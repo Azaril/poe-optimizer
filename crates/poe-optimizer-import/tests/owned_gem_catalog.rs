@@ -821,6 +821,25 @@ fn multi_effect_source_sets_reject_duplicates_missing_members_and_stat_sets() {
 
 #[test]
 fn every_additional_skill_requires_an_exact_mapping_and_owned_identity() {
+    let without_observations = |mut roles: OwnedSkillRolePackageInput| {
+        for row in &mut roles.roles {
+            row.construction = OwnedGemSourceConstruction::Unavailable;
+        }
+        roles
+    };
+    // Explicitly unavailable observations remain a valid authored-role domain.
+    // Establish that this domain can compile before using it below to exercise
+    // the Gem compiler's own mapping checks independently of role validation.
+    let mut baseline = context();
+    baseline.policy = multi_policy(&baseline);
+    baseline.roles = OwnedSkillRoleIndex::new(
+        without_observations(baseline.roles.input().clone()),
+        &baseline.mapping,
+        baseline.base.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    assert!(compile(&baseline, &baseline.policy).is_ok());
     for case in 0..3 {
         let mut c = context();
         c.policy = multi_policy(&c);
@@ -871,8 +890,25 @@ fn every_additional_skill_requires_an_exact_mapping_and_owned_identity() {
         .unwrap();
         let mut roles = c.roles.input().clone();
         roles.mapping = *c.mapping.identity();
-        c.roles = OwnedSkillRoleIndex::new(roles, &c.mapping, c.base.schema(), Default::default())
-            .unwrap();
+        assert!(
+            matches!(
+                OwnedSkillRoleIndex::new(
+                    roles.clone(),
+                    &c.mapping,
+                    c.base.schema(),
+                    Default::default()
+                ),
+                Err(SkillCatalogError::ConstructionMismatch)
+            ),
+            "observed construction rejects the changed mapping first: case {case}"
+        );
+        c.roles = OwnedSkillRoleIndex::new(
+            without_observations(roles),
+            &c.mapping,
+            c.base.schema(),
+            Default::default(),
+        )
+        .unwrap();
         assert!(compile(&c, &c.policy).is_err(), "case {case}");
     }
     let c = context();

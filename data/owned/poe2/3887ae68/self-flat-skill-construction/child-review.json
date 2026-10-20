@@ -1,5 +1,5 @@
 {
-  "acquisition_sha256": "d7df2cde5648ee00354c80f70f50285f12851070d31b16677777b2d7b1c08faf",
+  "acquisition_sha256": "88bea790e333ba0f80a97a59d9207bdfa85e79eb24e9a997c2f76d8e59490921",
   "bodies_sha256": "8fc5ce308afa368538212d66a4f489a955250c4bbeca10fbe3f3fb10f3b5be3b",
   "construction": {
     "child_level": 1,
@@ -13,11 +13,11 @@
     "profile": "RaisedSkeletonSniper",
     "recipe": "MinionMeleeBow",
     "recipe_sha256": "abc764c4728687f465ffea2ea8b16e597e2a91121ee7e2e37a5bbe7d2c90e213",
-    "selected_bindings_sha256": "e2089f9e8487b75ad46f708255a1bc157c4b004129842d7f245f06dccd36570e",
+    "selected_bindings_sha256": "14f549952927c9a08e57cb1a3255349db7dd1d2e9a963720fbaa4bcd51c83864",
     "support_effects": 0
   },
   "kind": "finite-sniper-child-extra-stat-lifecycle",
-  "prior_authority_sha256": "105b36b7a75e02cb33a5882c1d2fcc5ba75661399702f5cac815cf6592045ef9",
+  "prior_authority_sha256": "8ff24776e3338be02f13ab6d5f5c15e12707b487ada803a5987e266b2a0db5ca",
   "remaining": [
     "Later direct and inherited minion-store writers and dynamic factories",
     "Source-to-native contributor membership and final checked self-flat queries",

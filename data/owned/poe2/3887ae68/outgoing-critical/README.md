@@ -1,9 +1,10 @@
-# Outgoing critical authoring - unpublished
+# Outgoing critical calculation - published partial component
 
-This packet drafts ordinary outgoing critical chance and critical damage
+This packet publishes ordinary outgoing critical chance and critical damage
 multiplier for the exact supplied Actor's Basic Attack. It is separate from the
-published incoming Player critical receivers. It has no publication helper,
-successor receipt, native coverage promotion, or whole-build completion claim.
+published incoming Player critical receivers. The full native consumer is tested
+in a finite controlled graph; publication preserves all existing coverage gaps.
+It does not admit a complete build or arbitrary changed candidates.
 
 The seven reserved definitions are final Action chance `33aa`, final Action
 multiplier `33ab`, shared Actor cap `33ac`, shared Actor bonus `33ad`, Enemy
@@ -21,10 +22,9 @@ the count to 0-20, and divides by two only for the emitted magnitude. Its
 independent Boolean condition remains unresolved. An inactive or zero effect
 does not remove its potential membership. The current public checked-query
 origin now includes this Encounter through the accepted generic Actor migration;
-`bindings.json` records the exact member still to install in this packet's
-executable stage. Numeric reads use the same checked Actor query contract.
-All 16 query groups and both new owners remain
-Partial. This draft is not yet an executable admitted component.
+`bindings.json` records the exact installed member. Numeric reads use the same
+checked Actor query contract. All 16 query groups and both existing owners remain
+Partial. Independent condition and special-branch admission is unfinished.
 
 The ordinary nodes retain cap/override order, accuracy confirmation from
 `321c` (not hit chance after block `3220`), and explicit numeric-selection absence.
@@ -70,8 +70,9 @@ No new source process was run.
 
 This certificate establishes the finite original-source construction path.
 It cannot complete a changed native candidate. Diamond condition coverage,
-the guarded override factory, and the actual conditional Weakness member still
-need exact native membership and activation authority before owner admission.
+the guarded override factory, and Weakness activation still need complete native
+source accounting before owner admission. The conditional Weakness numeric
+member is now installed with its exact Encounter origin.
 No artificial Diamond channel, global false condition, or neutral observed
 value is introduced. The selected absence of CritMultiplier MORE candidates
 makes the anomalous call irrelevant only in this source domain; positive
@@ -121,11 +122,44 @@ native compiler/evaluator, including an admitted/outside/missing/admitted
 scratch sequence and lazy bypass. This finite numerical test does not compile
 or admit the complete pending critical consumer.
 
-The generic Actor migration implements explicit Encounter contribution
-membership, numeric scenario-Enemy reads and shared Actor ownership. Rebase this
-unpublished packet's dependency pins and pending-contract binding markers onto
-that endpoint, bind the real Encounter source and execute the complete consumer.
-Candidate-bound Boolean and special-branch coverage still require validation;
-no query or owner is promoted to Complete, and no successor is published.
+## Native execution and publication, October 16
+
+The dependency snapshot authenticates the generic Actor endpoint's exact owners,
+input routes, referenced definitions and all potential native writers. The
+publication allocates seven definitions, appends two real programs and sixteen
+Partial queries, and extends the existing supplied-Actor baseline. Exact
+inverses verify every other schema/rule/import field. Definition comparison uses
+typed identity, since canonical schema order is not allocation order.
+
+Nine native controls execute the full consumer with its real intrinsic chance
+and accuracy producers. They cover exact Actor/Action/Enemy recipients, present
+zero and conflicting overrides, the lazy 100% override, missing operands,
+true/false/unknown Weakness, clamped counts, unlisted/late suppliers and identical
+fresh/reused/Rayon reports. Synthetic controls supply explicit finite condition
+authority; they do not change production closure or inject observed results.
+
+The combined source/publication/native target run passes 26 ordinary tests;
+the explicit all-five publication also passes, retaining 110 queries and issue
+counts **106/117/109/123/4**. Logs:
+`runs/owned-outgoing-critical-component-tests-01.log`,
+`runs/owned-outgoing-critical-component-native-02.log`,
+`runs/owned-outgoing-critical-component-publication-02.log` and
+`runs/owned-outgoing-critical-component-clippy-{02,03}.log`.
+
+The reproducible local package is
+`runs/owned-outgoing-critical-component-publication-02/package`:
+
+- Input: `051c663ef14260a0fd10b7cfedb6f253cb1dfede2efd017831f25b7237904e64`.
+- Registry: `62e7dd21337c75d34344dcc317e117bc0cbb02da13e25f870766cd9c62b58369`, last `33b0`.
+- Definitions: `b4f501b1283f6fd89c2af86ddfaa69d77b28032f5730b8ad20cc686c3c45f52a`.
+- Rules: `68b6eb7ff34492958455184baa089fbca10fca4fe879ab5305a660ba59a027ae`.
+- Compiled rules: `c009cd5524bbd2736dfc1dc7d43ba1321e0a8419594473ceaf5d49179c1836c4`.
+
+Next import the explicit configured Weakness Boolean and bind its separate
+Encounter FLAG producer before the condition freeze. Its absent-input
+constructor is false; that proves only the configured source's state, not the
+absence of skill-applied Weakness. Keep the untranslated Sand Djinn and Diamond
+responsibilities blocking until independently accounted for. Then use the same
+graph for normal and critical Enemy-armour calculations.
 The [implementation plan](../../../../../docs/implementation.md#next-damage-checkpoint-outgoing-critical-calculation-and-enemy-mitigation)
 records the next controls and the unresolved Sand Djinn responsibility.

@@ -239,6 +239,7 @@ fn project_input() -> ProjectInput {
 }
 fn scenario(which: u8) -> ScenarioInput {
     ScenarioInput {
+        usage_intents: vec![],
         game_version: namespace(),
         enemy: EnemySpec {
             encounter: def(if which == 0 { "boss" } else { "mapping" }),
@@ -451,6 +452,7 @@ fn complete_selection_matches_explicit_composition_and_shared_record_identity() 
     // An independently specified concrete build also checks the exact projection.
     let direct = BuildSpec::new(
         BuildInput {
+            usage_preferences: vec![],
             generated_inputs: None,
             authored_support_order: None,
             allocator: p.allocator,
@@ -492,7 +494,7 @@ fn complete_selection_matches_explicit_composition_and_shared_record_identity() 
     );
     assert_eq!(
         finalized.request_digest(),
-        digest_owned("owned-request-v1", &expected, limits().input.max_wire_bytes).unwrap()
+        digest_owned("owned-request-v2", &expected, limits().input.max_wire_bytes).unwrap()
     );
     let build = finalized.request().build().input();
     assert_eq!(build.items.len(), 1);
@@ -774,7 +776,7 @@ fn draft_codec_rejects_unknown_duplicate_missing_and_unsupported_wire_values() {
         ));
     }
     let duplicate = format!(
-        "{{\"schema_version\":4,\"schema_version\":4,\"draft\":{}}}",
+        "{{\"schema_version\":5,\"schema_version\":5,\"draft\":{}}}",
         serde_json::to_string(session.input()).unwrap()
     );
     assert!(matches!(
@@ -1029,7 +1031,7 @@ fn draft_contribution_codec_preserves_order_and_rejects_v1_before_old_payload_sh
     let session = DraftSession::new(raw, limits()).unwrap();
     let bytes = encode_draft(&session, limits()).unwrap();
     let mut wire: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
-    assert_eq!(wire["schema_version"], 4);
+    assert_eq!(wire["schema_version"], 5);
     assert_eq!(decode_draft(&bytes, limits()).unwrap(), session);
     wire["draft"]["allocation_presets"]["members"][0]
         .as_object_mut()

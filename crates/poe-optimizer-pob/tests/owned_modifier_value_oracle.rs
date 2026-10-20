@@ -1,4 +1,4 @@
-//! Optional numeric-component parity against authenticated original source.
+//! Numeric-component parity against authenticated original source.
 //! Source encoding/admission, Item cache/history, factor production, and complete
 //! build evaluation remain outside this deliberately partial component fixture.
 #![cfg(not(target_arch = "wasm32"))]
@@ -194,9 +194,9 @@ fn native_component_with_import(
             schema: schema.input().clone(),
             rules: RulePackageInput {
                 support_discovery: None,
-                existing_actor_rules: None,
-                contribution_queries: None,
-                effect_applications: None,
+                existing_actor_rules: Some(DeclaredSet::complete(vec![])),
+                contribution_queries: Some(DeclaredSet::complete(vec![])),
+                effect_applications: Some(DeclaredSet::complete(vec![])),
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: namespace.clone(),
                 release: key("source-oracle"),
@@ -383,7 +383,6 @@ fn catalog_row(oracle: &FormatterOracle, template: &str, scalable: bool) -> Tabl
 }
 
 #[test]
-#[ignore = "optional authenticated ItemTools/Common/ModParser oracle; requires pinned vendor submodule"]
 fn canonical_numeric_recipes_match_original_formatting_for_explicit_admitted_components() {
     let oracle = FormatterOracle::new();
     let pins: Vec<_> = [
@@ -786,7 +785,6 @@ fn traced_source_range(
 }
 
 #[test]
-#[ignore = "optional authenticated Import projection/ItemTools oracle; requires pinned vendor submodule"]
 fn public_numeric_projection_and_native_recipe_match_original_sign_and_decimal_transport() {
     let oracle = FormatterOracle::new();
     let range = |id, lower, upper, prefix, qualifier| NumericAdmission {
@@ -1045,7 +1043,6 @@ fn public_numeric_projection_and_native_recipe_match_original_sign_and_decimal_t
 }
 
 #[test]
-#[ignore = "optional authenticated numeric conversion contract; plus-qualified text is not admitted source semantics"]
 fn plus_prefix_conversion_contract_distinguishes_source_parser_acceptance() {
     let oracle = FormatterOracle::new();
     let fixed = NumericAdmission {
@@ -1215,7 +1212,6 @@ fn plus_prefix_conversion_contract_distinguishes_source_parser_acceptance() {
 }
 
 #[test]
-#[ignore = "optional authenticated damage-pair source admission contrasts; requires pinned vendor submodule"]
 fn damage_pair_source_parser_rejects_signed_components_across_families() {
     let oracle = FormatterOracle::new();
     let parser: Function = oracle
@@ -1297,7 +1293,6 @@ fn damage_pair_source_parser_rejects_signed_components_across_families() {
 }
 
 #[test]
-#[ignore = "optional authenticated direct-resistance source admission contrasts; requires pinned vendor submodule"]
 fn direct_resistance_source_admission_depends_on_rendered_sign() {
     let oracle = FormatterOracle::new();
     let parser: Function = oracle

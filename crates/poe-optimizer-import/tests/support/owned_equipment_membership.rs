@@ -162,6 +162,17 @@ fn normalize_queries(
     queries: &[ImportQueryTemplate],
     limits: NormalizationLimits,
 ) -> std::result::Result<NormalizedImport, NormalizationError> {
+    normalize_queries_with_retired(xml, fixture, policy, queries, limits, 0)
+}
+
+fn normalize_queries_with_retired(
+    xml: &str,
+    fixture: &Fixture,
+    policy: &NormalizationPolicy,
+    queries: &[ImportQueryTemplate],
+    limits: NormalizationLimits,
+    additional_retired: usize,
+) -> std::result::Result<NormalizedImport, NormalizationError> {
     let source = source(xml, 93);
     let evidence =
         SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
@@ -202,7 +213,7 @@ fn normalize_queries(
                 .is_some_and(|order| matches!(order.completion, DraftListCompletion::Complete)),
         );
     }
-    origin_integrity_with_retired(&source, &result, retired);
+    origin_integrity_with_retired(&source, &result, retired + additional_retired);
     Ok(result)
 }
 fn run(xml: &str, fixture: &Fixture) -> NormalizedImport {

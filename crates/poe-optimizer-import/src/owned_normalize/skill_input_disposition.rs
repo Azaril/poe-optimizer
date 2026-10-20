@@ -6,6 +6,72 @@ use crate::owned_source_actions::{
     ImportReferenceContext, SourceActionInspection, SourceActionSelection,
 };
 
+/// A literal primary switch of `true` imposes no additional indexed source gate.
+/// Pinned admission/export use `not hasGlobalEffect or enableGlobal1`; the Vaal
+/// count branch returns `enableGlobal1 == true` without changing the count.
+/// This holds for whichever effect occupies index one, so it needs no complete
+/// effect-list or lazy metadata inference. It proves neither admission nor a
+/// count, participation, reference selection, secondary switch or native effect.
+///
+/// Only an already checked input disposition may retain this field fact. The
+/// raw source stays intact; absent/defaulted, escaped or other tokens gain no
+/// authority. Callers include this constant-size check in their charged field
+/// traversal; this helper never looks up another source or mutates a record.
+pub(super) fn exact_primary_global_gate_is_neutral(
+    attribute: &SourceAttributeEvidence<'_>,
+) -> bool {
+    attribute.origin().name == "enableGlobal1"
+        && attribute.raw() == "true"
+        && attribute.decoded().ok() == Some("true")
+}
+
+/// Reviewed indexed-consumer fact for an already-proved physical SkillUse.
+/// Complete source construction is necessary here: a resolved singleton can
+/// still retain a missing Command, a constructor addition or a reordered effect.
+/// Compare source references, not only native Skill IDs (stat-set aliases may
+/// map to the same Skill). Multiple stat sets and lazy global metadata do not
+/// create an index two.
+///
+/// This does not prove execution, participation, count, reference selection or
+/// numerical coverage. It retains the raw field and grants no support, Direct
+/// or generated-source authority. Runtime role binding is not independent source
+/// authentication: offline publication must reproduce the construction facts.
+/// The caller charges bounded source-field/string comparisons before calling.
+pub(super) fn physical_secondary_global_is_unconsumed(
+    row: &SourceEvidenceRow<'_>,
+    gem: &GemDefId,
+    role: &OwnedGemRoleRow,
+) -> bool {
+    if &role.gem != gem
+        || role.materialization != OwnedGemMaterialization::Physical
+        || role.role != OwnedGemRole::Known(AuthoredGemRole::SkillUse)
+    {
+        return false;
+    }
+    let (OwnedPrimarySkill::Known(primary), OwnedGemSourceConstruction::Observed(facts)) =
+        (&role.primary, &role.construction)
+    else {
+        return false;
+    };
+    let Some(attribute) = row.attribute("enableGlobal2") else {
+        return false;
+    };
+    let exact_boolean = matches!(attribute.raw(), "true" | "false")
+        && attribute.decoded().ok() == Some(attribute.raw());
+    exact_boolean
+        && source_shape::value(row, "gemId") == Some(facts.game_id.as_str())
+        && source_shape::value(row, "variantId") == Some(facts.variant_id.as_str())
+        && source_shape::value(row, "skillId") == Some(facts.primary.effect_id.as_str())
+        && matches!(&facts.primary.resolution,
+            OwnedSourceEffectResolution::Mapped(resolved) if resolved == primary)
+        && facts.declared_additional_effects.is_empty()
+        && facts.constructed_additional_effects.is_empty()
+        && facts.resolved_additional_effects.is_empty()
+        && facts.missing_references.is_empty()
+        && facts.resolved_effects.as_slice() == std::slice::from_ref(&facts.primary)
+        && facts.display_order.as_deref().is_none_or(|order| order == [1])
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DeferredSourceUsageInput {

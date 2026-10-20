@@ -22,7 +22,7 @@ pub enum ConfigurationRewardInventoryPolicy {
 }
 
 pub(super) struct CompiledConfigurationRewardInventory<'p> {
-    controls: BTreeMap<&'p str, &'p ValueSelector>,
+    controls: BTreeMap<&'p str, Vec<&'p ValueSelector>>,
     work: usize,
 }
 
@@ -64,7 +64,18 @@ pub(super) fn compile<'p>(
             "configuration reward control census",
         ));
     }
-    if controls.len() != rewards.rules().len() {
+    if controls.len()
+        != rewards
+            .rules()
+            .map(|r| {
+                r.recipe
+                    .tiers
+                    .iter()
+                    .map(|t| t.selectors.len())
+                    .sum::<usize>()
+            })
+            .sum::<usize>()
+    {
         return Err(NormalizationError::Policy(
             "configuration reward rule census",
         ));
@@ -78,7 +89,10 @@ pub(super) fn compile<'p>(
             || name.chars().any(char::is_control)
             || !matches!(
                 control.selector.lane,
-                ValueLane::InputBoolean | ValueLane::InputString
+                ValueLane::InputBoolean
+                    | ValueLane::InputString
+                    | ValueLane::InputNumber
+                    | ValueLane::PlaceholderNumber
             )
         {
             return Err(NormalizationError::Policy("configuration reward selector"));
@@ -95,27 +109,43 @@ pub(super) fn compile<'p>(
             ));
         }
     }
-    // Bound all policy rows/bytes before allocating indexes. One source name
-    // cannot acquire competing lanes or two independent default authorities.
-    let mut by_recipe = BTreeMap::new();
-    let mut by_name = BTreeMap::new();
+    // One source name retains one recipe authority. The two explicit numeric
+    // lanes can share that authority; duplicate recipe/lane records cannot.
+    let mut by_recipe: BTreeMap<_, Vec<_>> = BTreeMap::new();
+    let mut by_name: BTreeMap<_, Vec<_>> = BTreeMap::new();
+    let mut name_owners = BTreeMap::new();
     for control in controls {
-        if by_recipe
-            .insert(&control.recipe, &control.selector)
-            .is_some()
-            || by_name
-                .insert(control.selector.name.as_str(), &control.selector)
-                .is_some()
+        let selectors = by_recipe.entry(&control.recipe).or_default();
+        if selectors.contains(&&control.selector)
+            || name_owners
+                .insert(control.selector.name.as_str(), &control.recipe)
+                .is_some_and(|old| old != &control.recipe)
         {
             return Err(NormalizationError::Policy(
                 "configuration reward duplicate control",
             ));
         }
+        selectors.push(&control.selector);
+        by_name
+            .entry(control.selector.name.as_str())
+            .or_default()
+            .push(&control.selector);
     }
     for rule in rewards.rules() {
-        if rule.recipe.tiers.len() != 1
-            || rule.recipe.tiers[0].selectors.len() != 1
-            || by_recipe.get(&rule.recipe.id).copied() != rule.recipe.tiers[0].selectors.first()
+        let expected: Vec<_> = rule
+            .recipe
+            .tiers
+            .iter()
+            .flat_map(|t| &t.selectors)
+            .collect();
+        let actual = by_recipe.get(&rule.recipe.id);
+        let finite = matches!(&rule.output, RewardRuleOutput::Cases(_));
+        if expected.is_empty()
+            || (finite && (rule.recipe.tiers.len() != 1 || expected.len() != 1))
+            || expected.iter().any(|s| s.name != expected[0].name)
+            || actual.is_none_or(|rows| {
+                rows.len() != expected.len() || expected.iter().any(|s| !rows.contains(s))
+            })
         {
             return Err(NormalizationError::Policy(
                 "configuration reward rule selector",
@@ -141,6 +171,8 @@ struct ProvenControl {
     recipe: OwnedDefinitionKey,
     selector: ValueSelector,
     origin: Option<SourceOccurrenceId>,
+    unselected: Vec<(SourceOccurrenceId, ValueSelector)>,
+    numeric: bool,
     outcome: ProvenControlOutcome,
 }
 
@@ -165,7 +197,9 @@ impl ProvenControl {
                     return None;
                 }
                 *next_output = next_output.saturating_add(1);
-                if authored {
+                if authored && self.selector.lane == ValueLane::PlaceholderNumber {
+                    ConfigurationSourceState::Placeholder
+                } else if authored {
                     ConfigurationSourceState::Authored
                 } else {
                     ConfigurationSourceState::ConstructorDefault
@@ -200,21 +234,34 @@ pub(super) fn collect(
             let Some(name) = value(child, "name") else {
                 continue;
             };
-            let Some(selector) = policy.controls.get(name) else {
+            let Some(selectors) = policy.controls.get(name) else {
                 continue;
             };
-            let attribute = match selector.lane {
-                ValueLane::InputBoolean => "boolean",
-                ValueLane::InputString => "string",
-                _ => {
-                    return Err(NormalizationError::Policy(
-                        "configuration reward source lane",
-                    ));
+            let actual = match (
+                child.occurrence().name(),
+                value(child, "boolean"),
+                value(child, "string"),
+                value(child, "number"),
+            ) {
+                ("Input", Some(_), None, None) => Some((ValueLane::InputBoolean, "boolean")),
+                ("Input", None, Some(_), None) => Some((ValueLane::InputString, "string")),
+                ("Input", None, None, Some(_)) => Some((ValueLane::InputNumber, "number")),
+                ("Placeholder", None, None, Some(_)) => {
+                    Some((ValueLane::PlaceholderNumber, "number"))
                 }
+                _ => None,
             };
-            if child.occurrence().name() != "Input"
-                || value(child, attribute).is_none()
-                || inputs.insert(name, (*id, attribute)).is_some()
+            let Some((lane, attribute)) = actual else {
+                uncertain = true;
+                break;
+            };
+            let matching: Vec<_> = selectors.iter().filter(|s| s.lane == lane).collect();
+            if matching.len() != 1
+                || child.occurrence().has_namespace_context()
+                || !child.children().is_empty()
+                || child.attributes().len() != 2
+                || b.attributes[id.ordinal() as usize].len() != 2
+                || inputs.insert((name, lane), (*id, attribute)).is_some()
             {
                 uncertain = true;
                 break;
@@ -228,22 +275,50 @@ pub(super) fn collect(
         let mut controls = Vec::new();
         for rule in rewards.rules() {
             b.charge(1)?;
-            let selector = &rule.recipe.tiers[0].selectors[0];
-            let candidate = inputs.get(selector.name.as_str()).map(|(id, attribute)| {
-                let (index, value) = b.attributes[id.ordinal() as usize][attribute];
-                ValueCandidate {
-                    selector,
-                    origin: SourceAttributeRef {
-                        occurrence: *id,
-                        index,
-                    },
-                    value: match value.decoded() {
-                        Ok(text) => CandidateValue::Decoded(text),
-                        Err(error) => CandidateValue::Unavailable(error),
-                    },
-                }
-            });
-            let decision = rewards.decide(&rule.recipe.id, candidate.as_slice())?;
+            let selectors: Vec<_> = rule
+                .recipe
+                .tiers
+                .iter()
+                .flat_map(|t| &t.selectors)
+                .collect();
+            let candidates: Vec<_> = selectors
+                .iter()
+                .filter_map(|selector| {
+                    inputs
+                        .get(&(selector.name.as_str(), selector.lane))
+                        .map(|(id, attribute)| {
+                            let (index, value) = b.attributes[id.ordinal() as usize][attribute];
+                            ValueCandidate {
+                                selector,
+                                origin: SourceAttributeRef {
+                                    occurrence: *id,
+                                    index,
+                                },
+                                value: match value.decoded() {
+                                    Ok(text) => CandidateValue::Decoded(text),
+                                    Err(error) => CandidateValue::Unavailable(error),
+                                },
+                            }
+                        })
+                })
+                .collect();
+            b.charge(candidates.len())?;
+            let decision = rewards.decide(&rule.recipe.id, &candidates)?;
+            let selected = if let Some(numeric) = &decision.numeric {
+                numeric.selected
+            } else if let ValueOutcome::Selected { origin, .. } = &decision.value.outcome {
+                Some(*origin)
+            } else {
+                None
+            };
+            let selector = selected
+                .and_then(|origin| {
+                    candidates
+                        .iter()
+                        .find(|c| c.origin == origin)
+                        .map(|c| c.selector)
+                })
+                .unwrap_or(selectors[0]);
             b.charge(
                 rule.recipe
                     .id
@@ -271,7 +346,17 @@ pub(super) fn collect(
             controls.push(ProvenControl {
                 recipe: rule.recipe.id.clone(),
                 selector: selector.clone(),
-                origin: inputs.get(selector.name.as_str()).map(|(id, _)| *id),
+                origin: selected.map(|origin| origin.occurrence),
+                unselected: if decision.numeric.is_some() {
+                    candidates
+                        .iter()
+                        .filter(|c| Some(c.origin) != selected)
+                        .map(|c| (c.origin.occurrence, c.selector.clone()))
+                        .collect()
+                } else {
+                    vec![]
+                },
+                numeric: decision.numeric.is_some(),
                 outcome,
             });
         }
@@ -391,8 +476,59 @@ pub(super) fn checked_receipts(
             },
             source_state,
             target: target.clone(),
+            additional_targets: match (&control.outcome, control.origin) {
+                (ProvenControlOutcome::Reward { index }, Some(origin)) => {
+                    let reward = OwnedOriginTarget::Reward(owner.rewards.members[*index]);
+                    if b.origins[origin.ordinal() as usize]
+                        .links
+                        .iter()
+                        .filter(|link| **link == reward)
+                        .count()
+                        != 1
+                    {
+                        return Ok(vec![]);
+                    }
+                    vec![reward]
+                }
+                _ => vec![],
+            },
             source_only: None,
         });
+        for (origin, selector) in &control.unselected {
+            b.charge(
+                selector
+                    .name
+                    .len()
+                    .saturating_add(b.origins[origin.ordinal() as usize].links.len())
+                    .saturating_add(1),
+            )?;
+            if b.evidence.rows()[origin.ordinal() as usize]
+                .occurrence()
+                .parent()
+                != Some(scope)
+                || b.origins[origin.ordinal() as usize]
+                    .links
+                    .iter()
+                    .filter(|link| **link == target)
+                    .count()
+                    != 1
+            {
+                return Ok(vec![]);
+            }
+            result.push(CheckedConfigurationReceipt {
+                scope,
+                origin: Some(*origin),
+                selector: Some(selector.clone()),
+                control: ConfigurationAdapterControl::Reward {
+                    recipe: control.recipe.clone(),
+                },
+                source_state:
+                    configuration_dispositions::ConfigurationSourceState::UnselectedProjection,
+                target: target.clone(),
+                additional_targets: vec![],
+                source_only: Some(key("unselected-config-projection")),
+            });
+        }
     }
     if next_output != proof.rewards.len() {
         return Ok(vec![]);
@@ -471,6 +607,17 @@ pub(super) fn finish(
             .retain(|link| !matches!(link, OwnedOriginTarget::Issue(issue) if *issue == retired));
         if proof.reviewed.contains(id) {
             b.link(*id, OwnedOriginTarget::ChoicePreset(choice))?;
+            // Numeric source transport does not by itself account for every
+            // saved responsibility. The common accounting owner must check both
+            // selected and losing lanes before retiring the roles obligation.
+            b.charge(proof.controls.len())?;
+            if proof.controls.iter().any(|c| {
+                c.numeric
+                    && (c.origin == Some(*id)
+                        || c.unselected.iter().any(|(origin, _)| origin == id))
+            }) {
+                b.link(*id, OwnedOriginTarget::Issue(roles_issue))?;
+            }
         } else if b.origins[id.ordinal() as usize].links.is_empty() {
             // Keep unrelated settings unresolved in their own configuration;
             // never let the later fallback attach issues from other scopes.
@@ -502,6 +649,8 @@ mod tests {
                 name: "test-input".into(),
             },
             origin: authored.then_some(origin),
+            unselected: vec![],
+            numeric: false,
             outcome,
         };
         let controls = [

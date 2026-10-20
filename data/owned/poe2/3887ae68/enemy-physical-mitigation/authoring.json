@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "before": "a7e1cb77b85ecd34ff18ea7b99cf104b41079cd9328715e00553d2785c1f9e3d",
+  "release": "pob-3887ae68-armour-response-component-v1",
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/enemy-physical-mitigation/definitions.json",
+      "bytes": 1459,
+      "sha256": "c3377500592badfc994e8befbb482fa2563b70cf5dd60d2b0b6ec65a4a5e3fc6"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/enemy-physical-mitigation/consumer.json",
+      "bytes": 48385,
+      "sha256": "7992ec31380e45d117f868ee88b09182578d6fac069b681f2e9ffd9c0892b1a7"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/enemy-physical-mitigation/bindings.json",
+      "bytes": 2371,
+      "sha256": "bfa5ca96952e13a79811e0ca6cba35947a3ff9fce4399d58803db9aaf9e36966"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/enemy-physical-mitigation/dependencies.json",
+      "bytes": 317351,
+      "sha256": "956417012e61f2ab16ded090aac316b0f5bfdf9fb0683da02482879fa11f0d71"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/enemy-physical-mitigation/migration.json",
+      "bytes": 2387,
+      "sha256": "fbd26942dee9da46aadc1c5c4ddd7f9b5edb28418495ebe7790b1395c16b7595"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/enemy-physical-mitigation/source-evidence.json",
+      "bytes": 6036,
+      "sha256": "d462af9bf8a253fa295e7a108145c3972181fbdcf7f1bbd15693391942570ef1"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/enemy-physical-mitigation/source-vectors.json",
+      "bytes": 62861,
+      "sha256": "fb675c15fe80240d1a5388d534ebdcb45154970f1ab1cc94e1af6fafae4934df"
+    }
+  ],
+  "scope": {
+    "publication_ready": true,
+    "ready_for_native_admission": false,
+    "complete_request": false,
+    "complete_mitigation": false,
+    "candidate_source_closure": false,
+    "query_closure_changed": false,
+    "existing_owner_closure_changed": false,
+    "new_source_execution": false
+  }
+}

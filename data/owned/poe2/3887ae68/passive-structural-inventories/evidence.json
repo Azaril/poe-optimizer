@@ -1,0 +1,2840 @@
+{
+  "kind": "reviewed-passive-direct-declaration-evidence",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "recipes": {
+    "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain.json",
+    "bytes": 471969,
+    "sha256": "ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f"
+  },
+  "selected_bindings": {
+    "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/bindings.json",
+    "bytes": 1814005,
+    "sha256": "d4e773a5f44f88f2e36463754484613da541c09ec1239eab368766ea804a7b4f"
+  },
+  "catalog": {
+    "path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+    "bytes": 2247063,
+    "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e"
+  },
+  "grant_bindings": {
+    "path": "data/owned/poe2/3887ae68/djinn-tree-grants/bindings.json",
+    "bytes": 5944,
+    "sha256": "780c278e35c29ac1aa5eeba9cf1028396334af0dba1a25bc7d828aa8c4113aaa"
+  },
+  "grant_authority": {
+    "path": "data/owned/poe2/3887ae68/djinn-tree-grants/authoring.json",
+    "bytes": 6704,
+    "sha256": "70955a2e23c0ed6340be04e1bda4561a8cb67fc5431f406f61d3d53dbaca36d7"
+  },
+  "sources": [
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "authority": "lua-source-manifest",
+      "bytes": 95117,
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c",
+      "archive": "sources/src_Classes_PassiveSpec.lua.gz",
+      "archive_bytes": 22792,
+      "archive_sha256": "8b797c17e938efbf73b95f0a57ea197e81be37510b54a04ea25d8a400612c55e"
+    },
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "authority": "lua-source-manifest",
+      "bytes": 31232,
+      "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d",
+      "archive": "sources/src_Classes_PassiveTree.lua.gz",
+      "archive_bytes": 8179,
+      "archive_sha256": "f772cd60df379afff18e8f2a1003b426b39f7c774851bf89f75e5e0a9078706f"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "authority": "lua-source-manifest",
+      "bytes": 1172527,
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962",
+      "archive": "sources/src_Data_Skills_other.lua.gz",
+      "archive_bytes": 124283,
+      "archive_sha256": "7f56e9ed93f98f55afd1d69ec4a9bd982b0a499db0207235eb3a737160f5fa33"
+    },
+    {
+      "path": "src/Data/StatDescriptions/stat_descriptions.lua",
+      "authority": "lua-source-manifest",
+      "bytes": 4100157,
+      "sha256": "97d380b8ce61f13174f8163ce21334f65e34261e42070afc7c4a5fda00a5b718",
+      "archive": "sources/src_Data_StatDescriptions_stat_descriptions.lua.gz",
+      "archive_bytes": 474553,
+      "archive_sha256": "c9f35d5b0999904848a54b5ae21e9a3d57431bf24938a57ee0a3852899bea2f0"
+    },
+    {
+      "path": "src/Export/Scripts/statdesc.lua",
+      "authority": "lua-source-manifest",
+      "bytes": 5537,
+      "sha256": "12f295df1b697ab4ef4ea169cf7203409a395746c64c2191e890625531e5374c",
+      "archive": "sources/src_Export_Scripts_statdesc.lua.gz",
+      "archive_bytes": 1825,
+      "archive_sha256": "679fb036194822dcdc48dcf63285530fa5dad596f0b89b7ad13146bc74ca89e0"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "authority": "lua-source-manifest",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "archive": "sources/src_Modules_CalcSetup.lua.gz",
+      "archive_bytes": 21399,
+      "archive_sha256": "cdefa2fbbb4a15befdc728fd549902f4032c1cdf0b52c3070dc356f0a45e718f"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "authority": "lua-source-manifest",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+      "archive": "sources/src_Modules_ModParser.lua.gz",
+      "archive_bytes": 105049,
+      "archive_sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466"
+    },
+    {
+      "path": "src/Modules/StatDescriber.lua",
+      "authority": "lua-source-manifest",
+      "bytes": 11843,
+      "sha256": "f7698f0127a32f38fe03272f6b88416238a154b668a79aabc1f9114687dedc3e",
+      "archive": "sources/src_Modules_StatDescriber.lua.gz",
+      "archive_bytes": 2337,
+      "archive_sha256": "a8ef6612c1b3b6a9e470613036d64cc5e22dd28fda25bc955fc83b0e1b31af80"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.json",
+      "authority": "pinned-tree-json",
+      "bytes": 2049036,
+      "sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95",
+      "archive": "sources/src_TreeData_0_5_tree.json.gz",
+      "archive_bytes": 339380,
+      "archive_sha256": "58cf71ca3225802aac41fe04cb15df1ba66eb9afbff722adbf7495bcec0f3af5"
+    }
+  ],
+  "boundaries": [
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "first_line": 211,
+      "last_line": 310,
+      "sha256": "a3df83560a8d4ae1df4dcd694d7086f4f144cb73f9fdbf1d73353ea6ff5d3ca2"
+    },
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "first_line": 407,
+      "last_line": 417,
+      "sha256": "4ea39638f17eb03a75171275de4f06b8c370e3d5edf8d280ece7a552f6ece10e"
+    },
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "first_line": 448,
+      "last_line": 525,
+      "sha256": "dbaafdae063379e3bf6ab19145438034c947fb48ccf7e64aee80de67893e5dae"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "first_line": 360,
+      "last_line": 387,
+      "sha256": "92ef87912a3d2fde50ee13d9337d813d4fa176878a8af57ac67cd78759aa6d23"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "first_line": 1319,
+      "last_line": 1334,
+      "sha256": "bf38a94de295a1990948ea7a184cb4a9876de6a5ebedd9ed4fb51fe77ae1b4a9"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "first_line": 1450,
+      "last_line": 1530,
+      "sha256": "15fd2fb4dfcc7b205fc69c29973382ecf146b6304674b50ee373d3f7a9b8e67c"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "first_line": 1555,
+      "last_line": 1790,
+      "sha256": "17ca3e2612e8ab384c2ba6d51e335267ff8cdcbcfc33ca6ccd45246b8c8ae863"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "first_line": 2047,
+      "last_line": 2077,
+      "sha256": "a9a23e711020ba204abd380c9190644dcf95f9beb24715b0f5d762d10bd3703b"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "first_line": 2619,
+      "last_line": 2704,
+      "sha256": "45b3dde46c72a6a73dd13fe0f8df7e71cee2ad684061f9b9c64c7f510b3b45d6"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 200,
+      "last_line": 412,
+      "sha256": "cdae882d1801e720fcece3a43cd388d58db6867f218d7ea5b80eb34f3e8dd490"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1669,
+      "last_line": 1730,
+      "sha256": "b8a85ad624122d1cc5ea55c073201965daab304ec445d3a9c76f9b2ca9c73b61"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "first_line": 2186,
+      "last_line": 2200,
+      "sha256": "ca17d531d957956229454abaeb44e420c5c8a38fad0376406a24525d29de0c10"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "first_line": 3589,
+      "last_line": 3590,
+      "sha256": "3d3e403a28b7365c1d068786a1f0371fcabcfbb442cd5ab9d40f688b7c85d8ab"
+    },
+    {
+      "path": "src/Export/Scripts/statdesc.lua",
+      "first_line": 14,
+      "last_line": 47,
+      "sha256": "772d034b9424463084f577c2ad705a9e1604e1f51e30e8ebcae4085c8239166f"
+    },
+    {
+      "path": "src/Export/Scripts/statdesc.lua",
+      "first_line": 109,
+      "last_line": 122,
+      "sha256": "80032caa7e8460fb15701ca0c151f5aca1dd1bcae9a2c4f5fb62472c8e74e68e"
+    },
+    {
+      "path": "src/Modules/StatDescriber.lua",
+      "first_line": 13,
+      "last_line": 39,
+      "sha256": "84f4bbbc5a700fd4414050b1cb8b2a3b1ca460c724a84e9d6f06621d2a69e998"
+    }
+  ],
+  "families": [
+    {
+      "node_id": "13289",
+      "passive": "def.0000000000000b34",
+      "node": {
+        "ascendancyName": "Disciple of Varashta",
+        "connections": [],
+        "flavourText": "\"And you... there was no excuse for your actions. You defiled them! You have tainted the very sands with the blood of your own! Yet the war rages on. You have achieved nothing. You must pay.\" \\n\\nVarashta condemned Kelari to the ritual of the <i>{barya}, sentenced to serve as a Djinn.",
+        "group": 641,
+        "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/SummonSandDjinn.dds",
+        "isNotable": true,
+        "name": "Barya of Kelari",
+        "nodeOverlay": {
+          "alloc": "Disciple of VarashtaFrameLargeAllocated",
+          "path": "Disciple of VarashtaFrameLargeCanAllocate",
+          "unalloc": "Disciple of VarashtaFrameLargeNormal"
+        },
+        "orbit": 8,
+        "orbitIndex": 15,
+        "skill": 13289,
+        "stats": [
+          "Grants Skill: Kelari, the Tainted Sands"
+        ],
+        "stringId": "AscendancySorceress3Notable8"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "13289"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000b34"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "0000000000000364"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000000b34",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf1",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.0000000000000b34",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "13289"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "889d36f9705ab3f9d962eb4b040df57f29d4fd9dfe3ef1f36e7a1a49ac824193",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "13289"
+      },
+      "recipe": {
+        "id": "13289",
+        "name": "Barya of Kelari",
+        "stats": [
+          {
+            "line": "Grants Skill: Kelari, the Tainted Sands",
+            "mods": {
+              "[1]": {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraSkill",
+                "type": "LIST",
+                "value": {
+                  "level": 1,
+                  "skillId": "SummonSandDjinnPlayer"
+                }
+              }
+            },
+            "remainder": null
+          }
+        ]
+      },
+      "semantics": [],
+      "grant": {
+        "source_effect": "SummonSandDjinnPlayer",
+        "skill": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000322"
+        },
+        "grant": {
+          "declaration": {
+            "kind": "passive_node",
+            "definition": {
+              "kind": "passive_node",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000b34"
+            }
+          },
+          "slot": {
+            "kind": "grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032d3"
+          }
+        },
+        "supply": {
+          "declaration": {
+            "kind": "passive_node",
+            "definition": {
+              "kind": "passive_node",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000b34"
+            }
+          },
+          "slot": {
+            "kind": "skill_grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032d2"
+          }
+        },
+        "skill_mapping": {
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "skill",
+              "value": {
+                "effect_id": {
+                  "kind": "text",
+                  "value": "SummonSandDjinnPlayer"
+                }
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "skill",
+                  "value": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000322"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        },
+        "skill_identity": {
+          "id": "SummonSandDjinnPlayer",
+          "name": "Kelari, the Tainted Sands",
+          "base_type_name": "Kelari, the Tainted Sands",
+          "support": null,
+          "from_tree": true,
+          "winning_declaration": 433
+        },
+        "skill_declaration": {
+          "index": 433,
+          "id": "SummonSandDjinnPlayer",
+          "source": {
+            "path": "src/Data/Skills/other.lua",
+            "line": 9822,
+            "end_line": 9942,
+            "sha256": "136b02d7650712d310cd545bf47344039d3c97f59a0194e624ff050c99af04c7"
+          },
+          "identity": {
+            "name": "Kelari, the Tainted Sands",
+            "base_type_name": "Kelari, the Tainted Sands",
+            "support": null,
+            "from_tree": true
+          }
+        }
+      }
+    },
+    {
+      "node_id": "19318",
+      "passive": "def.0000000000000d0f",
+      "node": {
+        "connections": [
+          {
+            "id": 53795,
+            "orbit": 5
+          }
+        ],
+        "group": 485,
+        "icon": "Art/2DArt/SkillIcons/passives/PuppeteerNode.dds",
+        "name": "Puppet Master chance",
+        "orbit": 3,
+        "orbitIndex": 13,
+        "skill": 19318,
+        "stats": [
+          "20% increased Effect of Puppet Master"
+        ],
+        "stringId": "Puppetmaster5"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "19318"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000d0f"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "0000000000000368"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000000d0f",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf0",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.0000000000000d0f",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "19318"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "b46a076c12d665f26ecb57a67fa6be737c259dba1aeb4922f4184fc66ce83569",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "19318"
+      },
+      "recipe": {
+        "id": "19318",
+        "name": "Puppet Master chance",
+        "stats": [
+          {
+            "line": "20% increased Effect of Puppet Master",
+            "mods": {
+              "[1]": {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "LocalEffect",
+                "type": "INC",
+                "value": 20
+              }
+            },
+            "remainder": "  of Puppet Master "
+          }
+        ]
+      },
+      "semantics": [
+        {
+          "classification": "existing-buff-magnitude",
+          "value": 20,
+          "template": "{0}% increased Effect of Puppet Master",
+          "stat_ids": [
+            "puppet_master_effect_+%"
+          ],
+          "source": {
+            "path": "src/Data/StatDescriptions/stat_descriptions.lua",
+            "first_line": 210301,
+            "last_line": 210329,
+            "sha256": "ef491c0f0812064f1eb298283a6a449d6684166d8ea43d952a2a4d88a78b056b"
+          }
+        }
+      ],
+      "grant": null
+    },
+    {
+      "node_id": "32705",
+      "passive": "def.00000000000010d4",
+      "node": {
+        "ascendancyName": "Disciple of Varashta",
+        "connections": [],
+        "flavourText": "\"You knew the twisted plan these fools devised. As Tale-woman, you are their compass in the sandstorm. Yet... you did not act. And now we mourn these honoured dead. You must pay.\"\\n \\nVarashta condemned Navira to the ritual of the <i>{barya}, sentenced to serve as a Djinn.",
+        "group": 641,
+        "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/SummonWaterDjinn.dds",
+        "isNotable": true,
+        "name": "Barya of Navira",
+        "nodeOverlay": {
+          "alloc": "Disciple of VarashtaFrameLargeAllocated",
+          "path": "Disciple of VarashtaFrameLargeCanAllocate",
+          "unalloc": "Disciple of VarashtaFrameLargeNormal"
+        },
+        "orbit": 3,
+        "orbitIndex": 0,
+        "skill": 32705,
+        "stats": [
+          "Grants Skill: Navira, the Last Mirage"
+        ],
+        "stringId": "AscendancySorceress3Notable7"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "32705"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000010d4"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "0000000000000352"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.00000000000010d4",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf1",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.00000000000010d4",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "32705"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "efee4a77c97a7a1a2ab426d29be0949cb41920204a646e0ca94393758ee11a37",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "32705"
+      },
+      "recipe": {
+        "id": "32705",
+        "name": "Barya of Navira",
+        "stats": [
+          {
+            "line": "Grants Skill: Navira, the Last Mirage",
+            "mods": {
+              "[1]": {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraSkill",
+                "type": "LIST",
+                "value": {
+                  "level": 1,
+                  "skillId": "SummonWaterDjinnPlayer"
+                }
+              }
+            },
+            "remainder": null
+          }
+        ]
+      },
+      "semantics": [],
+      "grant": {
+        "source_effect": "SummonWaterDjinnPlayer",
+        "skill": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000032c"
+        },
+        "grant": {
+          "declaration": {
+            "kind": "passive_node",
+            "definition": {
+              "kind": "passive_node",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000010d4"
+            }
+          },
+          "slot": {
+            "kind": "grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032d5"
+          }
+        },
+        "supply": {
+          "declaration": {
+            "kind": "passive_node",
+            "definition": {
+              "kind": "passive_node",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000010d4"
+            }
+          },
+          "slot": {
+            "kind": "skill_grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032d4"
+          }
+        },
+        "skill_mapping": {
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "skill",
+              "value": {
+                "effect_id": {
+                  "kind": "text",
+                  "value": "SummonWaterDjinnPlayer"
+                }
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "skill",
+                  "value": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000032c"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        },
+        "skill_identity": {
+          "id": "SummonWaterDjinnPlayer",
+          "name": "Navira, the Last Mirage",
+          "base_type_name": "Navira, the Last Mirage",
+          "support": null,
+          "from_tree": true,
+          "winning_declaration": 454
+        },
+        "skill_declaration": {
+          "index": 454,
+          "id": "SummonWaterDjinnPlayer",
+          "source": {
+            "path": "src/Data/Skills/other.lua",
+            "line": 12310,
+            "end_line": 12430,
+            "sha256": "6c5954084cd45abf8c270aa6e94f689b9869eb4e5f529f9fad2056813a5cba84"
+          },
+          "identity": {
+            "name": "Navira, the Last Mirage",
+            "base_type_name": "Navira, the Last Mirage",
+            "support": null,
+            "from_tree": true
+          }
+        }
+      }
+    },
+    {
+      "node_id": "35560",
+      "passive": "def.00000000000011c2",
+      "node": {
+        "activeEffectImage": "Art/2DArt/UIImages/InGame/PassiveMastery/MasteryBackgroundGraphic/MasteryMinionOffencePattern",
+        "connections": [],
+        "group": 607,
+        "icon": "Art/2DArt/SkillIcons/passives/miniondamageBlue.dds",
+        "isNotable": true,
+        "name": "At your Command",
+        "orbit": 0,
+        "orbitIndex": 0,
+        "recipe": [
+          "Suffering",
+          "Despair",
+          "Envy"
+        ],
+        "skill": 35560,
+        "stats": [
+          "Minions deal 10% increased Damage with Command Skills for each different type of Persistent Minion in your Presence"
+        ],
+        "stringId": "minion_offence47_"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "35560"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000011c2"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "0000000000000367"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.00000000000011c2",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf0",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.00000000000011c2",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "35560"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "36531360998561e5a5e9c2bdf141c493c824b676c5127860a44e2ec890dad771",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "35560"
+      },
+      "recipe": {
+        "id": "35560",
+        "name": "At your Command",
+        "stats": [
+          {
+            "line": "Minions deal 10% increased Damage with Command Skills for each different type of Persistent Minion in your Presence",
+            "mods": {
+              "[1]": {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "MinionModifier",
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "[1]": {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    },
+                    "[2]": {
+                      "type": "Multiplier",
+                      "var": "PersistentMinionTypes"
+                    },
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            },
+            "remainder": null
+          }
+        ]
+      },
+      "semantics": [
+        {
+          "classification": "existing-minion-damage",
+          "value": 10,
+          "template": "Minions deal {0}% increased Damage with Command Skills for each different type of Persistent Minion in your Presence",
+          "stat_ids": [
+            "minion_commanded_skill_damage_+%_per_different_persistent_minion_in_presence"
+          ],
+          "source": {
+            "path": "src/Data/StatDescriptions/stat_descriptions.lua",
+            "first_line": 198042,
+            "last_line": 198070,
+            "sha256": "1b68daff66fe1c37e39d2635ddd7f86a408b10aa3975db1e9c90a35a85199705"
+          }
+        }
+      ],
+      "grant": null
+    },
+    {
+      "node_id": "45333",
+      "passive": "def.00000000000014d8",
+      "node": {
+        "connections": [
+          {
+            "id": 59781,
+            "orbit": -2
+          }
+        ],
+        "group": 732,
+        "icon": "Art/2DArt/SkillIcons/passives/ArchonofUndeathNode.dds",
+        "name": "Archon Effect",
+        "orbit": 2,
+        "orbitIndex": 6,
+        "skill": 45333,
+        "stats": [
+          "15% increased effect of Archon Buffs on you"
+        ],
+        "stringId": "archon24"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "45333"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000014d8"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "000000000000036a"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.00000000000014d8",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf0",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.00000000000014d8",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "45333"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "4dbfd35700bc58cca48ffb17336d4658c5209763b4a9660c8d2dbf46d767d2ec",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "45333"
+      },
+      "recipe": {
+        "id": "45333",
+        "name": "Archon Effect",
+        "stats": [
+          {
+            "line": "15% increased effect of Archon Buffs on you",
+            "mods": {
+              "[1]": {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "LocalEffect",
+                "type": "INC",
+                "value": 15
+              }
+            },
+            "remainder": "  of Archon Buffs on you "
+          }
+        ]
+      },
+      "semantics": [
+        {
+          "classification": "existing-buff-magnitude",
+          "value": 15,
+          "template": "{0}% increased effect of Archon Buffs on you",
+          "stat_ids": [
+            "archon_effect_on_you_+%"
+          ],
+          "source": {
+            "path": "src/Data/StatDescriptions/stat_descriptions.lua",
+            "first_line": 95799,
+            "last_line": 95827,
+            "sha256": "5222cf688590c33e350e52458eeb0821eb7e25400925a115201fcdc8a8d13d64"
+          }
+        }
+      ],
+      "grant": null
+    },
+    {
+      "node_id": "62210",
+      "passive": "def.00000000000019ec",
+      "node": {
+        "activeEffectImage": "Art/2DArt/UIImages/InGame/PassiveMastery/MasteryBackgroundGraphic/MasteryMinionOffencePattern",
+        "connections": [],
+        "group": 485,
+        "icon": "Art/2DArt/SkillIcons/passives/PuppeteerNoteble.dds",
+        "isNotable": true,
+        "name": "Puppet Master chance",
+        "orbit": 3,
+        "orbitIndex": 5,
+        "recipe": [
+          "Greed",
+          "Despair",
+          "Fear"
+        ],
+        "skill": 62210,
+        "stats": [
+          "15% increased Mana Cost Efficiency of Command Skills",
+          "+1 maximum stacks of Puppet Master"
+        ],
+        "stringId": "Puppetmaster6"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "62210"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000019ec"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "0000000000000381"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.00000000000019ec",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf0",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.00000000000019ec",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "62210"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "530920dd6d867c3ccb792e6eb7f3012be3b60b4da328c7c88b5724f137575eb4",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "62210"
+      },
+      "recipe": {
+        "id": "62210",
+        "name": "Puppet Master chance",
+        "stats": [
+          {
+            "line": "15% increased Mana Cost Efficiency of Command Skills",
+            "mods": {
+              "[1]": {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaCostEfficiency",
+                "type": "INC",
+                "value": 15
+              }
+            },
+            "remainder": "  of Command Skills "
+          },
+          {
+            "line": "+1 maximum stacks of Puppet Master",
+            "mods": {},
+            "remainder": " maximum stacks of Puppet Master "
+          }
+        ]
+      },
+      "semantics": [
+        {
+          "classification": "existing-skill-cost",
+          "value": 15,
+          "template": "{0}% increased Mana Cost Efficiency of Command Skills",
+          "stat_ids": [
+            "base_mana_cost_efficiency_+%_of_command_skills"
+          ],
+          "source": {
+            "path": "src/Data/StatDescriptions/stat_descriptions.lua",
+            "first_line": 104366,
+            "last_line": 104394,
+            "sha256": "ee90eda9ff078644ef0057204546a0c1e8a26ffd0c9496cd779aa76530fd05f4"
+          }
+        },
+        {
+          "classification": "existing-buff-capacity",
+          "value": 1,
+          "template": "+{0} maximum stacks of Puppet Master",
+          "stat_ids": [
+            "max_puppet_master_stacks_+"
+          ],
+          "source": {
+            "path": "src/Data/StatDescriptions/stat_descriptions.lua",
+            "first_line": 194257,
+            "last_line": 194272,
+            "sha256": "4b1c57e8860dd1a70818d17740d4d45b466085119b0125554bfd0b517f695457"
+          }
+        }
+      ],
+      "grant": null
+    }
+  ],
+  "unresolved": [
+    {
+      "node_id": "10561",
+      "passive": "def.0000000000000a6d",
+      "node": {
+        "ascendancyName": "Disciple of Varashta",
+        "connections": [
+          {
+            "id": 32705,
+            "orbit": 9
+          }
+        ],
+        "flavourText": "\"My heart was fractured. I believed Kelari's words. I knew not his true nature... his ambition. I convinced Ruzhan there were cowards among his ranks. I failed you. And I accept my fate.\" \\n\\nNavira confessed her failure to Varashta.",
+        "group": 641,
+        "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/WaterDjinnChiilldedGroundBurst.dds",
+        "isNotable": true,
+        "name": "Navira's Fracturing",
+        "nodeOverlay": {
+          "alloc": "Disciple of VarashtaFrameLargeAllocated",
+          "path": "Disciple of VarashtaFrameLargeCanAllocate",
+          "unalloc": "Disciple of VarashtaFrameLargeNormal"
+        },
+        "orbit": 7,
+        "orbitIndex": 17,
+        "skill": 10561,
+        "stats": [
+          "Grants Skill: Navira's Fracturing"
+        ],
+        "stringId": "AscendancySorceress3Notable10_"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "10561"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a6d"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "0000000000000374"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000000a6d",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf1",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.0000000000000a6d",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "10561"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "576e71d8f8978c97c4596c098648115bc824a5336fba13391a212ca7850dd19a",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "10561"
+      },
+      "recipe": {
+        "id": "10561",
+        "name": "Navira's Fracturing",
+        "stats": [
+          {
+            "line": "Grants Skill: Navira's Fracturing",
+            "mods": null,
+            "remainder": null
+          }
+        ]
+      },
+      "reason": "unresolved-djinn-command-grant"
+    },
+    {
+      "node_id": "14686",
+      "passive": "def.0000000000000bb3",
+      "node": {
+        "connections": [
+          {
+            "id": 48552,
+            "orbit": 0
+          },
+          {
+            "id": 53795,
+            "orbit": -3
+          }
+        ],
+        "group": 485,
+        "icon": "Art/2DArt/SkillIcons/passives/PuppeteerNode.dds",
+        "name": "Puppet Master chance",
+        "orbit": 7,
+        "orbitIndex": 17,
+        "skill": 14686,
+        "stats": [
+          "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill"
+        ],
+        "stringId": "Puppetmaster1"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "14686"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000bb3"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "0000000000000358"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000000bb3",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf0",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.0000000000000bb3",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "14686"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "f6a42ed9f45c48690a39d446cbfc16c238860abf4790f8a7974cff763fa5e824",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "14686"
+      },
+      "recipe": {
+        "id": "14686",
+        "name": "Puppet Master chance",
+        "stats": [
+          {
+            "line": "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill",
+            "mods": {},
+            "remainder": "% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill "
+          }
+        ]
+      },
+      "reason": "missing-pinned-buff-payload"
+    },
+    {
+      "node_id": "23265",
+      "passive": "def.0000000000000e15",
+      "node": {
+        "ascendancyName": "Disciple of Varashta",
+        "connections": [
+          {
+            "id": 13289,
+            "orbit": 8
+          }
+        ],
+        "flavourText": "\"Listen not to his simpering words. He means to languish before you to weaken your resolve! He is duplicitous. An assassin, thriving on deception and lies. His lust for power is what drove his choice!\" \\n\\nOutrage trembled in Ruzhan's voice at the sentencing.",
+        "group": 641,
+        "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/SandDjinnExplosiveTeleport.dds",
+        "isNotable": true,
+        "name": "Kelari's Deception",
+        "nodeOverlay": {
+          "alloc": "Disciple of VarashtaFrameLargeAllocated",
+          "path": "Disciple of VarashtaFrameLargeCanAllocate",
+          "unalloc": "Disciple of VarashtaFrameLargeNormal"
+        },
+        "orbit": 9,
+        "orbitIndex": 38,
+        "skill": 23265,
+        "stats": [
+          "Grants Skill: Kelari's Deception"
+        ],
+        "stringId": "AscendancySorceress3Notable13"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "23265"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000e15"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "000000000000035c"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000000e15",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf1",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.0000000000000e15",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "23265"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "8935115f925f807ac4f34a6a83604acd02c436c54c1c6fc64d90c00c37093e5e",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "23265"
+      },
+      "recipe": {
+        "id": "23265",
+        "name": "Kelari's Deception",
+        "stats": [
+          {
+            "line": "Grants Skill: Kelari's Deception",
+            "mods": null,
+            "remainder": null
+          }
+        ]
+      },
+      "reason": "unresolved-djinn-command-grant"
+    },
+    {
+      "node_id": "26926",
+      "passive": "def.0000000000000f2a",
+      "node": {
+        "connections": [
+          {
+            "id": 39416,
+            "orbit": 0
+          },
+          {
+            "id": 45333,
+            "orbit": -7
+          }
+        ],
+        "group": 732,
+        "icon": "Art/2DArt/SkillIcons/passives/ArchonofUndeathNoteble.dds",
+        "isNotable": true,
+        "name": "Archon of Undeath",
+        "orbit": 3,
+        "orbitIndex": 21,
+        "recipe": [
+          "Guilt",
+          "Suffering",
+          "Isolation"
+        ],
+        "skill": 26926,
+        "stats": [
+          "15% chance to gain Archon of Undeath when you use a Command skill"
+        ],
+        "stringId": "archon23"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "26926"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000f2a"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "0000000000000382"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000000f2a",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf0",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.0000000000000f2a",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "26926"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "f3d9793c951a978fc717b4219747115ba3d5786d2f961c360fe346320886e79a",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "26926"
+      },
+      "recipe": {
+        "id": "26926",
+        "name": "Archon of Undeath",
+        "stats": [
+          {
+            "line": "15% chance to gain Archon of Undeath when you use a Command skill",
+            "mods": null,
+            "remainder": "Archon of Undeath when you use a Command skill "
+          }
+        ]
+      },
+      "reason": "missing-pinned-buff-payload"
+    },
+    {
+      "node_id": "53324",
+      "passive": "def.000000000000173f",
+      "node": {
+        "connections": [],
+        "group": 485,
+        "icon": "Art/2DArt/SkillIcons/passives/PuppeteerNode.dds",
+        "name": "Puppet Master chance",
+        "orbit": 3,
+        "orbitIndex": 8,
+        "skill": 53324,
+        "stats": [
+          "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill"
+        ],
+        "stringId": "Puppetmaster4"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "53324"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000173f"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "0000000000000354"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.000000000000173f",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf0",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.000000000000173f",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "53324"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "a40e2c5e3d22b8b887d39eb26cf55618c0fa993e057231b2075bda62795212ee",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "53324"
+      },
+      "recipe": {
+        "id": "53324",
+        "name": "Puppet Master chance",
+        "stats": [
+          {
+            "line": "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill",
+            "mods": {},
+            "remainder": "% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill "
+          }
+        ]
+      },
+      "reason": "missing-pinned-buff-payload"
+    },
+    {
+      "node_id": "53795",
+      "passive": "def.0000000000001760",
+      "node": {
+        "connections": [
+          {
+            "id": 62210,
+            "orbit": 5
+          },
+          {
+            "id": 53324,
+            "orbit": -4
+          },
+          {
+            "id": 64804,
+            "orbit": -5
+          }
+        ],
+        "group": 485,
+        "icon": "Art/2DArt/SkillIcons/passives/PuppeteerNode.dds",
+        "name": "Puppet Master chance",
+        "orbit": 0,
+        "orbitIndex": 0,
+        "skill": 53795,
+        "stats": [
+          "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill"
+        ],
+        "stringId": "Puppetmaster2_"
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "tree_version": {
+                "kind": "text",
+                "value": "0_5"
+              },
+              "node_id": {
+                "kind": "text",
+                "value": "53795"
+              },
+              "view": {
+                "kind": "missing"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "passive_node",
+                "value": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001760"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "selected_binding": {
+        "allocation_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001bf"
+        },
+        "binding": {
+          "kind": "allocation",
+          "value": {
+            "access": {
+              "kind": "ordinary"
+            },
+            "choices": {
+              "completion": {
+                "kind": "complete"
+              },
+              "members": []
+            },
+            "id": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "0000000000000366"
+            },
+            "node": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001760",
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "pool": {
+              "kind": "known",
+              "value": {
+                "key": "def.0000000000001bf0",
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            },
+            "scope": {
+              "kind": "known",
+              "value": {
+                "kind": "shared"
+              }
+            }
+          }
+        },
+        "character_preset": {
+          "lineage": "99d5e15352dde91edb69bbfb887046c6",
+          "local": "00000000000001c1"
+        },
+        "classification": "captured-recipes-have-no-reviewed-self-flat-record",
+        "mapping": {
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "basis": {
+                "kind": "exact"
+              },
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "key": "def.0000000000001760",
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "node_id": {
+                  "kind": "text",
+                  "value": "53795"
+                },
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          }
+        },
+        "recipe_sha256": "f609875d33fc43b6676542d3e54eddb8703f0eddba6f21cfd34b82baeaee6107",
+        "source_spec": {
+          "ordinal": 135,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        "source_token": "53795"
+      },
+      "recipe": {
+        "id": "53795",
+        "name": "Puppet Master chance",
+        "stats": [
+          {
+            "line": "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill",
+            "mods": {},
+            "remainder": "% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill "
+          }
+        ]
+      },
+      "reason": "missing-pinned-buff-payload"
+    }
+  ],
+  "candidate_census_complete": true,
+  "candidate_closure_complete": false
+}

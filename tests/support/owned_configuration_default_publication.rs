@@ -13,8 +13,8 @@ mod identity;
 #[path = "owned_physical_inventory_preservation.rs"]
 mod preservation;
 #[path = "owned_release_fixture.rs"]
-mod release;
-use poe_optimizer_core::build_identity::BuildLineage;
+pub(crate) mod release;
+use poe_optimizer_core::{build_identity::BuildLineage, owned_build::ParameterValue};
 use poe_optimizer_import::{
     build_instance::ImportedBuildInstance, decode_build, owned_source::SourceProjectEvidence,
 };
@@ -56,9 +56,7 @@ fn assumptions(draft: &mut Value) -> &mut Vec<Value> {
         .as_array_mut()
         .unwrap()
 }
-fn expected(input: &Value, target: &Value, v: f64) -> Value {
-    let mut value = input["constructor_default"].clone();
-    value["value"]["value"] = json!(v);
+fn expected(input: &Value, target: &Value, value: &ParameterValue) -> Value {
     json!({"input":{"kind":"known","value":input["value_input"]},"target":target,"value":{"kind":"known","value":value}})
 }
 fn source(xml: &[u8]) -> ImportedBuildInstance {
@@ -133,6 +131,7 @@ impl LeafRole {
         }
     }
 }
+#[derive(Clone)]
 pub struct Output {
     pub policy_target: &'static str,
     pub draft_target: Value,
@@ -183,9 +182,84 @@ pub struct SourceExpectations {
     pub source_name: String,
     pub expected: Expectations,
 }
+/// Explicit typed source expectations. `original_leaf: None` requires no saved
+/// Input or Placeholder with this name; it never means an unchecked source.
+pub struct TypedSourceExpectations {
+    pub source_name: String,
+    pub outputs: Vec<Output>,
+    pub default: ParameterValue,
+    pub original_leaf: Option<(&'static str, LeafRole)>,
+    pub controls: Vec<TypedControl>,
+}
+pub struct TypedControl {
+    pub name: &'static str,
+    pub input: Option<(&'static str, &'static str)>,
+    pub placeholder: Option<&'static str>,
+    pub values: Option<Vec<ParameterValue>>,
+    pub roles: [Option<LeafRole>; 2],
+}
+fn numeric_value(input: &Value, number: f64) -> ParameterValue {
+    let mut value = input["constructor_default"].clone();
+    value["value"]["value"] = json!(number);
+    serde_json::from_value(value).unwrap()
+}
+fn typed_numeric(inputs: &[Value], groups: &[SourceExpectations]) -> Vec<TypedSourceExpectations> {
+    let mut cursor = 0;
+    groups
+        .iter()
+        .map(|group| {
+            let end = cursor + group.expected.outputs.len();
+            assert!(
+                end > cursor && end <= inputs.len(),
+                "exact nonempty source group"
+            );
+            let first = &inputs[cursor];
+            assert_eq!(
+                first["constructor_default"]["value"]["value"].as_f64(),
+                Some(group.expected.default)
+            );
+            let typed = TypedSourceExpectations {
+                source_name: group.source_name.clone(),
+                outputs: group.expected.outputs.clone(),
+                default: numeric_value(first, group.expected.default),
+                original_leaf: Some(("Placeholder", group.expected.original_placeholder)),
+                controls: group
+                    .expected
+                    .controls
+                    .iter()
+                    .map(|c| TypedControl {
+                        name: c.name,
+                        input: c.input.map(|v| ("number", v)),
+                        placeholder: c.placeholder,
+                        values: c.values.as_ref().map(|v| {
+                            assert_eq!(v.len(), end - cursor);
+                            inputs[cursor..end]
+                                .iter()
+                                .zip(v)
+                                .map(|(i, n)| numeric_value(i, *n))
+                                .collect()
+                        }),
+                        roles: c.roles,
+                    })
+                    .collect(),
+            };
+            cursor = end;
+            typed
+        })
+        .collect()
+}
+/// Numeric expectation entry point used by the ailment/activity grouping tests.
+/// Publication itself reaches the same validation after typed conversion.
+#[allow(dead_code)]
 pub fn checked_group_ranges(
     inputs: &[Value],
     groups: &[SourceExpectations],
+) -> Vec<std::ops::Range<usize>> {
+    checked_typed_group_ranges(inputs, &typed_numeric(inputs, groups))
+}
+pub fn checked_typed_group_ranges(
+    inputs: &[Value],
+    groups: &[TypedSourceExpectations],
 ) -> Vec<std::ops::Range<usize>> {
     let mut group_ranges = vec![];
     let mut cursor = 0;
@@ -196,17 +270,17 @@ pub fn checked_group_ranges(
             seen.insert(group.source_name.as_str()),
             "duplicate expected source"
         );
-        let end = cursor + group.expected.outputs.len();
+        let end = cursor + group.outputs.len();
         assert!(
             end > cursor && end <= inputs.len(),
             "exact nonempty source group"
         );
         let first = &inputs[cursor];
         assert_eq!(
-            first["constructor_default"]["value"]["value"].as_f64(),
-            Some(group.expected.default)
+            serde_json::from_value::<ParameterValue>(first["constructor_default"].clone()).unwrap(),
+            group.default
         );
-        for (input, output) in inputs[cursor..end].iter().zip(&group.expected.outputs) {
+        for (input, output) in inputs[cursor..end].iter().zip(&group.outputs) {
             assert_eq!(input["source_name"], group.source_name);
             assert_eq!(input["constructor_default"], first["constructor_default"]);
             assert!(
@@ -226,6 +300,9 @@ pub fn checked_group_ranges(
                 output.ignore_placeholder
             );
         }
+        if let Some((element, _)) = group.original_leaf {
+            assert!(["Input", "Placeholder"].contains(&element));
+        }
         group_ranges.push(cursor..end);
         cursor = end;
     }
@@ -243,18 +320,41 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
             .into_iter()
             .map(|v| serde_json::to_value(v).unwrap())
             .collect();
+    let expectations = typed_numeric(&inputs, &spec.expectations);
+    run_typed_sources(
+        Publication {
+            directory: spec.directory,
+            stage: spec.stage,
+            prior: spec.prior,
+            output: spec.output,
+            original05_before: spec.original05_before,
+            new_definitions: spec.new_definitions,
+            expectations,
+        },
+        0,
+    );
+}
+pub fn run_typed_sources(
+    spec: Publication<Vec<TypedSourceExpectations>>,
+    expected_new_programs: usize,
+) {
+    let inputs: Vec<Value> =
+        crate::configuration_stage::inputs(read(spec.directory.join("input.json")))
+            .into_iter()
+            .map(|v| serde_json::to_value(v).unwrap())
+            .collect();
     // Test expectations are explicit. Neither source name nor vector length
     // selects semantics, target ownership or source-accounting outcomes.
     let groups = spec.expectations;
-    let group_ranges = checked_group_ranges(&inputs, &groups);
+    let group_ranges = checked_typed_group_ranges(&inputs, &groups);
     let defaults: Vec<_> = groups
         .iter()
         .zip(&group_ranges)
         .flat_map(|(g, r)| {
             inputs[r.clone()]
                 .iter()
-                .zip(&g.expected.outputs)
-                .map(|(i, o)| expected(i, &o.draft_target, g.expected.default))
+                .zip(&g.outputs)
+                .map(|(i, o)| expected(i, &o.draft_target, &g.default))
         })
         .collect();
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
@@ -264,6 +364,20 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
     let prior_files = release::inventory(&prior_path);
     let prior = release::load(&prior_path);
     let next = (spec.stage)(&prior);
+    let program_count = |release: &StagedOwnedRelease| {
+        release
+            .input()
+            .recipe
+            .rules
+            .owners
+            .iter()
+            .map(|owner| owner.programs.members.len())
+            .sum::<usize>()
+    };
+    assert_eq!(
+        program_count(&next),
+        program_count(&prior) + expected_new_programs
+    );
     fs::create_dir_all(&out).unwrap();
     write(out.join("endpoint.json"), next.input());
     write(out.join("receipt.json"), next.receipt());
@@ -330,7 +444,19 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
         let scenario = json!({"kind":"scenario_preset","value":read(new.join("draft.json"))["draft"]["scenario_presets"]["members"][0]["id"]});
         let mut changed_leaves = vec![];
         for group in &groups {
-            let at = leaf(&evidence, "Placeholder", &group.source_name);
+            let Some((element, role)) = group.original_leaf else {
+                assert!(
+                    !evidence.rows().iter().any(|row| {
+                        ["Input", "Placeholder"].contains(&row.occurrence().name())
+                            && row.attribute("name").is_some_and(|a| {
+                                a.decoded().ok() == Some(group.source_name.as_str())
+                            })
+                    }),
+                    "absent source expectation must be exact"
+                );
+                continue;
+            };
+            let at = leaf(&evidence, element, &group.source_name);
             assert!(
                 !changed_leaves.contains(&at),
                 "source leaf expectations may not overlap"
@@ -341,10 +467,7 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
                 json!({"kind":"contributes"})
             );
             assert_eq!(sa["origins"][at]["links"], json!([issue]));
-            assert_eq!(
-                sb["origins"][at]["disposition"],
-                group.expected.original_placeholder.disposition()
-            );
+            assert_eq!(sb["origins"][at]["disposition"], role.disposition());
             assert_eq!(sb["origins"][at]["links"], json!([scenario]));
         }
         let counts_before = census(&sa, &evidence, &issue);
@@ -353,8 +476,8 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
         assert_eq!(
             counts_after,
             (
-                counts_before.0 - groups.len(),
-                counts_before.1 - groups.len(),
+                counts_before.0 - changed_leaves.len(),
+                counts_before.1 - changed_leaves.len(),
                 counts_before.2
             )
         );
@@ -363,8 +486,8 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
             assert_eq!(
                 counts_after,
                 (
-                    spec.original05_before.0 - groups.len(),
-                    spec.original05_before.1 - groups.len(),
+                    spec.original05_before.0 - changed_leaves.len(),
+                    spec.original05_before.1 - changed_leaves.len(),
                     spec.original05_before.2
                 )
             );
@@ -442,16 +565,17 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
             .unwrap();
     let mut control_count = 0;
     for (group, range) in groups.into_iter().zip(group_ranges) {
-        let source_name = group.source_name.as_str();
+        let source_name_owned = group.source_name.clone();
+        let source_name = source_name_owned.as_str();
         let inputs = &inputs[range.clone()];
         let input_ids: Vec<_> = inputs
             .iter()
             .map(|i| i["value_input"]["key"].clone())
             .collect();
-        let expectation = group.expected;
+        let expectation = group;
         let mut controls = vec![];
         for case in expectation.controls {
-            let Control {
+            let TypedControl {
                 name,
                 input,
                 placeholder,
@@ -475,7 +599,7 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
                 ),
                 "Input",
                 source_name,
-                input.map(|v| ("number", v)),
+                input,
             );
             controls.push((name, xml, values, roles));
         }
@@ -492,7 +616,7 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
             ));
         }
         for (name, xml, value, roles) in &controls {
-            let qualified = format!("{}-{name}", group.source_name);
+            let qualified = format!("{source_name}-{name}");
             let path = out.join(format!("probe-{qualified}.xml"));
             fs::write(&path, xml).unwrap();
             let target = out.join(format!("probe-{qualified}"));
@@ -511,7 +635,7 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
                         .iter()
                         .zip(&expectation.outputs)
                         .zip(values)
-                        .map(|((i, o), v)| expected(i, &o.draft_target, *v))
+                        .map(|((i, o), v)| expected(i, &o.draft_target, v))
                         .collect::<Vec<_>>())
                     .unwrap_or_default(),
                 "{name}"
@@ -594,6 +718,6 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
     assert_eq!(release::inventory(&prior_path), prior_files);
     write(
         out.join("validation.json"),
-        &json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":results,"mutation_controls":control_count,"queries":110,"new_definitions":spec.new_definitions,"new_programs":0,"rebuild_byte_identical":true,"inventory_completed":false,"complete_original_builds":0}),
+        &json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":results,"mutation_controls":control_count,"queries":110,"new_definitions":spec.new_definitions,"new_programs":expected_new_programs,"rebuild_byte_identical":true,"inventory_completed":false,"complete_original_builds":0}),
     );
 }

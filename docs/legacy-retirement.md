@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-10-15 for the owner's aggressive retirement direction. This is a living companion to
+Updated 2026-10-20 for the owner's aggressive retirement direction. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -10,6 +10,48 @@ review and Lua behavior/type pass. Track delivery order in the
 do not create a parallel cleanup plan or treat the archived checkpoints below as
 new work. Recent discussion findings must be classified here with a live consumer,
 retirement condition and validation boundary.
+
+## Source global-effect switches and native meaning (2026-10-20)
+
+PoB's `enableGlobal1/2` controls indexed source admission and, in the Vaal count
+branch, the enabled result consumed by FullDPS. It is not one generic native
+activation property. Lazy `hasGlobalEffect` metadata and display-order rewriting
+make cold observations or primary-name matching insufficient. Retain raw export
+values, then prove either a real native destination or a narrowly inapplicable
+source branch; do not copy the source's index, metadata cache or Boolean defaults
+into native rules.
+
+The existing Frost Bomb `requested-global-effect` transport has a live imported
+preference but retains Partial mechanics. Audit its eventual mechanical
+destination before reusing that label for another skill. This is an unresolved
+naming/semantic-boundary review, not evidence that the current preference can be
+deleted. Retire or rename source-shaped native channels only after their actual
+consumers and preserved intent are accounted for.
+
+The [construction proposal](owned-source-effect-construction-proposal.md) was
+accepted October 20. Reuse Import's existing role artifact for compiler-derived
+source facts, rebuild affected data and remove superseded interfaces in the same
+change. The owner explicitly requires no compatibility for this unshipped code.
+The implementation removes the physical-Gem V1/V2 and Direct V1 variants,
+Direct's version-dispatch state and historical singleton support-primary
+acceptance. The sole current payloads require their explicit fields, including
+an empty Direct disposition list when responsibility is unresolved. Keep the
+two live primary-usage proofs and the real additional-effect support memberships;
+their names or age do not make them redundant. Required construction facts
+rebuild through existing compilers with exact native-content preservation.
+Temporary offline cutover hooks must be removed after artifact authoring;
+the ordinary loader must continue rejecting missing or stale fields.
+The [secondary-switch packet](../data/owned/poe2/3887ae68/secondary-effect-switch-source/README.md)
+provides independent component evidence only. Its singleton and exact-true
+controls do not close usage or numerical coverage. Delivery and validation remain
+in the [implementation plan](implementation.md).
+
+The exact primary `true` case now has a private Import disposition after the
+existing live source/provider/output checks. This removes a redundant source
+restriction without introducing a PoB-shaped native Boolean. It does not authorize
+changing the saved toggle, infer participation, or account for other values and
+secondary fields. Support accounting and every other usage consumer remain
+separate. The current release's inventory-disabled behavior is unchanged.
 
 ## Current rule-format cutover (2026-10-07)
 
@@ -186,6 +228,16 @@ the complete inputs needed to reproduce each compiled dependency, not only
 the final package. This is offline tooling debt, not a reason to add an old-format
 loader, database or second evaluator, and must not displace the closest-build
 calculation work after this migration is validated.
+
+The October 20 CI repair also found stale commitments inside retained review
+records after the Scenario-format migration. Reconstructing the complete review
+exposed nested selected-membership hashes missed by updating top-level input
+hashes alone. Extend this same rebuild follow-up to the transitive review chain:
+compare each reconstructed record, classify every changed leaf, regenerate only
+derived provenance references and execute its ordinary authenticating tests.
+Keep original source observations and numerical expectations unchanged unless
+separate source evidence justifies a semantic change. A textual hash search is
+useful for propagation but cannot prove that every derived commitment is current.
 
 ## Retention rule
 
@@ -644,13 +696,22 @@ frames. It does not require unrelated skill fields to be understood. A fallback
 that depends on a unique matching primary effect still requires complete sibling
 evidence. Unknown inputs remain Pending and cannot certify complete inventories.
 
-`tests/support/owned_usage_transport_cutover.rs` is a bounded offline evidence
-migration for one authenticated predecessor, not a runtime compatibility loader.
-It proves an exact inverse of the old recipe representation before constructing
-the current format. Retain it while it authenticates the current publication's
-unchanged-input claim; retire it when that independent evidence is stored and a
-maintained current-format acquisition path replaces the historical build chain.
-Do not add broader old-format acceptance to production to replay that chain.
+The superseded `owned_usage_transport_cutover` test and its exclusive helper were
+removed October 20 after the current source-construction publication passed its
+all-five preservation check. Their ignored entry point no longer constructed the
+current policy and had no live acquisition, production or CI caller. No
+compatibility behavior was restored.
+
+Retain the independent historical evidence: predecessor
+`runs/owned-player-rule-ownership-01/package`, successor
+`runs/owned-usage-transport-03/package`, its `validation.json` and the passing
+`runs/owned-usage-transport-cutover-tests-03.log`. The retirement audit authenticated
+both seventeen-artifact packages and all five saved outputs. The old validation
+receipt SHA-256 is `af21966c15fe374503bd510400542fe8cbdb182bd73a044976f684571651b78a`;
+the historical observations were not regenerated. Current migration validation
+is `runs/owned-construction-cutover-validation-01/validation.json`; the retained
+`self-flat-selected-bindings` readers consume their own authenticated snapshots
+and do not depend on the deleted harness.
 
 ## What is actually coupled
 
@@ -1096,12 +1157,23 @@ damage bonus 50 is a foreign skill contribution, not Sniper's bonus.
 This is an unresolved gameplay responsibility. A missing PoB modifier mapping
 establishes neither intended absence nor an inactive native Enemy condition.
 Review exact generated-skill participation, commanded action applicability and
-delivery/uptime before deciding whether it affects this scenario. Do not
-auto-enable Weakness, default its condition to false, copy a Lua nil mapping
-into runtime rules, or claim a PoB-defect exception. The selected-source critical
+delivery/uptime before deciding whether it affects this scenario. Do not infer
+the Enemy condition from enabled skills or untranslated mappings, copy a Lua nil
+mapping into runtime rules, or claim a PoB-defect exception. The selected-source critical
 certificate records this obligation but cannot close a candidate's Boolean
 membership. This investigation belongs to the first-build coverage work;
 changed candidates also require their own admitted mechanics.
+
+**Configured-state distinction, October 16:** the source checkbox writes the
+Enemy's applied-Weakness condition. A skill capability is instead recorded on
+the Player store, and choosing a displayed Command action records no prior hit.
+The existing typed configuration-default policy can import the source-backed
+absent-checkbox default as an explicit configured false. This means the saved
+scenario does not assert the debuff applied; it does not erase the skill's on-hit
+capability or prove that every possible condition supplier is absent. Implement
+that input and its exact Encounter FLAG member separately, retaining unknown
+condition coverage and the unresolved on-hit/timing responsibility. No temporal
+simulation or new public input-ownership model is needed for that import step.
 
 ### Other current compatibility investigations
 

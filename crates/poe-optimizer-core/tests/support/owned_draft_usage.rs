@@ -33,6 +33,51 @@ fn generated_target(local: u64) -> UsageTarget {
 }
 
 #[test]
+fn scenario_intent_pending_inventory_and_parameters_survive_roundtrip_and_block_selection() {
+    let mut raw = input();
+    let selected = raw
+        .scenario_presets
+        .members
+        .iter_mut()
+        .find(|preset| preset.id == id(150))
+        .unwrap();
+    let exact = authored(60, 3);
+    selected.scenario.usage_intents.members.push(
+        ScenarioUsageIntent {
+            policy: exact.policy,
+            parameters: exact.parameters,
+        }
+        .into(),
+    );
+    selected.scenario.usage_intents.completion = open(990);
+    selected.scenario.usage_intents.members[0]
+        .parameters
+        .members[0]
+        .value = DraftField::Pending(pending(
+        991,
+        vec![ParameterValue::Integer(BoundedInteger::new(3).unwrap())],
+    ));
+    let draft = DraftSession::new(raw, limits()).unwrap();
+    let bytes = encode_draft(&draft, limits()).unwrap();
+    let restored = decode_draft(&bytes, limits()).unwrap();
+    assert_eq!(restored, draft);
+    let (issues, _) = pending_result(&restored);
+    assert_eq!(issues.len(), 2);
+    assert!(issues.iter().all(|issue| {
+        issue.owner == Some(id::<ScenarioPresetId>(150).instance_id())
+            && issue.path.contains("usage_intents")
+    }));
+    assert!(issues.iter().any(|issue| issue.id == id(990)));
+    assert!(issues.iter().any(|issue| issue.id == id(991)));
+    let mut wire: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+    wire["draft"]["scenario_presets"]["members"][0]["scenario"]
+        .as_object_mut()
+        .unwrap()
+        .remove("usage_intents");
+    assert!(decode_draft(&serde_json::to_vec(&wire).unwrap(), limits()).is_err());
+}
+
+#[test]
 fn finalization_uses_the_shared_composer_and_preserves_queries_and_physical_inputs() {
     let mut raw = input();
     preferences(&mut raw, 130, vec![authored(60, 2), authored(61, 4)]);
@@ -77,7 +122,38 @@ fn finalization_uses_the_shared_composer_and_preserves_queries_and_physical_inpu
             .gems
     );
     assert!(expected.scenario().input().usage.contains(&authored(60, 8)));
-    assert!(expected.scenario().input().usage.contains(&authored(61, 4)));
+    assert!(
+        expected
+            .build()
+            .input()
+            .usage_preferences
+            .contains(&authored(61, 4))
+    );
+    assert!(
+        expected
+            .build()
+            .input()
+            .usage_preferences
+            .contains(&authored(60, 2))
+    );
+    assert_eq!(
+        expected.build().input().usage_preferences,
+        vec![authored(60, 2), authored(61, 4)]
+    );
+    assert_eq!(expected.scenario().input().usage.len(), 2);
+    assert!(
+        expected
+            .scenario()
+            .input()
+            .usage
+            .contains(&UsagePolicySelection {
+                policy: def("usage"),
+                target: UsageTarget::Actor(ActorKey::Player),
+                parameters: vec![],
+            })
+    );
+    assert!(!expected.scenario().input().usage.contains(&authored(61, 4)));
+    assert!(!expected.scenario().input().usage.contains(&authored(60, 2)));
 }
 
 #[test]
@@ -236,7 +312,14 @@ fn complete_generated_actor_action_and_skill_preferences_survive_draft_conversio
     assert_eq!(restored, draft);
     let request = ready(&restored, selection());
     for row in rows {
-        assert!(request.request().scenario().input().usage.contains(&row));
+        assert!(
+            request
+                .request()
+                .build()
+                .input()
+                .usage_preferences
+                .contains(&row)
+        );
     }
 }
 

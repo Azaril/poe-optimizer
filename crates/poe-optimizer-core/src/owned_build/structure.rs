@@ -271,17 +271,6 @@ impl PresetUsageScope {
     }
 }
 
-pub(crate) fn validate_usage_layers(
-    namespace: &GameVersionNamespace,
-    preferences: &[UsagePolicySelection],
-    overrides: &[UsagePolicySelection],
-    limits: OwnedInputLimits,
-) -> Result {
-    let mut check = StructuralCheck::new(namespace, limits, None)?;
-    check.usage("composition.preferences", preferences)?;
-    check.usage("composition.overrides", overrides)
-}
-
 /// Crate-private structural leaves shared by complete inputs and typed drafts.
 pub(crate) struct StructuralCheck<'a> {
     namespace: &'a GameVersionNamespace,
@@ -929,6 +918,7 @@ impl<'a> StructuralCheck<'a> {
         if let Some(inputs) = &build.generated_inputs {
             self.generated_inputs("build.generated_inputs", inputs)?;
         }
+        self.usage("build.usage_preferences", &build.usage_preferences)?;
         if let Some(sequences) = &build.authored_support_order {
             self.authored_support_order(
                 "build.authored_support_order",
@@ -969,7 +959,25 @@ impl<'a> StructuralCheck<'a> {
                 AssumptionTarget::Skill(skill) => self.skill(&path, skill)?,
             }
         }
-        self.usage("scenario.usage", &scenario.usage)
+        self.usage("scenario.usage", &scenario.usage)?;
+        self.usage_intents("scenario.usage_intents", &scenario.usage_intents)
+    }
+    fn usage_intents(&mut self, path: &str, intents: &[ScenarioUsageIntent]) -> Result {
+        self.collection(path, intents.len())?;
+        let mut seen = BTreeSet::new();
+        for (index, intent) in intents.iter().enumerate() {
+            let path = format!("{path}[{index}]");
+            if !seen.insert(&intent.policy) {
+                return Err(error(&path, StructuralErrorKind::DuplicateAssignment));
+            }
+            self.definition(&path, &intent.policy)?;
+            self.parameters(
+                &format!("{path}.parameters"),
+                &intent.parameters,
+                &SlotOwnerDefId::UsagePolicy(intent.policy.clone()),
+            )?;
+        }
+        Ok(())
     }
     pub(crate) fn generated_inputs(
         &mut self,
@@ -1217,6 +1225,7 @@ pub(crate) fn canonicalize_choices(choices: &mut [MechanicChoice]) {
     choices.sort_by(|a, b| (&a.owner, &a.choice.slot).cmp(&(&b.owner, &b.choice.slot)));
 }
 pub(crate) fn canonicalize_build(build: &mut BuildInput) {
+    canonicalize_usage(&mut build.usage_preferences);
     if let Some(inputs) = &mut build.generated_inputs {
         inputs.bindings.sort_by(|a, b| a.target.cmp(&b.target));
         for row in &mut inputs.bindings {
@@ -1244,6 +1253,12 @@ pub(crate) fn canonicalize_scenario(scenario: &mut ScenarioInput) {
         .assumptions
         .sort_by(|a, b| (&a.target, &a.input).cmp(&(&b.target, &b.input)));
     canonicalize_usage(&mut scenario.usage);
+    scenario
+        .usage_intents
+        .sort_by(|a, b| a.policy.cmp(&b.policy));
+    for intent in &mut scenario.usage_intents {
+        canonicalize_parameters(&mut intent.parameters);
+    }
 }
 pub(crate) fn canonicalize_usage(usage: &mut [UsagePolicySelection]) {
     usage.sort_by(|a, b| (&a.target, &a.policy).cmp(&(&b.target, &b.policy)));

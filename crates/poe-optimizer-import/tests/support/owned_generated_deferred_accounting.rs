@@ -12,10 +12,7 @@ use std::collections::BTreeSet;
 fn configured() -> Fixture {
     let mut f = Fixture::new();
     let DirectSkillInputPolicy::PobManualDirectSkillV2 { skills, .. } =
-        f.base.policy.direct_skill_inputs.as_ref().unwrap()
-    else {
-        unreachable!()
-    };
+        f.base.policy.direct_skill_inputs.as_ref().unwrap();
     let direct = skills[0].clone();
     let quality = direct
         .parameters
@@ -93,10 +90,7 @@ fn configured() -> Fixture {
         roles: direct_roles,
         dispositions,
         ..
-    } = f.base.policy.direct_skill_inputs.as_mut().unwrap()
-    else {
-        unreachable!()
-    };
+    } = f.base.policy.direct_skill_inputs.as_mut().unwrap();
     *direct_definitions = definitions.clone();
     *direct_roles = roles;
     let SourceActionCorrespondenceInput::PobManualDirectSingletonMinionActionsV1 {

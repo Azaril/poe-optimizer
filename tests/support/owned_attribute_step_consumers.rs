@@ -874,6 +874,7 @@ mod native {
         ) -> std::result::Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>, PlanError>
         {
             let scenario = ScenarioInput {
+                usage_intents: vec![],
                 game_version: ns(),
                 enemy: EnemySpec {
                     encounter: def(0x31d1),

@@ -88,7 +88,8 @@ pub(crate) fn fixture() -> (Artifacts, NormalizationPolicy) {
         slot_attribute: "slot".into(),
         shared_slots: vec![SourceComponent::Missing],
     });
-    p.direct_skill_inputs = Some(DirectSkillInputPolicy::PobManualDirectSkillV1 {
+    p.direct_skill_inputs = Some(DirectSkillInputPolicy::PobManualDirectSkillV2 {
+        dispositions: vec![],
         definitions: a.schema.identity().clone(),
         source: pin(),
         roles: *a.roles.identity(),
@@ -138,11 +139,8 @@ pub(crate) fn fixture() -> (Artifacts, NormalizationPolicy) {
     (a, p)
 }
 pub(crate) fn row(p: &mut NormalizationPolicy) -> &mut DirectSkillInputRule {
-    let DirectSkillInputPolicy::PobManualDirectSkillV1 { skills, .. } =
-        p.direct_skill_inputs.as_mut().unwrap()
-    else {
-        panic!("fixture requires Direct V1")
-    };
+    let DirectSkillInputPolicy::PobManualDirectSkillV2 { skills, .. } =
+        p.direct_skill_inputs.as_mut().unwrap();
     &mut skills[0]
 }
 pub(crate) fn run(
@@ -267,7 +265,7 @@ fn missing_malformed_out_of_range_inputs_remain_pending_even_when_disabled() {
 }
 
 #[test]
-fn nonmanual_unknown_namespaced_and_ambiguous_frames_never_create_direct_instances() {
+fn nonmanual_unknown_local_namespaced_and_ambiguous_frames_never_create_direct_instances() {
     let (a, p) = fixture();
     let baseline = xml(DIRECT);
     for source in [
@@ -284,7 +282,6 @@ fn nonmanual_unknown_namespaced_and_ambiguous_frames_never_create_direct_instanc
         ),
         baseline.replace("</Skills>", "<SkillSet id=\"7\"/></Skills>"),
         baseline.replace("id=\"7\"", "id=\"07\""),
-        baseline.replace("</SkillSet>", "<Skill><Unexpected/></Skill></SkillSet>"),
     ] {
         let result = run(&a, &p, &source).unwrap();
         assert!(result.draft().input().skills.members.is_empty(), "{source}");
@@ -306,20 +303,54 @@ fn nonmanual_unknown_namespaced_and_ambiguous_frames_never_create_direct_instanc
 }
 
 #[test]
+fn unreviewed_siblings_do_not_discard_raw_direct_inputs_or_authorize_complete_inventories() {
+    let (a, p) = fixture();
+    let source = xml(&format!("{DIRECT}{SUPPORT}"))
+        .replace("</SkillSet>", "<Skill><Unexpected/></Skill></SkillSet>");
+    let result = run(&a, &p, &source).unwrap();
+    let draft = result.draft().input();
+    assert_eq!(draft.skills.members.len(), 1);
+    let skill = &draft.skills.members[0];
+    assert_eq!(values(skill), [Some(17.0), Some(0.0)]);
+    assert!(matches!(
+        skill.parameters.as_ref().unwrap().completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    assert_eq!(draft.supports.members.len(), 1);
+    assert!(matches!(
+        draft.supports.members[0].target,
+        DraftSkillTarget::Pending(_)
+    ));
+    let preset = &draft.skill_presets.members[0];
+    assert_eq!(preset.skills.members, [skill.id]);
+    assert!(matches!(
+        preset.skills.completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    assert!(matches!(
+        preset.supports.completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    let usage = preset.usage_preferences.as_ref().unwrap();
+    assert!(usage.members.is_empty());
+    assert!(matches!(
+        usage.completion,
+        DraftListCompletion::Pending { .. }
+    ));
+}
+
+#[test]
 fn stale_source_definition_catalog_and_role_bindings_reject_the_policy() {
     let (a, p) = fixture();
     for case in 0..4 {
         let mut changed = p.clone();
-        let DirectSkillInputPolicy::PobManualDirectSkillV1 {
+        let DirectSkillInputPolicy::PobManualDirectSkillV2 {
             definitions,
             source,
             catalog,
             roles,
             ..
-        } = changed.direct_skill_inputs.as_mut().unwrap()
-        else {
-            panic!("fixture requires Direct V1")
-        };
+        } = changed.direct_skill_inputs.as_mut().unwrap();
         match case {
             0 => source.revision = "d".repeat(40),
             1 => definitions.release.push_str("-stale"),
@@ -358,11 +389,8 @@ fn catalog_provenance_may_be_a_strict_subset_but_every_required_pin_is_immutable
         matches!(run(&a, &p, &xml(DIRECT)), Err(NormalizationError::Binding)),
         "the role digest still requires exact rebinding"
     );
-    let DirectSkillInputPolicy::PobManualDirectSkillV1 { roles, .. } =
-        p.direct_skill_inputs.as_mut().unwrap()
-    else {
-        panic!("fixture requires Direct V1")
-    };
+    let DirectSkillInputPolicy::PobManualDirectSkillV2 { roles, .. } =
+        p.direct_skill_inputs.as_mut().unwrap();
     *roles = *a.roles.identity();
     let after = run(&a, &p, &xml(DIRECT)).unwrap();
     assert_eq!(before.draft(), after.draft());
@@ -371,11 +399,8 @@ fn catalog_provenance_may_be_a_strict_subset_but_every_required_pin_is_immutable
     assert_eq!(a.mapping.input().source.files.len(), 2);
 
     let mut widened = p.clone();
-    let DirectSkillInputPolicy::PobManualDirectSkillV1 { source, .. } =
-        widened.direct_skill_inputs.as_mut().unwrap()
-    else {
-        panic!("fixture requires Direct V1")
-    };
+    let DirectSkillInputPolicy::PobManualDirectSkillV2 { source, .. } =
+        widened.direct_skill_inputs.as_mut().unwrap();
     *source = a.mapping.input().source.clone();
     assert!(
         matches!(
@@ -453,23 +478,17 @@ fn typed_inputs_require_exact_authored_authority_owner_and_unique_recipe() {
             }
         }
         rebind_quality_schema(&mut a, &mut p, schema);
-        let DirectSkillInputPolicy::PobManualDirectSkillV1 {
+        let DirectSkillInputPolicy::PobManualDirectSkillV2 {
             definitions, roles, ..
-        } = p.direct_skill_inputs.as_mut().unwrap()
-        else {
-            panic!("fixture requires Direct V1")
-        };
+        } = p.direct_skill_inputs.as_mut().unwrap();
         *definitions = a.schema.identity().clone();
         *roles = *a.roles.identity();
         assert!(run(&a, &p, &xml(DIRECT)).is_err());
     }
     let (mut a, mut p) = fixture();
     replace_materialization(&mut a, "active", OwnedGemMaterialization::Physical);
-    let DirectSkillInputPolicy::PobManualDirectSkillV1 { roles, .. } =
-        p.direct_skill_inputs.as_mut().unwrap()
-    else {
-        panic!("fixture requires Direct V1")
-    };
+    let DirectSkillInputPolicy::PobManualDirectSkillV2 { roles, .. } =
+        p.direct_skill_inputs.as_mut().unwrap();
     *roles = *a.roles.identity();
     assert!(matches!(
         run(&a, &p, &xml(DIRECT)),
@@ -481,7 +500,13 @@ fn typed_inputs_require_exact_authored_authority_owner_and_unique_recipe() {
 fn direct_omission_is_byte_and_allocation_compatible_null_and_unknown_version_reject() {
     let (a, mut p) = fixture();
     let mut json = serde_json::to_value(&p).unwrap();
-    json["direct_skill_inputs"]["kind"] = "pob_manual_direct_skill_v2".into();
+    let current: NormalizationPolicy = serde_json::from_value(json.clone()).unwrap();
+    assert_eq!(serde_json::to_value(&current).unwrap(), json);
+    assert_eq!(
+        run(&a, &current, &xml(DIRECT)).unwrap().draft(),
+        run(&a, &p, &xml(DIRECT)).unwrap().draft()
+    );
+    json["direct_skill_inputs"]["kind"] = "pob_manual_direct_skill_v999".into();
     assert!(serde_json::from_value::<NormalizationPolicy>(json).is_err());
     let mut null = serde_json::to_value(&p).unwrap();
     null["direct_skill_inputs"] = serde_json::Value::Null;
@@ -563,12 +588,12 @@ fn policy_and_source_work_are_bounded_without_partial_results() {
 }
 
 #[test]
-fn full_source_census_is_lazy_once_per_import_and_still_rejects_unreviewed_siblings() {
+fn raw_only_inputs_remain_bounded_and_do_not_replace_independent_inventory_proofs() {
     let (a, p) = fixture();
     let mut omitted = p.clone();
     omitted.direct_skill_inputs = None;
-    // Every name/row below is inspected by the full census, but none matches the
-    // Direct catalog. Unlike whitespace, these survive XML source decoding.
+    // These retained rows do not match the Direct catalog. Exact raw-input
+    // transport must not pretend to certify their whole saved-set inventory.
     const ROW: &str = r#"<Gem gemId="unmapped" variantId="v" skillId="unmapped" nameSpec="Unmapped" level="17" quality="0" enabled="true" enableGlobal1="true" enableGlobal2="false" count="1" skillMinion="unmapped" skillMinionSkill="1" skillMinionSkillCalcs="1" corrupted="false" corruptLevel="0"/>"#;
     let source = |directs: usize| {
         xml(&format!(
@@ -598,21 +623,6 @@ fn full_source_census_is_lazy_once_per_import_and_still_rejects_unreviewed_sibli
     let unrelated = source(0);
     let one = source(1);
     let two = source(2);
-    let unrelated_work = minimum_work(&unrelated, &p);
-    let unrelated_overhead = unrelated_work - minimum_work(&unrelated, &omitted);
-    let one_work = minimum_work(&one, &p);
-    let one_overhead = one_work - minimum_work(&one, &omitted);
-    assert!(
-        one_overhead > unrelated_overhead * 2,
-        "matching source must pay substantial whole-frame work that irrelevant policy skips"
-    );
-    let census_increment = one_overhead - unrelated_overhead;
-    let two_work = minimum_work(&two, &p);
-    assert!(
-        two_work - one_work < census_increment / 2,
-        "a second exact match must reuse the successful immutable census"
-    );
-
     let result = run(&a, &p, &unrelated).unwrap();
     let prior = run(&a, &omitted, &unrelated).unwrap();
     assert!(result.draft().input().skills.members.is_empty());
@@ -632,40 +642,11 @@ fn full_source_census_is_lazy_once_per_import_and_still_rejects_unreviewed_sibli
 
     let invalidate =
         |source: &str| source.replace("</SkillSet>", "<Skill><Unexpected/></Skill></SkillSet>");
-    let invalid_one = invalidate(&one);
     let invalid_two = invalidate(&two);
-    let invalid_one_work = minimum_work(&invalid_one, &p);
-    let invalid_two_work = minimum_work(&invalid_two, &p);
-    assert!(
-        invalid_two_work - invalid_one_work < census_increment / 2,
-        "rejected immutable frames must also be cached"
-    );
-    assert!(
-        run(&a, &p, &invalid_two)
-            .unwrap()
-            .draft()
-            .input()
-            .skills
-            .members
-            .is_empty(),
-        "a later matching row cannot bypass an unreviewed sibling"
-    );
-    let tight = NormalizationLimits {
-        max_work: one_work - 1,
-        ..Default::default()
-    };
-    assert!(usage_input_tests::run_limits(&unrelated, &a, &p, tight).is_ok());
-    assert!(
-        matches!(
-            usage_input_tests::run_limits(&one, &a, &p, tight),
-            Err(NormalizationError::Limit(_))
-        ),
-        "a relevant complete census must still spend its source work"
-    );
-
-    // Independent inventory adapters need the same immutable census but retain
-    // their own classification/closure checks. Combined work must be materially
-    // below paying both isolated full-frame proofs.
+    // Inventory adapters still require their own complete frame/classification
+    // proofs. Their failure cannot promote raw transport to inventory authority
+    // or discard independently checked inputs. Shared census cache behavior is
+    // covered directly by the gem_inventory::dispositions unit tests.
     let mut inventory = omitted.clone();
     inventory.support_origin_order = Some(
         SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 {
@@ -689,47 +670,70 @@ fn full_source_census_is_lazy_once_per_import_and_still_rejects_unreviewed_sibli
     );
     let mut combined = inventory.clone();
     combined.direct_skill_inputs = p.direct_skill_inputs.clone();
-    let combined_work = minimum_work(&one, &combined);
-    let independent_work = one_work + minimum_work(&one, &inventory) - minimum_work(&one, &omitted);
-    assert!(
-        combined_work + census_increment / 2 < independent_work,
-        "Direct, support and payload consumers must share source inspection"
-    );
-    let result = run(&a, &combined, &one).unwrap();
-    assert_eq!(result.draft().input().skills.members.len(), 1);
-    let preset = &result.draft().input().skill_presets.members[0];
-    assert!(matches!(
-        preset.supports.completion,
-        DraftListCompletion::Pending { .. }
-    ));
-    assert!(
-        matches!(
-            preset.payload_links.completion,
-            DraftListCompletion::Pending { .. }
-        ),
-        "source framing alone cannot close unreviewed policy-specific inventories"
-    );
-    let invalid_combined_work = minimum_work(&invalid_one, &combined);
-    let invalid_independent_work = invalid_one_work + minimum_work(&invalid_one, &inventory)
-        - minimum_work(&invalid_one, &omitted);
-    assert!(
-        invalid_combined_work + census_increment / 2 < invalid_independent_work,
-        "invalid immutable frames must be shared across independent consumers too"
-    );
-    let tight = NormalizationLimits {
-        max_work: combined_work - 1,
-        ..Default::default()
-    };
-    assert!(matches!(
-        usage_input_tests::run_limits(&one, &a, &combined, tight),
-        Err(NormalizationError::Limit(_))
-    ));
-    let exact = NormalizationLimits {
-        max_work: combined_work,
-        ..Default::default()
-    };
-    assert!(
-        usage_input_tests::run_limits(&one, &a, &combined, exact).is_ok(),
-        "failed normalization cannot poison a later fresh proof"
-    );
+    for policy in [&p, &combined] {
+        for (source, count) in [(&one, 1), (&invalid_two, 2)] {
+            let baseline = run(&a, policy, source).unwrap();
+            let draft = baseline.draft().input();
+            assert_eq!(draft.skills.members.len(), count);
+            for skill in &draft.skills.members {
+                assert_eq!(values(skill), [Some(17.0), Some(0.0)]);
+                assert!(matches!(
+                    skill.parameters.as_ref().unwrap().completion,
+                    DraftListCompletion::Pending { .. }
+                ));
+            }
+            assert_eq!(draft.supports.members.len(), 1);
+            assert!(matches!(
+                draft.supports.members[0].target,
+                DraftSkillTarget::Pending(_)
+            ));
+            let preset = &draft.skill_presets.members[0];
+            assert!(matches!(
+                preset.skills.completion,
+                DraftListCompletion::Pending { .. }
+            ));
+            assert!(matches!(
+                preset.supports.completion,
+                DraftListCompletion::Pending { .. }
+            ));
+            assert!(matches!(
+                preset.payload_links.completion,
+                DraftListCompletion::Pending { .. }
+            ));
+            assert!(matches!(
+                preset.usage_preferences.as_ref().unwrap().completion,
+                DraftListCompletion::Pending { .. }
+            ));
+
+            let work = minimum_work(source, policy);
+            assert!(matches!(
+                usage_input_tests::run_limits(
+                    source,
+                    &a,
+                    policy,
+                    NormalizationLimits {
+                        max_work: work - 1,
+                        ..Default::default()
+                    }
+                ),
+                Err(NormalizationError::Limit(_))
+            ));
+            let exact = usage_input_tests::run_limits(
+                source,
+                &a,
+                policy,
+                NormalizationLimits {
+                    max_work: work,
+                    ..Default::default()
+                },
+            )
+            .unwrap();
+            assert_eq!(exact.draft(), baseline.draft());
+            assert_eq!(exact.allocator_after(), baseline.allocator_after());
+            assert_eq!(
+                serde_json::to_value(exact.sidecar()).unwrap(),
+                serde_json::to_value(baseline.sidecar()).unwrap()
+            );
+        }
+    }
 }

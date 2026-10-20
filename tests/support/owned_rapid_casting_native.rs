@@ -233,6 +233,7 @@ impl World {
             BuildSpec::new(self.base.inner.build.clone(), Default::default()).unwrap(),
             ScenarioSpec::new(
                 ScenarioInput {
+                    usage_intents: vec![],
                     game_version: bidding_fixture::ns(),
                     enemy: EnemySpec {
                         encounter: def("fixture.encounter"),

@@ -541,6 +541,7 @@ dependencies = [
 name = "poe-optimizer-pob"
 version = "0.1.0"
 dependencies = [
+ "flate2",
  "mlua",
  "poe-optimizer-core",
  "poe-optimizer-data",

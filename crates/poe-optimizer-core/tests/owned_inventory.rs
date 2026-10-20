@@ -59,6 +59,7 @@ fn item(record: u64, first_modifier: u64) -> ItemRecord {
 }
 fn build_input() -> BuildInput {
     BuildInput {
+        usage_preferences: vec![],
         generated_inputs: None,
         authored_support_order: None,
         allocator: InstanceAllocatorState::from_parts(lineage(), 100),

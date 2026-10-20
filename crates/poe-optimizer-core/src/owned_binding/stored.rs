@@ -6,8 +6,9 @@ pub(crate) struct StoredIntentValidation {
     pub work_used: usize,
 }
 
-/// Validate the explicit scenario layer in its actual selected context before
-/// replacement. Character roots and required choices are meaningful here.
+/// Validate every selected usage layer before preparation resolves precedence.
+/// Character roots and required choices are meaningful for exact selections;
+/// intent validates its schema and values without inventing recipient topology.
 pub(crate) fn validate_selected_usage<I: DefinitionSchemaIndex>(
     index: &I,
     request: &OwnedEvaluationRequest,
@@ -22,12 +23,32 @@ pub(crate) fn validate_selected_usage<I: DefinitionSchemaIndex>(
         work: limits.max_work,
         issues: Vec::new(),
     };
-    let usage = &request.scenario().input().usage;
-    checker.charge(usage.len() + 1)?;
+    let preferences = &request.build().input().usage_preferences;
+    let scenario = request.scenario().input();
+    let usage = &scenario.usage;
+    checker.charge(preferences.len() + usage.len() + scenario.usage_intents.len() + 1)?;
+    for (index, row) in preferences.iter().enumerate() {
+        checker.usage_selection(
+            row,
+            &BindingSite::new(
+                BindingLocation::BuildUsagePreference { index },
+                BindingFacet::Target,
+            ),
+        )?;
+    }
     for (index, row) in usage.iter().enumerate() {
         checker.usage_selection(
             row,
             &BindingSite::new(BindingLocation::Usage { index }, BindingFacet::Target),
+        )?;
+    }
+    for (index, intent) in scenario.usage_intents.iter().enumerate() {
+        checker.scenario_usage_intent(
+            intent,
+            &BindingSite::new(
+                BindingLocation::ScenarioUsageIntent { index },
+                BindingFacet::Target,
+            ),
         )?;
     }
     Ok(StoredIntentValidation {

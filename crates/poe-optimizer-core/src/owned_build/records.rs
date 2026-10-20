@@ -50,6 +50,9 @@ pub struct BuildInput {
         deserialize_with = "non_null_extension"
     )]
     pub generated_inputs: Option<GeneratedSkillInputsV1>,
+    /// Selected exact build preferences. Scenario intent and exact overrides
+    /// remain separate until definition-aware preparation resolves precedence.
+    pub usage_preferences: Vec<UsagePolicySelection>,
     pub payload_links: Vec<PayloadLink>,
     pub choices: Vec<MechanicChoice>,
 }
@@ -486,7 +489,10 @@ pub struct ScenarioInput {
     pub game_version: GameVersionNamespace,
     pub enemy: EnemySpec,
     pub assumptions: Vec<ExternalAssumption>,
+    /// Explicit exact overrides; never contains copied build preferences.
     pub usage: Vec<UsagePolicySelection>,
+    /// Scenario-owned intent whose eligible exact recipients bind at preparation.
+    pub usage_intents: Vec<ScenarioUsageIntent>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -522,6 +528,13 @@ pub enum AssumptionTarget {
 pub struct UsagePolicySelection {
     pub policy: UsagePolicyDefId,
     pub target: UsageTarget,
+    pub parameters: Vec<ParameterAssignment>,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ScenarioUsageIntent {
+    pub policy: UsagePolicyDefId,
     pub parameters: Vec<ParameterAssignment>,
 }
 

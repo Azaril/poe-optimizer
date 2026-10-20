@@ -1,0 +1,32 @@
+{
+  "artifacts": {
+    "dependencies.json": {
+      "bytes": 39577,
+      "sha256": "f54ff2d0a0a11ad11e81a25ecee8316d60055d96b6738ef90e7cfefc4fddefe7"
+    },
+    "source-evidence.json": {
+      "bytes": 2788,
+      "sha256": "a1b3d1a098933c050638015ad97ce9b49fcb7610046b9aab6f5825cfebf00edd"
+    },
+    "usage.json": {
+      "bytes": 7809,
+      "sha256": "6f24c262c84bfdca6d900c0ef00efe5204d5895c4c6e9a74b6828d64d567a39d"
+    }
+  },
+  "expected_predecessor": "2d307fd317100b5282026a38d91c281a937eb850e275664d8c5ddfc9ee2c6560",
+  "native_mechanics_coverage": "partial",
+  "new_defaults": 0,
+  "new_definitions": 0,
+  "new_rules": 0,
+  "new_slots": 0,
+  "new_tables": 0,
+  "physical_occurrences": [
+    0,
+    0,
+    0,
+    0,
+    4
+  ],
+  "schema_version": 1,
+  "usage_inventory": "pending"
+}

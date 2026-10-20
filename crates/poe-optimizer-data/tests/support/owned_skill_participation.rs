@@ -32,6 +32,7 @@ fn fixture() -> Fixture {
         DefinitionDescriptor::UsagePolicy(entry(
             id("requested"),
             UsagePolicySchema {
+                scenario_skill_applicability: None,
                 targets: vec![UsageTargetKind::Skill],
                 declarations: DeclaredSlots {
                     parameters: DeclaredSet::complete(vec![usage_parameter()]),

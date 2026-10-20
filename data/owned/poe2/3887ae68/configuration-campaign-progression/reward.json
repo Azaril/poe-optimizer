@@ -1,0 +1,78 @@
+{
+  "recipe": {
+    "id": "campaign-bosses-defeated",
+    "codec": {
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "whitespace": "trim_ascii",
+      "codec": {
+        "value": {
+          "syntax": "scientific"
+        },
+        "kind": "integer"
+      }
+    },
+    "tiers": [
+      {
+        "selectors": [
+          {
+            "lane": "input_number",
+            "name": "configBossFaceBroken"
+          }
+        ],
+        "duplicates": "reject"
+      },
+      {
+        "selectors": [
+          {
+            "lane": "placeholder_number",
+            "name": "configBossFaceBroken"
+          }
+        ],
+        "duplicates": "reject"
+      }
+    ],
+    "missing": {
+      "kind": "pending"
+    }
+  },
+  "outcomes": {
+    "selector": {
+      "value": {
+        "kind": "reward",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "configBossFaceBroken"
+          }
+        }
+      },
+      "kind": "definition"
+    },
+    "parameter": {
+      "declaration": {
+        "kind": "reward",
+        "definition": {
+          "kind": "reward",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033b4"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033b5"
+      }
+    },
+    "fixed_parameters": [],
+    "selection": "nonzero_input_then_nonzero_placeholder"
+  }
+}

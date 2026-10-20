@@ -15,6 +15,9 @@ pub(super) struct CheckedConfigurationReceipt {
     pub(super) control: ConfigurationAdapterControl,
     pub(super) source_state: ConfigurationSourceState,
     pub(super) target: OwnedOriginTarget,
+    /// Exact additional provenance established by the same checked output.
+    /// Other adapters keep this empty; a selected Reward also retains its own ID.
+    pub(super) additional_targets: Vec<OwnedOriginTarget>,
     pub(super) source_only: Option<OwnedDefinitionKey>,
 }
 
@@ -41,6 +44,7 @@ pub struct ConfigurationDispositionDependencies {
     pub enemy_level: Option<OwnedContentDigest>,
     pub scalar_inputs: Option<OwnedContentDigest>,
     pub reward_inventory: Option<OwnedContentDigest>,
+    pub usage_inputs: OwnedContentDigest,
     pub rewards: OwnedContentDigest,
 }
 
@@ -50,8 +54,16 @@ pub struct ConfigurationDispositionDependencies {
 pub enum ConfigurationAdapterControl {
     Encounter,
     EnemyLevel,
-    Reward { recipe: OwnedDefinitionKey },
-    ScalarInput { input: ExternalInputDefId },
+    Reward {
+        recipe: OwnedDefinitionKey,
+    },
+    ScalarInput {
+        input: ExternalInputDefId,
+    },
+    UsageIntent {
+        policy: UsagePolicyDefId,
+        parameter: DeclaredSlot<ParameterSlotDefId>,
+    },
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
@@ -129,6 +141,7 @@ pub fn configuration_disposition_dependencies(
         enemy_level: component(&policy.enemy_level, limits)?,
         scalar_inputs: component(&policy.configuration_inputs, limits)?,
         reward_inventory: component(&policy.configuration_reward_inventory, limits)?,
+        usage_inputs: usage_inputs_identity(policy, limits)?,
         rewards: *rewards.identity(),
     })
 }
@@ -204,6 +217,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         || p.dependencies.scalar_inputs != component(&policy.configuration_inputs, limits)?
         || p.dependencies.reward_inventory
             != component(&policy.configuration_reward_inventory, limits)?
+        || p.dependencies.usage_inputs != usage_inputs_identity(policy, limits)?
     {
         return Err(NormalizationError::Binding);
     }
@@ -258,6 +272,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                             }))
                         },
                         ConfigurationAdapterControl::ScalarInput { input } => input.key().as_str().len(),
+                        ConfigurationAdapterControl::UsageIntent { policy, parameter } => policy.key().as_str().len().saturating_add(parameter.slot.key().as_str().len()),
                         ConfigurationAdapterControl::Encounter | ConfigurationAdapterControl::EnemyLevel => 1,
                     };
                     work = work.saturating_add(adapter_work);
@@ -269,6 +284,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                             ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 { controls, .. } => controls.iter().any(|c| &c.recipe == recipe && c.selector == row.selector),
                         }) => {},
                         ConfigurationAdapterControl::ScalarInput { input } if policy.configuration_inputs.is_some() && input.namespace() == &policy.namespace && matches!(definitions.definition(input), SchemaLookup::Known(_)) => {},
+                        ConfigurationAdapterControl::UsageIntent { .. } if usage_inputs::configuration_control_matches(policy, &row.selector, control, &mut work, limits)? => {},
                         _ => return Err(NormalizationError::Policy("configuration disposition adapter")),
                     }
                     CompiledDestination::Adapter(control.clone())
@@ -303,6 +319,13 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             });
         }
         configuration_inputs::check_projection_destinations(
+            policy,
+            &row.selector,
+            &adapters,
+            &mut work,
+            limits,
+        )?;
+        usage_inputs::check_configuration_projection_destinations(
             policy,
             &row.selector,
             &adapters,

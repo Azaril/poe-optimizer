@@ -30,6 +30,49 @@ fn retained_supplier_bodies_and_exact_selected_sources_reconstruct_without_pob()
 }
 
 #[test]
+fn archival_normalization_remains_exact_evidence_without_current_defaults() {
+    let original = proof::load();
+    assert!(original.policy["usage_inputs"].get("scenario").is_none());
+    proof::reconcile_selected_inputs(&original).unwrap();
+    for mutation in 0..3 {
+        let mut changed = original.clone();
+        match mutation {
+            0 => changed.policy["usage_inputs"]["scenario"] = json!([]),
+            1 => {
+                changed
+                    .policy
+                    .as_object_mut()
+                    .unwrap()
+                    .remove("usage_inputs");
+            }
+            _ => changed.policy["version"] = json!("unreviewed"),
+        }
+        assert_eq!(
+            proof::reconcile_selected_inputs(&changed).unwrap_err(),
+            "unreviewed historical normalization policy"
+        );
+    }
+    for release in [false, true] {
+        let mut changed = original.clone();
+        if release {
+            changed.release["normalization"] = json!("unreviewed");
+        } else {
+            changed.sidecar["policy"] = json!("unreviewed");
+        }
+        assert_eq!(
+            proof::reconcile_selected_inputs(&changed).unwrap_err(),
+            "current normalization policy commitments differ"
+        );
+    }
+    let mut changed = original;
+    changed.queries.push(changed.queries[0].clone());
+    assert_eq!(
+        proof::reconcile_selected_inputs(&changed).unwrap_err(),
+        "current normalization policy commitments differ"
+    );
+}
+
+#[test]
 fn zero_inactive_and_application_native_suppliers_require_new_review() {
     let i = proof::load();
     proof::check_candidate_supplier_inventory(&i.rules).unwrap();
@@ -52,16 +95,24 @@ fn zero_inactive_and_application_native_suppliers_require_new_review() {
     };
     for inactive in [false, true] {
         let mut changed = i.rules.clone();
-        let owner = changed
-            .owners
+        let owner = changed["owners"]
+            .as_array_mut()
+            .unwrap()
             .iter_mut()
-            .find(|o| !proof::collectors().iter().any(|c| c.owner == o.owner))
+            .find(|o| {
+                !proof::collectors()
+                    .iter()
+                    .any(|c| serde_json::to_value(&c.owner).unwrap() == o["owner"])
+            })
             .unwrap();
         let mut p = program.clone();
         if inactive {
             p.effects[0].when = Some("inactive".parse().unwrap());
         }
-        owner.programs.members.push(p);
+        owner["programs"]["members"]
+            .as_array_mut()
+            .unwrap()
+            .push(serde_json::to_value(p).unwrap());
         let err = proof::check_candidate_supplier_inventory(&changed).unwrap_err();
         assert!(
             err.starts_with("unreviewed ordinary Mana supplier:"),
@@ -69,24 +120,101 @@ fn zero_inactive_and_application_native_suppliers_require_new_review() {
         );
     }
     let mut changed = i.rules.clone();
-    let application = &mut changed.effect_applications.as_mut().unwrap().members[0];
-    application.program = program;
-    application.activation = "inactive".parse().unwrap();
+    let application = &mut changed["effect_applications"]["members"][0];
+    application["program"] = serde_json::to_value(program).unwrap();
+    application["activation"] = json!("inactive");
     let err = proof::check_candidate_supplier_inventory(&changed).unwrap_err();
     assert!(
         err.starts_with("unreviewed application Mana supplier:"),
         "{err}"
     );
     let mut changed = i.rules;
-    let owner = changed
-        .owners
+    let owner = changed["owners"]
+        .as_array_mut()
+        .unwrap()
         .iter_mut()
-        .find(|o| o.owner == collector.owner)
+        .find(|o| o["owner"] == serde_json::to_value(&collector.owner).unwrap())
         .unwrap();
-    owner.programs.members[0].effects[0].when = Some("inactive".parse().unwrap());
+    owner["programs"]["members"][0]["effects"][0]["when"] = json!("inactive");
     assert_eq!(
         proof::check_candidate_supplier_inventory(&changed).unwrap_err(),
         "reviewed adjustment collector body changed"
+    );
+}
+
+#[test]
+fn archival_rule_census_rejects_missing_removed_and_unknown_effects() {
+    let original = proof::load().rules;
+    let collectors: Vec<_> = proof::collectors()
+        .iter()
+        .map(|c| serde_json::to_value(&c.owner).unwrap())
+        .collect();
+    let ordinary = original["owners"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .position(|o| {
+            !collectors.contains(&o["owner"])
+                && o["programs"]["members"]
+                    .as_array()
+                    .unwrap()
+                    .first()
+                    .is_some_and(|program| !program["effects"].as_array().unwrap().is_empty())
+        })
+        .unwrap();
+    for container in ["owners", "effect_applications"] {
+        let mut missing = original.clone();
+        missing.as_object_mut().unwrap().remove(container);
+        let error = proof::check_candidate_supplier_inventory(&missing).unwrap_err();
+        assert!(error.starts_with("missing or malformed "), "{error}");
+    }
+    let mut missing = original.clone();
+    missing["owners"][ordinary]["programs"]
+        .as_object_mut()
+        .unwrap()
+        .remove("members");
+    assert_eq!(
+        proof::check_candidate_supplier_inventory(&missing).unwrap_err(),
+        "missing or malformed ordinary program inventory"
+    );
+    for application in [false, true] {
+        let mut unknown = original.clone();
+        let program = if application {
+            &mut unknown["effect_applications"]["members"][0]["program"]
+        } else {
+            &mut unknown["owners"][ordinary]["programs"]["members"][0]
+        };
+        program["effects"][0]["effect"]["kind"] = json!("unreviewed_effect");
+        let error = proof::check_candidate_supplier_inventory(&unknown).unwrap_err();
+        assert!(
+            error.starts_with(if application {
+                "unsupported archived application effect:"
+            } else {
+                "unsupported archived ordinary effect:"
+            }),
+            "{error}"
+        );
+    }
+    let mut removed = original.clone();
+    removed["owners"].as_array_mut().unwrap().remove(ordinary);
+    assert_eq!(
+        proof::check_candidate_supplier_inventory(&removed).unwrap_err(),
+        "unreviewed historical rule inventory or metadata"
+    );
+    let mut removed = original.clone();
+    removed["effect_applications"]["members"]
+        .as_array_mut()
+        .unwrap()
+        .clear();
+    assert_eq!(
+        proof::check_candidate_supplier_inventory(&removed).unwrap_err(),
+        "unreviewed historical rule inventory or metadata"
+    );
+    let mut unknown_container = original;
+    unknown_container["additional_programs"] = json!([]);
+    assert_eq!(
+        proof::check_candidate_supplier_inventory(&unknown_container).unwrap_err(),
+        "unreviewed historical rule inventory or metadata"
     );
 }
 

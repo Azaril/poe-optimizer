@@ -224,6 +224,7 @@ impl Fixture {
                     skill_count: 1,
                 },
                 roles: vec![OwnedGemRoleRow {
+                    construction: poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
                     gem: gem.clone(),
                     primary: OwnedPrimarySkill::Known(primary.clone()),
                     role: OwnedGemRole::Known(AuthoredGemRole::SkillUse),

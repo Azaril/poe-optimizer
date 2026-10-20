@@ -558,6 +558,7 @@ pub fn participation_inputs(f: &mut Fixture) -> Checked<Inputs> {
         DefinitionDescriptor::UsagePolicy(known(
             def("participation-policy"),
             UsagePolicySchema {
+                scenario_skill_applicability: None,
                 targets: vec![UsageTargetKind::Skill],
                 declarations: DeclaredSlots {
                     parameters: DeclaredSet::complete(vec![parameter.clone()]),

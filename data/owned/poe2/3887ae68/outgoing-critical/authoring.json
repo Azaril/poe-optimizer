@@ -1,0 +1,71 @@
+{
+  "artifacts": [
+    {
+      "bytes": 4868,
+      "path": "data/owned/poe2/3887ae68/outgoing-critical/definitions.json",
+      "sha256": "e3cf0adf6be56c63d44826540a04003089c224935600e1a672e3d8c538a227ed"
+    },
+    {
+      "bytes": 123781,
+      "path": "data/owned/poe2/3887ae68/outgoing-critical/consumer.json",
+      "sha256": "b5357fb6d0b2ae3b6a5d28bd9294fa16231c210bcd91b8f4ffb2c075dbddef96"
+    },
+    {
+      "bytes": 24233,
+      "path": "data/owned/poe2/3887ae68/outgoing-critical/baseline.json",
+      "sha256": "6995114b861e1904c0d34151dbfd161c45de11b0e9083a58e65ea324ef1396f6"
+    },
+    {
+      "bytes": 2713,
+      "path": "data/owned/poe2/3887ae68/outgoing-critical/bindings.json",
+      "sha256": "3016f21853ea10d67810b548a6a8aa65fad17592665c4cdc617c9725313a089c"
+    },
+    {
+      "bytes": 248446,
+      "path": "data/owned/poe2/3887ae68/outgoing-critical/dependencies.json",
+      "sha256": "1552b8cd991a8716f78f8853cfac09f9c0031d640bd36469fb44276e0182ee39"
+    },
+    {
+      "bytes": 6697,
+      "path": "data/owned/poe2/3887ae68/outgoing-critical/migration.json",
+      "sha256": "48b6bb1acc59b67b2ceeecc7898b6998d1c193bb049f644ac558ea6ce3c171cf"
+    },
+    {
+      "bytes": 64941,
+      "path": "data/owned/poe2/3887ae68/outgoing-critical/source-evidence.json",
+      "sha256": "9312f5e6dc12ab7788bb8be94914cd3dfa5e10c251167bb9fc1f1e84e82c2805"
+    },
+    {
+      "bytes": 219510,
+      "path": "data/owned/poe2/3887ae68/outgoing-critical/source-domain.json",
+      "sha256": "dc59c4e7e8549b0e47e4653889adcb30d9b8058bc4c2b3fef38996106eff1d32"
+    },
+    {
+      "bytes": 45455,
+      "path": "data/owned/poe2/3887ae68/outgoing-critical/source-vectors.json",
+      "sha256": "a82928e3ebd10c8190bc2df2f24ff0fe2de947720af63a0f78796e8687c54408"
+    },
+    {
+      "bytes": 33148,
+      "path": "data/owned/poe2/3887ae68/outgoing-critical/ordinary-source-domain.json",
+      "sha256": "d7670e571d5eaa279615c017cf687861deb2e2a1e2844ab6a0b413c2f985900f"
+    },
+    {
+      "bytes": 5546,
+      "path": "data/owned/poe2/3887ae68/outgoing-critical/rounding-domain.json",
+      "sha256": "6c4d090791668579d325eacfb91dd7640e2ef7ede744c71c5329d7317a020480"
+    }
+  ],
+  "before": "1b2603af5c5a6a698159c717e398a98e478316c9b3069f5310d9ccf35010d511",
+  "release": "pob-3887ae68-outgoing-critical-component-v1",
+  "schema_version": 1,
+  "scope": {
+    "candidate_source_closure": false,
+    "complete_request": false,
+    "existing_owner_closure_changed": false,
+    "new_source_execution": false,
+    "publication_ready": true,
+    "query_closure_changed": false,
+    "ready_for_native_admission": false
+  }
+}

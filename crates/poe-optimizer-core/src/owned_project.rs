@@ -739,16 +739,17 @@ pub(crate) fn compose_validated(
             ),
             choices: choice_preset.choices.clone(),
             generated_inputs: None,
+            usage_preferences: skill_preset.usage_preferences.clone().unwrap_or_default(),
         },
         limits,
     )
     .map_err(Into::into)
 }
 
-/// Compose one selected preference layer with explicit scenario overrides.
-/// Both layers are structurally checked before replacement; a matching scenario record
-/// replaces the entire parameter record, never individual fields. The scenario
-/// and queries are not mutated, and no defaults or occurrences are invented.
+/// Compose independently owned preference and Scenario layers.
+/// Both exact layers remain available for definition-aware preparation, where a
+/// matching Scenario record replaces the entire parameter record. Composition
+/// does not resolve intent, mutate the Scenario or invent defaults/occurrences.
 /// Definition binding of the resulting request remains a separate operation;
 /// this function has no definition index and cannot check authored schema ranges.
 /// Scenario selectors retain the existing historical-reference contract: absent
@@ -763,24 +764,5 @@ pub fn compose_request(
     limits: OwnedInputLimits,
 ) -> Result<OwnedEvaluationRequest, ProjectError> {
     let build = compose(project, selection, inventory, limits)?;
-    let preset = selected(&project.input().skill_presets, selection.skills, |v| v.id);
-    let Some(preferences) = &preset.usage_preferences else {
-        return OwnedEvaluationRequest::new(build, scenario, queries, limits).map_err(Into::into);
-    };
-    // Validate the explicit layer under existing request-selector semantics:
-    // lineage/watermark and present-domain checks, with absent roots deferred.
-    // Structurally malformed records cannot be hidden by replacement.
-    OwnedEvaluationRequest::new(build.clone(), scenario.clone(), queries.clone(), limits)?;
-    let mut merged = scenario.into_input();
-    owned_build::validate_usage_layers(&merged.game_version, preferences, &merged.usage, limits)?;
-    let mut usage: BTreeMap<_, _> = preferences
-        .iter()
-        .map(|row| ((row.policy.clone(), row.target.clone()), row.clone()))
-        .collect();
-    for row in merged.usage {
-        usage.insert((row.policy.clone(), row.target.clone()), row);
-    }
-    merged.usage = usage.into_values().collect();
-    OwnedEvaluationRequest::new(build, ScenarioSpec::new(merged, limits)?, queries, limits)
-        .map_err(Into::into)
+    OwnedEvaluationRequest::new(build, scenario, queries, limits).map_err(Into::into)
 }

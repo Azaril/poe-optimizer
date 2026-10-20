@@ -1,80 +1,80 @@
 {
-  "schema_version": 1,
-  "kind": "offering-speed-rate",
-  "before": "d935e89968280f49c6a6eb75463107858e44bd736ca3e96902707a42916c4b59",
-  "scope": {
-    "publication_ready": true,
-    "positive_speed_application_authored": true,
-    "ordinary_rate_consumer_authored": true,
-    "complete_timing_authority": true,
-    "complete_build": false,
-    "timing_authority_domain": "exact selected RaisedSkeletonSniper / MinionMeleeBow Main Hand",
-    "all_builds": false
+  "artifacts": {
+    "applications.json": {
+      "bytes": 17937,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/applications.json",
+      "sha256": "c30f898a01fb51e75fd3fdb8bc23f044fbc3ca959ef67bc47c4791730185dc40"
+    },
+    "bindings.json": {
+      "bytes": 1511,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/bindings.json",
+      "sha256": "976bfc519aecbe47f2753d1c51355c1ba3419f5808066464fdfb8487a67f97c1"
+    },
+    "consumer.json": {
+      "bytes": 12087,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/consumer.json",
+      "sha256": "a05da3ceb417e58f168f3b877a77aa7d71109daad78693d683ec3862f39b60bf"
+    },
+    "definitions.json": {
+      "bytes": 1458,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/definitions.json",
+      "sha256": "cd318736f3edbaeef7fe0309500c77ed2645f1dd52ae34c7ec67e9822a24d7b4"
+    },
+    "dependencies.json": {
+      "bytes": 480853,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/dependencies.json",
+      "sha256": "782d836f3b36345c71474bdd686d6485b04607790675ac0eaba46cde9bcf0090"
+    },
+    "migration.json": {
+      "bytes": 16605,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/migration.json",
+      "sha256": "79a6fbb1c6f3b0c7f707235ef78688eac72dacb50bb728507694b3198b04f89e"
+    },
+    "queries.json": {
+      "bytes": 1485,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/queries.json",
+      "sha256": "14eeb5fa2b0b16fd7ebb86dcb3e2b2594f2de9c432686aa7f09c72ee6a7c561d"
+    },
+    "source-evidence.json": {
+      "bytes": 3802,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/source-evidence.json",
+      "sha256": "2cfd77c4ada95688d692a13c6a14a656c30ba4daf2facd617961167ec598d2e8"
+    },
+    "source-vectors.json": {
+      "bytes": 341516,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/source-vectors.json",
+      "sha256": "116936d4b5ce43ef497629270b92b7488ba43d4caeabeefa4b15dc30bb39fba2"
+    },
+    "tables.json": {
+      "bytes": 13072,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/tables.json",
+      "sha256": "29c36515147eb58ae52c14b3a1f41eb3b45ca1e887f6b2ec631d250bfb2c7405"
+    },
+    "timing-obligations.json": {
+      "bytes": 4345,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/timing-obligations.json",
+      "sha256": "60788a896f2851672db9b58137cc4ec0fc7381cf1b52d4afa9919d06fed76cf1"
+    },
+    "timing-source-domain.json": {
+      "bytes": 1347585,
+      "path": "data/owned/poe2/3887ae68/offering-speed-rate/timing-source-domain.json",
+      "sha256": "ca727702cc10bd2e7aef7c2b5e51d9eed3b916787696f71a664ff557ef208775"
+    }
   },
+  "before": "d935e89968280f49c6a6eb75463107858e44bd736ca3e96902707a42916c4b59",
+  "kind": "offering-speed-rate",
   "reserved_definitions": [
     "def.00000000000033a2",
     "def.00000000000033a3"
   ],
-  "artifacts": {
-    "applications.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/applications.json",
-      "bytes": 17937,
-      "sha256": "c30f898a01fb51e75fd3fdb8bc23f044fbc3ca959ef67bc47c4791730185dc40"
-    },
-    "bindings.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/bindings.json",
-      "bytes": 1511,
-      "sha256": "976bfc519aecbe47f2753d1c51355c1ba3419f5808066464fdfb8487a67f97c1"
-    },
-    "definitions.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/definitions.json",
-      "bytes": 1458,
-      "sha256": "cd318736f3edbaeef7fe0309500c77ed2645f1dd52ae34c7ec67e9822a24d7b4"
-    },
-    "dependencies.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/dependencies.json",
-      "bytes": 480803,
-      "sha256": "9304a6dbb6b95cad507e29b2cbe7d0e5443335b03e3d6d144c59a40bc0ca48dd"
-    },
-    "queries.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/queries.json",
-      "bytes": 1485,
-      "sha256": "14eeb5fa2b0b16fd7ebb86dcb3e2b2594f2de9c432686aa7f09c72ee6a7c561d"
-    },
-    "source-evidence.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/source-evidence.json",
-      "bytes": 3802,
-      "sha256": "2cfd77c4ada95688d692a13c6a14a656c30ba4daf2facd617961167ec598d2e8"
-    },
-    "source-vectors.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/source-vectors.json",
-      "bytes": 341516,
-      "sha256": "116936d4b5ce43ef497629270b92b7488ba43d4caeabeefa4b15dc30bb39fba2"
-    },
-    "tables.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/tables.json",
-      "bytes": 13072,
-      "sha256": "29c36515147eb58ae52c14b3a1f41eb3b45ca1e887f6b2ec631d250bfb2c7405"
-    },
-    "timing-obligations.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/timing-obligations.json",
-      "bytes": 4345,
-      "sha256": "60788a896f2851672db9b58137cc4ec0fc7381cf1b52d4afa9919d06fed76cf1"
-    },
-    "consumer.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/consumer.json",
-      "bytes": 12087,
-      "sha256": "a05da3ceb417e58f168f3b877a77aa7d71109daad78693d683ec3862f39b60bf"
-    },
-    "migration.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/migration.json",
-      "bytes": 16605,
-      "sha256": "79a6fbb1c6f3b0c7f707235ef78688eac72dacb50bb728507694b3198b04f89e"
-    },
-    "timing-source-domain.json": {
-      "path": "data/owned/poe2/3887ae68/offering-speed-rate/timing-source-domain.json",
-      "bytes": 1347585,
-      "sha256": "d77b5e14713f6553402a256e9cdd67e3c2516bf3e6a182f71d45f25399f24129"
-    }
+  "schema_version": 1,
+  "scope": {
+    "all_builds": false,
+    "complete_build": false,
+    "complete_timing_authority": true,
+    "ordinary_rate_consumer_authored": true,
+    "positive_speed_application_authored": true,
+    "publication_ready": true,
+    "timing_authority_domain": "exact selected RaisedSkeletonSniper / MinionMeleeBow Main Hand"
   }
 }

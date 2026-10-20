@@ -273,6 +273,111 @@ fn annotation_wrapper_preserves_default_exit_codes_and_opt_in_continuation() {
     }
 }
 
+fn annotated_script(body: &str) -> Output {
+    let temp = tempfile::tempdir().unwrap();
+    let child = temp.path().join("diagnostic-child.ps1");
+    fs::write(&child, body).unwrap();
+    let wrapper = ps_string(
+        script("invoke-with-failure-annotation.ps1")
+            .to_str()
+            .unwrap(),
+    );
+    pwsh()
+        .args([
+            "-Command",
+            &format!(
+                "& {wrapper} -FilePath pwsh -ArgumentList @('-NoLogo','-NoProfile','-NonInteractive','-File',{}); exit $LASTEXITCODE",
+                ps_string(child.to_str().unwrap())
+            ),
+        ])
+        .output()
+        .unwrap()
+}
+
+fn annotation_bodies(output: &Output, title: &str) -> Vec<String> {
+    let prefix = format!("::error title={title}::");
+    String::from_utf8_lossy(&output.stdout)
+        .lines()
+        .filter_map(|line| line.strip_prefix(&prefix))
+        // Decode once: a literal source "%0A" is encoded as "%250A", not a
+        // newline. Percent must be restored after the two control escapes.
+        .map(|line| {
+            line.replace("%0D", "\r")
+                .replace("%0A", "\n")
+                .replace("%25", "%")
+        })
+        .collect()
+}
+
+#[test]
+fn early_rust_failure_survives_successful_output_after_the_failure() {
+    let output = annotated_script(
+        "Write-Output '     Running tests/early_failure.rs (target/debug/deps/early_failure)'\n\
+         Write-Output \"thread 'exact_test' (42) panicked at tests/early_failure.rs:9:5:\"\n\
+         Write-Output 'early-diagnostic-sentinel: literal %0A and %25'\n\
+         Write-Output '  left: 1'\n\
+         Write-Output ' right: 2'\n\
+         1..300 | ForEach-Object { Write-Output ('later passing test ' + $_) }\n\
+         Write-Output 'error: 1 target failed:'\n\
+         Write-Output '    early_failure'\n\
+         exit 101\n",
+    );
+    assert_eq!(output.status.code(), Some(101), "{}", output_text(&output));
+    let diagnostics = annotation_bodies(&output, "Command diagnostics");
+    let tail = annotation_bodies(&output, "Command failed");
+    assert!(!diagnostics.is_empty());
+    let diagnostics = diagnostics.join("");
+    assert!(diagnostics.contains("Running tests/early_failure.rs"));
+    assert!(diagnostics.contains("panicked at tests/early_failure.rs:9:5"));
+    assert!(diagnostics.contains("early-diagnostic-sentinel: literal %0A and %25"));
+    assert!(diagnostics.contains("  left: 1"));
+    assert!(diagnostics.contains(" right: 2"));
+    assert!(!tail.join("").contains("early-diagnostic-sentinel"));
+    assert!(tail.join("").contains("error: 1 target failed:"));
+}
+
+#[test]
+fn annotations_bound_early_contexts_and_long_lines_without_losing_exit_status() {
+    let output = annotated_script(
+        "1..40 | ForEach-Object {\n\
+           Write-Output ('error[E0001]: diagnostic-' + $_)\n\
+           Write-Output ('long-line-start:' + ('x' * 10000) + ':long-line-end')\n\
+           1..20 | ForEach-Object { Write-Output 'context-padding' }\n\
+         }\n\
+         1..300 | ForEach-Object { Write-Output ('after-contexts-' + $_) }\n\
+         exit 9\n",
+    );
+    assert_eq!(output.status.code(), Some(9), "{}", output_text(&output));
+    let diagnostics = annotation_bodies(&output, "Command diagnostics");
+    let tail = annotation_bodies(&output, "Command failed");
+    assert!(!diagnostics.is_empty());
+    assert!(diagnostics.len() <= 4, "{diagnostics:?}");
+    assert!(tail.len() <= 5);
+    for body in diagnostics.iter().chain(&tail) {
+        assert!(body.len() < 4096, "annotation is {} bytes", body.len());
+    }
+    let diagnostics = diagnostics.join("");
+    assert!(diagnostics.contains("error[E0001]: diagnostic-1"));
+    assert!(diagnostics.contains("long-line-start:"));
+    assert!(!diagnostics.contains(":long-line-end"));
+    assert!(diagnostics.contains("...[truncated]"));
+    assert!(diagnostics.contains("further contexts omitted"));
+    assert!(!diagnostics.contains("diagnostic-40"));
+    assert!(tail.join("").contains("after-contexts-300"));
+}
+
+#[test]
+fn successful_commands_never_publish_error_annotations_for_diagnostic_like_text() {
+    let output = annotated_script(
+        "Write-Output 'error: expected diagnostic in a passing negative test'\n\
+         Write-Output \"thread 'expected_panic' (42) panicked at fixture.rs:1:1:\"\n\
+         exit 0\n",
+    );
+    assert!(output.status.success(), "{}", output_text(&output));
+    assert!(annotation_bodies(&output, "Command diagnostics").is_empty());
+    assert!(annotation_bodies(&output, "Command failed").is_empty());
+}
+
 #[test]
 fn cli_shard_runs_both_profiles_and_preserves_failure_from_either() {
     let temp = tempfile::tempdir().unwrap();

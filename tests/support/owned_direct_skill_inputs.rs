@@ -42,15 +42,12 @@ pub fn check_authored() {
     assert!(migration.tables.is_empty() && migration.owners.is_empty());
     assert!(migration.receivers.is_empty() && migration.query_targets.is_empty());
     assert!(migration.evaluation.is_none());
-    let DirectSkillInputPolicy::PobManualDirectSkillV1 {
+    let DirectSkillInputPolicy::PobManualDirectSkillV2 {
         skills,
         source,
         catalog,
         ..
-    } = &inputs
-    else {
-        panic!("fixture requires Direct V1")
-    };
+    } = &inputs;
     assert_eq!(skills.len(), 2);
     for row in skills {
         assert_eq!(row.parameters.len(), 2);
@@ -166,16 +163,13 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     let migration: OwnedReleaseMigrationInput = read("migration.json");
     let migrated = compile_owned_release_migration(prior, migration, Default::default()).unwrap();
     let mut inputs: DirectSkillInputPolicy = read("inputs.json");
-    let DirectSkillInputPolicy::PobManualDirectSkillV1 {
+    let DirectSkillInputPolicy::PobManualDirectSkillV2 {
         definitions,
         roles,
         source,
         catalog,
         ..
-    } = &mut inputs
-    else {
-        panic!("fixture requires Direct V1")
-    };
+    } = &mut inputs;
     assert_eq!(*definitions, *prior.assembled().schema().identity());
     assert_eq!(*roles, *prior.roles().identity());
     assert_eq!(*source, prior.roles().input().compilation.source);

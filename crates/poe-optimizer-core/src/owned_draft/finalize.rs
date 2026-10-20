@@ -399,7 +399,7 @@ impl DraftSession {
             QuerySpec::new(resolved(&queries.queries, "queries")?, limits.input)?,
         )?;
         let request_digest =
-            digest_owned("owned-request-v1", &request, limits.input.max_wire_bytes)?;
+            digest_owned("owned-request-v2", &request, limits.input.max_wire_bytes)?;
         Ok((
             DraftFinalization::Ready(Box::new(FinalizedDraft {
                 draft_digest,

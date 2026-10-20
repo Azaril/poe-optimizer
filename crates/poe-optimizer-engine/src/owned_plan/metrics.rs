@@ -1,6 +1,7 @@
 //! Requested native measurements over private, occurrence-bound effect plans.
 //! Mapping is semantic data, not a source output field or an authorization to
 //! publish intermediate effects. No caller-supplied result can bypass execution.
+use super::requirements::RequirementProjection;
 use super::*;
 use poe_optimizer_core::owned_metrics::MetricBindingRole;
 use poe_optimizer_data::owned_metrics::OwnedMetricMapping;
@@ -23,6 +24,7 @@ pub struct OwnedMetricReport {
     pub identity: OwnedContentDigest,
     pub gaps: Vec<PlanGap>,
     pub results: Vec<OwnedMetricResult>,
+    pub requirements: OwnedRequirementAssessment,
 }
 struct BoundMetric {
     stat: StatDefId,
@@ -40,6 +42,12 @@ pub(super) struct MetricProjection {
 /// Bound only to the private value arena supplied by an executing graph driver.
 pub(super) struct MetricRows {
     values: Vec<Option<ReadBinding>>,
+}
+/// Final projection inputs from one static or retained-support execution graph.
+pub(super) struct MetricAttempt<'a> {
+    pub query_gates: &'a [Vec<ReadBinding>],
+    pub values: &'a MetricRows,
+    pub requirements: OwnedRequirementAssessment,
 }
 impl MetricProjection {
     pub(super) fn compile<I: DefinitionSchemaIndex>(
@@ -126,11 +134,15 @@ impl MetricProjection {
         &self,
         identity: OwnedContentDigest,
         gaps: &[PlanGap],
-        query_gates: &[Vec<ReadBinding>],
-        values: &MetricRows,
+        attempt: MetricAttempt<'_>,
         scratch: &OwnedPlanScratch,
         work: &mut usize,
     ) -> Result<OwnedMetricReport> {
+        let MetricAttempt {
+            query_gates,
+            values,
+            requirements,
+        } = attempt;
         if query_gates.len() != self.rows.len() || values.values.len() != self.rows.len() {
             return Err(PlanError::Invalid("metric query bindings differ".into()));
         }
@@ -172,6 +184,7 @@ impl MetricProjection {
             identity,
             gaps: gaps.to_vec(),
             results,
+            requirements,
         })
     }
 
@@ -182,6 +195,7 @@ impl MetricProjection {
         identity: OwnedContentDigest,
         gaps: &[PlanGap],
         cause: &EffectValue,
+        requirements: OwnedRequirementAssessment,
         work: &mut usize,
     ) -> Result<OwnedMetricReport> {
         if matches!(cause, EffectValue::Known { .. }) {
@@ -207,19 +221,22 @@ impl MetricProjection {
             identity,
             gaps: gaps.to_vec(),
             results,
+            requirements,
         })
     }
 }
 
 /// Immutable plan shared across workers. This API requires the same complete
 /// owned request and global contributor closure as OwnedEffectPlan. It does not
-/// finalize partial drafts, certify legality or establish agreement with an oracle.
+/// finalize partial drafts, certify complete gameplay legality or establish agreement
+/// with an oracle. Injected requirements are assessed beside the measurements.
 pub struct OwnedMetricPlan<I> {
     effects: Arc<OwnedEffectPlan<I>>,
     projection: MetricProjection,
     bindings: MetricPlanIdentity,
     identity: OwnedContentDigest,
     rows: MetricRows,
+    requirements: RequirementProjection,
 }
 impl<I: DefinitionSchemaIndex> OwnedMetricPlan<I> {
     pub fn compile(
@@ -239,12 +256,18 @@ impl<I: DefinitionSchemaIndex> OwnedMetricPlan<I> {
         )?;
         let mut work = effects.limits.max_work;
         let rows = projection.bind_values(&effects.values, effects.complete, &mut work)?;
+        let requirements = RequirementProjection::compile(
+            &effects.rules,
+            &effects.requirement_owners,
+            &effects.requirement_gaps,
+            &mut work,
+        )?;
         let bindings = MetricPlanIdentity {
             effects: effects.identity(),
             mapping: *projection.mapping().identity(),
         };
         let identity = digest_owned(
-            "owned-metric-plan-v1",
+            "owned-metric-plan-v3",
             &bindings,
             effects.limits.max_wire_bytes,
         )?;
@@ -254,6 +277,7 @@ impl<I: DefinitionSchemaIndex> OwnedMetricPlan<I> {
             bindings,
             identity,
             rows,
+            requirements,
         })
     }
     pub fn identity(&self) -> OwnedContentDigest {
@@ -276,11 +300,21 @@ impl<I: DefinitionSchemaIndex> OwnedMetricPlan<I> {
         scratch: &OwnedPlanScratch,
         work: &mut usize,
     ) -> Result<OwnedMetricReport> {
+        let requirements = self.requirements.collect(
+            self.effects.as_ref(),
+            scratch,
+            &self.effects.gaps,
+            None,
+            work,
+        )?;
         self.projection.collect(
             self.identity,
             &self.effects.gaps,
-            &self.effects.query_gates,
-            &self.rows,
+            MetricAttempt {
+                query_gates: &self.effects.query_gates,
+                values: &self.rows,
+                requirements,
+            },
             scratch,
             work,
         )

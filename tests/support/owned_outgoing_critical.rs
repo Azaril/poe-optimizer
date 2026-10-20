@@ -1,4 +1,4 @@
-//! Unpublished outgoing-critical authoring. Source observations never close a query.
+//! Outgoing-critical component authoring. Source observations never close a query.
 use flate2::read::GzDecoder;
 use poe_optimizer_core::{owned_rules::*, owned_schema::DefinitionDescriptor};
 use serde::Deserialize;
@@ -618,8 +618,35 @@ pub fn check_authored() {
             .flat_map(|q| &q.groups)
             .all(|g| !g.members.is_complete())
     );
-    let pending = read("bindings.json");
-    assert_eq!(pending["ready_for_native_admission"], false);
-    assert_eq!(pending["pending_members"].as_array().unwrap().len(), 1);
+    let bindings = read("bindings.json");
+    assert_eq!(bindings["ready_for_native_admission"], false);
+    assert_eq!(bindings["publication_scope"], "partial_component");
+    let query = consumer
+        .queries
+        .iter()
+        .find(|query| query.id.as_str() == "outgoing-critical-enemy-chance-add")
+        .unwrap();
+    let expected: ContributionMember = serde_json::from_value(json!({
+        "producer": {
+            "kind": "program_effect",
+            "owner": consumer.owners[1].owner,
+            "program": "configured-critical-weakness",
+            "effect": "critical-weakness",
+            "origin": {"kind": "encounter"}
+        },
+        "order": {"source_rank": 0, "program_rank": 0, "effect_rank": 0, "slot_ranks": []}
+    }))
+    .unwrap();
+    assert_eq!(
+        query.groups[0].members.members,
+        std::slice::from_ref(&expected)
+    );
+    assert_eq!(
+        bindings["encounter_member"],
+        json!({
+            "query": query.id,
+            "member": expected
+        })
+    );
     review_baseline(&read("baseline.json")).unwrap();
 }

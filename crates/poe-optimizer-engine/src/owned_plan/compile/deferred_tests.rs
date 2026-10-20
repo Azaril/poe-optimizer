@@ -232,6 +232,7 @@ impl Fixture {
         .unwrap();
         let build = BuildSpec::new(
             BuildInput {
+                usage_preferences: vec![],
                 generated_inputs: None,
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([41; 16]),
@@ -283,6 +284,7 @@ impl Fixture {
         .unwrap();
         let scenario = ScenarioSpec::new(
             ScenarioInput {
+                usage_intents: vec![],
                 game_version: ns(),
                 enemy: EnemySpec {
                     encounter: def("encounter"),
@@ -468,10 +470,80 @@ fn empty_owner_bindings_are_bounded_before_inventory_allocation() {
         max_owner_bindings: 1,
         ..Default::default()
     });
+    let mut owners = Vec::new();
+    let class = SchemaSubject::Definition(def::<ClassDefinition>("class").address());
+    builder
+        .defer_owner(
+            &mut owners,
+            class.clone(),
+            &root(ProviderRoot::Character),
+            &ActorKey::Player,
+            None,
+        )
+        .unwrap();
     assert!(matches!(
-        builder.discover(),
+        builder.defer_owner(
+            &mut owners,
+            subject(false),
+            &root(ProviderRoot::SkillUse(id(10))),
+            &ActorKey::Player,
+            None,
+        ),
         Err(PlanError::Limit("owner bindings"))
     ));
+    assert_eq!(owners.len(), 1);
+    assert_eq!(owners[0].subject, class);
+    assert!(builder.invocations.is_empty());
+    assert!(builder.effects.is_empty());
+}
+
+#[test]
+fn potential_requirement_owners_are_bounded_before_census_allocation() {
+    let fixture = Fixture::new(RuleOperationsVersion::V11);
+    let mut builder = fixture.builder(PlanLimits {
+        max_owner_bindings: 4,
+        ..Default::default()
+    });
+    assert!(matches!(
+        builder.discover(),
+        Err(PlanError::Limit("requirement owners"))
+    ));
+    // Character, direct Skill, its output and Gem precede the fifth census
+    // subject, the Gem output. Refusal must not insert that fifth owner.
+    let expected: requirements::RequirementOwnerCensus = [
+        SchemaSubject::Definition(def::<ClassDefinition>("class").address()),
+        subject(false),
+        SchemaSubject::Slot(ActionOutputDefId::address(&output(false))),
+        subject(true),
+    ]
+    .into_iter()
+    .map(|subject| (requirements::owner_key(&subject), subject))
+    .collect();
+    assert_eq!(builder.requirement_owners, expected);
+    assert!(builder.invocations.is_empty());
+    assert!(builder.effects.is_empty());
+}
+
+#[test]
+fn duplicate_requirement_owner_does_not_consume_another_census_entry() {
+    let fixture = Fixture::new(RuleOperationsVersion::V11);
+    let mut builder = fixture.builder(PlanLimits {
+        max_owner_bindings: 1,
+        ..Default::default()
+    });
+    let class = SchemaSubject::Definition(def::<ClassDefinition>("class").address());
+    builder.requirement_owner(class.clone()).unwrap();
+    builder.requirement_owner(class.clone()).unwrap();
+    assert!(matches!(
+        builder.requirement_owner(subject(false)),
+        Err(PlanError::Limit("requirement owners"))
+    ));
+    assert_eq!(
+        builder.requirement_owners,
+        [(requirements::owner_key(&class), class)]
+            .into_iter()
+            .collect()
+    );
     assert!(builder.invocations.is_empty());
     assert!(builder.effects.is_empty());
 }
@@ -480,13 +552,26 @@ fn empty_owner_bindings_are_bounded_before_inventory_allocation() {
 fn empty_owner_bindings_do_not_consume_the_rule_invocation_limit() {
     let fixture = Fixture::new(RuleOperationsVersion::V11);
     let limits = PlanLimits {
-        max_owner_bindings: 3,
+        // Three provider owners and their two potential output-slot owners
+        // occupy the distinct requirement census; only three are deferred.
+        max_owner_bindings: 5,
         max_invocations: 2,
         ..Default::default()
     };
     limits.validate().unwrap();
     let mut builder = fixture.builder(limits);
     let owners = builder.discover().unwrap();
+    let expected: requirements::RequirementOwnerCensus = [
+        SchemaSubject::Definition(def::<ClassDefinition>("class").address()),
+        subject(false),
+        subject(true),
+        SchemaSubject::Slot(ActionOutputDefId::address(&output(false))),
+        SchemaSubject::Slot(ActionOutputDefId::address(&output(true))),
+    ]
+    .into_iter()
+    .map(|subject| (requirements::owner_key(&subject), subject))
+    .collect();
+    assert_eq!(builder.requirement_owners, expected);
     // The class has an empty program collection; Skill and Gem each invoke one.
     assert_eq!(owners.len(), 3);
     builder.actions.insert(action(false));

@@ -43836,6 +43836,13 @@
       "kind": "issue",
       "value": {
         "lineage": "99d5e15352dde91edb69bbfb887046c6",
+        "local": "0000000000000681"
+      }
+    },
+    {
+      "kind": "issue",
+      "value": {
+        "lineage": "99d5e15352dde91edb69bbfb887046c6",
         "local": "00000000000001f2"
       }
     },
@@ -45551,7 +45558,7 @@
   "publication": {
     "import_report": {
       "allocator_after": {
-        "last_issued": "0000000000000680",
+        "last_issued": "0000000000000681",
         "lineage": "99d5e15352dde91edb69bbfb887046c6"
       },
       "allocator_before": {
@@ -45575,7 +45582,7 @@
         "supports": 111
       },
       "document_kind": "owned_normalization_report",
-      "draft_digest": "0915bcfb550741fea22ba7a02a60b138b2f3dc68fce65a9cf2de1f1af833df46",
+      "draft_digest": "c296656c65f3426eec33da01e71f5e08021c259d459edd6b810bfbcde3a2eaa0",
       "issue_codes": {
         "configuration-roles-not-converted": 1,
         "equipment-membership-not-converted": 5,
@@ -45593,6 +45600,7 @@
         "quality-not-converted": 14,
         "rewards-not-converted": 1,
         "saved-selection-not-converted": 1,
+        "scenario-usage-intents-not-converted": 1,
         "skill-membership-not-converted": 4,
         "socketed-equipment-membership-not-converted": 1,
         "socketed-item-membership-not-converted": 1,
@@ -45601,7 +45609,7 @@
         "usage-not-converted": 1,
         "usage-preferences-not-converted": 5
       },
-      "issue_count": 156,
+      "issue_count": 157,
       "normalization_status": "pending",
       "output": {
         "directory": "\\\\?\\C:\\code\\poe-optimizer\\runs\\owned-numeric-domain-publication-01\\original-05",
@@ -45610,9 +45618,9 @@
         "sidecar": "sidecar.json"
       },
       "schema_version": 1,
-      "sidecar_bytes": 951533,
+      "sidecar_bytes": 951632,
       "sidecar_schema_version": 23,
-      "sidecar_sha256": "15068a61709dc121621df4dc8f87e376448f14a2386c580f05aa08dee42299f3",
+      "sidecar_sha256": "64cf2d9f936039db6c8c51008ecc768c7432d98fdfbdab3e91e392cb70ac50f6",
       "source": {
         "bytes": 106378,
         "occurrences": 799,
@@ -47197,6 +47205,13 @@
             "value": {
               "lineage": "99d5e15352dde91edb69bbfb887046c6",
               "local": "0000000000000208"
+            }
+          },
+          {
+            "kind": "issue",
+            "value": {
+              "lineage": "99d5e15352dde91edb69bbfb887046c6",
+              "local": "0000000000000681"
             }
           }
         ],

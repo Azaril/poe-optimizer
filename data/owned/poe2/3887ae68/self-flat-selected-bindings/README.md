@@ -2,7 +2,18 @@
 
 This is an offline authoring proof for unchanged Original05. It connects the retained source recipe audit and runtime-gate observations to the exact imported owned records from `runs/owned-numeric-domain-publication-01`. It installs no runtime exclusions or zero-valued producers, completes no contribution domain, and retires no saved-input obligations.
 
-`bindings.json` is reconstructed by `tests/owned_self_flat_selected_bindings.rs`. The compressed inputs retain the publication's exact draft, sidecar, mapping, selection, recipe manifest, release receipt and import report. `inputs.json` records their original and compressed hashes. The verifier uses the current typed draft and mapping DTOs plus source occurrence evidence; it does not introduce another input model or historical runtime path. The gzip reader has a hard expansion limit for each file. Ordinary CI needs neither ignored run directories nor Lua execution.
+`bindings.json` is reconstructed by `tests/owned_self_flat_selected_bindings.rs`. The compressed inputs retain the publication's mapping, selection, recipe manifest and release receipt unchanged, alongside maintained typed draft, sidecar and import-report evidence. `inputs.json` records their original and compressed hashes. The verifier uses the current typed draft and mapping DTOs plus source occurrence evidence; it does not introduce another input model or historical runtime path. The gzip reader has a hard expansion limit for each file. Ordinary CI needs neither ignored run directories nor Lua execution.
+
+On 2026-10-20, the maintained draft evidence was reauthored to schema 5 with
+explicit Actor targets for scenario-enemy assumptions and one pending
+`scenario-usage-intents-not-converted` inventory on the existing Scenario.
+The new issue uses the allocator frontier and links to the exact ConfigSet
+source; all previous selections, values and issue links remain. Whole-record
+inverse checks cover the draft, sidecar, report and derived bindings.
+`inputs.json` retains the prior archive commitments and the reauthoring receipt.
+The report now contains 157 unresolved issues. This format update grants no
+native coverage; the source archives and historical release artifacts are
+unchanged.
 
 The correspondence preserves:
 

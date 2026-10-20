@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-16. The owned path imports an external build into explicit
+Snapshot: 2026-10-20. The owned path imports an external build into explicit
 occurrences, validates it against injected definitions and rules, and executes
 the resulting graph in Rust. The CLI, future UI and optimizer share those public
 contracts. Native calculation has no Lua state or PoB subprocess. Optional
@@ -16,6 +16,76 @@ checkpoints below explain what each component proves without implying complete
 build support.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
+
+The October 20 [coverage assessment](../runs/coverage-audit-20261020/assessment.md)
+audits the last validated release separately from current migration work.
+Imported identities, complete structural inventories, mechanical implementation
+and numerical validation are distinct coverage layers. No unchanged example
+build yet has a complete native evaluation. A complete numerical/requirement
+report also need not describe a legal optimizer candidate: the retained raw
+Original05 reference reports negative unreserved Spirit. The target design must
+preserve useful measurements and explicit illegality without altering the input.
+The audit inventories downstream work and unknown full-game behavior families;
+it does not introduce a new execution model or approve pending proposals.
+
+The accepted [source-construction cutover](owned-source-effect-construction-proposal.md)
+keeps ordered effect observations, unresolved references and separate stat-set
+references in the existing **Import-only** role artifact. These are compiler
+facts about an external format, not native Skill membership or execution rules.
+Runtime Import validates their bounded bindings; offline publication additionally
+reproduces them from the authenticated catalog, refusing ambiguous owned-row
+pairings. No Lua evaluator or compatibility reader is added. The candidate
+package and both maintained seeds rebuild with unchanged native mechanics.
+Dependent-fixture, all-five preservation and all 377 normalizer checks pass. The
+superseded usage-transport migration harness is removed, with its historical
+evidence retained.
+
+Two input contracts were accepted October 19:
+numeric progression imported through existing Choice rewards, with unique
+authority checked after composition; and Scenario-owned usage intent resolved
+to eligible exact occurrences, retaining dormant settings and exact overrides.
+Their [progression](owned-progression-input-proposal.md) and
+[usage-intent](owned-scenario-usage-intent-proposal.md) decisions preserve the
+existing build/Scenario separation. They do not change today's coverage claims.
+Numeric reward projection, exact import accounting and the actual campaign-data
+publication pass focused tests and all-five reimport preservation. Native
+fact/authority rules distinguish equal duplicate sources from one authority.
+Final candidate admission remains unfinished. Scenario intent's native path passes
+focused validation: Core retains the three layers, Data declares exact applicability,
+and Engine resolves them through shared structural discovery. All five originals
+reimport into the current format with unchanged queries and explicit unresolved
+intent inventories. CLI, retained-evidence, strict lint and owned-library boundary
+checks also pass. Configuration projection and its shared source accounting now
+pass focused tests and all-five unchanged-draft preservation. Actual Sigil/Cry
+stage-policy data is now published through that existing path: each original gains
+exactly two typed intents while all other inputs and incomplete inventories survive
+an exact inverse check. Applicability stays nonempty and Partial over five exact
+supplier relations; incomplete native Skill schemas do not prevent preserving
+intent and do not become executable. Complete discovery and stage mechanics
+remain separate publication gates.
+Four structural publications now close 90 proven inventories: fifteen Gem
+potential-Skill lists, direct declarations on those fifteen Gems, four item
+templates and six passive definitions. Full-source evidence and exact ownership
+checks stay in offline Rust tests; the native package contains ordinary owned
+declarations only. All-five replay and identical package rebuild pass. Numerical
+programs, descendant inventories and the remaining passive/Actor/Skill census
+remain incomplete; this does not establish a complete build or dormant intent.
+The direct Gem proof distinguishes physical carriers from supplied or supported
+Skills: closing a Gem's own declarations does not complete the Skill's Orb,
+ground, Infusion or Offering-spike mechanics. External item/tree/modifier owners
+also retain their grants even where PoB reuses Gem-shaped records.
+Positive membership also does not establish execution authority: the actual
+Corrupting Cry support-generated child still exposes grant activation and exact
+Actor/scheduling gaps. Existing support tests for generated receiving Skills do
+not prove that a physical support assignment can supply an executable child.
+The [implementation checkpoint](implementation.md#current-checkpoint-configuration-admission)
+tracks that distinction and the next focused regression.
+The owner also accepted
+[requirement assessment alongside metric reports](owned-requirement-assessment-proposal.md).
+Its same-attempt collector and CLI pass ordinary/support regression tests. Reports
+retain computable measurements, exact requirement outcomes and separate coverage;
+they do not claim complete game legality. Action contexts without a complete
+mechanical census remain conservatively incomplete, independent of metric queries.
 
 The latest [selected physical-base component](../data/owned/poe2/3887ae68/selected-physical-base/README.md)
 publishes the actual Basic Attack pre-conversion formula and checked self-flat
@@ -37,9 +107,9 @@ adds an independently stacked Speed effect to the existing application and uses
 the actual level table and eight-input timing operation. Original05 now computes
 **0.8666666666666667 attacks/s** in native Rust. Source/destination and native
 writer checks establish the finite timing domain; fresh/reused/Rayon tests and
-all-five publication/rebuild pass. Next are outgoing critical calculation and
-separate normal/critical armour mitigation. Final DPS and complete-build coverage
-remain unfinished.
+all-five publication/rebuild pass. Outgoing critical calculation and separate
+normal/critical armour components have since been published, as described below.
+Final DPS and complete-build coverage remain unfinished.
 
 The subsequent [Player Evasion component](../data/owned/poe2/3887ae68/player-evasion-final/README.md)
 adds intrinsic Evasion and a final receiver using the actual selected quest
@@ -59,10 +129,57 @@ strict Clippy and all-five rebuild pass. Conditional and transformation coverage
 remain incomplete. The existing numeric-domain operation excludes a
 source rounding anomaly without adding Lua-compatible native arithmetic.
 
-The unpublished outgoing-critical work now has a checked selected-source
-supplier review and executable tests of its six authored rounding fragments.
-Its full consumer still needs actual Encounter producer binding and complete
-native condition coverage; the generic query authority is now implemented.
+The [outgoing-critical component](../data/owned/poe2/3887ae68/outgoing-critical/README.md)
+now publishes the full ordinary chance/multiplier consumer and its actual
+Encounter-owned conditional Weakness contribution. Nine native controls exercise
+the full graph, including real intrinsic/accuracy producers, recipient isolation,
+overrides, unknown conditions and fresh/reused/Rayon determinism. Source and
+publication checks also pass, preserving all five originals. All sixteen query
+groups and existing owner gaps remain Partial; this is component execution,
+not complete candidate admission. Configured Weakness activation and separate
+normal/critical armour calculations now also execute and publish through this
+graph. The latter uses the actual level table and mitigates each pass before
+critical weighting. Its four Armour query groups remain Partial; extra mitigation,
+damage-taken effects and candidate admission still need work.
+
+The [ordinary physical DPS component](../data/owned/poe2/3887ae68/physical-hit-dps/README.md)
+now joins those separate normal/critical averages with critical chance, post-block
+hit chance and ordinary attack rate through the existing native graph. The finite
+joined control yields 388.7517825598493 physical damage/s. All 39 source comparisons
+are retained, including three controls where added or converted elemental damage
+makes all-type DPS different. Package rebuild and all-five preservation pass.
+These are internal physical-component outputs: source coverage remains Partial,
+and neither a final saved DPS metric binding nor complete build admission follows.
+Import now has a checked preset-usage inventory gate. Its optional source policy
+must account for the whole SkillSet using successful conversion receipts,
+current typed values and exact origin links. Retirement is atomic; a converted
+subset cannot declare the preset complete. Support and generated-input producers
+now retain their proofs through final checking of live assignments, exact raw
+and usage bindings, supplying records, preset membership and origin links.
+Archived sources and merely parseable switches provide no such authority.
+The originals still lack complete reference-selection and global-effect
+accounting. Authored/Direct and generated receipts can now account for the exact
+saved primary `true` as a non-restricting source gate after their live input
+checks. This preserves raw intent and adds no native activation flag; other
+values, secondary switches and support receipts gain no such authority.
+Current published policies do not yet use the whole-preset inventory gate.
+This is Import work; it changes no native calculation rule or per-candidate
+evaluation path. See the living implementation plan for validation and the exact
+resume point.
+The secondary-switch source tests distinguish complete singleton effects from
+missing declared references and from multiple stat sets. Compiler-derived
+construction facts are now implemented in the existing Import role artifact
+under the October 20 approval; current artifacts and dependent fixtures are
+rebuilt, and all-five preservation validation passes. Retired input-policy
+readers are removed. A private secondary-switch accounting adapter is applied and
+undergoing focused validation. Source tests alone grant no native execution or import-completion
+authority. Primary-switch semantics and exact occurrence/selector correspondence
+remain separate obligations.
+The existing count policy now also imports Ice Nova's saved count. All-five
+preservation verifies exactly four added bindings across Original05's presets,
+including one in the selected preset, with every other input and unresolved
+obligation unchanged. This adds input transport, not FullDPS aggregation or
+complete numerical coverage.
 The review also found an untranslated Sand Djinn on-hit
 Critical Weakness stat: source construction absence cannot stand in for game
 semantics or a false native condition. Exact participation and Enemy delivery
@@ -73,9 +190,9 @@ queries previously could not name existing Encounter producers or consume numeri
 Enemy groups. The [accepted extension](owned-encounter-contribution-queries-proposal.md)
 keeps those sources in the same contribution graph, with exact selected
 Encounter and recipient validation. This contract is implemented in the Actor
-migration. Configured Critical Weakness and Armour still need their real
-producer/query adoption; generic authority alone does not admit those numerical
-consumers.
+migration. The conditional Critical Weakness numeric producer now uses it;
+its configured Boolean source and ordinary Armour adoption are also implemented.
+Generic authority alone does not admit complete numerical coverage.
 
 Shared baseline rules are a distinct source from configured Encounter rules.
 The [generic Actor migration](owned-existing-enemy-rule-ownership-proposal.md)
@@ -86,8 +203,10 @@ contexts and placeholder Player identities. Core/Data/Engine and current
 artifacts are migrated: Core has 312 existing and 25 focused passing tests,
 Data has 205, and Engine has 718 with seven intentional ignored tests. Strict
 Engine Clippy passes for the library and all 73 owned integration targets;
-Core/Data strict checks also pass. Exact package/replay inverses and all-five
-imports preserve 110 queries and unresolved counts 106/117/109/123/4. The scoped
+Core/Data strict checks also pass. At that migration checkpoint, exact
+package/replay inverses and all-five imports preserved 110 queries and unresolved
+counts 106/117/109/123/4. The later Scenario-intent format adds one Pending
+inventory per selected Scenario, giving current counts 107/118/110/124/5. The scoped
 Import/CLI regressions, full CLI publication chain, catalog reproduction and
 strict Clippy checks pass; exact scopes and logs are in the
 [implementation plan](implementation.md). Hosted CI remains separate. The current contract uses schema 7, rule
@@ -99,9 +218,11 @@ does not itself admit a new metric or complete build.
 Its [trade-search preference successor](../data/owned/poe2/3887ae68/source-trade-preferences/README.md)
 accounts for saved trade weights in import provenance without inferring gameplay
 inputs or optimizer objectives. All-five preservation and exact package rebuild
-pass. Original05 now has **16 remaining configuration origins and 33 known
-assumptions**; its four complete input inventories remain Pending. The current
-slot Evasion successor has 8202 effective programs and complete native builds
+pass. At that checkpoint Original05 had **16 remaining configuration origins and
+33 known assumptions**. Configured Weakness activation adds one known assumption
+(34 total) without retiring a saved source leaf. That armour checkpoint retained
+four Pending input inventories and 8206 effective programs. The subsequent
+Scenario-intent format adds a fifth selected obligation; complete native builds
 remain **0/5**.
 See the [current endpoint](implementation.md#current-checkpoint-configuration-admission).
 
@@ -163,7 +284,7 @@ See the [packet](../data/owned/poe2/3887ae68/reporting-inclusion/README.md) and
 [predecessor endpoint](implementation.md#previous-checkpoint-skill-support-and-exact-aggregation).
 
 Delivery now explicitly prioritizes the closest complete unchanged build,
-currently Original05 (Skeletal Sniper). Its four selected input obligations
+currently Original05 (Skeletal Sniper). Its five selected input obligations
 still block request finalization, and complete native builds remain 0/5.
 The first complete native/reference result unlocks owned optimizer integration;
 we do not wait for all five. Subsequent candidate changes need their own coverage
@@ -173,7 +294,7 @@ The [current delivery map](implementation.md#route-to-the-first-complete-build)
 accounts for all twenty-two saved queries: nineteen finite reference values and
 three unavailable results. Recent minion Life work advances selected-Actor
 coverage; it does not close the saved Player Life metric. Final metric production
-and the four input inventories remain parallel completion gates.
+and the five input inventories remain parallel completion gates.
 
 Checked numeric ranges now run in the existing Rust rule engine, with explicit
 unsupported-domain results. The first checked configuration-accounting
@@ -229,18 +350,22 @@ source modifier-list destination. Demonflame is Player transformation state;
 current Energy Shield is a Player percentage whose callback also enables a
 condition. Campaign-boss progress has no authenticated constructor default, so
 Import must preserve absence rather than substitute zero. Sigil and Corrupting
-Cry stages belong to exact Skill usage. That runtime contract already exists,
-but the Config-to-occurrence import join is unfinished; Skill-targeted external
+Cry stages belong to exact Skill usage. Native Scenario intent now resolves these
+settings against eligible exact occurrences. The configuration-to-intent
+import adapter passes focused tests and all-five preservation; Skill-targeted external
 assumptions cannot bypass it because the engine rejects Skill-targeted external
 reads. Skill-context reads of Player inputs do not establish skill ownership. Propagation
-across repeated occurrences and independently selected presets requires complete
-source-consumer and composition evidence before a policy is chosen. These are
-remaining admission tasks, not new implemented runtime behavior.
-Two concrete proposals now separate these decisions: [Scenario-owned usage
-intent](owned-scenario-usage-intent-proposal.md) would resolve skill-stage state
+across repeated occurrences and independently selected presets follows checked
+policy applicability. Reviewed source consumers establish distinct zero semantics
+and finite integer-stage formulas; actual control publication still needs proven
+grant/supply applicability and complete source accounting.
+Two accepted contracts separate these decisions: [Scenario-owned usage
+intent](owned-scenario-usage-intent-proposal.md) resolves skill-stage state
 against exact composed occurrences, while [numeric progression
-rewards](owned-progression-input-proposal.md) would keep campaign progress in
-the existing build Choice/reward path. Both await owner review. A saved
+rewards](owned-progression-input-proposal.md) now keep campaign progress in
+the existing build Choice/reward path. Both were accepted October 19. Numeric
+projection/accounting and actual all-five publication pass locally. Native Scenario
+intent resolution and its import projection also pass focused tests. A saved
 configuration field's location does not determine its native owner.
 
 The [empty intrinsic socket packet](../data/owned/poe2/3887ae68/empty-passive-socket-intrinsics/README.md)
@@ -1358,9 +1483,11 @@ selected obligations; it does not currently convert them. The finite replay
 explicitly requires an absent or reviewed empty Party container before its
 test-only completion. Closing configuration or external-input obligations must
 retain this boundary; catalog absence alone cannot authorize a zero result.
-For the current Original05 import, Party rows link to configuration issue
+For the Original05 import at that contribution checkpoint, Party rows link to configuration issue
 `01f2`; separate external-assumption issue `0207` also remains pending. Neither
-obligation is retired by publishing this contribution query.
+obligation is retired by publishing this contribution query. The later reviewed
+empty-Party publication and current local IDs are recorded in the implementation
+plan; the source-domain requirement remains the same.
 
 The [intrinsic source-selection packet](../data/owned/poe2/3887ae68/minion-attack-selection/README.md)
 binds the four existing Basic Attack source routes to one existing Fixed selector
@@ -1905,11 +2032,12 @@ cache state or Lua dependency to native execution. See the
 In the current implementation, the selected skill preset owns typed usage preferences for its exact supplying
 Skill, Action or generated Actor occurrences. Reusing the same physical Gem in
 another preset does not reuse its occurrence preferences. The shared
-composition boundary combines that selected layer with the explicit scenario.
+composition boundary preserves that selected layer separately from the Scenario.
 Legacy preferences use `owned_project::compose_request`; versioned intent uses
 `owned_preset_intent::compose_request_checked` and
-`DraftSession::finalize_selection_checked` with the data-aware proof. A scenario row
-replaces a preference only at the exact `(policy, target)` key, replacing its
+`DraftSession::finalize_selection_checked` with the data-aware proof.
+Definition-aware Engine preparation resolves all three layers. An exact Scenario row
+replaces an earlier selection only at the exact `(policy, target)` key, replacing its
 whole parameter record. It cannot borrow omitted parameters from the preference.
 
 The owner accepted the [generated-source extension](owned-generated-skill-usage-proposal.md)
@@ -1919,7 +2047,7 @@ The provider remains authoritative, stale/ambiguous targets remain obligations,
 and dormant/overridden values still need data-aware validation. The versioned
 `SkillPreset.intent` contract now implements this extension with full-project or
 full-draft schema proof before selection. Checked composition and finalization
-share applicability and merge behavior; the structural-only APIs reject the new
+share applicability and layer-preservation behavior; the structural-only APIs reject the new
 contract without its proof. The legacy `usage_preferences` field retains its
 existing strict local ownership and omitted-field bytes. An explicit conversion
 moves that field into the new envelope; decoding never silently migrates it.
@@ -1949,10 +2077,15 @@ Complete projects and editable drafts retain the layer. An omitted legacy field
 keeps its old serialized representation and means no authored preferences; it
 does not prove complete imported usage. Pending preferences on the selected
 preset block finalization, while an unselected preset remains independently
-editable. Structural validation checks both raw layers before replacement and
+editable. Structural validation checks all three raw layers before replacement and
 charges them before deduplication. Definition binding remains a separate step.
 
-The resulting native request still uses `ScenarioInput.usage`. Usage programs
+The native request now retains `BuildInput.usage_preferences`, typed
+`ScenarioInput.usage_intents`, and exact `ScenarioInput.usage` separately. The
+Engine resolves one immutable exact list in that precedence order; invocation
+binding and parameter reads share it. Structural discovery includes disabled
+and inactive-loadout suppliers, while participation still gates execution.
+Focused native, CLI and retained-evidence tests pass. Usage programs
 execute through the ordinary compiled rule graph, exact target resolution and
 activation gates. Supported contexts are Skill-to-Skill, Action-to-Action and
 Actor-to-Actor, with ordinary derivation, contribution, capability and requirement
@@ -1973,17 +2106,18 @@ exact preference is actually attached and the containing usage inventory remains
 explicitly Pending. Physical completeness does not erase remaining usage or
 action-selection obligations.
 
-The additive UsageV2 policy preserves those Boolean rows and adds typed numeric
-occurrence inputs with an optional containing-group override. An override wins
+The current UsageV3 policy supports Boolean and typed numeric occurrence inputs
+with an optional containing-group override. An override wins
 by presence, including zero; malformed values remain Pending. Numeric rows do
 not acquire the Boolean-specific physical-inventory proof. Sniper's reviewed
 count recipe also rejects ambiguous source effect matching when no group
 override exists. This source interpretation stays in Import.
 
-The opt-in UsageV3 path extends the same decoder to proved authored Direct and
+UsageV3 uses the same decoder for proved authored Direct and
 exact generated occurrences, with multiple policies per occurrence. Raw inputs
 and usage share one provider resolver but decode their values independently.
-No quality permission or successful quality value is required to identify a
+Earlier UsageV1/V2 policy variants have been removed. No quality permission or
+successful quality value is required to identify a
 usage target. Historical physical rows retain their exclusive inventory-proof
 capability; new rows cannot certify complete gameplay usage. The checked count
 packet adds nine selected preferences across Originals01/05, using the unchanged

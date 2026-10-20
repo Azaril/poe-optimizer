@@ -133,10 +133,7 @@ impl Fixture {
     }
     pub fn row(&mut self) -> &mut DirectSkillInputDisposition {
         let DirectSkillInputPolicy::PobManualDirectSkillV2 { dispositions, .. } =
-            self.base.policy.direct_skill_inputs.as_mut().unwrap()
-        else {
-            unreachable!()
-        };
+            self.base.policy.direct_skill_inputs.as_mut().unwrap();
         &mut dispositions[0]
     }
 }

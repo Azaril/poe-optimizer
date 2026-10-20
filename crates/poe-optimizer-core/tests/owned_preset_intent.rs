@@ -62,6 +62,7 @@ fn exact_selection_is_not_activation_and_a_b_a_is_stable() {
             .is_empty()
     );
     assert!(b.request().scenario().input().usage.is_empty());
+    assert!(b.request().build().input().usage_preferences.is_empty());
     assert!(b.diagnostics().iter().all(|r|matches!(&r.disposition,IntentDisposition::NotApplicable {excluded_sources} if excluded_sources==&[ProviderRoot::EquipmentUse(id(11))])));
     assert_eq!(
         a,
@@ -121,9 +122,10 @@ fn skill_presets_independently_configure_one_exact_external_occurrence() {
             }]
         );
         assert_eq!(
-            result.request().scenario().input().usage,
+            result.request().build().input().usage_preferences,
             vec![usage(count)]
         );
+        assert!(result.request().scenario().input().usage.is_empty());
         assert_eq!(result.receipt().selection.skills, preset);
         assert_eq!(result.receipt().project_digest, proof.content_digest());
         assert_eq!(&result.receipt().data, index.identity());
@@ -175,6 +177,10 @@ fn required_source_exclusion_and_explicit_override_are_distinct() {
         overridden.request().scenario().input().usage,
         vec![usage(7)]
     );
+    assert_eq!(
+        overridden.request().build().input().usage_preferences,
+        vec![usage(3)]
+    );
     assert!(
         overridden
             .diagnostics()
@@ -187,6 +193,90 @@ fn required_source_exclusion_and_explicit_override_are_distinct() {
         compose(&index, &p, &selected, &proof, vec![bad]),
         Err(IntentError::Schema(_))
     ));
+}
+
+#[test]
+fn checked_composition_keeps_two_scenarios_and_two_presets_independent() {
+    let mut index = schema();
+    let DefinitionDescriptor::UsagePolicy(DefinitionEntry {
+        schema: SchemaState::Known(policy),
+        ..
+    }) = index
+        .definitions
+        .get_mut(&def::<UsagePolicyDefinition>("usage").address())
+        .unwrap()
+    else {
+        panic!("fixture policy")
+    };
+    policy.scenario_skill_applicability = Some(DeclaredSet::complete(vec![]));
+    let mut raw = project_input();
+    let mut alternate = raw.skill_presets[0].clone();
+    alternate.id = id(131);
+    alternate.intent.as_mut().unwrap().usage[0].selection = usage(7);
+    raw.skill_presets.push(alternate);
+    let project = project(raw);
+    let proof = proof(&index, &project);
+    let mut digests = std::collections::BTreeSet::new();
+    for count in [5, 9] {
+        let mut scenario_input = scenario(vec![usage(11)]).into_input();
+        scenario_input.usage_intents = vec![ScenarioUsageIntent {
+            policy: def("usage"),
+            parameters: usage(count).parameters,
+        }];
+        let scenario =
+            ScenarioSpec::new(scenario_input.clone(), OwnedInputLimits::default()).unwrap();
+        let mut scenario_digest = None;
+        for (preset, preference) in [(id(130), 3), (id(131), 7)] {
+            let selected = VariantSelection {
+                skills: preset,
+                ..selection()
+            };
+            let result = compose_request_checked(
+                &index,
+                &project,
+                IntentCompositionInputs {
+                    selection: &selected,
+                    inventory: None,
+                    scenario: scenario.clone(),
+                    queries: queries(),
+                },
+                &proof,
+                BindingLimits::default(),
+            )
+            .unwrap();
+            assert_eq!(
+                result.request().build().input().usage_preferences,
+                vec![usage(preference)]
+            );
+            assert_eq!(result.request().scenario(), &scenario);
+            assert_eq!(result.request().scenario().input().usage, vec![usage(11)]);
+            assert!(digests.insert(result.receipt().request_digest));
+            if let Some(expected) = scenario_digest {
+                assert_eq!(result.receipt().scenario_digest, expected);
+            }
+            scenario_digest = Some(result.receipt().scenario_digest);
+        }
+        // No recipient is required to validate saved intent, and an exact
+        // override cannot hide malformed intent parameters.
+        scenario_input.usage_intents[0].parameters[0].value = integer(41);
+        assert!(matches!(
+            compose_request_checked(
+                &index,
+                &project,
+                IntentCompositionInputs {
+                    selection: &selection(),
+                    inventory: None,
+                    scenario: ScenarioSpec::new(scenario_input, OwnedInputLimits::default())
+                        .unwrap(),
+                    queries: queries(),
+                },
+                &proof,
+                BindingLimits::default(),
+            ),
+            Err(IntentError::Schema(_))
+        ));
+    }
+    assert_eq!(digests.len(), 4);
 }
 
 #[test]

@@ -629,6 +629,7 @@ fn authored_request(r: &Real) -> OwnedEvaluationRequest {
     .collect();
     let build = BuildSpec::new(
         BuildInput {
+            usage_preferences: vec![],
             generated_inputs: None,
             authored_support_order: None,
             allocator: InstanceAllocatorState::from_parts(BuildLineage::from_bytes([113; 16]), 20),
@@ -665,6 +666,7 @@ fn authored_request(r: &Real) -> OwnedEvaluationRequest {
     .unwrap();
     let scenario = ScenarioSpec::new(
         ScenarioInput {
+            usage_intents: vec![],
             game_version: ns.clone(),
             enemy: EnemySpec {
                 encounter,

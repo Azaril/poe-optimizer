@@ -1,0 +1,946 @@
+{
+  "schema_version": 1,
+  "kind": "ordinary-physical-hit-dps-source-domain",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "inherited_timing": {
+    "path": "data/owned/poe2/3887ae68/offering-speed-rate/timing-source-domain.json",
+    "bytes": 1347585,
+    "sha256": "ca727702cc10bd2e7aef7c2b5e51d9eed3b916787696f71a664ff557ef208775"
+  },
+  "inputs": [
+    {
+      "id": "jit-off",
+      "archive": {
+        "bytes": 1290374,
+        "path": "data/owned/poe2/3887ae68/mana-supplier-sources/source-jit-off.json.gz",
+        "sha256": "eb3e2f5df46d7c7f7e55b5968d1609ab7c6010f2b93b24137dec3d925e65b842"
+      },
+      "bytes": 25031221,
+      "sha256": "542e0e7ebc1947a45be14f8b0c9e4eed28df2d37d7d46c8d3fd0a1ee5444c971",
+      "counts": {
+        "baseline": 18,
+        "configuration": 2,
+        "environments": 21,
+        "skill_construction": 1536
+      }
+    },
+    {
+      "id": "jit-on",
+      "archive": {
+        "bytes": 1289531,
+        "path": "data/owned/poe2/3887ae68/mana-supplier-sources/source-jit-on.json.gz",
+        "sha256": "f895dff33823fa7dd6a33dc874b6f66bdc424291e0fd45216761691cd5777242"
+      },
+      "bytes": 25031220,
+      "sha256": "fd7cd3dfbe854e876fa9bc452d09814edefbd53d83019869bd0e06da73ceb22e",
+      "counts": {
+        "baseline": 18,
+        "configuration": 2,
+        "environments": 21,
+        "skill_construction": 1536
+      }
+    }
+  ],
+  "selected_recipes": {
+    "bytes": 471969,
+    "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain.json",
+    "sha256": "ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f"
+  },
+  "target_names": [
+    "DPS",
+    "QuantityMultiplier",
+    "OnlyFinalRepeat",
+    "CanCreateHazards",
+    "HazardRearmChance",
+    "RuthlessBlowMaxCount",
+    "HasSeals",
+    "DamageSeal",
+    "NoRepeatBonuses",
+    "GrenadeActivateTwice",
+    "UseOffhandAttackSpeed",
+    "SequentialProjectiles",
+    "BarrageRepeats",
+    "SaviourMirageWarriorMaxCount",
+    "GeneralsCryDoubleMaxCount"
+  ],
+  "forbidden_fields": [
+    "dpsMultiplier",
+    "hitTimeMultiplier",
+    "hitTimeOverride",
+    "maxHitRatePerEnemy",
+    "monsterExplode",
+    "hitChanceIsExplodeChance",
+    "channelRelease",
+    "triggeredOnDeath",
+    "doubleHitsWhenDualWielding"
+  ],
+  "source_counts": {
+    "environments": 21,
+    "baseline": 18,
+    "configuration": 2,
+    "skill_construction": 1536
+  },
+  "selected_recipe_count": 40,
+  "basic_constructor_count": 36,
+  "neutral": {
+    "dps_multiplier": 1,
+    "quantity_multiplier": 1,
+    "effective_rate": "ordinary Speed; no HitSpeed override"
+  },
+  "repeat_mode": "AVERAGE",
+  "ruthless_modes": [
+    null,
+    "AVERAGE"
+  ],
+  "scan_tokens": [
+    "\"DPS\"",
+    "\"QuantityMultiplier\"",
+    "dpsMultiplier",
+    "quantityMultiplier",
+    "HitSpeed",
+    "hitTimeOverride",
+    "hitTimeMultiplier",
+    "maxHitRatePerEnemy"
+  ],
+  "source_scans": [
+    {
+      "source_path": "src/Modules/CalcActiveSkill.lua",
+      "rows": []
+    },
+    {
+      "source_path": "src/Modules/CalcPerform.lua",
+      "rows": [
+        {
+          "line": 2092,
+          "text": "\t\t\t\tlocal activation_frequency, duration = getCachedOutputValue(env, activeSkill, \"HitSpeed\", \"Duration\") -- HitSpeed is the brand activation frequency"
+        }
+      ]
+    },
+    {
+      "source_path": "src/Modules/CalcOffence.lua",
+      "rows": [
+        {
+          "line": 1118,
+          "text": "\t\t\tskillModList:NewMod(\"DPS\", \"MORE\", dpsMulti, \"Barrage Repeats\")"
+        },
+        {
+          "line": 1125,
+          "text": "\t\t\t\tskillModList:NewMod(\"DPS\", \"MORE\", skillModList:Sum(\"BASE\", skillCfg, \"ProjectileCount\") + 2 * skillModList:Sum(\"BASE\", skillCfg, \"TwoAdditionalProjectilesChance\") / 100 + skillModList:Sum(\"BASE\", skillCfg, \"SurpassingProjectileChance\") / 100, \"Barrage Repeats\")"
+        },
+        {
+          "line": 1230,
+          "text": "\t\t\t\tskillModList:NewMod(\"DPS\", \"MORE\", (output.Repeats - 1) * 100, \"Repeat Count\")"
+        },
+        {
+          "line": 1283,
+          "text": "\t\tmodDB:NewMod(\"DPS\", \"MORE\", detonateTwice, \"Grenade Activate Twice\")"
+        },
+        {
+          "line": 1288,
+          "text": "\t\tskillModList:NewMod(\"DPS\", \"MORE\", 100, \"Hits with both weapons\")"
+        },
+        {
+          "line": 1301,
+          "text": "\t\tif skillModList:Flag(nil, \"DamageSeal\") and not skillData.hitTimeOverride then"
+        },
+        {
+          "line": 1308,
+          "text": "\t\t\t\tenv.player.mainSkill.skillModList:NewMod(\"DPS\", \"MORE\", (output.SealMax * calcLib.mod(skillModList, skillCfg, \"SealRepeatPenalty\")) * 100, skillName)"
+        },
+        {
+          "line": 1309,
+          "text": "\t\t\t\tenv.player.mainSkill.skillData.hitTimeOverride = m_max(output.TimeMaxSeals, totalCastSpeed * 1.1)"
+        },
+        {
+          "line": 1311,
+          "text": "\t\t\t\tenv.player.mainSkill.skillModList:NewMod(\"DPS\", \"MORE\", round(1 / output.SealCooldown / (totalCastSpeed * 1.1) * calcLib.mod(skillModList, skillCfg, \"SealRepeatPenalty\") * 100, 2), skillName)"
+        },
+        {
+          "line": 1319,
+          "text": "\t\t\t\tenv.player.mainSkill.skillData.hitTimeOverride = m_max(output.TimeMaxSeals, totalCastSpeed * 1.1)"
+        },
+        {
+          "line": 1649,
+          "text": "\t\tskillModList:NewMod(\"DPS\", \"MORE\", output.HazardRearmChance, \"Chance To Rearm\")"
+        },
+        {
+          "line": 2654,
+          "text": "\t\t\t\tlocal stackName = stat:gsub(\"DPS\",\"\") .. \"Stacks\""
+        },
+        {
+          "line": 2681,
+          "text": "\t\telseif mode == \"DPS\" then"
+        },
+        {
+          "line": 3011,
+          "text": "\t\t\tif output.Cooldown and skillFlags.selfCast or skillData.maxHitRatePerEnemy or skillData.hitTimeOverride then"
+        },
+        {
+          "line": 3133,
+          "text": "\t\tif skillData.hitTimeOverride and not skillData.triggeredOnDeath or skillData.maxHitRatePerEnemy then"
+        },
+        {
+          "line": 3134,
+          "text": "\t\t\t--checks if skill has a max hit rate per enemy and adjust hitTimeOverride"
+        },
+        {
+          "line": 3135,
+          "text": "\t\t\tif skillData.maxHitRatePerEnemy and not skillData.hitTimeOverride then"
+        },
+        {
+          "line": 3136,
+          "text": "\t\t\t\tskillData.hitTimeOverride = skillData.maxHitRatePerEnemy"
+        },
+        {
+          "line": 3137,
+          "text": "\t\t\telseif skillData.maxHitRatePerEnemy and skillData.hitTimeOverride < skillData.maxHitRatePerEnemy then"
+        },
+        {
+          "line": 3138,
+          "text": "\t\t\t\tskillData.hitTimeOverride = skillData.maxHitRatePerEnemy"
+        },
+        {
+          "line": 3140,
+          "text": "\t\t\toutput.HitTime = skillData.hitTimeOverride"
+        },
+        {
+          "line": 3141,
+          "text": "\t\t\toutput.HitSpeed = 1 / output.HitTime"
+        },
+        {
+          "line": 3142,
+          "text": "\t\t\t--Brands always have hitTimeOverride"
+        },
+        {
+          "line": 3144,
+          "text": "\t\t\t\toutput.BrandTicks = m_floor(output.Duration * output.HitSpeed)"
+        },
+        {
+          "line": 3146,
+          "text": "\t\telseif skillData.hitTimeMultiplier and output.Time and not skillData.triggeredOnDeath then"
+        },
+        {
+          "line": 3147,
+          "text": "\t\t\toutput.HitTime = output.Time * skillData.hitTimeMultiplier"
+        },
+        {
+          "line": 3152,
+          "text": "\t\t\t\toutput.HitSpeed = 1 / (m_max(output.HitTime, output.Cooldown))"
+        },
+        {
+          "line": 3154,
+          "text": "\t\t\t\toutput.HitSpeed = 1 / (output.HitTime + output.Cooldown)"
+        },
+        {
+          "line": 3156,
+          "text": "\t\t\t\toutput.HitSpeed = 1 / output.HitTime"
+        },
+        {
+          "line": 3162,
+          "text": "\t\tskillModList:NewMod(\"DPS\", \"MORE\", -100 / (output.Repeats or 1), \"Only Final Repeat\")"
+        },
+        {
+          "line": 3180,
+          "text": "\t\tcombineStat(\"HitSpeed\", \"OR\")"
+        },
+        {
+          "line": 3247,
+          "text": "\t\tif skillData.hitTimeOverride and not skillData.triggeredOnDeath then"
+        },
+        {
+          "line": 3248,
+          "text": "\t\t\toutput.HitTime = skillData.hitTimeOverride"
+        },
+        {
+          "line": 3249,
+          "text": "\t\t\toutput.HitSpeed = 1 / output.HitTime"
+        },
+        {
+          "line": 3252,
+          "text": "\t\telseif skillData.hitTimeMultiplier and output.Time and not skillData.triggeredOnDeath then"
+        },
+        {
+          "line": 3253,
+          "text": "\t\t\toutput.HitTime = output.Time * skillData.hitTimeMultiplier"
+        },
+        {
+          "line": 3258,
+          "text": "\t\t\t\toutput.HitSpeed = 1 / (m_max(output.HitTime, output.Cooldown))"
+        },
+        {
+          "line": 3260,
+          "text": "\t\t\t\toutput.HitSpeed = 1 / (output.HitTime + output.Cooldown)"
+        },
+        {
+          "line": 3262,
+          "text": "\t\t\t\toutput.HitSpeed = m_min(1 / output.HitTime, data.misc.ServerTickRate)"
+        },
+        {
+          "line": 3281,
+          "text": "\t\tif skillData.hitTimeOverride and not skillData.triggeredOnDeath then"
+        },
+        {
+          "line": 3282,
+          "text": "\t\t\tbreakdown.HitSpeed = { }"
+        },
+        {
+          "line": 3283,
+          "text": "\t\t\tt_insert(breakdown.HitSpeed, s_format(\"1 / %.2f ^8(hit time override)\", output.HitTime))"
+        },
+        {
+          "line": 3284,
+          "text": "\t\t\tt_insert(breakdown.HitSpeed, s_format(\"= %.2f\", output.HitSpeed))"
+        },
+        {
+          "line": 3285,
+          "text": "\t\telseif skillData.hitTimeMultiplier and output.Time and not skillData.triggeredOnDeath then"
+        },
+        {
+          "line": 3287,
+          "text": "\t\t\tif m_floor(skillData.hitTimeMultiplier) ~= skillData.hitTimeMultiplier then"
+        },
+        {
+          "line": 3288,
+          "text": "\t\t\t\tt_insert(breakdown.HitTime, s_format(colorCodes.CUSTOM..\"NOTE: First stage has a %.2fx channel time multiplier\", skillData.hitTimeMultiplier - m_floor(skillData.hitTimeMultiplier)))"
+        },
+        {
+          "line": 3295,
+          "text": "\t\t\tt_insert(breakdown.HitTime, s_format(\"x %.2f ^8(channel time multiplier)\", skillData.hitTimeMultiplier))"
+        },
+        {
+          "line": 3297,
+          "text": "\t\t\tbreakdown.HitSpeed = { }"
+        },
+        {
+          "line": 3299,
+          "text": "\t\t\t\tt_insert(breakdown.HitSpeed, s_format(\"1 / min(%.2f, %.2f) ^8min(hit time, cooldown)\", output.HitTime, output.Cooldown))"
+        },
+        {
+          "line": 3301,
+          "text": "\t\t\t\tt_insert(breakdown.HitSpeed, s_format(\"1 / (%.2f + %.2f) ^8(hit time + cooldown)\", output.HitTime, output.Cooldown))"
+        },
+        {
+          "line": 3303,
+          "text": "\t\t\t\tt_insert(breakdown.HitSpeed, s_format(\"1 / %.2f ^8(hit time)\", output.HitTime))"
+        },
+        {
+          "line": 3305,
+          "text": "\t\t\tt_insert(breakdown.HitSpeed, s_format(\"= %.2f\", output.HitSpeed))"
+        },
+        {
+          "line": 3310,
+          "text": "\tlocal quantityMultiplier = m_max(activeSkill.skillModList:Sum(\"BASE\", activeSkill.skillCfg, \"QuantityMultiplier\"), 1)"
+        },
+        {
+          "line": 3311,
+          "text": "\tif quantityMultiplier > 1 then"
+        },
+        {
+          "line": 3312,
+          "text": "\t\toutput.QuantityMultiplier = quantityMultiplier"
+        },
+        {
+          "line": 3682,
+          "text": "\t\t\t\t\tskillModList:NewMod(\"DPS\", \"MORE\", -100 + 100 / (ruthlessBlowMaxCount or 1), \"Only Ruthless Blows\")"
+        },
+        {
+          "line": 4065,
+          "text": "\t\toutput.DpsMultiplier = ( skillData.dpsMultiplier or 1 ) * calcLib.mod(skillModList, skillCfg, \"DPS\")"
+        },
+        {
+          "line": 4067,
+          "text": "\t\tlocal hitRate = output.HitChance / 100 * (globalOutput.HitSpeed or globalOutput.Speed) * output.DpsMultiplier"
+        },
+        {
+          "line": 4576,
+          "text": "\t\toutput.TotalDPS = output.AverageDamage * (globalOutput.HitSpeed or globalOutput.Speed) * output.DpsMultiplier * quantityMultiplier"
+        },
+        {
+          "line": 4649,
+          "text": "\t\t\t\t\tPvpTvalue = 1/((globalOutput.HitSpeed or globalOutput.Speed)/globalOutput.ActionSpeedMod) * skillModList:More(cfg, \"PvpTvalueMultiplier\")"
+        },
+        {
+          "line": 4668,
+          "text": "\t\t\toutput.PvpTotalDPS = output.PvpAverageDamage * (globalOutput.HitSpeed or globalOutput.Speed) * output.DpsMultiplier"
+        },
+        {
+          "line": 4728,
+          "text": "\t\tcombineStat(\"AverageDamage\", \"DPS\")"
+        },
+        {
+          "line": 4729,
+          "text": "\t\tcombineStat(\"PvpAverageDamage\", \"DPS\")"
+        },
+        {
+          "line": 4730,
+          "text": "\t\tcombineStat(\"DpsMultiplier\", \"DPS\")"
+        },
+        {
+          "line": 4731,
+          "text": "\t\tcombineStat(\"TotalDPS\", \"DPS\")"
+        },
+        {
+          "line": 4732,
+          "text": "\t\tcombineStat(\"PvpTotalDPS\", \"DPS\")"
+        },
+        {
+          "line": 4733,
+          "text": "\t\tcombineStat(\"LifeLeechDuration\", \"DPS\")"
+        },
+        {
+          "line": 4734,
+          "text": "\t\tcombineStat(\"LifeLeechInstances\", \"DPS\")"
+        },
+        {
+          "line": 4735,
+          "text": "\t\tcombineStat(\"LifeLeechInstant\", \"DPS\")"
+        },
+        {
+          "line": 4736,
+          "text": "\t\tcombineStat(\"LifeLeechInstantRate\", \"DPS\")"
+        },
+        {
+          "line": 4737,
+          "text": "\t\tcombineStat(\"LifeLeechInstantProportion\", \"DPS\")"
+        },
+        {
+          "line": 4738,
+          "text": "\t\tcombineStat(\"EnergyShieldLeechDuration\", \"DPS\")"
+        },
+        {
+          "line": 4739,
+          "text": "\t\tcombineStat(\"EnergyShieldLeechInstances\", \"DPS\")"
+        },
+        {
+          "line": 4740,
+          "text": "\t\tcombineStat(\"EnergyShieldLeechInstant\", \"DPS\")"
+        },
+        {
+          "line": 4741,
+          "text": "\t\tcombineStat(\"EnergyShieldLeechInstantRate\", \"DPS\")"
+        },
+        {
+          "line": 4742,
+          "text": "\t\tcombineStat(\"EnergyShieldLeechInstantProportion\", \"DPS\")"
+        },
+        {
+          "line": 4743,
+          "text": "\t\tcombineStat(\"ManaLeechDuration\", \"DPS\")"
+        },
+        {
+          "line": 4744,
+          "text": "\t\tcombineStat(\"ManaLeechInstances\", \"DPS\")"
+        },
+        {
+          "line": 4745,
+          "text": "\t\tcombineStat(\"ManaLeechInstant\", \"DPS\")"
+        },
+        {
+          "line": 4746,
+          "text": "\t\tcombineStat(\"ManaLeechInstantRate\", \"DPS\")"
+        },
+        {
+          "line": 4747,
+          "text": "\t\tcombineStat(\"ManaLeechInstantProportion\", \"DPS\")"
+        },
+        {
+          "line": 4748,
+          "text": "\t\tcombineStat(\"LifeOnHit\", \"DPS\")"
+        },
+        {
+          "line": 4749,
+          "text": "\t\tcombineStat(\"LifeOnHitRate\", \"DPS\")"
+        },
+        {
+          "line": 4750,
+          "text": "\t\tcombineStat(\"LifeOnKill\", \"DPS\")"
+        },
+        {
+          "line": 4751,
+          "text": "\t\tcombineStat(\"EnergyShieldOnHit\", \"DPS\")"
+        },
+        {
+          "line": 4752,
+          "text": "\t\tcombineStat(\"EnergyShieldOnHitRate\", \"DPS\")"
+        },
+        {
+          "line": 4753,
+          "text": "\t\tcombineStat(\"EnergyShieldOnKill\", \"DPS\")"
+        },
+        {
+          "line": 4754,
+          "text": "\t\tcombineStat(\"ManaOnHit\", \"DPS\")"
+        },
+        {
+          "line": 4755,
+          "text": "\t\tcombineStat(\"ManaOnHitRate\", \"DPS\")"
+        },
+        {
+          "line": 4756,
+          "text": "\t\tcombineStat(\"ManaOnKill\", \"DPS\")"
+        },
+        {
+          "line": 4758,
+          "text": "\t\t\tcombineStat(damageType..\"StoredCombinedAvg\", \"DPS\")"
+        },
+        {
+          "line": 4862,
+          "text": "\t\t\t\toutput.HitSpeed and s_format(\"x %.2f ^8(hit rate)\", output.HitSpeed) or s_format(\"x %.2f ^8(attack rate)\", output.Speed),"
+        },
+        {
+          "line": 4867,
+          "text": "\t\t\t\toutput.HitSpeed and s_format(\"x %.2f ^8(hit rate)\", output.HitSpeed) or s_format(\"x %.2f ^8(trigger rate)\", output.Speed),"
+        },
+        {
+          "line": 4872,
+          "text": "\t\t\t\toutput.HitSpeed and s_format(\"x %.2f ^8(hit rate)\", output.HitSpeed) or s_format(\"x %.2f ^8(cast rate)\", output.Speed),"
+        },
+        {
+          "line": 4878,
+          "text": "\t\tif quantityMultiplier > 1 then"
+        },
+        {
+          "line": 4879,
+          "text": "\t\t\tt_insert(breakdown.TotalDPS, s_format(\"x %g ^8(quantity multiplier for this skill)\", quantityMultiplier))"
+        },
+        {
+          "line": 4891,
+          "text": "\t\t\t\toutput.HitSpeed and s_format(\"x %.2f ^8(hit rate)\", output.HitSpeed) or s_format(\"x %.2f ^8(%s rate)\", output.Speed, rateType),"
+        },
+        {
+          "line": 4896,
+          "text": "\t\t\tif quantityMultiplier > 1 then"
+        },
+        {
+          "line": 4897,
+          "text": "\t\t\t\tt_insert(breakdown.PvpTotalDPS, s_format(\"x %g ^8(quantity multiplier for this skill)\", quantityMultiplier))"
+        },
+        {
+          "line": 4904,
+          "text": "\t\tskillData.summonSpeed = output.SummonedMinionsPerCast * (output.HitSpeed or output.Speed) * output.DpsMultiplier"
+        },
+        {
+          "line": 4950,
+          "text": "\t\tlocal hitRate = output.HitChance / 100 * (globalOutput.HitSpeed or globalOutput.Speed) * output.DpsMultiplier"
+        },
+        {
+          "line": 5143,
+          "text": "\t\t\t\tlocal breakdownDPS = breakdown[ailment..\"DPS\"] or { }"
+        },
+        {
+          "line": 5144,
+          "text": "\t\t\t\tbreakdown[ailment..\"DPS\"] = breakdownDPS"
+        },
+        {
+          "line": 5259,
+          "text": "\t\t\t\telseif (globalOutput.HitSpeed or globalOutput.Speed) > 0 then"
+        },
+        {
+          "line": 5261,
+          "text": "\t\t\t\t\tailmentStacks = ailmentStacks * globalOutput[ailment .. \"Duration\"] * (globalOutput.HitSpeed or globalOutput.Speed)"
+        },
+        {
+          "line": 5293,
+          "text": "\t\t\t\t\telseif (globalOutput.HitSpeed or globalOutput.Speed) > 0 then"
+        },
+        {
+          "line": 5336,
+          "text": "\t\t\t\tglobalBreakdown[ailment .. \"DPS\"] = {"
+        },
+        {
+          "line": 5343,
+          "text": "\t\t\t\t\tt_insert(globalBreakdown[ailment .. \"DPS\"], \"\")"
+        },
+        {
+          "line": 5344,
+          "text": "\t\t\t\t\tt_insert(globalBreakdown[ailment .. \"DPS\"], \"Crit Dmg Derivation:\")"
+        },
+        {
+          "line": 5345,
+          "text": "\t\t\t\t\tt_insert(globalBreakdown[ailment .. \"DPS\"], s_format(\"%.0f + (%.0f - %.0f) * %.2f%%\", critMin, critMax, critMin, ailmentRollAverage))"
+        },
+        {
+          "line": 5346,
+          "text": "\t\t\t\t\tt_insert(globalBreakdown[ailment .. \"DPS\"], \"^8min combined sources + (max combined sources - min combined sources) * average roll\")"
+        },
+        {
+          "line": 5347,
+          "text": "\t\t\t\t\tt_insert(globalBreakdown[ailment .. \"DPS\"], s_format(\"= %.2f\", critAvg))"
+        },
+        {
+          "line": 5406,
+          "text": "\t\t\t\toutput[ailment .. \"DPS\"] = ailmentDPSCapped"
+        },
+        {
+          "line": 5442,
+          "text": "\t\t\t\tglobalOutput[ailment .. \"Damage\"] = output[ailment .. \"DPS\"] * globalOutput[ailment .. \"Duration\"]"
+        },
+        {
+          "line": 5444,
+          "text": "\t\t\t\t\toutput[ailment .. \"Damage\"] = output[ailment .. \"DPS\"] * globalOutput[ailment .. \"Duration\"]"
+        },
+        {
+          "line": 5446,
+          "text": "\t\t\t\t\toutput[\"Total\" .. ailment .. \"DPS\"] = output[ailment .. \"DPS\"]"
+        },
+        {
+          "line": 5450,
+          "text": "\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"x %.2f ^8(ailment deals %d%% per second)\", data.misc[ailment .. \"PercentBase\"], data.misc[ailment .. \"PercentBase\"] * 100))"
+        },
+        {
+          "line": 5451,
+          "text": "\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"x %.2f ^8(ailment magnitude effect)\", globalOutput[ailment .. \"MagnitudeEffect\"]))"
+        },
+        {
+          "line": 5452,
+          "text": "\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"= %.1f\", baseVal, 1))"
+        },
+        {
+          "line": 5453,
+          "text": "\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], \"\")"
+        },
+        {
+          "line": 5454,
+          "text": "\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], \"Average DPS for all \" .. ailment .. \"s:\")"
+        },
+        {
+          "line": 5456,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"%.1f ^8(base damage per second)\", baseVal))"
+        },
+        {
+          "line": 5459,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"x %.2f ^8(ailment effect modifier)\", effectMod))"
+        },
+        {
+          "line": 5462,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"x %.2f ^8(rate modifier)\", rateMod))"
+        },
+        {
+          "line": 5465,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"x %.2f ^8(avg ailment stacks)\", activeAilments))"
+        },
+        {
+          "line": 5468,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"x %.3f ^8(effective DPS modifier from enemy debuffs)\", effMult))"
+        },
+        {
+          "line": 5470,
+          "text": "\t\t\t\t\tif output[ailment .. \"DPS\"] ~= ailmentDPSUncapped then"
+        },
+        {
+          "line": 5471,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"= %.1f ^8(Uncapped raw ailment DPS)\", ailmentDPSUncapped))"
+        },
+        {
+          "line": 5472,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"^8(Raw ailment DPS is \"..colorCodes.NEGATIVE..\"overcapped ^8by^7 %.0f ^8:^7 %.1f%%^8)\", ailmentDPSUncapped - ailmentDPSCapped, (ailmentDPSUncapped - ailmentDPSCapped) / ailmentDPSCapped * 100))"
+        },
+        {
+          "line": 5473,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"= %d ^8(Capped ailment DPS)\", ailmentDPSCapped))"
+        },
+        {
+          "line": 5475,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"= %.1f ^8per second\", output[ailment .. \"DPS\"]))"
+        },
+        {
+          "line": 5477,
+          "text": "\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"%.2f%% of Maximum ailment DPS\", output[ailment .. \"DPS\"] / maxAilmentDPSCapped * 100))"
+        },
+        {
+          "line": 5478,
+          "text": "\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], \"\")"
+        },
+        {
+          "line": 5479,
+          "text": "\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], \"DPS Range:\")"
+        },
+        {
+          "line": 5481,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"%.0f to %.0f ^8(ailment DPS Range)\", minAilmentDPSUncapped, maxAilmentDPSUncapped))"
+        },
+        {
+          "line": 5483,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"%.0f to %.0f ^8(Uncapped ailment DPS Range)\", minAilmentDPSUncapped, maxAilmentDPSUncapped))"
+        },
+        {
+          "line": 5486,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"^8(Raw Min ailment DPS is \"..colorCodes.NEGATIVE..\"overcapped ^8by^7 %.0f ^8:^7 %.1f%%^8)\", minAilmentDPSUncapped - minAilmentDPSCapped, (minAilmentDPSUncapped - minAilmentDPSCapped) / minAilmentDPSCapped * 100))"
+        },
+        {
+          "line": 5489,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"^8(Raw Max ailment DPS is \"..colorCodes.NEGATIVE..\"overcapped ^8by^7 %.0f ^8:^7 %.1f%%^8)\", maxAilmentDPSUncapped - maxAilmentDPSCapped, (maxAilmentDPSUncapped - maxAilmentDPSCapped) / maxAilmentDPSCapped * 100))"
+        },
+        {
+          "line": 5492,
+          "text": "\t\t\t\t\t\tt_insert(breakdown[ailment .. \"DPS\"], s_format(\"%.0f to %.0f ^8(Capped ailment DPS Range)\", minAilmentDPSCapped, maxAilmentDPSCapped))"
+        },
+        {
+          "line": 5751,
+          "text": "\t\t\t\t\t\tbreakdown[ailment..\"DPS\"].label = \"Resulting ailment effect\"..((current > 0 and val.ramping) and s_format(\" ^8(with a ^7%s%% ^8%s on the enemy)^7\", current, ailment) or \"\")"
+        },
+        {
+          "line": 5752,
+          "text": "\t\t\t\t\t\tbreakdown[ailment..\"DPS\"].rowList = { }"
+        },
+        {
+          "line": 5753,
+          "text": "\t\t\t\t\t\tbreakdown[ailment..\"DPS\"].colList = {"
+        },
+        {
+          "line": 5780,
+          "text": "\t\t\t\t\t\t\tt_insert(breakdown[ailment..\"DPS\"].rowList, {"
+        },
+        {
+          "line": 5946,
+          "text": "\t\t\tcombineStat(ailment..\"DPS\", \"CHANCE_AILMENT\", ailment..\"Chance\")"
+        },
+        {
+          "line": 5949,
+          "text": "\t\t\t\tcombineStat(\"Total\"..ailment..\"DPS\", \"DPS\")"
+        },
+        {
+          "line": 5950,
+          "text": "\t\t\t\tcombineStat(ailment .. \"StacksMax\", \"DPS\")"
+        },
+        {
+          "line": 6139,
+          "text": "\t\toutput.TotalDot = m_min(output.TotalDotInstance * speed * output.Duration * output.DpsMultiplier * quantityMultiplier, data.misc.DotDpsCap)"
+        },
+        {
+          "line": 6150,
+          "text": "\t\t\tif quantityMultiplier > 1 then"
+        },
+        {
+          "line": 6151,
+          "text": "\t\t\t\tt_insert(breakdown.TotalDot, s_format(\"x %g ^8(quantity multiplier for this skill)\", quantityMultiplier))"
+        },
+        {
+          "line": 6206,
+          "text": "\t\t\t\tuseSpeed = env.player.mainSkill.skillData.hitTimeOverride / repeats"
+        },
+        {
+          "line": 6278,
+          "text": "\t\t\t\t\toutput[\"With\" .. ailment .. \"DPS\"] = baseDPS + output[\"Total\" .. ailment .. \"DPS\"]"
+        },
+        {
+          "line": 6281,
+          "text": "\t\t\t\toutput[\"With\" .. ailment .. \"DPS\"] = baseDPS + output[ailment .. \"Damage\"]"
+        },
+        {
+          "line": 6284,
+          "text": "\t\t\t\toutput[\"With\" .. ailment .. \"DPS\"] = baseDPS + output[ailment .. \"DPS\"]"
+        },
+        {
+          "line": 6287,
+          "text": "\t\t\toutput[\"With\" .. ailment .. \"DPS\"] = baseDPS"
+        },
+        {
+          "line": 6372,
+          "text": "\t\t\toutput.ImpaleDPS = output.ImpaleDPS * (output.HitSpeed or output.Speed)"
+        },
+        {
+          "line": 6375,
+          "text": "\t\tif quantityMultiplier > 1 then"
+        },
+        {
+          "line": 6376,
+          "text": "\t\t\toutput.ImpaleDPS = output.ImpaleDPS * quantityMultiplier"
+        },
+        {
+          "line": 6400,
+          "text": "\t\t\tt_insert(breakdown.ImpaleDPS, output.HitSpeed and s_format(\"x %.2f ^8(hit rate)\", output.HitSpeed) or s_format(\"x %.2f ^8(%s rate)\", output.Speed, skillFlags.attack and \"attack\" or \"cast\"))"
+        },
+        {
+          "line": 6405,
+          "text": "\t\tif quantityMultiplier > 1 then"
+        },
+        {
+          "line": 6406,
+          "text": "\t\t\tt_insert(breakdown.ImpaleDPS, s_format(\"x %g ^8(quantity multiplier for this skill)\", quantityMultiplier))"
+        }
+      ]
+    },
+    {
+      "source_path": "src/Modules/Data.lua",
+      "rows": [
+        {
+          "line": 206,
+          "text": "\t\t\tstatTable.stat:match(\"DPS\")"
+        },
+        {
+          "line": 230,
+          "text": "\tif (not statEntry.stat) or statEntry.stat:match(\"DPS\") or minionNonApplicableStats[statEntry.stat] then"
+        }
+      ]
+    },
+    {
+      "source_path": "src/Classes/ModStore.lua",
+      "rows": []
+    },
+    {
+      "source_path": "src/Modules/CalcDefence.lua",
+      "rows": []
+    },
+    {
+      "source_path": "src/Modules/CalcSetup.lua",
+      "rows": []
+    },
+    {
+      "source_path": "src/Modules/CalcTools.lua",
+      "rows": []
+    },
+    {
+      "source_path": "src/Classes/ModDB.lua",
+      "rows": []
+    },
+    {
+      "source_path": "src/Classes/ModList.lua",
+      "rows": []
+    },
+    {
+      "source_path": "src/Data/Minions.lua",
+      "rows": []
+    },
+    {
+      "source_path": "src/Modules/CalcTriggers.lua",
+      "rows": [
+        {
+          "line": 71,
+          "text": "\tlocal cachedSpeed = GlobalCache.cachedData[env.mode][uuid].HitSpeed or GlobalCache.cachedData[env.mode][uuid].Speed"
+        },
+        {
+          "line": 85,
+          "text": "\t\treturn skill, GlobalCache.cachedData[env.mode][uuid].HitSpeed or GlobalCache.cachedData[env.mode][uuid].Speed, uuid"
+        },
+        {
+          "line": 449,
+          "text": "\t\t\t\tlocal unleashDpsMult = GlobalCache.cachedData[env.mode][uuid].ActiveSkill.skillData.dpsMultiplier or 1"
+        },
+        {
+          "line": 1072,
+          "text": "\t\t\t\t\tlocal cachedSpeed = GlobalCache.cachedData[env.mode][uuid].HitSpeed or GlobalCache.cachedData[env.mode][uuid].Speed"
+        },
+        {
+          "line": 1325,
+          "text": "\t\t\t\tenv.player.mainSkill.skillData.hitTimeMultiplier = m_max(1, snipeStages) - 0.5 --First stage takes 0.5x time to channel compared to subsequent stages"
+        },
+        {
+          "line": 1360,
+          "text": "\t\t\t\t\t\tskill.skillData.hitTimeMultiplier = snipeStages - 0.5"
+        },
+        {
+          "line": 1365,
+          "text": "\t\t\t\t\t\tlocal cachedSpeed = GlobalCache.cachedData[env.mode][uuid].Env.player.output.HitSpeed"
+        }
+      ]
+    }
+  ],
+  "scope": {
+    "native_membership_authorized": false,
+    "complete_request": false,
+    "all_damage_types": false,
+    "saved_average_hit_authorized": false,
+    "whole_build_complete": false
+  },
+  "obligations": [
+    "all captured records and recipient paths are inspected, including zero and inactive candidates",
+    "timing proof owns all eight inputs, exact Basic constructors, callbacks, profile and support exclusions",
+    "new channel census independently excludes DPS, QuantityMultiplier and every enabled late factory",
+    "repeatMode is explicitly AVERAGE; FINAL is unsupported even with one repeat",
+    "trigger config lookup has no Basic Attack entry; absent trigger parent is source-derived from complete constructor/support ownership, not observed by scalar snapshots",
+    "normal call path does not call mirages; minion triggers remain checked",
+    "source output counts and TotalDPS are comparison evidence, never input operands"
+  ],
+  "inherited_transport_proofs": [
+    {
+      "bytes": 5024,
+      "path": "data/owned/poe2/3887ae68/self-flat-minion-store/review.json",
+      "sha256": "d35ca00990f80e801758de29c38d5d3e3cb289af73f886b2d93fd99a7fc12ca9"
+    },
+    {
+      "bytes": 9880,
+      "path": "data/owned/poe2/3887ae68/self-flat-flask-keystone/review.json",
+      "sha256": "1c3211e7e5770e02a4ff46be25407cdc11c61a18b914e10c93bf4b85005cc6c2"
+    },
+    {
+      "bytes": 1369,
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/review.json",
+      "sha256": "b2126e93f6def75e8b2da3f29202cd31d0316d302d4d503959a15864860c2051"
+    },
+    {
+      "bytes": 1559,
+      "path": "data/owned/poe2/3887ae68/self-flat-action-factories/review.json",
+      "sha256": "594ef9db626b15dfa60d10a10c0892e944234d7e8ebff691c16aabc9e28ab21f"
+    },
+    {
+      "bytes": 2762,
+      "path": "data/owned/poe2/3887ae68/self-flat-later-helpers/review.json",
+      "sha256": "49b80c2e13bd98538646326bf8bd14d83989d5ae55cfb3dafbe450237d33a382"
+    },
+    {
+      "bytes": 1856,
+      "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/child-review.json",
+      "sha256": "ef1a1dbc2161d170e99a8ccb3811b605efcc32a0ff2c01f6be92d6913f114021"
+    }
+  ],
+  "late_factory_admission": [
+    {
+      "span": "barrage-and-complete-repeat",
+      "prerequisite": "SequentialProjectiles/BarrageRepeats; RepeatCount on the exact recipient",
+      "proof": "New whole-input scan excludes sequential/barrage suppliers. Inherited exact recipient census retains RepeatCount on other Spell Echo source; all36 Basic constructors have no supports and the selected profile has no mods. Repeats=1 from initialized1 plus eligible0, not from a final scalar."
+    },
+    {
+      "span": "grenade-dual-seals",
+      "prerequisite": "Grenade type; bothWeaponAttack plus doubleHitsWhenDualWielding; HasSeals",
+      "proof": "Exact selected Basic definition and all constructor flags retain attack/projectile/Bow, one Main Hand, no grenade/offhand. Field presence is rejected including false. All captured/selected sources lack seal and grenade activation providers. Seal writes to player mainSkill are additionally distinct from this supplied Actor."
+    },
+    {
+      "span": "hazard",
+      "prerequisite": "CanCreateHazards and HazardRearmChance",
+      "proof": "Both named suppliers are absent from the independent new-channel census; selected complete Basic callbacks and supports cannot add them."
+    },
+    {
+      "span": "global-hit-speed-and-final-repeat",
+      "prerequisite": "HitSpeed overrides; repeatMode FINAL or OnlyFinalRepeat",
+      "proof": "All potential override fields reject even zero/false; repeatMode is explicitly AVERAGE on both complete configuration snapshots and OnlyFinalRepeat is absent. One repeat alone does not satisfy this check."
+    },
+    {
+      "span": "attack-hit-speed",
+      "prerequisite": "hitTimeOverride/timeOverride/hitTimeMultiplier/channel/trigger/death/cooldown",
+      "proof": "Inherited eight-input timing proof plus new fields census excludes every special branch. No measured Speed/HitSpeed value supplies authority."
+    },
+    {
+      "span": "ruthless",
+      "prerequisite": "RuthlessBlowMaxCount and MAX mode",
+      "proof": "Provider absent in complete selected inputs, with input/default mode absent-or-AVERAGE/AVERAGE. MAX is rejected even if current count would be zero."
+    },
+    {
+      "span": "dps-multiplier",
+      "prerequisite": "skillData.dpsMultiplier and DPS INC/MORE",
+      "proof": "Any explicit dpsMultiplier (including0) is rejected. Whole construction roots contain no DPS modifier; full late factory branches above and inherited exact empty callbacks/transport account for later creation. CalcTools neutral INC/MORE is1."
+    },
+    {
+      "span": "quantity",
+      "prerequisite": "QuantityMultiplier BASE",
+      "proof": "No selected raw or constructed source contains this channel. Full body scan retains every later occurrence; max(empty Sum0,1)=1. No floor/integer coercion is introduced."
+    },
+    {
+      "span": "trigger-mirage-dispatch",
+      "prerequisite": "minion trigger dispatch remains active",
+      "proof": "Complete Basic Attack identity and empty supports, complete CalcActiveSkill parent writer boundary, and full config table establish source-derived absence of a matching trigger. Constructor h.scalars does not observe table-valued triggeredBy nil; no such observation is claimed. Normal CalcPerform disables mirages but retains minion trigger dispatch. The exact empty socket source excludes unique-item trigger names."
+    },
+    {
+      "span": "all-damage-averages",
+      "prerequisite": "all damage types before final hit metric",
+      "proof": "This packet consumes physical means only. Other-type source outputs0 are comparison diagnostics, never a general absence proof. Saved selected_hit_dps routing remains untouched."
+    }
+  ],
+  "capture_limitations": [
+    "Constructor snapshots are not a final minion ModDB snapshot and do not capture arbitrary late factories.",
+    "Exact full source dispatch, callback and transport proof is required in addition to the new-name census.",
+    "The bounded source proof is not a native supplier-membership certificate; all production owner/input/source coverage remains Partial.",
+    "Future/reused late ExtraAura delivery and additional nonordinary mechanics remain separate unsupported coverage.",
+    "Table-valued triggeredBy is omitted by scalar field capture. Its dispatch exclusion is derived from pinned construction and support ownership, not a measured nil."
+  ]
+}

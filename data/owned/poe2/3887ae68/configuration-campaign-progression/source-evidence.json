@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "kind": "campaign-progression-source-review",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "manifest": {
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603
+  },
+  "license": {
+    "sha256": "22d2d075c1d361971764fbbd1e12e1485bdf35f0769ffac4eca8a79afc60dda8",
+    "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/LICENSE.md",
+    "bytes": 67979
+  },
+  "bodies": [
+    {
+      "source_path": "src/Modules/ConfigOptions.lua",
+      "archive": {
+        "sha256": "dee4ff2ce5f34bfbbff52587ada77ca4c91ab0ff0cd9f7ad390504e0370fdfbb",
+        "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/ConfigOptions.lua.gz",
+        "bytes": 32320
+      },
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "bytes": 235127,
+      "encoding": "gzip"
+    },
+    {
+      "source_path": "src/Classes/ConfigTab.lua",
+      "archive": {
+        "sha256": "8749d4b7771265efb21319ffbf79791f02eb4c1bd04c63557311a00a98fb26a1",
+        "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/ConfigTab.lua.gz",
+        "bytes": 9976
+      },
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "bytes": 50481,
+      "encoding": "gzip"
+    },
+    {
+      "source_path": "src/Classes/ImportTab.lua",
+      "archive": {
+        "sha256": "6e7da474dda76b3af022e2b003d0e9f651a212be3cf563acee99baccf0404946",
+        "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/ImportTab.lua.gz",
+        "bytes": 16017
+      },
+      "sha256": "ba2933b2268ba9cb8a4ecfb529a01612781100975272a4bc2ef3e9555eb9f5e2",
+      "bytes": 71408,
+      "encoding": "gzip"
+    }
+  ],
+  "spans": [
+    {
+      "first": 860,
+      "source_path": "src/Modules/ConfigOptions.lua",
+      "role": "campaign-count-meaning-and-application",
+      "last": 862,
+      "body": "\t{ var = \"configBossFaceBroken\", type = \"count\", label = \"# of Boss's Faces Broken:\", ifMult = \"BossFaceBroken\", tooltip = \"Boss's Face Broken refers to unique bosses defeated in the campaign that have a skull marker on the World Screen. Rare monster encounters with the skull marker do not count.\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:BossFaceBroken\", \"BASE\", val, \"Config\")\n\tend },\n",
+      "sha256": "d61270e4c72af0dbf360e815642f7c6e225581ebe7648f0463571123e915edc6"
+    },
+    {
+      "first": 883,
+      "source_path": "src/Classes/ConfigTab.lua",
+      "role": "saved-numeric-lanes",
+      "last": 920,
+      "body": "\tlocal function setInputAndPlaceholder(node, configSetId)\n\t\tif node.elem == \"Input\" then\n\t\t\tif not node.attrib.name then\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Input' element missing name attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\t\tif node.attrib.number then\n\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = tonumber(node.attrib.number)\n\t\t\telseif node.attrib.string then\n\t\t\t\tif node.attrib.name == \"enemyIsBoss\" then\n\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string:lower():gsub(\"(%l)(%w*)\", function(a,b) return s_upper(a)..b end)\n\t\t\t\t\t:gsub(\"Uber Atziri\", \"Boss\"):gsub(\"Shaper\", \"Pinnacle\"):gsub(\"Sirus\", \"Pinnacle\")\n\t\t\t\t-- backwards compat <=3.20, Uber Atziri Flameblast -> Atziri Flameblast\n\t\t\t\telseif node.attrib.name == \"presetBossSkills\" then\n\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string:gsub(\"^Uber \", \"\")\n\t\t\t\telse\n\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string\n\t\t\t\tend\n\t\t\telseif node.attrib.boolean then\n\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.boolean == \"true\"\n\t\t\telse\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Input' element missing number, string or boolean attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\telseif node.elem == \"Placeholder\" then\n\t\t\tif not node.attrib.name then\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Placeholder' element missing name attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\t\tif node.attrib.number then\n\t\t\t\tself.configSets[configSetId].placeholder[node.attrib.name] = tonumber(node.attrib.number)\n\t\t\telseif node.attrib.string then\n\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string\n\t\t\telse\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Placeholder' element missing number\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\tend\n",
+      "sha256": "8a18c9041cee098ffd8c294bb355a692595d2f8cb0ede796b6805b93e7439e39"
+    },
+    {
+      "first": 1183,
+      "source_path": "src/Classes/ConfigTab.lua",
+      "role": "nonzero-count-source-precedence",
+      "last": 1187,
+      "body": "\t\t\telseif varData.type == \"count\" or varData.type == \"integer\" or varData.type == \"countAllowZero\" or varData.type == \"float\" then\n\t\t\t\tif input[varData.var] and (input[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\telseif placeholder[varData.var] and (placeholder[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(placeholder[varData.var], modList, enemyModList, self.build)\n",
+      "sha256": "35cf071b0530131ee05ea02f5f900da854b1fbeaf6313340c9e0acf60582ba64"
+    },
+    {
+      "first": 1317,
+      "source_path": "src/Classes/ConfigTab.lua",
+      "role": "constructor-only-declared-defaults",
+      "last": 1334,
+      "body": "function ConfigTabClass:CreateConfigSet(configSetId, title)\n\tlocal configSet = { id = configSetId, title = title, input = {}, placeholder = {}, customModsList = { { title = \"Default\", enabled = true, text = \"\" } } }\n\tif not configSetId then\n\t\tconfigSet.id = #self.configSets + 1\n\tend\n\t-- there are default values for input and placeholder that every new config set needs to have\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.var then\n\t\t\tconfigSet.input[varData.var] = varData.defaultState\n\t\t\tconfigSet.placeholder[varData.var] = varData.defaultPlaceholderState\n\t\t\tif varData.defaultIndex then\n\t\t\t\tconfigSet.input[varData.var] = varData.list[varData.defaultIndex].val\n\t\t\tend\n\t\tend\n\tend\n\tself.configSets[configSet.id] = configSet\n\treturn configSet\nend\n",
+      "sha256": "60ff84266cd7f571d1b199bf0dae52509d516d61c1bf8108131029fef2724dd3"
+    },
+    {
+      "first": 833,
+      "source_path": "src/Classes/ImportTab.lua",
+      "role": "quest-stat-placeholder-projection",
+      "last": 846,
+      "body": "\tlocal function statKey(text)\n\t\ttext = escapeGGGString(text):lower():gsub(\"^%s+\", \"\"):gsub(\"%s+$\", \"\")\n\t\treturn tradeHelpers.modLineTemplate(text), tradeHelpers.modLineValue(text) or 0\n\tend\n\n\tlocal statTotals = {}\n\tlocal updated = false\n\tfor _, stat in ipairs(questStats) do\n\t\tlocal key, value = statKey(stat)\n\t\tif key == \"# broken boss faces\" then\n\t\t\tif configTab.placeholder.configBossFaceBroken ~= value then\n\t\t\t\tconfigTab.placeholder.configBossFaceBroken = value\n\t\t\t\tupdated = true\n\t\t\tend\n",
+      "sha256": "e18ac231347907dc78e1471d64250651df3fd70c7828d1a23f663f6221454517"
+    }
+  ],
+  "originals": [
+    {
+      "source_name": "configBossFaceBroken",
+      "source_lane": "placeholder_number",
+      "file": {
+        "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+        "path": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+        "bytes": 49642
+      },
+      "line": "\t\t\t<Placeholder name=\"configBossFaceBroken\" number=\"55\"/>",
+      "value": 55
+    },
+    {
+      "source_name": "configBossFaceBroken",
+      "source_lane": "placeholder_number",
+      "file": {
+        "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+        "path": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+        "bytes": 116512
+      },
+      "line": "\t\t\t<Placeholder number=\"57\" name=\"configBossFaceBroken\"/>",
+      "value": 57
+    },
+    {
+      "source_name": "configBossFaceBroken",
+      "source_lane": "placeholder_number",
+      "file": {
+        "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490",
+        "path": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+        "bytes": 46532
+      },
+      "line": "\t\t\t<Placeholder number=\"57\" name=\"configBossFaceBroken\"/>",
+      "value": 57
+    },
+    {
+      "source_name": "configBossFaceBroken",
+      "source_lane": "placeholder_number",
+      "file": {
+        "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711",
+        "path": "tests/fixtures/builds/breadth-20260908/build-04.xml",
+        "bytes": 46397
+      },
+      "line": "\t\t\t<Placeholder name=\"configBossFaceBroken\" number=\"56\"/>",
+      "value": 56
+    },
+    {
+      "source_name": "configBossFaceBroken",
+      "source_lane": "placeholder_number",
+      "file": {
+        "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+        "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+        "bytes": 106378
+      },
+      "line": "\t\t\t<Placeholder number=\"56\" name=\"configBossFaceBroken\"/>",
+      "value": 56
+    }
+  ],
+  "scope": {
+    "new_source_execution": false,
+    "gameplay_maximum_proven": false,
+    "complete_build": false,
+    "count_domain_is_owned_representational_contract": true,
+    "captured_sample_counts_are_defaults": false
+  }
+}

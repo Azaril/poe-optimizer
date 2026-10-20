@@ -1,64 +1,170 @@
 {
-  "schema_version": 1,
-  "kind": "selected-ordinary-critical-source-domain",
-  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
-  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
-  "target_names": [
-    "CritChance",
-    "CritChanceBase",
-    "CritChanceCap",
-    "CritMultiplier",
-    "SelfCritChance",
-    "SelfCritMultiplier",
-    "Condition:ApplyCriticalWeakness",
-    "ApplyCriticalWeakness",
-    "NeverCrit",
-    "SpellSkillsCannotDealCriticalStrikesExceptOnFinalRepeat",
-    "SpellSkillsAlwaysDealCriticalStrikesOnFinalRepeat",
-    "MainHandCritIsEqualToParent",
-    "MainHandCritIsEqualToPartyMember",
-    "BaseCritFromMainHand",
-    "AttackCritIsEqualToParentMainHand",
-    "CritChanceLucky",
-    "BifurcateCrit",
-    "InevitableCriticalHits",
-    "NoCritMultiplier",
-    "Multiplier:SecondsSinceInevitableCrit",
-    "ClawCritChanceAppliesToUnarmed",
-    "ClawCritChanceAppliesToMinions",
-    "ClawCritMultiplierAppliesToMinions",
-    "CritChanceIncreasedByUncappedLightningRes",
-    "CritChanceIncreasedByLightningRes",
-    "CritChanceIncreasedByOvercappedLightningRes",
-    "CritChanceIncreasedBySpellSuppressChance",
-    "SupportedByNightblade",
-    "SkillCritChanceIncreasedPerBlueSupport",
-    "HasSeals",
-    "NoRepeatBonuses",
-    "DamageSeal",
-    "UseMaxUnleash",
-    "MaxSealCrit",
-    "DiamondShrine",
-    "Elusive",
-    "NightbladeElusiveCritMultiplier",
-    "Condition:DiamondShrine",
-    "Condition:Elusive",
-    "Condition:OnProfaneGround",
-    "AbyssalWasted",
-    "AbyssalWastingImpliesCondition",
-    "EnemyModifier",
-    "ExtraCurse",
-    "ExtraAura",
-    "AffectedByAuraMod",
-    "ExtraSkillStat",
-    "ExtraSkillMod",
-    "ExtraSupport",
-    "Keystone",
-    "FlasksApplyToMinion",
-    "ParentNonUniqueFlasksAppliedToYou",
-    "LegacyFlask",
-    "ExtraLinkEffect",
-    "ExtraAuraEffect"
+  "bodies": [
+    {
+      "archive": {
+        "bytes": 21347,
+        "path": "data/owned/poe2/3887ae68/mana-supplier-sources/CalcSetup.lua.gz",
+        "sha256": "6cf68ffe3f750e1b0670c54f4152fa2cbd88db2c1092d16c7541f773582a708c"
+      },
+      "bytes": 100609,
+      "encoding": "gzip",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "source_path": "src/Modules/CalcSetup.lua"
+    },
+    {
+      "archive": {
+        "bytes": 34408,
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+        "sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575"
+      },
+      "bytes": 181097,
+      "encoding": "gzip",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "archive": {
+        "bytes": 64248,
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcOffence.lua.gz",
+        "sha256": "3ee439d6209cd88adbca368dd7b3e741e9ed537531a37fcc0a8f4b1863e56147"
+      },
+      "bytes": 364029,
+      "encoding": "gzip",
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94",
+      "source_path": "src/Modules/CalcOffence.lua"
+    },
+    {
+      "archive": {
+        "bytes": 7158,
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+        "sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b"
+      },
+      "bytes": 36471,
+      "encoding": "gzip",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62",
+      "source_path": "src/Classes/ModStore.lua"
+    },
+    {
+      "archive": {
+        "bytes": 2020,
+        "path": "data/owned/poe2/3887ae68/mana-supplier-sources/passive-ModList.lua.gz",
+        "sha256": "7b1b25081e088b45c6a28ba5449faf44409641ad0d6688518ba07bc2b36dc815"
+      },
+      "bytes": 14406,
+      "encoding": "gzip",
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d",
+      "source_path": "src/Classes/ModList.lua"
+    },
+    {
+      "archive": {
+        "bytes": 2575,
+        "path": "data/owned/poe2/3887ae68/life-base-domain/ModDB.lua.gz",
+        "sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9"
+      },
+      "bytes": 17768,
+      "encoding": "gzip",
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6",
+      "source_path": "src/Classes/ModDB.lua"
+    },
+    {
+      "archive": {
+        "bytes": 8259,
+        "path": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Misc.lua.gz",
+        "sha256": "bdc486e956dfde075166d88c612d2c527df2543567ae39da56e7f48090ec50c1"
+      },
+      "bytes": 24010,
+      "encoding": "gzip",
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9",
+      "source_path": "src/Data/Misc.lua"
+    },
+    {
+      "archive": {
+        "bytes": 235127,
+        "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+        "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+      },
+      "bytes": 235127,
+      "encoding": "utf8",
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "source_path": "src/Modules/ConfigOptions.lua"
+    },
+    {
+      "archive": {
+        "bytes": 50481,
+        "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
+        "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+      },
+      "bytes": 50481,
+      "encoding": "utf8",
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "source_path": "src/Classes/ConfigTab.lua"
+    },
+    {
+      "archive": {
+        "bytes": 9574,
+        "path": "data/owned/poe2/3887ae68/outgoing-critical/Common.lua.gz",
+        "sha256": "ea41c886396a83d09569d75e0c7ad6b0b60e39bb9ca8e9d9680d0dca12190d8e"
+      },
+      "bytes": 30833,
+      "encoding": "gzip",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8",
+      "source_path": "src/Modules/Common.lua"
+    },
+    {
+      "archive": {
+        "bytes": 10868,
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcActiveSkill.lua.gz",
+        "sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48"
+      },
+      "bytes": 50144,
+      "encoding": "gzip",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04",
+      "source_path": "src/Modules/CalcActiveSkill.lua"
+    },
+    {
+      "archive": {
+        "bytes": 10599,
+        "path": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Data.lua.gz",
+        "sha256": "38cd62af46c9f291240d5a33f20779bd101766d9f62b2165b929737380586c46"
+      },
+      "bytes": 38313,
+      "encoding": "gzip",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4",
+      "source_path": "src/Modules/Data.lua"
+    },
+    {
+      "archive": {
+        "bytes": 39593,
+        "path": "data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/CalcDefence.lua.gz",
+        "sha256": "9e232710732a7223b87b7174c7bd8a0531309675b76c605e07df55b0f72d6bf3"
+      },
+      "bytes": 239878,
+      "encoding": "gzip",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2",
+      "source_path": "src/Modules/CalcDefence.lua"
+    },
+    {
+      "archive": {
+        "bytes": 3321,
+        "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/child-CalcTools.lua.gz",
+        "sha256": "b4b896d49bbe5f0d2006b1b03cd6f1d4e5274c061e46e52fd21787b7eabcf67a"
+      },
+      "bytes": 11517,
+      "encoding": "gzip",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c",
+      "source_path": "src/Modules/CalcTools.lua"
+    },
+    {
+      "archive": {
+        "bytes": 4752,
+        "path": "data/owned/poe2/3887ae68/self-flat-minion-store/Minions.lua.gz",
+        "sha256": "7abe2ddb8b83894af28484642a7fed90cc5367d8dda2bbb57e54f0f03650aa59"
+      },
+      "bytes": 46701,
+      "encoding": "gzip",
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639",
+      "source_path": "src/Data/Minions.lua"
+    }
   ],
   "condition_names": [
     "DiamondShrine",
@@ -74,276 +180,294 @@
     "node_construction",
     "node_lists"
   ],
-  "inputs": [
+  "inherited_proofs": [
     {
-      "id": "jit-off",
-      "raw_sha256": "542e0e7ebc1947a45be14f8b0c9e4eed28df2d37d7d46c8d3fd0a1ee5444c971",
-      "family_counts": {
-        "baseline": 18,
-        "configuration": 2,
-        "environments": 21,
-        "skill_construction": 1536,
-        "node_construction": 2394,
-        "node_lists": 42
-      },
-      "census": [
-        {
-          "body": {
-            "_positions": [
-              {
-                "index": 1,
-                "value": {
-                  "type": "Condition",
-                  "var": "ApplyCriticalWeakness"
-                }
-              }
-            ],
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "SelfCritChance",
-            "source": "Critical Weakness",
-            "type": "BASE",
-            "value": 10
-          },
-          "count": 2,
-          "paths_sha256": "abb2b2c9960a64a505468f6905b529d48a568ed93e3ed19896322da258ff39af",
-          "first_path": "/configuration/0/enemy_records/4/body"
-        },
-        {
-          "body": {
-            "_positions": [
-              {
-                "index": 1,
-                "value": {
-                  "type": "Condition",
-                  "var": "Combat"
-                }
-              }
-            ],
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "Multiplier:SecondsSinceInevitableCrit",
-            "source": "Config",
-            "type": "BASE",
-            "value": 10
-          },
-          "count": 23,
-          "paths_sha256": "848e4de14516b04e1299d1191a2a1119540a8490050489ef49a02753ec0e9adc",
-          "first_path": "/configuration/0/player_records/19/body"
-        },
-        {
-          "body": {
-            "_positions": [
-              {
-                "index": 1,
-                "value": {
-                  "type": "Condition",
-                  "var": "DiamondShrine"
-                }
-              }
-            ],
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "DiamondShrine",
-            "source": "Base",
-            "type": "FLAG",
-            "value": true
-          },
-          "count": 57,
-          "paths_sha256": "d2510d10ec4ebc0dc4da7cd5548928896ca2f075deef1e16059ae67923acf09e",
-          "first_path": "/baseline/0/enemy_store/0/buckets/DiamondShrine/0/body"
-        },
-        {
-          "body": {
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "CritChanceCap",
-            "source": "Base",
-            "type": "BASE",
-            "value": 100
-          },
-          "count": 57,
-          "paths_sha256": "7d5a3c6829bf8bba141d1ecf5532e3d6c7fb6ec18bd32cd0817204dc0ec91881",
-          "first_path": "/baseline/0/enemy_store/0/buckets/CritChanceCap/0/body"
-        },
-        {
-          "body": {
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "CritMultiplier",
-            "source": "Base",
-            "type": "BASE",
-            "value": 100
-          },
-          "count": 39,
-          "paths_sha256": "ad8edc881fae584db7fcc1328b013be9932935dae1e969685fce38f6e2976cb5",
-          "first_path": "/baseline/0/player_store/0/buckets/CritMultiplier/0/body"
-        },
-        {
-          "body": {
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "CritMultiplier",
-            "source": "Skill:SummonSandDjinnPlayer",
-            "type": "INC",
-            "value": 50
-          },
-          "count": 84,
-          "paths_sha256": "b52a361eb8d39e8b9b9bfaca4378e6fd823da88812ec99c657baa187d314fdfd",
-          "first_path": "/skill_construction/10/records/13/body"
-        }
-      ],
-      "basic_count": 36,
-      "basic_sha256": "5246a9c1cf0cde59219e69b1bc36a2a73e02c52d1374ca9e0046479caf0b5fbd"
+      "bytes": 69320,
+      "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/review.json",
+      "sha256": "fd4f6dd13f6766351bf9118063972e0202e7d8663c5323c4114c4b5c42075c3d"
     },
     {
-      "id": "jit-on",
-      "raw_sha256": "fd7cd3dfbe854e876fa9bc452d09814edefbd53d83019869bd0e06da73ceb22e",
-      "family_counts": {
-        "baseline": 18,
-        "configuration": 2,
-        "environments": 21,
-        "skill_construction": 1536,
-        "node_construction": 2394,
-        "node_lists": 42
-      },
-      "census": [
-        {
-          "body": {
-            "_positions": [
-              {
-                "index": 1,
-                "value": {
-                  "type": "Condition",
-                  "var": "ApplyCriticalWeakness"
-                }
-              }
-            ],
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "SelfCritChance",
-            "source": "Critical Weakness",
-            "type": "BASE",
-            "value": 10
-          },
-          "count": 2,
-          "paths_sha256": "abb2b2c9960a64a505468f6905b529d48a568ed93e3ed19896322da258ff39af",
-          "first_path": "/configuration/0/enemy_records/4/body"
-        },
-        {
-          "body": {
-            "_positions": [
-              {
-                "index": 1,
-                "value": {
-                  "type": "Condition",
-                  "var": "Combat"
-                }
-              }
-            ],
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "Multiplier:SecondsSinceInevitableCrit",
-            "source": "Config",
-            "type": "BASE",
-            "value": 10
-          },
-          "count": 23,
-          "paths_sha256": "848e4de14516b04e1299d1191a2a1119540a8490050489ef49a02753ec0e9adc",
-          "first_path": "/configuration/0/player_records/19/body"
-        },
-        {
-          "body": {
-            "_positions": [
-              {
-                "index": 1,
-                "value": {
-                  "type": "Condition",
-                  "var": "DiamondShrine"
-                }
-              }
-            ],
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "DiamondShrine",
-            "source": "Base",
-            "type": "FLAG",
-            "value": true
-          },
-          "count": 57,
-          "paths_sha256": "d2510d10ec4ebc0dc4da7cd5548928896ca2f075deef1e16059ae67923acf09e",
-          "first_path": "/baseline/0/enemy_store/0/buckets/DiamondShrine/0/body"
-        },
-        {
-          "body": {
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "CritChanceCap",
-            "source": "Base",
-            "type": "BASE",
-            "value": 100
-          },
-          "count": 57,
-          "paths_sha256": "7d5a3c6829bf8bba141d1ecf5532e3d6c7fb6ec18bd32cd0817204dc0ec91881",
-          "first_path": "/baseline/0/enemy_store/0/buckets/CritChanceCap/0/body"
-        },
-        {
-          "body": {
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "CritMultiplier",
-            "source": "Base",
-            "type": "BASE",
-            "value": 100
-          },
-          "count": 39,
-          "paths_sha256": "ad8edc881fae584db7fcc1328b013be9932935dae1e969685fce38f6e2976cb5",
-          "first_path": "/baseline/0/player_store/0/buckets/CritMultiplier/0/body"
-        },
-        {
-          "body": {
-            "flags": 0,
-            "keywordFlags": 0,
-            "name": "CritMultiplier",
-            "source": "Skill:SummonSandDjinnPlayer",
-            "type": "INC",
-            "value": 50
-          },
-          "count": 84,
-          "paths_sha256": "b52a361eb8d39e8b9b9bfaca4378e6fd823da88812ec99c657baa187d314fdfd",
-          "first_path": "/skill_construction/10/records/13/body"
-        }
-      ],
-      "basic_count": 36,
-      "basic_sha256": "5246a9c1cf0cde59219e69b1bc36a2a73e02c52d1374ca9e0046479caf0b5fbd"
+      "bytes": 1856,
+      "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/child-review.json",
+      "sha256": "ef1a1dbc2161d170e99a8ccb3811b605efcc32a0ff2c01f6be92d6913f114021"
+    },
+    {
+      "bytes": 5985,
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/review.json",
+      "sha256": "a02bb22eb2d5a0ade8b9c4be9551e047d9c976d249d615e9d8b8616b9239814f"
+    },
+    {
+      "bytes": 5024,
+      "path": "data/owned/poe2/3887ae68/self-flat-minion-store/review.json",
+      "sha256": "d35ca00990f80e801758de29c38d5d3e3cb289af73f886b2d93fd99a7fc12ca9"
+    },
+    {
+      "bytes": 9880,
+      "path": "data/owned/poe2/3887ae68/self-flat-flask-keystone/review.json",
+      "sha256": "1c3211e7e5770e02a4ff46be25407cdc11c61a18b914e10c93bf4b85005cc6c2"
+    },
+    {
+      "bytes": 1369,
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/review.json",
+      "sha256": "b2126e93f6def75e8b2da3f29202cd31d0316d302d4d503959a15864860c2051"
+    },
+    {
+      "bytes": 1559,
+      "path": "data/owned/poe2/3887ae68/self-flat-action-factories/review.json",
+      "sha256": "594ef9db626b15dfa60d10a10c0892e944234d7e8ebff691c16aabc9e28ab21f"
+    },
+    {
+      "bytes": 2762,
+      "path": "data/owned/poe2/3887ae68/self-flat-later-helpers/review.json",
+      "sha256": "49b80c2e13bd98538646326bf8bd14d83989d5ae55cfb3dafbe450237d33a382"
     }
   ],
-  "recipes": {
-    "file": {
-      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain.json",
-      "bytes": 471969,
-      "sha256": "ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f"
-    },
-    "counts": {
-      "items": 8,
-      "tree": 57,
-      "skills": 40,
-      "minion_profiles": 6
-    },
-    "census": [
-      {
-        "body": {
-          "flags": 0,
-          "keywordFlags": 0,
-          "name": "CritMultiplier",
-          "source": "Skill:SummonSandDjinnPlayer",
-          "type": "INC"
+  "inputs": [
+    {
+      "basic_count": 36,
+      "basic_sha256": "5246a9c1cf0cde59219e69b1bc36a2a73e02c52d1374ca9e0046479caf0b5fbd",
+      "census": [
+        {
+          "body": {
+            "_positions": [
+              {
+                "index": 1,
+                "value": {
+                  "type": "Condition",
+                  "var": "ApplyCriticalWeakness"
+                }
+              }
+            ],
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "SelfCritChance",
+            "source": "Critical Weakness",
+            "type": "BASE",
+            "value": 10
+          },
+          "count": 2,
+          "first_path": "/configuration/0/enemy_records/4/body",
+          "paths_sha256": "abb2b2c9960a64a505468f6905b529d48a568ed93e3ed19896322da258ff39af"
         },
-        "count": 1,
-        "paths_sha256": "cbe5f1e12ce2db56f42aecd154903cf5d6934eb3d3d0cd9ea8232469a657de1a",
-        "first_path": "/skills/22/resolved/4/mapping/value/[1]"
-      }
-    ],
+        {
+          "body": {
+            "_positions": [
+              {
+                "index": 1,
+                "value": {
+                  "type": "Condition",
+                  "var": "Combat"
+                }
+              }
+            ],
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "Multiplier:SecondsSinceInevitableCrit",
+            "source": "Config",
+            "type": "BASE",
+            "value": 10
+          },
+          "count": 23,
+          "first_path": "/configuration/0/player_records/19/body",
+          "paths_sha256": "848e4de14516b04e1299d1191a2a1119540a8490050489ef49a02753ec0e9adc"
+        },
+        {
+          "body": {
+            "_positions": [
+              {
+                "index": 1,
+                "value": {
+                  "type": "Condition",
+                  "var": "DiamondShrine"
+                }
+              }
+            ],
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "DiamondShrine",
+            "source": "Base",
+            "type": "FLAG",
+            "value": true
+          },
+          "count": 57,
+          "first_path": "/baseline/0/enemy_store/0/buckets/DiamondShrine/0/body",
+          "paths_sha256": "d2510d10ec4ebc0dc4da7cd5548928896ca2f075deef1e16059ae67923acf09e"
+        },
+        {
+          "body": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "CritChanceCap",
+            "source": "Base",
+            "type": "BASE",
+            "value": 100
+          },
+          "count": 57,
+          "first_path": "/baseline/0/enemy_store/0/buckets/CritChanceCap/0/body",
+          "paths_sha256": "7d5a3c6829bf8bba141d1ecf5532e3d6c7fb6ec18bd32cd0817204dc0ec91881"
+        },
+        {
+          "body": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "CritMultiplier",
+            "source": "Base",
+            "type": "BASE",
+            "value": 100
+          },
+          "count": 39,
+          "first_path": "/baseline/0/player_store/0/buckets/CritMultiplier/0/body",
+          "paths_sha256": "ad8edc881fae584db7fcc1328b013be9932935dae1e969685fce38f6e2976cb5"
+        },
+        {
+          "body": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "CritMultiplier",
+            "source": "Skill:SummonSandDjinnPlayer",
+            "type": "INC",
+            "value": 50
+          },
+          "count": 84,
+          "first_path": "/skill_construction/10/records/13/body",
+          "paths_sha256": "b52a361eb8d39e8b9b9bfaca4378e6fd823da88812ec99c657baa187d314fdfd"
+        }
+      ],
+      "family_counts": {
+        "baseline": 18,
+        "configuration": 2,
+        "environments": 21,
+        "node_construction": 2394,
+        "node_lists": 42,
+        "skill_construction": 1536
+      },
+      "id": "jit-off",
+      "raw_sha256": "542e0e7ebc1947a45be14f8b0c9e4eed28df2d37d7d46c8d3fd0a1ee5444c971"
+    },
+    {
+      "basic_count": 36,
+      "basic_sha256": "5246a9c1cf0cde59219e69b1bc36a2a73e02c52d1374ca9e0046479caf0b5fbd",
+      "census": [
+        {
+          "body": {
+            "_positions": [
+              {
+                "index": 1,
+                "value": {
+                  "type": "Condition",
+                  "var": "ApplyCriticalWeakness"
+                }
+              }
+            ],
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "SelfCritChance",
+            "source": "Critical Weakness",
+            "type": "BASE",
+            "value": 10
+          },
+          "count": 2,
+          "first_path": "/configuration/0/enemy_records/4/body",
+          "paths_sha256": "abb2b2c9960a64a505468f6905b529d48a568ed93e3ed19896322da258ff39af"
+        },
+        {
+          "body": {
+            "_positions": [
+              {
+                "index": 1,
+                "value": {
+                  "type": "Condition",
+                  "var": "Combat"
+                }
+              }
+            ],
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "Multiplier:SecondsSinceInevitableCrit",
+            "source": "Config",
+            "type": "BASE",
+            "value": 10
+          },
+          "count": 23,
+          "first_path": "/configuration/0/player_records/19/body",
+          "paths_sha256": "848e4de14516b04e1299d1191a2a1119540a8490050489ef49a02753ec0e9adc"
+        },
+        {
+          "body": {
+            "_positions": [
+              {
+                "index": 1,
+                "value": {
+                  "type": "Condition",
+                  "var": "DiamondShrine"
+                }
+              }
+            ],
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "DiamondShrine",
+            "source": "Base",
+            "type": "FLAG",
+            "value": true
+          },
+          "count": 57,
+          "first_path": "/baseline/0/enemy_store/0/buckets/DiamondShrine/0/body",
+          "paths_sha256": "d2510d10ec4ebc0dc4da7cd5548928896ca2f075deef1e16059ae67923acf09e"
+        },
+        {
+          "body": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "CritChanceCap",
+            "source": "Base",
+            "type": "BASE",
+            "value": 100
+          },
+          "count": 57,
+          "first_path": "/baseline/0/enemy_store/0/buckets/CritChanceCap/0/body",
+          "paths_sha256": "7d5a3c6829bf8bba141d1ecf5532e3d6c7fb6ec18bd32cd0817204dc0ec91881"
+        },
+        {
+          "body": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "CritMultiplier",
+            "source": "Base",
+            "type": "BASE",
+            "value": 100
+          },
+          "count": 39,
+          "first_path": "/baseline/0/player_store/0/buckets/CritMultiplier/0/body",
+          "paths_sha256": "ad8edc881fae584db7fcc1328b013be9932935dae1e969685fce38f6e2976cb5"
+        },
+        {
+          "body": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "CritMultiplier",
+            "source": "Skill:SummonSandDjinnPlayer",
+            "type": "INC",
+            "value": 50
+          },
+          "count": 84,
+          "first_path": "/skill_construction/10/records/13/body",
+          "paths_sha256": "b52a361eb8d39e8b9b9bfaca4378e6fd823da88812ec99c657baa187d314fdfd"
+        }
+      ],
+      "family_counts": {
+        "baseline": 18,
+        "configuration": 2,
+        "environments": 21,
+        "node_construction": 2394,
+        "node_lists": 42,
+        "skill_construction": 1536
+      },
+      "id": "jit-on",
+      "raw_sha256": "fd7cd3dfbe854e876fa9bc452d09814edefbd53d83019869bd0e06da73ceb22e"
+    }
+  ],
+  "kind": "selected-ordinary-critical-source-domain",
+  "recipes": {
     "basic": {
       "base_mods": {
         "aliases": [],
@@ -448,427 +572,32 @@
         }
       ]
     },
+    "census": [
+      {
+        "body": {
+          "flags": 0,
+          "keywordFlags": 0,
+          "name": "CritMultiplier",
+          "source": "Skill:SummonSandDjinnPlayer",
+          "type": "INC"
+        },
+        "count": 1,
+        "first_path": "/skills/22/resolved/4/mapping/value/[1]",
+        "paths_sha256": "cbe5f1e12ce2db56f42aecd154903cf5d6934eb3d3d0cd9ea8232469a657de1a"
+      }
+    ],
+    "counts": {
+      "items": 8,
+      "minion_profiles": 6,
+      "skills": 40,
+      "tree": 57
+    },
+    "file": {
+      "bytes": 471969,
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain.json",
+      "sha256": "ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f"
+    },
     "skill_contexts_sha256": "aebcc3e3b6a9498c5cdf150c3c2cc082fbf6aca21239d83cef904f4294b7cfe1"
-  },
-  "bodies": [
-    {
-      "source_path": "src/Modules/CalcSetup.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/mana-supplier-sources/CalcSetup.lua.gz",
-        "bytes": 21347,
-        "sha256": "6cf68ffe3f750e1b0670c54f4152fa2cbd88db2c1092d16c7541f773582a708c"
-      },
-      "encoding": "gzip",
-      "bytes": 100609,
-      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
-    },
-    {
-      "source_path": "src/Modules/CalcPerform.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
-        "bytes": 34408,
-        "sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575"
-      },
-      "encoding": "gzip",
-      "bytes": 181097,
-      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
-    },
-    {
-      "source_path": "src/Modules/CalcOffence.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcOffence.lua.gz",
-        "bytes": 64248,
-        "sha256": "3ee439d6209cd88adbca368dd7b3e741e9ed537531a37fcc0a8f4b1863e56147"
-      },
-      "encoding": "gzip",
-      "bytes": 364029,
-      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
-    },
-    {
-      "source_path": "src/Classes/ModStore.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
-        "bytes": 7158,
-        "sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b"
-      },
-      "encoding": "gzip",
-      "bytes": 36471,
-      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
-    },
-    {
-      "source_path": "src/Classes/ModList.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/mana-supplier-sources/passive-ModList.lua.gz",
-        "bytes": 2020,
-        "sha256": "7b1b25081e088b45c6a28ba5449faf44409641ad0d6688518ba07bc2b36dc815"
-      },
-      "encoding": "gzip",
-      "bytes": 14406,
-      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
-    },
-    {
-      "source_path": "src/Classes/ModDB.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/life-base-domain/ModDB.lua.gz",
-        "bytes": 2575,
-        "sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9"
-      },
-      "encoding": "gzip",
-      "bytes": 17768,
-      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
-    },
-    {
-      "source_path": "src/Data/Misc.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Misc.lua.gz",
-        "bytes": 8259,
-        "sha256": "bdc486e956dfde075166d88c612d2c527df2543567ae39da56e7f48090ec50c1"
-      },
-      "encoding": "gzip",
-      "bytes": 24010,
-      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
-    },
-    {
-      "source_path": "src/Modules/ConfigOptions.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
-        "bytes": 235127,
-        "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
-      },
-      "encoding": "utf8",
-      "bytes": 235127,
-      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
-    },
-    {
-      "source_path": "src/Classes/ConfigTab.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
-        "bytes": 50481,
-        "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
-      },
-      "encoding": "utf8",
-      "bytes": 50481,
-      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
-    },
-    {
-      "source_path": "src/Modules/Common.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/outgoing-critical/Common.lua.gz",
-        "bytes": 9574,
-        "sha256": "ea41c886396a83d09569d75e0c7ad6b0b60e39bb9ca8e9d9680d0dca12190d8e"
-      },
-      "encoding": "gzip",
-      "bytes": 30833,
-      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
-    },
-    {
-      "source_path": "src/Modules/CalcActiveSkill.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcActiveSkill.lua.gz",
-        "bytes": 10868,
-        "sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48"
-      },
-      "bytes": 50144,
-      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04",
-      "encoding": "gzip"
-    },
-    {
-      "source_path": "src/Modules/Data.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Data.lua.gz",
-        "bytes": 10599,
-        "sha256": "38cd62af46c9f291240d5a33f20779bd101766d9f62b2165b929737380586c46"
-      },
-      "bytes": 38313,
-      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4",
-      "encoding": "gzip"
-    },
-    {
-      "source_path": "src/Modules/CalcDefence.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/CalcDefence.lua.gz",
-        "bytes": 39593,
-        "sha256": "9e232710732a7223b87b7174c7bd8a0531309675b76c605e07df55b0f72d6bf3"
-      },
-      "bytes": 239878,
-      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2",
-      "encoding": "gzip"
-    },
-    {
-      "source_path": "src/Modules/CalcTools.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/child-CalcTools.lua.gz",
-        "bytes": 3321,
-        "sha256": "b4b896d49bbe5f0d2006b1b03cd6f1d4e5274c061e46e52fd21787b7eabcf67a"
-      },
-      "bytes": 11517,
-      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c",
-      "encoding": "gzip"
-    },
-    {
-      "source_path": "src/Data/Minions.lua",
-      "archive": {
-        "path": "data/owned/poe2/3887ae68/self-flat-minion-store/Minions.lua.gz",
-        "bytes": 4752,
-        "sha256": "7abe2ddb8b83894af28484642a7fed90cc5367d8dda2bbb57e54f0f03650aa59"
-      },
-      "bytes": 46701,
-      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639",
-      "encoding": "gzip"
-    }
-  ],
-  "writer_domains": [
-    {
-      "role": "shared-initializer",
-      "source_path": "src/Modules/CalcSetup.lua",
-      "first": 26,
-      "last": 114,
-      "body_sha256": "6c77648550fb529b4a0f857ed5057d87896bf0fa14e49aeb34cf37fef2d7caa4",
-      "reason": "All shared root writes are fixed; retain actual cap100 and DiamondShrine FLAG with Condition:DiamondShrine."
-    },
-    {
-      "role": "fresh-actor-enemy-construction",
-      "source_path": "src/Modules/CalcSetup.lua",
-      "first": 717,
-      "last": 801,
-      "body_sha256": "5f57479250ab7b50d17eb76188312760c96bfbdbfebb7deeb9d958c7b219c382",
-      "reason": "Selected fresh call identity and complete empty Flask/Charm candidates are authenticated by radius and Flask proofs; no accelerated or override replacement authority."
-    },
-    {
-      "role": "config-enemy-party-inputs",
-      "source_path": "src/Modules/CalcSetup.lua",
-      "first": 829,
-      "last": 930,
-      "body_sha256": "ecdf4c6339a88112d82e2060287324ccc0935f0eb6fb4ced15f89593e9470e70",
-      "reason": "Enemy root receives exact selected Config records and no Party payload; no cached parent/reuse path for this selection."
-    },
-    {
-      "role": "condition-resolution",
-      "source_path": "src/Classes/ModStore.lua",
-      "first": 405,
-      "last": 415,
-      "body_sha256": "7a04712f104a09c0879b78fc7cbe65badb2b0e1d32f99e7aeaef9c7eece8f5b7",
-      "reason": "Exact cfg overrideCond, local and parent condition state plus Condition:name FLAG are all potential sources. Absence is checked in complete selected inputs; the initializer DiamondShrine FLAG is not itself Condition:DiamondShrine."
-    },
-    {
-      "role": "condition-tag-resolution",
-      "source_path": "src/Classes/ModStore.lua",
-      "first": 742,
-      "last": 775,
-      "body_sha256": "f681b697542eaeab64eb62a89d6d9915a769dbd35161cc9f4c30f3a5890f0db1",
-      "reason": "Condition tags also consult skillCond; the complete Basic constructor and original construction path are part of the finite condition proof."
-    },
-    {
-      "role": "selected-skill-cfg",
-      "source_path": "src/Modules/CalcActiveSkill.lua",
-      "first": 635,
-      "last": 795,
-      "body_sha256": "eb575e49c71bbddfdaab65f2bd675720940ad532a613cf1e597629cab2e1de71",
-      "reason": "Exact Basic has no initial callback or SkillData override, selfCast Main Hand Bow, no supports. skillCond starts empty; per-hand conditions add MainHandAttack only, and GemCorrupted is separately guarded."
-    },
-    {
-      "role": "friendly-child-identity",
-      "source_path": "src/Modules/CalcActiveSkill.lua",
-      "first": 904,
-      "last": 1031,
-      "body_sha256": "ff6f79cc9ef57394f9597899adc1a499fc28867a631d5d7d0b3527343e85df2d",
-      "reason": "Selected Sniper is friendly, its Enemy is env.enemy and its store is independent; hostile/profile replacement paths are excluded by exact selected profile/constructor."
-    },
-    {
-      "role": "minion-initializer",
-      "source_path": "src/Modules/CalcPerform.lua",
-      "first": 1049,
-      "last": 1156,
-      "body_sha256": "68d8bdd02f145fad0ad2c81a90eda002c905222399c2cf12924630d5da003a38",
-      "reason": "Minion cap100 and bonus30+70 are source baseline producers, not observed neutral outputs. No selected equipment/profile additions are permitted by the existing constructor proof."
-    },
-    {
-      "role": "fresh-minion-store",
-      "source_path": "src/Modules/CalcPerform.lua",
-      "first": 1193,
-      "last": 1237,
-      "body_sha256": "6890d30bb7c405c061d89e7126a7f6221dd35d424cf627c2a8e58e4419b19b95",
-      "reason": "Every selected child begins with a fresh independent root; prior Actor/Party or inherited store state is not silently reused."
-    },
-    {
-      "role": "enemy-transport-and-abyssal-condition-factory",
-      "source_path": "src/Modules/CalcPerform.lua",
-      "first": 1258,
-      "last": 1275,
-      "body_sha256": "bd9fe6e342fc3a5225daab8640596c6fdf4ca3e64ff5376b02805c6990f8aea4",
-      "reason": "EnemyModifier and AbyssalWastingImpliesCondition are generic transports; complete selected candidate census is empty, not merely their activated results."
-    },
-    {
-      "role": "attributes-and-diamond-factory",
-      "source_path": "src/Modules/CalcPerform.lua",
-      "first": 264,
-      "last": 528,
-      "body_sha256": "62618a3ec22d6f83c8d0564cc40476dd51395c9297dbb53f5dc3557bc58ebdb9",
-      "reason": "Actor-relative writes stay on the supplied Actor. Actual guarded DiamondShrine FLAG is retained; no local, parent, cfg or Condition:DiamondShrine provider is selected, so the OVERRIDE100 factory is not constructed."
-    },
-    {
-      "role": "enemy-modifier-destination",
-      "source_path": "src/Modules/CalcPerform.lua",
-      "first": 565,
-      "last": 579,
-      "body_sha256": "7099e60dd3fa1f8491e44a9f10b62571247ccecd22a0f6e51a708ff031d24918",
-      "reason": "All transported payloads target actor.enemy.modDB; complete payload candidates are absent. This excludes both Player-to-Enemy and Enemy-to-Player wrong-recipient shortcuts."
-    },
-    {
-      "role": "misc-state-and-elusive",
-      "source_path": "src/Modules/CalcPerform.lua",
-      "first": 584,
-      "last": 857,
-      "body_sha256": "44a98ea21763a7e7bb76ea40bfb8f3493f2dac41e16bce85c3b6ddd71f2314c3",
-      "reason": "Fixed condition names and gated factories are reviewed over the whole body. Elusive/Nightblade inputs are absent; computed exposure names stay damage-type-prefixed, never critical condition names."
-    },
-    {
-      "role": "primary-inherited-and-keystone",
-      "source_path": "src/Modules/CalcPerform.lua",
-      "first": 1832,
-      "last": 1861,
-      "body_sha256": "84530d7d59598ae4b20a9572ae4feffc3fee350401bb394c19893f627281ac41",
-      "reason": "Retained pointer-bound inherited appends and empty Keystone candidates establish actual selected transport before Actor attribute conditions."
-    },
-    {
-      "role": "critical-capability-is-not-enemy-condition",
-      "source_path": "src/Modules/CalcPerform.lua",
-      "first": 2562,
-      "last": 2568,
-      "body_sha256": "b6c6cc21880c0887dded588451644b1333ff13f09bcee954e125c5314da815e3",
-      "reason": "ApplyCriticalWeakness capability propagation targets Player modDB and has no Condition: prefix; it cannot activate Enemy Condition:ApplyCriticalWeakness."
-    },
-    {
-      "role": "late-buffs-party-aura",
-      "source_path": "src/Modules/CalcPerform.lua",
-      "first": 3110,
-      "last": 3244,
-      "body_sha256": "bb3fba5e4025ecb2c8412ac8497645376f13b815f809c661fb328a5e3d35854b",
-      "reason": "Full payload/recipient joins retain actual FrostBomb exposures and Offering/Rage buffs; empty ExtraAura/AffectedByAuraMod and Party payloads come from independent retained business-call evidence."
-    },
-    {
-      "role": "secondary-child-and-final-order",
-      "source_path": "src/Modules/CalcPerform.lua",
-      "first": 3365,
-      "last": 3501,
-      "body_sha256": "919308e5dd3ac1e8ae04402b552e21dfc3326b35dede954b384c0ba97b99815d",
-      "reason": "Secondary child rebuilding gates are false under the complete captured candidate census. Whole late helper order and existing destination certificate are retained; no new child/store path is inferred."
-    },
-    {
-      "role": "nightblade-critical-factory",
-      "source_path": "src/Modules/CalcOffence.lua",
-      "first": 744,
-      "last": 761,
-      "body_sha256": "48f0ddea97b55b7deb241cbd0cf7a5cec02e168fb2ae38f41c5335f6c0624bb9",
-      "reason": "Elusive plus SupportedByNightblade is required; neither potential input is selected."
-    },
-    {
-      "role": "blue-support-critical-factory",
-      "source_path": "src/Modules/CalcOffence.lua",
-      "first": 836,
-      "last": 873,
-      "body_sha256": "fed85f8da45ad18932f4f20745e1342569579f1562b8139c2180567d2742533d",
-      "reason": "SkillCritChanceIncreasedPerBlueSupport is absent and exact Basic support list is empty."
-    },
-    {
-      "role": "claw-and-defence-critical-factories",
-      "source_path": "src/Modules/CalcOffence.lua",
-      "first": 1022,
-      "last": 1076,
-      "body_sha256": "8bc8d53e5e93d92051cfcb70aee9ec447e141e9ccdb13ed0ae91117192817ba4",
-      "reason": "All six enabling flags are absent in complete Player/child inputs; Bow Main Hand does not obtain critical stats from the Player claw or defensive values."
-    },
-    {
-      "role": "seal-critical-factory",
-      "source_path": "src/Modules/CalcOffence.lua",
-      "first": 1291,
-      "last": 1336,
-      "body_sha256": "68fa90bf8c6c040f45d7b3b986f6859226b3b6d4eb9dfc001b674db7ab6bf4ac",
-      "reason": "HasSeals and all enabling seal fields/flags are absent in exact Basic construction; no generated CritChance or CritMultiplier record is admitted."
-    },
-    {
-      "role": "ordinary-critical-consumer",
-      "source_path": "src/Modules/CalcOffence.lua",
-      "first": 3816,
-      "last": 4040,
-      "body_sha256": "4bc67c22d3098a9e3bab8209fd344c4fd78b78e52da59eec7ef41178b1d94a49",
-      "reason": "NeverCrit/repeat/replacement/lucky/bifurcate/inevitable/NoCritMultiplier flags are absent. Conditional Weakness BASE10 remains a potential record. CritMultiplier MORE has no selected local/parent candidate or reachable dynamic factory, so anomalous dispatch is irrelevant only in this finite domain."
-    },
-    {
-      "role": "critical-weakness-config",
-      "source_path": "src/Modules/ConfigOptions.lua",
-      "first": 1908,
-      "last": 1913,
-      "body_sha256": "88a1ab5eb621759098407653716028cbc953c2de89f242427924d17bb44e70eb",
-      "reason": "Missing enable checkbox skips its callback; count callback really constructs conditional BASE10. Complete derivation and unknown other Boolean providers remain explicit native requirements."
-    },
-    {
-      "role": "profane-ground-config",
-      "source_path": "src/Modules/ConfigOptions.lua",
-      "first": 1934,
-      "last": 1938,
-      "body_sha256": "1f84eed6275fdb8b91c5163fc835e9f85a8e0c52b7e71c3be5ff09b591ab498d",
-      "reason": "Both source enabling callbacks are absent from the selected Config inputs and actual callback invocation inventory."
-    }
-  ],
-  "inherited_proofs": [
-    {
-      "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/review.json",
-      "bytes": 69320,
-      "sha256": "b2c444e057d10a0a18308b3cbed3a2a52abd5f811f087800b6dcb56591b04533"
-    },
-    {
-      "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/child-review.json",
-      "bytes": 1856,
-      "sha256": "40e23023267135a3c23a2a6f3bf71140f6209ca554e0123edab3c187605dacb1"
-    },
-    {
-      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/review.json",
-      "bytes": 5985,
-      "sha256": "a02bb22eb2d5a0ade8b9c4be9551e047d9c976d249d615e9d8b8616b9239814f"
-    },
-    {
-      "path": "data/owned/poe2/3887ae68/self-flat-minion-store/review.json",
-      "bytes": 5024,
-      "sha256": "743bf794c227a577ae97a92e3823541f734af31046788b9f04db35e988f38b0d"
-    },
-    {
-      "path": "data/owned/poe2/3887ae68/self-flat-flask-keystone/review.json",
-      "bytes": 9880,
-      "sha256": "9fdb17a822784740afc540b5ab1ca5d1904e78300d92eaaba37b0360b012bb72"
-    },
-    {
-      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/review.json",
-      "bytes": 1369,
-      "sha256": "ffa26fd3dbe56a0f9560a1abde997a66be5e1b3681440fccf5601199fcaa560c"
-    },
-    {
-      "path": "data/owned/poe2/3887ae68/self-flat-action-factories/review.json",
-      "bytes": 1559,
-      "sha256": "ed8519376438e4fdc3721f183e08daf11d6b74c3b54f45ddec6610e47116cffc"
-    },
-    {
-      "path": "data/owned/poe2/3887ae68/self-flat-later-helpers/review.json",
-      "bytes": 2762,
-      "sha256": "c24d61a546f9827be308232da9c8cccc4e7086995520b11784f2f3595ac7c3e2"
-    }
-  ],
-  "scope": {
-    "original": 5,
-    "actor_profile": "RaisedSkeletonSniper",
-    "effect": "MinionMeleeBow",
-    "hand": "Main Hand",
-    "source_constructor_and_factory_domain_only": true,
-    "diamond_initializer_flag_preserved": true,
-    "conditional_weakness_base_preserved": true,
-    "foreign_sand_djinn_not_sniper": true,
-    "changed_candidate_authorized": false,
-    "native_membership_authorized": false,
-    "native_boolean_absence_authorized": false,
-    "whole_owner_complete": false,
-    "positive_critical_numeric_order_proven": false,
-    "anomalous_more_compatibility": false,
-    "source_execution": false
   },
   "runtime_requirements": [
     "Exact native candidate/provider membership must bind this source domain to the selected build; an unchanged source certificate is not an arbitrary-build absence authority.",
@@ -878,9 +607,85 @@
     "Positive critical modifiers require their own source-store ordering and scaling proof. Existing independent output vectors only corroborate the finite ordinary branch.",
     "Selected Sand Djinn raw apply_X_stacks_of_critical_weakness_on_hit is unparsed in the retained source recipe; its game-level activation/delivery cannot be discarded when admitting the native Enemy condition."
   ],
+  "schema_version": 1,
+  "scope": {
+    "actor_profile": "RaisedSkeletonSniper",
+    "anomalous_more_compatibility": false,
+    "changed_candidate_authorized": false,
+    "conditional_weakness_base_preserved": true,
+    "diamond_initializer_flag_preserved": true,
+    "effect": "MinionMeleeBow",
+    "foreign_sand_djinn_not_sniper": true,
+    "hand": "Main Hand",
+    "native_boolean_absence_authorized": false,
+    "native_membership_authorized": false,
+    "original": 5,
+    "positive_critical_numeric_order_proven": false,
+    "source_constructor_and_factory_domain_only": true,
+    "source_execution": false,
+    "whole_owner_complete": false
+  },
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "target_names": [
+    "CritChance",
+    "CritChanceBase",
+    "CritChanceCap",
+    "CritMultiplier",
+    "SelfCritChance",
+    "SelfCritMultiplier",
+    "Condition:ApplyCriticalWeakness",
+    "ApplyCriticalWeakness",
+    "NeverCrit",
+    "SpellSkillsCannotDealCriticalStrikesExceptOnFinalRepeat",
+    "SpellSkillsAlwaysDealCriticalStrikesOnFinalRepeat",
+    "MainHandCritIsEqualToParent",
+    "MainHandCritIsEqualToPartyMember",
+    "BaseCritFromMainHand",
+    "AttackCritIsEqualToParentMainHand",
+    "CritChanceLucky",
+    "BifurcateCrit",
+    "InevitableCriticalHits",
+    "NoCritMultiplier",
+    "Multiplier:SecondsSinceInevitableCrit",
+    "ClawCritChanceAppliesToUnarmed",
+    "ClawCritChanceAppliesToMinions",
+    "ClawCritMultiplierAppliesToMinions",
+    "CritChanceIncreasedByUncappedLightningRes",
+    "CritChanceIncreasedByLightningRes",
+    "CritChanceIncreasedByOvercappedLightningRes",
+    "CritChanceIncreasedBySpellSuppressChance",
+    "SupportedByNightblade",
+    "SkillCritChanceIncreasedPerBlueSupport",
+    "HasSeals",
+    "NoRepeatBonuses",
+    "DamageSeal",
+    "UseMaxUnleash",
+    "MaxSealCrit",
+    "DiamondShrine",
+    "Elusive",
+    "NightbladeElusiveCritMultiplier",
+    "Condition:DiamondShrine",
+    "Condition:Elusive",
+    "Condition:OnProfaneGround",
+    "AbyssalWasted",
+    "AbyssalWastingImpliesCondition",
+    "EnemyModifier",
+    "ExtraCurse",
+    "ExtraAura",
+    "AffectedByAuraMod",
+    "ExtraSkillStat",
+    "ExtraSkillMod",
+    "ExtraSupport",
+    "Keystone",
+    "FlasksApplyToMinion",
+    "ParentNonUniqueFlasksAppliedToYou",
+    "LegacyFlask",
+    "ExtraLinkEffect",
+    "ExtraAuraEffect"
+  ],
   "untranslated_condition_inputs": [
     {
-      "path": "/skills/22/resolved/0",
       "body": {
         "mapping": {
           "aliases": [],
@@ -890,7 +695,202 @@
         "set": 1,
         "stat": "apply_X_stacks_of_critical_weakness_on_hit"
       },
-      "meaning": "Selected Sand Djinn on-hit Critical Weakness stat remains untranslated. A nil source mapping proves no original callback/modifier construction here, not game-level absence or native Boolean completeness."
+      "meaning": "Selected Sand Djinn on-hit Critical Weakness stat remains untranslated. A nil source mapping proves no original callback/modifier construction here, not game-level absence or native Boolean completeness.",
+      "path": "/skills/22/resolved/0"
+    }
+  ],
+  "writer_domains": [
+    {
+      "body_sha256": "6c77648550fb529b4a0f857ed5057d87896bf0fa14e49aeb34cf37fef2d7caa4",
+      "first": 26,
+      "last": 114,
+      "reason": "All shared root writes are fixed; retain actual cap100 and DiamondShrine FLAG with Condition:DiamondShrine.",
+      "role": "shared-initializer",
+      "source_path": "src/Modules/CalcSetup.lua"
+    },
+    {
+      "body_sha256": "5f57479250ab7b50d17eb76188312760c96bfbdbfebb7deeb9d958c7b219c382",
+      "first": 717,
+      "last": 801,
+      "reason": "Selected fresh call identity and complete empty Flask/Charm candidates are authenticated by radius and Flask proofs; no accelerated or override replacement authority.",
+      "role": "fresh-actor-enemy-construction",
+      "source_path": "src/Modules/CalcSetup.lua"
+    },
+    {
+      "body_sha256": "ecdf4c6339a88112d82e2060287324ccc0935f0eb6fb4ced15f89593e9470e70",
+      "first": 829,
+      "last": 930,
+      "reason": "Enemy root receives exact selected Config records and no Party payload; no cached parent/reuse path for this selection.",
+      "role": "config-enemy-party-inputs",
+      "source_path": "src/Modules/CalcSetup.lua"
+    },
+    {
+      "body_sha256": "7a04712f104a09c0879b78fc7cbe65badb2b0e1d32f99e7aeaef9c7eece8f5b7",
+      "first": 405,
+      "last": 415,
+      "reason": "Exact cfg overrideCond, local and parent condition state plus Condition:name FLAG are all potential sources. Absence is checked in complete selected inputs; the initializer DiamondShrine FLAG is not itself Condition:DiamondShrine.",
+      "role": "condition-resolution",
+      "source_path": "src/Classes/ModStore.lua"
+    },
+    {
+      "body_sha256": "f681b697542eaeab64eb62a89d6d9915a769dbd35161cc9f4c30f3a5890f0db1",
+      "first": 742,
+      "last": 775,
+      "reason": "Condition tags also consult skillCond; the complete Basic constructor and original construction path are part of the finite condition proof.",
+      "role": "condition-tag-resolution",
+      "source_path": "src/Classes/ModStore.lua"
+    },
+    {
+      "body_sha256": "eb575e49c71bbddfdaab65f2bd675720940ad532a613cf1e597629cab2e1de71",
+      "first": 635,
+      "last": 795,
+      "reason": "Exact Basic has no initial callback or SkillData override, selfCast Main Hand Bow, no supports. skillCond starts empty; per-hand conditions add MainHandAttack only, and GemCorrupted is separately guarded.",
+      "role": "selected-skill-cfg",
+      "source_path": "src/Modules/CalcActiveSkill.lua"
+    },
+    {
+      "body_sha256": "ff6f79cc9ef57394f9597899adc1a499fc28867a631d5d7d0b3527343e85df2d",
+      "first": 904,
+      "last": 1031,
+      "reason": "Selected Sniper is friendly, its Enemy is env.enemy and its store is independent; hostile/profile replacement paths are excluded by exact selected profile/constructor.",
+      "role": "friendly-child-identity",
+      "source_path": "src/Modules/CalcActiveSkill.lua"
+    },
+    {
+      "body_sha256": "68d8bdd02f145fad0ad2c81a90eda002c905222399c2cf12924630d5da003a38",
+      "first": 1049,
+      "last": 1156,
+      "reason": "Minion cap100 and bonus30+70 are source baseline producers, not observed neutral outputs. No selected equipment/profile additions are permitted by the existing constructor proof.",
+      "role": "minion-initializer",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "body_sha256": "6890d30bb7c405c061d89e7126a7f6221dd35d424cf627c2a8e58e4419b19b95",
+      "first": 1193,
+      "last": 1237,
+      "reason": "Every selected child begins with a fresh independent root; prior Actor/Party or inherited store state is not silently reused.",
+      "role": "fresh-minion-store",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "body_sha256": "bd9fe6e342fc3a5225daab8640596c6fdf4ca3e64ff5376b02805c6990f8aea4",
+      "first": 1258,
+      "last": 1275,
+      "reason": "EnemyModifier and AbyssalWastingImpliesCondition are generic transports; complete selected candidate census is empty, not merely their activated results.",
+      "role": "enemy-transport-and-abyssal-condition-factory",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "body_sha256": "62618a3ec22d6f83c8d0564cc40476dd51395c9297dbb53f5dc3557bc58ebdb9",
+      "first": 264,
+      "last": 528,
+      "reason": "Actor-relative writes stay on the supplied Actor. Actual guarded DiamondShrine FLAG is retained; no local, parent, cfg or Condition:DiamondShrine provider is selected, so the OVERRIDE100 factory is not constructed.",
+      "role": "attributes-and-diamond-factory",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "body_sha256": "7099e60dd3fa1f8491e44a9f10b62571247ccecd22a0f6e51a708ff031d24918",
+      "first": 565,
+      "last": 579,
+      "reason": "All transported payloads target actor.enemy.modDB; complete payload candidates are absent. This excludes both Player-to-Enemy and Enemy-to-Player wrong-recipient shortcuts.",
+      "role": "enemy-modifier-destination",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "body_sha256": "44a98ea21763a7e7bb76ea40bfb8f3493f2dac41e16bce85c3b6ddd71f2314c3",
+      "first": 584,
+      "last": 857,
+      "reason": "Fixed condition names and gated factories are reviewed over the whole body. Elusive/Nightblade inputs are absent; computed exposure names stay damage-type-prefixed, never critical condition names.",
+      "role": "misc-state-and-elusive",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "body_sha256": "84530d7d59598ae4b20a9572ae4feffc3fee350401bb394c19893f627281ac41",
+      "first": 1832,
+      "last": 1861,
+      "reason": "Retained pointer-bound inherited appends and empty Keystone candidates establish actual selected transport before Actor attribute conditions.",
+      "role": "primary-inherited-and-keystone",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "body_sha256": "b6c6cc21880c0887dded588451644b1333ff13f09bcee954e125c5314da815e3",
+      "first": 2562,
+      "last": 2568,
+      "reason": "ApplyCriticalWeakness capability propagation targets Player modDB and has no Condition: prefix; it cannot activate Enemy Condition:ApplyCriticalWeakness.",
+      "role": "critical-capability-is-not-enemy-condition",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "body_sha256": "bb3fba5e4025ecb2c8412ac8497645376f13b815f809c661fb328a5e3d35854b",
+      "first": 3110,
+      "last": 3244,
+      "reason": "Full payload/recipient joins retain actual FrostBomb exposures and Offering/Rage buffs; empty ExtraAura/AffectedByAuraMod and Party payloads come from independent retained business-call evidence.",
+      "role": "late-buffs-party-aura",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "body_sha256": "919308e5dd3ac1e8ae04402b552e21dfc3326b35dede954b384c0ba97b99815d",
+      "first": 3365,
+      "last": 3501,
+      "reason": "Secondary child rebuilding gates are false under the complete captured candidate census. Whole late helper order and existing destination certificate are retained; no new child/store path is inferred.",
+      "role": "secondary-child-and-final-order",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "body_sha256": "48f0ddea97b55b7deb241cbd0cf7a5cec02e168fb2ae38f41c5335f6c0624bb9",
+      "first": 744,
+      "last": 761,
+      "reason": "Elusive plus SupportedByNightblade is required; neither potential input is selected.",
+      "role": "nightblade-critical-factory",
+      "source_path": "src/Modules/CalcOffence.lua"
+    },
+    {
+      "body_sha256": "fed85f8da45ad18932f4f20745e1342569579f1562b8139c2180567d2742533d",
+      "first": 836,
+      "last": 873,
+      "reason": "SkillCritChanceIncreasedPerBlueSupport is absent and exact Basic support list is empty.",
+      "role": "blue-support-critical-factory",
+      "source_path": "src/Modules/CalcOffence.lua"
+    },
+    {
+      "body_sha256": "8bc8d53e5e93d92051cfcb70aee9ec447e141e9ccdb13ed0ae91117192817ba4",
+      "first": 1022,
+      "last": 1076,
+      "reason": "All six enabling flags are absent in complete Player/child inputs; Bow Main Hand does not obtain critical stats from the Player claw or defensive values.",
+      "role": "claw-and-defence-critical-factories",
+      "source_path": "src/Modules/CalcOffence.lua"
+    },
+    {
+      "body_sha256": "68fa90bf8c6c040f45d7b3b986f6859226b3b6d4eb9dfc001b674db7ab6bf4ac",
+      "first": 1291,
+      "last": 1336,
+      "reason": "HasSeals and all enabling seal fields/flags are absent in exact Basic construction; no generated CritChance or CritMultiplier record is admitted.",
+      "role": "seal-critical-factory",
+      "source_path": "src/Modules/CalcOffence.lua"
+    },
+    {
+      "body_sha256": "4bc67c22d3098a9e3bab8209fd344c4fd78b78e52da59eec7ef41178b1d94a49",
+      "first": 3816,
+      "last": 4040,
+      "reason": "NeverCrit/repeat/replacement/lucky/bifurcate/inevitable/NoCritMultiplier flags are absent. Conditional Weakness BASE10 remains a potential record. CritMultiplier MORE has no selected local/parent candidate or reachable dynamic factory, so anomalous dispatch is irrelevant only in this finite domain.",
+      "role": "ordinary-critical-consumer",
+      "source_path": "src/Modules/CalcOffence.lua"
+    },
+    {
+      "body_sha256": "88a1ab5eb621759098407653716028cbc953c2de89f242427924d17bb44e70eb",
+      "first": 1908,
+      "last": 1913,
+      "reason": "Missing enable checkbox skips its callback; count callback really constructs conditional BASE10. Complete derivation and unknown other Boolean providers remain explicit native requirements.",
+      "role": "critical-weakness-config",
+      "source_path": "src/Modules/ConfigOptions.lua"
+    },
+    {
+      "body_sha256": "1f84eed6275fdb8b91c5163fc835e9f85a8e0c52b7e71c3be5ff09b591ab498d",
+      "first": 1934,
+      "last": 1938,
+      "reason": "Both source enabling callbacks are absent from the selected Config inputs and actual callback invocation inventory.",
+      "role": "profane-ground-config",
+      "source_path": "src/Modules/ConfigOptions.lua"
     }
   ]
 }

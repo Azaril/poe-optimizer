@@ -202,6 +202,8 @@ pub fn check_authored() {
     let d = dependencies();
     assert_eq!(a["kind"], KIND);
     assert_eq!(a["before"], json!(d.before));
+    // This commitment describes the historical proof, not its current native fixture.
+    assert_eq!(d.operations_version.as_str(), OWNED_RULE_OPERATIONS_V27);
     assert_eq!(
         a["scope"],
         json!({"changed_programs":1,"refined_gaps":1,"new_definitions":0,"new_receivers":0,"closed_owners":0,"closed_supplier_queries":0,"supplier_admission":false,"whole_build":false})
@@ -311,7 +313,11 @@ pub fn check_authored() {
 }
 pub fn census(rules: &RulePackageInput, guarded: bool) {
     let d = dependencies();
-    assert_eq!(rules.operations_version, d.operations_version);
+    assert_eq!(rules.operations_version, d.native_rules.operations_version);
+    assert_eq!(
+        rules.operations_version.as_str(),
+        OWNED_RULE_OPERATIONS_VERSION
+    );
     assert_eq!(rules.existing_actor_rules, d.existing_actor_rules);
     let registry = rules.contribution_queries.as_ref().unwrap();
     assert_eq!(registry.closure, d.query_registry_closure);

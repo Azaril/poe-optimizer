@@ -246,7 +246,7 @@ impl PendingDisposition {
 }
 
 #[cfg(test)]
-mod tests {
+pub(super) mod tests {
     use super::*;
     use crate::{build_instance::ImportedBuildInstance, decode_build};
     use poe_optimizer_data::owned_schema::*;
@@ -317,6 +317,25 @@ mod tests {
         ),
     ) {
         with_source_destination(SOURCE, test);
+    }
+
+    /// Reuse the real private source/sidecar fixture after its checked attachment.
+    /// Inventory tests exercise retirement, not source authoring.
+    pub(in crate::owned_normalize) fn with_usage_inventory_destination(
+        source_xml: &str,
+        test: impl FnOnce(
+            &mut Builder<'_, '_>,
+            SkillDraft,
+            SkillPresetDraft,
+            GemDefId,
+            SourceOccurrenceId,
+        ),
+    ) {
+        with_source_destination(source_xml, |b, pending, skill, mut preset, _| {
+            let proof = pending.attach(b, &skill, &mut preset).unwrap();
+            assert!(pending.completed_by(proof.as_ref()));
+            test(b, skill, preset, pending.gem.clone(), pending.source);
+        });
     }
 
     fn with_source_destination(

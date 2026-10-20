@@ -1,5 +1,6 @@
 //! Measurements collected inside the same sealed retained-support attempt.
-use super::metrics::MetricProjection;
+use super::metrics::{MetricAttempt, MetricProjection};
+use super::requirements::RequirementProjection;
 use super::support_effects::SupportAttempt;
 use super::*;
 use crate::owned_supports::SupportPreparationGap;
@@ -35,6 +36,7 @@ pub struct OwnedSupportMetricPlan<I> {
     projection: MetricProjection,
     bindings: MetricPlanIdentity,
     identity: OwnedContentDigest,
+    requirements: RequirementProjection,
 }
 
 impl<I: DefinitionSchemaIndex> OwnedSupportMetricPlan<I> {
@@ -58,8 +60,15 @@ impl<I: DefinitionSchemaIndex> OwnedSupportMetricPlan<I> {
             effects: effects.identity(),
             mapping: *projection.mapping().identity(),
         };
+        let mut work = base.limits.max_work;
+        let requirements = RequirementProjection::compile(
+            &base.rules,
+            &base.requirement_owners,
+            &base.requirement_gaps,
+            &mut work,
+        )?;
         let identity = digest_owned(
-            "owned-metric-plan-v1",
+            "owned-metric-plan-v3",
             &bindings,
             base.limits.max_wire_bytes,
         )?;
@@ -68,6 +77,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportMetricPlan<I> {
             projection,
             bindings,
             identity,
+            requirements,
         })
     }
 
@@ -107,49 +117,86 @@ impl<I: DefinitionSchemaIndex> OwnedSupportMetricPlan<I> {
         work: &mut usize,
     ) -> Result<OwnedSupportMetricReport> {
         let base = self.effects.base_plan();
-        let outcome = self
-            .effects
-            .evaluate_projected(scratch, work, |suffix, scratch, work| {
+        self.effects.evaluate_finalized(
+            scratch,
+            work,
+            |suffix, scratch, work| {
                 let rows = self
                     .projection
                     .bind_values(&suffix.values, base.complete, work)?;
+                let requirements = self
+                    .requirements
+                    .collect(suffix, scratch, &base.gaps, None, work)?;
                 self.projection.collect(
                     self.identity,
                     &base.gaps,
-                    &suffix.query_gates,
-                    &rows,
+                    MetricAttempt {
+                        query_gates: &suffix.query_gates,
+                        values: &rows,
+                        requirements,
+                    },
                     scratch,
                     work,
                 )
-            })?;
-        let (evaluation, support) = match outcome {
-            SupportAttempt::Evaluated(evaluation) => (evaluation, SupportMetricStatus::Evaluated),
-            SupportAttempt::Unavailable { cause, input } => (
-                self.projection
-                    .unavailable(self.identity, &base.gaps, &cause, work)?,
-                SupportMetricStatus::Unavailable { cause, input },
-            ),
-            SupportAttempt::PreparationUnresolved {
-                target,
-                reason,
-                origin_index,
-            } => (
-                self.projection.unavailable(
-                    self.identity,
-                    &base.gaps,
-                    &EffectValue::unresolved(PlanGapReason::UpstreamUnavailable),
-                    work,
-                )?,
-                SupportMetricStatus::PreparationUnresolved {
-                    target,
-                    reason,
-                    origin_index,
-                },
-            ),
-        };
-        Ok(OwnedSupportMetricReport {
-            evaluation,
-            support,
-        })
+            },
+            |outcome, scratch, work| {
+                let (evaluation, support) = match outcome {
+                    SupportAttempt::Evaluated(evaluation) => {
+                        (evaluation, SupportMetricStatus::Evaluated)
+                    }
+                    SupportAttempt::Unavailable { cause, input } => {
+                        let requirements = self.requirements.collect(
+                            base,
+                            scratch,
+                            &base.gaps,
+                            Some(&cause),
+                            work,
+                        )?;
+                        (
+                            self.projection.unavailable(
+                                self.identity,
+                                &base.gaps,
+                                &cause,
+                                requirements,
+                                work,
+                            )?,
+                            SupportMetricStatus::Unavailable { cause, input },
+                        )
+                    }
+                    SupportAttempt::PreparationUnresolved {
+                        target,
+                        reason,
+                        origin_index,
+                    } => {
+                        let cause = EffectValue::unresolved(PlanGapReason::UpstreamUnavailable);
+                        let requirements = self.requirements.collect(
+                            base,
+                            scratch,
+                            &base.gaps,
+                            Some(&cause),
+                            work,
+                        )?;
+                        (
+                            self.projection.unavailable(
+                                self.identity,
+                                &base.gaps,
+                                &cause,
+                                requirements,
+                                work,
+                            )?,
+                            SupportMetricStatus::PreparationUnresolved {
+                                target,
+                                reason,
+                                origin_index,
+                            },
+                        )
+                    }
+                };
+                Ok(OwnedSupportMetricReport {
+                    evaluation,
+                    support,
+                })
+            },
+        )
     }
 }

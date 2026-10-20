@@ -88,6 +88,7 @@ fn request(
     OwnedEvaluationRequest::new(
         BuildSpec::new(
             BuildInput {
+                usage_preferences: vec![],
                 allocator: draft.allocator,
                 revision: draft.revision,
                 game_version: draft.game_version.clone(),
@@ -115,6 +116,7 @@ fn request(
         .unwrap(),
         ScenarioSpec::new(
             ScenarioInput {
+                usage_intents: vec![],
                 game_version: draft.game_version.clone(),
                 enemy: scenario.enemy.to_resolved().unwrap(),
                 assumptions: vec![],

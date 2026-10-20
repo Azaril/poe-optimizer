@@ -1,0 +1,152 @@
+{
+  "spans": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "first": 1908,
+      "last": 1913,
+      "role": "separate-enemy-activation-and-stack-callbacks",
+      "body": "\t{ var = \"conditionEnemyCriticalWeakness\", type = \"check\", label = \"Is the enemy Critically Weak\", ifFlag = \"ApplyCriticalWeakness\", tooltip = \"Hits against Critically Weak enemies have up to +10% Critical Strike Chance.\\nThis option will also allow you to input the effect of Critical Weakness.\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"Condition:ApplyCriticalWeakness\", \"FLAG\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },\n\t{ var = \"enemyCriticalWeaknessStacks\", type = \"count\", label = \"Critical weakness stacks:\", ifOption = \"conditionEnemyCriticalWeakness\", tooltip = \"Each stack of critical weakness applies +0.5% to critical strike chance against the affected target\", defaultPlaceholderState = 20, apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"SelfCritChance\", \"BASE\", m_max(m_min(val or 20, 20), 0) / 2, \"Critical Weakness\", { type = \"Condition\", var = \"ApplyCriticalWeakness\" })\n\tend },",
+      "sha256": "50dd5c882592f38491c088ecc9ec34c1337498f70aa3a83fcba881807a1b2216"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 712,
+      "last": 732,
+      "role": "checkbox-constructor-default",
+      "body": "\t\t\tif varData.var then\n\t\t\t\tself.configSets[self.activeConfigSetId].input[varData.var] = varData.defaultState\n\t\t\t\tcontrol.state = varData.defaultState\n\t\t\t\tself.varControls[varData.var] = control\n\t\t\t\tself.configSets[self.activeConfigSetId].placeholder[varData.var] = varData.defaultPlaceholderState\n\t\t\t\tcontrol.placeholder = varData.defaultPlaceholderState\n\t\t\t\tif varData.defaultIndex then\n\t\t\t\t\tself.configSets[self.activeConfigSetId].input[varData.var] = varData.list[varData.defaultIndex].val\n\t\t\t\t\tcontrol.selIndex = varData.defaultIndex\n\t\t\t\tend\n\t\t\t\tif varData.type == \"check\" then\n\t\t\t\t\tself.defaultState[varData.var] = varData.defaultState or false\n\t\t\t\telseif varData.type == \"count\" or varData.type == \"integer\" or varData.type == \"countAllowZero\" or varData.type == \"float\" then\n\t\t\t\t\tself.defaultState[varData.var] = varData.defaultState or 0\n\t\t\t\telseif varData.type == \"list\" then\n\t\t\t\t\tself.defaultState[varData.var] = varData.list[varData.defaultIndex or 1].val\n\t\t\t\telseif varData.type == \"text\" then\n\t\t\t\t\tself.defaultState[varData.var] = varData.defaultState or \"\"\n\t\t\t\telse\n\t\t\t\t\tself.defaultState[varData.var] = varData.defaultState\n\t\t\t\tend",
+      "sha256": "2df4831f72bfb1b4013a006efffd48169946e1d04716ed9e16db1baec2245179"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 883,
+      "last": 906,
+      "role": "saved-input-loading",
+      "body": "\tlocal function setInputAndPlaceholder(node, configSetId)\n\t\tif node.elem == \"Input\" then\n\t\t\tif not node.attrib.name then\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Input' element missing name attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\t\tif node.attrib.number then\n\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = tonumber(node.attrib.number)\n\t\t\telseif node.attrib.string then\n\t\t\t\tif node.attrib.name == \"enemyIsBoss\" then\n\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string:lower():gsub(\"(%l)(%w*)\", function(a,b) return s_upper(a)..b end)\n\t\t\t\t\t:gsub(\"Uber Atziri\", \"Boss\"):gsub(\"Shaper\", \"Pinnacle\"):gsub(\"Sirus\", \"Pinnacle\")\n\t\t\t\t-- backwards compat <=3.20, Uber Atziri Flameblast -> Atziri Flameblast\n\t\t\t\telseif node.attrib.name == \"presetBossSkills\" then\n\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string:gsub(\"^Uber \", \"\")\n\t\t\t\telse\n\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string\n\t\t\t\tend\n\t\t\telseif node.attrib.boolean then\n\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.boolean == \"true\"\n\t\t\telse\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Input' element missing number, string or boolean attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend",
+      "sha256": "aabc60153c2b801bb68424e3a9215bf1becc0962597a401e26a6a4b8f8061cbf"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1169,
+      "last": 1199,
+      "role": "fresh-lists-and-checkbox-dispatch",
+      "body": "function ConfigTabClass:BuildModList()\n\tlocal modList = new(\"ModList\"):ModList()\n\tself.modList = modList\n\tlocal enemyModList = new(\"ModList\"):ModList()\n\tself.enemyModList = enemyModList\n\tlocal input = self.configSets[self.activeConfigSetId].input\n\tlocal placeholder = self.configSets[self.activeConfigSetId].placeholder\n\tself:UpdateLevel() -- enemy level handled here because it's needed to correctly set boss stats\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.apply then\n\t\t\tif varData.type == \"check\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(true, modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"count\" or varData.type == \"integer\" or varData.type == \"countAllowZero\" or varData.type == \"float\" then\n\t\t\t\tif input[varData.var] and (input[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\telseif placeholder[varData.var] and (placeholder[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(placeholder[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"list\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"text\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend",
+      "sha256": "a9edc6f6f7761fc906fc43a7484a318013ae9bbcfd878a4c3bf01cced1ae2f31"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1317,
+      "last": 1334,
+      "role": "fresh-config-constructor",
+      "body": "function ConfigTabClass:CreateConfigSet(configSetId, title)\n\tlocal configSet = { id = configSetId, title = title, input = {}, placeholder = {}, customModsList = { { title = \"Default\", enabled = true, text = \"\" } } }\n\tif not configSetId then\n\t\tconfigSet.id = #self.configSets + 1\n\tend\n\t-- there are default values for input and placeholder that every new config set needs to have\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.var then\n\t\t\tconfigSet.input[varData.var] = varData.defaultState\n\t\t\tconfigSet.placeholder[varData.var] = varData.defaultPlaceholderState\n\t\t\tif varData.defaultIndex then\n\t\t\t\tconfigSet.input[varData.var] = varData.list[varData.defaultIndex].val\n\t\t\tend\n\t\tend\n\tend\n\tself.configSets[configSet.id] = configSet\n\treturn configSet\nend",
+      "sha256": "96193ef8356da473de340f756a516c9201e05fd951d4b0aca3db9913ba214f3b"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "first": 1193,
+      "last": 1197,
+      "role": "player-and-enemy-destination-bindings",
+      "body": "function calcs.perform(env, skipEHP)\n\t---@type ModDB\n\tlocal modDB = env.modDB\n\t---@type ModDB\n\tlocal enemyDB = env.enemyDB",
+      "sha256": "a213f366e1850758e003c36978ab0b0dc4984c40cf24be0d38d3e0ee2207ab8e"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "first": 2562,
+      "last": 2568,
+      "role": "capability-is-not-enemy-condition",
+      "body": "\t\tif activeSkill.skillModList:Flag(nil, \"Condition:CanWither\") or (activeSkill.minion and env.minion and env.minion.modDB:Flag(nil, \"Condition:CanWither\")) then\n\t\t\tlocal effect = activeSkill.minion and 5 or m_floor(5 * (1 + modDB:Sum(\"INC\", nil, \"WitherEffect\") / 100))\n\t\t\tmodDB:NewMod(\"WitherEffectStack\", \"MAX\", effect)\n\t\tend\n\t\tif activeSkill.skillModList:Flag(nil, \"ApplyCriticalWeakness\") then\n\t\t\tmodDB:NewMod(\"ApplyCriticalWeakness\", \"FLAG\", true)\n\t\tend",
+      "sha256": "a3fc6a1543cfd0c40c1aeba897cd30cdaeb9ed05bbe158d37374d7dea79b5071"
+    }
+  ],
+  "constructor_dependencies": [
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/source-comparison.json",
+      "sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-review.json",
+      "sha256": "d8f7abf2202ace98318d9c3c80be31ea77c3d9d17a307a174e866fc9c44fa9d5"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-bodies.json",
+      "sha256": "1b470cb8f843655071fe8fe38d7075b974085debf683581813f20ea286a92d20"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-auxiliary-bodies.json",
+      "sha256": "b0e1f431cc964c38040abdab36618401e5f3e77407020b58df364ff31574e1a2"
+    }
+  ],
+  "kind": "configured-enemy-critical-weakness-activation",
+  "license": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/LICENSE.md",
+  "schema_version": 1,
+  "archives": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "encoding": "utf8",
+      "artifact_sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "encoding": "utf8",
+      "artifact_sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae",
+      "encoding": "gzip",
+      "artifact_sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575"
+    }
+  ],
+  "scope": {
+    "target": "scenario_enemy_actor",
+    "configured_snapshot": true,
+    "constructor": false,
+    "true_callback_emits_condition": true,
+    "false_callback_emits_no_record": true,
+    "missing_or_malformed_proof_is_false": false,
+    "capability_implies_activation": false,
+    "participation_implies_hit": false,
+    "global_condition_absence": false,
+    "coverage_completed": false,
+    "new_source_execution": false
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "derivation": {
+    "source_scope": "this-config-callback-only",
+    "true": [
+      {
+        "name": "Condition:ApplyCriticalWeakness",
+        "type": "FLAG",
+        "value": true,
+        "source": "Config",
+        "flags": 0,
+        "keywordFlags": 0,
+        "_positions": [
+          {
+            "index": 1,
+            "value": {
+              "type": "Condition",
+              "var": "Effective"
+            }
+          }
+        ]
+      }
+    ],
+    "false": [],
+    "absent_saved_control": "reviewed-fresh-checkbox-default-false",
+    "malformed_saved_control": "pending-no-input",
+    "global_condition_false_inferred": false,
+    "effective_tag": "source-view applicability, not a native UI-mode flag",
+    "sand_djinn": "Capability and Command classification do not establish a past hit or current Enemy stacks; raw on-hit application remains separately untranslated."
+  }
+}

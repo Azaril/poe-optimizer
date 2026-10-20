@@ -92,6 +92,8 @@ fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain()
     )
     .unwrap();
     input.normalization.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
+        inventory: None,
+        scenario: vec![],
         definitions: prior.schema().identity().clone(),
         source: roles.input().compilation.source.clone(),
         roles: *roles.identity(),
@@ -106,7 +108,8 @@ fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain()
     });
     let original_usage_digest =
         usage_inputs_identity(&input.normalization, Default::default()).unwrap();
-    input.normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV2 {
+    input.normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV3 {
+        primary_dispositions: vec![],
         definitions: prior.schema().identity().clone(),
         roles: *roles.identity(),
         catalog: roles.input().compilation.catalog_digest,
@@ -121,7 +124,7 @@ fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain()
     });
     let before = serde_json::to_vec(&input).unwrap();
     let next = stage(input.clone());
-    let Some(GemInventoryPolicy::PobFreshPhysicalV2 { usage_inputs, .. }) =
+    let Some(GemInventoryPolicy::PobFreshPhysicalV3 { usage_inputs, .. }) =
         &next.normalization().gem_inventory
     else {
         panic!("physical inventory policy retained");
@@ -324,8 +327,12 @@ fn reward_inventory_tracks_checked_catalog_bindings_without_repairing_stale_auth
                     OwnedDefinitionKey::new("different-reward-authoring").unwrap()
             }
             2 => {
-                stale.rewards.rules[0]
-                    .outcomes
+                let poe_optimizer_import::owned_reward_policy::RewardRuleOutput::Cases(outcomes) =
+                    &mut stale.rewards.rules[0].output
+                else {
+                    panic!("finite reward fixture")
+                };
+                outcomes
                     .iter_mut()
                     .find(|case| matches!(case.outcome, RewardTemplate::Reward { .. }))
                     .unwrap()
@@ -1110,7 +1117,14 @@ fn rule_programs_and_table_cells_consume_the_aggregate_entry_budget() {
             .rewards
             .rules
             .iter()
-            .map(|r| r.outcomes.len())
+            .map(|r| match &r.output {
+                poe_optimizer_import::owned_reward_policy::RewardRuleOutput::Cases(outcomes) => {
+                    outcomes.len()
+                }
+                poe_optimizer_import::owned_reward_policy::RewardRuleOutput::NumericParameter(
+                    numeric,
+                ) => numeric.fixed_parameters.len() + 1,
+            })
             .sum::<usize>()
         + base.items.rules.len()
         + base.item_source.rule_layouts.len()

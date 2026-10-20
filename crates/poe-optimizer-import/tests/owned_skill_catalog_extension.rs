@@ -449,7 +449,9 @@ fn extends_only_missing_ids_preserving_known_ports_aliases_partial_gaps_and_tomb
 fn repeating_the_extension_allocates_nothing_and_preserves_snapshot_identities() {
     let seed = seed();
     let first = extend(&seed, extended_data()).unwrap();
-    let (schema, mappings, _) = assembled(&seed, &first);
+    let (schema, mappings, roles) = assembled(&seed, &first);
+    let catalog = SkillIdentityCatalog::new(extended_data()).unwrap();
+    verify_owned_skill_catalog_reproduction(&catalog, &roles, &mappings, limits()).unwrap();
     let next = Seed {
         registry: first.registry.clone(),
         schema,
@@ -470,7 +472,8 @@ fn repeating_the_extension_allocates_nothing_and_preserves_snapshot_identities()
     assert_eq!(second.slots, first.slots);
     assert_eq!(second.mappings, first.mappings);
     assert_eq!(second.roles, first.roles);
-    let (schema, mapping, _) = assembled(&next, &second);
+    let (schema, mapping, roles) = assembled(&next, &second);
+    verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, limits()).unwrap();
     assert_eq!(schema.identity(), next.schema.identity());
     assert_eq!(mapping.identity(), next.mappings.identity());
     // Receipt records this operation's actual predecessor; no historical policy proof.

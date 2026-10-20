@@ -307,7 +307,7 @@ fn empty_custom(state: &Value) -> Result<(), String> {
 // cannot authenticate a coherently changed source matrix or native owner.
 const REWARD_SOURCE: &str = "4fa239bb7f72b936b522a84fb6adb0139cdddb2a4b593ce69a64bb722f7a2e9d";
 const REWARD_RELEASE: &str = "ea5e38460e1dcb8df912a4dcddfd31d3e0be89dca2f5ede339b1a7173a1f34f2";
-const REWARD_REPORT: &str = "a8f76db2b906c42f8e78bd5653a11023979b6f3456ff87dd08e04b490174f25c";
+const REWARD_REPORT: &str = "42fe06d045eb06938b41991c4dde47aa435119dff3e3f95e0056f8fd0a3c515a";
 
 fn reward_archive(metadata: &Value, role: &str, limit: usize) -> Result<Vec<u8>, String> {
     let pin = &metadata["files"][role];

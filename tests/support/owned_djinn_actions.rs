@@ -720,7 +720,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     let base = migrated.input();
     let mut normalization = base.normalization.clone();
     let previous = normalization.direct_skill_inputs.take().unwrap();
-    let DirectSkillInputPolicy::PobManualDirectSkillV1 {
+    let DirectSkillInputPolicy::PobManualDirectSkillV2 {
         definitions,
         source,
         roles,
@@ -728,10 +728,9 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         manual_sources,
         group_attributes,
         skills,
-    } = previous
-    else {
-        panic!("exact V1 predecessor required");
-    };
+        dispositions: previous_dispositions,
+    } = previous;
+    assert!(previous_dispositions.is_empty());
     assert_eq!(skills.len(), 2);
     let mut rows = dispositions();
     for row in &mut rows {

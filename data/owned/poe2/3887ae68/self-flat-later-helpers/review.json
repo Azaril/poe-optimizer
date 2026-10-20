@@ -19,15 +19,15 @@
       "profile": "RaisedSkeletonSniper",
       "recipe": "MinionMeleeBow",
       "recipe_sha256": "abc764c4728687f465ffea2ea8b16e597e2a91121ee7e2e37a5bbe7d2c90e213",
-      "selected_bindings_sha256": "e2089f9e8487b75ad46f708255a1bc157c4b004129842d7f245f06dccd36570e",
+      "selected_bindings_sha256": "14f549952927c9a08e57cb1a3255349db7dd1d2e9a963720fbaa4bcd51c83864",
       "support_effects": 0
     },
     "triggered_by_nil_observed": false
   },
-  "inputs_sha256": "d7df2cde5648ee00354c80f70f50285f12851070d31b16677777b2d7b1c08faf",
+  "inputs_sha256": "88bea790e333ba0f80a97a59d9207bdfa85e79eb24e9a997c2f76d8e59490921",
   "kind": "finite-selected-later-helper-destinations",
   "late_aura_limit": "Reservation may append arbitrary nested ExtraAura payloads. It runs after current-pass ExtraAura delivery; this proves no immediate delivery by these helpers, not absence, purity, arbitrary reused-environment behavior or future-pass exclusion.",
-  "minion_store_review_sha256": "743bf794c227a577ae97a92e3823541f734af31046788b9f04db35e988f38b0d",
+  "minion_store_review_sha256": "d35ca00990f80e801758de29c38d5d3e3cb289af73f886b2d93fd99a7fc12ca9",
   "remaining": [
     "Exact later Party/AffectedByAuraMod call-time authority belongs to its separate source capture.",
     "Flask/Keystone and Action-local factory proofs are separate dependencies, not closed by this helper packet.",

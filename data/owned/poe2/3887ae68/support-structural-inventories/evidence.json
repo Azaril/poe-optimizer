@@ -1,0 +1,2594 @@
+{
+  "kind": "reviewed-support-direct-declaration-evidence",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "catalog": {
+    "path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+    "bytes": 2247063,
+    "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e"
+  },
+  "recipes": {
+    "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain.json",
+    "bytes": 471969,
+    "sha256": "ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f"
+  },
+  "sources": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08",
+      "archive": "sources/src_Classes_SkillsTab.lua.gz",
+      "archive_bytes": 14566,
+      "archive_sha256": "10cfe57bc6dd059e2264596551a03a925662b832b99b71473a233c1c864c3249"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "bytes": 513395,
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1",
+      "archive": "sources/src_Data_Gems.lua.gz",
+      "archive_bytes": 47092,
+      "archive_sha256": "d082011371b93f4748dd05f961418559a60b54806a49b93fa0eb2d613e95bbf8"
+    },
+    {
+      "path": "src/Data/Skills/sup_dex.lua",
+      "bytes": 194700,
+      "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac",
+      "archive": "sources/src_Data_Skills_sup_dex.lua.gz",
+      "archive_bytes": 24395,
+      "archive_sha256": "f9e8ba5e223774088fe9cbf1081e8fd510eb6fe5f5888e3db2c1d179c8516d93"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "bytes": 358587,
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b",
+      "archive": "sources/src_Data_Skills_sup_int.lua.gz",
+      "archive_bytes": 42898,
+      "archive_sha256": "5bfaa0261d86313be125d073c34236e815ee02d85a83407436d2613480006e4e"
+    },
+    {
+      "path": "src/Data/Skills/sup_str.lua",
+      "bytes": 277106,
+      "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3",
+      "archive": "sources/src_Data_Skills_sup_str.lua.gz",
+      "archive_bytes": 31262,
+      "archive_sha256": "eb89d755d8fd33b4bd24b68497e6b3b6d7bc2a9f04e434942489950e3fe88cc0"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "bytes": 111112,
+      "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675",
+      "archive": "sources/src_Data_SkillStatMap.lua.gz",
+      "archive_bytes": 17343,
+      "archive_sha256": "9e98975b399de8e883e327e448440c1e55f2da586026bf6e1da19ee697f4f43d"
+    },
+    {
+      "path": "src/Data/StatDescriptions/gem_stat_descriptions.lua",
+      "bytes": 596697,
+      "sha256": "4c7aeb72ed9359483ca3bfd6cf83e02b040a390fbe96dccc71f16ed9ce8daf01",
+      "archive": "sources/src_Data_StatDescriptions_gem_stat_descriptions.lua.gz",
+      "archive_bytes": 72525,
+      "archive_sha256": "78f224e0e08dfd384d3bfb1fee2d63f2d36e95009fc09ce013a0014ebc85204c"
+    },
+    {
+      "path": "src/Data/StatDescriptions/stat_descriptions.lua",
+      "bytes": 4100157,
+      "sha256": "97d380b8ce61f13174f8163ce21334f65e34261e42070afc7c4a5fda00a5b718",
+      "archive": "sources/src_Data_StatDescriptions_stat_descriptions.lua.gz",
+      "archive_bytes": 474553,
+      "archive_sha256": "c9f35d5b0999904848a54b5ae21e9a3d57431bf24938a57ee0a3852899bea2f0"
+    },
+    {
+      "path": "src/Export/Scripts/skills.lua",
+      "bytes": 37334,
+      "sha256": "c3cdb3b5b9e1fa620ca034a64f35d42863af07af7a1628d5acbef1b99fca3417",
+      "archive": "sources/src_Export_Scripts_skills.lua.gz",
+      "archive_bytes": 7676,
+      "archive_sha256": "ba892ca3fc45154b0793896a1cc6c76cf442b54d8f58ed5c8918973f937a8089"
+    },
+    {
+      "path": "src/Export/Scripts/statdesc.lua",
+      "bytes": 5537,
+      "sha256": "12f295df1b697ab4ef4ea169cf7203409a395746c64c2191e890625531e5374c",
+      "archive": "sources/src_Export_Scripts_statdesc.lua.gz",
+      "archive_bytes": 1825,
+      "archive_sha256": "679fb036194822dcdc48dcf63285530fa5dad596f0b89b7ad13146bc74ca89e0"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04",
+      "archive": "sources/src_Modules_CalcActiveSkill.lua.gz",
+      "archive_bytes": 10868,
+      "archive_sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "archive": "sources/src_Modules_CalcSetup.lua.gz",
+      "archive_bytes": 21399,
+      "archive_sha256": "cdefa2fbbb4a15befdc728fd549902f4032c1cdf0b52c3070dc356f0a45e718f"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4",
+      "archive": "sources/src_Modules_Data.lua.gz",
+      "archive_bytes": 10604,
+      "archive_sha256": "73c2915afcc9bb90d972cd99d6aa690812ca8c2a1edd31eda7b67bd47a322af8"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+      "archive": "sources/src_Modules_ModParser.lua.gz",
+      "archive_bytes": 105049,
+      "archive_sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466"
+    },
+    {
+      "path": "src/Modules/StatDescriber.lua",
+      "bytes": 11843,
+      "sha256": "f7698f0127a32f38fe03272f6b88416238a154b668a79aabc1f9114687dedc3e",
+      "archive": "sources/src_Modules_StatDescriber.lua.gz",
+      "archive_bytes": 2337,
+      "archive_sha256": "a8ef6612c1b3b6a9e470613036d64cc5e22dd28fda25bc955fc83b0e1b31af80"
+    }
+  ],
+  "boundaries": [
+    {
+      "path": "src/Modules/Data.lua",
+      "first_line": 56,
+      "last_line": 98,
+      "sha256": "cf26d4b77d158d3e491ccfc9b5c492f7b8e798e1ac7bbccfc24152f45808646c",
+      "lf_whole_file_sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "first_line": 910,
+      "last_line": 966,
+      "sha256": "86dc27a5772c5b9a26bea1c76a1776dd1cd8bdfa55ef65050d020afe84086ddd",
+      "lf_whole_file_sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "first_line": 979,
+      "last_line": 1068,
+      "sha256": "73c0d483c9845e498c52e2a1027bc5f116ae69d03e088d5e4493a9d4f5c50502",
+      "lf_whole_file_sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "first_line": 1242,
+      "last_line": 1322,
+      "sha256": "8737e8311f6cbef4b9bc10525e28831d00f52e602494a7f2bdfbccee68a33f32",
+      "lf_whole_file_sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 550,
+      "last_line": 584,
+      "sha256": "cb9874cc95be90d8bbbe97e38686b203510d8783836b49f6998e4c50c95190b8",
+      "lf_whole_file_sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 630,
+      "last_line": 666,
+      "sha256": "a219c7630202290c1e85f809799e7cc6f75a94ac760d244405db908cf85d3a4d",
+      "lf_whole_file_sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1987,
+      "last_line": 2107,
+      "sha256": "d31f3b136785d8b284f55b1f1e70f8166ae0d6f566c7e7b79f11ec4ec09e65dc",
+      "lf_whole_file_sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1784,
+      "last_line": 1834,
+      "sha256": "03866c5e89f3c49111ad30e3969a7a735574033dde5afc33a5ddc27e764868a2",
+      "lf_whole_file_sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 144,
+      "last_line": 237,
+      "sha256": "c4011518900a4c198814cea5d7697fd2d490fbd5811d5b2b075808f81bd4fdd1",
+      "lf_whole_file_sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 895,
+      "last_line": 955,
+      "sha256": "63b51d94d1b70b44d78ceceaa843fcf54c1017ad596204a1df9c0fcc303bcd66",
+      "lf_whole_file_sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 1116,
+      "last_line": 1184,
+      "sha256": "f37b06a29338459f2efcdd745733b3ab25394d287d45fc92af61fb20550ff5ca",
+      "lf_whole_file_sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "first_line": 2193,
+      "last_line": 2255,
+      "sha256": "21b83f31b3ab0b9ae5149041bd594cc08e62b028f69fe30c6aa91477b1c9ec93",
+      "lf_whole_file_sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Export/Scripts/statdesc.lua",
+      "first_line": 14,
+      "last_line": 47,
+      "sha256": "772d034b9424463084f577c2ad705a9e1604e1f51e30e8ebcae4085c8239166f",
+      "lf_whole_file_sha256": "12f295df1b697ab4ef4ea169cf7203409a395746c64c2191e890625531e5374c"
+    },
+    {
+      "path": "src/Export/Scripts/statdesc.lua",
+      "first_line": 109,
+      "last_line": 122,
+      "sha256": "80032caa7e8460fb15701ca0c151f5aca1dd1bcae9a2c4f5fb62472c8e74e68e",
+      "lf_whole_file_sha256": "12f295df1b697ab4ef4ea169cf7203409a395746c64c2191e890625531e5374c"
+    },
+    {
+      "path": "src/Export/Scripts/skills.lua",
+      "first_line": 58,
+      "last_line": 100,
+      "sha256": "0b1bd4a491b685723aab55524c61fe0ef7f1276915a2bdae6fbc3a0bc95bb997",
+      "lf_whole_file_sha256": "c3cdb3b5b9e1fa620ca034a64f35d42863af07af7a1628d5acbef1b99fca3417"
+    },
+    {
+      "path": "src/Export/Scripts/skills.lua",
+      "first_line": 759,
+      "last_line": 778,
+      "sha256": "57dd2530e2292259793de8420723949ef3e1a5fb554356c2a3299c6bc44bb41a",
+      "lf_whole_file_sha256": "c3cdb3b5b9e1fa620ca034a64f35d42863af07af7a1628d5acbef1b99fca3417"
+    },
+    {
+      "path": "src/Modules/StatDescriber.lua",
+      "first_line": 13,
+      "last_line": 39,
+      "sha256": "84f4bbbc5a700fd4414050b1cb8b2a3b1ca460c724a84e9d6f06621d2a69e998",
+      "lf_whole_file_sha256": "f7698f0127a32f38fe03272f6b88416238a154b668a79aabc1f9114687dedc3e"
+    }
+  ],
+  "families": [
+    {
+      "gem": "def.0000000000000674",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemBiddingSupportTwo",
+        "game_id": "Metadata/Items/Gem/SupportGemBiddingTwo",
+        "variant_id": "BiddingSupportTwo",
+        "name": "Bidding II",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "SupportBiddingPlayerTwo",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "SupportBiddingPlayerTwo"
+        ],
+        "display_order": null,
+        "winning_declaration": 622
+      },
+      "skill_identity": {
+        "id": "SupportBiddingPlayerTwo",
+        "name": "Bidding II",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 1252
+      },
+      "gem_declaration": {
+        "index": 622,
+        "key": "Metadata/Items/Gems/SkillGemBiddingSupportTwo",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 13202,
+          "end_line": 13220,
+          "sha256": "9787a83a448f4a0a657b3c007d7d921d88cf4ba9cabebcfb8e3b55cfbc18220d"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gem/SupportGemBiddingTwo",
+          "variant_id": "BiddingSupportTwo",
+          "name": "Bidding II",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "SupportBiddingPlayerTwo",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 1252,
+        "id": "SupportBiddingPlayerTwo",
+        "source": {
+          "path": "src/Data/Skills/sup_int.lua",
+          "line": 797,
+          "end_line": 827,
+          "sha256": "a8d59f1f0b57a184d25842b4780af04327df92a04de4f316907b7b8508e54db9"
+        },
+        "identity": {
+          "name": "Bidding II",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "root_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_fields": [
+        "baseFlags",
+        "constantStats",
+        "incrementalEffectiveness",
+        "label",
+        "levels",
+        "statDescriptionScope",
+        "stats"
+      ],
+      "recipe": {
+        "base_mods": {
+          "aliases": [],
+          "callbacks": [],
+          "value": null
+        },
+        "callbacks": {},
+        "id": "SupportBiddingPlayerTwo",
+        "metadata": {
+          "excludeSkillTypes": {},
+          "minionList": null,
+          "name": "Bidding II",
+          "requireSkillTypes": {
+            "[1]": 183,
+            "[2]": 129
+          },
+          "skillTypes": null,
+          "support": true,
+          "weaponTypes": null
+        },
+        "resolved": [
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "MinionModifier",
+                  "source": "Skill:SupportBiddingPlayerTwo",
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "[1]": {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      },
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Skill:SupportBiddingPlayerTwo",
+                      "type": "INC"
+                    }
+                  }
+                }
+              }
+            },
+            "set": 1,
+            "stat": "minion_command_skill_cooldown_speed_+%"
+          },
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "MinionModifier",
+                  "source": "Skill:SupportBiddingPlayerTwo",
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "[1]": {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      },
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Skill:SupportBiddingPlayerTwo",
+                      "type": "MORE"
+                    }
+                  }
+                }
+              }
+            },
+            "set": 1,
+            "stat": "support_command_skill_damage_+%_final"
+          }
+        ],
+        "stat_set_base_mods": [
+          {
+            "records": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1
+          }
+        ]
+      },
+      "mapping_sources": [
+        {
+          "stat": "minion_command_skill_cooldown_speed_+%",
+          "set": 1,
+          "path": "src/Data/SkillStatMap.lua",
+          "first_line": 2687,
+          "last_line": 2689,
+          "sha256": "ff7393b33e02429c3d44f3bd2442c38831905e489b45262bd27ac2052086d8e1"
+        },
+        {
+          "stat": "support_command_skill_damage_+%_final",
+          "set": 1,
+          "path": "src/Data/SkillStatMap.lua",
+          "first_line": 2684,
+          "last_line": 2686,
+          "sha256": "0ef775883c2e0ffae959a2e048e8cc2426442b0adfaabffb6e5f03b217c55d6d"
+        }
+      ],
+      "null_semantics": [],
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gem/SupportGemBiddingTwo"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "BiddingSupportTwo"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000674"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      }
+    },
+    {
+      "gem": "def.0000000000000740",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemEncroachingGroundSupport",
+        "game_id": "Metadata/Items/Gem/SupportGemSuffuse",
+        "variant_id": "EncroachingGroundSupport",
+        "name": "Encroaching Ground",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "SupportEncroachingGroundPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "SupportEncroachingGroundPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 759
+      },
+      "skill_identity": {
+        "id": "SupportEncroachingGroundPlayer",
+        "name": "Encroaching Ground",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 1316
+      },
+      "gem_declaration": {
+        "index": 759,
+        "key": "Metadata/Items/Gems/SkillGemEncroachingGroundSupport",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 15783,
+          "end_line": 15800,
+          "sha256": "b443c3d9196ea565615c5f604f155b899f5beb251d19e6ee641c4cfef1c213a2"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gem/SupportGemSuffuse",
+          "variant_id": "EncroachingGroundSupport",
+          "name": "Encroaching Ground",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "SupportEncroachingGroundPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 1316,
+        "id": "SupportEncroachingGroundPlayer",
+        "source": {
+          "path": "src/Data/Skills/sup_int.lua",
+          "line": 4195,
+          "end_line": 4225,
+          "sha256": "e79b0076e7663fcfaa5f34d9ec8402c214f407e5f205450a3433329f09f73025"
+        },
+        "identity": {
+          "name": "Encroaching Ground",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "root_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_fields": [
+        "baseFlags",
+        "constantStats",
+        "incrementalEffectiveness",
+        "label",
+        "levels",
+        "statDescriptionScope",
+        "stats"
+      ],
+      "recipe": {
+        "base_mods": {
+          "aliases": [],
+          "callbacks": [],
+          "value": null
+        },
+        "callbacks": {},
+        "id": "SupportEncroachingGroundPlayer",
+        "metadata": {
+          "excludeSkillTypes": {},
+          "minionList": null,
+          "name": "Encroaching Ground",
+          "requireSkillTypes": {
+            "[1]": 167
+          },
+          "skillTypes": null,
+          "support": true,
+          "weaponTypes": null
+        },
+        "resolved": [
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1,
+            "stat": "support_ground_effect_area_of_effect_+%_final_per_second"
+          },
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1,
+            "stat": "support_ground_effect_area_of_effect_+%_final_per_second_max"
+          }
+        ],
+        "stat_set_base_mods": [
+          {
+            "records": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1
+          }
+        ]
+      },
+      "mapping_sources": [],
+      "null_semantics": [
+        {
+          "stat": "support_ground_effect_area_of_effect_+%_final_per_second",
+          "set": 1,
+          "scope": "gem_stat_descriptions",
+          "classification": "existing_recipient_numeric_or_usage",
+          "interpretation": "Area change rate on Ground Surfaces already created by supported Skills.",
+          "description": {
+            "applicable_scope": true,
+            "source": {
+              "path": "src/Data/StatDescriptions/gem_stat_descriptions.lua",
+              "first_line": 24062,
+              "last_line": 24103,
+              "sha256": "3295f42d3c00052c4a79bd569cb121cca794bb2f0b05d6692d3dbb522ce5769b",
+              "lf_file_sha256": "4c7aeb72ed9359483ca3bfd6cf83e02b040a390fbe96dccc71f16ed9ce8daf01",
+              "body": "\t[1005]={\n\t\t[1]={\n\t\t\t[1]={\n\t\t\t\tlimit={\n\t\t\t\t\t[1]={\n\t\t\t\t\t\t[1]=1,\n\t\t\t\t\t\t[2]=\"#\"\n\t\t\t\t\t},\n\t\t\t\t\t[2]={\n\t\t\t\t\t\t[1]=1,\n\t\t\t\t\t\t[2]=\"#\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\ttext=\"Ground Surfaces created by Supported Skills gain {0}% increased Area of Effect per second, up to a maximum of {1}%\"\n\t\t\t},\n\t\t\t[2]={\n\t\t\t\t[1]={\n\t\t\t\t\tk=\"negate\",\n\t\t\t\t\tv=1\n\t\t\t\t},\n\t\t\t\t[2]={\n\t\t\t\t\tk=\"negate\",\n\t\t\t\t\tv=2\n\t\t\t\t},\n\t\t\t\tlimit={\n\t\t\t\t\t[1]={\n\t\t\t\t\t\t[1]=\"#\",\n\t\t\t\t\t\t[2]=-1\n\t\t\t\t\t},\n\t\t\t\t\t[2]={\n\t\t\t\t\t\t[1]=\"#\",\n\t\t\t\t\t\t[2]=-1\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\ttext=\"Ground Surfaces created by Supported Skills lose {0}% increased Area of Effect per second, up to a maximum of {1}%\"\n\t\t\t}\n\t\t},\n\t\tstats={\n\t\t\t[1]=\"support_ground_effect_area_of_effect_+%_final_per_second\",\n\t\t\t[2]=\"support_ground_effect_area_of_effect_+%_final_per_second_max\"\n\t\t}\n\t},\n"
+            },
+            "stat_line": 24100,
+            "text": [
+              "Ground Surfaces created by Supported Skills gain {0}% increased Area of Effect per second, up to a maximum of {1}%",
+              "Ground Surfaces created by Supported Skills lose {0}% increased Area of Effect per second, up to a maximum of {1}%"
+            ]
+          }
+        },
+        {
+          "stat": "support_ground_effect_area_of_effect_+%_final_per_second_max",
+          "set": 1,
+          "scope": "gem_stat_descriptions",
+          "classification": "existing_recipient_numeric_or_usage",
+          "interpretation": "Maximum area change on those same Ground Surfaces.",
+          "description": {
+            "applicable_scope": true,
+            "source": {
+              "path": "src/Data/StatDescriptions/gem_stat_descriptions.lua",
+              "first_line": 24062,
+              "last_line": 24103,
+              "sha256": "3295f42d3c00052c4a79bd569cb121cca794bb2f0b05d6692d3dbb522ce5769b",
+              "lf_file_sha256": "4c7aeb72ed9359483ca3bfd6cf83e02b040a390fbe96dccc71f16ed9ce8daf01",
+              "body": "\t[1005]={\n\t\t[1]={\n\t\t\t[1]={\n\t\t\t\tlimit={\n\t\t\t\t\t[1]={\n\t\t\t\t\t\t[1]=1,\n\t\t\t\t\t\t[2]=\"#\"\n\t\t\t\t\t},\n\t\t\t\t\t[2]={\n\t\t\t\t\t\t[1]=1,\n\t\t\t\t\t\t[2]=\"#\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\ttext=\"Ground Surfaces created by Supported Skills gain {0}% increased Area of Effect per second, up to a maximum of {1}%\"\n\t\t\t},\n\t\t\t[2]={\n\t\t\t\t[1]={\n\t\t\t\t\tk=\"negate\",\n\t\t\t\t\tv=1\n\t\t\t\t},\n\t\t\t\t[2]={\n\t\t\t\t\tk=\"negate\",\n\t\t\t\t\tv=2\n\t\t\t\t},\n\t\t\t\tlimit={\n\t\t\t\t\t[1]={\n\t\t\t\t\t\t[1]=\"#\",\n\t\t\t\t\t\t[2]=-1\n\t\t\t\t\t},\n\t\t\t\t\t[2]={\n\t\t\t\t\t\t[1]=\"#\",\n\t\t\t\t\t\t[2]=-1\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\ttext=\"Ground Surfaces created by Supported Skills lose {0}% increased Area of Effect per second, up to a maximum of {1}%\"\n\t\t\t}\n\t\t},\n\t\tstats={\n\t\t\t[1]=\"support_ground_effect_area_of_effect_+%_final_per_second\",\n\t\t\t[2]=\"support_ground_effect_area_of_effect_+%_final_per_second_max\"\n\t\t}\n\t},\n"
+            },
+            "stat_line": 24101,
+            "text": [
+              "Ground Surfaces created by Supported Skills gain {0}% increased Area of Effect per second, up to a maximum of {1}%",
+              "Ground Surfaces created by Supported Skills lose {0}% increased Area of Effect per second, up to a maximum of {1}%"
+            ]
+          }
+        }
+      ],
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gem/SupportGemSuffuse"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "EncroachingGroundSupport"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000740"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      }
+    },
+    {
+      "gem": "def.00000000000007f2",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemIncreaseLimitSupport",
+        "game_id": "Metadata/Items/Gems/SupportGemOverabundance",
+        "variant_id": "IncreaseLimitSupport",
+        "name": "Overabundance I",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "SupportIncreaseLimitPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "SupportIncreaseLimitPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 314
+      },
+      "skill_identity": {
+        "id": "SupportIncreaseLimitPlayer",
+        "name": "Overabundance I",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 1165
+      },
+      "gem_declaration": {
+        "index": 314,
+        "key": "Metadata/Items/Gems/SkillGemIncreaseLimitSupport",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 6808,
+          "end_line": 6824,
+          "sha256": "771dbbfd68f436958e68f955a6d979bf351f494b2f4385da1a2e3b22e03077c8"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SupportGemOverabundance",
+          "variant_id": "IncreaseLimitSupport",
+          "name": "Overabundance I",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "SupportIncreaseLimitPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 1165,
+        "id": "SupportIncreaseLimitPlayer",
+        "source": {
+          "path": "src/Data/Skills/sup_dex.lua",
+          "line": 3380,
+          "end_line": 3415,
+          "sha256": "9758578e5d058fd0000939db8fd431082f73613808e980e8ec2bd63f9037cf02"
+        },
+        "identity": {
+          "name": "Overabundance I",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "root_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_fields": [
+        "baseFlags",
+        "constantStats",
+        "incrementalEffectiveness",
+        "label",
+        "levels",
+        "statDescriptionScope",
+        "statMap",
+        "stats"
+      ],
+      "recipe": {
+        "base_mods": {
+          "aliases": [],
+          "callbacks": [],
+          "value": null
+        },
+        "callbacks": {},
+        "id": "SupportIncreaseLimitPlayer",
+        "metadata": {
+          "excludeSkillTypes": {},
+          "minionList": null,
+          "name": "Overabundance I",
+          "requireSkillTypes": {
+            "[1]": 145
+          },
+          "skillTypes": null,
+          "support": true,
+          "weaponTypes": null
+        },
+        "resolved": [
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "AdditionalCooldownUses",
+                  "source": "Skill:SupportIncreaseLimitPlayer",
+                  "type": "BASE"
+                }
+              }
+            },
+            "set": 1,
+            "stat": "base_limit_+"
+          },
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Duration",
+                  "source": "Skill:SupportIncreaseLimitPlayer",
+                  "type": "MORE"
+                }
+              }
+            },
+            "set": 1,
+            "stat": "support_limit_skill_effect_duration_+%_final"
+          }
+        ],
+        "stat_set_base_mods": [
+          {
+            "records": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1
+          }
+        ]
+      },
+      "mapping_sources": [
+        {
+          "stat": "base_limit_+",
+          "set": 1,
+          "path": "src/Data/SkillStatMap.lua",
+          "first_line": 2927,
+          "last_line": 2929,
+          "sha256": "b448a6d43a2936f2a810964a76e8a0edbb64f48dc4ab62b1029a9b4ec26c4933"
+        },
+        {
+          "stat": "support_limit_skill_effect_duration_+%_final",
+          "set": 1,
+          "path": "src/Data/Skills/sup_dex.lua",
+          "first_line": 3398,
+          "last_line": 3400,
+          "sha256": "9cfc399b7aaf4a6053543a5bdef532186693b7dbff3ee3ed8735d7d9335a6640"
+        }
+      ],
+      "null_semantics": [],
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gems/SupportGemOverabundance"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "IncreaseLimitSupport"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000007f2"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      }
+    },
+    {
+      "gem": "def.000000000000080a",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemLastGaspSupport",
+        "game_id": "Metadata/Items/Gem/SupportGemLastGasp",
+        "variant_id": "LastGaspSupport",
+        "name": "Last Gasp",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "SupportLastGaspPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "SupportLastGaspPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 357
+      },
+      "skill_identity": {
+        "id": "SupportLastGaspPlayer",
+        "name": "Last Gasp",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 1367
+      },
+      "gem_declaration": {
+        "index": 357,
+        "key": "Metadata/Items/Gems/SkillGemLastGaspSupport",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 7665,
+          "end_line": 7684,
+          "sha256": "edb4a11a9582d6838e8e59cc1fe399d4bb02945b92b7b1ac38385976bd8eaea3"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gem/SupportGemLastGasp",
+          "variant_id": "LastGaspSupport",
+          "name": "Last Gasp",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "SupportLastGaspPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 1367,
+        "id": "SupportLastGaspPlayer",
+        "source": {
+          "path": "src/Data/Skills/sup_int.lua",
+          "line": 6230,
+          "end_line": 6259,
+          "sha256": "4839c2e4694575695da91cec37d9f3b59fd9f73ebb180afd36ea3c1c96c64bd4"
+        },
+        "identity": {
+          "name": "Last Gasp",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "root_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_fields": [
+        "baseFlags",
+        "constantStats",
+        "incrementalEffectiveness",
+        "label",
+        "levels",
+        "statDescriptionScope",
+        "stats"
+      ],
+      "recipe": {
+        "base_mods": {
+          "aliases": [],
+          "callbacks": [],
+          "value": null
+        },
+        "callbacks": {},
+        "id": "SupportLastGaspPlayer",
+        "metadata": {
+          "excludeSkillTypes": {
+            "[1]": 214
+          },
+          "minionList": null,
+          "name": "Last Gasp",
+          "requireSkillTypes": {
+            "[1]": 77,
+            "[2]": 140,
+            "[3]": 74
+          },
+          "skillTypes": null,
+          "support": true,
+          "weaponTypes": null
+        },
+        "resolved": [
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1,
+            "stat": "support_last_gasp_duration_ms"
+          }
+        ],
+        "stat_set_base_mods": [
+          {
+            "records": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1
+          }
+        ]
+      },
+      "mapping_sources": [],
+      "null_semantics": [
+        {
+          "stat": "support_last_gasp_duration_ms",
+          "set": 1,
+          "scope": "gem_stat_descriptions",
+          "classification": "existing_recipient_numeric_or_usage",
+          "interpretation": "Delayed death of the same Minions after Life reaches zero; existing-minion duration semantics.",
+          "description": {
+            "applicable_scope": true,
+            "source": {
+              "path": "src/Data/StatDescriptions/gem_stat_descriptions.lua",
+              "first_line": 25089,
+              "last_line": 25121,
+              "sha256": "d18f9f3e6174a9bd361934df36f577dc6e8696d0696e0f7e3f2b271dd3390ab6",
+              "lf_file_sha256": "4c7aeb72ed9359483ca3bfd6cf83e02b040a390fbe96dccc71f16ed9ce8daf01",
+              "body": "\t[1040]={\n\t\t[1]={\n\t\t\t[1]={\n\t\t\t\t[1]={\n\t\t\t\t\tk=\"milliseconds_to_seconds\",\n\t\t\t\t\tv=1\n\t\t\t\t},\n\t\t\t\tlimit={\n\t\t\t\t\t[1]={\n\t\t\t\t\t\t[1]=1000,\n\t\t\t\t\t\t[2]=1000\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\ttext=\"Minions from Supported Skills die {0} second after their Life is reduced to 0\"\n\t\t\t},\n\t\t\t[2]={\n\t\t\t\t[1]={\n\t\t\t\t\tk=\"milliseconds_to_seconds\",\n\t\t\t\t\tv=1\n\t\t\t\t},\n\t\t\t\tlimit={\n\t\t\t\t\t[1]={\n\t\t\t\t\t\t[1]=\"#\",\n\t\t\t\t\t\t[2]=\"#\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\ttext=\"Minions from Supported Skills die {0} seconds after their Life is reduced to 0\"\n\t\t\t}\n\t\t},\n\t\tstats={\n\t\t\t[1]=\"support_last_gasp_duration_ms\"\n\t\t}\n\t},\n"
+            },
+            "stat_line": 25119,
+            "text": [
+              "Minions from Supported Skills die {0} second after their Life is reduced to 0",
+              "Minions from Supported Skills die {0} seconds after their Life is reduced to 0"
+            ]
+          }
+        }
+      ],
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gem/SupportGemLastGasp"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "LastGaspSupport"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000080a"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      }
+    },
+    {
+      "gem": "def.000000000000082a",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemMagnifiedAreaSupport",
+        "game_id": "Metadata/Items/Gems/SupportGemMagnifiedEffect",
+        "variant_id": "MagnifiedAreaSupport",
+        "name": "Magnified Area I",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "SupportMagnifiedAreaPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "SupportMagnifiedAreaPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 20
+      },
+      "skill_identity": {
+        "id": "SupportMagnifiedAreaPlayer",
+        "name": "Magnified Area I",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 1375
+      },
+      "gem_declaration": {
+        "index": 20,
+        "key": "Metadata/Items/Gems/SkillGemMagnifiedAreaSupport",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 390,
+          "end_line": 407,
+          "sha256": "316c858ac5b6cd312c2042c8e47ec6cb341906adf58ead94ea4a0c43913da890"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SupportGemMagnifiedEffect",
+          "variant_id": "MagnifiedAreaSupport",
+          "name": "Magnified Area I",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "SupportMagnifiedAreaPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 1375,
+        "id": "SupportMagnifiedAreaPlayer",
+        "source": {
+          "path": "src/Data/Skills/sup_int.lua",
+          "line": 6684,
+          "end_line": 6715,
+          "sha256": "7e5e83b2b8f87ccb84edde7421a8d41fbc64c0ce78b3bc407fb88806c3830997"
+        },
+        "identity": {
+          "name": "Magnified Area I",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "root_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_fields": [
+        "baseEffectiveness",
+        "baseFlags",
+        "constantStats",
+        "incrementalEffectiveness",
+        "label",
+        "levels",
+        "statDescriptionScope",
+        "stats"
+      ],
+      "recipe": {
+        "base_mods": {
+          "aliases": [],
+          "callbacks": [],
+          "value": null
+        },
+        "callbacks": {},
+        "id": "SupportMagnifiedAreaPlayer",
+        "metadata": {
+          "excludeSkillTypes": {},
+          "minionList": null,
+          "name": "Magnified Area I",
+          "requireSkillTypes": {
+            "[1]": 8,
+            "[2]": 18
+          },
+          "skillTypes": null,
+          "support": true,
+          "weaponTypes": null
+        },
+        "resolved": [
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1,
+            "stat": "support_increased_area_damage_+%_final"
+          },
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "AreaOfEffect",
+                  "source": "Skill:SupportMagnifiedAreaPlayer",
+                  "type": "INC"
+                }
+              }
+            },
+            "set": 1,
+            "stat": "base_skill_area_of_effect_+%"
+          }
+        ],
+        "stat_set_base_mods": [
+          {
+            "records": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1
+          }
+        ]
+      },
+      "mapping_sources": [
+        {
+          "stat": "base_skill_area_of_effect_+%",
+          "set": 1,
+          "path": "src/Data/SkillStatMap.lua",
+          "first_line": 644,
+          "last_line": 646,
+          "sha256": "151d3ad7962abc10035160bf557c404753c964d055406a7cb1067a37d52cc4b0"
+        }
+      ],
+      "null_semantics": [
+        {
+          "stat": "support_increased_area_damage_+%_final",
+          "set": 1,
+          "scope": "gem_stat_descriptions",
+          "classification": "existing_recipient_numeric_or_usage",
+          "interpretation": "More/less Area Damage on existing supported Skills; source I has value zero but this classification does not depend on zero.",
+          "description": {
+            "applicable_scope": true,
+            "source": {
+              "path": "src/Data/StatDescriptions/gem_stat_descriptions.lua",
+              "first_line": 24796,
+              "last_line": 24824,
+              "sha256": "eb8cd022a921d9876c26165ab23ec41090210d1c20132a5ab7fc3bad1e36dfc7",
+              "lf_file_sha256": "4c7aeb72ed9359483ca3bfd6cf83e02b040a390fbe96dccc71f16ed9ce8daf01",
+              "body": "\t[1029]={\n\t\t[1]={\n\t\t\t[1]={\n\t\t\t\tlimit={\n\t\t\t\t\t[1]={\n\t\t\t\t\t\t[1]=1,\n\t\t\t\t\t\t[2]=\"#\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\ttext=\"Supported Skills deal {0}% more Area Damage\"\n\t\t\t},\n\t\t\t[2]={\n\t\t\t\t[1]={\n\t\t\t\t\tk=\"negate\",\n\t\t\t\t\tv=1\n\t\t\t\t},\n\t\t\t\tlimit={\n\t\t\t\t\t[1]={\n\t\t\t\t\t\t[1]=\"#\",\n\t\t\t\t\t\t[2]=-1\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\ttext=\"Supported Skills deal {0}% less Area Damage\"\n\t\t\t}\n\t\t},\n\t\tstats={\n\t\t\t[1]=\"support_increased_area_damage_+%_final\"\n\t\t}\n\t},\n"
+            },
+            "stat_line": 24822,
+            "text": [
+              "Supported Skills deal {0}% more Area Damage",
+              "Supported Skills deal {0}% less Area Damage"
+            ]
+          }
+        }
+      ],
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gems/SupportGemMagnifiedEffect"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "MagnifiedAreaSupport"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000082a"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      }
+    },
+    {
+      "gem": "def.000000000000082b",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemMagnifiedAreaSupportTwo",
+        "game_id": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+        "variant_id": "MagnifiedAreaSupportTwo",
+        "name": "Magnified Area II",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "SupportMagnifiedAreaPlayerTwo",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "SupportMagnifiedAreaPlayerTwo"
+        ],
+        "display_order": null,
+        "winning_declaration": 21
+      },
+      "skill_identity": {
+        "id": "SupportMagnifiedAreaPlayerTwo",
+        "name": "Magnified Area II",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 1376
+      },
+      "gem_declaration": {
+        "index": 21,
+        "key": "Metadata/Items/Gems/SkillGemMagnifiedAreaSupportTwo",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 408,
+          "end_line": 425,
+          "sha256": "2f80aad50f2d4eb1a63cb2e31472e543f82c21e6acb1775d68be14bad6cab250"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+          "variant_id": "MagnifiedAreaSupportTwo",
+          "name": "Magnified Area II",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "SupportMagnifiedAreaPlayerTwo",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 1376,
+        "id": "SupportMagnifiedAreaPlayerTwo",
+        "source": {
+          "path": "src/Data/Skills/sup_int.lua",
+          "line": 6716,
+          "end_line": 6752,
+          "sha256": "c93c1bc13553d7f85471d034b05da58a447ab11d38c8928e5e48bc9d928d6e78"
+        },
+        "identity": {
+          "name": "Magnified Area II",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "root_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_fields": [
+        "baseEffectiveness",
+        "baseFlags",
+        "constantStats",
+        "incrementalEffectiveness",
+        "label",
+        "levels",
+        "statDescriptionScope",
+        "statMap",
+        "stats"
+      ],
+      "recipe": {
+        "base_mods": {
+          "aliases": [],
+          "callbacks": [],
+          "value": null
+        },
+        "callbacks": {},
+        "id": "SupportMagnifiedAreaPlayerTwo",
+        "metadata": {
+          "excludeSkillTypes": {},
+          "minionList": null,
+          "name": "Magnified Area II",
+          "requireSkillTypes": {
+            "[1]": 8,
+            "[2]": 18
+          },
+          "skillTypes": null,
+          "support": true,
+          "weaponTypes": null
+        },
+        "resolved": [
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "AreaOfEffect",
+                  "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                  "type": "INC"
+                }
+              }
+            },
+            "set": 1,
+            "stat": "base_skill_area_of_effect_+%"
+          },
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 512,
+                  "keywordFlags": 0,
+                  "name": "Damage",
+                  "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                  "type": "MORE"
+                }
+              }
+            },
+            "set": 1,
+            "stat": "support_increased_area_damage_+%_final"
+          }
+        ],
+        "stat_set_base_mods": [
+          {
+            "records": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1
+          }
+        ]
+      },
+      "mapping_sources": [
+        {
+          "stat": "base_skill_area_of_effect_+%",
+          "set": 1,
+          "path": "src/Data/SkillStatMap.lua",
+          "first_line": 644,
+          "last_line": 646,
+          "sha256": "151d3ad7962abc10035160bf557c404753c964d055406a7cb1067a37d52cc4b0"
+        },
+        {
+          "stat": "support_increased_area_damage_+%_final",
+          "set": 1,
+          "path": "src/Data/Skills/sup_int.lua",
+          "first_line": 6735,
+          "last_line": 6737,
+          "sha256": "eba374fbdb54d18c7d22f49ba25e28173bdc8e6d88594680e606b5caf1c501e4"
+        }
+      ],
+      "null_semantics": [],
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "MagnifiedAreaSupportTwo"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000082b"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      }
+    },
+    {
+      "gem": "def.0000000000000858",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemMusterSupport",
+        "game_id": "Metadata/Items/Gem/SupportGemMuster",
+        "variant_id": "MusterSupport",
+        "name": "Muster",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "SupportMusterPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "SupportMusterPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 687
+      },
+      "skill_identity": {
+        "id": "SupportMusterPlayer",
+        "name": "Muster",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 1387
+      },
+      "gem_declaration": {
+        "index": 687,
+        "key": "Metadata/Items/Gems/SkillGemMusterSupport",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 14403,
+          "end_line": 14420,
+          "sha256": "9f4b1af7fa81d3fd00f5cd9351e5b8103aa1cdfbd40c2a1bafb4c77c49c0501c"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gem/SupportGemMuster",
+          "variant_id": "MusterSupport",
+          "name": "Muster",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "SupportMusterPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 1387,
+        "id": "SupportMusterPlayer",
+        "source": {
+          "path": "src/Data/Skills/sup_int.lua",
+          "line": 7106,
+          "end_line": 7140,
+          "sha256": "f47cd7dbd3c50202c3c302bd39a398b2ff54ec018b24960502e96dbe61658ec1"
+        },
+        "identity": {
+          "name": "Muster",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "root_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_fields": [
+        "baseFlags",
+        "constantStats",
+        "incrementalEffectiveness",
+        "label",
+        "levels",
+        "statDescriptionScope",
+        "statMap",
+        "stats"
+      ],
+      "recipe": {
+        "base_mods": {
+          "aliases": [],
+          "callbacks": [],
+          "value": null
+        },
+        "callbacks": {},
+        "id": "SupportMusterPlayer",
+        "metadata": {
+          "excludeSkillTypes": {},
+          "minionList": null,
+          "name": "Muster",
+          "requireSkillTypes": {
+            "[1]": 77
+          },
+          "skillTypes": null,
+          "support": true,
+          "weaponTypes": null
+        },
+        "resolved": [
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "MinionModifier",
+                  "source": "Skill:SupportMusterPlayer",
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "[1]": {
+                        "actor": "parent",
+                        "type": "Multiplier",
+                        "var": "PersistentMinionTypes"
+                      },
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Skill:SupportMusterPlayer",
+                      "type": "MORE"
+                    }
+                  }
+                }
+              }
+            },
+            "set": 1,
+            "stat": "support_varied_troops_damage_+%_final_per_different_persistent_ominion"
+          }
+        ],
+        "stat_set_base_mods": [
+          {
+            "records": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1
+          }
+        ]
+      },
+      "mapping_sources": [
+        {
+          "stat": "support_varied_troops_damage_+%_final_per_different_persistent_ominion",
+          "set": 1,
+          "path": "src/Data/Skills/sup_int.lua",
+          "first_line": 7124,
+          "last_line": 7126,
+          "sha256": "7539975436a3c92f8e66ed6ffd72365a66144019d334d82fea982e333abc8c69"
+        }
+      ],
+      "null_semantics": [],
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gem/SupportGemMuster"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "MusterSupport"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000858"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      }
+    },
+    {
+      "gem": "def.00000000000008a4",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemProlongedDurationSupport",
+        "game_id": "Metadata/Items/Gems/SupportGemPersistence",
+        "variant_id": "ProlongedDurationSupport",
+        "name": "Prolonged Duration I",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "ProlongedDurationSupportPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "ProlongedDurationSupportPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 212
+      },
+      "skill_identity": {
+        "id": "ProlongedDurationSupportPlayer",
+        "name": "Prolonged Duration I",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 996
+      },
+      "gem_declaration": {
+        "index": 212,
+        "key": "Metadata/Items/Gems/SkillGemProlongedDurationSupport",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 4451,
+          "end_line": 4468,
+          "sha256": "43cb92bff3dd398e688e6318af43de6d92e17a807c30ef9af31621581979ce22"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SupportGemPersistence",
+          "variant_id": "ProlongedDurationSupport",
+          "name": "Prolonged Duration I",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "ProlongedDurationSupportPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 996,
+        "id": "ProlongedDurationSupportPlayer",
+        "source": {
+          "path": "src/Data/Skills/sup_str.lua",
+          "line": 5606,
+          "end_line": 5640,
+          "sha256": "a43b299cbfd7cf1f7fdc8473630d5e73a8d040aee3a5ca23ea0aa8ad92ae3ba4"
+        },
+        "identity": {
+          "name": "Prolonged Duration I",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "root_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_fields": [
+        "baseFlags",
+        "constantStats",
+        "incrementalEffectiveness",
+        "label",
+        "levels",
+        "statDescriptionScope",
+        "statMap",
+        "stats"
+      ],
+      "recipe": {
+        "base_mods": {
+          "aliases": [],
+          "callbacks": [],
+          "value": null
+        },
+        "callbacks": {},
+        "id": "ProlongedDurationSupportPlayer",
+        "metadata": {
+          "excludeSkillTypes": {},
+          "minionList": null,
+          "name": "Prolonged Duration I",
+          "requireSkillTypes": {
+            "[1]": 9
+          },
+          "skillTypes": null,
+          "support": true,
+          "weaponTypes": null
+        },
+        "resolved": [
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Duration",
+                  "source": "Skill:ProlongedDurationSupportPlayer",
+                  "type": "MORE"
+                }
+              }
+            },
+            "set": 1,
+            "stat": "support_more_duration_skill_effect_duration_+%_final"
+          }
+        ],
+        "stat_set_base_mods": [
+          {
+            "records": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1
+          }
+        ]
+      },
+      "mapping_sources": [
+        {
+          "stat": "support_more_duration_skill_effect_duration_+%_final",
+          "set": 1,
+          "path": "src/Data/Skills/sup_str.lua",
+          "first_line": 5624,
+          "last_line": 5626,
+          "sha256": "5f14d97de435606b18f519841d427c808113734ecdcd74109d3bca88138a7f15"
+        }
+      ],
+      "null_semantics": [],
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gems/SupportGemPersistence"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "ProlongedDurationSupport"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000008a4"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      }
+    },
+    {
+      "gem": "def.00000000000008bf",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemRapidCastingSupport",
+        "game_id": "Metadata/Items/Gems/SupportGemArcaneTempo",
+        "variant_id": "RapidCastingSupport",
+        "name": "Rapid Casting I",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "SupportRapidCastingPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "SupportRapidCastingPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 43
+      },
+      "skill_identity": {
+        "id": "SupportRapidCastingPlayer",
+        "name": "Rapid Casting I",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 1400
+      },
+      "gem_declaration": {
+        "index": 43,
+        "key": "Metadata/Items/Gems/SkillGemRapidCastingSupport",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 835,
+          "end_line": 852,
+          "sha256": "2015c6467cb020877732a9bdf5e6596292fd0ae2569e40857bd6a0c80a9b4ea2"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SupportGemArcaneTempo",
+          "variant_id": "RapidCastingSupport",
+          "name": "Rapid Casting I",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "SupportRapidCastingPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 1400,
+        "id": "SupportRapidCastingPlayer",
+        "source": {
+          "path": "src/Data/Skills/sup_int.lua",
+          "line": 7534,
+          "end_line": 7564,
+          "sha256": "9f1ce343fc435918cce26aa48c5997d085c8eb2a5ad20de1e17dad7d594c668c"
+        },
+        "identity": {
+          "name": "Rapid Casting I",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "root_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_fields": [
+        "baseEffectiveness",
+        "baseFlags",
+        "constantStats",
+        "incrementalEffectiveness",
+        "label",
+        "levels",
+        "statDescriptionScope",
+        "stats"
+      ],
+      "recipe": {
+        "base_mods": {
+          "aliases": [],
+          "callbacks": [],
+          "value": null
+        },
+        "callbacks": {},
+        "id": "SupportRapidCastingPlayer",
+        "metadata": {
+          "excludeSkillTypes": {
+            "[1]": 64,
+            "[2]": 106,
+            "[3]": 218
+          },
+          "minionList": null,
+          "name": "Rapid Casting I",
+          "requireSkillTypes": {
+            "[1]": 2
+          },
+          "skillTypes": null,
+          "support": true,
+          "weaponTypes": null
+        },
+        "resolved": [
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 16,
+                  "keywordFlags": 0,
+                  "name": "Speed",
+                  "source": "Skill:SupportRapidCastingPlayer",
+                  "type": "INC"
+                }
+              }
+            },
+            "set": 1,
+            "stat": "base_cast_speed_+%"
+          }
+        ],
+        "stat_set_base_mods": [
+          {
+            "records": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1
+          }
+        ]
+      },
+      "mapping_sources": [
+        {
+          "stat": "base_cast_speed_+%",
+          "set": 1,
+          "path": "src/Data/SkillStatMap.lua",
+          "first_line": 2270,
+          "last_line": 2272,
+          "sha256": "71a05bcf210b367b86a9ec54d1a3f6b8f6a2831d03fb99a6194133203422d0c5"
+        }
+      ],
+      "null_semantics": [],
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gems/SupportGemArcaneTempo"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "RapidCastingSupport"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000008bf"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      }
+    },
+    {
+      "gem": "def.000000000000090c",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemShortFuseSupport",
+        "game_id": "Metadata/Items/Gem/SupportGemExpedite",
+        "variant_id": "ShortFuseSupport",
+        "name": "Short Fuse I",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "SupportShortFusePlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "SupportShortFusePlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 744
+      },
+      "skill_identity": {
+        "id": "SupportShortFusePlayer",
+        "name": "Short Fuse I",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 1026
+      },
+      "gem_declaration": {
+        "index": 744,
+        "key": "Metadata/Items/Gems/SkillGemShortFuseSupport",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 15493,
+          "end_line": 15509,
+          "sha256": "8176f2db863f6d37f200d0122e013090b82c52f8078dfe808b78a7e69f54af19"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gem/SupportGemExpedite",
+          "variant_id": "ShortFuseSupport",
+          "name": "Short Fuse I",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "SupportShortFusePlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 1026,
+        "id": "SupportShortFusePlayer",
+        "source": {
+          "path": "src/Data/Skills/sup_str.lua",
+          "line": 6626,
+          "end_line": 6660,
+          "sha256": "6d0ca976c3c7166a71d81e60ec81d8d53db9866dbf047088826d4f7bf34aad4a"
+        },
+        "identity": {
+          "name": "Short Fuse I",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "root_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_fields": [
+        "baseFlags",
+        "constantStats",
+        "incrementalEffectiveness",
+        "label",
+        "levels",
+        "statDescriptionScope",
+        "statMap",
+        "stats"
+      ],
+      "recipe": {
+        "base_mods": {
+          "aliases": [],
+          "callbacks": [],
+          "value": null
+        },
+        "callbacks": {},
+        "id": "SupportShortFusePlayer",
+        "metadata": {
+          "excludeSkillTypes": {},
+          "minionList": null,
+          "name": "Short Fuse I",
+          "requireSkillTypes": {
+            "[1]": 217
+          },
+          "skillTypes": null,
+          "support": true,
+          "weaponTypes": null
+        },
+        "resolved": [
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "DetonationTime",
+                  "source": "Skill:SupportShortFusePlayer",
+                  "type": "MORE"
+                }
+              }
+            },
+            "set": 1,
+            "stat": "support_fast_forward_detonation_time_+%_final"
+          }
+        ],
+        "stat_set_base_mods": [
+          {
+            "records": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1
+          }
+        ]
+      },
+      "mapping_sources": [
+        {
+          "stat": "support_fast_forward_detonation_time_+%_final",
+          "set": 1,
+          "path": "src/Data/Skills/sup_str.lua",
+          "first_line": 6644,
+          "last_line": 6646,
+          "sha256": "df3fc2fcaad7d57cf44b40e5e5897847f7e2f40e08cbe009f6b0678bfac18129"
+        }
+      ],
+      "null_semantics": [],
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gem/SupportGemExpedite"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "ShortFuseSupport"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000090c"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      }
+    },
+    {
+      "gem": "def.000000000000092e",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemSpellEchoSupport",
+        "game_id": "Metadata/Items/Gems/SupportGemSpellEcho",
+        "variant_id": "SpellEchoSupport",
+        "name": "Spell Echo",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "SupportSpellEchoPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "SupportSpellEchoPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 77
+      },
+      "skill_identity": {
+        "id": "SupportSpellEchoPlayer",
+        "name": "Spell Echo",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 1414
+      },
+      "gem_declaration": {
+        "index": 77,
+        "key": "Metadata/Items/Gems/SkillGemSpellEchoSupport",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 1562,
+          "end_line": 1580,
+          "sha256": "90881b74ba46592e506659f1fbcc4da97faaa3f43836b7fd26c7dcb53f94c27a"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SupportGemSpellEcho",
+          "variant_id": "SpellEchoSupport",
+          "name": "Spell Echo",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "SupportSpellEchoPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 1414,
+        "id": "SupportSpellEchoPlayer",
+        "source": {
+          "path": "src/Data/Skills/sup_int.lua",
+          "line": 8012,
+          "end_line": 8049,
+          "sha256": "0ed562026cd4a385e174d54e6198b052ac7d38ef3e02f0d269c139e9382d2cfa"
+        },
+        "identity": {
+          "name": "Spell Echo",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "root_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "ignoreMinionTypes",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_fields": [
+        "baseFlags",
+        "constantStats",
+        "incrementalEffectiveness",
+        "label",
+        "levels",
+        "statDescriptionScope",
+        "statMap",
+        "stats"
+      ],
+      "recipe": {
+        "base_mods": {
+          "aliases": [],
+          "callbacks": [],
+          "value": null
+        },
+        "callbacks": {},
+        "id": "SupportSpellEchoPlayer",
+        "metadata": {
+          "excludeSkillTypes": {
+            "[1]": 37,
+            "[2]": 258,
+            "[3]": 140
+          },
+          "minionList": null,
+          "name": "Spell Echo",
+          "requireSkillTypes": {
+            "[1]": 56
+          },
+          "skillTypes": null,
+          "support": true,
+          "weaponTypes": null
+        },
+        "resolved": [
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "[1]": {
+                    "skillType": 56,
+                    "type": "SkillType"
+                  },
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "RepeatCount",
+                  "source": "Skill:SupportSpellEchoPlayer",
+                  "type": "BASE"
+                }
+              }
+            },
+            "set": 1,
+            "stat": "support_spell_echo_number_of_echo_cascades"
+          },
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "RepeatAreaOfEffect",
+                  "source": "Skill:SupportSpellEchoPlayer",
+                  "type": "INC"
+                }
+              }
+            },
+            "set": 1,
+            "stat": "echoed_spell_area_of_effect_+%"
+          },
+          {
+            "mapping": {
+              "aliases": [],
+              "callbacks": [],
+              "value": {
+                "[1]": {
+                  "flags": 16,
+                  "keywordFlags": 0,
+                  "name": "Speed",
+                  "source": "Skill:SupportSpellEchoPlayer",
+                  "type": "MORE"
+                }
+              }
+            },
+            "set": 1,
+            "stat": "support_multicast_cast_speed_+%_final"
+          }
+        ],
+        "stat_set_base_mods": [
+          {
+            "records": {
+              "aliases": [],
+              "callbacks": [],
+              "value": null
+            },
+            "set": 1
+          }
+        ]
+      },
+      "mapping_sources": [
+        {
+          "stat": "support_spell_echo_number_of_echo_cascades",
+          "set": 1,
+          "path": "src/Data/SkillStatMap.lua",
+          "first_line": 287,
+          "last_line": 289,
+          "sha256": "9650ae29255dbf6a8748e7d452bcae74fa7eb216b57b8d796e9109a249f432b8"
+        },
+        {
+          "stat": "echoed_spell_area_of_effect_+%",
+          "set": 1,
+          "path": "src/Data/SkillStatMap.lua",
+          "first_line": 293,
+          "last_line": 295,
+          "sha256": "3450a5f6c29da63fdf16961a108b08654154804fa095a0a86a64a32c21eda63d"
+        },
+        {
+          "stat": "support_multicast_cast_speed_+%_final",
+          "set": 1,
+          "path": "src/Data/Skills/sup_int.lua",
+          "first_line": 8031,
+          "last_line": 8033,
+          "sha256": "c438eb7e5457e5028b9c45a40c36084afb34848ff6f43460f12276c7a1478c1a"
+        }
+      ],
+      "null_semantics": [],
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gems/SupportGemSpellEcho"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "SpellEchoSupport"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000092e"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

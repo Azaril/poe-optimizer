@@ -146,7 +146,11 @@ struct Builder<'a, I> {
     index: &'a I,
     rules: &'a CompiledRulePackage,
     operations: RuleOperationsVersion,
-    inactive_support_providers: BTreeSet<ProviderKey>,
+    inactive_providers: BTreeSet<ProviderKey>,
+    usage_matches: Vec<BTreeMap<SkillTarget, usage::UsageCandidate>>,
+    usage_census_gaps: Vec<PlanGap>,
+    potential_skill_census: BTreeMap<(ProviderKey, SkillDefId), ActorKey>,
+    usage_resolution: OwnedUsageResolution,
     preparation: bool,
     receiving: Option<&'a poe_optimizer_data::owned_support_receiving::OwnedSupportReceiving>,
     stages: Option<&'a OwnedEvaluationStages>,
@@ -160,6 +164,8 @@ struct Builder<'a, I> {
     limits: PlanLimits,
     work: usize,
     gaps: Vec<PlanGap>,
+    requirement_gaps: Vec<PlanGap>,
+    requirement_owners: requirements::RequirementOwnerCensus,
     invocations: Vec<Invocation>,
     pending: Vec<Vec<PendingRead>>,
     effects: Vec<EffectNode>,
@@ -497,7 +503,13 @@ fn compile_inner<I: DefinitionSchemaIndex>(
             b.actions.insert(action.as_ref().clone());
         }
     }
-    for u in &request.scenario().input().usage {
+    for u in request
+        .build()
+        .input()
+        .usage_preferences
+        .iter()
+        .chain(&request.scenario().input().usage)
+    {
         if let UsageTarget::Action(action) = &u.target {
             let resolved = b.resolver.action(action)?;
             charge(&mut b.work, resolved.work_used())?;
@@ -517,7 +529,9 @@ fn compile_inner<I: DefinitionSchemaIndex>(
         return Err(PlanError::Limit("actions"));
     }
     b.validate_generated_input_writers()?;
+    b.initialize_usage_census()?;
     let owners = b.discover()?;
+    b.resolve_usage()?;
     let provider_owner_count = owners.len();
     b.index_readiness_topology()?;
     b.generated_inputs()?;
@@ -752,8 +766,11 @@ fn compile_inner<I: DefinitionSchemaIndex>(
             identity,
             bindings,
             binding_report: report,
+            usage_resolution: b.usage_resolution,
             limits,
             gaps: b.gaps,
+            requirement_gaps: b.requirement_gaps,
+            requirement_owners: b.requirement_owners,
             complete,
             invocations: b.invocations,
             effects: b.effects,
@@ -886,7 +903,14 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             index,
             rules,
             operations,
-            inactive_support_providers: BTreeSet::new(),
+            inactive_providers: BTreeSet::new(),
+            usage_matches: vec![],
+            usage_census_gaps: vec![],
+            potential_skill_census: BTreeMap::new(),
+            usage_resolution: OwnedUsageResolution {
+                selections: vec![],
+                intents: vec![],
+            },
             preparation: false,
             receiving: None,
             stages: None,
@@ -900,6 +924,8 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             limits,
             work: limits.max_work,
             gaps: vec![],
+            requirement_gaps: vec![],
+            requirement_owners: BTreeMap::new(),
             invocations: vec![],
             pending: vec![],
             effects: vec![],
@@ -1007,41 +1033,69 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         }
         while let Some(key) = pending.pop_first() {
             charge(&mut self.work, 1)?;
-            if self.providers.contains(&key) {
+            if self.providers.contains(&key) || self.inactive_providers.contains(&key) {
                 continue;
             }
-            if self.providers.len() + self.inactive_support_providers.len()
-                >= self.limits.max_providers
-            {
+            if self.providers.len() + self.inactive_providers.len() >= self.limits.max_providers {
                 return Err(PlanError::Limit("providers"));
             }
             let resolution = self.resolver.provider(&key)?;
             charge(&mut self.work, resolution.work_used())?;
-            if resolution.status() == SelectorBindingStatus::Unavailable {
-                if resolution
+            let inactive = resolution.status() == SelectorBindingStatus::Unavailable;
+            let inactive_support_coverage = inactive
+                && resolution
                     .issues()
                     .iter()
-                    .any(|issue| issue.code == BindingIssueCode::DisabledProvider)
-                {
-                    self.check_inactive_support_sources(&key)?;
-                }
-                if !key.grant_path.is_empty() && self.operations.supports_actor_supply() {
-                    // Discovery follows explicitly declared grants from an available
-                    // parent. A rejected child is contradictory potential topology,
-                    // not permission to silently filter the authored supply graph.
-                    return Err(PlanError::Invalid(
-                        "declared potential supply is unavailable in its actor/provider context"
-                            .into(),
-                    ));
-                }
-                continue;
+                    .any(|issue| issue.code == BindingIssueCode::DisabledProvider);
+            let query_available = !inactive && resolution.value().is_some();
+            if inactive
+                && !resolution.issues().iter().any(|issue| {
+                    matches!(
+                        issue.code,
+                        BindingIssueCode::DisabledProvider | BindingIssueCode::InactiveLoadout
+                    )
+                })
+                && !key.grant_path.is_empty()
+                && self.operations.supports_actor_supply()
+            {
+                return Err(PlanError::Invalid(
+                    "declared potential supply is unavailable in its actor/provider context".into(),
+                ));
             }
-            let Some(provider) = resolution.into_value() else {
-                self.gap(Some(key), None, PlanGapReason::UnresolvedTopology)?;
+            let provider = if query_available {
+                resolution.into_value()
+            } else {
+                let structural = self.resolver.structural_provider(&key)?;
+                charge(&mut self.work, structural.work_used())?;
+                structural.into_value()
+            };
+            let Some(provider) = provider else {
+                self.usage_census_gap(Some(&key), None, PlanGapReason::UnresolvedTopology)?;
+                self.inactive_providers.insert(key.clone());
+                if !inactive || inactive_support_coverage {
+                    self.gap(Some(key), None, PlanGapReason::UnresolvedTopology)?;
+                }
                 continue;
             };
             if self.operations.supports_actor_supply() {
                 self.check_supply_ancestors(&key, provider.exposure())?;
+            }
+            self.census_usage_occurrence(&key, provider.actor(), provider.exposure())?;
+            self.structural_children(
+                &key,
+                provider.exposure(),
+                &mut pending,
+                inactive_support_coverage,
+            )?;
+            if inactive {
+                self.inactive_providers.insert(key);
+                continue;
+            }
+            if !query_available {
+                self.usage_census_gap(Some(&key), None, PlanGapReason::UnresolvedTopology)?;
+                self.inactive_providers.insert(key.clone());
+                self.gap(Some(key), None, PlanGapReason::UnresolvedTopology)?;
+                continue;
             }
             self.providers.insert(key.clone());
             if matches!(key.root, ProviderRoot::SupportAssignment(_)) && !self.preparation {
@@ -1127,7 +1181,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         }
                     }
                     for owner in owners {
-                        self.declarations(&key, owner.declarations(), &mut pending)?;
+                        self.declarations(&key, owner.declarations())?;
                         self.defer_owner(
                             &mut owners_to_instantiate,
                             owner.subject(),
@@ -1182,7 +1236,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                             .or_default()
                             .push(activation);
                     }
-                    self.declarations(&key, declarations, &mut pending)?;
+                    self.declarations(&key, declarations)?;
                     self.defer_owner(
                         &mut owners_to_instantiate,
                         owner_subject(owner),
@@ -1218,6 +1272,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     if !schema.skills.is_complete() || !schema.outputs.is_complete() {
                         self.gap(Some(key.clone()), None, PlanGapReason::PartialDeclarations)?;
                     }
+                    self.requirement_output_coverage(&key, &schema.outputs.members)?;
                     for skill in &schema.skills.members {
                         charge(&mut self.work, 1)?;
                         self.potential_skills.insert((key.clone(), skill.clone()));
@@ -1237,7 +1292,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         None,
                     )?;
                     if let Some(owner) = owner {
-                        self.declarations(&key, owner.declarations(), &mut pending)?;
+                        self.declarations(&key, owner.declarations())?;
                         self.defer_owner(
                             &mut owners_to_instantiate,
                             owner.subject(),
@@ -1251,7 +1306,9 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     self.gap(Some(key), None, PlanGapReason::UnsupportedRelation)?;
                 }
             }
-            if pending.len() + self.providers.len() > self.limits.max_providers {
+            if pending.len() + self.providers.len() + self.inactive_providers.len()
+                > self.limits.max_providers
+            {
                 return Err(PlanError::Limit("providers"));
             }
         }
@@ -1406,12 +1463,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         self.supply_ancestors.insert(key.clone(), ancestors);
         Ok(())
     }
-    fn declarations(
-        &mut self,
-        key: &ProviderKey,
-        d: &DeclaredSlots,
-        pending: &mut BTreeSet<ProviderKey>,
-    ) -> Result<()> {
+    fn declarations(&mut self, key: &ProviderKey, d: &DeclaredSlots) -> Result<()> {
         if !d.parameters.is_complete()
             || !d.choices.is_complete()
             || !d.grants.is_complete()
@@ -1422,18 +1474,10 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         {
             self.gap(Some(key.clone()), None, PlanGapReason::PartialDeclarations)?;
         }
+        self.requirement_output_coverage(key, &d.outputs.members)?;
         for grant in &d.grants.members {
             charge(&mut self.work, key.grant_path.len() + 1)?;
             if let SchemaLookup::Known(schema) = self.index.slot(grant) {
-                if self.operations.supports_actor_supply() {
-                    if key.grant_path.len() >= self.limits.binding.input.max_provider_steps {
-                        return Err(PlanError::Limit("provider depth"));
-                    }
-                    // Charge and reject before allocating any child key or occurrence.
-                    if pending.len() + self.providers.len() >= self.limits.max_providers {
-                        return Err(PlanError::Limit("providers"));
-                    }
-                }
                 if let GrantTarget::Actor(actor) = &schema.target {
                     let target = OwnedActorKey {
                         provider: key.clone(),
@@ -1447,9 +1491,6 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                             slot: grant.clone(),
                         });
                 }
-                let mut child = key.clone();
-                child.grant_path.push(grant.clone());
-                pending.insert(child);
             } else {
                 self.gap(
                     Some(key.clone()),
@@ -1457,9 +1498,37 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     PlanGapReason::UnresolvedTopology,
                 )?;
             }
-            if pending.len() + self.providers.len() > self.limits.max_providers {
-                return Err(PlanError::Limit("providers"));
-            }
+        }
+        Ok(())
+    }
+
+    /// A selected provider's potential output owners may contain requirements even
+    /// when no metric requests an Action. Check the bounded declaration inventory;
+    /// do not instantiate variants or alter the numerical effect-plan closure.
+    fn requirement_output_coverage(
+        &mut self,
+        provider: &ProviderKey,
+        outputs: &[DeclaredSlot<ActionOutputDefId>],
+    ) -> Result<()> {
+        charge(&mut self.work, outputs.len())?;
+        for output in outputs {
+            charge(
+                &mut self.work,
+                self.rules.input().owners.len() + provider.grant_path.len() + 1,
+            )?;
+            let subject = SchemaSubject::Slot(ActionOutputDefId::address(output));
+            let reason = match self
+                .rules
+                .input()
+                .owners
+                .iter()
+                .find(|row| row.owner == subject)
+            {
+                Some(row) if row.programs.is_complete() => continue,
+                Some(_) => PlanGapReason::PartialPrograms,
+                None => PlanGapReason::MissingPrograms,
+            };
+            self.requirement_gap(Some(provider), Some(subject), reason)?;
         }
         Ok(())
     }

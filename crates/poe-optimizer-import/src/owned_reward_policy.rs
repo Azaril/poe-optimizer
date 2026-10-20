@@ -4,10 +4,20 @@
 //! the list is empty. The caller proves candidate scope/presence, preserves any
 //! unconverted membership, and allocates owned occurrences. This module neither
 //! inspects source trees nor evaluates game rules or source programs.
+pub use crate::owned_configuration_numeric::{
+    ConfigurationNumericDecision as RewardNumericDecision,
+    ConfigurationNumericDisposition as RewardNumericDisposition,
+    ConfigurationNumericSelection as RewardNumericSelection,
+    ConfigurationNumericSource as RewardNumericSource,
+};
+use crate::owned_configuration_numeric::{
+    ConfigurationNumericError, ConfigurationNumericOutcome, ConfigurationNumericReason,
+    ConfigurationNumericRecipe, ConfigurationNumericViolation,
+};
 use crate::{owned_mapping::*, owned_value::ValueCodecKind, owned_value_policy::*};
 use poe_optimizer_core::{
     data::DataIdentity,
-    owned_build::{ParameterAssignment, ParameterValue},
+    owned_build::{DeclaredSlot, ParameterAssignment, ParameterValue},
     owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},
     owned_definitions::*,
     owned_schema::*,
@@ -51,7 +61,25 @@ pub struct RewardOutcomeCase {
 #[serde(deny_unknown_fields)]
 pub struct RewardRuleInput {
     pub recipe: ValueRecipeInput,
-    pub outcomes: Vec<RewardOutcomeCase>,
+    #[serde(rename = "outcomes")]
+    pub output: RewardRuleOutput,
+}
+/// Finite decisions and transport of an authored number have different authority.
+/// Numeric projection neither invents a value nor allocates a Reward occurrence.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum RewardRuleOutput {
+    Cases(Vec<RewardOutcomeCase>),
+    NumericParameter(Box<RewardNumericParameter>),
+}
+/// The numeric object's existing wire shape is independent of its allocation.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct RewardNumericParameter {
+    pub selector: ExternalSelector,
+    pub parameter: DeclaredSlot<ParameterSlotDefId>,
+    pub fixed_parameters: Vec<ParameterAssignment>,
+    pub selection: RewardNumericSelection,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -124,6 +152,8 @@ pub enum RewardPolicyViolation {
     OutOfRange,
     OptionNotAllowed,
     RequiredParameterMissing,
+    NumericDefault,
+    UnsupportedSelection,
 }
 #[derive(Debug, thiserror::Error)]
 pub enum RewardPolicyError {
@@ -166,6 +196,9 @@ pub enum RewardUnmappedReason {
     DefinitionMissing { subject: SchemaSubject },
     SchemaUnmapped { subject: SchemaSubject },
     SchemaPartial { subject: SchemaSubject },
+    ProjectedValueOutOfRange,
+    InvalidNumericCandidate,
+    NoNumericSelection,
 }
 #[derive(Clone, Debug, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
@@ -181,13 +214,26 @@ pub enum RewardOutcome {
 }
 #[derive(Clone, Debug, PartialEq, Serialize)]
 pub struct RewardDecision<'a> {
+    /// The checked recipe decision. Numeric selection can skip a present zero;
+    /// in that case `numeric.selected` is the emitted Reward's source authority.
     pub value: ValueDecision<'a>,
     pub outcome: RewardOutcome,
+    pub numeric: Option<RewardNumericDecision>,
 }
 #[derive(Clone, Debug)]
-struct Rule {
-    recipe: ValueRecipe,
-    outcomes: BTreeMap<RewardValue, RewardOutcome>,
+enum Rule {
+    Cases {
+        recipe: Box<ValueRecipe>,
+        outcomes: BTreeMap<RewardValue, RewardOutcome>,
+    },
+    NumericParameter(Box<CompiledNumericParameter>),
+}
+#[derive(Clone, Debug)]
+struct CompiledNumericParameter {
+    template: RewardOutcome,
+    parameter: DeclaredSlot<ParameterSlotDefId>,
+    domain: Option<ValueSchema>,
+    recipe: ConfigurationNumericRecipe,
 }
 #[derive(Clone, Debug)]
 pub struct OwnedRewardPolicy {
@@ -264,57 +310,108 @@ impl OwnedRewardPolicy {
             if rule.recipe.codec.namespace != input.namespace {
                 return invalid(&path, RewardPolicyViolation::ForeignNamespace);
             }
-            let boolean = match &rule.recipe.codec.codec {
-                ValueCodecKind::Boolean { .. } => true,
-                ValueCodecKind::Option { .. } => false,
-                _ => return invalid(&path, RewardPolicyViolation::UnsupportedRecipe),
-            };
-            if rule
-                .recipe
-                .tiers
-                .iter()
-                .flat_map(|tier| &tier.selectors)
-                .any(|selector| {
-                    !matches!(
-                        selector.lane,
-                        ValueLane::InputBoolean | ValueLane::InputString
-                    )
-                })
-            {
-                return invalid(&path, RewardPolicyViolation::UnsupportedLane);
-            }
-            let recipe = ValueRecipe::new(rule.recipe.clone(), limits.value)?;
-            charge(&mut outcomes_left, rule.outcomes.len(), "outcomes")?;
-            let mut outcomes = BTreeMap::new();
-            for (case_index, case) in rule.outcomes.iter().enumerate() {
-                let path = format!("{path}.outcomes[{case_index}]");
-                if outcomes.contains_key(&case.when) {
-                    return invalid(&path, RewardPolicyViolation::DuplicateOutcome);
-                }
-                if matches!(case.when, RewardValue::Boolean(_)) != boolean {
-                    return invalid(&path, RewardPolicyViolation::WrongWhenKind);
-                }
-                let mut unresolved = None;
-                if let RewardValue::Option(id) = &case.when {
-                    checker.namespace(id.namespace(), &path)?;
-                    checker.definition(id, &mut unresolved)?;
-                }
-                let outcome = match &case.outcome {
-                    RewardTemplate::None => RewardOutcome::None,
-                    RewardTemplate::Unmapped { issue } => pending(RewardUnmappedReason::Explicit {
-                        issue: issue.clone(),
-                    }),
-                    RewardTemplate::Reward {
-                        selector,
-                        parameters,
-                    } => {
-                        charge(&mut parameters_left, parameters.len(), "parameters")?;
-                        checker.reward(selector, parameters, mappings, &path, &mut unresolved)?
+            let compiled = match &rule.output {
+                RewardRuleOutput::Cases(cases) => {
+                    let boolean = match &rule.recipe.codec.codec {
+                        ValueCodecKind::Boolean { .. } => true,
+                        ValueCodecKind::Option { .. } => false,
+                        _ => return invalid(&path, RewardPolicyViolation::UnsupportedRecipe),
+                    };
+                    if rule
+                        .recipe
+                        .tiers
+                        .iter()
+                        .flat_map(|t| &t.selectors)
+                        .any(|s| {
+                            !matches!(s.lane, ValueLane::InputBoolean | ValueLane::InputString)
+                        })
+                    {
+                        return invalid(&path, RewardPolicyViolation::UnsupportedLane);
                     }
-                };
-                outcomes.insert(case.when.clone(), unresolved.map_or(outcome, pending));
-            }
-            rules.insert(rule.recipe.id.clone(), Rule { recipe, outcomes });
+                    charge(&mut outcomes_left, cases.len(), "outcomes")?;
+                    let mut outcomes = BTreeMap::new();
+                    for (case_index, case) in cases.iter().enumerate() {
+                        let path = format!("{path}.output.outcomes[{case_index}]");
+                        if outcomes.contains_key(&case.when) {
+                            return invalid(&path, RewardPolicyViolation::DuplicateOutcome);
+                        }
+                        if matches!(case.when, RewardValue::Boolean(_)) != boolean {
+                            return invalid(&path, RewardPolicyViolation::WrongWhenKind);
+                        }
+                        let mut unresolved = None;
+                        if let RewardValue::Option(id) = &case.when {
+                            checker.namespace(id.namespace(), &path)?;
+                            checker.definition(id, &mut unresolved)?;
+                        }
+                        let outcome = match &case.outcome {
+                            RewardTemplate::None => RewardOutcome::None,
+                            RewardTemplate::Unmapped { issue } => {
+                                pending(RewardUnmappedReason::Explicit {
+                                    issue: issue.clone(),
+                                })
+                            }
+                            RewardTemplate::Reward {
+                                selector,
+                                parameters,
+                            } => {
+                                charge(&mut parameters_left, parameters.len(), "parameters")?;
+                                checker
+                                    .reward(
+                                        selector,
+                                        parameters,
+                                        None,
+                                        mappings,
+                                        &path,
+                                        &mut unresolved,
+                                    )?
+                                    .0
+                            }
+                        };
+                        outcomes.insert(case.when.clone(), unresolved.map_or(outcome, pending));
+                    }
+                    Rule::Cases {
+                        recipe: Box::new(ValueRecipe::new(rule.recipe.clone(), limits.value)?),
+                        outcomes,
+                    }
+                }
+                RewardRuleOutput::NumericParameter(numeric) => {
+                    let RewardNumericParameter {
+                        selector,
+                        parameter,
+                        fixed_parameters,
+                        selection,
+                    } = numeric.as_ref();
+                    ConfigurationNumericRecipe::validate_recipe(&rule.recipe, *selection)
+                        .map_err(|error| numeric_error(error, &path))?;
+                    charge(&mut outcomes_left, 1, "outcomes")?;
+                    charge(
+                        &mut parameters_left,
+                        fixed_parameters.len().saturating_add(1),
+                        "parameters",
+                    )?;
+                    let mut unresolved = None;
+                    let (template, domain) = checker.reward(
+                        selector,
+                        fixed_parameters,
+                        Some((parameter, &rule.recipe.codec.codec)),
+                        mappings,
+                        &path,
+                        &mut unresolved,
+                    )?;
+                    Rule::NumericParameter(Box::new(CompiledNumericParameter {
+                        template: unresolved.map_or(template, pending),
+                        parameter: parameter.clone(),
+                        domain,
+                        recipe: ConfigurationNumericRecipe::new(
+                            rule.recipe.clone(),
+                            *selection,
+                            limits.value,
+                        )
+                        .map_err(|error| numeric_error(error, &path))?,
+                    }))
+                }
+            };
+            rules.insert(rule.recipe.id.clone(), compiled);
         }
         Ok(Self {
             input,
@@ -350,7 +447,13 @@ impl OwnedRewardPolicy {
             .rules
             .get(rule_id)
             .ok_or_else(|| RewardPolicyError::UnknownRule(rule_id.clone()))?;
-        let value = rule.recipe.decide(candidates)?;
+        let Rule::Cases { recipe, outcomes } = rule else {
+            let Rule::NumericParameter(numeric) = rule else {
+                unreachable!()
+            };
+            return decide_numeric(numeric, candidates);
+        };
+        let value = recipe.decide(candidates)?;
         let outcome = match &value.outcome {
             ValueOutcome::Selected { value, .. } | ValueOutcome::Defaulted { value } => {
                 let key = match value {
@@ -358,7 +461,7 @@ impl OwnedRewardPolicy {
                     ParameterValue::Option(value) => RewardValue::Option(value.clone()),
                     _ => return invalid("decision", RewardPolicyViolation::UnsupportedRecipe),
                 };
-                rule.outcomes
+                outcomes
                     .get(&key)
                     .cloned()
                     .unwrap_or_else(|| pending(RewardUnmappedReason::NoMatchingOutcome))
@@ -366,10 +469,76 @@ impl OwnedRewardPolicy {
             ValueOutcome::Absent => pending(RewardUnmappedReason::ValueAbsent),
             ValueOutcome::Pending { .. } => pending(RewardUnmappedReason::ValuePending),
         };
-        Ok(RewardDecision { value, outcome })
+        Ok(RewardDecision {
+            value,
+            outcome,
+            numeric: None,
+        })
     }
 }
 
+fn numeric_error(error: ConfigurationNumericError, path: &str) -> RewardPolicyError {
+    match error {
+        ConfigurationNumericError::Value(error) => RewardPolicyError::Value(error),
+        ConfigurationNumericError::Invalid(violation) => RewardPolicyError::Invalid {
+            path: path.into(),
+            violation: match violation {
+                ConfigurationNumericViolation::UnsupportedRecipe => {
+                    RewardPolicyViolation::UnsupportedRecipe
+                }
+                ConfigurationNumericViolation::NumericDefault => {
+                    RewardPolicyViolation::NumericDefault
+                }
+                ConfigurationNumericViolation::UnsupportedLane => {
+                    RewardPolicyViolation::UnsupportedLane
+                }
+                ConfigurationNumericViolation::UnsupportedSelection => {
+                    RewardPolicyViolation::UnsupportedSelection
+                }
+            },
+        },
+    }
+}
+fn numeric_reason(reason: ConfigurationNumericReason) -> RewardUnmappedReason {
+    match reason {
+        ConfigurationNumericReason::ValuePending => RewardUnmappedReason::ValuePending,
+        ConfigurationNumericReason::ValueAbsent => RewardUnmappedReason::ValueAbsent,
+        ConfigurationNumericReason::ProjectedValueOutOfRange => {
+            RewardUnmappedReason::ProjectedValueOutOfRange
+        }
+        ConfigurationNumericReason::InvalidNumericCandidate => {
+            RewardUnmappedReason::InvalidNumericCandidate
+        }
+        ConfigurationNumericReason::NoNumericSelection => RewardUnmappedReason::NoNumericSelection,
+    }
+}
+fn decide_numeric<'a>(
+    numeric: &CompiledNumericParameter,
+    candidates: &[ValueCandidate<'a>],
+) -> Result<RewardDecision<'a>> {
+    let decision = numeric
+        .recipe
+        .decide(candidates, numeric.domain.as_ref())
+        .map_err(|error| numeric_error(error, "decision"))?;
+    let outcome = match decision.outcome {
+        ConfigurationNumericOutcome::Unavailable { reason } => pending(numeric_reason(reason)),
+        ConfigurationNumericOutcome::Selected { value } => {
+            let mut outcome = numeric.template.clone();
+            if let RewardOutcome::Reward { parameters, .. } = &mut outcome {
+                parameters.push(ParameterAssignment {
+                    slot: numeric.parameter.clone(),
+                    value,
+                });
+            }
+            outcome
+        }
+    };
+    Ok(RewardDecision {
+        value: decision.value,
+        outcome,
+        numeric: Some(decision.numeric),
+    })
+}
 struct SchemaChecker<'a, I> {
     schema: &'a I,
     namespace: &'a GameVersionNamespace,
@@ -483,10 +652,11 @@ impl<'s, I: DefinitionSchemaIndex> SchemaChecker<'s, I> {
         &mut self,
         selector: &ExternalSelector,
         parameters: &[ParameterAssignment],
+        projection: Option<(&DeclaredSlot<ParameterSlotDefId>, &ValueCodecKind)>,
         mappings: &OwnedMappingIndex,
         path: &str,
         unresolved: &mut Option<RewardUnmappedReason>,
-    ) -> Result<RewardOutcome> {
+    ) -> Result<(RewardOutcome, Option<ValueSchema>)> {
         if !matches!(
             selector,
             ExternalSelector::Definition(ExternalOwnerSelector::Reward { .. })
@@ -524,36 +694,49 @@ impl<'s, I: DefinitionSchemaIndex> SchemaChecker<'s, I> {
             }
         };
         let mut supplied = BTreeSet::new();
-        for row in parameters {
-            self.namespace(row.slot.declaration.namespace(), path)?;
-            self.namespace(row.slot.slot.namespace(), path)?;
-            if !matches!(&row.slot.declaration, SlotOwnerDefId::Reward(id) if reward.is_none_or(|expected| id == expected))
+        let mut projected_domain = None;
+        for (parameter, value) in parameters
+            .iter()
+            .map(|row| (&row.slot, Some(&row.value)))
+            .chain(projection.map(|(parameter, _)| (parameter, None)))
+        {
+            self.namespace(parameter.declaration.namespace(), path)?;
+            self.namespace(parameter.slot.namespace(), path)?;
+            if !matches!(&parameter.declaration, SlotOwnerDefId::Reward(id) if reward.is_none_or(|expected| id == expected))
             {
                 return invalid(path, RewardPolicyViolation::WrongParameterOwner);
             }
-            if !supplied.insert(&row.slot) {
+            if !supplied.insert(parameter) {
                 return invalid(path, RewardPolicyViolation::DuplicateParameter);
             }
-            match &row.value {
-                ParameterValue::Option(id) => self.namespace(id.namespace(), path)?,
-                ParameterValue::Quantity(value) => {
+            match value {
+                Some(ParameterValue::Option(id)) => self.namespace(id.namespace(), path)?,
+                Some(ParameterValue::Quantity(value)) => {
                     self.namespace(value.unit().namespace(), path)?
                 }
                 _ => {}
             }
-            let subject = SchemaSubject::Slot(ParameterSlotDefId::address(&row.slot));
+            let subject = SchemaSubject::Slot(ParameterSlotDefId::address(parameter));
             if let Some(slot) =
-                self.lookup(self.schema.slot(&row.slot), subject.clone(), unresolved)?
+                self.lookup(self.schema.slot(parameter), subject.clone(), unresolved)?
             {
                 charge(&mut self.work, slot.sites.len(), "schema work")?;
                 if !slot.sites.contains(&ParameterSite::RewardParameter) {
                     return invalid(path, RewardPolicyViolation::WrongParameterSite);
                 }
-                self.value(&row.value, &slot.value, &subject, path, unresolved)?;
+                if let Some(value) = value {
+                    self.value(value, &slot.value, &subject, path, unresolved)?;
+                } else if let Some((_, codec)) = projection {
+                    self.projected_value(codec, &slot.value, &subject, path, unresolved)?;
+                    projected_domain = Some(slot.value.clone());
+                }
             }
         }
         let Some(reward) = reward else {
-            return Ok(pending(RewardUnmappedReason::MappingMissing));
+            return Ok((
+                pending(RewardUnmappedReason::MappingMissing),
+                projected_domain,
+            ));
         };
         self.namespace(reward.namespace(), path)?;
         let subject = SchemaSubject::Definition(reward.address());
@@ -561,7 +744,7 @@ impl<'s, I: DefinitionSchemaIndex> SchemaChecker<'s, I> {
             let declarations = &schema.declarations.parameters;
             charge(
                 &mut self.work,
-                declarations.members.len() + parameters.len(),
+                declarations.members.len().saturating_add(supplied.len()),
                 "schema work",
             )?;
             let mut declared = BTreeSet::new();
@@ -594,16 +777,53 @@ impl<'s, I: DefinitionSchemaIndex> SchemaChecker<'s, I> {
                     }
                 }
             }
-            if declarations.is_complete()
-                && parameters.iter().any(|row| !declared.contains(&row.slot))
-            {
+            if declarations.is_complete() && supplied.iter().any(|slot| !declared.contains(slot)) {
                 return invalid(path, RewardPolicyViolation::ParameterNotDeclared);
             }
         }
-        Ok(RewardOutcome::Reward {
-            definition: reward.clone(),
-            parameters: parameters.to_vec(),
-        })
+        Ok((
+            RewardOutcome::Reward {
+                definition: reward.clone(),
+                parameters: parameters.to_vec(),
+            },
+            projected_domain,
+        ))
+    }
+
+    fn projected_value(
+        &mut self,
+        codec: &ValueCodecKind,
+        schema: &ValueSchema,
+        subject: &SchemaSubject,
+        path: &str,
+        unresolved: &mut Option<RewardUnmappedReason>,
+    ) -> Result<()> {
+        match (codec, schema) {
+            (ValueCodecKind::Integer { .. }, ValueSchema::Integer(range)) => {
+                if range.minimum > range.maximum {
+                    return Err(RewardPolicyError::IndexFault {
+                        subject: Box::new(subject.clone()),
+                    });
+                }
+            }
+            (ValueCodecKind::Quantity { unit, .. }, ValueSchema::Quantity(range)) => {
+                if range.minimum.unit() != range.maximum.unit()
+                    || range.minimum.value() > range.maximum.value()
+                {
+                    return Err(RewardPolicyError::IndexFault {
+                        subject: Box::new(subject.clone()),
+                    });
+                }
+                self.namespace(unit.namespace(), path)?;
+                self.definition(unit, unresolved)?;
+                self.definition(range.minimum.unit(), unresolved)?;
+                if unit != range.minimum.unit() {
+                    return invalid(path, RewardPolicyViolation::WrongUnit);
+                }
+            }
+            _ => return invalid(path, RewardPolicyViolation::WrongValueKind),
+        }
+        Ok(())
     }
 }
 
@@ -630,14 +850,26 @@ pub fn encode_reward_policy(
     let mut outcomes = limits.max_outcomes;
     let mut parameters = limits.max_parameters;
     for rule in policy.rules() {
-        charge(&mut outcomes, rule.outcomes.len(), "outcomes")?;
         ValueRecipe::new(rule.recipe.clone(), limits.value)?;
-        for case in &rule.outcomes {
-            if let RewardTemplate::Reward {
-                parameters: rows, ..
-            } = &case.outcome
-            {
-                charge(&mut parameters, rows.len(), "parameters")?;
+        match &rule.output {
+            RewardRuleOutput::Cases(cases) => {
+                charge(&mut outcomes, cases.len(), "outcomes")?;
+                for case in cases {
+                    if let RewardTemplate::Reward {
+                        parameters: rows, ..
+                    } = &case.outcome
+                    {
+                        charge(&mut parameters, rows.len(), "parameters")?;
+                    }
+                }
+            }
+            RewardRuleOutput::NumericParameter(numeric) => {
+                charge(&mut outcomes, 1, "outcomes")?;
+                charge(
+                    &mut parameters,
+                    numeric.fixed_parameters.len().saturating_add(1),
+                    "parameters",
+                )?;
             }
         }
     }

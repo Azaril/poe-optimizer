@@ -2,7 +2,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 use std::{fmt, io};
-pub const OWNED_DRAFT_SCHEMA_VERSION: u32 = 4;
+pub const OWNED_DRAFT_SCHEMA_VERSION: u32 = 5;
 #[derive(Debug)]
 pub enum DraftCodecError {
     Structure(StructuralError),

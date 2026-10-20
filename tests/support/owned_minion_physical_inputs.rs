@@ -400,7 +400,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     }
     normalization.version = key("minion-physical-inputs-v1");
     let scalar = gem_inventory_scalar_inputs_identity(&normalization, Default::default()).unwrap();
-    if let Some(GemInventoryPolicy::PobFreshSingleSupportV1 { scalar_inputs, .. }) =
+    if let Some(GemInventoryPolicy::PobFreshPhysicalV3 { scalar_inputs, .. }) =
         &mut normalization.gem_inventory
     {
         *scalar_inputs = scalar;
@@ -514,8 +514,8 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         .retain(|row| !additions.gems.iter().any(|added| added.gem == row.gem));
     restored_policy.version = carried.normalization().version.clone();
     if let (
-        Some(GemInventoryPolicy::PobFreshSingleSupportV1 { scalar_inputs, .. }),
-        Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+        Some(GemInventoryPolicy::PobFreshPhysicalV3 { scalar_inputs, .. }),
+        Some(GemInventoryPolicy::PobFreshPhysicalV3 {
             scalar_inputs: old, ..
         }),
     ) = (

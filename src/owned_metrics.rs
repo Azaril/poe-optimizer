@@ -101,6 +101,7 @@ impl SupportArgs {
 struct Verification {
     scope: &'static str,
     contributor_closure: &'static str,
+    requirement_scope: &'static str,
     game_legality: &'static str,
     whole_build_parity: &'static str,
 }
@@ -316,6 +317,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
                 verification: Verification {
                     scope: "requested_owned_metrics_with_support_preparation",
                     contributor_closure: "whole_plan",
+                    requirement_scope: "injected_requirements",
                     game_legality: "not_checked",
                     whole_build_parity: "not_established",
                 },
@@ -336,6 +338,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         verification: Verification {
             scope: "requested_owned_metrics",
             contributor_closure: "whole_plan",
+            requirement_scope: "injected_requirements",
             game_legality: "not_checked",
             whole_build_parity: "not_established",
         },

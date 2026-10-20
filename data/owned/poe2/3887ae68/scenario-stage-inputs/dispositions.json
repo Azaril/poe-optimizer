@@ -1,0 +1,178 @@
+[
+  {
+    "id": "scenario-stage-0-lane-0",
+    "selector": {
+      "lane": "input_number",
+      "name": "sigilOfPowerStages"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "usage_intent",
+          "policy": {
+            "kind": "usage_policy",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033bc"
+          },
+          "parameter": {
+            "declaration": {
+              "kind": "usage_policy",
+              "definition": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000033bc"
+              }
+            },
+            "slot": {
+              "kind": "parameter_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000033bd"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "scenario-stage-0-lane-1",
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "sigilOfPowerStages"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "usage_intent",
+          "policy": {
+            "kind": "usage_policy",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033bc"
+          },
+          "parameter": {
+            "declaration": {
+              "kind": "usage_policy",
+              "definition": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000033bc"
+              }
+            },
+            "slot": {
+              "kind": "parameter_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000033bd"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "scenario-stage-1-lane-0",
+    "selector": {
+      "lane": "input_number",
+      "name": "conditionCorruptingCryStages"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "usage_intent",
+          "policy": {
+            "kind": "usage_policy",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033be"
+          },
+          "parameter": {
+            "declaration": {
+              "kind": "usage_policy",
+              "definition": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000033be"
+              }
+            },
+            "slot": {
+              "kind": "parameter_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000033bf"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "scenario-stage-1-lane-1",
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "conditionCorruptingCryStages"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "usage_intent",
+          "policy": {
+            "kind": "usage_policy",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033be"
+          },
+          "parameter": {
+            "declaration": {
+              "kind": "usage_policy",
+              "definition": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000033be"
+              }
+            },
+            "slot": {
+              "kind": "parameter_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000033bf"
+            }
+          }
+        }
+      }
+    ]
+  }
+]

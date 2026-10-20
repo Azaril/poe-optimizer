@@ -883,6 +883,7 @@ fn scenario_enemy_does_not_gain_usage_or_final_stat_receiver_authority() {
         .push(DefinitionDescriptor::UsagePolicy(entry(
             def("actor-usage"),
             UsagePolicySchema {
+                scenario_skill_applicability: None,
                 targets: vec![UsageTargetKind::Actor],
                 declarations: ports(),
             },

@@ -93,30 +93,85 @@ pub(super) fn check_projection_destinations(
     work: &mut usize,
     limits: NormalizationLimits,
 ) -> Result<()> {
-    let Some(ConfigurationInputsPolicy::PobFreshConfigInputsV3 { default_inputs, .. }) =
-        &policy.configuration_inputs
-    else {
-        return Ok(());
-    };
-    charge(work, default_inputs.len(), limits)?;
-    if !matches!(
-        selector.lane,
-        ValueLane::InputNumber | ValueLane::PlaceholderNumber
-    ) {
-        return Ok(());
-    }
-    for input in default_inputs {
-        charge(work, input.source_name.len().saturating_add(1), limits)?;
-        if input.selection.projects_placeholder() && input.source_name == selector.name {
-            charge(work, input.value_input.key().as_str().len(), limits)?;
-            if !adapters.contains(&ConfigurationAdapterControl::ScalarInput {
-                input: input.value_input.clone(),
-            }) {
-                return Err(NormalizationError::Policy(
-                    "configuration projection responsibilities",
-                ));
-            }
+    let (inputs, fallbacks, options, defaults) = match &policy.configuration_inputs {
+        None => return Ok(()),
+        Some(ConfigurationInputsPolicy::PobFreshNumericConfigOverridesV1 { inputs, .. }) => {
+            (inputs.as_slice(), &[][..], &[][..], &[][..])
         }
+        Some(ConfigurationInputsPolicy::PobFreshNumericConfigFallbacksV2 {
+            inputs,
+            placeholder_fallback_inputs,
+            ..
+        }) => (
+            inputs.as_slice(),
+            placeholder_fallback_inputs.as_slice(),
+            &[][..],
+            &[][..],
+        ),
+        Some(ConfigurationInputsPolicy::PobFreshConfigInputsV3 {
+            inputs,
+            placeholder_fallback_inputs,
+            option_inputs,
+            default_inputs,
+            ..
+        }) => (
+            inputs.as_slice(),
+            placeholder_fallback_inputs.as_slice(),
+            option_inputs.as_slice(),
+            default_inputs.as_slice(),
+        ),
+    };
+    charge(
+        work,
+        inputs
+            .len()
+            .saturating_add(fallbacks.len())
+            .saturating_add(options.len())
+            .saturating_add(defaults.len()),
+        limits,
+    )?;
+    let mut require =
+        |input: &ExternalInputDefId, recipe: &ValueRecipeInput, placeholder: Option<&str>| {
+            charge(work, recipe.tiers.len(), limits)?;
+            let mut matches = false;
+            for tier in &recipe.tiers {
+                charge(work, tier.selectors.len(), limits)?;
+                for candidate in &tier.selectors {
+                    charge(work, candidate.name.len(), limits)?;
+                    matches |= candidate == selector;
+                }
+            }
+            if let Some(name) = placeholder {
+                charge(work, name.len().saturating_add(1), limits)?;
+                matches |= selector.lane == ValueLane::PlaceholderNumber && selector.name == name;
+            }
+            if matches {
+                charge(work, input.key().as_str().len(), limits)?;
+                if !adapters.contains(&ConfigurationAdapterControl::ScalarInput {
+                    input: input.clone(),
+                }) {
+                    return Err(NormalizationError::Policy(
+                        "configuration projection responsibilities",
+                    ));
+                }
+            }
+            Ok(())
+        };
+    // Raw-only inputs also review their overwritten Placeholder lane. Both
+    // selected and deliberately ignored lanes need the same checked output.
+    for input in inputs.iter().chain(fallbacks) {
+        require(&input.value_input, &input.recipe, Some(&input.source_name))?;
+    }
+    for input in options {
+        require(&input.value_input, &input.recipe, None)?;
+    }
+    for input in defaults {
+        require(
+            &input.value_input,
+            &input.recipe,
+            (input.selection.projects_placeholder() || input.ignore_numeric_placeholder)
+                .then_some(input.source_name.as_str()),
+        )?;
     }
     Ok(())
 }

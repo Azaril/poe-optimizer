@@ -220,6 +220,7 @@ impl Fixture {
         index.put(DefinitionDescriptor::UsagePolicy(known(
             def("usage"),
             UsagePolicySchema {
+                scenario_skill_applicability: None,
                 targets: vec![UsageTargetKind::Actor],
                 declarations: declarations(),
             },
@@ -233,6 +234,7 @@ impl Fixture {
         Self {
             index,
             build: BuildInput {
+                usage_preferences: vec![],
                 generated_inputs: None,
                 authored_support_order: None,
                 allocator: InstanceAllocatorState::from_parts(
@@ -286,6 +288,7 @@ impl Fixture {
                 choices: vec![],
             },
             scenario: ScenarioInput {
+                usage_intents: vec![],
                 game_version: ns(),
                 enemy: EnemySpec {
                     encounter: def("encounter"),
@@ -374,6 +377,100 @@ fn valid(r: &DefinitionBindingReport) {
 fn has(r: &DefinitionBindingReport, code: BindingIssueCode) -> bool {
     r.issues().iter().any(|v| v.code == code)
 }
+#[test]
+fn every_usage_layer_is_checked_even_without_intent_recipients_or_before_override() {
+    let fixture = layered_usage_fixture();
+    valid(&fixture.bind());
+    // Schema validation does not prove a complete composed source census.
+    assert!(fixture.build.skills.is_empty());
+    for location in [
+        BindingLocation::BuildUsagePreference { index: 0 },
+        BindingLocation::ScenarioUsageIntent { index: 0 },
+        BindingLocation::Usage { index: 0 },
+    ] {
+        let mut invalid = fixture.clone();
+        let parameters = match location {
+            BindingLocation::BuildUsagePreference { .. } => {
+                &mut invalid.build.usage_preferences[0].parameters
+            }
+            BindingLocation::ScenarioUsageIntent { .. } => {
+                &mut invalid.scenario.usage_intents[0].parameters
+            }
+            _ => &mut invalid.scenario.usage[0].parameters,
+        };
+        parameters[0].value = ParameterValue::Integer(BoundedInteger::new(11).unwrap());
+        let report = invalid.bind();
+        assert!(report.issues().iter().any(|issue| {
+            issue.site.location == location && issue.code == BindingIssueCode::OutOfRange
+        }));
+    }
+}
+
+fn intent_policy(fixture: &mut Fixture) -> &mut UsagePolicySchema {
+    let DefinitionDescriptor::UsagePolicy(DefinitionEntry {
+        schema: SchemaState::Known(schema),
+        ..
+    }) = fixture
+        .index
+        .definitions
+        .get_mut(&def::<UsagePolicyDefinition>("usage").address())
+        .unwrap()
+    else {
+        panic!("known usage policy")
+    };
+    schema
+}
+
+fn layered_usage_fixture() -> Fixture {
+    let mut fixture = Fixture::new();
+    let schema = intent_policy(&mut fixture);
+    schema.targets.push(UsageTargetKind::Skill);
+    schema.scenario_skill_applicability = Some(DeclaredSet::complete(vec![]));
+    let slot = fixture.index.parameter(
+        SlotOwnerDefId::UsagePolicy(def("usage")),
+        ParameterSite::UsagePolicyParameter,
+        ValueSchema::Integer(range(0, 10)),
+    );
+    fixture.scenario.usage[0].parameters = vec![ParameterAssignment {
+        slot,
+        value: ParameterValue::Integer(BoundedInteger::new(0).unwrap()),
+    }];
+    fixture.build.usage_preferences = fixture.scenario.usage.clone();
+    fixture.scenario.usage_intents = vec![ScenarioUsageIntent {
+        policy: def("usage"),
+        parameters: fixture.scenario.usage[0].parameters.clone(),
+    }];
+    fixture
+}
+
+#[test]
+fn scenario_intent_requires_declared_complete_applicability_and_all_typed_values() {
+    let mut fixture = layered_usage_fixture();
+    intent_policy(&mut fixture).scenario_skill_applicability = None;
+    let report = fixture.bind();
+    assert_eq!(report.schema(), SchemaBindingStatus::Invalid);
+    assert!(has(&report, BindingIssueCode::NotDeclared));
+
+    intent_policy(&mut fixture).scenario_skill_applicability = Some(DeclaredSet {
+        members: vec![],
+        closure: SchemaClosure::Partial {
+            gaps: vec![gap(SchemaSubject::Definition(
+                def::<UsagePolicyDefinition>("usage").address(),
+            ))],
+        },
+    });
+    let report = fixture.bind();
+    assert_eq!(report.schema(), SchemaBindingStatus::Unresolved);
+    assert!(has(&report, BindingIssueCode::PartialMembership));
+    fixture.scenario.usage_intents[0].parameters.clear();
+    assert!(has(&fixture.bind(), BindingIssueCode::RequiredValueMissing));
+
+    intent_policy(&mut fixture).scenario_skill_applicability = Some(DeclaredSet::complete(vec![]));
+    fixture.scenario.usage_intents[0].parameters = fixture.scenario.usage[0].parameters.clone();
+    intent_policy(&mut fixture).targets = vec![UsageTargetKind::Actor];
+    assert!(has(&fixture.bind(), BindingIssueCode::IncompatibleRole));
+}
+
 #[test]
 fn scenario_actor_resolves_without_player_fallback_and_keeps_exact_input_role() {
     let mut fixture = Fixture::new();

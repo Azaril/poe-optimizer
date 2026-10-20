@@ -162,10 +162,7 @@ fn stale_direct_policy_commitment_rejects_even_when_source_still_matches() {
     configure(&mut f);
     let DirectSkillInputPolicy::PobManualDirectSkillV2 {
         group_attributes, ..
-    } = f.base.policy.direct_skill_inputs.as_mut().unwrap()
-    else {
-        unreachable!()
-    };
+    } = f.base.policy.direct_skill_inputs.as_mut().unwrap();
     group_attributes.push("another-field".into());
     assert!(matches!(
         f.base

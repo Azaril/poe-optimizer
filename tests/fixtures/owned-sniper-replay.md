@@ -96,10 +96,20 @@ require deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
 The current fixture has **957 definitions, 625 owners and 37 stages**.
-It is 139,830 compressed bytes and 5,442,843 JSON bytes. Gzip SHA-256:
-`96e32a6b7e44c265200563f0bd56f9dc86cd73783ded8be186cd4ea5668bf0ea`.
+It is 139,874 compressed bytes and 5,442,921 JSON bytes. Gzip SHA-256:
+`d52b4af0d05a1d38ca108acf3f043977c2bfa93c3416ddfe51a7f34cce73013e`.
 Decoded JSON SHA-256:
-`60a66d425d65361dd885676165ac31e11320d1ea327375112660974f094b18b0`.
+`c0b1138b72edbb7de0c3bb000d56f405b9ccea663ff48d7d1a2c350970ae2810`.
+
+The October 19 Scenario-intent format update adds an explicit null applicability
+declaration to the existing UsagePolicy and empty Build preference/Scenario intent
+layers. Sixteen exact dependency fields are rebound through the checked package
+constructors. An inverse restores every prior semantic field against the pinned
+prior gzip
+`96e32a6b7e44c265200563f0bd56f9dc86cd73783ded8be186cd4ea5668bf0ea`;
+fresh reports agree and gzip re-encoding is deterministic. Evidence:
+`runs/scenario-format-replay-proof.json` and
+`runs/scenario-format-replay-authoring-01.log`.
 
 The October 15 Actor migration updates the current format to schema 7, rule
 package 4 and operations V28. Its exact inverse checks all 51 declared format

@@ -1,0 +1,98 @@
+{
+  "kind": "ordinary-armour-response-component",
+  "program": "ordinary-armour-adjusted-physical-averages",
+  "inputs": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000031e0"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033a0"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033a1"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033ab"
+    }
+  ],
+  "outputs": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033b2"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033b3"
+    }
+  ],
+  "armour_member": {
+    "query": "enemy-armour-add",
+    "member": {
+      "producer": {
+        "kind": "program_effect",
+        "owner": {
+          "kind": "definition",
+          "value": {
+            "kind": "encounter",
+            "value": {
+              "kind": "encounter",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000031d1"
+            }
+          }
+        },
+        "program": "configured-enemy-armour-base",
+        "effect": "configured-base",
+        "origin": {
+          "kind": "encounter"
+        }
+      },
+      "order": {
+        "source_rank": 0,
+        "program_rank": 0,
+        "effect_rank": 0,
+        "slot_ranks": []
+      }
+    }
+  },
+  "publication_scope": "partial_component",
+  "ready_for_native_admission": false,
+  "pending": [
+    "Complete selected and dynamically generated Armour supplier census",
+    "Armour-break-below-zero and ignore/bypass applicability",
+    "Additional physical-reduction and damage-taken contributions",
+    "Lucky and critical-specific pre-hit multipliers and damage-type conversion/gain",
+    "Complete-build execution and all-type DPS"
+  ]
+}

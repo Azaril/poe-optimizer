@@ -237,6 +237,7 @@ fn non_skill_owners_cannot_claim_any_skill_input_authority() {
                     DefinitionDescriptor::UsagePolicy(DefinitionEntry {
                         id: id.clone(),
                         schema: SchemaState::Known(UsagePolicySchema {
+                            scenario_skill_applicability: None,
                             targets: vec![UsageTargetKind::Skill],
                             declarations,
                         }),

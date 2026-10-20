@@ -93,6 +93,8 @@ fn fixture() -> Fixture {
             },
         });
         roles.roles.push(OwnedGemRoleRow {
+            construction:
+                poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
             gem,
             primary: OwnedPrimarySkill::Known(effect),
             role: OwnedGemRole::Known(role),
@@ -120,10 +122,7 @@ fn fixture() -> Fixture {
         roles,
         dispositions,
         ..
-    } = f.base.policy.direct_skill_inputs.as_mut().unwrap()
-    else {
-        unreachable!()
-    };
+    } = f.base.policy.direct_skill_inputs.as_mut().unwrap();
     *definitions = base.schema.identity().clone();
     *roles = *base.roles.identity();
     for disposition in dispositions {
@@ -158,6 +157,50 @@ fn enable(f: &mut Fixture) {
 }
 fn run(f: &Fixture, xml: &str) -> NormalizedImport {
     f.base.run(xml, Default::default()).unwrap()
+}
+
+#[test]
+fn empty_dispositions_keep_raw_inputs_pending_and_cannot_authorize_support_targets() {
+    let mut f = fixture();
+    let DirectSkillInputPolicy::PobManualDirectSkillV2 { dispositions, .. } =
+        f.base.policy.direct_skill_inputs.as_mut().unwrap();
+    dispositions.clear();
+    let text = inventory::xml(&format!("{}{SUPPORT}", inventory::GEM));
+    let before = run(&f, &text);
+    enable(&mut f);
+    let after = run(&f, &text);
+    assert_eq!(before.draft().input(), after.draft().input());
+    assert_eq!(after.draft().input().skills.members.len(), 1);
+    let raw = after.draft().input().skills.members[0]
+        .parameters
+        .as_ref()
+        .unwrap();
+    assert!(matches!(
+        raw.completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    assert_eq!(raw.members.len(), 2);
+    assert!(
+        raw.members
+            .iter()
+            .all(|parameter| parameter.to_resolved().is_some())
+    );
+    assert!(matches!(
+        after.draft().input().supports.members[0].target,
+        DraftSkillTarget::Pending(_)
+    ));
+    assert!(
+        after.draft().input().skill_presets.members[0]
+            .usage_preferences
+            .as_ref()
+            .unwrap()
+            .to_resolved()
+            .is_none()
+    );
+    let mut expected_sidecar = serde_json::to_value(before.sidecar()).unwrap();
+    let actual_sidecar = serde_json::to_value(after.sidecar()).unwrap();
+    expected_sidecar["policy"] = actual_sidecar["policy"].clone();
+    assert_eq!(expected_sidecar, actual_sidecar);
 }
 
 #[test]
@@ -327,7 +370,7 @@ fn ambiguous_unreviewed_and_generated_groups_keep_targets_pending() {
 }
 
 #[test]
-fn explicit_empty_source_preserves_legacy_raw_input_but_cannot_gain_manual_target() {
+fn explicit_empty_source_preserves_raw_input_but_cannot_gain_manual_target() {
     let mut f = fixture();
     let text = inventory::xml(&format!("{}{SUPPORT}", inventory::GEM))
         .replace("<Skill enabled", "<Skill source=\"\" enabled");
@@ -381,8 +424,10 @@ fn omitted_policy_preserves_ordinary_targets_and_stale_authority_is_rejected() {
         .as_object_mut()
         .unwrap()
         .remove("dispositions");
-    f.base.policy = serde_json::from_value(wire).unwrap();
-    assert!(f.base.run(&text, Default::default()).is_err());
+    assert!(
+        serde_json::from_value::<NormalizationPolicy>(wire).is_err(),
+        "retired Direct policy cannot supply support-target authority"
+    );
 }
 
 #[test]

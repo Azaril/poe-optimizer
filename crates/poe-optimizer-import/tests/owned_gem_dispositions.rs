@@ -59,10 +59,7 @@ fn adding_earlier_physical_dispositions_preserves_ordinary_usage_and_all_instanc
         let GemInventoryPolicy::PobFreshPhysicalV3 {
             primary_dispositions,
             ..
-        } = f.policy.gem_inventory.as_mut().unwrap()
-        else {
-            unreachable!()
-        };
+        } = f.policy.gem_inventory.as_mut().unwrap();
         primary_dispositions.clear();
         let before = run(&f, &text);
         assert_eq!(completion(&before), [false, false, false]);
@@ -530,10 +527,7 @@ fn source_and_artifact_bindings_and_finite_recipe_contract_are_checked() {
                     usage_inputs,
                     primary_dispositions,
                     ..
-                } = f.policy.gem_inventory.as_mut().unwrap()
-                else {
-                    unreachable!()
-                };
+                } = f.policy.gem_inventory.as_mut().unwrap();
                 match case {
                     13 => *roles = *catalog,
                     14 => *scalar_inputs = *roles,
@@ -562,47 +556,29 @@ fn v3_is_explicit_and_empty_extension_keeps_absent_inventory_allocation_and_side
     let GemInventoryPolicy::PobFreshPhysicalV3 {
         primary_dispositions,
         ..
-    } = f.policy.gem_inventory.as_mut().unwrap()
-    else {
-        unreachable!()
-    };
+    } = f.policy.gem_inventory.as_mut().unwrap();
     primary_dispositions.clear();
     let v3 = run(&f, &xml(GEM));
-    let GemInventoryPolicy::PobFreshPhysicalV3 {
-        definitions,
-        roles,
-        catalog,
-        scalar_inputs,
-        usage_inputs,
-        supports,
-        primary_skills,
-        ..
-    } = f.policy.gem_inventory.take().unwrap()
-    else {
-        unreachable!()
-    };
-    // Historical V2 requires an actual usage policy, even with zero rows; use
-    // the still older absent inventory to prove the empty V3 creates no inputs.
-    let v2 = GemInventoryPolicy::PobFreshPhysicalV2 {
-        definitions,
-        roles,
-        catalog,
-        scalar_inputs,
-        usage_inputs,
-        supports,
-        primary_skills,
-    };
-    let bytes = serde_json::to_vec(&v2).unwrap();
+    let current = f.policy.gem_inventory.take().unwrap();
+    let bytes = serde_json::to_vec(&current).unwrap();
     assert_eq!(
         serde_json::to_vec(&serde_json::from_slice::<GemInventoryPolicy>(&bytes).unwrap()).unwrap(),
         bytes
     );
-    assert!(
-        serde_json::to_value(v2)
-            .unwrap()
-            .get("primary_dispositions")
-            .is_none()
-    );
+    let wire = serde_json::to_value(current).unwrap();
+    assert_eq!(wire["primary_dispositions"], serde_json::json!([]));
+    let mut missing = wire.clone();
+    missing
+        .as_object_mut()
+        .unwrap()
+        .remove("primary_dispositions")
+        .unwrap();
+    assert!(serde_json::from_value::<GemInventoryPolicy>(missing).is_err());
+    for tag in ["pob_fresh_single_support_v1", "pob_fresh_physical_v2"] {
+        let mut retired = wire.clone();
+        retired["kind"] = tag.into();
+        assert!(serde_json::from_value::<GemInventoryPolicy>(retired).is_err());
+    }
     let absent = run(&f, &xml(GEM));
     assert_eq!(v3.draft(), absent.draft());
     assert_eq!(v3.allocator_after(), absent.allocator_after());

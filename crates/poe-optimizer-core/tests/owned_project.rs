@@ -1088,6 +1088,7 @@ fn equipment_and_allocation_contributions_compose_all_four_independent_selection
                 .collect();
             let expected = BuildSpec::new(
                 BuildInput {
+                    usage_preferences: vec![],
                     generated_inputs: None,
                     authored_support_order: None,
                     allocator: raw.allocator,

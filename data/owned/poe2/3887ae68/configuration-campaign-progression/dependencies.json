@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "before": "5b611f43a0eedbf556799bcbd2c295a85d58d3264a7306c24602fd4d41e6e7b6",
+  "registry_before": "0ea683ed2b25a7a000a25a157a6076818c7fc3e8231a75f49edf9fd1f0b31ab0",
+  "allocations": [
+    {
+      "key": "def.00000000000033b4",
+      "role": "campaign-progression-reward"
+    },
+    {
+      "key": "def.00000000000033b5",
+      "role": "bosses-defeated-parameter"
+    },
+    {
+      "key": "def.00000000000033b6",
+      "role": "canonical-progression-fact"
+    },
+    {
+      "key": "def.00000000000033b7",
+      "role": "progression-authority-count"
+    }
+  ],
+  "scope": {
+    "source_control": "configBossFaceBroken",
+    "parameter_minimum": 0,
+    "parameter_maximum": 9007199254740991,
+    "maximum_is_representation_bound": true,
+    "gameplay_maximum_proven": false,
+    "complete_build": false,
+    "complete_source_supplier_coverage": false
+  }
+}

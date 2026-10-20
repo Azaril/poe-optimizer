@@ -1,0 +1,1292 @@
+{
+  "definitions": [
+    {
+      "kind": "gem",
+      "value": {
+        "id": {
+          "key": "def.00000000000007dd",
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "declarations": {
+              "actors": {
+                "closure": {
+                  "kind": "complete"
+                },
+                "members": []
+              },
+              "choices": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "physical-gem-input-review-incomplete",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "gem",
+                            "value": {
+                              "key": "def.00000000000007dd",
+                              "kind": "gem",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": []
+              },
+              "grants": {
+                "closure": {
+                  "kind": "complete"
+                },
+                "members": [
+                  {
+                    "declaration": {
+                      "definition": {
+                        "key": "def.00000000000007dd",
+                        "kind": "gem",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        }
+                      },
+                      "kind": "gem"
+                    },
+                    "slot": {
+                      "key": "def.000000000000327f",
+                      "kind": "grant_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      }
+                    }
+                  }
+                ]
+              },
+              "outputs": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "physical-gem-input-review-incomplete",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "gem",
+                            "value": {
+                              "key": "def.00000000000007dd",
+                              "kind": "gem",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": []
+              },
+              "parameters": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "physical-gem-input-review-incomplete",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "gem",
+                            "value": {
+                              "key": "def.00000000000007dd",
+                              "kind": "gem",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": [
+                  {
+                    "declaration": {
+                      "definition": {
+                        "key": "def.00000000000007dd",
+                        "kind": "gem",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        }
+                      },
+                      "kind": "gem"
+                    },
+                    "slot": {
+                      "key": "def.00000000000030c0",
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      }
+                    }
+                  },
+                  {
+                    "declaration": {
+                      "definition": {
+                        "key": "def.00000000000007dd",
+                        "kind": "gem",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        }
+                      },
+                      "kind": "gem"
+                    },
+                    "slot": {
+                      "key": "def.00000000000030c1",
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      }
+                    }
+                  }
+                ]
+              },
+              "skill_grants": {
+                "closure": {
+                  "kind": "complete"
+                },
+                "members": [
+                  {
+                    "declaration": {
+                      "definition": {
+                        "key": "def.00000000000007dd",
+                        "kind": "gem",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        }
+                      },
+                      "kind": "gem"
+                    },
+                    "slot": {
+                      "key": "def.000000000000327e",
+                      "kind": "skill_grant_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      }
+                    }
+                  }
+                ]
+              },
+              "sockets": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "physical-gem-input-review-incomplete",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "gem",
+                            "value": {
+                              "key": "def.00000000000007dd",
+                              "kind": "gem",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": []
+              }
+            },
+            "level": {
+              "maximum": 40,
+              "minimum": 1
+            },
+            "quality": {
+              "allowed_kinds": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "physical-gem-input-review-incomplete",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "gem",
+                            "value": {
+                              "key": "def.00000000000007dd",
+                              "kind": "gem",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": [
+                  {
+                    "key": "def.0000000000000006",
+                    "kind": "quality",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                ]
+              },
+              "presence": "optional"
+            },
+            "roles": [
+              "skill_use"
+            ],
+            "skills": {
+              "closure": {
+                "kind": "complete"
+              },
+              "members": [
+                {
+                  "key": "def.00000000000001df",
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "skill",
+      "value": {
+        "id": {
+          "key": "def.00000000000001df",
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "declarations": {
+              "actors": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "ice-nova-input-and-mechanics-unconverted",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "skill",
+                            "value": {
+                              "key": "def.00000000000001df",
+                              "kind": "skill",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": []
+              },
+              "choices": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "ice-nova-input-and-mechanics-unconverted",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "skill",
+                            "value": {
+                              "key": "def.00000000000001df",
+                              "kind": "skill",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": []
+              },
+              "grants": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "ice-nova-input-and-mechanics-unconverted",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "skill",
+                            "value": {
+                              "key": "def.00000000000001df",
+                              "kind": "skill",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": []
+              },
+              "outputs": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "ice-nova-input-and-mechanics-unconverted",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "skill",
+                            "value": {
+                              "key": "def.00000000000001df",
+                              "kind": "skill",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": [
+                  {
+                    "declaration": {
+                      "definition": {
+                        "key": "def.00000000000001df",
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        }
+                      },
+                      "kind": "skill"
+                    },
+                    "slot": {
+                      "key": "def.0000000000003280",
+                      "kind": "action_output",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      }
+                    }
+                  }
+                ]
+              },
+              "parameters": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "ice-nova-input-and-mechanics-unconverted",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "skill",
+                            "value": {
+                              "key": "def.00000000000001df",
+                              "kind": "skill",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": [
+                  {
+                    "declaration": {
+                      "definition": {
+                        "key": "def.00000000000001df",
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        }
+                      },
+                      "kind": "skill"
+                    },
+                    "slot": {
+                      "key": "def.00000000000032d6",
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      }
+                    }
+                  }
+                ]
+              },
+              "skill_grants": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "ice-nova-input-and-mechanics-unconverted",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "skill",
+                            "value": {
+                              "key": "def.00000000000001df",
+                              "kind": "skill",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": []
+              },
+              "sockets": {
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "code": "ice-nova-input-and-mechanics-unconverted",
+                        "facet": "input_schema",
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "skill",
+                            "value": {
+                              "key": "def.00000000000001df",
+                              "kind": "skill",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "members": []
+              }
+            },
+            "directly_selectable": false
+          }
+        }
+      }
+    },
+    {
+      "kind": "usage_policy",
+      "value": {
+        "id": {
+          "key": "def.000000000000326a",
+          "kind": "usage_policy",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "declarations": {
+              "actors": {
+                "closure": {
+                  "kind": "complete"
+                },
+                "members": []
+              },
+              "choices": {
+                "closure": {
+                  "kind": "complete"
+                },
+                "members": []
+              },
+              "grants": {
+                "closure": {
+                  "kind": "complete"
+                },
+                "members": []
+              },
+              "outputs": {
+                "closure": {
+                  "kind": "complete"
+                },
+                "members": []
+              },
+              "parameters": {
+                "closure": {
+                  "kind": "complete"
+                },
+                "members": [
+                  {
+                    "declaration": {
+                      "definition": {
+                        "key": "def.000000000000326a",
+                        "kind": "usage_policy",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        }
+                      },
+                      "kind": "usage_policy"
+                    },
+                    "slot": {
+                      "key": "def.000000000000326b",
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      }
+                    }
+                  }
+                ]
+              },
+              "skill_grants": {
+                "closure": {
+                  "kind": "complete"
+                },
+                "members": []
+              },
+              "sockets": {
+                "closure": {
+                  "kind": "complete"
+                },
+                "members": []
+              }
+            },
+            "scenario_skill_applicability": null,
+            "targets": [
+              "skill"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "roles": [
+    {
+      "construction": {
+        "kind": "observed",
+        "value": {
+          "additional_stat_sets": [],
+          "catalog_gem_key": "Metadata/Items/Gems/SkillGemAstralProjectionSupport",
+          "constructed_additional_effects": [],
+          "declared_additional_effects": [],
+          "display_order": null,
+          "game_id": "Metadata/Items/Gem/SupportGemAstralProjection",
+          "missing_references": [],
+          "primary": {
+            "effect_id": "SupportAstralProjectionPlayer",
+            "resolution": {
+              "kind": "mapped",
+              "value": {
+                "key": "def.0000000000000357",
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          },
+          "resolved_additional_effects": [],
+          "resolved_effects": [
+            {
+              "effect_id": "SupportAstralProjectionPlayer",
+              "resolution": {
+                "kind": "mapped",
+                "value": {
+                  "key": "def.0000000000000357",
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          ],
+          "variant_id": "AstralProjectionSupport",
+          "winning_declaration": 600
+        }
+      },
+      "gem": {
+        "key": "def.000000000000065a",
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        }
+      },
+      "materialization": {
+        "kind": "physical"
+      },
+      "primary": {
+        "kind": "known",
+        "value": {
+          "key": "def.0000000000000357",
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        }
+      },
+      "role": {
+        "kind": "known",
+        "value": "support_assignment"
+      }
+    },
+    {
+      "construction": {
+        "kind": "observed",
+        "value": {
+          "additional_stat_sets": [],
+          "catalog_gem_key": "Metadata/Items/Gems/SkillGemEncroachingGroundSupport",
+          "constructed_additional_effects": [],
+          "declared_additional_effects": [],
+          "display_order": null,
+          "game_id": "Metadata/Items/Gem/SupportGemSuffuse",
+          "missing_references": [],
+          "primary": {
+            "effect_id": "SupportEncroachingGroundPlayer",
+            "resolution": {
+              "kind": "mapped",
+              "value": {
+                "key": "def.00000000000003f8",
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          },
+          "resolved_additional_effects": [],
+          "resolved_effects": [
+            {
+              "effect_id": "SupportEncroachingGroundPlayer",
+              "resolution": {
+                "kind": "mapped",
+                "value": {
+                  "key": "def.00000000000003f8",
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          ],
+          "variant_id": "EncroachingGroundSupport",
+          "winning_declaration": 759
+        }
+      },
+      "gem": {
+        "key": "def.0000000000000740",
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        }
+      },
+      "materialization": {
+        "kind": "physical"
+      },
+      "primary": {
+        "kind": "known",
+        "value": {
+          "key": "def.00000000000003f8",
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        }
+      },
+      "role": {
+        "kind": "known",
+        "value": "support_assignment"
+      }
+    },
+    {
+      "construction": {
+        "kind": "observed",
+        "value": {
+          "additional_stat_sets": [
+            {
+              "id": "IceNovaPlayerOnFrostbolt",
+              "index": 1
+            },
+            {
+              "id": "IceNovaColdInfusedPlayer",
+              "index": 2
+            }
+          ],
+          "catalog_gem_key": "Metadata/Items/Gems/SkillGemIceNova",
+          "constructed_additional_effects": [],
+          "declared_additional_effects": [],
+          "display_order": null,
+          "game_id": "Metadata/Items/Gems/SkillGemIceNova",
+          "missing_references": [],
+          "primary": {
+            "effect_id": "IceNovaPlayer",
+            "resolution": {
+              "kind": "mapped",
+              "value": {
+                "key": "def.00000000000001df",
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          },
+          "resolved_additional_effects": [],
+          "resolved_effects": [
+            {
+              "effect_id": "IceNovaPlayer",
+              "resolution": {
+                "kind": "mapped",
+                "value": {
+                  "key": "def.00000000000001df",
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          ],
+          "variant_id": "IceNova",
+          "winning_declaration": 1
+        }
+      },
+      "gem": {
+        "key": "def.00000000000007dd",
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        }
+      },
+      "materialization": {
+        "kind": "physical"
+      },
+      "primary": {
+        "kind": "known",
+        "value": {
+          "key": "def.00000000000001df",
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        }
+      },
+      "role": {
+        "kind": "known",
+        "value": "skill_use"
+      }
+    },
+    {
+      "construction": {
+        "kind": "observed",
+        "value": {
+          "additional_stat_sets": [],
+          "catalog_gem_key": "Metadata/Items/Gems/SkillGemMagnifiedAreaSupportTwo",
+          "constructed_additional_effects": [],
+          "declared_additional_effects": [],
+          "display_order": null,
+          "game_id": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+          "missing_references": [],
+          "primary": {
+            "effect_id": "SupportMagnifiedAreaPlayerTwo",
+            "resolution": {
+              "kind": "mapped",
+              "value": {
+                "key": "def.0000000000000480",
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          },
+          "resolved_additional_effects": [],
+          "resolved_effects": [
+            {
+              "effect_id": "SupportMagnifiedAreaPlayerTwo",
+              "resolution": {
+                "kind": "mapped",
+                "value": {
+                  "key": "def.0000000000000480",
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          ],
+          "variant_id": "MagnifiedAreaSupportTwo",
+          "winning_declaration": 21
+        }
+      },
+      "gem": {
+        "key": "def.000000000000082b",
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        }
+      },
+      "materialization": {
+        "kind": "physical"
+      },
+      "primary": {
+        "kind": "known",
+        "value": {
+          "key": "def.0000000000000480",
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        }
+      },
+      "role": {
+        "kind": "known",
+        "value": "support_assignment"
+      }
+    },
+    {
+      "construction": {
+        "kind": "observed",
+        "value": {
+          "additional_stat_sets": [],
+          "catalog_gem_key": "Metadata/Items/Gems/SkillGemRapidCastingSupport",
+          "constructed_additional_effects": [],
+          "declared_additional_effects": [],
+          "display_order": null,
+          "game_id": "Metadata/Items/Gems/SupportGemArcaneTempo",
+          "missing_references": [],
+          "primary": {
+            "effect_id": "SupportRapidCastingPlayer",
+            "resolution": {
+              "kind": "mapped",
+              "value": {
+                "key": "def.00000000000004eb",
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          },
+          "resolved_additional_effects": [],
+          "resolved_effects": [
+            {
+              "effect_id": "SupportRapidCastingPlayer",
+              "resolution": {
+                "kind": "mapped",
+                "value": {
+                  "key": "def.00000000000004eb",
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          ],
+          "variant_id": "RapidCastingSupport",
+          "winning_declaration": 43
+        }
+      },
+      "gem": {
+        "key": "def.00000000000008bf",
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        }
+      },
+      "materialization": {
+        "kind": "physical"
+      },
+      "primary": {
+        "kind": "known",
+        "value": {
+          "key": "def.00000000000004eb",
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        }
+      },
+      "role": {
+        "kind": "known",
+        "value": "support_assignment"
+      }
+    },
+    {
+      "construction": {
+        "kind": "observed",
+        "value": {
+          "additional_stat_sets": [],
+          "catalog_gem_key": "Metadata/Items/Gems/SkillGemRapidCastingSupportTwo",
+          "constructed_additional_effects": [],
+          "declared_additional_effects": [],
+          "display_order": null,
+          "game_id": "Metadata/Items/Gems/SupportGemArcaneTempoTwo",
+          "missing_references": [],
+          "primary": {
+            "effect_id": "SupportRapidCastingPlayerTwo",
+            "resolution": {
+              "kind": "mapped",
+              "value": {
+                "key": "def.00000000000004ed",
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          },
+          "resolved_additional_effects": [],
+          "resolved_effects": [
+            {
+              "effect_id": "SupportRapidCastingPlayerTwo",
+              "resolution": {
+                "kind": "mapped",
+                "value": {
+                  "key": "def.00000000000004ed",
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          ],
+          "variant_id": "RapidCastingSupportTwo",
+          "winning_declaration": 44
+        }
+      },
+      "gem": {
+        "key": "def.00000000000008c1",
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        }
+      },
+      "materialization": {
+        "kind": "physical"
+      },
+      "primary": {
+        "kind": "known",
+        "value": {
+          "key": "def.00000000000004ed",
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        }
+      },
+      "role": {
+        "kind": "known",
+        "value": "support_assignment"
+      }
+    }
+  ],
+  "slots": [
+    {
+      "kind": "parameter",
+      "value": {
+        "id": {
+          "declaration": {
+            "definition": {
+              "key": "def.000000000000326a",
+              "kind": "usage_policy",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "kind": "usage_policy"
+          },
+          "slot": {
+            "key": "def.000000000000326b",
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            }
+          }
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "presence": "required_once",
+            "sites": [
+              "usage_policy_parameter"
+            ],
+            "value": {
+              "kind": "integer",
+              "value": {
+                "maximum": 4,
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "grant",
+      "value": {
+        "id": {
+          "declaration": {
+            "definition": {
+              "key": "def.00000000000007dd",
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "kind": "gem"
+          },
+          "slot": {
+            "key": "def.000000000000327f",
+            "kind": "grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            }
+          }
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "provider_roles": [
+              "skill_use"
+            ],
+            "target": {
+              "kind": "skill",
+              "value": {
+                "declaration": {
+                  "definition": {
+                    "key": "def.00000000000007dd",
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  },
+                  "kind": "gem"
+                },
+                "slot": {
+                  "key": "def.000000000000327e",
+                  "kind": "skill_grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "skill_grant",
+      "value": {
+        "id": {
+          "declaration": {
+            "definition": {
+              "key": "def.00000000000007dd",
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "kind": "gem"
+          },
+          "slot": {
+            "key": "def.000000000000327e",
+            "kind": "skill_grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            }
+          }
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "outputs": {
+              "closure": {
+                "kind": "partial",
+                "value": {
+                  "gaps": [
+                    {
+                      "code": "ice-nova-input-and-mechanics-unconverted",
+                      "facet": "input_schema",
+                      "subject": {
+                        "kind": "definition",
+                        "value": {
+                          "kind": "skill",
+                          "value": {
+                            "key": "def.00000000000001df",
+                            "kind": "skill",
+                            "namespace": {
+                              "game": "poe2",
+                              "version": "owned-mechanics-v1"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "members": [
+                {
+                  "declaration": {
+                    "definition": {
+                      "key": "def.00000000000001df",
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      }
+                    },
+                    "kind": "skill"
+                  },
+                  "slot": {
+                    "key": "def.0000000000003280",
+                    "kind": "action_output",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    }
+                  }
+                }
+              ]
+            },
+            "skill": {
+              "key": "def.00000000000001df",
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

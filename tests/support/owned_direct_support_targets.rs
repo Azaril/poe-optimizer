@@ -134,10 +134,7 @@ fn stage(prior: &StagedOwnedRelease, authority: &Value) -> StagedOwnedRelease {
         dispositions,
         skills,
         ..
-    } = direct
-    else {
-        panic!("exact reviewed V2 Direct source authority required")
-    };
+    } = direct;
     assert_eq!(
         json!(source)["revision"],
         authority["provider"]["source_revision"]

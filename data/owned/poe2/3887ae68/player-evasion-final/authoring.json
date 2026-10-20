@@ -1,45 +1,45 @@
 {
-  "schema_version": 1,
-  "kind": "player-evasion-final",
-  "before": "b6c757ffc109b2a58bc21b0d185033bfe1553c37419cf46402116dfed09e7a0e",
-  "registry_last": 13219,
-  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
-  "scope": {
-    "publication_ready": true,
-    "finite_source_gate_complete": true,
-    "new_programs": 2,
-    "complete_build": false
-  },
   "artifacts": [
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-final/definitions.json",
       "bytes": 730,
+      "path": "data/owned/poe2/3887ae68/player-evasion-final/definitions.json",
       "sha256": "4c805e03ce63d9fa1cd57c9b69ffd49a9e54606486b8bf2064c75368fe3c99ee"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-final/consumer.json",
       "bytes": 82721,
+      "path": "data/owned/poe2/3887ae68/player-evasion-final/consumer.json",
       "sha256": "e9a4a04b786a84598fd1470bbd73a857917ad0f34d82f33cb1173d5f15511d5a"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-final/migration.json",
       "bytes": 1463,
+      "path": "data/owned/poe2/3887ae68/player-evasion-final/migration.json",
       "sha256": "097e72d4f642170aa62ba96b1d384a4fe2585e38fd183488a2d6f799d3e5aace"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-final/dependencies.json",
       "bytes": 1617965,
+      "path": "data/owned/poe2/3887ae68/player-evasion-final/dependencies.json",
       "sha256": "713da3c1b614a13f840692d70b8366bb08c0faa13a2c0ded29b8b2bbf05db44f"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-final/source-domain.json",
       "bytes": 1655131,
-      "sha256": "d9c15d9f26192082243d7f5dd5ce23bee9fe4af14c59ecb2e4591b988d19193f"
+      "path": "data/owned/poe2/3887ae68/player-evasion-final/source-domain.json",
+      "sha256": "c16d1ecb4d53a90845a87219988de4c5105f0941f5f446aef5c4a84e826ed09c"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-final/bindings.json",
       "bytes": 995,
+      "path": "data/owned/poe2/3887ae68/player-evasion-final/bindings.json",
       "sha256": "595380d0fb9b76729a2f4b7f48b2167d20a2413597a902dd83a7648146d84753"
     }
-  ]
+  ],
+  "before": "b6c757ffc109b2a58bc21b0d185033bfe1553c37419cf46402116dfed09e7a0e",
+  "kind": "player-evasion-final",
+  "registry_last": 13219,
+  "schema_version": 1,
+  "scope": {
+    "complete_build": false,
+    "finite_source_gate_complete": true,
+    "new_programs": 2,
+    "publication_ready": true
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
 }

@@ -321,7 +321,7 @@ pub fn run_with_item_parameter_completions_and_counts(
         "before":prior.receipt().input,"after":next.receipt().input,"originals":originals,
         "queries":110,"artifacts":18,"rebuild_byte_identical":true,"prior_unchanged":true,
         "closed_rule_owners":scope.closed_existing_rule_owners,"retired_input_issues":0,"complete_original_builds":0,
-        "evaluation_bundle_added":false,"receiving_fragment_only":!scope.passive_refinement,
+        "evaluation_bundle_added":false,"passive_refinement":scope.passive_refinement,
         "authoring_payloads_excluded":true,"provenance_preserved":true,
     });
     if !completions.is_empty() {

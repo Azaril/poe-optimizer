@@ -11,9 +11,7 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
         .find(|r| r.role == OwnedGemRole::Known(AuthoredGemRole::SupportAssignment))
         .unwrap()
         .clone();
-    let OwnedPrimarySkill::Known(primary) = role.primary else {
-        unreachable!()
-    };
+    assert!(matches!(role.primary, OwnedPrimarySkill::Known(_)));
     let count = a.registry.allocate_definition::<UnitDefinition>().unwrap();
     let owner = SlotOwnerDefId::Gem(role.gem.clone());
     let corrupted = a
@@ -58,7 +56,7 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
         },
         roles: vec![AuthoredGemRole::SupportAssignment],
         skills: DeclaredSet::partial(
-            vec![primary],
+            vec![],
             vec![SchemaGap {
                 subject: subject(&role.gem),
                 facet: SchemaFacet::StaticLinks,
@@ -145,13 +143,20 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
     };
     q.kind_attribute = "qualityId".into();
     q.kinds.retain(|v| v.source == SourceComponent::Missing);
-    p.gem_inventory = Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+    p.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV3 {
+        usage_inputs: poe_optimizer_import::owned_normalize::usage_inputs_identity(
+            &p,
+            Default::default(),
+        )
+        .unwrap(),
+        primary_skills: vec![],
+        primary_dispositions: vec![],
         definitions: a.schema.identity().clone(),
         roles: *a.roles.identity(),
         catalog: a.roles.input().compilation.catalog_digest,
         scalar_inputs: gem_inventory_scalar_inputs_identity(&p, NormalizationLimits::default())
             .unwrap(),
-        gems: vec![PhysicalGemInputInventory {
+        supports: vec![PhysicalGemInputInventory {
             gem: role.gem,
             game_id: "support".into(),
             variant_id: "v".into(),
@@ -178,12 +183,17 @@ fn complete_parameters(r: &NormalizedImport) -> bool {
 }
 fn refresh(p: &mut NormalizationPolicy) {
     let digest = gem_inventory_scalar_inputs_identity(p, NormalizationLimits::default()).unwrap();
-    let Some(GemInventoryPolicy::PobFreshSingleSupportV1 { scalar_inputs, .. }) =
-        &mut p.gem_inventory
+    let usage = usage_inputs_identity(p, Default::default()).unwrap();
+    let Some(GemInventoryPolicy::PobFreshPhysicalV3 {
+        scalar_inputs,
+        usage_inputs,
+        ..
+    }) = &mut p.gem_inventory
     else {
         unreachable!()
     };
     *scalar_inputs = digest;
+    *usage_inputs = usage;
 }
 
 #[test]
@@ -214,11 +224,8 @@ fn finite_support_inventory_closes_only_physical_assignments_and_keeps_partial_d
         ));
     }
     assert_eq!(&schema_before, a.schema.input());
-    let GemInventoryPolicy::PobFreshSingleSupportV1 { gems, .. } =
-        p.gem_inventory.as_ref().unwrap()
-    else {
-        unreachable!("legacy V1 fixture")
-    };
+    let GemInventoryPolicy::PobFreshPhysicalV3 { supports: gems, .. } =
+        p.gem_inventory.as_ref().unwrap();
     let SchemaLookup::Known(schema) = a.schema.definition(&gems[0].gem) else {
         unreachable!()
     };
@@ -235,17 +242,133 @@ fn finite_support_inventory_closes_only_physical_assignments_and_keeps_partial_d
 }
 
 #[test]
-fn support_inventory_accepts_corrected_empty_supply_and_historical_primary_only() {
+fn usage_inventory_support_wiring_preserves_outputs_and_unreviewed_usage() {
+    let (a, mut p) = fixture();
+    let GemInventoryPolicy::PobFreshPhysicalV3 { supports: gems, .. } =
+        p.gem_inventory.as_ref().unwrap();
+    let support_gem = gems[0].gem.clone();
+    p.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
+        definitions: a.schema.identity().clone(),
+        source: a.roles.input().compilation.source.clone(),
+        roles: *a.roles.identity(),
+        catalog: a.roles.input().compilation.catalog_digest,
+        scalar_inputs: gem_inventory_scalar_inputs_identity(&p, Default::default()).unwrap(),
+        physical: vec![],
+        occurrences: vec![],
+        scenario: vec![],
+        inventory: None,
+    });
+    refresh(&mut p);
+    let mut checked = p.clone();
+    let Some(UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. }) = &mut checked.usage_inputs
+    else {
+        unreachable!()
+    };
+    let mut fields: Vec<_> = [
+        "gemId",
+        "variantId",
+        "skillId",
+        "nameSpec",
+        "level",
+        "quality",
+        "corrupted",
+        "corruptLevel",
+        "enabled",
+        "count",
+        "enableGlobal1",
+        "enableGlobal2",
+    ]
+    .into_iter()
+    .map(|name| UsageInventoryField {
+        field: UsageInventoryFieldSelector::OccurrenceAttribute { name: name.into() },
+        destinations: vec![
+            if matches!(name, "count" | "enableGlobal1" | "enableGlobal2") {
+                UsageInventoryDestination::Deferred {
+                    reason: key("support-usage-meaning-unreviewed"),
+                }
+            } else {
+                UsageInventoryDestination::InputDisposition
+            },
+        ],
+    })
+    .collect();
+    fields.extend([
+        UsageInventoryField {
+            field: UsageInventoryFieldSelector::GroupAttribute {
+                name: "enabled".into(),
+            },
+            destinations: vec![UsageInventoryDestination::InputDisposition],
+        },
+        UsageInventoryField {
+            field: UsageInventoryFieldSelector::ReferenceDescendants,
+            destinations: vec![UsageInventoryDestination::InputDisposition],
+        },
+    ]);
+    *inventory = Some(UsageInventoryPolicy {
+        evidence: "e".repeat(64).parse().unwrap(),
+        rows: vec![UsageInventoryRow {
+            source: UsageInventorySource::Physical { gem: support_gem },
+            fields,
+        }],
+    });
+    refresh(&mut checked);
+    for (raw, resolved_supports) in [
+        (format!("{ACTIVE}{GEM}{GEM}"), 2),
+        (GEM.into(), 0),
+        (
+            format!("{ACTIVE}{}", GEM.replace("count=\"1\"", "count=\"2\"")),
+            1,
+        ),
+    ] {
+        let source = source(&xml(&raw), 77);
+        let baseline = run_with_policy(&source, &a, &[], &p);
+        let result = run_with_policy(&source, &a, &[], &checked);
+        assert_eq!(result.draft().input(), baseline.draft().input());
+        assert_eq!(result.sidecar().origins, baseline.sidecar().origins);
+        assert_eq!(result.allocator_after(), baseline.allocator_after());
+        assert_eq!(
+            result
+                .draft()
+                .input()
+                .supports
+                .members
+                .iter()
+                .filter(|support| support.to_resolved().is_some())
+                .count(),
+            resolved_supports
+        );
+        // This tests real normalizer wiring and refusal, not an invented support
+        // count/global policy or a complete preset.
+        assert!(
+            result
+                .draft()
+                .input()
+                .skill_presets
+                .members
+                .iter()
+                .all(|preset| {
+                    preset.usage_preferences.as_ref().is_none_or(|usage| {
+                        !matches!(usage.completion, DraftListCompletion::Complete)
+                    })
+                })
+        );
+        origin_integrity(&source, &result);
+    }
+}
+
+#[test]
+fn support_inventory_requires_empty_supply_and_rejects_retired_primary_membership() {
     let (a, p) = fixture();
     let before = normalize_with_loadouts(&xml(GEM), &a, &p).unwrap();
     for case in 0..4 {
         let (mut a, mut p) = fixture();
-        let GemInventoryPolicy::PobFreshSingleSupportV1 { gems, .. } =
-            p.gem_inventory.as_ref().unwrap()
-        else {
+        let GemInventoryPolicy::PobFreshPhysicalV3 { supports: gems, .. } =
+            p.gem_inventory.as_ref().unwrap();
+        let gem = gems[0].gem.clone();
+        let OwnedPrimarySkill::Known(primary) = &a.roles.role(&gem).unwrap().primary else {
             unreachable!()
         };
-        let gem = gems[0].gem.clone();
+        let primary = primary.clone();
         let other = a
             .roles
             .input()
@@ -272,24 +395,21 @@ fn support_inventory_accepts_corrected_empty_supply_and_historical_primary_only(
         };
         match case {
             0 => gem_schema.skills.members.clear(),
-            1 => {} // Historical immutable package remains replayable.
+            1 => gem_schema.skills.members = vec![primary],
             2 => gem_schema.skills.members = vec![other],
-            3 => gem_schema.skills.members.push(other),
+            3 => gem_schema.skills.members = vec![primary, other],
             _ => unreachable!(),
         }
         assert!(!gem_schema.skills.is_complete());
         rebind_quality_schema(&mut a, &mut p, schema);
-        let GemInventoryPolicy::PobFreshSingleSupportV1 {
+        let GemInventoryPolicy::PobFreshPhysicalV3 {
             definitions, roles, ..
-        } = p.gem_inventory.as_mut().unwrap()
-        else {
-            unreachable!()
-        };
+        } = p.gem_inventory.as_mut().unwrap();
         *definitions = a.schema.identity().clone();
         *roles = *a.roles.identity();
         refresh(&mut p);
         let result = normalize_with_loadouts(&xml(GEM), &a, &p);
-        if case < 2 {
+        if case == 0 {
             let result = result.unwrap();
             assert!(complete_parameters(&result));
             assert_eq!(result.draft().input(), before.draft().input());
@@ -459,16 +579,14 @@ fn bindings_domains_and_closed_wire_reject_stale_or_ambiguous_authoring() {
     let (a, p) = fixture();
     for case in 0..9 {
         let mut bad = p.clone();
-        let GemInventoryPolicy::PobFreshSingleSupportV1 {
+        let GemInventoryPolicy::PobFreshPhysicalV3 {
             definitions,
             roles,
             catalog,
             scalar_inputs,
-            gems,
-        } = bad.gem_inventory.as_mut().unwrap()
-        else {
-            unreachable!("legacy V1 fixture")
-        };
+            supports: gems,
+            ..
+        } = bad.gem_inventory.as_mut().unwrap();
         match case {
             0 => definitions.content_sha256 = "0".repeat(64),
             1 => {
@@ -504,11 +622,8 @@ fn bindings_domains_and_closed_wire_reject_stale_or_ambiguous_authoring() {
     wire["gem_inventory"]["force_complete"] = true.into();
     assert!(serde_json::from_value::<NormalizationPolicy>(wire).is_err());
     let mut empty = p.clone();
-    let GemInventoryPolicy::PobFreshSingleSupportV1 { gems, .. } =
-        empty.gem_inventory.as_mut().unwrap()
-    else {
-        unreachable!("legacy V1 fixture")
-    };
+    let GemInventoryPolicy::PobFreshPhysicalV3 { supports: gems, .. } =
+        empty.gem_inventory.as_mut().unwrap();
     gems.clear();
     assert!(!complete_parameters(
         &normalize_with_loadouts(&xml(GEM), &a, &empty).unwrap()

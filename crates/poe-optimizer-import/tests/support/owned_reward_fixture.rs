@@ -305,7 +305,7 @@ pub fn stage_rewards(base: &OwnedIdRegistry) -> StagedRewardFixture {
                 }],
                 missing: MissingValuePolicy::Explicit { value: default },
             },
-            outcomes,
+            output: RewardRuleOutput::Cases(outcomes),
         });
     }
     base.validate_successor(&stage.registry).unwrap();

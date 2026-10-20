@@ -22,6 +22,7 @@ pub mod owned_augment_reconstruction;
 pub mod owned_augments;
 mod owned_baseline;
 pub mod owned_catalog_recipe;
+pub mod owned_configuration_numeric;
 pub mod owned_defence_profiles;
 pub mod owned_effective_gem_recipe;
 pub mod owned_gem_catalog;

@@ -999,7 +999,28 @@ impl Visit<'_> {
                 Ok(())
             },
         )?;
-        self.usages(&format!("{path}.usage"), &value.usage, None)
+        self.usages(&format!("{path}.usage"), &value.usage, None)?;
+        let mut seen = BTreeSet::new();
+        self.list(
+            &format!("{path}.usage_intents"),
+            &value.usage_intents,
+            |v, p, intent| {
+                v.definition(&format!("{p}.policy"), &intent.policy)?;
+                v.parameters(
+                    &format!("{p}.parameters"),
+                    &intent.parameters,
+                    intent.policy.to_resolved().map(SlotOwnerDefId::UsagePolicy),
+                    |owner| matches!(owner, SlotOwnerDefId::UsagePolicy(_)),
+                )?;
+                if !v.gathering
+                    && let Some(policy) = intent.policy.to_resolved()
+                    && !seen.insert(policy)
+                {
+                    return Err(error(p, StructuralErrorKind::DuplicateAssignment));
+                }
+                Ok(())
+            },
+        )
     }
     fn usages(
         &mut self,

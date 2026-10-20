@@ -210,7 +210,7 @@ impl Fixture {
                         value: ParameterValue::Boolean(false),
                     },
                 },
-                outcomes: vec![
+                output: RewardRuleOutput::Cases(vec![
                     RewardOutcomeCase {
                         when: RewardValue::Boolean(false),
                         outcome: RewardTemplate::None,
@@ -225,7 +225,7 @@ impl Fixture {
                             }],
                         },
                     },
-                ],
+                ]),
             }],
         }
     }
@@ -242,6 +242,7 @@ impl Fixture {
             OwnedDefinitionSchemaPackage::new(schema, OwnedSchemaLimits::default()).unwrap();
         let mut input = self.mapping.input().clone();
         input.definitions = self.schema.identity().clone();
+        input.registry = self.registry.identity().unwrap();
         self.mapping = OwnedMappingIndex::new(
             input,
             &self.registry,
@@ -261,12 +262,116 @@ impl Fixture {
         slot.value = value;
         self.rebuild(schema);
     }
+    fn additional_required_parameter(&mut self) -> DeclaredSlot<ParameterSlotDefId> {
+        let parameter = self
+            .registry
+            .allocate_slot(SlotOwnerDefId::Reward(self.reward.clone()))
+            .unwrap();
+        let mut input = self.schema.input().clone();
+        for descriptor in &mut input.definitions {
+            if let DefinitionDescriptor::Reward(row) = descriptor
+                && row.id == self.reward
+            {
+                let SchemaState::Known(schema) = &mut row.schema else {
+                    unreachable!()
+                };
+                schema
+                    .declarations
+                    .parameters
+                    .members
+                    .push(parameter.clone());
+            }
+        }
+        input.slots.push(SlotDescriptor::Parameter(known(
+            parameter.clone(),
+            ParameterSlotSchema {
+                skill_input: None,
+                value: ValueSchema::Integer(IntegerRange {
+                    minimum: BoundedInteger::new(0).unwrap(),
+                    maximum: BoundedInteger::new(9).unwrap(),
+                }),
+                presence: SlotPresence::RequiredOnce,
+                sites: vec![ParameterSite::RewardParameter],
+            },
+        )));
+        self.rebuild(input);
+        parameter
+    }
 }
 fn parameters(input: &mut RewardPolicyInput) -> &mut Vec<ParameterAssignment> {
-    let RewardTemplate::Reward { parameters, .. } = &mut input.rules[0].outcomes[1].outcome else {
+    let RewardTemplate::Reward { parameters, .. } = &mut cases(input)[1].outcome else {
         unreachable!()
     };
     parameters
+}
+fn cases(input: &mut RewardPolicyInput) -> &mut Vec<RewardOutcomeCase> {
+    let RewardRuleOutput::Cases(cases) = &mut input.rules[0].output else {
+        unreachable!()
+    };
+    cases
+}
+fn numeric_input(fixture: &Fixture, selection: RewardNumericSelection) -> RewardPolicyInput {
+    let mut input = fixture.input();
+    let rule = &mut input.rules[0];
+    rule.recipe.codec.codec = ValueCodecKind::Integer {
+        syntax: DecimalSyntax::Scientific,
+    };
+    rule.recipe.missing = MissingValuePolicy::Pending;
+    rule.recipe.tiers = [ValueLane::InputNumber, ValueLane::PlaceholderNumber]
+        .into_iter()
+        .map(|lane| ValueTier {
+            selectors: vec![ValueSelector {
+                lane,
+                name: "caller-count".into(),
+            }],
+            duplicates: DuplicatePolicy::Reject,
+        })
+        .collect();
+    rule.output = RewardRuleOutput::NumericParameter(Box::new(RewardNumericParameter {
+        selector: selector("chosen"),
+        parameter: fixture.parameter.clone(),
+        fixed_parameters: vec![],
+        selection,
+    }));
+    input
+}
+fn numeric_decision<'a>(
+    policy: &'a OwnedRewardPolicy,
+    input: Option<&'a str>,
+    placeholder: Option<&'a str>,
+) -> RewardDecision<'a> {
+    let ids = origins();
+    let selectors: Vec<_> = policy.input().rules[0]
+        .recipe
+        .tiers
+        .iter()
+        .flat_map(|t| &t.selectors)
+        .collect();
+    let candidates: Vec<_> = [input, placeholder]
+        .into_iter()
+        .enumerate()
+        .filter_map(|(index, value)| {
+            value.map(|value| ValueCandidate {
+                selector: selectors[index],
+                origin: ids[index],
+                value: CandidateValue::Decoded(value),
+            })
+        })
+        .collect();
+    policy.decide(&key("rule"), &candidates).unwrap()
+}
+fn numeric_value(outcome: &RewardOutcome, fixture: &Fixture) -> ParameterValue {
+    let RewardOutcome::Reward {
+        definition,
+        parameters,
+    } = outcome
+    else {
+        panic!("{outcome:?}")
+    };
+    assert_eq!(definition, &fixture.reward);
+    assert_eq!(parameters.len(), 1);
+    assert_eq!(parameters[0].slot, fixture.parameter);
+    parameters[0].value.clone()
 }
 fn origins() -> Vec<SourceAttributeRef> {
     let source = ImportedBuildInstance::from_decoded(
@@ -344,8 +449,8 @@ fn injected_boolean_and_exact_option_outcomes_bind_without_allocating_occurrence
     };
     input.rules[0].recipe.tiers[0].selectors[0].lane = ValueLane::InputString;
     input.rules[0].recipe.missing = MissingValuePolicy::Pending;
-    input.rules[0].outcomes[0].when = RewardValue::Option(fixture.options[1].clone());
-    input.rules[0].outcomes[1].when = RewardValue::Option(fixture.options[0].clone());
+    cases(&mut input)[0].when = RewardValue::Option(fixture.options[1].clone());
+    cases(&mut input)[1].when = RewardValue::Option(fixture.options[0].clone());
     let policy = fixture.build(input).unwrap();
     assert!(matches!(
         selected(&policy, "Exact option"),
@@ -431,7 +536,7 @@ fn absent_unmatched_and_explicit_unmapped_are_distinct_from_no_reward() {
     let fixture = Fixture::new();
     let mut input = fixture.input();
     input.rules[0].recipe.missing = MissingValuePolicy::Absent;
-    input.rules[0].outcomes[1].outcome = RewardTemplate::Unmapped {
+    cases(&mut input)[1].outcome = RewardTemplate::Unmapped {
         issue: key("caller-gap"),
     };
     let policy = fixture.build(input.clone()).unwrap();
@@ -449,7 +554,7 @@ fn absent_unmatched_and_explicit_unmapped_are_distinct_from_no_reward() {
             }
         }
     );
-    input.rules[0].outcomes.clear();
+    cases(&mut input).clear();
     assert_eq!(
         selected(&fixture.build(input.clone()).unwrap(), "on"),
         RewardOutcome::Unmapped {
@@ -555,7 +660,7 @@ fn known_parameter_contradictions_reject_even_when_another_mapping_is_unknown() 
     let RewardTemplate::Reward {
         selector: target,
         parameters,
-    } = &mut input.rules[0].outcomes[1].outcome
+    } = &mut cases(&mut input)[1].outcome
     else {
         unreachable!()
     };
@@ -660,14 +765,14 @@ fn unsupported_recipes_duplicate_rows_and_foreign_values_reject() {
     input.rules.push(input.rules[0].clone());
     violation(fixture.build(input), RewardPolicyViolation::DuplicateRule);
     let mut input = fixture.input();
-    let duplicate = input.rules[0].outcomes[0].clone();
-    input.rules[0].outcomes.push(duplicate);
+    let duplicate = cases(&mut input)[0].clone();
+    cases(&mut input).push(duplicate);
     violation(
         fixture.build(input),
         RewardPolicyViolation::DuplicateOutcome,
     );
     let mut input = fixture.input();
-    input.rules[0].outcomes[0].when = RewardValue::Option(fixture.options[0].clone());
+    cases(&mut input)[0].when = RewardValue::Option(fixture.options[0].clone());
     violation(fixture.build(input), RewardPolicyViolation::WrongWhenKind);
     let mut input = fixture.input();
     parameters(&mut input)[0].value = ParameterValue::Option(
@@ -680,6 +785,615 @@ fn unsupported_recipes_duplicate_rows_and_foreign_values_reject() {
     violation(
         fixture.build(input),
         RewardPolicyViolation::ForeignNamespace,
+    );
+}
+
+#[test]
+fn numeric_projection_preserves_explicit_zero_and_skipped_zero_source_authority() {
+    let fixture = Fixture::new();
+    let ordinary = fixture
+        .build(numeric_input(
+            &fixture,
+            RewardNumericSelection::RecipePrecedence,
+        ))
+        .unwrap();
+    let zero = numeric_decision(&ordinary, Some("0"), Some("7"));
+    assert_eq!(numeric_value(&zero.outcome, &fixture), integer(0));
+    assert_eq!(zero.numeric.unwrap().selected, Some(origins()[0]));
+    let nonzero = fixture
+        .build(numeric_input(
+            &fixture,
+            RewardNumericSelection::NonzeroInputThenNonzeroPlaceholder,
+        ))
+        .unwrap();
+    for (input, placeholder, expected, selected_index) in [
+        (Some("4"), Some("7"), 4, 0),
+        (Some("0"), Some("7"), 7, 1),
+        (Some("4"), Some("0"), 4, 0),
+        (None, Some("7.0"), 7, 1),
+    ] {
+        let decision = numeric_decision(&nonzero, input, placeholder);
+        assert_eq!(
+            numeric_value(&decision.outcome, &fixture),
+            integer(expected)
+        );
+        assert_eq!(
+            decision.numeric.unwrap().selected,
+            Some(origins()[selected_index])
+        );
+    }
+    let fallback = numeric_decision(&nonzero, Some("0"), Some("7"));
+    assert!(
+        matches!(fallback.value.outcome, ValueOutcome::Selected { origin, .. } if origin == origins()[0])
+    );
+    assert_eq!(
+        fallback.numeric.unwrap().sources,
+        vec![
+            RewardNumericSource {
+                origin: origins()[0],
+                disposition: RewardNumericDisposition::ZeroSkipped
+            },
+            RewardNumericSource {
+                origin: origins()[1],
+                disposition: RewardNumericDisposition::Selected
+            },
+        ]
+    );
+    for (input, placeholder) in [(Some("0"), None), (None, Some("0")), (Some("0"), Some("0"))] {
+        let decision = numeric_decision(&nonzero, input, placeholder);
+        assert_eq!(
+            decision.outcome,
+            RewardOutcome::Unmapped {
+                reason: RewardUnmappedReason::NoNumericSelection
+            }
+        );
+        let trace = decision.numeric.unwrap();
+        assert_eq!(trace.selected, None);
+        assert!(
+            trace
+                .sources
+                .iter()
+                .all(|s| s.disposition == RewardNumericDisposition::ZeroSkipped)
+        );
+    }
+    let missing = numeric_decision(&nonzero, None, None);
+    assert_eq!(
+        missing.outcome,
+        RewardOutcome::Unmapped {
+            reason: RewardUnmappedReason::ValuePending
+        }
+    );
+    assert!(missing.numeric.unwrap().sources.is_empty());
+}
+
+#[test]
+fn destination_neutral_numeric_selection_preserves_reward_decisions_and_trace_wire() {
+    use poe_optimizer_import::owned_configuration_numeric::{
+        ConfigurationNumericOutcome, ConfigurationNumericRecipe,
+    };
+    let fixture = Fixture::new();
+    let domain = ValueSchema::Integer(IntegerRange {
+        minimum: BoundedInteger::new(0).unwrap(),
+        maximum: BoundedInteger::new(9).unwrap(),
+    });
+    for selection in [
+        RewardNumericSelection::RecipePrecedence,
+        RewardNumericSelection::NonzeroInputThenNonzeroPlaceholder,
+    ] {
+        let input = numeric_input(&fixture, selection);
+        let shared = ConfigurationNumericRecipe::new(
+            input.rules[0].recipe.clone(),
+            selection,
+            Default::default(),
+        )
+        .unwrap();
+        let policy = fixture.build(input).unwrap();
+        let ids = origins();
+        for values in [
+            [Some("0"), Some("7")],
+            [Some("4"), Some("0")],
+            [Some("0"), Some("0")],
+            [Some("4"), Some("NaN")],
+            [Some("4"), Some("10")],
+            [None, Some("7.0")],
+            [None, None],
+        ] {
+            let candidates: Vec<_> = values
+                .iter()
+                .enumerate()
+                .filter_map(|(i, text)| {
+                    text.map(|text| ValueCandidate {
+                        selector: &shared.input().tiers[i].selectors[0],
+                        origin: ids[i],
+                        value: CandidateValue::Decoded(text),
+                    })
+                })
+                .collect();
+            let numeric = shared.decide(&candidates, Some(&domain)).unwrap();
+            let reward = numeric_decision(&policy, values[0], values[1]);
+            assert_eq!(numeric.value, reward.value);
+            assert_eq!(
+                serde_json::to_vec(&numeric.numeric).unwrap(),
+                serde_json::to_vec(reward.numeric.as_ref().unwrap()).unwrap(),
+                "the Reward public source trace retains its exact wire"
+            );
+            match numeric.outcome {
+                ConfigurationNumericOutcome::Selected { value } => {
+                    assert_eq!(numeric_value(&reward.outcome, &fixture), value);
+                }
+                ConfigurationNumericOutcome::Unavailable { reason } => {
+                    assert_eq!(numeric.numeric.selected, None);
+                    let RewardOutcome::Unmapped {
+                        reason: reward_reason,
+                    } = reward.outcome
+                    else {
+                        panic!("unavailable selection cannot emit a Reward")
+                    };
+                    assert_eq!(
+                        serde_json::to_value(reason).unwrap(),
+                        serde_json::to_value(reward_reason).unwrap()["kind"],
+                        "destination mapping preserves the exact failure reason"
+                    );
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn numeric_projection_checks_losing_values_and_refuses_defaults_and_ambiguous_selection() {
+    let fixture = Fixture::new();
+    for selection in [
+        RewardNumericSelection::RecipePrecedence,
+        RewardNumericSelection::NonzeroInputThenNonzeroPlaceholder,
+    ] {
+        let policy = fixture.build(numeric_input(&fixture, selection)).unwrap();
+        for malformed in ["NaN", "", "1.5", "bad"] {
+            for (input, placeholder) in [(Some("4"), Some(malformed)), (Some(malformed), Some("7"))]
+            {
+                let decision = numeric_decision(&policy, input, placeholder);
+                assert_eq!(
+                    decision.outcome,
+                    RewardOutcome::Unmapped {
+                        reason: RewardUnmappedReason::InvalidNumericCandidate
+                    }
+                );
+                assert_eq!(decision.numeric.unwrap().selected, None);
+            }
+        }
+        for outside in ["-1", "10"] {
+            let decision = numeric_decision(&policy, Some("4"), Some(outside));
+            assert_eq!(
+                decision.outcome,
+                RewardOutcome::Unmapped {
+                    reason: RewardUnmappedReason::ProjectedValueOutOfRange
+                }
+            );
+            assert_eq!(decision.numeric.unwrap().selected, None);
+        }
+    }
+    let mut input = numeric_input(&fixture, RewardNumericSelection::RecipePrecedence);
+    input.rules[0].recipe.missing = MissingValuePolicy::Explicit { value: integer(0) };
+    violation(fixture.build(input), RewardPolicyViolation::NumericDefault);
+    let mut input = numeric_input(&fixture, RewardNumericSelection::RecipePrecedence);
+    input.rules[0].recipe.tiers[1].duplicates = DuplicatePolicy::LastInSourceOrder;
+    violation(
+        fixture.build(input),
+        RewardPolicyViolation::UnsupportedSelection,
+    );
+    for lane in [
+        ValueLane::Attribute,
+        ValueLane::InputString,
+        ValueLane::PlaceholderBoolean,
+    ] {
+        let mut input = numeric_input(&fixture, RewardNumericSelection::RecipePrecedence);
+        input.rules[0].recipe.tiers[0].selectors[0].lane = lane;
+        violation(fixture.build(input), RewardPolicyViolation::UnsupportedLane);
+    }
+    let mut input = numeric_input(
+        &fixture,
+        RewardNumericSelection::NonzeroInputThenNonzeroPlaceholder,
+    );
+    input.rules[0].recipe.tiers[1].selectors[0].name = "other-count".into();
+    violation(
+        fixture.build(input),
+        RewardPolicyViolation::UnsupportedSelection,
+    );
+}
+
+#[test]
+fn numeric_projection_rejects_duplicate_losing_lanes_and_unavailable_evidence() {
+    let fixture = Fixture::new();
+    let policy = fixture
+        .build(numeric_input(
+            &fixture,
+            RewardNumericSelection::NonzeroInputThenNonzeroPlaceholder,
+        ))
+        .unwrap();
+    let selectors: Vec<_> = policy.input().rules[0]
+        .recipe
+        .tiers
+        .iter()
+        .flat_map(|t| &t.selectors)
+        .collect();
+    let ids = origins();
+    let extra = SourceAttributeRef {
+        occurrence: ids[1].occurrence,
+        index: 1,
+    };
+    let candidates = [
+        ValueCandidate {
+            selector: selectors[0],
+            origin: ids[0],
+            value: CandidateValue::Decoded("4"),
+        },
+        ValueCandidate {
+            selector: selectors[1],
+            origin: ids[1],
+            value: CandidateValue::Decoded("7"),
+        },
+        ValueCandidate {
+            selector: selectors[1],
+            origin: extra,
+            value: CandidateValue::Decoded("0"),
+        },
+    ];
+    assert!(matches!(
+        policy.decide(&key("rule"), &candidates),
+        Err(RewardPolicyError::Value(ValuePolicyError::MultipleValues {
+            tier: 1,
+            count: 2
+        }))
+    ));
+    let unavailable = SourceXmlError {
+        byte_offset: 0,
+        reason: "unavailable".into(),
+    };
+    let candidates = [
+        ValueCandidate {
+            selector: selectors[0],
+            origin: ids[0],
+            value: CandidateValue::Decoded("4"),
+        },
+        ValueCandidate {
+            selector: selectors[1],
+            origin: ids[1],
+            value: CandidateValue::Unavailable(&unavailable),
+        },
+    ];
+    assert_eq!(
+        policy.decide(&key("rule"), &candidates).unwrap().outcome,
+        RewardOutcome::Unmapped {
+            reason: RewardUnmappedReason::InvalidNumericCandidate
+        }
+    );
+}
+
+#[test]
+fn numeric_projection_validates_owner_site_required_slots_and_units_before_admission() {
+    let mut fixture = Fixture::new();
+    let mut input = numeric_input(&fixture, RewardNumericSelection::RecipePrecedence);
+    let RewardRuleOutput::NumericParameter(numeric) = &mut input.rules[0].output else {
+        unreachable!()
+    };
+    numeric.parameter.declaration = SlotOwnerDefId::Reward(fixture.other.clone());
+    violation(
+        fixture.build(input),
+        RewardPolicyViolation::WrongParameterOwner,
+    );
+    let mut input = numeric_input(&fixture, RewardNumericSelection::RecipePrecedence);
+    let RewardRuleOutput::NumericParameter(numeric) = &mut input.rules[0].output else {
+        unreachable!()
+    };
+    numeric.fixed_parameters.push(ParameterAssignment {
+        slot: fixture.parameter.clone(),
+        value: integer(3),
+    });
+    violation(
+        fixture.build(input),
+        RewardPolicyViolation::DuplicateParameter,
+    );
+    fixture.slot_schema(ValueSchema::Boolean);
+    violation(
+        fixture.build(numeric_input(
+            &fixture,
+            RewardNumericSelection::RecipePrecedence,
+        )),
+        RewardPolicyViolation::WrongValueKind,
+    );
+    fixture.slot_schema(ValueSchema::Quantity(QuantityRange {
+        minimum: FiniteQuantity::new(0., fixture.units[0].clone()).unwrap(),
+        maximum: FiniteQuantity::new(9., fixture.units[0].clone()).unwrap(),
+    }));
+    let mut input = numeric_input(&fixture, RewardNumericSelection::RecipePrecedence);
+    input.rules[0].recipe.codec.codec = ValueCodecKind::Quantity {
+        syntax: DecimalSyntax::Decimal,
+        unit: fixture.units[0].clone(),
+        scale: RationalScale {
+            numerator: BoundedInteger::new(1).unwrap(),
+            denominator: BoundedInteger::new(2).unwrap(),
+        },
+    };
+    let policy = fixture.build(input.clone()).unwrap();
+    assert_eq!(
+        numeric_value(
+            &numeric_decision(&policy, Some("7"), None).outcome,
+            &fixture
+        ),
+        ParameterValue::Quantity(FiniteQuantity::new(3.5, fixture.units[0].clone()).unwrap())
+    );
+    let ValueCodecKind::Quantity { unit, .. } = &mut input.rules[0].recipe.codec.codec else {
+        unreachable!()
+    };
+    *unit = fixture.units[1].clone();
+    violation(fixture.build(input), RewardPolicyViolation::WrongUnit);
+}
+
+#[test]
+fn numeric_projection_keeps_required_fixed_parameters_and_unknown_schema_blocking() {
+    let mut fixture = Fixture::new();
+    let extra = fixture.additional_required_parameter();
+    violation(
+        fixture.build(numeric_input(
+            &fixture,
+            RewardNumericSelection::RecipePrecedence,
+        )),
+        RewardPolicyViolation::RequiredParameterMissing,
+    );
+    let mut input = numeric_input(&fixture, RewardNumericSelection::RecipePrecedence);
+    let RewardRuleOutput::NumericParameter(numeric) = &mut input.rules[0].output else {
+        unreachable!()
+    };
+    numeric.fixed_parameters.push(ParameterAssignment {
+        slot: extra.clone(),
+        value: integer(2),
+    });
+    let policy = fixture.build(input.clone()).unwrap();
+    assert_eq!(
+        numeric_decision(&policy, Some("9"), Some("0")).outcome,
+        RewardOutcome::Reward {
+            definition: fixture.reward.clone(),
+            parameters: vec![
+                ParameterAssignment {
+                    slot: extra,
+                    value: integer(2)
+                },
+                ParameterAssignment {
+                    slot: fixture.parameter.clone(),
+                    value: integer(9)
+                }
+            ],
+        }
+    );
+    let tight = RewardPolicyLimits {
+        max_parameters: 1,
+        ..Default::default()
+    };
+    assert!(matches!(
+        OwnedRewardPolicy::new(input.clone(), &fixture.mapping, &fixture.schema, tight),
+        Err(RewardPolicyError::Limit("parameters"))
+    ));
+    assert!(matches!(
+        encode_reward_policy(&policy, tight),
+        Err(RewardPolicyError::Limit("parameters"))
+    ));
+
+    let mut raw = fixture.schema.input().clone();
+    let SlotDescriptor::Parameter(row) = &mut raw.slots[0] else {
+        unreachable!()
+    };
+    let SchemaState::Known(slot) = &mut row.schema else {
+        unreachable!()
+    };
+    // A foreign site is rejected by the schema boundary itself. A schema with
+    // no admitted sites is structurally valid, but cannot authorize projection.
+    slot.sites.clear();
+    fixture.rebuild(raw);
+    input.definitions = fixture.schema.identity().clone();
+    input.mapping = *fixture.mapping.identity();
+    violation(
+        fixture.build(input),
+        RewardPolicyViolation::WrongParameterSite,
+    );
+
+    for partial in [false, true] {
+        let mut fixture = Fixture::new();
+        let mut raw = fixture.schema.input().clone();
+        if partial {
+            for descriptor in &mut raw.definitions {
+                if let DefinitionDescriptor::Reward(row) = descriptor
+                    && row.id == fixture.reward
+                {
+                    let SchemaState::Known(schema) = &mut row.schema else {
+                        unreachable!()
+                    };
+                    schema.declarations.parameters = DeclaredSet::partial(
+                        vec![fixture.parameter.clone()],
+                        vec![gap(SchemaSubject::Definition(fixture.reward.address()))],
+                    );
+                }
+            }
+        } else {
+            let SlotDescriptor::Parameter(row) = &mut raw.slots[0] else {
+                unreachable!()
+            };
+            row.schema = SchemaState::Unmapped {
+                gaps: vec![gap(SchemaSubject::Slot(ParameterSlotDefId::address(
+                    &fixture.parameter,
+                )))],
+            };
+        }
+        fixture.rebuild(raw);
+        let policy = fixture
+            .build(numeric_input(
+                &fixture,
+                RewardNumericSelection::RecipePrecedence,
+            ))
+            .unwrap();
+        assert!(matches!(
+            numeric_decision(&policy, Some("4"), None).outcome,
+            RewardOutcome::Unmapped { .. }
+        ));
+    }
+}
+
+#[test]
+fn finite_wire_identity_and_strict_numeric_union_are_independent() {
+    #[derive(serde::Serialize)]
+    struct FiniteRule<'a> {
+        recipe: &'a ValueRecipeInput,
+        outcomes: &'a [RewardOutcomeCase],
+    }
+    #[derive(serde::Serialize)]
+    struct Policy<'a, R> {
+        schema_version: u32,
+        namespace: &'a GameVersionNamespace,
+        version: &'a OwnedDefinitionKey,
+        definitions: &'a DataIdentity,
+        mapping: &'a poe_optimizer_core::owned_content::OwnedContentDigest,
+        rules: Vec<R>,
+    }
+    let fixture = Fixture::new();
+    let input = fixture.input();
+    let finite = Policy {
+        schema_version: input.schema_version,
+        namespace: &input.namespace,
+        version: &input.version,
+        definitions: &input.definitions,
+        mapping: &input.mapping,
+        rules: input
+            .rules
+            .iter()
+            .map(|r| {
+                let RewardRuleOutput::Cases(outcomes) = &r.output else {
+                    unreachable!()
+                };
+                FiniteRule {
+                    recipe: &r.recipe,
+                    outcomes,
+                }
+            })
+            .collect(),
+    };
+    let policy = fixture.build(input.clone()).unwrap();
+    let expected = serde_json::to_vec(&finite).unwrap();
+    assert_eq!(
+        encode_reward_policy(&policy, Default::default()).unwrap(),
+        expected
+    );
+    assert_eq!(
+        policy.identity(),
+        &poe_optimizer_core::owned_content::digest_owned(
+            "owned-reward-policy-v1",
+            &finite,
+            RewardPolicyLimits::default().max_wire_bytes
+        )
+        .unwrap()
+    );
+    let numeric = fixture
+        .build(numeric_input(
+            &fixture,
+            RewardNumericSelection::RecipePrecedence,
+        ))
+        .unwrap();
+    let encoded = encode_reward_policy(&numeric, Default::default()).unwrap();
+    // Independent declaration of the existing numeric object proves boxing has
+    // changed neither field order/shape nor the complete policy commitment.
+    #[derive(serde::Serialize)]
+    struct NumericOutput<'a> {
+        selector: &'a ExternalSelector,
+        parameter: &'a DeclaredSlot<ParameterSlotDefId>,
+        fixed_parameters: &'a [ParameterAssignment],
+        selection: RewardNumericSelection,
+    }
+    #[derive(serde::Serialize)]
+    struct NumericRule<'a> {
+        recipe: &'a ValueRecipeInput,
+        outcomes: NumericOutput<'a>,
+    }
+    let input = numeric.input();
+    let numeric_wire = Policy {
+        schema_version: input.schema_version,
+        namespace: &input.namespace,
+        version: &input.version,
+        definitions: &input.definitions,
+        mapping: &input.mapping,
+        rules: input
+            .rules
+            .iter()
+            .map(|r| {
+                let RewardRuleOutput::NumericParameter(n) = &r.output else {
+                    unreachable!()
+                };
+                NumericRule {
+                    recipe: &r.recipe,
+                    outcomes: NumericOutput {
+                        selector: &n.selector,
+                        parameter: &n.parameter,
+                        fixed_parameters: &n.fixed_parameters,
+                        selection: n.selection,
+                    },
+                }
+            })
+            .collect(),
+    };
+    assert_eq!(encoded, serde_json::to_vec(&numeric_wire).unwrap());
+    assert_eq!(
+        numeric.identity(),
+        &poe_optimizer_core::owned_content::digest_owned(
+            "owned-reward-policy-v1",
+            &numeric_wire,
+            RewardPolicyLimits::default().max_wire_bytes
+        )
+        .unwrap()
+    );
+    let decoded = decode_reward_policy(
+        &encoded,
+        &fixture.mapping,
+        &fixture.schema,
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(numeric.identity(), decoded.identity());
+    let base: serde_json::Value = serde_json::from_slice(&encoded).unwrap();
+    assert!(base["rules"][0]["outcomes"].is_object());
+    for field in ["unknown", "cases", "outcomes"] {
+        let mut malformed = base.clone();
+        malformed["rules"][0]["outcomes"][field] = serde_json::json!([]);
+        assert!(
+            decode_reward_policy(
+                &serde_json::to_vec(&malformed).unwrap(),
+                &fixture.mapping,
+                &fixture.schema,
+                Default::default()
+            )
+            .is_err()
+        );
+    }
+    let mut missing = base.clone();
+    missing["rules"][0]["outcomes"]
+        .as_object_mut()
+        .unwrap()
+        .remove("selection");
+    assert!(
+        decode_reward_policy(
+            &serde_json::to_vec(&missing).unwrap(),
+            &fixture.mapping,
+            &fixture.schema,
+            Default::default()
+        )
+        .is_err()
+    );
+    let mut mixed = base;
+    mixed["rules"][0]["outcomes"] = serde_json::json!([mixed["rules"][0]["outcomes"].clone()]);
+    assert!(
+        decode_reward_policy(
+            &serde_json::to_vec(&mixed).unwrap(),
+            &fixture.mapping,
+            &fixture.schema,
+            Default::default()
+        )
+        .is_err()
     );
 }
 

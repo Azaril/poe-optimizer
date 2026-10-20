@@ -188,7 +188,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     full.normalization = serde_json::from_value(normalization).unwrap();
     let scalar_inputs =
         gem_inventory_scalar_inputs_identity(&full.normalization, Default::default()).unwrap();
-    let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+    let Some(GemInventoryPolicy::PobFreshPhysicalV3 {
         roles: bound_roles,
         scalar_inputs: bound_scalars,
         ..

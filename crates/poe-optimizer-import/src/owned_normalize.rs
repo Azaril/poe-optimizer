@@ -138,9 +138,11 @@ pub(crate) use support_inventory::rebind_roles as rebind_support_inventory_roles
 pub use support_order::SupportOriginOrderPolicy;
 pub(crate) use usage_inputs::rebind as rebind_usage_inputs;
 pub use usage_inputs::{
+    ConfigurationNumericSelection, ConfigurationUsageIntentInput, ConfigurationUsageParameterInput,
     OccurrenceUsagePolicy, OccurrenceUsageRule, OccurrenceUsageTarget, PrimarySkillUsageInput,
-    UsageFallbackAdmission, UsageGroupCompanion, UsageInputPolicy, UsageParameterInput,
-    UsageValueSource, usage_inputs_identity,
+    UsageFallbackAdmission, UsageGroupCompanion, UsageInputPolicy, UsageInventoryDestination,
+    UsageInventoryField, UsageInventoryFieldSelector, UsageInventoryPolicy, UsageInventoryRow,
+    UsageInventorySource, UsageParameterInput, UsageValueSource, usage_inputs_identity,
 };
 
 /// The caller supplies desired measurements. There is no built-in metric list.
@@ -405,6 +407,10 @@ pub enum OwnedOriginTarget {
     SkillPreset(SkillPresetId),
     ChoicePreset(ChoicePresetId),
     ScenarioPreset(ScenarioPresetId),
+    ScenarioUsageIntent {
+        scenario: ScenarioPresetId,
+        policy: UsagePolicyDefId,
+    },
     QueryPreset(QueryPresetId),
     Issue(DraftIssueId),
 }
@@ -1285,6 +1291,10 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let config_levels = enemy_level::collect(&mut b, enemy_level.as_ref())?;
     let config_encounters = encounter::collect(&mut b, encounter.as_ref())?;
     let config_inputs = configuration_inputs::collect(&mut b, configuration_inputs.as_ref())?;
+    let config_usage = match &usage_inputs {
+        Some(inputs) => inputs.collect_configuration(&mut b)?,
+        None => BTreeMap::new(),
+    };
     let mut config_input_scenarios = BTreeMap::new();
     let config_rewards =
         configuration_reward_inventory::collect(&mut b, configuration_reward_inventory.as_ref())?;
@@ -1466,7 +1476,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     config_rewards.get(&s),
                     config_encounters.get(&s),
                 )?;
-                if config_inputs.contains_key(&s) {
+                if config_inputs.contains_key(&s) || config_usage.contains_key(&s) {
                     b.charge(1)?;
                     if config_input_scenarios.len() >= limits.draft.input.max_collection_entries {
                         return Err(NormalizationError::Limit("configuration input scopes"));
@@ -1789,6 +1799,10 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let mut support_rows = vec![];
     let mut deferred_gem_dispositions = vec![];
     let mut deferred_direct_dispositions = vec![];
+    let mut usage_inventory_receipts = usage_inputs::InventoryReceipts::default();
+    let usage_inventory_enabled = usage_inputs
+        .as_ref()
+        .is_some_and(|inputs| inputs.inventory_enabled());
     let mut support_inventory_census = support_inventory::Census::new(support_inventory.as_ref());
     let mut skill_inventory_census = skill_inventory::Census::new(skill_inventory.as_ref());
     let mut payload_inventory_census = payload_inventory::Census::default();
@@ -1969,6 +1983,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             gem_inputs.as_ref(),
             gem_inventory.as_ref(),
         )?;
+        let (parameters, support_input_proof) = parameters.into_support_proof();
         // Keep legacy level/issue allocation before Skill creation. Additive
         // proofs finish only after their real preset destination is established.
         let level = b.level(Some(row), s, &recipes[1])?;
@@ -2006,6 +2021,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                                 skill: id,
                                 preset: &mut draft.skill_presets.members[preset],
                                 inventory_proof: parameters.awaits_usage(),
+                                receipts: &mut usage_inventory_receipts,
                             },
                         )?;
                     }
@@ -2013,7 +2029,15 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 }
             }
             Some(AuthoredGemRole::SupportAssignment) => {
-                support_rows.push((s, group_id, gem_id, preset, manual));
+                support_rows.push((
+                    s,
+                    group_id,
+                    gem_id,
+                    preset,
+                    manual,
+                    draft.gems.members.len(),
+                    support_input_proof,
+                ));
             }
             _ => {}
         }
@@ -2057,6 +2081,19 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 &mut draft.gems.members[gem].parameters.completion,
                 "gem-parameters-not-converted",
             )?;
+            if usage_inputs
+                .as_ref()
+                .is_some_and(|inputs| inputs.inventory_enabled())
+            {
+                usage_inputs::record_input_disposition(
+                    &mut b,
+                    source,
+                    &draft.skill_presets.members[preset],
+                    &draft.skills.members[skill],
+                    Some(&draft.gems.members[gem]),
+                    &mut usage_inventory_receipts,
+                )?;
+            }
         }
     }
     for (skill, preset, source, proof) in deferred_direct_dispositions {
@@ -2077,11 +2114,24 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 &mut parameters.completion,
                 "direct-skill-parameters-not-converted",
             )?;
+            if usage_inputs
+                .as_ref()
+                .is_some_and(|inputs| inputs.inventory_enabled())
+            {
+                usage_inputs::record_input_disposition(
+                    &mut b,
+                    source,
+                    &draft.skill_presets.members[preset],
+                    &draft.skills.members[skill],
+                    None,
+                    &mut usage_inventory_receipts,
+                )?;
+            }
         }
     }
     let mut support_order_index = support_order::OrderIndex::default();
     let mut direct_support_targets_attached = false;
-    for (s, group_id, gem, preset, manual) in support_rows {
+    for (s, group_id, gem, preset, manual, gem_index, input_proof) in support_rows {
         let row = &evidence.rows()[s.ordinal() as usize];
         let group = &evidence.rows()[group_id.ordinal() as usize];
         let id = b.id()?;
@@ -2139,6 +2189,16 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 .supports
                 .members
                 .push(id);
+            if usage_inventory_enabled && let Some(proof) = input_proof {
+                usage_inputs::record_support_input_disposition(
+                    &mut b,
+                    proof,
+                    &draft.skill_presets.members[preset],
+                    draft.supports.members.last().expect("constructed support"),
+                    &draft.gems.members[gem_index],
+                    &mut usage_inventory_receipts,
+                )?;
+            }
         }
     }
     let skill_source_sets = if support_inventory_census.enabled() || payload_inventory.is_some() {
@@ -2254,6 +2314,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 "configuration input scenario scope",
             ))?;
         configuration_inputs::materialize(&mut b, scope, scenario, config_inputs.get(&scope))?;
+        usage_inputs::materialize_configuration(&mut b, scope, scenario, config_usage.get(&scope))?;
     }
     // Allocate new intent obligations only after all historical records/issues.
     // Existing usage values and completion IDs move without reallocation.
@@ -2279,10 +2340,12 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 equipment: &equipment_sets,
                 items: &item_ids,
             },
+            &mut usage_inventory_receipts,
         )?
     } else {
         vec![]
     };
+    let mut generated_dispositions = Vec::new();
     generated_skill_inputs::account(
         &mut b,
         &draft,
@@ -2291,7 +2354,15 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         gem_inventory.as_ref(),
         &generated_input_receipts,
         &usage_receipts,
+        usage_inventory_enabled.then_some(&mut generated_dispositions),
     )?;
+    for proof in generated_dispositions {
+        usage_inputs::record_generated_input_disposition(
+            &mut b,
+            proof,
+            &mut usage_inventory_receipts,
+        )?;
+    }
     // Run after generated correspondence and field dispositions. An unresolved
     // archived responsibility or saved sharing relation cannot be discarded.
     if support_inventory_census.enabled() {
@@ -2311,9 +2382,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             encounters: &config_encounters,
             levels: &config_levels,
             inputs: &config_inputs,
+            usage: &config_usage,
+            usage_policy: usage_inputs.as_ref(),
             rewards: &config_rewards,
         },
     )?;
+    if let Some(inputs) = &usage_inputs {
+        inputs.complete_inventory(&mut b, &mut draft, &skill_sets, &usage_inventory_receipts)?;
+    }
     let occurrence_usage = matches!(
         policy.usage_inputs,
         Some(UsageInputPolicy::PobOccurrenceUsageV3 { .. })
@@ -2330,8 +2406,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         Some(ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 { .. })
     );
     let item_range_origins_attached = b.item_range_origins_attached;
+    let configuration_projection = policy.configuration_inputs.is_some()
+        || matches!(
+            &policy.usage_inputs,
+            Some(UsageInputPolicy::PobOccurrenceUsageV3 { scenario, .. })
+                if !scenario.is_empty()
+        );
     let sidecar = FreshNormalizationSidecar {
-        schema_version: if policy.configuration_inputs.is_some() {
+        schema_version: if configuration_projection {
             23
         } else if policy.generated_skill_inputs.is_some() {
             22
@@ -2375,7 +2457,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        if policy.configuration_inputs.is_some() {
+        if configuration_projection {
             "owned-normalization-sidecar-v23"
         } else if policy.generated_skill_inputs.is_some() {
             "owned-normalization-sidecar-v22"
@@ -2431,6 +2513,7 @@ fn add_config(
             },
             assumptions: b.closure(s, "external-assumptions-not-converted", vec![])?,
             usage: b.closure(s, "usage-not-converted", vec![])?,
+            usage_intents: b.closure(s, "scenario-usage-intents-not-converted", vec![])?,
         },
     });
     // Retire the inventory issue after other scoped adapters have added their
@@ -2538,6 +2621,7 @@ fn add_rewards(
             let attribute = match selector.lane {
                 ValueLane::InputBoolean => "boolean",
                 ValueLane::InputString => "string",
+                ValueLane::InputNumber | ValueLane::PlaceholderNumber => "number",
                 _ => return Err(NormalizationError::Policy("unsupported reward value lane")),
             };
             if let Some(rows) = inputs.get(selector.name.as_str()) {
@@ -2545,17 +2629,18 @@ fn add_rewards(
                     b.charge(1)?;
                     let attrs = &b.attributes[row.occurrence().id().ordinal() as usize];
                     // A present wrong-shaped value must not be mistaken for
-                    // absence and activate a missing-value default. Placeholder
-                    // writes/precedence are deliberately not inferred here.
-                    let actual_lane = if attrs.contains_key("boolean") {
-                        Some(ValueLane::InputBoolean)
-                    } else if attrs.contains_key("string") {
-                        Some(ValueLane::InputString)
-                    } else {
-                        None
+                    // absence and activate a missing-value default. Numeric
+                    // selection belongs to the injected reward policy.
+                    let actual_lane = match row.occurrence().name() {
+                        "Input" if attrs.contains_key("boolean") => Some(ValueLane::InputBoolean),
+                        "Input" if attrs.contains_key("string") => Some(ValueLane::InputString),
+                        "Input" if attrs.contains_key("number") => Some(ValueLane::InputNumber),
+                        "Placeholder" if attrs.contains_key("number") => {
+                            Some(ValueLane::PlaceholderNumber)
+                        }
+                        _ => None,
                     };
-                    if row.occurrence().name() != "Input"
-                        || !row.children().is_empty()
+                    if !row.children().is_empty()
                         || row.attributes().len() != 2
                         || attrs.len() != 2
                         || !actual_lane
@@ -2590,6 +2675,14 @@ fn add_rewards(
         if shape_pending {
             continue;
         }
+        // Numeric callbacks have no constructor fallback. Duplicate saved
+        // records stay unresolved even when they agree or occupy a losing lane.
+        if matches!(&rule.output, RewardRuleOutput::NumericParameter(_)) {
+            let mut lanes = BTreeSet::new();
+            if candidates.iter().any(|c| !lanes.insert(c.selector)) {
+                continue;
+            }
+        }
         let decision = policy.decide(&rule.recipe.id, &candidates)?;
         if let RewardOutcome::Reward {
             definition,
@@ -2599,7 +2692,14 @@ fn add_rewards(
             b.charge(parameters.len())?;
             let id = b.id()?;
             b.link(source, OwnedOriginTarget::Reward(id))?;
-            if let ValueOutcome::Selected { origin, .. } = decision.value.outcome {
+            let selected = if let Some(numeric) = &decision.numeric {
+                numeric.selected
+            } else if let ValueOutcome::Selected { origin, .. } = decision.value.outcome {
+                Some(origin)
+            } else {
+                None
+            };
+            if let Some(origin) = selected {
                 b.link(origin.occurrence, OwnedOriginTarget::Reward(id))?;
             }
             output.members.push(id);

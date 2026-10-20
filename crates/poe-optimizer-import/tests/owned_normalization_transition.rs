@@ -265,13 +265,20 @@ fn explicit_policy_install_preserves_true_prior_and_rebinds_only_tree_policy_ide
         definitions: prior.assembled().schema().identity().clone(),
         gems: vec![],
     });
-    replacement.gem_inventory = Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+    replacement.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV3 {
+        usage_inputs: poe_optimizer_import::owned_normalize::usage_inputs_identity(
+            &replacement,
+            Default::default(),
+        )
+        .unwrap(),
+        primary_skills: vec![],
+        primary_dispositions: vec![],
         definitions: prior.assembled().schema().identity().clone(),
         roles: *prior.roles().identity(),
         catalog: prior.roles().input().compilation.catalog_digest,
         scalar_inputs: gem_inventory_scalar_inputs_identity(&replacement, Default::default())
             .unwrap(),
-        gems: vec![],
+        supports: vec![],
     });
     let result = transition_owned_normalization_with_tree_compact(
         input,
@@ -334,7 +341,7 @@ fn explicit_policy_install_preserves_true_prior_and_rebinds_only_tree_policy_ide
             .definitions,
         replacement.gem_inputs.unwrap().definitions
     );
-    let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+    let Some(GemInventoryPolicy::PobFreshPhysicalV3 {
         definitions,
         roles,
         scalar_inputs,

@@ -18,10 +18,7 @@ use crate::{
     owned_schema::DefinitionSchemaIndex,
 };
 use serde::{Deserialize, Serialize};
-use std::{
-    collections::{BTreeMap, BTreeSet},
-    fmt,
-};
+use std::{collections::BTreeSet, fmt};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -685,7 +682,7 @@ pub fn compose_request_checked<I: DefinitionSchemaIndex>(
         data: proof.data.clone(),
         selection: *selection,
         scenario_digest,
-        request_digest: digest_owned("owned-request-v1", &request, limits.input.max_wire_bytes)?,
+        request_digest: digest_owned("owned-request-v2", &request, limits.input.max_wire_bytes)?,
     };
     Ok(ComposedRequest {
         request,
@@ -798,23 +795,10 @@ fn compose_selected(
     limits: OwnedInputLimits,
 ) -> Result<(OwnedEvaluationRequest, Vec<IntentDiagnostic>), IntentError> {
     OwnedEvaluationRequest::new(build.clone(), scenario.clone(), queries.clone(), limits)?;
-    let mut merged = scenario.into_input();
-    validate_usage_layers(&merged.game_version, preferences, &merged.usage, limits)?;
-    let mut usage: BTreeMap<_, _> = preferences
-        .iter()
-        .map(|row| ((row.policy.clone(), row.target.clone()), row.clone()))
-        .collect();
-    for row in merged.usage {
-        usage.insert((row.policy.clone(), row.target.clone()), row);
-    }
-    merged.usage = usage.into_values().collect();
     let mut build = build.into_input();
     build.generated_inputs = inputs;
-    let request = OwnedEvaluationRequest::new(
-        BuildSpec::new(build, limits)?,
-        ScenarioSpec::new(merged, limits)?,
-        queries,
-        limits,
-    )?;
+    build.usage_preferences = preferences.to_vec();
+    let request =
+        OwnedEvaluationRequest::new(BuildSpec::new(build, limits)?, scenario, queries, limits)?;
     Ok((request, diagnostics))
 }

@@ -3,27 +3,13 @@
 use super::*;
 mod dispositions;
 pub(super) use dispositions::PendingDisposition;
+#[cfg(test)]
+pub(super) use dispositions::tests::with_usage_inventory_destination;
 pub use dispositions::{DeferredGemUsageField, DeferredGemUsageInput, PrimaryGemInputDisposition};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum GemInventoryPolicy {
-    PobFreshSingleSupportV1 {
-        definitions: DataIdentity,
-        roles: OwnedContentDigest,
-        catalog: OwnedContentDigest,
-        scalar_inputs: OwnedContentDigest,
-        gems: Vec<PhysicalGemInputInventory>,
-    },
-    PobFreshPhysicalV2 {
-        definitions: DataIdentity,
-        roles: OwnedContentDigest,
-        catalog: OwnedContentDigest,
-        scalar_inputs: OwnedContentDigest,
-        usage_inputs: OwnedContentDigest,
-        supports: Vec<PhysicalGemInputInventory>,
-        primary_skills: Vec<PrimarySkillGemInventory>,
-    },
     PobFreshPhysicalV3 {
         definitions: DataIdentity,
         roles: OwnedContentDigest,
@@ -37,9 +23,9 @@ pub enum GemInventoryPolicy {
 }
 
 /// Physical identity and intrinsic slots, reviewed against the authenticated
-/// catalog. Each inventory version supplies its own effect/reference disposition
-/// proof. V1/V2 still require absent additional effects/stat sets; V3 may retain
-/// reviewed alternative actions. The role package binds the exact catalog/source.
+/// catalog. The selected domain supplies its effect/reference disposition proof;
+/// primary dispositions may retain reviewed alternative actions. The role
+/// package binds the exact catalog/source.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PhysicalGemInputInventory {
@@ -106,52 +92,19 @@ pub(crate) fn rebind(
         return Ok(());
     }
     let scalar = gem_inventory_scalar_inputs_identity(policy, limits)?;
-    let usage = matches!(
-        policy.gem_inventory,
-        Some(
-            GemInventoryPolicy::PobFreshPhysicalV2 { .. }
-                | GemInventoryPolicy::PobFreshPhysicalV3 { .. }
-        )
-    )
-    .then(|| usage_inputs_identity(policy, limits))
-    .transpose()?;
-    let (bound_definitions, bound_roles, scalar_inputs) =
-        match policy.gem_inventory.as_mut().unwrap() {
-            GemInventoryPolicy::PobFreshSingleSupportV1 {
-                definitions,
-                roles,
-                scalar_inputs,
-                ..
-            } => (definitions, roles, scalar_inputs),
-            GemInventoryPolicy::PobFreshPhysicalV2 {
-                definitions,
-                roles,
-                scalar_inputs,
-                usage_inputs,
-                ..
-            } => {
-                *usage_inputs = usage.expect("V2 usage commitment");
-                (definitions, roles, scalar_inputs)
-            }
-            GemInventoryPolicy::PobFreshPhysicalV3 {
-                definitions: bound,
-                roles: bound_roles,
-                scalar_inputs,
-                usage_inputs,
-                primary_dispositions,
-                ..
-            } => {
-                *usage_inputs = usage.expect("V3 inherited usage commitment");
-                for row in primary_dispositions {
-                    crate::owned_source_actions::rebind_input(
-                        &mut row.reference_action,
-                        definitions,
-                        roles,
-                    );
-                }
-                (bound, bound_roles, scalar_inputs)
-            }
-        };
+    let usage = usage_inputs_identity(policy, limits)?;
+    let GemInventoryPolicy::PobFreshPhysicalV3 {
+        definitions: bound_definitions,
+        roles: bound_roles,
+        scalar_inputs,
+        usage_inputs,
+        primary_dispositions,
+        ..
+    } = policy.gem_inventory.as_mut().unwrap();
+    *usage_inputs = usage;
+    for row in primary_dispositions {
+        crate::owned_source_actions::rebind_input(&mut row.reference_action, definitions, roles);
+    }
     *bound_definitions = definitions.clone();
     *bound_roles = *roles.identity();
     *scalar_inputs = scalar;
@@ -211,10 +164,60 @@ pub(super) struct GemInventoryContext<'a, 's> {
     pub parameters: &'a [ParameterDraft],
 }
 pub(super) enum GemInventoryProof {
-    Physical,
+    PhysicalSupport(PhysicalSupportInputProof),
     AwaitUsage(PendingPrimaryInventory),
     AwaitDisposition(PendingDisposition),
 }
+
+/// Attempt-local evidence from the explicit physical SupportAssignment proof.
+/// This is not a usage-completeness certificate. The caller must still bind the
+/// actual Gem/Support outputs, preset membership and current source links.
+pub(super) struct PhysicalSupportInputProof {
+    source: SourceOccurrenceId,
+    group: SourceOccurrenceId,
+    gem: GemDefId,
+}
+
+impl PhysicalSupportInputProof {
+    pub(super) fn source(&self) -> SourceOccurrenceId {
+        self.source
+    }
+
+    pub(super) fn group(&self) -> SourceOccurrenceId {
+        self.group
+    }
+
+    pub(super) fn gem(&self) -> &GemDefId {
+        &self.gem
+    }
+
+    pub(super) fn occurrence_attributes(&self) -> &'static [&'static str] {
+        &[
+            "gemId",
+            "variantId",
+            "skillId",
+            "nameSpec",
+            "level",
+            "quality",
+            "corrupted",
+            "corruptLevel",
+            "enabled",
+            "statSetIndex",
+            "statSetIndexCalcs",
+        ]
+    }
+
+    pub(super) fn group_attributes(&self) -> &'static [&'static str] {
+        &["enabled", "source", "label"]
+    }
+
+    /// This support proof admits only flat source rows and absent/nil reference
+    /// selectors. It does not inherit the primary skill's reference accounting.
+    pub(super) fn reference_descendants(&self) -> &[SourceOccurrenceId] {
+        &[]
+    }
+}
+
 pub(super) struct PendingPrimaryInventory {
     source: SourceOccurrenceId,
     gem: GemDefId,
@@ -257,70 +260,16 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     let Some(inventory) = &policy.gem_inventory else {
         return Ok(None);
     };
-    let (
-        identity,
-        role_identity,
+    let GemInventoryPolicy::PobFreshPhysicalV3 {
+        definitions: identity,
+        roles: role_identity,
         catalog,
         scalar_inputs,
+        usage_inputs: usage_binding,
         supports,
         primary_skills,
         primary_dispositions,
-        usage_binding,
-    ) = match inventory {
-        GemInventoryPolicy::PobFreshSingleSupportV1 {
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            gems,
-        } => (
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            gems.as_slice(),
-            &[][..],
-            &[][..],
-            None,
-        ),
-        GemInventoryPolicy::PobFreshPhysicalV2 {
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            usage_inputs,
-            supports,
-            primary_skills,
-        } => (
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            supports.as_slice(),
-            primary_skills.as_slice(),
-            &[][..],
-            Some(usage_inputs),
-        ),
-        GemInventoryPolicy::PobFreshPhysicalV3 {
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            usage_inputs,
-            supports,
-            primary_skills,
-            primary_dispositions,
-        } => (
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            supports.as_slice(),
-            primary_skills.as_slice(),
-            primary_dispositions.as_slice(),
-            Some(usage_inputs),
-        ),
-    };
+    } = inventory;
     if identity != definitions.identity()
         || role_identity != roles.identity()
         || roles.input().definitions != *definitions.identity()
@@ -329,11 +278,8 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     {
         return Err(NormalizationError::Binding);
     }
-    let usage_required = matches!(inventory, GemInventoryPolicy::PobFreshPhysicalV2 { .. })
-        || !primary_skills.is_empty();
-    if let Some(binding) = usage_binding
-        && ((usage_required && policy.usage_inputs.is_none())
-            || binding != &usage_inputs_identity(policy, limits)?)
+    if (!primary_skills.is_empty() && policy.usage_inputs.is_none())
+        || usage_binding != &usage_inputs_identity(policy, limits)?
     {
         return Err(NormalizationError::Binding);
     }
@@ -559,15 +505,12 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         // Partial skills/parameters remain Partial. The separate catalog-bound
         // source construction claim supplies only this physical inventory proof.
         // A support's source primary is catalogue identity, not an executable
-        // skill supply. Accept the historical singleton only to read/replay
-        // immutable packages during checked migration; the corrected producer
-        // emits no supply for this single-support domain. Additional potential
+        // skill supply. The current producer emits no supply for this
+        // single-support domain. Additional potential
         // skills still require their own reviewed inventory proof.
         let skills_match = match expected_role {
             AuthoredGemRole::SkillUse => schema.skills.members == [primary.clone()],
-            AuthoredGemRole::SupportAssignment => {
-                schema.skills.members.is_empty() || schema.skills.members == [primary.clone()]
-            }
+            AuthoredGemRole::SupportAssignment => schema.skills.members.is_empty(),
         };
         if schema.roles != [expected_role]
             || !skills_match
@@ -888,7 +831,14 @@ impl CompiledGemInventory<'_> {
                 policy: usage.policy.clone(),
             })
         } else {
-            GemInventoryProof::Physical
+            // Compilation admitted this branch only for a physical
+            // SupportAssignment. Primary proofs always take one of the two
+            // deferred branches above, independently of policy format.
+            GemInventoryProof::PhysicalSupport(PhysicalSupportInputProof {
+                source: row.occurrence().id(),
+                group: group.occurrence().id(),
+                gem: bound.input.gem.clone(),
+            })
         }))
     }
 }
@@ -898,4 +848,333 @@ fn quantity_fits(value: &FiniteQuantity, range: &QuantityRange) -> bool {
         && value.unit() == range.maximum.unit()
         && value.value() >= range.minimum.value()
         && value.value() <= range.maximum.value()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::owned_value::{BooleanToken, DecimalSyntax, ValueCodecInput, WhitespacePolicy};
+
+    const GEM: &str = r#"<Gem gemId="support" variantId="variant" skillId="support-effect" nameSpec="Fixture support" level="17" quality="0" corrupted="false" corruptLevel="0" enabled="true" count="1" enableGlobal1="true" enableGlobal2="true"/>"#;
+
+    fn xml(gem: &str) -> String {
+        format!(
+            r#"<PathOfBuilding2><Skills activeSkillSet="1"><SkillSet id="1"><Skill enabled="true" label="Support group">{gem}</Skill></SkillSet><SkillSet id="2"><Skill><Gem/></Skill></SkillSet></Skills></PathOfBuilding2>"#
+        )
+    }
+
+    fn recipe(ns: &GameVersionNamespace, name: &str, boolean: bool) -> ValueRecipe {
+        ValueRecipe::new(
+            ValueRecipeInput {
+                id: key(name),
+                codec: ValueCodecInput {
+                    namespace: ns.clone(),
+                    whitespace: WhitespacePolicy::Exact,
+                    codec: if boolean {
+                        ValueCodecKind::Boolean {
+                            tokens: vec![
+                                BooleanToken {
+                                    token: "true".into(),
+                                    value: true,
+                                },
+                                BooleanToken {
+                                    token: "false".into(),
+                                    value: false,
+                                },
+                            ],
+                        }
+                    } else {
+                        ValueCodecKind::Integer {
+                            syntax: DecimalSyntax::Integer,
+                        }
+                    },
+                },
+                tiers: vec![ValueTier {
+                    selectors: vec![ValueSelector {
+                        lane: ValueLane::Attribute,
+                        name: name.into(),
+                    }],
+                    duplicates: DuplicatePolicy::Reject,
+                }],
+                missing: MissingValuePolicy::Pending,
+                numeric_aliases: vec![],
+            },
+            Default::default(),
+        )
+        .unwrap()
+    }
+
+    // Exercise the real private runtime proof using the existing Builder fixture.
+    // The bound domain models compile's explicit SupportAssignment branch; this
+    // does not establish any production definition or source-schema authority.
+    fn with_support_domain(
+        source_xml: &str,
+        test: impl FnOnce(
+            &mut Builder<'_, '_>,
+            &CompiledGemInventory<'_>,
+            &DraftField<GemDefId>,
+            &DraftQuality,
+            &[ParameterDraft],
+            SourceOccurrenceId,
+        ),
+    ) {
+        with_usage_inventory_destination(source_xml, |b, _, _, gem, source| {
+            b.attributes = b
+                .evidence
+                .rows()
+                .iter()
+                .map(|row| {
+                    row.attributes()
+                        .iter()
+                        .enumerate()
+                        .filter(|(_, a)| a.origin().namespace.is_none())
+                        .map(|(index, a)| (a.origin().name.as_str(), (index as u32, a)))
+                        .collect()
+                })
+                .collect();
+            let ns = gem.namespace();
+            let count = UnitDefId::new(ns.clone(), key("count"));
+            let percent = UnitDefId::new(ns.clone(), key("percent"));
+            let quality_kind = QualityDefId::new(ns.clone(), key("quality"));
+            let input = PhysicalGemInputInventory {
+                gem: gem.clone(),
+                game_id: "support".into(),
+                variant_id: "variant".into(),
+                skill_id: "support-effect".into(),
+                name_spec: "Fixture support".into(),
+                corrupted: DeclaredSlot {
+                    declaration: SlotOwnerDefId::Gem(gem.clone()),
+                    slot: ParameterSlotDefId::new(ns.clone(), key("corrupted")),
+                },
+                corruption_level: DeclaredSlot {
+                    declaration: SlotOwnerDefId::Gem(gem.clone()),
+                    slot: ParameterSlotDefId::new(ns.clone(), key("corruption-level")),
+                },
+            };
+            let parameters: Vec<ParameterDraft> = vec![
+                ParameterAssignment {
+                    slot: input.corrupted.clone(),
+                    value: ParameterValue::Boolean(false),
+                }
+                .into(),
+                ParameterAssignment {
+                    slot: input.corruption_level.clone(),
+                    value: ParameterValue::Quantity(
+                        FiniteQuantity::new(0.0, count.clone()).unwrap(),
+                    ),
+                }
+                .into(),
+            ];
+            let quality = DraftQuality::Known {
+                value: Some(
+                    QualitySelection {
+                        kind: quality_kind.clone(),
+                        amount: FiniteQuantity::new(0.0, percent.clone()).unwrap(),
+                    }
+                    .into(),
+                ),
+            };
+            let bound = BoundGem {
+                input: &input,
+                level: IntegerRange {
+                    minimum: BoundedInteger::new(1).unwrap(),
+                    maximum: BoundedInteger::new(40).unwrap(),
+                },
+                corruption_level: QuantityRange {
+                    minimum: FiniteQuantity::new(-10.0, count.clone()).unwrap(),
+                    maximum: FiniteQuantity::new(10.0, count).unwrap(),
+                },
+                quality: quality_kind,
+                quality_amount: QuantityRange {
+                    minimum: FiniteQuantity::new(0.0, percent.clone()).unwrap(),
+                    maximum: FiniteQuantity::new(100.0, percent).unwrap(),
+                },
+                usage: None,
+                disposition: None,
+            };
+            let manual = [SourceComponent::Missing];
+            let domain = CompiledGemInventory {
+                gems: [(&input.gem, bound)].into(),
+                level: recipe(ns, "level", false),
+                enabled: recipe(ns, "enabled", true),
+                group_enabled: recipe(ns, "enabled", true),
+                manual_sources: &manual,
+                generated_prefixes: &[],
+                work: 0,
+            };
+            test(
+                b,
+                &domain,
+                &gem.clone().into(),
+                &quality,
+                &parameters,
+                source,
+            );
+        });
+    }
+
+    fn prove(
+        b: &mut Builder<'_, '_>,
+        domain: &CompiledGemInventory<'_>,
+        gem: &DraftField<GemDefId>,
+        quality: &DraftQuality,
+        parameters: &[ParameterDraft],
+        source: SourceOccurrenceId,
+        wrong_group: bool,
+    ) -> Option<GemInventoryProof> {
+        let evidence = b.evidence;
+        let row = &evidence.rows()[source.ordinal() as usize];
+        let group = if wrong_group {
+            evidence
+                .rows()
+                .iter()
+                .rev()
+                .find(|row| row.occurrence().name() == "Skill")
+                .unwrap()
+        } else {
+            &evidence.rows()[row.occurrence().parent().unwrap().ordinal() as usize]
+        };
+        domain
+            .prove(
+                b,
+                GemInventoryContext {
+                    row,
+                    group,
+                    gem,
+                    quality,
+                    parameters,
+                },
+            )
+            .unwrap()
+    }
+
+    #[test]
+    fn support_token_preserves_exact_intrinsic_scope_without_usage_meaning() {
+        with_support_domain(&xml(GEM), |b, domain, gem, quality, parameters, source| {
+            let Some(GemInventoryProof::PhysicalSupport(proof)) =
+                prove(b, domain, gem, quality, parameters, source, false)
+            else {
+                panic!("explicit support proof")
+            };
+            assert_eq!(proof.source(), source);
+            assert_eq!(
+                proof.group(),
+                b.evidence.rows()[source.ordinal() as usize]
+                    .occurrence()
+                    .parent()
+                    .unwrap()
+            );
+            assert_eq!(Some(proof.gem()), gem.to_resolved().as_ref());
+            assert_eq!(
+                proof.occurrence_attributes(),
+                [
+                    "gemId",
+                    "variantId",
+                    "skillId",
+                    "nameSpec",
+                    "level",
+                    "quality",
+                    "corrupted",
+                    "corruptLevel",
+                    "enabled",
+                    "statSetIndex",
+                    "statSetIndexCalcs",
+                ]
+            );
+            assert_eq!(proof.group_attributes(), ["enabled", "source", "label"]);
+            assert!(proof.reference_descendants().is_empty());
+            let before = (b.work, b.links, b.issues, b.allocator.state());
+            let origins = b.origins.clone();
+            let expected = complete(parameters.to_vec());
+            let value = gem_inputs::GemParameters::PhysicalSupport {
+                parameters: expected.clone(),
+                proof,
+            };
+            let (value, retained) = value.into_support_proof();
+            assert_eq!(retained.unwrap().source(), source);
+            let (value, consumed) = value.into_support_proof();
+            assert!(consumed.is_none(), "proof extraction is single-use");
+            assert_eq!(value.finish(b, source, None).unwrap(), expected);
+            assert_eq!(before, (b.work, b.links, b.issues, b.allocator.state()));
+            assert_eq!(b.origins, origins);
+        });
+    }
+
+    #[test]
+    fn support_token_refuses_unknown_fields_references_wrong_owners_and_invalid_inputs() {
+        let invalid = [
+            GEM.replace("variantId=\"variant\"", "variantId=\"other\""),
+            GEM.replace("level=\"17\"", "level=\"41\""),
+            GEM.replace("count=\"1\"", "count=\"2\""),
+            GEM.replace("enableGlobal2=\"true\"", "enableGlobal2=\"false\""),
+            GEM.replace("/>", " statSetIndex=\"1\"/>"),
+            GEM.replace("/>", " future=\"true\"/>"),
+            GEM.replace(
+                "/>",
+                "><StatSetIndex grantedEffect=\"support-effect\" index=\"1\"/></Gem>",
+            ),
+        ];
+        // Duplicate XML attributes fail before a source proof can be attempted.
+        assert!(
+            crate::decode_build(xml(&GEM.replace("/>", " enabled=\"false\"/>")).as_bytes())
+                .is_err()
+        );
+        for raw in invalid {
+            with_support_domain(&xml(&raw), |b, domain, gem, quality, parameters, source| {
+                assert!(
+                    prove(b, domain, gem, quality, parameters, source, false).is_none(),
+                    "{raw}"
+                );
+            });
+        }
+        with_support_domain(&xml(GEM), |b, domain, gem, quality, parameters, source| {
+            assert!(prove(b, domain, gem, quality, parameters, source, true).is_none());
+            assert!(prove(b, domain, gem, quality, &parameters[..1], source, false).is_none());
+            let foreign: DraftField<_> = GemDefId::new(
+                domain.gems.keys().next().unwrap().namespace().clone(),
+                key("other"),
+            )
+            .into();
+            assert!(prove(b, domain, &foreign, quality, parameters, source, false).is_none());
+        });
+    }
+
+    #[test]
+    fn unproved_parameters_and_primary_usage_cannot_mint_support_tokens() {
+        with_support_domain(&xml(GEM), |b, domain, gem, quality, parameters, source| {
+            let expected = complete(parameters.to_vec());
+            let (resolved, proof) =
+                gem_inputs::GemParameters::Resolved(expected.clone()).into_support_proof();
+            assert!(proof.is_none());
+            assert_eq!(resolved.finish(b, source, None).unwrap(), expected);
+            let (_, proof) = gem_inputs::GemParameters::AwaitUsage {
+                members: parameters.to_vec(),
+                proof: PendingPrimaryInventory {
+                    source,
+                    gem: gem.to_resolved().unwrap(),
+                    policy: UsagePolicyDefId::new(
+                        domain.gems.keys().next().unwrap().namespace().clone(),
+                        key("primary-usage"),
+                    ),
+                },
+            }
+            .into_support_proof();
+            assert!(proof.is_none());
+
+            // The normal finishing path, including imports with no inventory
+            // consumer, produces exactly the same values without extra work.
+            let Some(GemInventoryProof::PhysicalSupport(proof)) =
+                prove(b, domain, gem, quality, parameters, source, false)
+            else {
+                panic!("explicit support proof")
+            };
+            let before = (b.work, b.links, b.issues, b.allocator.state());
+            let value = gem_inputs::GemParameters::PhysicalSupport {
+                parameters: expected.clone(),
+                proof,
+            };
+            assert_eq!(value.finish(b, source, None).unwrap(), expected);
+            assert_eq!(before, (b.work, b.links, b.issues, b.allocator.state()));
+        });
+    }
 }

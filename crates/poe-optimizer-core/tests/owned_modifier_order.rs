@@ -39,6 +39,7 @@ fn item(record: u64, modifiers: &[u64]) -> ItemRecord {
 }
 fn input() -> BuildInput {
     BuildInput {
+        usage_preferences: vec![],
         generated_inputs: None,
         authored_support_order: None,
         allocator: InstanceAllocatorState::from_parts(lineage(), 100),
@@ -200,7 +201,7 @@ fn build_inventory_and_raw_item_wire_require_order_and_reject_previous_envelope(
     ] {
         let encoded = encode_owned(&document, limits()).unwrap();
         let value: serde_json::Value = serde_json::from_slice(&encoded).unwrap();
-        assert_eq!(value["schema_version"], 4);
+        assert_eq!(value["schema_version"], 5);
         assert_eq!(decode_owned(&encoded, limits()).unwrap(), document);
         let mut old = value.clone();
         old["schema_version"] = json!(3);
@@ -270,10 +271,10 @@ fn draft_wire_order_presence_identity_and_nested_sequence_budgets_are_explicit()
     let bytes = encode_draft(&a, DraftLimits::default()).unwrap();
     assert_eq!(decode_draft(&bytes, DraftLimits::default()).unwrap(), a);
     let mut value: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
-    assert_eq!(value["schema_version"], 4);
+    assert_eq!(value["schema_version"], 5);
     value["schema_version"] = json!(3);
     assert!(decode_draft(&serde_json::to_vec(&value).unwrap(), DraftLimits::default()).is_err());
-    value["schema_version"] = json!(4);
+    value["schema_version"] = json!(5);
     value["draft"]["items"]["members"][0]
         .as_object_mut()
         .unwrap()

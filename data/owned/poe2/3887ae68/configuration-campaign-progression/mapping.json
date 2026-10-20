@@ -1,0 +1,36 @@
+{
+  "source": {
+    "value": {
+      "kind": "reward",
+      "value": {
+        "key": {
+          "kind": "text",
+          "value": "configBossFaceBroken"
+        }
+      }
+    },
+    "kind": "definition"
+  },
+  "outcome": {
+    "kind": "mapped",
+    "value": {
+      "basis": {
+        "kind": "exact"
+      },
+      "target": {
+        "kind": "definition",
+        "value": {
+          "kind": "reward",
+          "value": {
+            "kind": "reward",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033b4"
+          }
+        }
+      }
+    }
+  }
+}

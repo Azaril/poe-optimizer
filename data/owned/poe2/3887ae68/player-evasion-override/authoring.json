@@ -1,36 +1,36 @@
 {
-  "schema_version": 1,
-  "kind": "player-evasion-override",
-  "release": "pob-3887ae68-player-evasion-override-v1",
-  "before": "cb52e5b9de49d5e8aea9e7d8bb603a92e839ee6e5c5635e83f32364c4869cc78",
-  "scope": {
-    "publication_ready": true,
-    "new_definitions": 0,
-    "new_programs": 0,
-    "new_queries": 1,
-    "final_owner_complete": false,
-    "candidate_source_closure": false
-  },
   "artifacts": [
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-override/consumer.json",
       "bytes": 15274,
+      "path": "data/owned/poe2/3887ae68/player-evasion-override/consumer.json",
       "sha256": "f612eac3f9ca4adeec524f63fcd015870b8ac868ab4e117e14459280bd10a81d"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-override/dependencies.json",
       "bytes": 13123,
-      "sha256": "b15971a840fae2820b15ce0d012b01919253de63a9690f29f3d01228ff495c0b"
+      "path": "data/owned/poe2/3887ae68/player-evasion-override/dependencies.json",
+      "sha256": "8227c876b1d451d6fa1491e05de168f0d02eba3f25beb31e1b40670f66246acf"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-override/bindings.json",
       "bytes": 1053,
+      "path": "data/owned/poe2/3887ae68/player-evasion-override/bindings.json",
       "sha256": "858760c6f37a7af16afd0d6fdf532876d6baf6a67f58f58f25c76f12a995a6a9"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-override/source-evidence.json",
       "bytes": 11377,
-      "sha256": "4b2f020ee5faa7c5c3613eb230de2f4d1ceec15b516fee3e84c190e3d76da70c"
+      "path": "data/owned/poe2/3887ae68/player-evasion-override/source-evidence.json",
+      "sha256": "633d0db9cf987cedf1a79ea39a51f0517a1e6a66218347353e1462b6bf21947c"
     }
-  ]
+  ],
+  "before": "cb52e5b9de49d5e8aea9e7d8bb603a92e839ee6e5c5635e83f32364c4869cc78",
+  "kind": "player-evasion-override",
+  "release": "pob-3887ae68-player-evasion-override-v1",
+  "schema_version": 1,
+  "scope": {
+    "candidate_source_closure": false,
+    "final_owner_complete": false,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "new_queries": 1,
+    "publication_ready": true
+  }
 }

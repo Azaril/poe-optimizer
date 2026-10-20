@@ -1,0 +1,74 @@
+{
+  "programs": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "reward",
+          "value": {
+            "kind": "reward",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033b4"
+          }
+        }
+      },
+      "program": "campaign-progression-fact",
+      "stage": "prepare"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "reward",
+          "value": {
+            "kind": "reward",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033b4"
+          }
+        }
+      },
+      "program": "campaign-progression-authority",
+      "stage": "execute"
+    }
+  ],
+  "frozen_channels": [
+    {
+      "channel": {
+        "kind": "contributions",
+        "scope": "actor",
+        "stat": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033b6"
+        },
+        "contribution": "override"
+      },
+      "stage": "prepare"
+    },
+    {
+      "channel": {
+        "kind": "contributions",
+        "scope": "actor",
+        "stat": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033b7"
+        },
+        "contribution": "add"
+      },
+      "stage": "prepare"
+    }
+  ]
+}

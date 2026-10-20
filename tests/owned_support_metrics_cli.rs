@@ -17,6 +17,12 @@ use std::{
 use support::{child_actor, def, key, occurrence};
 
 fn fixture(level: u16) -> (support::Inputs, Arc<OwnedMetricMapping>, OwnedRulePackage) {
+    fixture_with_requirement(level, false)
+}
+fn fixture_with_requirement(
+    level: u16,
+    requirement: bool,
+) -> (support::Inputs, Arc<OwnedMetricMapping>, OwnedRulePackage) {
     let mut f = support::source_fixture();
     f.build
         .gems
@@ -104,7 +110,39 @@ fn fixture(level: u16) -> (support::Inputs, Arc<OwnedMetricMapping>, OwnedRulePa
     })
     .collect();
     let mut source = None;
-    let input = support::inputs_with_rules(&f, |rules| source = Some(rules.clone()), |_| {});
+    let input = support::inputs_with_rules(
+        &f,
+        |rules| {
+            if requirement {
+                let delivery = rules
+                    .owners
+                    .iter_mut()
+                    .find(|owner| owner.owner == support::support_owner())
+                    .unwrap()
+                    .programs
+                    .members
+                    .iter_mut()
+                    .find(|program| program.id == key("actor-deliver"))
+                    .unwrap();
+                delivery.nodes.push(RuleNode {
+                    id: key("requirement-answer"),
+                    expression: RuleExpression::Literal {
+                        value: ParameterValue::Boolean(false),
+                    },
+                });
+                delivery.effects.push(RuleEffect {
+                    id: key("delivery-requirement"),
+                    when: None,
+                    effect: RuleEffectKind::Requirement {
+                        satisfied: key("requirement-answer"),
+                        code: key("support-delivery-requirement"),
+                    },
+                });
+            }
+            source = Some(rules.clone());
+        },
+        |_| {},
+    );
     let stored = OwnedRulePackage::new(
         source.unwrap(),
         input.definitions.as_ref(),
@@ -266,6 +304,11 @@ fn support_cli_matches_native_ordered_metrics_and_preserves_output() {
         );
         assert_eq!(report["support_preparation"]["status"], "evaluated");
         assert_eq!(
+            report["verification"]["requirement_scope"],
+            "injected_requirements"
+        );
+        assert_eq!(report["verification"]["game_legality"], "not_checked");
+        assert_eq!(
             report["bindings"],
             serde_json::to_value(plan.bindings()).unwrap()
         );
@@ -308,6 +351,69 @@ fn support_cli_matches_native_ordered_metrics_and_preserves_output() {
             result.stdout
         );
     }
+}
+
+#[test]
+fn support_delivery_requirement_and_measurements_come_from_the_same_attempt() {
+    let (input, mapping, _) = fixture(2);
+    let base = Arc::new(
+        OwnedSupportEffectPlan::compile(
+            input,
+            PlanLimits::default(),
+            SupportPreparationLimits::default(),
+        )
+        .unwrap(),
+    );
+    let baseline = OwnedSupportMetricPlan::compile(base, mapping).unwrap();
+    let baseline = baseline.evaluate(&mut baseline.new_scratch()).unwrap();
+
+    let (input, mapping, rules) = fixture_with_requirement(2, true);
+    let directory = tempfile::tempdir().unwrap();
+    save(directory.path(), &input, &mapping, &rules);
+    let effects = Arc::new(
+        OwnedSupportEffectPlan::compile(
+            input,
+            PlanLimits::default(),
+            SupportPreparationLimits::default(),
+        )
+        .unwrap(),
+    );
+    let plan = OwnedSupportMetricPlan::compile(effects, mapping).unwrap();
+    let expected = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert_eq!(expected.evaluation.results, baseline.evaluation.results);
+    assert!(expected.evaluation.requirements.has_violations());
+    assert!(!expected.evaluation.requirements.is_satisfied());
+    let output = run(directory.path(), 15, &[]);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let report: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(
+        report["evaluation"],
+        serde_json::to_value(&expected.evaluation).unwrap()
+    );
+    assert_eq!(
+        report["support_preparation"],
+        serde_json::to_value(&expected.support).unwrap()
+    );
+    let rows = report["evaluation"]["requirements"]["results"]
+        .as_array()
+        .unwrap();
+    assert!(!rows.is_empty());
+    for row in rows {
+        assert_eq!(row["code"], "support-delivery-requirement");
+        assert_eq!(row["outcome"]["status"], "violated");
+        assert_eq!(row["key"]["invocation"]["program"], "actor-deliver");
+        assert!(!row["key"]["invocation"]["origin"].is_null());
+        assert!(!row["key"]["invocation"]["entity"].is_null());
+    }
+    assert_eq!(
+        report["verification"]["requirement_scope"],
+        "injected_requirements"
+    );
+    assert_eq!(report["verification"]["game_legality"], "not_checked");
 }
 
 #[test]
@@ -384,6 +490,11 @@ fn missing_source_order_is_reported_without_numeric_fallback() {
         report["evaluation"],
         serde_json::to_value(&expected.evaluation).unwrap()
     );
+    assert_eq!(
+        report["evaluation"]["requirements"]["coverage"]["status"],
+        "incomplete"
+    );
+    assert!(!expected.evaluation.requirements.is_satisfied());
     assert_eq!(expected.evaluation.results.len(), 4);
     assert!(
         expected

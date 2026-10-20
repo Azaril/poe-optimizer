@@ -5,13 +5,10 @@ mod selected;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_core::{
-    owned_content::digest_owned,
     owned_draft::{DraftLimits, EvaluationSelection, decode_draft},
-    owned_rules::{DefinitionRules, RuleEffectKind, RulePackageInput},
+    owned_rules::{DefinitionRules, RuleEffect, RuleEffectKind},
 };
-use poe_optimizer_import::owned_normalize::{
-    ImportQueryTemplate, NormalizationLimits, NormalizationPolicy,
-};
+use poe_optimizer_import::owned_normalize::{ImportQueryTemplate, NormalizationLimits};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -31,6 +28,7 @@ const COLLECTORS: &str = "data/owned/poe2/3887ae68/mana-pool-adjustments/consume
 const SETUP: &str = "vendor/path-of-building-poe2/src/Modules/CalcSetup.lua";
 const COMPARISON_SHA: &str = "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155";
 const INPUT: &str = "3ee48944d26b5351ecc267cc2e87637b68a8b6153b7ab2bbc5c906f11e4bd702";
+const ARCHIVED_RULES_SHA: &str = "34f4880a51182d89006651942c2a02890c2af3dc1bf8d064e6be292852d9c992";
 const FILES: [(&str, &str, usize); 9] = [
     ("draft.json", "original-05/draft.json", 2 * 1024 * 1024),
     ("sidecar.json", "original-05/sidecar.json", 2 * 1024 * 1024),
@@ -100,8 +98,11 @@ pub struct Inputs {
     pub report: Value,
     pub manifest: Value,
     pub release: Value,
-    pub rules: RulePackageInput,
-    pub policy: NormalizationPolicy,
+    /// Immutable historical evidence, not a current executable rules package.
+    pub rules: Value,
+    /// Immutable historical normalization evidence; never executed or upgraded.
+    pub policy: Value,
+    policy_bytes: Vec<u8>,
     pub queries: Vec<ImportQueryTemplate>,
 }
 
@@ -149,6 +150,7 @@ pub fn load() -> Inputs {
         release: v("release.json"),
         rules: serde_json::from_slice(&inputs["rules.json"]).unwrap(),
         policy: serde_json::from_slice(&inputs["normalization.json"]).unwrap(),
+        policy_bytes: inputs["normalization.json"].clone(),
         queries: serde_json::from_slice(&inputs["queries-original-05.json"]).unwrap(),
     };
     assert_eq!(i.release["input"], INPUT);
@@ -179,6 +181,57 @@ pub fn load() -> Inputs {
         assert_eq!(i.release[field], i.manifest[field]);
     }
     i
+}
+
+/// Recompute the historical commitment from its authenticated canonical bytes.
+/// Serializing a Value would reorder fields; loading today's policy would add
+/// current-format obligations. Neither changes the retained evidence's meaning.
+fn archived_policy_digest(i: &Inputs, with_queries: bool) -> Result<Value, String> {
+    let original: Value =
+        serde_json::from_slice(&i.policy_bytes).map_err(|e| format!("archived policy: {e}"))?;
+    ensure(
+        i.policy == original,
+        "unreviewed historical normalization policy",
+    )?;
+    let queries = if with_queries {
+        Some(serde_json::to_vec(&i.queries).map_err(|e| format!("query serialization: {e}"))?)
+    } else {
+        None
+    };
+    let bytes = i.policy_bytes.len() + queries.as_ref().map_or(0, |q| q.len() + 3);
+    ensure(
+        bytes <= NormalizationLimits::default().max_policy_bytes,
+        "archived policy commitment exceeds byte limit",
+    )?;
+    let domain = "owned-normalization-policy-v3";
+    let mut hash = Sha256::new();
+    hash.update(b"poe-optimizer-owned-content-v1\0");
+    hash.update((domain.len() as u64).to_le_bytes());
+    hash.update(domain.as_bytes());
+    if queries.is_some() {
+        hash.update(b"[");
+    }
+    hash.update(&i.policy_bytes);
+    if let Some(queries) = queries {
+        hash.update(b",");
+        hash.update(queries);
+        hash.update(b"]");
+    }
+    Ok(json!(format!("{:x}", hash.finalize())))
+}
+
+fn authenticated_rules() -> &'static Value {
+    static RULES: OnceLock<Value> = OnceLock::new();
+    RULES.get_or_init(|| {
+        let receipt = read(format!("{DIR}/inputs.json"));
+        let bytes = unpack("rules.json", 24 * 1024 * 1024, &receipt);
+        assert_eq!(
+            hash(&bytes),
+            ARCHIVED_RULES_SHA,
+            "independently retained historical rules"
+        );
+        serde_json::from_slice(&bytes).unwrap()
+    })
 }
 
 fn authenticated_prior() -> &'static Value {
@@ -221,22 +274,8 @@ pub fn reconcile_selected_inputs(i: &Inputs) -> Result<Value, String> {
             && i.report["allocator_after"] == i.draft["draft"]["allocator"],
         "current allocator commitments differ",
     )?;
-    let policy_digest = value(
-        digest_owned(
-            "owned-normalization-policy-v3",
-            &(&i.policy, &i.queries),
-            NormalizationLimits::default().max_policy_bytes,
-        )
-        .map_err(|e| format!("policy query digest: {e}"))?,
-    );
-    let release_policy_digest = value(
-        digest_owned(
-            "owned-normalization-policy-v3",
-            &i.policy,
-            NormalizationLimits::default().max_policy_bytes,
-        )
-        .map_err(|e| format!("policy digest: {e}"))?,
-    );
+    let policy_digest = archived_policy_digest(i, true)?;
+    let release_policy_digest = archived_policy_digest(i, false)?;
     ensure(
         i.sidecar["policy"] == policy_digest
             && i.release["normalization"] == release_policy_digest
@@ -328,8 +367,12 @@ pub fn collectors() -> Vec<DefinitionRules> {
 
 /// Fail directly at a newly authored source; do not use a pending whole-build
 /// evaluation as a vacuous refusal. Inactive and zero-valued writers still count.
-pub fn check_candidate_supplier_inventory(rules: &RulePackageInput) -> Result<(), String> {
+pub fn check_candidate_supplier_inventory(rules: &Value) -> Result<(), String> {
     let expected = collectors();
+    ensure(
+        expected.len() == 5,
+        "five exact adjustment collectors required",
+    )?;
     let stats: BTreeSet<_> = expected
         .iter()
         .flat_map(|o| &o.programs.members)
@@ -343,14 +386,22 @@ pub fn check_candidate_supplier_inventory(rules: &RulePackageInput) -> Result<()
         stats.len() == 5,
         "five exact adjustment collectors required",
     )?;
+    let owners = evidence_array(&rules["owners"], "ordinary owner inventory")?;
+    let applications = evidence_array(
+        &rules["effect_applications"]["members"],
+        "application owner inventory",
+    )?;
     for owner in &expected {
-        let found: Vec<_> = rules
-            .owners
-            .iter()
-            .filter(|o| o.owner == owner.owner)
-            .collect();
+        let owner_id = value(&owner.owner);
+        let found: Vec<_> = owners.iter().filter(|o| o["owner"] == owner_id).collect();
         ensure(
-            found.len() == 1 && found[0] == owner,
+            found.len() == 1,
+            "reviewed adjustment collector body changed",
+        )?;
+        let actual: DefinitionRules = serde_json::from_value(found[0].clone())
+            .map_err(|_| "reviewed adjustment collector body changed".to_owned())?;
+        ensure(
+            actual == *owner,
             "reviewed adjustment collector body changed",
         )?;
     }
@@ -361,36 +412,67 @@ pub fn check_candidate_supplier_inventory(rules: &RulePackageInput) -> Result<()
         | RuleEffectKind::ProjectActorStat { stat, .. } => stats.contains(stat),
         _ => false,
     };
-    for owner in &rules.owners {
-        if expected.iter().any(|e| e == owner) {
-            continue;
-        }
-        for program in &owner.programs.members {
-            for effect in &program.effects {
+    for owner in owners {
+        ensure(owner.is_object(), "ordinary owner must be an object")?;
+        let reviewed = expected.iter().any(|e| value(&e.owner) == owner["owner"]);
+        let programs = evidence_array(&owner["programs"]["members"], "ordinary program inventory")?;
+        for program in programs {
+            ensure(program.is_object(), "ordinary program must be an object")?;
+            for raw in evidence_array(&program["effects"], "ordinary effect inventory")? {
+                // Context metadata is retained, never interpreted or rewritten.
+                // All effects, including the reviewed collectors, must satisfy
+                // the current effect contract before the finite writer census.
+                let effect: RuleEffect = serde_json::from_value(raw.clone())
+                    .map_err(|e| format!("unsupported archived ordinary effect: {e}"))?;
                 ensure(
-                    !writes(&effect.effect),
+                    reviewed || !writes(&effect.effect),
                     &format!(
-                        "unreviewed ordinary Mana supplier: {:?}/{:?}/{:?}",
-                        owner.owner, program.id, effect.id
+                        "unreviewed ordinary Mana supplier: {}/{}/{:?}",
+                        owner["owner"], program["id"], effect.id
                     ),
                 )?;
             }
         }
     }
-    if let Some(applications) = &rules.effect_applications {
-        for application in &applications.members {
-            for effect in &application.program.effects {
-                ensure(
-                    !writes(&effect.effect),
-                    &format!(
-                        "unreviewed application Mana supplier: {:?}/{:?}",
-                        application.id, effect.id
-                    ),
-                )?;
-            }
+    for application in applications {
+        ensure(
+            application.is_object(),
+            "application owner must be an object",
+        )?;
+        ensure(
+            application["program"].is_object(),
+            "application program must be an object",
+        )?;
+        for raw in evidence_array(
+            &application["program"]["effects"],
+            "application effect inventory",
+        )? {
+            let effect: RuleEffect = serde_json::from_value(raw.clone())
+                .map_err(|e| format!("unsupported archived application effect: {e}"))?;
+            ensure(
+                !writes(&effect.effect),
+                &format!(
+                    "unreviewed application Mana supplier: {}/{:?}",
+                    application["id"], effect.id
+                ),
+            )?;
         }
     }
-    Ok(())
+    // The archive is evidence, not a permissive historical package parser.
+    // Every untouched row, inventory closure and metadata field must still be
+    // the authenticated original. This catches deletion and unknown containers,
+    // even when their known effects do not write one of the five reviewed stats.
+    ensure(
+        rules == authenticated_rules(),
+        "unreviewed historical rule inventory or metadata",
+    )
+}
+
+fn evidence_array<'a>(value: &'a Value, label: &str) -> Result<&'a [Value], String> {
+    value
+        .as_array()
+        .map(Vec::as_slice)
+        .ok_or_else(|| format!("missing or malformed {label}"))
 }
 
 pub fn relevant_names() -> BTreeSet<String> {
@@ -567,7 +649,7 @@ pub fn reconstruct(i: &Inputs) -> Result<Value, String> {
         "independent initialization body review differs",
     )?;
     Ok(
-        json!({"schema_version":1,"kind":"offline-mana-supplier-source-review","scope":{"native_coverage_authorized":false,"runtime_changes":[],"complete_mana":false,"complete_supplier_closure":false},"required_source_names":relevant_names(),"selected":selected,"recipe_body_census":{"reference":selected::RECIPE,"source_record_candidates":[],"meaning":"captured-complete-record-bodies-not-constructor-or-callback-closure"},"body_reviews":body,"source_construction":{"off_metadata":source_metadata(&off),"on_metadata":source_metadata(&on),"off_candidates":source_candidates(&off["state"]),"on_candidates":source_candidates(&on["state"]),"callback_declarations_require_body_review":true},"native_inventory":{"ordinary_owners":i.rules.owners.len(),"application_owners":i.rules.effect_applications.as_ref().map(|a|a.members.len()),"reviewed_collectors":collectors(),"new_suppliers_permitted":false,"global_source_completeness":false},"resource_pass":{"reference":RESOURCE,"sha256":hash(&resource_bytes),"zero_conversion_transport_is_not_absence":true,"incoming_donors":["Armour","Evasion","EnergyShield","Life","Ward"]},"remaining":["configuration callback and default catalogue bodies beyond observed invocations","node/socket/radius/generated/support constructor and declaration body review","later procedural modifier transformations and recipient delivery","source-to-owned runtime dispositions and complete query membership"]}),
+        json!({"schema_version":1,"kind":"offline-mana-supplier-source-review","scope":{"native_coverage_authorized":false,"runtime_changes":[],"complete_mana":false,"complete_supplier_closure":false},"required_source_names":relevant_names(),"selected":selected,"recipe_body_census":{"reference":selected::RECIPE,"source_record_candidates":[],"meaning":"captured-complete-record-bodies-not-constructor-or-callback-closure"},"body_reviews":body,"source_construction":{"off_metadata":source_metadata(&off),"on_metadata":source_metadata(&on),"off_candidates":source_candidates(&off["state"]),"on_candidates":source_candidates(&on["state"]),"callback_declarations_require_body_review":true},"native_inventory":{"ordinary_owners":evidence_array(&i.rules["owners"],"ordinary owner inventory")?.len(),"application_owners":evidence_array(&i.rules["effect_applications"]["members"],"application owner inventory")?.len(),"reviewed_collectors":collectors(),"new_suppliers_permitted":false,"global_source_completeness":false},"resource_pass":{"reference":RESOURCE,"sha256":hash(&resource_bytes),"zero_conversion_transport_is_not_absence":true,"incoming_donors":["Armour","Evasion","EnergyShield","Life","Ward"]},"remaining":["configuration callback and default catalogue bodies beyond observed invocations","node/socket/radius/generated/support constructor and declaration body review","later procedural modifier transformations and recipient delivery","source-to-owned runtime dispositions and complete query membership"]}),
     )
 }
 

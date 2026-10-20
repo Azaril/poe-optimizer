@@ -302,11 +302,10 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     return Ok(missing(PlanGapReason::UnsupportedContext));
                 };
                 charge(&mut self.work, 1)?;
-                self.request
-                    .scenario()
-                    .input()
-                    .usage
+                self.usage_resolution
+                    .selections
                     .get(*index)
+                    .map(|v| &v.selection)
                     .filter(|v| &v.policy == definition)
                     .map(|v| v.parameters.as_slice())
             }

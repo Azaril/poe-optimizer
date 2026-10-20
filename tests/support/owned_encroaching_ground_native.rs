@@ -307,6 +307,7 @@ fn plan(w: &World) -> std::result::Result<bidding_fixture::Plan, String> {
         BuildSpec::new(w.inner.build.clone(), Default::default()).unwrap(),
         ScenarioSpec::new(
             ScenarioInput {
+                usage_intents: vec![],
                 game_version: bidding_fixture::ns(),
                 enemy: EnemySpec {
                     encounter: def("fixture.encounter"),

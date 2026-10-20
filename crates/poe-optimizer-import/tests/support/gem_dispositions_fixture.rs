@@ -360,10 +360,7 @@ impl Fixture {
         let GemInventoryPolicy::PobFreshPhysicalV3 {
             primary_dispositions,
             ..
-        } = self.policy.gem_inventory.as_mut().unwrap()
-        else {
-            unreachable!()
-        };
+        } = self.policy.gem_inventory.as_mut().unwrap();
         &mut primary_dispositions[0]
     }
     /// A distinct later physical family has an ordinary usage consumer. Adding
@@ -424,6 +421,7 @@ impl Fixture {
             .push(DefinitionDescriptor::UsagePolicy(DefinitionEntry {
                 id: policy.clone(),
                 schema: SchemaState::Known(UsagePolicySchema {
+                    scenario_skill_applicability: None,
                     targets: vec![UsageTargetKind::Skill],
                     declarations: DeclaredSlots {
                         parameters: DeclaredSet::complete(vec![parameter.clone()]),
@@ -487,6 +485,8 @@ impl Fixture {
         roles.definitions = f.base.schema.identity().clone();
         roles.mapping = *f.base.mapping.identity();
         roles.roles.push(OwnedGemRoleRow {
+            construction:
+                poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
             gem: gem.clone(),
             primary: OwnedPrimarySkill::Known(primary.clone()),
             role: OwnedGemRole::Known(AuthoredGemRole::SkillUse),
@@ -504,6 +504,8 @@ impl Fixture {
         quality.definitions = definitions.clone();
         f.policy.gem_inputs.as_mut().unwrap().definitions = definitions.clone();
         f.policy.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
+            inventory: None,
+            scenario: vec![],
             definitions: definitions.clone(),
             source: f.base.roles.input().compilation.source.clone(),
             roles,
@@ -560,10 +562,7 @@ impl Fixture {
             usage_inputs,
             primary_dispositions,
             ..
-        } = f.policy.gem_inventory.as_mut().unwrap()
-        else {
-            unreachable!()
-        };
+        } = f.policy.gem_inventory.as_mut().unwrap();
         *d = definitions.clone();
         *r = roles;
         *scalar_inputs = scalar;

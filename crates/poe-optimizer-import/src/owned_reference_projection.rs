@@ -719,7 +719,7 @@ impl BoundProjectionPlan {
             return Err(ProjectionError::Binding("finalized query rows"));
         }
         let request = digest_owned(
-            "owned-request-v1",
+            "owned-request-v2",
             finalized.request(),
             limits.draft.input.max_wire_bytes,
         )?;

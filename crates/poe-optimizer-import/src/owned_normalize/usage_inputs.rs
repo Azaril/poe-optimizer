@@ -2,7 +2,25 @@
 //! physical Gem inventory; a private per-policy token supports its independent proof.
 use super::*;
 use crate::owned_value::WhitespacePolicy;
+mod configuration;
+mod inventory;
 mod occurrences;
+pub use crate::owned_configuration_numeric::ConfigurationNumericSelection;
+pub use configuration::{ConfigurationUsageIntentInput, ConfigurationUsageParameterInput};
+pub(super) use configuration::{
+    ProvenConfigurationUsage,
+    check_projection_destinations as check_configuration_projection_destinations,
+    checked_receipts as checked_configuration_receipts,
+    control_matches as configuration_control_matches, materialize as materialize_configuration,
+};
+pub(super) use inventory::{
+    InventoryReceipts, record_generated_input_disposition, record_input_disposition,
+    record_support_input_disposition,
+};
+pub use inventory::{
+    UsageInventoryDestination, UsageInventoryField, UsageInventoryFieldSelector,
+    UsageInventoryPolicy, UsageInventoryRow, UsageInventorySource,
+};
 pub(super) use occurrences::MaterializedUsage;
 pub use occurrences::{OccurrenceUsagePolicy, OccurrenceUsageRule, OccurrenceUsageTarget};
 
@@ -19,6 +37,13 @@ pub enum UsageInputPolicy {
         scalar_inputs: OwnedContentDigest,
         physical: Vec<PrimarySkillUsageInput>,
         occurrences: Vec<OccurrenceUsageRule>,
+        /// Config-scoped values remain Scenario-owned; native preparation
+        /// resolves their recipients against the independently composed build.
+        scenario: Vec<ConfigurationUsageIntentInput>,
+        /// Absence supplies no inventory-completion authority. This is an
+        /// additive current-format capability, not a historical reader.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        inventory: Option<UsageInventoryPolicy>,
     },
 }
 impl UsageInputPolicy {
@@ -99,6 +124,8 @@ pub struct UsageGroupCompanion {
 pub(super) struct CompiledUsageInputs<'p> {
     rules: BTreeMap<&'p GemDefId, BoundUsage<'p>>,
     occurrences: Option<occurrences::CompiledOccurrences<'p>>,
+    scenario: configuration::CompiledConfigurationUsage<'p>,
+    inventory: Option<inventory::CompiledInventory<'p>>,
     pub work: usize,
 }
 struct BoundUsage<'p> {
@@ -157,6 +184,7 @@ pub(super) struct UsageInputContext<'a, 's> {
     pub skill: SkillUseId,
     pub preset: &'a mut SkillPresetDraft,
     pub inventory_proof: bool,
+    pub receipts: &'a mut InventoryReceipts,
 }
 impl AttachedPrimaryUsage<'_> {
     pub(super) fn proves(
@@ -222,6 +250,8 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         scalar_inputs,
         physical,
         occurrences,
+        scenario,
+        inventory,
     } = usage_policy;
     if identity != definitions.identity()
         || role_identity != roles.identity()
@@ -243,6 +273,8 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     let mut compiled = CompiledUsageInputs {
         rules: BTreeMap::new(),
         occurrences: None,
+        scenario: configuration::CompiledConfigurationUsage::default(),
+        inventory: None,
         work: 0,
     };
     charge(&mut compiled.work, bytes.len(), limits)?;
@@ -382,6 +414,11 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
             limits,
         )?);
     }
+    compiled.scenario = configuration::compile(scenario, definitions, &mut compiled.work, limits)?;
+    let mut inventory_work = 0;
+    compiled.inventory =
+        inventory::compile(inventory.as_ref(), &compiled, limits, &mut inventory_work)?;
+    charge(&mut compiled.work, inventory_work, limits)?;
     Ok(Some(compiled))
 }
 
@@ -394,6 +431,59 @@ struct PolicyCompilation<'a, I> {
     attributes: &'a BTreeSet<&'a str>,
     groups: &'a BTreeSet<&'a str>,
     allow_aliases: bool,
+}
+/// Destination-neutral ownership checks shared by exact occurrence and
+/// Scenario intent transport. Source frame/selection semantics stay separate.
+fn policy_schema<'a, I: DefinitionSchemaIndex>(
+    definitions: &'a I,
+    policy: &UsagePolicyDefId,
+    parameters: usize,
+    work: &mut usize,
+    limits: NormalizationLimits,
+) -> Result<&'a UsagePolicySchema> {
+    charge(work, 1, limits)?;
+    let SchemaLookup::Known(schema) = definitions.definition(policy) else {
+        return invalid("usage policy schema");
+    };
+    charge(
+        work,
+        schema.targets.len() + schema.declarations.parameters.members.len(),
+        limits,
+    )?;
+    if !schema.targets.contains(&UsageTargetKind::Skill)
+        || !schema.declarations.parameters.is_complete()
+        || parameters == 0
+        || parameters > 64
+        || schema.declarations.parameters.members.len() != parameters
+    {
+        return invalid("usage policy parameters");
+    }
+    Ok(schema)
+}
+fn parameter_schema<'a, I: DefinitionSchemaIndex>(
+    definitions: &'a I,
+    policy: &UsagePolicyDefId,
+    schema: &UsagePolicySchema,
+    slot: &DeclaredSlot<ParameterSlotDefId>,
+    work: &mut usize,
+    limits: NormalizationLimits,
+) -> Result<&'a ParameterSlotSchema> {
+    charge(work, schema.declarations.parameters.members.len(), limits)?;
+    if slot.declaration != SlotOwnerDefId::UsagePolicy(policy.clone())
+        || !schema.declarations.parameters.members.contains(slot)
+    {
+        return invalid("usage parameter authority");
+    }
+    let SchemaLookup::Known(value) = definitions.slot(slot) else {
+        return invalid("usage parameter schema");
+    };
+    charge(work, value.sites.len(), limits)?;
+    if value.presence != SlotPresence::RequiredOnce
+        || value.sites != [ParameterSite::UsagePolicyParameter]
+    {
+        return invalid("usage parameter site");
+    }
+    Ok(value)
 }
 fn compile_policies<'p, I: DefinitionSchemaIndex>(
     inputs: &'p [OccurrenceUsagePolicy],
@@ -416,47 +506,30 @@ fn compile_policies<'p, I: DefinitionSchemaIndex>(
     let mut ids = BTreeSet::new();
     let mut policies = Vec::new();
     for policy in inputs {
-        charge(work, 1, limits)?;
-        let SchemaLookup::Known(schema) = definitions.definition(&policy.policy) else {
-            return invalid("occurrence usage policy schema");
-        };
-        charge(
+        if !ids.insert(&policy.policy) {
+            return invalid("duplicate occurrence usage policy");
+        }
+        let schema = policy_schema(
+            definitions,
+            &policy.policy,
+            policy.parameters.len(),
             work,
-            schema.targets.len() + schema.declarations.parameters.members.len(),
             limits,
         )?;
-        if !ids.insert(&policy.policy)
-            || !schema.targets.contains(&UsageTargetKind::Skill)
-            || !schema.declarations.parameters.is_complete()
-            || policy.parameters.is_empty()
-            || policy.parameters.len() > 64
-            || schema.declarations.parameters.members.len() != policy.parameters.len()
-        {
-            return invalid("occurrence usage policy parameters");
-        }
         let mut slots = BTreeSet::new();
         let mut parameters = Vec::new();
         for parameter in &policy.parameters {
-            charge(work, schema.declarations.parameters.members.len(), limits)?;
-            if parameter.slot.declaration != SlotOwnerDefId::UsagePolicy(policy.policy.clone())
-                || !slots.insert(&parameter.slot)
-                || !schema
-                    .declarations
-                    .parameters
-                    .members
-                    .contains(&parameter.slot)
-            {
-                return invalid("occurrence usage parameter authority");
+            if !slots.insert(&parameter.slot) {
+                return invalid("duplicate occurrence usage parameter");
             }
-            let SchemaLookup::Known(value) = definitions.slot(&parameter.slot) else {
-                return invalid("occurrence usage parameter schema");
-            };
-            charge(work, value.sites.len(), limits)?;
-            if value.presence != SlotPresence::RequiredOnce
-                || value.sites != [ParameterSite::UsagePolicyParameter]
-            {
-                return invalid("occurrence usage parameter site");
-            }
+            let value = parameter_schema(
+                definitions,
+                &policy.policy,
+                schema,
+                &parameter.slot,
+                work,
+                limits,
+            )?;
             let recipe = |input: &ValueRecipeInput, names: &BTreeSet<&str>| {
                 typed_usage_recipe(
                     input,
@@ -750,6 +823,7 @@ impl<'p> CompiledUsageInputs<'p> {
             skill,
             preset,
             inventory_proof,
+            receipts,
         } = context;
         b.charge(1)?;
         let DraftField::Known { value: gem } = gem else {
@@ -810,25 +884,40 @@ impl<'p> CompiledUsageInputs<'p> {
         for policy in &bound.policies {
             b.charge(1)?;
             let (parameters, converted) = decode_parameters(b, row, group, &policy.parameters)?;
+            let selection = UsagePolicyDraft {
+                policy: policy.policy.clone().into(),
+                target: UsageTarget::Skill(SkillTarget::Generated(Box::new(GeneratedSkillKey {
+                    provider: ProviderKey {
+                        root: ProviderRoot::SkillUse(skill),
+                        grant_path: vec![],
+                    },
+                    slot: bound.input.supply.clone(),
+                })))
+                .into(),
+                parameters,
+            };
+            if converted && self.inventory.is_some() {
+                inventory::record_usage(
+                    b,
+                    row,
+                    group,
+                    preset.id,
+                    inventory::UsageInventorySource::Physical { gem: gem.clone() },
+                    &PresetUsageBindingDraft {
+                        selection: selection.clone(),
+                        applicability:
+                            poe_optimizer_core::owned_preset_intent::PresetApplicability::Required,
+                    },
+                    &policy.parameters,
+                    receipts,
+                )?;
+            }
             preset
                 .usage_preferences
                 .as_mut()
                 .expect("initialized above")
                 .members
-                .push(UsagePolicyDraft {
-                    policy: policy.policy.clone().into(),
-                    target: UsageTarget::Skill(SkillTarget::Generated(Box::new(
-                        GeneratedSkillKey {
-                            provider: ProviderKey {
-                                root: ProviderRoot::SkillUse(skill),
-                                grant_path: vec![],
-                            },
-                            slot: bound.input.supply.clone(),
-                        },
-                    )))
-                    .into(),
-                    parameters,
-                });
+                .push(selection);
             if converted {
                 attached.push(policy.policy);
             }
@@ -876,15 +965,49 @@ fn exact_preset(
 }
 
 impl CompiledUsageInputs<'_> {
+    pub(super) fn declares_configuration_selector(
+        &self,
+        b: &mut Builder<'_, '_>,
+        selector: &ValueSelector,
+    ) -> Result<bool> {
+        configuration::declares_selector(b, &self.scenario, selector)
+    }
+
+    pub(super) fn collect_configuration(
+        &self,
+        b: &mut Builder<'_, '_>,
+    ) -> Result<BTreeMap<SourceOccurrenceId, ProvenConfigurationUsage>> {
+        configuration::collect(b, &self.scenario)
+    }
     pub(super) fn materialize_occurrences(
         &self,
         b: &mut Builder<'_, '_>,
         draft: &mut DraftSessionInput,
         context: generated_skill_sources::Context<'_>,
+        receipts: &mut InventoryReceipts,
     ) -> Result<Vec<MaterializedUsage>> {
         match &self.occurrences {
-            Some(compiled) => occurrences::materialize(b, draft, compiled, context),
+            Some(compiled) => occurrences::materialize(
+                b,
+                draft,
+                compiled,
+                context,
+                self.inventory.is_some(),
+                receipts,
+            ),
             None => Ok(vec![]),
         }
+    }
+    pub(super) fn inventory_enabled(&self) -> bool {
+        self.inventory.is_some()
+    }
+    pub(super) fn complete_inventory(
+        &self,
+        b: &mut Builder<'_, '_>,
+        draft: &mut DraftSessionInput,
+        presets: &BTreeMap<SourceOccurrenceId, usize>,
+        receipts: &InventoryReceipts,
+    ) -> Result<()> {
+        inventory::complete(b, draft, presets, self.inventory.as_ref(), receipts)
     }
 }

@@ -150,19 +150,21 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         );
     }
     let b = prior.input();
-    let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+    let Some(GemInventoryPolicy::PobFreshPhysicalV3 {
         definitions,
         roles,
         catalog,
         scalar_inputs,
-        gems,
+        supports: gems,
+        ..
     }) = &b.normalization.gem_inventory
     else {
         panic!("exact prior support inventory");
     };
     assert_eq!(json!(catalog), authoring["catalog"]);
     let mut normalization = b.normalization.clone();
-    normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV2 {
+    normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV3 {
+        primary_dispositions: vec![],
         definitions: definitions.clone(),
         roles: *roles,
         catalog: *catalog,

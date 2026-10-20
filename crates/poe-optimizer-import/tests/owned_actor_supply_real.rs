@@ -195,6 +195,7 @@ impl Real {
         let limits = OwnedInputLimits::default();
         let build = BuildSpec::new(
             BuildInput {
+                usage_preferences: vec![],
                 generated_inputs: None,
                 authored_support_order: None,
                 allocator: InstanceAllocatorState::from_parts(
@@ -247,6 +248,7 @@ impl Real {
         .unwrap();
         let scenario = ScenarioSpec::new(
             ScenarioInput {
+                usage_intents: vec![],
                 game_version: ns.clone(),
                 enemy: EnemySpec {
                     encounter: EncounterDefId::parse(ns.clone(), "unmapped-test-encounter")

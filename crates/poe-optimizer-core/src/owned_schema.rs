@@ -346,10 +346,42 @@ schema_record!(MetricSchema {
     actor_roles: Vec<MetricActorRole>,
     provider_roles: Vec<ProviderRole>,
 });
-schema_record!(UsagePolicySchema {
-    targets: Vec<UsageTargetKind>,
-    declarations: DeclaredSlots,
-});
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct UsagePolicySchema {
+    pub targets: Vec<UsageTargetKind>,
+    pub declarations: DeclaredSlots,
+    /// Explicit all-eligible Skill expansion authority for Scenario intent.
+    /// Null denies expansion; partial membership never proves an empty result.
+    #[serde(deserialize_with = "required_usage_applicability")]
+    pub scenario_skill_applicability: Option<DeclaredSet<UsageSkillApplicability>>,
+}
+fn required_usage_applicability<'de, D: serde::Deserializer<'de>>(
+    deserializer: D,
+) -> Result<Option<DeclaredSet<UsageSkillApplicability>>, D::Error> {
+    Option::deserialize(deserializer)
+}
+
+/// A finite permission over existing Skill and supply identities, not a query.
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum UsageSkillApplicability {
+    AuthoredDirect { skill: SkillDefId },
+    Supplied(Box<UsageSkillSupply>),
+}
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct UsageSkillSupply {
+    pub skill: SkillDefId,
+    /// The exact entering relation; the runtime retains its whole provider path.
+    pub grant: DeclaredSlot<GrantSlotDefId>,
+    pub supply: DeclaredSlot<SkillGrantSlotDefId>,
+}
 schema_record!(SkillLinkRoleSchema {
     containers: DeclaredSet<SkillDefId>,
     payloads: DeclaredSet<SkillDefId>,

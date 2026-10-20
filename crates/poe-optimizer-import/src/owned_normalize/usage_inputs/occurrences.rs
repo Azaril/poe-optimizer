@@ -46,6 +46,20 @@ pub(super) struct CompiledOccurrences<'p> {
     direct: BTreeMap<(&'p str, &'p str), usize>,
     generated: CompiledSources<'p>,
 }
+impl<'p> CompiledOccurrences<'p> {
+    pub(super) fn inventory_row_count(&self) -> usize {
+        self.rows.len()
+    }
+    pub(super) fn inventory_policies(
+        &self,
+        target: &OccurrenceUsageTarget,
+    ) -> Option<&[BoundPolicy<'p>]> {
+        self.rows
+            .iter()
+            .find(|row| &row.row.target == target)
+            .map(|row| row.policies.as_slice())
+    }
+}
 impl OccurrenceUsageTarget {
     fn identity(&self) -> (&GemDefId, &str, &str, &str, &str, &SkillDefId) {
         match self {
@@ -362,6 +376,8 @@ pub(super) fn materialize(
     draft: &mut DraftSessionInput,
     compiled: &CompiledOccurrences<'_>,
     context: Context<'_>,
+    inventory_enabled: bool,
+    inventory_receipts: &mut InventoryReceipts,
 ) -> Result<Vec<MaterializedUsage>> {
     let mut receipts = Vec::new();
     let mut plans = direct_plans(b, draft, compiled, context)?;
@@ -473,6 +489,23 @@ pub(super) fn materialize(
                 target: plan.target.clone().into(),
                 parameters,
             };
+            if converted && inventory_enabled {
+                inventory::record_usage(
+                    b,
+                    source,
+                    group,
+                    preset.id,
+                    UsageInventorySource::Occurrence {
+                        target: Box::new(bound.row.target.clone()),
+                    },
+                    &PresetUsageBindingDraft {
+                        selection: selection.clone(),
+                        applicability: plan.applicability,
+                    },
+                    &policy.parameters,
+                    inventory_receipts,
+                )?;
+            }
             if let Some(intent) = &mut preset.intent {
                 let binding = PresetUsageBindingDraft {
                     selection,

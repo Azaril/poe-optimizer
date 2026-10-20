@@ -1,0 +1,51 @@
+{
+  "kind": "source-bound-gem-skill-inventories",
+  "before": "520832751a5c6650954aa23c70f0b7a7b3ca5cc47c5cc39b8bd62277ee7f41e6",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-passive-structural-inventories-v1",
+    "schema_version": 7,
+    "content_sha256": "88dbe50ce55c1123af6025c834e78418f486be3f3041f68045036042fe7e642f",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "replaced_definitions": 4,
+  "closed_potential_skill_inventories": 4,
+  "closed_direct_inventories": 0,
+  "preserved_nonempty_skill_inventories": 3,
+  "allocated_definitions": 0,
+  "new_members": 0,
+  "ice_nova_declared_stat_set_aliases": 2,
+  "ice_nova_constructed_stat_sets": 2,
+  "scope": {
+    "potential_skill_membership_only": true,
+    "activation_certified": false,
+    "direct_declarations_certified": false,
+    "descendant_topology_certified": false,
+    "null_stat_mappings_classified": false,
+    "numerical_coverage_certified": false,
+    "scenario_census_complete": false
+  },
+  "artifacts": [
+    {
+      "file": "dependencies.json",
+      "bytes": 159515,
+      "sha256": "79c75a76eaacd7ac65eca44af4bac494653134f0987b1cec64dbc5b5dd618ca0"
+    },
+    {
+      "file": "evidence.json",
+      "bytes": 26643,
+      "sha256": "6aa33ae071a590bbed33165cbb58271c71dd5b10aeaebe38ceb4d780c00d82e5"
+    },
+    {
+      "file": "migration.json",
+      "bytes": 49362,
+      "sha256": "7f566e0d7730f731e7a8d5ded250f38bdfb1d8309a1c1de9e9f8489776ae41fa"
+    }
+  ],
+  "license": {
+    "path": "data/owned/poe2/3887ae68/passive-structural-inventories/sources/LICENSE.md",
+    "bytes": 66619,
+    "sha256": "b61f62cf2b8e301ef2a4a3c5f7de9460fea53327edf9f260b7c746502fc6bf97"
+  }
+}

@@ -28,6 +28,7 @@ use crate::{
     },
     owned_reward_policy::{
         OwnedRewardPolicy, RewardPolicyError, RewardPolicyInput, RewardPolicyLimits,
+        RewardRuleOutput,
     },
     owned_skill_catalog::{
         OwnedSkillRoleIndex, OwnedSkillRolePackageInput, SkillCatalogError, SkillCatalogLimits,
@@ -650,7 +651,13 @@ fn preflight(
         charge(&mut left, n, "validation entries")?;
     }
     for rule in &input.rewards.rules {
-        charge(&mut left, rule.outcomes.len(), "validation entries")?;
+        let entries = match &rule.output {
+            RewardRuleOutput::Cases(outcomes) => outcomes.len(),
+            RewardRuleOutput::NumericParameter(numeric) => {
+                numeric.fixed_parameters.len().saturating_add(1)
+            }
+        };
+        charge(&mut left, entries, "validation entries")?;
     }
     if input.query_sets.len() > limits.max_query_sets {
         return Err(SuccessorBundleError::Limit("query sets"));

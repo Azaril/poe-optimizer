@@ -1,0 +1,19 @@
+{
+  "kind": "source-components-only-no-import-authority",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "artifacts": {
+    "evidence.json": {
+      "bytes": 16988,
+      "sha256": "0ab9da94682212c300209d6de0f0514e2a6510e97651343c4a56d87f4f6d76d8"
+    },
+    "README.md": {
+      "bytes": 4220,
+      "sha256": "cfdce0d0be96a0a89c9a6aa32ce50072cb7dd88697788419d22be7bbe2cb6a72"
+    }
+  },
+  "full_build_parity": false,
+  "numerical_parity": false,
+  "import_receipt_implemented": false,
+  "production_files_changed": false
+}

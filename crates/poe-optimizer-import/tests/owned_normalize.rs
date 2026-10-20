@@ -97,6 +97,7 @@ fn artifacts(mapped: bool) -> Artifacts {
                 },
             });
             role_rows.push(OwnedGemRoleRow {
+                construction: poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
                 gem,
                 primary: OwnedPrimarySkill::Known(skill),
                 role: OwnedGemRole::Known(role),
@@ -250,6 +251,8 @@ fn add_active_sibling(artifacts: &mut Artifacts, materialization: OwnedGemMateri
     roles.compilation.gem_count += 1;
     roles.compilation.skill_count += 1;
     roles.roles.push(OwnedGemRoleRow {
+        construction:
+            poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
         gem,
         primary: OwnedPrimarySkill::Known(skill),
         role: OwnedGemRole::Known(AuthoredGemRole::SkillUse),
@@ -362,6 +365,32 @@ fn queries() -> Vec<ImportQueryTemplate> {
         },
     ]
 }
+#[test]
+fn unconverted_scenario_intent_has_its_own_pending_inventory() {
+    let imported = source(
+        r#"<PathOfBuilding2><Build level="80"/><Config><ConfigSet id="1"><Placeholder name="caller-stage-count" number="3"/></ConfigSet></Config></PathOfBuilding2>"#,
+        0xa7,
+    );
+    let artifacts = artifacts(false);
+    let normalized = run(&imported, &artifacts, &[]);
+    let scenarios = &normalized.draft().input().scenario_presets.members;
+    assert_eq!(scenarios.len(), 1);
+    let scenario = &scenarios[0].scenario;
+    assert!(scenario.usage.members.is_empty());
+    assert!(scenario.usage_intents.members.is_empty());
+    let DraftListCompletion::Pending { id: exact, .. } = &scenario.usage.completion else {
+        panic!("unconverted exact usage remains pending");
+    };
+    let DraftListCompletion::Pending { id: intent, code } = &scenario.usage_intents.completion
+    else {
+        panic!("unconverted Scenario intent cannot be inferred empty");
+    };
+    assert_ne!(
+        exact, intent,
+        "the two inventories have separate obligations"
+    );
+    assert_eq!(code.as_str(), "scenario-usage-intents-not-converted");
+}
 fn run(
     source: &ImportedBuildInstance,
     artifacts: &Artifacts,
@@ -421,6 +450,7 @@ fn ids(target: &OwnedOriginTarget) -> InstanceId {
         OwnedOriginTarget::SkillPreset(v) => v.instance_id(),
         OwnedOriginTarget::ChoicePreset(v) => v.instance_id(),
         OwnedOriginTarget::ScenarioPreset(v) => v.instance_id(),
+        OwnedOriginTarget::ScenarioUsageIntent { scenario, .. } => scenario.instance_id(),
         OwnedOriginTarget::QueryPreset(v) => v.instance_id(),
         OwnedOriginTarget::Issue(v) => v.instance_id(),
     }
@@ -1165,6 +1195,8 @@ fn ambiguous_gem_mapping_retains_bound_candidates_without_inventing_a_physical_o
     role_input.definitions = schema.identity().clone();
     role_input.compilation.gem_count += 1;
     role_input.roles.push(OwnedGemRoleRow {
+        construction:
+            poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
         gem: new_gem,
         primary: OwnedPrimarySkill::Unmapped {
             issue: key("primary-unknown"),
@@ -1501,7 +1533,7 @@ fn with_reward_policy() -> Artifacts {
             mapping: *a.mapping.identity(),
             rules: vec![RewardRuleInput {
                 recipe,
-                outcomes: vec![
+                output: RewardRuleOutput::Cases(vec![
                     RewardOutcomeCase {
                         when: RewardValue::Boolean(false),
                         outcome: RewardTemplate::None,
@@ -1513,7 +1545,7 @@ fn with_reward_policy() -> Artifacts {
                             parameters: vec![],
                         },
                     },
-                ],
+                ]),
             }],
         },
         &a.mapping,
@@ -3254,6 +3286,9 @@ mod enemy_level_tests;
 #[path = "support/owned_configuration_reward_inventory.rs"]
 mod configuration_reward_inventory_tests;
 
+#[path = "support/owned_numeric_reward_projection.rs"]
+mod numeric_reward_projection_tests;
+
 #[path = "support/owned_character_reward_inventory.rs"]
 mod character_reward_inventory_tests;
 
@@ -3277,6 +3312,9 @@ mod direct_skill_input_tests;
 
 #[path = "support/owned_numeric_usage_inputs.rs"]
 mod numeric_usage_input_tests;
+
+#[path = "support/owned_configuration_usage_intents.rs"]
+mod configuration_usage_intent_tests;
 
 #[path = "support/owned_skill_inventory.rs"]
 mod skill_inventory_tests;

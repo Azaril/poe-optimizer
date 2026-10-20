@@ -41,4 +41,4 @@ Final validation passed:
 - Ordinary target: 7 passed, 1 intentional ignored retention test, 16.42 s, `runs/owned-self-flat-minion-store-ordinary-02.log`.
 - Strict target Clippy: passed, 0.88 s, `runs/owned-self-flat-minion-store-clippy-01.log`.
 
-The exact `bodies.json` SHA-256 is `4135bdc54032242addb41942ec79d93b8557cb9b71e5d223db7c90f769badab5`; the derived 5,024-byte `review.json` SHA-256 is `743bf794c227a577ae97a92e3823541f734af31046788b9f04db35e988f38b0d`. The canonical native package remains unchanged.
+The exact `bodies.json` SHA-256 is `4135bdc54032242addb41942ec79d93b8557cb9b71e5d223db7c90f769badab5`; the derived 5,024-byte `review.json` SHA-256 is `d35ca00990f80e801758de29c38d5d3e3cb289af73f886b2d93fd99a7fc12ca9`. The canonical native package remains unchanged.

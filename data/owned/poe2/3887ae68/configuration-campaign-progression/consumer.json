@@ -1,0 +1,309 @@
+{
+  "owners": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "reward",
+          "value": {
+            "kind": "reward",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033b4"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "campaign-progression-fact",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "raw-count",
+                "value_type": {
+                  "kind": "integer"
+                },
+                "source": {
+                  "kind": "parameter",
+                  "value": {
+                    "slot": {
+                      "declaration": {
+                        "kind": "reward",
+                        "definition": {
+                          "kind": "reward",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.00000000000033b4"
+                        }
+                      },
+                      "slot": {
+                        "kind": "parameter_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000033b5"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "raw-count",
+                "expression": {
+                  "kind": "read",
+                  "input": "raw-count"
+                }
+              },
+              {
+                "id": "one",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 1
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "campaign-bosses-defeated",
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033b6"
+                  },
+                  "contribution": "override",
+                  "value": "raw-count"
+                }
+              },
+              {
+                "id": "campaign-progression-authority",
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033b7"
+                  },
+                  "contribution": "add",
+                  "value": "one"
+                }
+              }
+            ]
+          },
+          {
+            "id": "campaign-progression-authority",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "authority-count",
+                "value_type": {
+                  "kind": "integer"
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "campaign-progression-authority",
+                    "group": "sources"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "authority-count",
+                "expression": {
+                  "kind": "read",
+                  "input": "authority-count"
+                }
+              },
+              {
+                "id": "one",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "id": "unique",
+                "expression": {
+                  "kind": "compare",
+                  "operation": "equal",
+                  "left": "authority-count",
+                  "right": "one"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "unique-progression-authority",
+                "effect": {
+                  "kind": "requirement",
+                  "satisfied": "unique",
+                  "code": "exactly-one-campaign-progression-authority"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "complete"
+        }
+      }
+    }
+  ],
+  "queries": [
+    {
+      "id": "campaign-bosses-defeated",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033b6"
+      },
+      "contribution": "override",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "require_agreement",
+          "ordering": "unordered",
+          "empty": null,
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "reward",
+                      "value": {
+                        "kind": "reward",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000033b4"
+                      }
+                    }
+                  },
+                  "program": "campaign-progression-fact",
+                  "effect": "campaign-bosses-defeated",
+                  "origin": {
+                    "kind": "reward"
+                  }
+                },
+                "order": null
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "campaign-progression-authority",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033b7"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "exact_integer_sum",
+          "ordering": "unordered",
+          "empty": {
+            "kind": "integer",
+            "value": 0
+          },
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "reward",
+                      "value": {
+                        "kind": "reward",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000033b4"
+                      }
+                    }
+                  },
+                  "program": "campaign-progression-fact",
+                  "effect": "campaign-progression-authority",
+                  "origin": {
+                    "kind": "reward"
+                  }
+                },
+                "order": null
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "support_source_domains": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "reward",
+          "value": {
+            "kind": "reward",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033b4"
+          }
+        }
+      },
+      "domain": {
+        "kind": "known",
+        "value": "authored_assignments_only"
+      }
+    }
+  ]
+}

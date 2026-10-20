@@ -398,6 +398,62 @@ fn colliding_exact_selectors_remain_ambiguous_without_selecting_a_role() {
 }
 
 #[test]
+fn ambiguous_catalog_rows_remain_diagnostic_but_cannot_certify_exchanged_owned_observations() {
+    let mut source = data();
+    add_gem(
+        &mut source,
+        "same-primary-other-key",
+        "external-support",
+        "v-a",
+        "support-effect",
+    );
+    // The same source selector/primary/role can still have different construction.
+    let stat_set = IndexedIdentityReference {
+        index: 3,
+        id: "other-stat-set".into(),
+    };
+    source.gem_declarations[2].identity.additional_stat_sets = vec![stat_set.clone()];
+    source.gems[2].declared_additional_stat_sets = vec![stat_set];
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source, AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    let original = OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, limits()).unwrap();
+    assert!(matches!(
+        mapping.lookup(&selector("external-support", "v-a")),
+        Some(MappingOutcome::Ambiguous { .. })
+    ));
+    assert!(matches!(
+        verify_owned_skill_catalog_reproduction(&catalog, &original, &mapping, limits()),
+        Err(SkillCatalogError::ReproductionMismatch)
+    ));
+    let first = input
+        .roles
+        .iter()
+        .position(|row| observed(row).catalog_gem_key == "support-gem-key")
+        .unwrap();
+    let second = input
+        .roles
+        .iter()
+        .position(|row| observed(row).catalog_gem_key == "same-primary-other-key")
+        .unwrap();
+    assert_eq!(input.roles[first].primary, input.roles[second].primary);
+    assert_eq!(input.roles[first].role, input.roles[second].role);
+    assert_eq!(
+        input.roles[first].materialization,
+        input.roles[second].materialization
+    );
+    let mut changed = input.clone();
+    changed.roles[first].construction = input.roles[second].construction.clone();
+    changed.roles[second].construction = input.roles[first].construction.clone();
+    let exchanged = OwnedSkillRoleIndex::new(changed, &mapping, &schema, limits()).unwrap();
+    assert_ne!(original.identity(), exchanged.identity());
+    assert!(matches!(
+        verify_owned_skill_catalog_reproduction(&catalog, &exchanged, &mapping, limits()),
+        Err(SkillCatalogError::ReproductionMismatch)
+    ));
+}
+
+#[test]
 fn missing_primary_effect_does_not_invent_a_skill_definition_or_support_role() {
     let mut source = data();
     add_gem(
@@ -493,6 +549,422 @@ fn source_and_final_binding_conflicts_are_rejected() {
     ));
 }
 
+fn construction_data() -> SkillIdentityData {
+    let mut source = data();
+    add_skill(&mut source, "late-effect", Some(false));
+    let declared = vec![IndexedIdentityReference {
+        index: 2,
+        id: "missing-command".into(),
+    }];
+    let stat_sets = vec![IndexedIdentityReference {
+        index: 4,
+        id: "additional-stat-set".into(),
+    }];
+    let order = Some(vec![3, 1, 2]);
+    let declaration = &mut source.gem_declarations[1].identity;
+    declaration.additional_effects = declared.clone();
+    declaration.additional_stat_sets = stat_sets.clone();
+    declaration.display_order = order.clone();
+    let gem = &mut source.gems[1];
+    gem.declared_additional_effects = declared.clone();
+    gem.declared_additional_stat_sets = stat_sets;
+    gem.constructed_additional_effects = declared;
+    gem.constructed_additional_effects.extend([
+        IndexedIdentityReference {
+            index: 5,
+            id: "late-effect".into(),
+        },
+        IndexedIdentityReference {
+            index: 8,
+            id: "late-effect".into(),
+        },
+    ]);
+    gem.additional_effects = vec!["late-effect".into(), "late-effect".into()];
+    gem.effect_list = vec![
+        "late-effect".into(),
+        "active-effect".into(),
+        "late-effect".into(),
+    ];
+    gem.display_order = order;
+    source.missing_references = source.expected_missing_references();
+    source
+}
+
+fn observed(row: &OwnedGemRoleRow) -> &ObservedGemSourceConstruction {
+    let OwnedGemSourceConstruction::Observed(facts) = &row.construction else {
+        panic!("compiled source observation")
+    };
+    facts
+}
+
+fn active_observed(input: &mut OwnedSkillRolePackageInput) -> &mut ObservedGemSourceConstruction {
+    input
+        .roles
+        .iter_mut()
+        .find_map(|row| match &mut row.construction {
+            OwnedGemSourceConstruction::Observed(facts)
+                if facts.catalog_gem_key == "active-gem-key" =>
+            {
+                Some(facts.as_mut())
+            }
+            _ => None,
+        })
+        .unwrap()
+}
+
+#[test]
+fn construction_preserves_sparse_missing_declared_and_late_repeated_display_positions() {
+    let source = construction_data();
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source.clone(), AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    let roles = OwnedSkillRoleIndex::new(input, &mapping, &schema, limits()).unwrap();
+    verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, limits()).unwrap();
+    let active = gem_id(&compiled, "external-active", "v-b");
+    let row = roles.role(&active).unwrap();
+    let facts = observed(row);
+    assert_eq!(facts.winning_declaration, 2);
+    assert_eq!(facts.catalog_gem_key, source.gems[1].key);
+    assert_eq!(facts.display_order, Some(vec![3, 1, 2]));
+    assert_eq!(
+        facts
+            .resolved_effects
+            .iter()
+            .map(|effect| effect.effect_id.as_str())
+            .collect::<Vec<_>>(),
+        ["late-effect", "active-effect", "late-effect"]
+    );
+    assert_eq!(facts.resolved_effects[0], facts.resolved_effects[2]);
+    assert_eq!(
+        facts
+            .resolved_additional_effects
+            .iter()
+            .map(|effect| effect.effect_id.as_str())
+            .collect::<Vec<_>>(),
+        ["late-effect", "late-effect"]
+    );
+    assert_eq!(
+        facts
+            .constructed_additional_effects
+            .iter()
+            .map(|effect| effect.index)
+            .collect::<Vec<_>>(),
+        [2, 5, 8]
+    );
+    assert_eq!(facts.declared_additional_effects.len(), 1);
+    assert_eq!(
+        facts.missing_references,
+        [
+            OwnedMissingSourceEffect {
+                kind: OwnedMissingSourceEffectKind::DeclaredAdditionalEffect,
+                index: Some(2),
+                effect_id: "missing-command".into(),
+            },
+            OwnedMissingSourceEffect {
+                kind: OwnedMissingSourceEffectKind::ConstructedAdditionalEffect,
+                index: Some(2),
+                effect_id: "missing-command".into(),
+            },
+        ]
+    );
+    assert_eq!(
+        facts.additional_stat_sets,
+        [OwnedSourceStatSetReference {
+            index: 4,
+            id: "additional-stat-set".into(),
+        }]
+    );
+    // Catalog identities do not create mechanics or map stat sets as Skills.
+    assert_eq!(compiled.receipt.skill_count, 3);
+    for effect in &facts.resolved_effects {
+        let OwnedSourceEffectResolution::Mapped(id) = &effect.resolution else {
+            panic!("resolved source position")
+        };
+        assert!(matches!(schema.definition(id), SchemaLookup::Unmapped(_)));
+    }
+    assert_eq!(row.role, OwnedGemRole::Known(AuthoredGemRole::SkillUse));
+    assert!(matches!(
+        schema.definition(&active),
+        SchemaLookup::Unmapped(_)
+    ));
+}
+
+#[test]
+fn observed_singleton_retains_missing_command_and_stat_sets_without_guessing_completeness() {
+    let mut source = construction_data();
+    let gem = &mut source.gems[1];
+    gem.constructed_additional_effects = gem.declared_additional_effects.clone();
+    gem.additional_effects.clear();
+    gem.effect_list = vec![gem.primary_effect_id.clone()];
+    gem.display_order = None;
+    source.gem_declarations[1].identity.display_order = None;
+    source.missing_references = source.expected_missing_references();
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source, AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    let roles = OwnedSkillRoleIndex::new(input, &mapping, &schema, limits()).unwrap();
+    verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, limits()).unwrap();
+    let active = gem_id(&compiled, "external-active", "v-b");
+    let facts = observed(roles.role(&active).unwrap());
+    assert_eq!(facts.resolved_effects.len(), 1);
+    assert_eq!(facts.missing_references.len(), 2);
+    assert_eq!(facts.additional_stat_sets.len(), 1);
+    assert_eq!(
+        facts.declared_additional_effects[0].effect.resolution,
+        OwnedSourceEffectResolution::Missing
+    );
+}
+
+#[test]
+fn construction_is_required_and_explicit_unavailable_never_passes_catalog_reproduction() {
+    let source = construction_data();
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source, AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, mut input) = assemble(&compiled);
+    let mut wire = serde_json::to_value(&input.roles[0]).unwrap();
+    wire.as_object_mut().unwrap().remove("construction");
+    assert!(serde_json::from_value::<OwnedGemRoleRow>(wire).is_err());
+    let active = gem_id(&compiled, "external-active", "v-b");
+    let facts = observed(input.roles.iter().find(|row| row.gem == active).unwrap());
+    let mut wire = serde_json::to_value(facts).unwrap();
+    wire.as_object_mut().unwrap().remove("display_order");
+    assert!(serde_json::from_value::<ObservedGemSourceConstruction>(wire).is_err());
+    let mut wire = serde_json::to_value(&facts.missing_references[0]).unwrap();
+    wire.as_object_mut().unwrap().remove("index");
+    assert!(serde_json::from_value::<OwnedMissingSourceEffect>(wire).is_err());
+    for row in &mut input.roles {
+        row.construction = OwnedGemSourceConstruction::Unavailable;
+    }
+    let roles = OwnedSkillRoleIndex::new(input, &mapping, &schema, limits()).unwrap();
+    assert!(matches!(
+        verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, limits()),
+        Err(SkillCatalogError::ReproductionMismatch)
+    ));
+    assert_eq!(
+        roles.role(&active).unwrap().role,
+        OwnedGemRole::Known(AuthoredGemRole::SkillUse)
+    );
+}
+
+#[test]
+fn runtime_construction_rejects_wrong_identity_joins_and_inconsistent_missing_census() {
+    let compiled = compile(construction_data(), AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    for mutation in 0..12 {
+        let mut changed = input.clone();
+        let facts = active_observed(&mut changed);
+        match mutation {
+            0 => facts.game_id = "other-external-gem".into(),
+            1 => facts.variant_id = "other-variant".into(),
+            2 => facts.primary.effect_id = "support-effect".into(),
+            3 => facts.resolved_effects[0].effect_id = "support-effect".into(),
+            4 => {
+                facts.resolved_effects[0].resolution = OwnedSourceEffectResolution::Mapped(
+                    DefId::parse(
+                        GameVersionNamespace::new("foreign", "v1").unwrap(),
+                        "foreign-skill",
+                    )
+                    .unwrap(),
+                )
+            }
+            5 => facts.missing_references[0].index = Some(7),
+            6 => facts.missing_references[0].kind = OwnedMissingSourceEffectKind::PrimaryEffect,
+            7 => {
+                facts.constructed_additional_effects.remove(0);
+            }
+            8 => facts.constructed_additional_effects[1].index = 2,
+            9 => facts.additional_stat_sets[0].index = 0,
+            10 => facts.resolved_effects.push(OwnedSourceEffectReference {
+                effect_id: "missing-command".into(),
+                resolution: OwnedSourceEffectResolution::Missing,
+            }),
+            11 => facts.winning_declaration = 0,
+            _ => unreachable!(),
+        };
+        assert!(
+            OwnedSkillRoleIndex::new(changed, &mapping, &schema, limits()).is_err(),
+            "accepted construction mutation {mutation}"
+        );
+    }
+}
+
+#[test]
+fn offline_reproduction_rejects_structurally_valid_forgery_even_with_fresh_package_digest() {
+    let source = construction_data();
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source, AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    let original = OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, limits()).unwrap();
+    for mutation in 0..8 {
+        let mut changed = input.clone();
+        let facts = active_observed(&mut changed);
+        match mutation {
+            0 => facts.resolved_effects.swap(0, 1),
+            1 => {
+                facts.resolved_effects.pop();
+            }
+            2 => facts.display_order = None,
+            3 => facts.winning_declaration = 1,
+            4 => facts.additional_stat_sets.clear(),
+            5 => facts.resolved_additional_effects.clear(),
+            6 => {
+                // Internally consistent omission still cannot certify a singleton.
+                facts.declared_additional_effects.clear();
+                facts.constructed_additional_effects.clear();
+                facts.resolved_additional_effects.clear();
+                facts.resolved_effects = vec![facts.primary.clone()];
+                facts.missing_references.clear();
+            }
+            7 => facts.catalog_gem_key = "invented-catalog-row".into(),
+            _ => unreachable!(),
+        }
+        let forged = OwnedSkillRoleIndex::new(changed, &mapping, &schema, limits()).unwrap();
+        assert_ne!(forged.identity(), original.identity());
+        assert!(matches!(
+            verify_owned_skill_catalog_reproduction(&catalog, &forged, &mapping, limits()),
+            Err(SkillCatalogError::ReproductionMismatch)
+        ));
+    }
+}
+
+#[test]
+fn reproduction_retains_historical_registry_ancestry_but_rejects_wrong_catalog_commitment() {
+    let source = construction_data();
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let mut compiled = compile(source, AbsentSupportPolicy::NonSupport);
+    let receipt = compiled.receipt.clone();
+    compiled
+        .registry
+        .allocate_definition::<ItemTemplateDefinition>()
+        .unwrap();
+    let (schema, mapping, input) = assemble(&compiled);
+    let roles = OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, limits()).unwrap();
+    assert_eq!(roles.input().compilation, receipt);
+    assert_ne!(mapping.input().registry, receipt.staged_registry);
+    verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, limits()).unwrap();
+    for mutation in 0..2 {
+        let mut changed = input.clone();
+        match mutation {
+            0 => changed.compilation.catalog_digest = "0".repeat(64).parse().unwrap(),
+            1 => changed.compilation.skill_count += 1,
+            _ => unreachable!(),
+        }
+        let forged = OwnedSkillRoleIndex::new(changed, &mapping, &schema, limits()).unwrap();
+        assert!(matches!(
+            verify_owned_skill_catalog_reproduction(&catalog, &forged, &mapping, limits()),
+            Err(SkillCatalogError::ReproductionMismatch)
+        ));
+    }
+}
+
+#[test]
+fn construction_nested_collections_text_and_total_reproduction_work_are_bounded() {
+    let mut source = construction_data();
+    source.gems[1].effect_list = vec!["active-effect".into(); 32];
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source, AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    let roles = OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, limits()).unwrap();
+    let mut tight = limits();
+    tight.mapping.max_collection_entries = 31;
+    assert!(matches!(
+        OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, tight),
+        Err(SkillCatalogError::LimitExceeded(
+            "construction resolved references"
+        ))
+    ));
+    assert!(verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, tight).is_err());
+    let original = serde_json::to_vec(roles.input()).unwrap();
+    let before = base();
+    let base_input = before.input().clone();
+    assert!(
+        compile_fresh_owned_skill_catalog(
+            &catalog,
+            &before,
+            &pin(),
+            &policy(AbsentSupportPolicy::NonSupport),
+            tight,
+        )
+        .is_err()
+    );
+    assert_eq!(before.input(), &base_input);
+    let mut long = input.clone();
+    active_observed(&mut long).additional_stat_sets[0].id = "s".repeat(128);
+    tight = limits();
+    tight.mapping.max_string_bytes = 127;
+    assert!(matches!(
+        OwnedSkillRoleIndex::new(long, &mapping, &schema, tight),
+        Err(SkillCatalogError::LimitExceeded("source text"))
+    ));
+    // Locate the finite aggregate boundary, then prove exact N vs N-1 behavior.
+    // The larger nested observation must not be hidden by the small row count.
+    let minimum = (1..1000)
+        .find(|max_entries| {
+            let mut bounded = limits();
+            bounded.mapping.max_entries = *max_entries;
+            verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, bounded).is_ok()
+        })
+        .expect("bounded fixture reproduction");
+    assert!(minimum > 32);
+    tight = limits();
+    tight.mapping.max_entries = minimum - 1;
+    assert!(verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, tight).is_err());
+    assert_eq!(serde_json::to_vec(roles.input()).unwrap(), original);
+}
+
+#[test]
+fn reproduction_bounds_shadowed_declaration_history_independently_of_final_rows() {
+    for gem_history in [true, false] {
+        let mut source = data();
+        for _ in 0..38 {
+            if gem_history {
+                let mut declaration = source.gem_declarations[1].clone();
+                declaration.index = source.gem_declarations.len() as u32 + 1;
+                source.gems[1].winning_declaration = declaration.index;
+                source.gem_declarations.push(declaration);
+            } else {
+                let mut declaration = source.skill_declarations[1].clone();
+                declaration.index = source.skill_declarations.len() as u32 + 1;
+                source.skills[1].winning_declaration = declaration.index;
+                source.skill_declarations.push(declaration);
+            }
+        }
+        assert_eq!(source.gems.len(), 2);
+        assert_eq!(source.skills.len(), 2);
+        let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+        let compiled = compile(source, AbsentSupportPolicy::NonSupport);
+        let (schema, mapping, input) = assemble(&compiled);
+        let roles = OwnedSkillRoleIndex::new(input, &mapping, &schema, limits()).unwrap();
+        verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, limits()).unwrap();
+        let before = serde_json::to_vec(roles.input()).unwrap();
+        let mut exact = limits();
+        exact.mapping.max_collection_entries = 40;
+        verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, exact).unwrap();
+        let mut tight = exact;
+        tight.mapping.max_collection_entries = 39;
+        let expected = if gem_history {
+            "gem declarations"
+        } else {
+            "skill declarations"
+        };
+        assert!(matches!(
+            verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, tight),
+            Err(SkillCatalogError::LimitExceeded(name)) if name == expected
+        ));
+        assert!(matches!(
+            compile_fresh_owned_skill_catalog(
+                &catalog,
+                &base(),
+                &pin(),
+                &policy(AbsentSupportPolicy::NonSupport),
+                tight,
+            ),
+            Err(SkillCatalogError::LimitExceeded(name)) if name == expected
+        ));
+        assert_eq!(serde_json::to_vec(roles.input()).unwrap(), before);
+    }
+}
+
 #[test]
 fn resource_failures_leave_the_base_unchanged_including_after_staged_allocations() {
     let base = base();
@@ -521,7 +993,8 @@ fn resource_failures_leave_the_base_unchanged_including_after_staged_allocations
     assert_eq!(base.input(), &before);
     let source = SkillIdentityCatalog::new(data()).unwrap();
     let mut exact = limits();
-    exact.mapping.max_entries = 22;
+    // Two additional ordered construction positions are now retained explicitly.
+    exact.mapping.max_entries = 24;
     assert!(
         compile_fresh_owned_skill_catalog(
             &source,
@@ -532,10 +1005,10 @@ fn resource_failures_leave_the_base_unchanged_including_after_staged_allocations
         )
         .is_ok()
     );
-    // The immutable base was constructed with looser bounds. Its 19 entries
+    // The immutable base was constructed with looser bounds. Its 21 entries
     // fit the requested limit, but the four newly staged IDs do not.
     let mut populated = base.clone();
-    for _ in 0..19 {
+    for _ in 0..21 {
         populated.allocate_definition::<SkillDefinition>().unwrap();
     }
     let populated_before = populated.input().clone();
@@ -550,7 +1023,7 @@ fn resource_failures_leave_the_base_unchanged_including_after_staged_allocations
         .is_err()
     );
     assert_eq!(populated.input(), &populated_before);
-    exact.mapping.max_entries = 21;
+    exact.mapping.max_entries = 23;
     assert!(matches!(
         compile_fresh_owned_skill_catalog(
             &source,

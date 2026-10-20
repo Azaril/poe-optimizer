@@ -20,6 +20,7 @@ use std::{
 mod compile;
 mod graph;
 mod metrics;
+mod requirements;
 mod support_effects;
 mod support_metrics;
 mod support_outputs;
@@ -27,6 +28,9 @@ mod support_source_properties;
 mod supports;
 pub use crate::owned_rules::UnsupportedDomainCause;
 pub use metrics::{MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport, OwnedMetricResult};
+pub use requirements::{
+    OwnedRequirementAssessment, OwnedRequirementResult, RequirementCoverage, RequirementOutcome,
+};
 pub use support_effects::{
     OwnedSupportEffectPlan, SupportEffectPlanInputs, SupportEffectsOutcome, SupportEffectsReport,
 };
@@ -41,8 +45,9 @@ pub use supports::{
 pub struct PlanLimits {
     pub binding: BindingLimits,
     pub max_providers: usize,
-    /// Discovered owners, including owners with empty program collections.
-    /// This inventory is bounded independently from actual rule invocations.
+    /// Independent cap for discovered owner bindings and distinct potential
+    /// requirement owners, including empty collections and output-slot owners.
+    /// Neither inventory consumes the actual rule invocation limit.
     pub max_owner_bindings: usize,
     pub max_invocations: usize,
     pub max_effects: usize,
@@ -150,6 +155,41 @@ pub enum ConcreteEntity {
     /// Exact authored or generated skill occurrence, not its actor or output.
     Skill(Box<SkillTarget>),
     Environment,
+}
+/// Exact usage records after the three authored layers have been reconciled.
+/// This is cold resolution evidence, not permission to execute a disabled source.
+#[derive(Clone, Debug, PartialEq, Serialize)]
+pub struct OwnedUsageResolution {
+    pub selections: Vec<ResolvedUsageSelection>,
+    pub intents: Vec<ResolvedUsageIntent>,
+}
+#[derive(Clone, Debug, PartialEq, Serialize)]
+pub struct ResolvedUsageSelection {
+    pub selection: UsagePolicySelection,
+    pub source: UsageSelectionSource,
+    pub replaced: Vec<UsageSelectionSource>,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum UsageSelectionSource {
+    Preset { index: usize },
+    ScenarioIntent { index: usize },
+    ExactScenario { index: usize },
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct ResolvedUsageIntent {
+    pub index: usize,
+    /// Empty matches mean dormant only when this independently checked census
+    /// is complete. Numerical program coverage does not establish this fact.
+    pub complete: bool,
+    pub matches: Vec<UsageSkillMatch>,
+    pub gaps: Vec<PlanGap>,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct UsageSkillMatch {
+    pub target: SkillTarget,
+    /// Full entering path for supplied skills; the direct root for authored ones.
+    pub provider: ProviderKey,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
@@ -337,6 +377,9 @@ pub enum PlanGapReason {
     UnresolvedActivation,
     ConflictingContributors,
     AbsentSelection,
+    /// Action-owned requirements still lack a metric-independent context census.
+    /// This assessment gap does not withhold otherwise computable measurements.
+    IncompleteRequirementContexts,
 }
 #[derive(Clone, Debug, PartialEq, Serialize)]
 #[serde(tag = "status", rename_all = "snake_case")]
@@ -518,8 +561,14 @@ pub struct OwnedEffectPlan<I> {
     identity: OwnedContentDigest,
     bindings: PlanIdentity,
     binding_report: DefinitionBindingReport,
+    usage_resolution: OwnedUsageResolution,
     limits: PlanLimits,
     gaps: Vec<PlanGap>,
+    /// Selected potential output rule inventories, independent of queried Actions.
+    /// These gaps restrict requirement assessment without changing numeric closure.
+    requirement_gaps: Vec<PlanGap>,
+    /// Potential owners from whole-build discovery, independent of metric Actions.
+    requirement_owners: requirements::RequirementOwnerCensus,
     complete: bool,
     invocations: Vec<Invocation>,
     effects: Vec<EffectNode>,
@@ -553,6 +602,9 @@ impl<I: DefinitionSchemaIndex> OwnedEffectPlan<I> {
     /// compilation. This report is immutable evidence, not evaluation authority.
     pub fn binding_report(&self) -> &DefinitionBindingReport {
         &self.binding_report
+    }
+    pub fn usage_resolution(&self) -> &OwnedUsageResolution {
+        &self.usage_resolution
     }
     pub fn definitions(&self) -> &I {
         &self.definitions

@@ -106,7 +106,7 @@ pub fn authenticate_source(proof: &Value) {
     let bytes = authenticated(&proof["prior_source_domain"]);
     assert_eq!(
         hash(&bytes),
-        "d9c15d9f26192082243d7f5dd5ce23bee9fe4af14c59ecb2e4591b988d19193f"
+        "c16d1ecb4d53a90845a87219988de4c5105f0941f5f446aef5c4a84e826ed09c"
     );
     assert_eq!(proof["source_revision"], prior["source_revision"]);
     let names = [

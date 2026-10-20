@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "kind": "ordinary-physical-hit-dps-component",
+  "program": "ordinary-physical-hit-dps",
+  "owner": {
+    "kind": "slot",
+    "value": {
+      "kind": "action_output",
+      "value": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000021"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000022"
+        }
+      }
+    }
+  },
+  "inputs": [
+    {
+      "name": "normal",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033b2"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d3a"
+      }
+    },
+    {
+      "name": "critical",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033b3"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d3a"
+      }
+    },
+    {
+      "name": "critical-percent",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033aa"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      }
+    },
+    {
+      "name": "hit-percent",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003220"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      }
+    },
+    {
+      "name": "rate",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a3"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d39"
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033b8"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033b9"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033ba"
+    }
+  ],
+  "stage": "ordinary-physical-hit-dps",
+  "predecessors": [
+    "armour-adjusted-physical-averages",
+    "ordinary-outgoing-critical",
+    "selected-basic-ordinary-rate",
+    "deliver"
+  ],
+  "source_domain": "source-domain.json",
+  "publication_scope": "partial-physical-component",
+  "ready_for_native_admission": false,
+  "complete_request": false,
+  "final_metric_binding": false,
+  "neutral_domain_is_runtime_certificate": false,
+  "pending": [
+    "complete native source membership for timing and multiplicity",
+    "all nonphysical damage components",
+    "whole selected input and provider closure",
+    "selected output metric authority"
+  ]
+}

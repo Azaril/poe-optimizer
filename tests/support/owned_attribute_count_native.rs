@@ -178,6 +178,7 @@ fn source() -> &'static Source {
                     })
                     .collect();
                 BuildInput {
+                    usage_preferences: vec![],
                     allocator: decode(&d["allocator"]),
                     revision: decode(&d["revision"]),
                     game_version: ns(),
@@ -360,6 +361,7 @@ impl World {
     }
     fn plan(&self) -> OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage> {
         let scenario = ScenarioInput {
+            usage_intents: vec![],
             game_version: ns(),
             enemy: EnemySpec {
                 encounter: def(0x31d1),

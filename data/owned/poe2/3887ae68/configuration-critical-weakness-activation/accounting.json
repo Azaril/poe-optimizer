@@ -1,0 +1,25 @@
+[
+  {
+    "id": "checked-critical-weakness-activation-input",
+    "selector": {
+      "lane": "input_boolean",
+      "name": "conditionEnemyCriticalWeakness"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033b1"
+          }
+        }
+      }
+    ]
+  }
+]

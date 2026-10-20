@@ -386,6 +386,7 @@ impl Fixture {
             effect_applications: Some(DeclaredSet::complete(vec![])),
         };
         let build = BuildInput {
+            usage_preferences: vec![],
             generated_inputs: None,
             allocator: InstanceAllocatorState::from_parts(BuildLineage::from_bytes([92; 16]), 100),
             revision: BuildRevision::from_u64(1),
@@ -420,6 +421,7 @@ impl Fixture {
             choices: vec![],
         };
         let scenario = ScenarioInput {
+            usage_intents: vec![],
             game_version: namespace,
             enemy: EnemySpec {
                 encounter,

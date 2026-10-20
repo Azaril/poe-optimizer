@@ -79,7 +79,7 @@ fn exact_report_is_shared_read_only_and_preserves_plan_identity_and_evaluation()
     assert_eq!(
         plan.identity(),
         digest_owned(
-            "owned-metric-plan-v1",
+            "owned-metric-plan-v3",
             plan.bindings(),
             PlanLimits::default().max_wire_bytes
         )

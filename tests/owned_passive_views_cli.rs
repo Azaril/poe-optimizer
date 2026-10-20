@@ -827,6 +827,7 @@ fn receiver_fixture(
     let request = OwnedEvaluationRequest::new(
         BuildSpec::new(
             BuildInput {
+                usage_preferences: vec![],
                 generated_inputs: None,
                 authored_support_order: None,
                 allocator: InstanceAllocatorState::from_parts(
@@ -870,6 +871,7 @@ fn receiver_fixture(
         .unwrap(),
         ScenarioSpec::new(
             ScenarioInput {
+                usage_intents: vec![],
                 game_version: namespace.clone(),
                 enemy: EnemySpec {
                     encounter,

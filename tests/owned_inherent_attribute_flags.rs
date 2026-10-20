@@ -274,6 +274,7 @@ impl World {
         Self {
             recipe,
             build: BuildInput {
+                usage_preferences: vec![],
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([0x6a; 16]),
                     4,
@@ -303,6 +304,7 @@ impl World {
                 choices: vec![],
             },
             scenario: ScenarioInput {
+                usage_intents: vec![],
                 game_version: ns(),
                 enemy: EnemySpec {
                     encounter: def(0xf0002),

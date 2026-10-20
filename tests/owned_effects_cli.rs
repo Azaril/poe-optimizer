@@ -104,6 +104,7 @@ fn fixture(offset: i64) -> Fixture {
     let loadout = WeaponLoadoutId::from_instance_id(InstanceId::from_parts(lineage, 1).unwrap());
     let build = BuildSpec::new(
         BuildInput {
+            usage_preferences: vec![],
             generated_inputs: None,
             authored_support_order: None,
             allocator: InstanceAllocatorState::from_parts(lineage, 1),
@@ -131,6 +132,7 @@ fn fixture(offset: i64) -> Fixture {
     .unwrap();
     let scenario = ScenarioSpec::new(
         ScenarioInput {
+            usage_intents: vec![],
             game_version: namespace(),
             enemy: EnemySpec {
                 encounter: id("encounter"),
@@ -332,7 +334,7 @@ fn explicit_owned_files_resolve_real_request_values_and_preserve_exact_bindings(
             report["bindings"]["request"],
             serde_json::to_value(
                 digest_owned(
-                    "owned-request-v1",
+                    "owned-request-v2",
                     &f.request,
                     OwnedInputLimits::default().max_wire_bytes
                 )

@@ -595,6 +595,7 @@ impl Fixture {
             outputs: vec![routes],
         };
         let build = BuildInput {
+            usage_preferences: vec![],
             generated_inputs: None,
             allocator: InstanceAllocatorState::from_parts(
                 BuildLineage::from_bytes([103; 16]),
@@ -621,6 +622,7 @@ impl Fixture {
             choices: vec![],
         };
         let scenario = ScenarioInput {
+            usage_intents: vec![],
             game_version: namespace.clone(),
             enemy: EnemySpec {
                 encounter,

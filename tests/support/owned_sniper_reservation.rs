@@ -275,7 +275,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     assert_eq!(physical.len(), 2);
     physical.push(read("usage.json"));
     let usage_identity = usage_inputs_identity(&normalization, Default::default()).unwrap();
-    let Some(GemInventoryPolicy::PobFreshPhysicalV2 { usage_inputs, .. }) =
+    let Some(GemInventoryPolicy::PobFreshPhysicalV3 { usage_inputs, .. }) =
         &mut normalization.gem_inventory
     else {
         panic!("retain the existing physical inventory rules")

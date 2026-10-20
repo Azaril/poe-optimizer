@@ -177,7 +177,8 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
     *roles = *a.roles.identity();
     *catalog = a.roles.input().compilation.catalog_digest;
     *scalar_inputs = scalar;
-    p.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV2 {
+    p.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV3 {
+        primary_dispositions: vec![],
         definitions: a.schema.identity().clone(),
         roles: *a.roles.identity(),
         catalog: a.roles.input().compilation.catalog_digest,
@@ -206,14 +207,11 @@ fn refresh(p: &mut NormalizationPolicy) {
         p.usage_inputs.as_mut().unwrap();
     *scalar_inputs = scalar;
     let usage = usage_inputs_identity(p, Default::default()).unwrap();
-    let GemInventoryPolicy::PobFreshPhysicalV2 {
+    let GemInventoryPolicy::PobFreshPhysicalV3 {
         scalar_inputs,
         usage_inputs,
         ..
-    } = p.gem_inventory.as_mut().unwrap()
-    else {
-        unreachable!()
-    };
+    } = p.gem_inventory.as_mut().unwrap();
     *scalar_inputs = scalar;
     *usage_inputs = usage;
 }
@@ -261,12 +259,9 @@ fn primary_inventory_still_requires_its_exact_executable_skill_supply() {
     } = p.usage_inputs.as_mut().unwrap();
     *definitions = a.schema.identity().clone();
     *roles = *a.roles.identity();
-    let GemInventoryPolicy::PobFreshPhysicalV2 {
+    let GemInventoryPolicy::PobFreshPhysicalV3 {
         definitions, roles, ..
-    } = p.gem_inventory.as_mut().unwrap()
-    else {
-        unreachable!()
-    };
+    } = p.gem_inventory.as_mut().unwrap();
     *definitions = a.schema.identity().clone();
     *roles = *a.roles.identity();
     refresh(&mut p);
@@ -313,11 +308,8 @@ fn primary_inventory_closes_two_intrinsic_values_after_real_usage_but_leaves_usa
         assert_eq!(usage.members[0].parameters.members.len(), 1);
     }
     assert_eq!(schema, *a.schema.input());
-    let GemInventoryPolicy::PobFreshPhysicalV2 { primary_skills, .. } =
-        p.gem_inventory.as_ref().unwrap()
-    else {
-        unreachable!()
-    };
+    let GemInventoryPolicy::PobFreshPhysicalV3 { primary_skills, .. } =
+        p.gem_inventory.as_ref().unwrap();
     let SchemaLookup::Known(gem) = a.schema.definition(&primary_skills[0].physical.gem) else {
         unreachable!()
     };
@@ -519,7 +511,7 @@ fn stale_bindings_and_incomplete_or_aliased_inventory_declarations_are_rejected(
     let (a, p) = fixture();
     for case in 0..11 {
         let mut bad = p.clone();
-        let GemInventoryPolicy::PobFreshPhysicalV2 {
+        let GemInventoryPolicy::PobFreshPhysicalV3 {
             definitions,
             roles,
             catalog,
@@ -527,10 +519,8 @@ fn stale_bindings_and_incomplete_or_aliased_inventory_declarations_are_rejected(
             usage_inputs,
             primary_skills,
             supports,
-        } = bad.gem_inventory.as_mut().unwrap()
-        else {
-            unreachable!()
-        };
+            ..
+        } = bad.gem_inventory.as_mut().unwrap();
         match case {
             0 => definitions.release = "different-release".into(),
             1 => *roles = *catalog,
@@ -591,23 +581,46 @@ fn stale_bindings_and_incomplete_or_aliased_inventory_declarations_are_rejected(
 }
 
 #[test]
-fn legacy_support_wire_and_outputs_stay_unchanged_and_v2_is_explicit() {
-    let (a, legacy) = gem_inventory_tests::fixture();
-    let bytes = serde_json::to_vec(&legacy).unwrap();
+fn current_physical_inventory_wire_roundtrips_and_rejects_retired_formats() {
+    let (a, current) = gem_inventory_tests::fixture();
+    let bytes = serde_json::to_vec(&current).unwrap();
     let decoded: NormalizationPolicy = serde_json::from_slice(&bytes).unwrap();
     assert_eq!(serde_json::to_vec(&decoded).unwrap(), bytes);
     let wire = serde_json::to_value(&decoded).unwrap();
-    assert_eq!(wire["gem_inventory"]["kind"], "pob_fresh_single_support_v1");
-    assert!(wire["gem_inventory"].get("primary_skills").is_none());
+    assert_eq!(wire["gem_inventory"]["kind"], "pob_fresh_physical_v3");
+    assert!(
+        wire["gem_inventory"]["primary_skills"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+    assert!(
+        wire["gem_inventory"]["primary_dispositions"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
     let xml = group(gem_inventory_tests::GEM);
-    let before = normalize_with_loadouts(&xml, &a, &legacy).unwrap();
+    let before = normalize_with_loadouts(&xml, &a, &current).unwrap();
     let after = normalize_with_loadouts(&xml, &a, &decoded).unwrap();
+    assert_eq!(completion(&before), [true]);
     assert_eq!(before.draft(), after.draft());
     assert_eq!(
         serde_json::to_value(before.sidecar()).unwrap(),
         serde_json::to_value(after.sidecar()).unwrap()
     );
     let (active_a, active_p) = fixture();
+    let bytes = serde_json::to_vec(&active_p).unwrap();
+    let decoded: NormalizationPolicy = serde_json::from_slice(&bytes).unwrap();
+    assert_eq!(serde_json::to_vec(&decoded).unwrap(), bytes);
+    let before = normalize_with_loadouts(&group(GEM), &active_a, &active_p).unwrap();
+    let after = normalize_with_loadouts(&group(GEM), &active_a, &decoded).unwrap();
+    assert_eq!(completion(&before), [true]);
+    assert_eq!(before.draft(), after.draft());
+    assert_eq!(
+        serde_json::to_value(before.sidecar()).unwrap(),
+        serde_json::to_value(after.sidecar()).unwrap()
+    );
     let mut no_inventory = active_p.clone();
     no_inventory.gem_inventory = None;
     let result = normalize_with_loadouts(&group(GEM), &active_a, &no_inventory).unwrap();
@@ -619,17 +632,47 @@ fn legacy_support_wire_and_outputs_stay_unchanged_and_v2_is_explicit() {
             .len(),
         2
     );
-    let mut wire = serde_json::to_value(&active_p).unwrap();
-    assert_eq!(wire["gem_inventory"]["kind"], "pob_fresh_physical_v2");
-    wire["gem_inventory"]["force_complete"] = true.into();
-    assert!(serde_json::from_value::<NormalizationPolicy>(wire).is_err());
-    for field in ["supports", "primary_skills", "usage_inputs"] {
-        let mut wire = serde_json::to_value(&active_p).unwrap();
-        wire["gem_inventory"].as_object_mut().unwrap().remove(field);
+    for (label, policy) in [("support", &current), ("primary", &active_p)] {
+        let wire = serde_json::to_value(policy).unwrap();
+        assert_eq!(wire["gem_inventory"]["kind"], "pob_fresh_physical_v3");
+        for retired in ["pob_fresh_single_support_v1", "pob_fresh_physical_v2"] {
+            let mut old = wire.clone();
+            old["gem_inventory"]["kind"] = retired.into();
+            assert!(
+                serde_json::from_value::<NormalizationPolicy>(old).is_err(),
+                "{label}: retired {retired}"
+            );
+        }
+        let mut unknown = wire.clone();
+        unknown["gem_inventory"]["force_complete"] = true.into();
         assert!(
-            serde_json::from_value::<NormalizationPolicy>(wire).is_err(),
-            "{field}"
+            serde_json::from_value::<NormalizationPolicy>(unknown).is_err(),
+            "{label}: unknown field"
         );
+        for field in [
+            "kind",
+            "definitions",
+            "roles",
+            "catalog",
+            "scalar_inputs",
+            "usage_inputs",
+            "supports",
+            "primary_skills",
+            "primary_dispositions",
+        ] {
+            let mut missing = wire.clone();
+            assert!(
+                missing["gem_inventory"]
+                    .as_object_mut()
+                    .unwrap()
+                    .remove(field)
+                    .is_some()
+            );
+            assert!(
+                serde_json::from_value::<NormalizationPolicy>(missing).is_err(),
+                "{label}: missing {field}"
+            );
+        }
     }
 }
 
@@ -649,11 +692,8 @@ fn active_inventory_honors_shared_work_and_policy_byte_budgets() {
         assert!(usage_input_tests::run_limits(&group(GEM), &a, &p, limits).is_err());
     }
     let mut huge = p.clone();
-    let GemInventoryPolicy::PobFreshPhysicalV2 { primary_skills, .. } =
-        huge.gem_inventory.as_mut().unwrap()
-    else {
-        unreachable!()
-    };
+    let GemInventoryPolicy::PobFreshPhysicalV3 { primary_skills, .. } =
+        huge.gem_inventory.as_mut().unwrap();
     primary_skills.resize(4097, primary_skills[0].clone());
     assert!(usage_input_tests::run_limits(&group(GEM), &a, &huge, Default::default()).is_err());
 }
@@ -702,12 +742,9 @@ fn physical_inventory_uses_only_its_designated_policy_among_independent_policies
             },
         )],
     );
-    let GemInventoryPolicy::PobFreshPhysicalV2 {
+    let GemInventoryPolicy::PobFreshPhysicalV3 {
         definitions, roles, ..
-    } = p.gem_inventory.as_mut().unwrap()
-    else {
-        unreachable!()
-    };
+    } = p.gem_inventory.as_mut().unwrap();
     *definitions = a.schema.identity().clone();
     *roles = *a.roles.identity();
     refresh(&mut p);

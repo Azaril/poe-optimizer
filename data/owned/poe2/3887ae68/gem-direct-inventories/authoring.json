@@ -1,0 +1,52 @@
+{
+  "kind": "source-bound-gem-direct-inventories",
+  "before": "420b4a071361ba61b95c6cb92a84ecd82ca36c2ba733c2bab8086647caeec3be",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-gem-skill-inventories-v1",
+    "schema_version": 7,
+    "content_sha256": "5324676ae412ce7f07f52dce2b34ba240f5a538826c15ce9372016071ad929e0",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "replaced_definitions": 4,
+  "closed_direct_inventories": 12,
+  "preserved_nonempty_primary_chains": 3,
+  "allocated_definitions": 0,
+  "new_members": 0,
+  "scope": {
+    "direct_gem_declarations_only": true,
+    "existing_primary_chains_preserved": true,
+    "skill_owned_creation_obligations_preserved": true,
+    "external_owner_grants_excluded": true,
+    "activation_certified": false,
+    "descendant_topology_certified": false,
+    "null_stat_mappings_classified": false,
+    "numerical_coverage_certified": false,
+    "scenario_census_complete": false,
+    "receiving_ground_topology_certified": false,
+    "trigger_coverage_certified": false
+  },
+  "artifacts": [
+    {
+      "file": "dependencies.json",
+      "bytes": 156261,
+      "sha256": "6fa545879a80de8c402f4abb4d4699ae206c05a0c16419928e1c8b99b8211176"
+    },
+    {
+      "file": "evidence.json",
+      "bytes": 11090,
+      "sha256": "840cc5dcbbf7d4215d1c09b7f160f6ffeb00ce4a35ebb2da5a3b0687c4be8710"
+    },
+    {
+      "file": "migration.json",
+      "bytes": 38592,
+      "sha256": "1c385f34eef3281010ceafd2c53c9d78a3059c5c8bc47c1b908c03ac1a170e08"
+    }
+  ],
+  "license": {
+    "path": "data/owned/poe2/3887ae68/passive-structural-inventories/sources/LICENSE.md",
+    "bytes": 66619,
+    "sha256": "b61f62cf2b8e301ef2a4a3c5f7de9460fea53327edf9f260b7c746502fc6bf97"
+  }
+}

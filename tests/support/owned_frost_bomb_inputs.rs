@@ -388,7 +388,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     assert!(!gems.iter().any(|row| row.gem == usage.gem));
     gems.push(usage);
     let usage_identity = usage_inputs_identity(&normalization, Default::default()).unwrap();
-    let Some(GemInventoryPolicy::PobFreshPhysicalV2 {
+    let Some(GemInventoryPolicy::PobFreshPhysicalV3 {
         primary_skills,
         usage_inputs,
         ..

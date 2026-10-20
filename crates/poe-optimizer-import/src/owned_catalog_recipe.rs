@@ -182,6 +182,10 @@ pub fn extend_owned_catalog_recipe(
         &schema,
         limits.catalog,
     )?;
+    // Runtime loading checks bindings and internal consistency. Offline
+    // publication additionally reproduces every observation from the catalog:
+    // a self-consistent caller-authored digest is not source evidence.
+    verify_owned_skill_catalog_reproduction(catalog, &roles, &mapping, limits.catalog)?;
     let mut rules = before.rules().input().clone();
     let mut routing = before.routing().input().clone();
     rules.definitions = schema.identity().clone();

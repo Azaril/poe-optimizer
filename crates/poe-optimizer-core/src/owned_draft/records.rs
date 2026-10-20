@@ -843,11 +843,16 @@ draft_record! { UsagePolicyDraft=>UsagePolicySelection {
     target:DraftUsageTarget=>draft,
     parameters:DraftList<ParameterDraft> =>draft,
 }}
+draft_record! { ScenarioUsageIntentDraft=>ScenarioUsageIntent {
+    policy:DraftField<UsagePolicyDefId> =>draft,
+    parameters:DraftList<ParameterDraft> =>draft,
+}}
 draft_record! { ScenarioDraft=>ScenarioInput {
     game_version:GameVersionNamespace=>direct,
     enemy:EnemyDraft=>draft,
     assumptions:DraftList<ExternalAssumptionDraft> =>draft,
     usage:DraftList<UsagePolicyDraft> =>draft,
+    usage_intents:DraftList<ScenarioUsageIntentDraft> =>draft,
 }}
 draft_record! { MetricRequestDraft=>MetricRequest {
     id:QueryId=>direct,

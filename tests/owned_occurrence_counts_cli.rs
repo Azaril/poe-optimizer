@@ -151,13 +151,9 @@ fn inherited_policy_rebind(next: &StagedOwnedRelease) {
     stale.normalization.usage_inputs = Some(policy.clone());
     // Refresh dependent commitments so rejection tests the stale policy itself.
     let usage_identity = usage_inputs_identity(&stale.normalization, Default::default()).unwrap();
-    match stale.normalization.gem_inventory.as_mut().unwrap() {
-        GemInventoryPolicy::PobFreshPhysicalV2 { usage_inputs, .. }
-        | GemInventoryPolicy::PobFreshPhysicalV3 { usage_inputs, .. } => {
-            *usage_inputs = usage_identity
-        }
-        _ => panic!("expected usage-bound physical inventory"),
-    }
+    let GemInventoryPolicy::PobFreshPhysicalV3 { usage_inputs, .. } =
+        stale.normalization.gem_inventory.as_mut().unwrap();
+    *usage_inputs = usage_identity;
     stale.tree.as_mut().unwrap().normalization = digest_owned(
         "owned-normalization-policy-v3",
         &stale.normalization,

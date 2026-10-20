@@ -30,7 +30,7 @@ fn input() -> InventoryInput {
     }
 }
 fn wire(input: InventoryInput) -> Vec<u8> {
-    serde_json::to_vec(&json!({"schema_version":4,"document":{"kind":"inventory","value":input}}))
+    serde_json::to_vec(&json!({"schema_version":5,"document":{"kind":"inventory","value":input}}))
         .unwrap()
 }
 #[test]
@@ -95,7 +95,7 @@ fn malformed_stock_cannot_enter_the_codec_as_a_validated_document() {
         decode_owned(&wire(duplicate), OwnedInputLimits::default()),
         Err(CodecError::Inventory(_))
     ));
-    let mut value = json!({"schema_version":4,"document":{"kind":"inventory","value":input()}});
+    let mut value = json!({"schema_version":5,"document":{"kind":"inventory","value":input()}});
     value["document"]["value"]["pob_stock"] = json!({});
     assert!(matches!(
         decode_owned(

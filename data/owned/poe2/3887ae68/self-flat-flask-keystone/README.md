@@ -41,4 +41,4 @@ Offline retention passed in 26.01 s. All nine new ordinary tests passed in 34.44
 
 Logs are `runs/owned-self-flat-flask-keystone-retain-02.log`, `runs/owned-self-flat-flask-keystone-ordinary-chain-01.log` and `runs/owned-self-flat-flask-keystone-clippy-chain-01.log`. The initial `retain-01` compile failure is preserved: nested helper visibility needed `pub(crate)` rather than `pub(super)`. No source bytes or proof assumptions changed to resolve it.
 
-`review.json` is 9,880 bytes, SHA-256 `9fdb17a822784740afc540b5ab1ca5d1904e78300d92eaaba37b0360b012bb72`. The source-body certificate is SHA-256 `737a4b750c6f1d8e41bd771676b0e06af552f02c2cc1c6556bd4b228e3782546`.
+`review.json` is 9,880 bytes, SHA-256 `1c3211e7e5770e02a4ff46be25407cdc11c61a18b914e10c93bf4b85005cc6c2`. The source-body certificate is SHA-256 `737a4b750c6f1d8e41bd771676b0e06af552f02c2cc1c6556bd4b228e3782546`.

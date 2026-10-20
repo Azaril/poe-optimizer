@@ -2733,7 +2733,7 @@
                   }
                 },
                 "facet": "game_rules",
-                "code": "critical-weakness-activation-and-encounter-membership-unresolved"
+                "code": "critical-weakness-activation-and-supplier-domain-unresolved"
               }
             ]
           }
@@ -3526,7 +3526,38 @@
             }
           },
           "members": {
-            "members": [],
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "encounter",
+                      "value": {
+                        "kind": "encounter",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000031d1"
+                      }
+                    }
+                  },
+                  "program": "configured-critical-weakness",
+                  "effect": "critical-weakness",
+                  "origin": {
+                    "kind": "encounter"
+                  }
+                },
+                "order": {
+                  "source_rank": 0,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              }
+            ],
             "closure": {
               "kind": "partial",
               "value": {

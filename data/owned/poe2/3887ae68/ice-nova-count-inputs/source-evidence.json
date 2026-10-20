@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "catalog_sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e",
+  "archives": [
+    {
+      "file": "data/owned/poe2/3887ae68/reporting-inclusion/SkillsTab.lua.gz",
+      "source": {
+        "path": "src/Classes/SkillsTab.lua",
+        "bytes": 69652,
+        "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+      },
+      "raw_bytes": 69652,
+      "compressed_bytes": 14532,
+      "compressed_sha256": "ba6c03535d271f8293588cc1ddc1e59ee6f46cc26e9336257d0d91bbd52558e2"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/CalcDefence.lua.gz",
+      "source": {
+        "path": "src/Modules/CalcDefence.lua",
+        "bytes": 239878,
+        "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+      },
+      "raw_bytes": 239878,
+      "compressed_bytes": 39593,
+      "compressed_sha256": "9e232710732a7223b87b7174c7bd8a0531309675b76c605e07df55b0f72d6bf3"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/reporting-inclusion/Calcs.lua.gz",
+      "source": {
+        "path": "src/Modules/Calcs.lua",
+        "bytes": 35868,
+        "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+      },
+      "raw_bytes": 35868,
+      "compressed_bytes": 8318,
+      "compressed_sha256": "7b90df1e4e63d65e14be2d272fc7800fc3a512c1e8380c6c277ee25f510bc1f6"
+    }
+  ],
+  "report": {
+    "file": "occurrences.json.gz",
+    "acquisitions": [
+      "runs/owned-ice-nova-occurrence-source-01/source-jit-off.json",
+      "runs/owned-ice-nova-occurrence-source-01/source-jit-on.json"
+    ],
+    "raw_bytes": 5226330,
+    "raw_sha256": "ef5fa7366c5c3c5fc98b31a947f52575dc9aebdf51333104a16aaa192dfea574",
+    "compressed_bytes": 423361,
+    "compressed_sha256": "1857d7283d4453398a84b104f4e3a1cb31a337826d0bcfdaa4f293141f618c98"
+  },
+  "license": {
+    "file": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/LICENSE.md",
+    "bytes": 67979,
+    "sha256": "22d2d075c1d361971764fbbd1e12e1485bdf35f0769ffac4eca8a79afc60dda8"
+  },
+  "semantics": {
+    "domain": {
+      "kind": "integer",
+      "minimum": 0,
+      "maximum": 4
+    },
+    "gameplay_maximum_proven": false,
+    "group_override": "attribute_presence_including_zero",
+    "malformed_winning_lane": "pending_no_fallback",
+    "malformed_shadowed_occurrence": "not_selected",
+    "missing": "pending",
+    "duplicate_primary_without_group": "pending",
+    "reviewed_companions": 5,
+    "complete_usage_inventory": false,
+    "native_count_consumer_added": false,
+    "full_dps_aggregation_added": false
+  }
+}

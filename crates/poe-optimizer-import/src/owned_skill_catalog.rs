@@ -19,6 +19,9 @@ use poe_optimizer_data::{
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
+mod source_construction;
+pub use source_construction::*;
+
 pub const OWNED_SKILL_ROLE_VERSION: u32 = 1;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -63,6 +66,10 @@ pub enum SkillCatalogError {
     UnknownTarget,
     #[error("owned skill role contradicts known schema metadata")]
     SchemaConflict,
+    #[error("owned source construction facts are inconsistent with their bound identities")]
+    ConstructionMismatch,
+    #[error("owned role rows do not reproduce the authenticated source catalog")]
+    ReproductionMismatch,
     #[error("existing selector has no unambiguous reusable identity: {0:?}")]
     ReuseUnresolved(Box<ExternalSelector>),
     #[error("catalog selector does not uniquely identify a reusable source row: {0:?}")]
@@ -126,6 +133,8 @@ pub struct OwnedGemRoleRow {
     pub primary: OwnedPrimarySkill,
     pub role: OwnedGemRole,
     pub materialization: OwnedGemMaterialization,
+    /// Import evidence only; this never declares native Skill supplies or mechanics.
+    pub construction: OwnedGemSourceConstruction,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -546,49 +555,14 @@ fn compile_catalog(
             }
         };
         gem_selectors.entry(source).or_default().push(subject(&id));
-        let (primary, role, materialization) = match skills.get(gem.primary_effect_id.as_str()) {
-            Some((primary, support, from_tree)) => {
-                let role = match (support, policy.absent_support) {
-                    (Some(true), _) => OwnedGemRole::Known(AuthoredGemRole::SupportAssignment),
-                    (Some(false), _) | (None, AbsentSupportPolicy::NonSupport) => {
-                        OwnedGemRole::Known(AuthoredGemRole::SkillUse)
-                    }
-                    (None, AbsentSupportPolicy::Pending) => OwnedGemRole::Unmapped {
-                        issue: key("support-role-unmapped"),
-                    },
-                };
-                let materialization = match (from_tree, policy.absent_from_tree) {
-                    (Some(true), _) => OwnedGemMaterialization::ProviderOnly,
-                    (Some(false), _) | (None, AbsentFromTreePolicy::Physical) => {
-                        OwnedGemMaterialization::Physical
-                    }
-                    (None, AbsentFromTreePolicy::Pending) => OwnedGemMaterialization::Unmapped {
-                        issue: key("gem-materialization-unmapped"),
-                    },
-                };
-                (
-                    OwnedPrimarySkill::Known(primary.clone()),
-                    role,
-                    materialization,
-                )
-            }
-            None => (
-                OwnedPrimarySkill::Unmapped {
-                    issue: key("primary-effect-unmapped"),
-                },
-                OwnedGemRole::Unmapped {
-                    issue: key("support-role-unmapped"),
-                },
-                OwnedGemMaterialization::Unmapped {
-                    issue: key("gem-materialization-unmapped"),
-                },
-            ),
-        };
+        let (primary, role, materialization) =
+            classify_primary(skills.get(gem.primary_effect_id.as_str()), policy);
         roles.push(OwnedGemRoleRow {
             gem: id,
             primary,
             role,
             materialization,
+            construction: source_construction::derive(gem, &skills, &mut budget)?,
         });
     }
     budget.collection(
@@ -655,6 +629,50 @@ fn compile_catalog(
     })
 }
 
+fn classify_primary(
+    skill: Option<&(SkillDefId, Option<bool>, Option<bool>)>,
+    policy: &SkillCatalogPolicy,
+) -> (OwnedPrimarySkill, OwnedGemRole, OwnedGemMaterialization) {
+    match skill {
+        Some((primary, support, from_tree)) => {
+            let role = match (support, policy.absent_support) {
+                (Some(true), _) => OwnedGemRole::Known(AuthoredGemRole::SupportAssignment),
+                (Some(false), _) | (None, AbsentSupportPolicy::NonSupport) => {
+                    OwnedGemRole::Known(AuthoredGemRole::SkillUse)
+                }
+                (None, AbsentSupportPolicy::Pending) => OwnedGemRole::Unmapped {
+                    issue: key("support-role-unmapped"),
+                },
+            };
+            let materialization = match (from_tree, policy.absent_from_tree) {
+                (Some(true), _) => OwnedGemMaterialization::ProviderOnly,
+                (Some(false), _) | (None, AbsentFromTreePolicy::Physical) => {
+                    OwnedGemMaterialization::Physical
+                }
+                (None, AbsentFromTreePolicy::Pending) => OwnedGemMaterialization::Unmapped {
+                    issue: key("gem-materialization-unmapped"),
+                },
+            };
+            (
+                OwnedPrimarySkill::Known(primary.clone()),
+                role,
+                materialization,
+            )
+        }
+        None => (
+            OwnedPrimarySkill::Unmapped {
+                issue: key("primary-effect-unmapped"),
+            },
+            OwnedGemRole::Unmapped {
+                issue: key("support-role-unmapped"),
+            },
+            OwnedGemMaterialization::Unmapped {
+                issue: key("gem-materialization-unmapped"),
+            },
+        ),
+    }
+}
+
 /// Final binding supplied after schema/mapping package assembly. Receipt hashes
 /// are provenance claims, not attestation or proof of registry succession. A host
 /// may append other domains after skill compilation, so the final mapping registry
@@ -713,12 +731,12 @@ impl OwnedSkillRoleIndex {
         {
             return Err(SkillCatalogError::ForeignNamespace);
         }
+        budget.pin(&input.compilation.source)?;
         input
             .compilation
             .source
             .files
             .sort_by(|a, b| a.path.cmp(&b.path));
-        budget.pin(&input.compilation.source)?;
         if input.definitions != *definitions.identity()
             || input.definitions != mappings.input().definitions
             || input.mapping != *mappings.identity()
@@ -729,10 +747,14 @@ impl OwnedSkillRoleIndex {
             return Err(SkillCatalogError::BindingMismatch);
         }
         budget.collection("role rows", input.roles.len())?;
+        for row in &input.roles {
+            source_construction::preflight(&row.construction, &mut budget)?;
+        }
         input.roles.sort_by(|a, b| a.gem.cmp(&b.gem));
         let mut positions = BTreeMap::new();
         let mut sources = BTreeMap::new();
         let mut mapped_gems = BTreeSet::new();
+        let mut construction_keys = BTreeSet::new();
         for entry in &mappings.input().entries {
             if matches!(
                 entry.source,
@@ -810,6 +832,7 @@ impl OwnedSkillRoleIndex {
                     return Err(SkillCatalogError::SchemaConflict);
                 }
             }
+            source_construction::validate(row, mappings, definitions, &mut construction_keys)?;
         }
         let identity = digest_owned(
             "owned-skill-role-package-v1",

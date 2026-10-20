@@ -72,12 +72,27 @@ fn ordinary_equal(a: &OwnedEffectsReport, b: &OwnedEffectsReport) {
     assert_eq!(a.values, b.values);
     assert_eq!(a.application_groups, b.application_groups);
 }
+fn exact_scenario_source(
+    plan: &OwnedEffectPlan<OwnedDefinitionSchemaPackage>,
+    resolved: &ResolvedUsageSelection,
+) {
+    let UsageSelectionSource::ExactScenario { index } = resolved.source else {
+        panic!("expected exact Scenario source: {resolved:?}");
+    };
+    assert_eq!(
+        plan.request().scenario().input().usage[index],
+        resolved.selection
+    );
+}
 #[test]
 fn reporting_intent_retains_identity_without_any_gameplay_invocation() {
     let mut f = base();
     install(&mut f);
     f.scenario.usage = vec![usage("skill-usage", authored(20), true)];
-    let baseline = evaluate(&f);
+    let baseline_plan = f.compile().unwrap();
+    let baseline = baseline_plan
+        .evaluate(&mut baseline_plan.new_scratch())
+        .unwrap();
     f.scenario.usage.push(preference(authored(20), false));
     f.scenario.usage.push(preference(authored(21), true));
     let a = f.compile().unwrap();
@@ -85,20 +100,35 @@ fn reporting_intent_retains_identity_without_any_gameplay_invocation() {
     assert_eq!(a.request().scenario(), f.request().scenario());
     assert_eq!(a.request().queries().input(), &f.queries);
     let expected = a.evaluate(&mut a.new_scratch()).unwrap();
-    // Canonical usage order inserts the metadata record before this existing
-    // activation. Its provenance position changes; its actual invocation,
-    // recipient and computed value must otherwise be exactly preserved.
+    // Added metadata can change the canonical resolved position. Resolve both
+    // origins to their exact input records before comparing numerical effects.
     let mut positional_inverse = expected.clone();
     assert_eq!(positional_inverse.effects.len(), 1);
+    let RuleOrigin::Usage {
+        index: baseline_index,
+    } = &baseline.effects[0].key.invocation.origin
+    else {
+        panic!("expected baseline usage origin");
+    };
+    let RuleOrigin::Usage {
+        index: resolved_index,
+    } = &expected.effects[0].key.invocation.origin
+    else {
+        panic!("expected resolved usage origin");
+    };
+    let baseline_source = &baseline_plan.usage_resolution().selections[*baseline_index];
+    let resolved_source = &a.usage_resolution().selections[*resolved_index];
     assert_eq!(
-        baseline.effects[0].key.invocation.origin,
-        RuleOrigin::Usage { index: 0 }
+        baseline_source.selection,
+        usage("skill-usage", authored(20), true)
     );
-    assert_eq!(
-        positional_inverse.effects[0].key.invocation.origin,
-        RuleOrigin::Usage { index: 1 }
-    );
-    positional_inverse.effects[0].key.invocation.origin = RuleOrigin::Usage { index: 0 };
+    assert_eq!(resolved_source.selection, baseline_source.selection);
+    exact_scenario_source(&baseline_plan, baseline_source);
+    exact_scenario_source(&a, resolved_source);
+    assert!(resolved_source.replaced.is_empty());
+    assert_eq!(a.usage_resolution().selections.len(), 3);
+    positional_inverse.effects[0].key.invocation.origin =
+        baseline.effects[0].key.invocation.origin.clone();
     ordinary_equal(&baseline, &positional_inverse);
     f.scenario.usage[1].parameters[0].value = ParameterValue::Boolean(true);
     let b = f.compile().unwrap();
@@ -312,15 +342,21 @@ fn reporting_preset_intent_uses_exact_whole_record_scenario_overrides() {
     };
     let a = compose(f.scenario.clone());
     assert_eq!(
-        a.scenario().input().usage,
+        a.build().input().usage_preferences,
         vec![preference(authored(20), false)]
     );
+    assert!(a.scenario().input().usage.is_empty());
+    assert!(a.scenario().input().usage_intents.is_empty());
     let mut scenario = f.scenario.clone();
     scenario.usage = vec![
         preference(authored(20), true),
         preference(authored(21), false),
     ];
     let b = compose(scenario);
+    assert_eq!(
+        b.build().input().usage_preferences,
+        a.build().input().usage_preferences
+    );
     assert_eq!(b.scenario().input().usage.len(), 2);
     assert!(
         b.scenario()
@@ -330,6 +366,25 @@ fn reporting_preset_intent_uses_exact_whole_record_scenario_overrides() {
     );
     let ap = compile_request(&f, a);
     let bp = compile_request(&f, b);
+    assert_eq!(ap.usage_resolution().selections.len(), 1);
+    let preferred = &ap.usage_resolution().selections[0];
+    assert_eq!(preferred.selection, preference(authored(20), false));
+    assert_eq!(preferred.source, UsageSelectionSource::Preset { index: 0 });
+    assert!(preferred.replaced.is_empty());
+    assert_eq!(bp.usage_resolution().selections.len(), 2);
+    for resolved in &bp.usage_resolution().selections {
+        exact_scenario_source(&bp, resolved);
+        if resolved.selection.target == authored(20) {
+            assert_eq!(resolved.selection, preference(authored(20), true));
+            assert_eq!(
+                resolved.replaced,
+                vec![UsageSelectionSource::Preset { index: 0 }]
+            );
+        } else {
+            assert_eq!(resolved.selection, preference(authored(21), false));
+            assert!(resolved.replaced.is_empty());
+        }
+    }
     assert_ne!(ap.bindings().request, bp.bindings().request);
     ordinary_equal(
         &ap.evaluate(&mut ap.new_scratch()).unwrap(),

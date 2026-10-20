@@ -273,7 +273,7 @@ pub fn check_authored() {
     assert_eq!(m.contract.schema_version, 7);
     assert_eq!(
         m.contract.operations_version,
-        key(OWNED_RULE_OPERATIONS_V27)
+        key(OWNED_RULE_OPERATIONS_VERSION)
     );
     assert_eq!(m.schema.len(), 1);
     assert_eq!(m.owners.len(), 1);

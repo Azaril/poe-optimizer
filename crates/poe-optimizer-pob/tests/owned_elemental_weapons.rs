@@ -120,9 +120,11 @@ impl Native {
         assert_eq!(owners.len(), 8);
         let rules = RulePackageInput {
             support_discovery: None,
-            existing_actor_rules: None,
-            contribution_queries: None,
-            effect_applications: None,
+            // This isolated receiver component has no shared Actor rules,
+            // contribution queries or effect applications.
+            existing_actor_rules: Some(DeclaredSet::complete(vec![])),
+            contribution_queries: Some(DeclaredSet::complete(vec![])),
+            effect_applications: Some(DeclaredSet::complete(vec![])),
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace,
             release: key("elemental-source-component-test"),

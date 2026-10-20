@@ -1,0 +1,94 @@
+{
+  "program": {
+    "id": "configured-critical-weakness-activation",
+    "context": "actor",
+    "reads": [
+      {
+        "id": "configured",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "external",
+          "value": {
+            "entity": "current",
+            "input": {
+              "kind": "external_input",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000033b1"
+            }
+          }
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "id": "configured",
+        "expression": {
+          "kind": "read",
+          "input": "configured"
+        }
+      },
+      {
+        "id": "true",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "boolean",
+            "value": true
+          }
+        }
+      }
+    ],
+    "effects": [
+      {
+        "id": "configured-activation",
+        "when": "configured",
+        "effect": {
+          "kind": "contribute",
+          "entity": "current",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033b0"
+          },
+          "contribution": "flag",
+          "value": "true"
+        }
+      }
+    ]
+  },
+  "query": "outgoing-critical-weakness-enabled",
+  "group": "sources",
+  "member": {
+    "producer": {
+      "kind": "program_effect",
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "encounter",
+          "value": {
+            "kind": "encounter",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000031d1"
+          }
+        }
+      },
+      "program": "configured-critical-weakness-activation",
+      "effect": "configured-activation",
+      "origin": {
+        "kind": "encounter"
+      }
+    },
+    "order": null
+  }
+}

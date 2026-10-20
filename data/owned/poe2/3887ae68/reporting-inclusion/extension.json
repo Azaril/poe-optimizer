@@ -1,7 +1,30 @@
 {
-  "schema_version": 1,
-  "version": "reporting-inclusion",
   "operations_version": "owned-domain-operations-v27",
+  "owners": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "usage_policy",
+          "value": {
+            "key": "def.000000000000338e",
+            "kind": "usage_policy",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            }
+          }
+        }
+      },
+      "programs": {
+        "closure": {
+          "kind": "complete"
+        },
+        "members": []
+      }
+    }
+  ],
+  "receivers": [],
   "schema": [
     {
       "kind": "definition",
@@ -9,85 +32,86 @@
         "kind": "usage_policy",
         "value": {
           "id": {
+            "key": "def.000000000000338e",
             "kind": "usage_policy",
             "namespace": {
               "game": "poe2",
               "version": "owned-mechanics-v1"
-            },
-            "key": "def.000000000000338e"
+            }
           },
           "schema": {
             "kind": "known",
             "value": {
-              "targets": [
-                "skill"
-              ],
               "declarations": {
+                "actors": {
+                  "closure": {
+                    "kind": "complete"
+                  },
+                  "members": []
+                },
+                "choices": {
+                  "closure": {
+                    "kind": "complete"
+                  },
+                  "members": []
+                },
+                "grants": {
+                  "closure": {
+                    "kind": "complete"
+                  },
+                  "members": []
+                },
+                "outputs": {
+                  "closure": {
+                    "kind": "complete"
+                  },
+                  "members": []
+                },
                 "parameters": {
+                  "closure": {
+                    "kind": "complete"
+                  },
                   "members": [
                     {
                       "declaration": {
-                        "kind": "usage_policy",
                         "definition": {
+                          "key": "def.000000000000338e",
                           "kind": "usage_policy",
                           "namespace": {
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
-                          },
-                          "key": "def.000000000000338e"
-                        }
+                          }
+                        },
+                        "kind": "usage_policy"
                       },
                       "slot": {
+                        "key": "def.000000000000338f",
                         "kind": "parameter_slot",
                         "namespace": {
                           "game": "poe2",
                           "version": "owned-mechanics-v1"
-                        },
-                        "key": "def.000000000000338f"
+                        }
                       }
                     }
-                  ],
-                  "closure": {
-                    "kind": "complete"
-                  }
-                },
-                "choices": {
-                  "members": [],
-                  "closure": {
-                    "kind": "complete"
-                  }
-                },
-                "grants": {
-                  "members": [],
-                  "closure": {
-                    "kind": "complete"
-                  }
-                },
-                "actors": {
-                  "members": [],
-                  "closure": {
-                    "kind": "complete"
-                  }
+                  ]
                 },
                 "skill_grants": {
-                  "members": [],
                   "closure": {
                     "kind": "complete"
-                  }
-                },
-                "outputs": {
-                  "members": [],
-                  "closure": {
-                    "kind": "complete"
-                  }
+                  },
+                  "members": []
                 },
                 "sockets": {
-                  "members": [],
                   "closure": {
                     "kind": "complete"
-                  }
+                  },
+                  "members": []
                 }
-              }
+              },
+              "scenario_skill_applicability": null,
+              "targets": [
+                "skill"
+              ]
             }
           }
         }
@@ -100,65 +124,42 @@
         "value": {
           "id": {
             "declaration": {
-              "kind": "usage_policy",
               "definition": {
+                "key": "def.000000000000338e",
                 "kind": "usage_policy",
                 "namespace": {
                   "game": "poe2",
                   "version": "owned-mechanics-v1"
-                },
-                "key": "def.000000000000338e"
-              }
+                }
+              },
+              "kind": "usage_policy"
             },
             "slot": {
+              "key": "def.000000000000338f",
               "kind": "parameter_slot",
               "namespace": {
                 "game": "poe2",
                 "version": "owned-mechanics-v1"
-              },
-              "key": "def.000000000000338f"
+              }
             }
           },
           "schema": {
             "kind": "known",
             "value": {
-              "value": {
-                "kind": "boolean"
-              },
               "presence": "required_once",
               "sites": [
                 "usage_policy_parameter"
-              ]
+              ],
+              "value": {
+                "kind": "boolean"
+              }
             }
           }
         }
       }
     }
   ],
-  "owners": [
-    {
-      "owner": {
-        "kind": "definition",
-        "value": {
-          "kind": "usage_policy",
-          "value": {
-            "kind": "usage_policy",
-            "namespace": {
-              "game": "poe2",
-              "version": "owned-mechanics-v1"
-            },
-            "key": "def.000000000000338e"
-          }
-        }
-      },
-      "programs": {
-        "members": [],
-        "closure": {
-          "kind": "complete"
-        }
-      }
-    }
-  ],
+  "schema_version": 1,
   "tables": [],
-  "receivers": []
+  "version": "reporting-inclusion"
 }

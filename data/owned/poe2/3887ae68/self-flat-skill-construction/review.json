@@ -1,6 +1,6 @@
 {
-  "acquisition_and_correspondence_sha256": "d7df2cde5648ee00354c80f70f50285f12851070d31b16677777b2d7b1c08faf",
-  "authority_sha256": "105b36b7a75e02cb33a5882c1d2fcc5ba75661399702f5cac815cf6592045ef9",
+  "acquisition_and_correspondence_sha256": "88bea790e333ba0f80a97a59d9207bdfa85e79eb24e9a997c2f76d8e59490921",
+  "authority_sha256": "8ff24776e3338be02f13ab6d5f5c15e12707b487ada803a5987e266b2a0db5ca",
   "bodies_sha256": "3fb2c74fa8c42bc3561b82749818fdb623efee9e363501a07bb8e95a1b2e3711",
   "construction": {
     "basic_attack_pairs": 18,
@@ -176,5 +176,5 @@
     "recipe_value_evaluation_parity": false,
     "unique_delivering_source_attribution": false
   },
-  "selected_source_membership_sha256": "e2089f9e8487b75ad46f708255a1bc157c4b004129842d7f245f06dccd36570e"
+  "selected_source_membership_sha256": "14f549952927c9a08e57cb1a3255349db7dd1d2e9a963720fbaa4bcd51c83864"
 }

@@ -12,7 +12,7 @@ use std::{collections::BTreeMap, fs, io::Read, path::PathBuf, sync::OnceLock};
 pub const DIR: &str = "data/owned/poe2/3887ae68/self-flat-later-helpers";
 const BODIES: &str = "c8b99d9a6d63ce813641a07969baa4a8bf3a417f02545b917849fd1da5b858ef";
 const MANIFEST: &str = "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675";
-const MINION_REVIEW: &str = "743bf794c227a577ae97a92e3823541f734af31046788b9f04db35e988f38b0d";
+const MINION_REVIEW: &str = "d35ca00990f80e801758de29c38d5d3e3cb289af73f886b2d93fd99a7fc12ca9";
 const BASIC: &str = "MinionMeleeBow";
 const EXCLUDED_DIRECT_NAMES: [&str; 11] = [
     "PhysicalMin",

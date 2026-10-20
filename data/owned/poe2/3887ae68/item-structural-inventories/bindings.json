@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "source": {
+    "input": "091556fee21e868c21ac3c2a61390c3e90c5900ab4576552c90a46a9fcc63ffd",
+    "definitions": {
+      "game": "poe2",
+      "release": "pob-3887ae68-armour-response-component-v1",
+      "schema_version": 7,
+      "content_sha256": "644cc89ed793d48d57e5e57536d4bcfe3708d85850f93b6e171dba7d7f271c81",
+      "semantics_version": "owned-mechanics-skill-inputs-v1"
+    },
+    "registry": "5f7a897104b1fad26e945de64d727c482712e49b42bf40b6cbf53d16ebdbec7e",
+    "rules": "de7b8c90f8d10c60576262abd093123e13e24b3491d6b8ce3a8d57336ffe0c69",
+    "mapping": "4e5d7f03eeb16c696ea7054db63deffe4e927392c94a54b13e24ece3cd2865b7",
+    "roles": "ad8a7d45200695520143996d8b0aa37bffe34cc093c6260bad9aa334bb394c24",
+    "normalization": "99ad2c90c79f3a08a9c5f3abe0001902a315dbb057b20d32905f070ba20e84d5"
+  },
+  "release": "pob-3887ae68-item-structural-inventories-v1",
+  "templates": [
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d75"
+      },
+      "source_base": "Ashen Staff",
+      "source_item_id": 28,
+      "source_ordinal": 594,
+      "closed_empty_intrinsic_declarations": [
+        "grants",
+        "actors",
+        "skill_grants"
+      ]
+    },
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001e84"
+      },
+      "source_base": "Fine Belt",
+      "source_item_id": 27,
+      "source_ordinal": 590,
+      "closed_empty_intrinsic_declarations": [
+        "grants",
+        "actors",
+        "skill_grants"
+      ]
+    },
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002007"
+      },
+      "source_base": "Rope Cuffs",
+      "source_item_id": 20,
+      "source_ordinal": 574,
+      "closed_empty_intrinsic_declarations": [
+        "grants",
+        "actors",
+        "skill_grants"
+      ]
+    },
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000238c"
+      },
+      "source_base": "Tattered Robe",
+      "source_item_id": 19,
+      "source_ordinal": 572,
+      "closed_empty_intrinsic_declarations": [
+        "grants",
+        "actors",
+        "skill_grants"
+      ]
+    }
+  ],
+  "scope": {
+    "new_definitions": 0,
+    "new_programs": 0,
+    "new_numeric_behavior": false,
+    "template_rules_closed": false,
+    "modifier_membership_closed": false,
+    "modifier_supplied_grants_closed": false,
+    "outputs_closed": false,
+    "choices_closed": false,
+    "parameters_changed": false,
+    "sockets_changed": false,
+    "quality_changed": false,
+    "whole_build_parity": false,
+    "complete_scenario_census": false,
+    "query_changes": 0
+  }
+}

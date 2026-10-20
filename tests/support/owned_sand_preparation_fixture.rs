@@ -380,6 +380,7 @@ impl World {
             unreachable!()
         };
         let build = BuildInput {
+            usage_preferences: vec![],
             allocator: InstanceAllocatorState::from_parts(BuildLineage::from_bytes([0x6b; 16]), 4),
             revision: BuildRevision::from_u64(1),
             game_version: ns(),
@@ -446,6 +447,7 @@ impl World {
             choices: vec![],
         };
         let scenario = ScenarioInput {
+            usage_intents: vec![],
             game_version: ns(),
             enemy: EnemySpec {
                 encounter: def(0xf1002),

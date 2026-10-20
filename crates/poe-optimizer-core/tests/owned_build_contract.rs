@@ -33,6 +33,7 @@ fn quality() -> QualitySelection {
 fn build_input() -> BuildInput {
     let support_owner = SlotOwnerDefId::Gem(definition("support-gem"));
     BuildInput {
+        usage_preferences: vec![],
         generated_inputs: None,
         authored_support_order: None,
         allocator: InstanceAllocatorState::from_parts(lineage(), 100),
@@ -448,6 +449,7 @@ fn query_input(root: ProviderRoot) -> QueryInput {
 }
 fn scenario_input() -> ScenarioInput {
     ScenarioInput {
+        usage_intents: vec![],
         game_version: namespace(),
         enemy: EnemySpec {
             encounter: definition("authored-encounter"),
@@ -472,6 +474,62 @@ fn scenario_input() -> ScenarioInput {
             }],
         }],
     }
+}
+
+#[test]
+fn usage_layers_are_required_canonical_records_without_implicit_defaults() {
+    let exact = scenario_input().usage.remove(0);
+    let mut raw_build = build_input();
+    raw_build.usage_preferences = vec![exact.clone()];
+    let build = BuildSpec::new(raw_build, limits()).unwrap();
+    let mut raw_scenario = scenario_input();
+    let intent = ScenarioUsageIntent {
+        policy: exact.policy.clone(),
+        parameters: exact.parameters.clone(),
+    };
+    raw_scenario.usage_intents = vec![intent.clone()];
+    let scenario = ScenarioSpec::new(raw_scenario, limits()).unwrap();
+    assert_eq!(build.input().usage_preferences, vec![exact]);
+    assert_eq!(scenario.input().usage_intents, vec![intent.clone()]);
+    for (document, field) in [
+        (OwnedDocument::Build(Box::new(build)), "usage_preferences"),
+        (OwnedDocument::Scenario(scenario), "usage_intents"),
+    ] {
+        let bytes = encode_owned(&document, limits()).unwrap();
+        assert_eq!(decode_owned(&bytes, limits()).unwrap(), document);
+        let wire: Value = serde_json::from_slice(&bytes).unwrap();
+        for null in [false, true] {
+            let mut invalid = wire.clone();
+            if null {
+                invalid["document"]["value"][field] = Value::Null;
+            } else {
+                invalid["document"]["value"]
+                    .as_object_mut()
+                    .unwrap()
+                    .remove(field);
+            }
+            assert!(decode_owned(&serde_json::to_vec(&invalid).unwrap(), limits()).is_err());
+        }
+    }
+    let mut duplicate = scenario_input();
+    duplicate.usage_intents = vec![intent.clone(), intent.clone()];
+    assert_eq!(
+        ScenarioSpec::new(duplicate, limits()).unwrap_err().kind,
+        StructuralErrorKind::DuplicateAssignment
+    );
+    let mut reverse = scenario_input();
+    let mut other = intent.clone();
+    other.policy = definition("another-usage");
+    for parameter in &mut other.parameters {
+        parameter.slot.declaration = SlotOwnerDefId::UsagePolicy(other.policy.clone());
+    }
+    reverse.usage_intents = vec![intent, other];
+    let mut forward = reverse.clone();
+    forward.usage_intents.reverse();
+    assert_eq!(
+        ScenarioSpec::new(reverse, limits()).unwrap(),
+        ScenarioSpec::new(forward, limits()).unwrap()
+    );
 }
 fn build() -> BuildSpec {
     BuildSpec::new(build_input(), limits()).unwrap()
@@ -784,6 +842,7 @@ fn query_ids_and_namespaces_cannot_implicitly_merge_or_retarget_requests() {
     let other_namespace = GameVersionNamespace::new("other-game", "v2").unwrap();
     let other = ScenarioSpec::new(
         ScenarioInput {
+            usage_intents: vec![],
             game_version: other_namespace.clone(),
             enemy: EnemySpec {
                 encounter: EncounterDefId::parse(other_namespace, "encounter").unwrap(),
@@ -854,7 +913,7 @@ fn owned_decode_requires_explicit_options_and_rejects_unknown_or_duplicate_field
         fails(decode_value(extra), &["unknown", "field"]);
     }
     let document = serde_json::to_string(&valid["document"]).unwrap();
-    let duplicate = format!(r#"{{"schema_version":4,"schema_version":4,"document":{document}}}"#);
+    let duplicate = format!(r#"{{"schema_version":5,"schema_version":5,"document":{document}}}"#);
     fails(decode_owned(duplicate.as_bytes(), limits()), &["duplicate"]);
     let encoded = serde_json::to_string(&valid).unwrap();
     let duplicate = encoded.replacen("\"level\":60", "\"level\":60,\"level\":60", 1);

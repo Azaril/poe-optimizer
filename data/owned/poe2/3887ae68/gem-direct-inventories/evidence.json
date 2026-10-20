@@ -1,0 +1,316 @@
+{
+  "kind": "reviewed-gem-direct-ownership",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "potential_membership_packet": [
+    {
+      "path": "data/owned/poe2/3887ae68/gem-skill-inventories/authoring.json",
+      "bytes": 1758,
+      "sha256": "98cec2bad291263e9c2a79ab774df6c3cf67f54c12a569996bfd8b29f35555e0"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/gem-skill-inventories/dependencies.json",
+      "bytes": 159515,
+      "sha256": "79c75a76eaacd7ac65eca44af4bac494653134f0987b1cec64dbc5b5dd618ca0"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/gem-skill-inventories/evidence.json",
+      "bytes": 26643,
+      "sha256": "6aa33ae071a590bbed33165cbb58271c71dd5b10aeaebe38ceb4d780c00d82e5"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/gem-skill-inventories/migration.json",
+      "bytes": 49362,
+      "sha256": "7f566e0d7730f731e7a8d5ded250f38bdfb1d8309a1c1de9e9f8489776ae41fa"
+    }
+  ],
+  "sources": [
+    {
+      "path": "src/Export/Scripts/skills.lua",
+      "bytes": 37334,
+      "sha256": "c3cdb3b5b9e1fa620ca034a64f35d42863af07af7a1628d5acbef1b99fca3417",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Export_Scripts_skills.lua.gz",
+      "archive_bytes": 7676,
+      "archive_sha256": "ba892ca3fc45154b0793896a1cc6c76cf442b54d8f58ed5c8918973f937a8089"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_Data.lua.gz",
+      "archive_bytes": 10604,
+      "archive_sha256": "73c2915afcc9bb90d972cd99d6aa690812ca8c2a1edd31eda7b67bd47a322af8"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_CalcSetup.lua.gz",
+      "archive_bytes": 21399,
+      "archive_sha256": "cdefa2fbbb4a15befdc728fd549902f4032c1cdf0b52c3070dc356f0a45e718f"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_CalcActiveSkill.lua.gz",
+      "archive_bytes": 10868,
+      "archive_sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_ModParser.lua.gz",
+      "archive_bytes": 105049,
+      "archive_sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d",
+      "archive": "data/owned/poe2/3887ae68/self-flat-minion-store/act_int.lua.gz",
+      "archive_bytes": 141617,
+      "archive_sha256": "076f9caf8f271b4faf456497f254b69d6cab0c7864f15b9f63dd3ba475df39ac"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "bytes": 358587,
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Data_Skills_sup_int.lua.gz",
+      "archive_bytes": 42898,
+      "archive_sha256": "5bfaa0261d86313be125d073c34236e815ee02d85a83407436d2613480006e4e"
+    }
+  ],
+  "boundaries": [
+    {
+      "id": "export-primary",
+      "path": "src/Export/Scripts/skills.lua",
+      "first_line": 124,
+      "last_line": 483,
+      "sha256": "9e4609f9447d955dbd5280faa19e1af440cf9da70321d9853e0b81ee9a643879"
+    },
+    {
+      "id": "export-level-quality",
+      "path": "src/Export/Scripts/skills.lua",
+      "first_line": 227,
+      "last_line": 320,
+      "sha256": "d2d54eec201a98e5bdb471740b4cfb5e6ed1b2e0576ae05acf938f5998a48e64"
+    },
+    {
+      "id": "export-statsets",
+      "path": "src/Export/Scripts/skills.lua",
+      "first_line": 485,
+      "last_line": 909,
+      "sha256": "a7c306c745bf5ed16890215e8863b22554b896e26d94d86f8e323951f0212e2d"
+    },
+    {
+      "id": "export-gem-writer",
+      "path": "src/Export/Scripts/skills.lua",
+      "first_line": 918,
+      "last_line": 1009,
+      "sha256": "c7c047015013cf32cbb22602b4beff609f550eb601af6a491a24eeabf23bed5f"
+    },
+    {
+      "id": "gem-constructor",
+      "path": "src/Modules/Data.lua",
+      "first_line": 979,
+      "last_line": 1069,
+      "sha256": "0fc4f16a1222d053a680fb005ae9dff4a4cb351673c8555df610b80d601b7e6f"
+    },
+    {
+      "id": "external-properties",
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 543,
+      "last_line": 584,
+      "sha256": "35083a3280ff4a0c82e7af2e944359b0ecc67dfaece5ec80c10df4035374c364"
+    },
+    {
+      "id": "external-generated-groups",
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1671,
+      "last_line": 1734,
+      "sha256": "1fffa72e8749a06f6981758cb21f251ce3911e6e3b9961655b3294051b20a333"
+    },
+    {
+      "id": "thorns-factory",
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1784,
+      "last_line": 1834,
+      "sha256": "03866c5e89f3c49111ad30e3969a7a735574033dde5afc33a5ddc27e764868a2"
+    },
+    {
+      "id": "active-dispatch",
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1987,
+      "last_line": 2123,
+      "sha256": "c06e35434502fed5a118bb025ac86409350e4afcd0b7399dc34e4dfb9c511a5f"
+    },
+    {
+      "id": "skill-stat-dispatch",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 80,
+      "last_line": 140,
+      "sha256": "c6f254a9b103dff37d8eb11abcb2039398781716dd2fa6a2057e620ae0d4f8e7"
+    },
+    {
+      "id": "skill-constructor",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 144,
+      "last_line": 234,
+      "sha256": "215482b85ed4bfab7be529873181e240d0f2b11cee6c6cf0007f007c00e7fd16"
+    },
+    {
+      "id": "source-properties",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 236,
+      "last_line": 262,
+      "sha256": "3b65de81e84920be53bb8cfad13c74ef0ed926a8adbe875c03247193e77228be"
+    },
+    {
+      "id": "totem-provenance",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 355,
+      "last_line": 393,
+      "sha256": "1cef1fbcfaeece4924ff006e244d6ee65b78decbea507ff290ff2ebb385ffe1c"
+    },
+    {
+      "id": "effect-stat-consumer",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 795,
+      "last_line": 808,
+      "sha256": "1105f6c140b6453a03736e6bea1500891e7505bbb92b127986dc755ffbe6dce9"
+    },
+    {
+      "id": "minion-factory",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 895,
+      "last_line": 1031,
+      "sha256": "43068ef6457a228179a84968e23278c0bd18be0d9dbf20e5f5f650d5fcdf00b0"
+    },
+    {
+      "id": "minion-skills",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 1116,
+      "last_line": 1185,
+      "sha256": "08a9e2cb4a396a93e5e49bae40dd8394ef23e93e160017585340f9b17b77b5ce"
+    },
+    {
+      "id": "external-extra-support",
+      "path": "src/Modules/ModParser.lua",
+      "first_line": 2219,
+      "last_line": 2253,
+      "sha256": "11ede92472d7dec6e85b0af4ff9c52a1da07d1a204a7d7e8339221d43872b962"
+    },
+    {
+      "id": "support-receiving-modifiers",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 731,
+      "last_line": 770,
+      "sha256": "74e4e26ef697d69a7830583a5a45dfd9c37060dac61144a212e5285b9093380d"
+    }
+  ],
+  "families": [
+    {
+      "gem": "def.00000000000006c5",
+      "primary_effect": "SupportChillingIcePlayer",
+      "source": {
+        "path": "src/Data/Skills/sup_int.lua",
+        "line": 5118,
+        "end_line": 5148,
+        "sha256": "108a16f755907641b1d49effc4b23f6ba0ddf0475355da79313625cc6d1c751a"
+      },
+      "direct_actor_members": [],
+      "descendant_owner": null,
+      "receiving_subject": "exact_supported_skill",
+      "creation_obligation": "supported-hit-freeze-ground",
+      "unresolved_constants": [
+        {
+          "stat": "chilling_ice_freezing_area_base_radius",
+          "value": 30
+        },
+        {
+          "stat": "chilling_ice_create_chilled_ground_on_freeze_base_duration_ms",
+          "value": 8000
+        }
+      ]
+    },
+    {
+      "gem": "def.0000000000000797",
+      "primary_effect": "FrostBombPlayer",
+      "source": {
+        "path": "src/Data/Skills/act_int.lua",
+        "line": 9025,
+        "end_line": 9165,
+        "sha256": "ccf2e75e3d04044640da981de3b6abfc4c455cf6df1de52eb6b86ca43ad31092"
+      },
+      "direct_actor_members": [],
+      "descendant_owner": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000149"
+      },
+      "creation_obligation": "orb-exposure-detonation-infusion"
+    },
+    {
+      "gem": "def.00000000000007dd",
+      "primary_effect": "IceNovaPlayer",
+      "source": {
+        "path": "src/Data/Skills/act_int.lua",
+        "line": 12801,
+        "end_line": 13020,
+        "sha256": "024888550af2f5827d379730a715b6e0277677c88262d3fe6399267ffeaf8e68"
+      },
+      "direct_actor_members": [],
+      "descendant_owner": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000001df"
+      },
+      "creation_obligation": "frostbolt-origin-infusion-ground"
+    },
+    {
+      "gem": "def.000000000000086b",
+      "primary_effect": "PainOfferingPlayer",
+      "source": {
+        "path": "src/Data/Skills/act_int.lua",
+        "line": 15720,
+        "end_line": 15856,
+        "sha256": "f8c1073dc188cc1eb5d847a2c6666333e037036a8c80d07916a18e252e678989"
+      },
+      "direct_actor_members": [],
+      "descendant_owner": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000002a2"
+      },
+      "creation_obligation": "offering-spike-minion-lifecycle"
+    }
+  ],
+  "scope": {
+    "direct_gem_declarations_only": true,
+    "existing_primary_chains_preserved": true,
+    "skill_owned_creation_obligations_preserved": true,
+    "external_owner_grants_excluded": true,
+    "activation_certified": false,
+    "descendant_topology_certified": false,
+    "null_stat_mappings_classified": false,
+    "numerical_coverage_certified": false,
+    "scenario_census_complete": false,
+    "receiving_ground_topology_certified": false,
+    "trigger_coverage_certified": false
+  }
+}

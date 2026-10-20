@@ -137,6 +137,7 @@ fn package() -> OwnedSupportPreparation {
 }
 fn input() -> BuildInput {
     BuildInput {
+        usage_preferences: vec![],
         generated_inputs: None,
         allocator: InstanceAllocatorState::from_parts(BuildLineage::from_bytes([73; 16]), 10000),
         revision: BuildRevision::from_u64(1),

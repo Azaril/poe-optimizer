@@ -1,0 +1,23 @@
+{
+  "kind": "source-components-only-no-import-authority",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "artifacts": {
+    "evidence.json": {
+      "bytes": 37637,
+      "sha256": "a5868b49fa33392e986b86a0bbfdf842c17639e033739dd50a475d72f10e69d1"
+    },
+    "BuildExportPoE2.lua.gz": {
+      "bytes": 4608,
+      "sha256": "1bac6d86fd27eaa2c2a0be07c0f2fbcd46a921394d618b0e57f2fa7de994116a"
+    },
+    "README.md": {
+      "bytes": 3872,
+      "sha256": "5533cb3ed5e45449b0ba4516a597057be4a3dadf6e846a8eb4116dd22e27a838"
+    }
+  },
+  "full_build_parity": false,
+  "numerical_parity": false,
+  "import_receipt_implemented": false,
+  "production_files_changed": false
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "before": "f72d73bb194b457aef22b09c94438bb2d308ba771fb6bc049788e5d09cc965d8",
+  "release": "pob-3887ae68-ordinary-physical-hit-dps-v1",
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/physical-hit-dps/definitions.json",
+      "bytes": 2545,
+      "sha256": "cfefa33c09f56a78cd5f2fe3d24fab20e2e485fbfcad9b42a4ec55dde9c93651"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/physical-hit-dps/consumer.json",
+      "bytes": 19217,
+      "sha256": "2714b7eb713569a973eb2923fcff4aa2b206f010f975e7a1a212f3494ca2789f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/physical-hit-dps/bindings.json",
+      "bytes": 4005,
+      "sha256": "eab590cd5af0421b1c8e0b6b4ae4d31c76c39c5dce58f8977fe347b19485ff84"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/physical-hit-dps/dependencies.json",
+      "bytes": 333328,
+      "sha256": "7d4307849940a04ca5b8897993471aed412e47264807c59df0b5adee8e487875"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/physical-hit-dps/migration.json",
+      "bytes": 3793,
+      "sha256": "c3b0aed0fb822701e6bef285c3c6c39339501160cdac93a041dd93d26c79a6b2"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/physical-hit-dps/source-evidence.json",
+      "bytes": 73974,
+      "sha256": "c8498a06a23834328e6a0438e5c1c1fb61c1d019dd1ee1be7a69938bc5236c32"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/physical-hit-dps/source-domain.json",
+      "bytes": 36814,
+      "sha256": "f496f546abaf97eebe08c154875c5364845e4524ef49093246b9588f11a03afd"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/physical-hit-dps/source-vectors.json",
+      "bytes": 49499,
+      "sha256": "9a51b00e30fa1fff12b94ecc703d43b543cee8f1e4c11beab99423fbced47f0d"
+    }
+  ],
+  "scope": {
+    "publication_ready": true,
+    "ready_for_native_admission": false,
+    "complete_request": false,
+    "complete_hit_dps": false,
+    "final_metric_binding": false,
+    "candidate_source_closure": false,
+    "query_closure_changed": false,
+    "existing_owner_closure_changed": false,
+    "new_source_execution": false
+  }
+}

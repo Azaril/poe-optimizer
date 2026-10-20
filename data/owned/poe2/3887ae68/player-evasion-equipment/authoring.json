@@ -1,47 +1,47 @@
 {
-  "schema_version": 1,
-  "kind": "player-evasion-equipment",
-  "before": "d70eb4fefe8e4cefdddf123f545424b83f9247d41e7ac7c8a00429938363cfbf",
-  "scope": {
-    "publication_ready": true,
-    "final_owner_complete": false,
-    "complete_build": false
-  },
   "artifacts": [
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/consumer.json",
       "bytes": 31469,
+      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/consumer.json",
       "sha256": "078db26cd382be88b9424686202dda5c85df112d79d469ad2e4c2a4c026db791"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/definitions.json",
       "bytes": 730,
+      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/definitions.json",
       "sha256": "643dd412da20d55df15fa79ea2015d49fdaf0a3377ccdaa3bd523b6cfc63198b"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/bindings.json",
       "bytes": 1553,
+      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/bindings.json",
       "sha256": "e609879fc160871c7d88d5a0b27ac82a81c098be66cbf12f4194299d07b5b9c5"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/dependencies.json",
       "bytes": 150720,
+      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/dependencies.json",
       "sha256": "85e1cd72fef32f7246fe1a7dff1aaeb41dec89aa09407afa02b44f7105b19c1d"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/source-evidence.json",
       "bytes": 19083,
-      "sha256": "c4d7e9edc2cfd340a557eae9d5be2badee70c8949dc8a70da163d104b6f2413d"
+      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/source-evidence.json",
+      "sha256": "02d7fe7a3dfd1c7c283e35286d4b74cb6692e2a190014668e816cf6a47367ec0"
     },
     {
-      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/migration.json",
       "bytes": 1471,
+      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/migration.json",
       "sha256": "4ca2b8506d649f960fa4a5b67bf0ebbab220be9fe35403463ac1c1f0ba92a046"
     },
     {
-      "path": "data/owned/poe2/3887ae68/item-evasion-property/authoring.json",
       "bytes": 1452,
+      "path": "data/owned/poe2/3887ae68/item-evasion-property/authoring.json",
       "sha256": "e826c3bfda519eccfaaf71d5347238b349d21633551d8051baf5921be2fdbbb8"
     }
-  ]
+  ],
+  "before": "d70eb4fefe8e4cefdddf123f545424b83f9247d41e7ac7c8a00429938363cfbf",
+  "kind": "player-evasion-equipment",
+  "schema_version": 1,
+  "scope": {
+    "complete_build": false,
+    "final_owner_complete": false,
+    "publication_ready": true
+  }
 }

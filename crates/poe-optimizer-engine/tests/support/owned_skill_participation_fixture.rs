@@ -51,6 +51,7 @@ pub fn install(f: &mut Fixture) {
         DefinitionDescriptor::UsagePolicy(known(
             def("participation-policy"),
             UsagePolicySchema {
+                scenario_skill_applicability: None,
                 targets: vec![UsageTargetKind::Skill],
                 declarations: DeclaredSlots {
                     parameters: DeclaredSet::complete(vec![parameter()]),

@@ -306,9 +306,10 @@ fn whole_container_uncertainty_does_not_select_a_convenient_scope() {
 fn explicit_none_is_distinct_from_unknown_missing_or_partial_outcomes() {
     let mut a = with_reward_policy();
     let mut input = a.rewards.input().clone();
-    input.rules[0]
-        .outcomes
-        .retain(|case| case.when == RewardValue::Boolean(false));
+    let RewardRuleOutput::Cases(outcomes) = &mut input.rules[0].output else {
+        panic!()
+    };
+    outcomes.retain(|case| case.when == RewardValue::Boolean(false));
     replace_rewards(&mut a, input);
     let source = source(
         r#"<PathOfBuilding2><Config activeConfigSet="1"><ConfigSet id="1"><Input name="caller-toggle" boolean="true"/></ConfigSet><ConfigSet id="2"><Input name="caller-toggle" boolean="false"/></ConfigSet><ConfigSet id="3"/></Config></PathOfBuilding2>"#,
@@ -418,7 +419,7 @@ fn census_bindings_are_exact_and_partial_rule_api_remains_available() {
     assert!(matches!(
         normalize(&source, &a, &reviewed(&a), Default::default()),
         Err(NormalizationError::Policy(
-            "configuration reward rule selector"
+            "configuration reward rule census"
         ))
     ));
 }

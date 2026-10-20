@@ -1,0 +1,588 @@
+{
+  "files": [
+    {
+      "archive": "configuration-campaign-progression/ConfigTab.lua.gz",
+      "bytes": 50481,
+      "compressed_bytes": 9976,
+      "compressed_sha256": "8749d4b7771265efb21319ffbf79791f02eb4c1bd04c63557311a00a98fb26a1",
+      "path": "src/Classes/ConfigTab.lua",
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "archive": "item-structural-inventories/evidence/Item.lua.gz",
+      "bytes": 112268,
+      "compressed_bytes": 24796,
+      "compressed_sha256": "f1d4fc1a06d7162d426e9b1d1acd3519e387eeeb29cafc3fa17f221dc020d1ee",
+      "path": "src/Classes/Item.lua",
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "archive": "configuration-distance-inputs/ModStore.lua.gz",
+      "bytes": 36471,
+      "compressed_bytes": 7158,
+      "compressed_sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b",
+      "path": "src/Classes/ModStore.lua",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "archive": "configuration-campaign-progression/ConfigOptions.lua.gz",
+      "bytes": 235127,
+      "compressed_bytes": 32320,
+      "compressed_sha256": "dee4ff2ce5f34bfbbff52587ada77ca4c91ab0ff0cd9f7ad390504e0370fdfbb",
+      "path": "src/Modules/ConfigOptions.lua",
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "archive": "support-structural-inventories/sources/src_Modules_Data.lua.gz",
+      "bytes": 38313,
+      "compressed_bytes": 10604,
+      "compressed_sha256": "73c2915afcc9bb90d972cd99d6aa690812ca8c2a1edd31eda7b67bd47a322af8",
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "archive": "support-structural-inventories/sources/src_Modules_ModParser.lua.gz",
+      "bytes": 677245,
+      "compressed_bytes": 105049,
+      "compressed_sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466",
+      "path": "src/Modules/ModParser.lua",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "archive": "support-structural-inventories/sources/src_Modules_CalcSetup.lua.gz",
+      "bytes": 100609,
+      "compressed_bytes": 21399,
+      "compressed_sha256": "cdefa2fbbb4a15befdc728fd549902f4032c1cdf0b52c3070dc356f0a45e718f",
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "archive": "support-structural-inventories/sources/src_Modules_CalcActiveSkill.lua.gz",
+      "bytes": 50144,
+      "compressed_bytes": 10868,
+      "compressed_sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "archive": "configuration-distance-inputs/CalcOffence.lua.gz",
+      "bytes": 364029,
+      "compressed_bytes": 64248,
+      "compressed_sha256": "3ee439d6209cd88adbca368dd7b3e741e9ed537531a37fcc0a8f4b1863e56147",
+      "path": "src/Modules/CalcOffence.lua",
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "archive": "support-structural-inventories/sources/src_Data_Gems.lua.gz",
+      "bytes": 513395,
+      "compressed_bytes": 47092,
+      "compressed_sha256": "d082011371b93f4748dd05f961418559a60b54806a49b93fa0eb2d613e95bbf8",
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "archive": "item-structural-inventories/evidence/staff.lua.gz",
+      "bytes": 18732,
+      "compressed_bytes": 1704,
+      "compressed_sha256": "69a7f018b4c9efa870e82ead918e2afd1b08fe22b7dc8bec461892e3235bd244",
+      "path": "src/Data/Bases/staff.lua",
+      "sha256": "6b04f45c0763088f865b8902733cecc6126829871a6766955a953a54cd657bf7"
+    },
+    {
+      "archive": "self-flat-minion-store/act_int.lua.gz",
+      "bytes": 1420976,
+      "compressed_bytes": 141617,
+      "compressed_sha256": "076f9caf8f271b4faf456497f254b69d6cab0c7864f15b9f63dd3ba475df39ac",
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "archive": "support-structural-inventories/sources/src_Data_Skills_sup_str.lua.gz",
+      "bytes": 277106,
+      "compressed_bytes": 31262,
+      "compressed_sha256": "eb89d755d8fd33b4bd24b68497e6b3b6d7bc2a9f04e434942489950e3fe88cc0",
+      "path": "src/Data/Skills/sup_str.lua",
+      "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+    }
+  ],
+  "license": {
+    "bytes": 66619,
+    "path": "data/owned/poe2/3887ae68/support-structural-inventories/sources/LICENSE.md",
+    "sha256": "b61f62cf2b8e301ef2a4a3c5f7de9460fea53327edf9f260b7c746502fc6bf97"
+  },
+  "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "mappings": [
+    {
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "basis": {
+            "kind": "exact"
+          },
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "item_template",
+              "value": {
+                "key": "def.0000000000001dd9",
+                "kind": "item_template",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "item_template",
+          "value": {
+            "base": {
+              "kind": "text",
+              "value": "Chiming Staff"
+            },
+            "prototype": {
+              "kind": "missing"
+            },
+            "variant": {
+              "kind": "missing"
+            }
+          }
+        }
+      }
+    },
+    {
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "basis": {
+            "kind": "exact"
+          },
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "gem",
+              "value": {
+                "key": "def.0000000000000911",
+                "kind": "gem",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "gem",
+          "value": {
+            "game_id": {
+              "kind": "text",
+              "value": "Metadata/Items/Gems/SkillGemSigilOfPower"
+            },
+            "variant_id": {
+              "kind": "text",
+              "value": "SigilOfPower"
+            }
+          }
+        }
+      }
+    },
+    {
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "basis": {
+            "kind": "exact"
+          },
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "gem",
+              "value": {
+                "key": "def.00000000000006eb",
+                "kind": "gem",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "gem",
+          "value": {
+            "game_id": {
+              "kind": "text",
+              "value": "Metadata/Items/Gems/SupportGemCorruptingCry"
+            },
+            "variant_id": {
+              "kind": "text",
+              "value": "CorruptingCrySupport"
+            }
+          }
+        }
+      }
+    },
+    {
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "basis": {
+            "kind": "exact"
+          },
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "gem",
+              "value": {
+                "key": "def.00000000000006ec",
+                "kind": "gem",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "gem",
+          "value": {
+            "game_id": {
+              "kind": "text",
+              "value": "Metadata/Items/Gems/SupportGemCorruptingCryThree"
+            },
+            "variant_id": {
+              "kind": "text",
+              "value": "CorruptingCrySupportThree"
+            }
+          }
+        }
+      }
+    },
+    {
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "basis": {
+            "kind": "exact"
+          },
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "gem",
+              "value": {
+                "key": "def.00000000000006ed",
+                "kind": "gem",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "gem",
+          "value": {
+            "game_id": {
+              "kind": "text",
+              "value": "Metadata/Items/Gems/SupportGemCorruptingCryTwo"
+            },
+            "variant_id": {
+              "kind": "text",
+              "value": "CorruptingCrySupportTwo"
+            }
+          }
+        }
+      }
+    },
+    {
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "basis": {
+            "kind": "exact"
+          },
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "skill",
+              "value": {
+                "key": "def.00000000000002fb",
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "SigilOfPowerPlayer"
+            }
+          }
+        }
+      }
+    },
+    {
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "basis": {
+            "kind": "exact"
+          },
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "skill",
+              "value": {
+                "key": "def.00000000000005a5",
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "TriggeredCorruptingCryPlayer"
+            }
+          }
+        }
+      }
+    },
+    {
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "basis": {
+            "kind": "exact"
+          },
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "skill",
+              "value": {
+                "key": "def.00000000000005a6",
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "TriggeredCorruptingCryThreePlayer"
+            }
+          }
+        }
+      }
+    },
+    {
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "basis": {
+            "kind": "exact"
+          },
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "skill",
+              "value": {
+                "key": "def.00000000000005a7",
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "TriggeredCorruptingCryTwoPlayer"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "originals": [
+    {
+      "bytes": 49642,
+      "caution": "The bounded saved-tag text check is not a composed consumer census.",
+      "file": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+      "named_positive_source_text_matches": [],
+      "saved_stage_fields": [
+        {
+          "element": "Placeholder",
+          "exact_tag": "<Placeholder name=\"sigilOfPowerStages\" number=\"1\"/>",
+          "line": 707,
+          "name": "sigilOfPowerStages",
+          "number": "1"
+        },
+        {
+          "element": "Placeholder",
+          "exact_tag": "<Placeholder name=\"conditionCorruptingCryStages\" number=\"10\"/>",
+          "line": 730,
+          "name": "conditionCorruptingCryStages",
+          "number": "10"
+        }
+      ],
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+    },
+    {
+      "bytes": 116512,
+      "caution": "The bounded saved-tag text check is not a composed consumer census.",
+      "file": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+      "named_positive_source_text_matches": [],
+      "saved_stage_fields": [
+        {
+          "element": "Placeholder",
+          "exact_tag": "<Placeholder number=\"1\" name=\"sigilOfPowerStages\"/>",
+          "line": 580,
+          "name": "sigilOfPowerStages",
+          "number": "1"
+        },
+        {
+          "element": "Placeholder",
+          "exact_tag": "<Placeholder number=\"10\" name=\"conditionCorruptingCryStages\"/>",
+          "line": 589,
+          "name": "conditionCorruptingCryStages",
+          "number": "10"
+        }
+      ],
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+    },
+    {
+      "bytes": 46532,
+      "caution": "The bounded saved-tag text check is not a composed consumer census.",
+      "file": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+      "named_positive_source_text_matches": [],
+      "saved_stage_fields": [
+        {
+          "element": "Placeholder",
+          "exact_tag": "<Placeholder number=\"1\" name=\"sigilOfPowerStages\"/>",
+          "line": 245,
+          "name": "sigilOfPowerStages",
+          "number": "1"
+        },
+        {
+          "element": "Placeholder",
+          "exact_tag": "<Placeholder number=\"10\" name=\"conditionCorruptingCryStages\"/>",
+          "line": 256,
+          "name": "conditionCorruptingCryStages",
+          "number": "10"
+        }
+      ],
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    },
+    {
+      "bytes": 46397,
+      "caution": "The bounded saved-tag text check is not a composed consumer census.",
+      "file": "tests/fixtures/builds/breadth-20260908/build-04.xml",
+      "named_positive_source_text_matches": [],
+      "saved_stage_fields": [
+        {
+          "element": "Placeholder",
+          "exact_tag": "<Placeholder name=\"conditionCorruptingCryStages\" number=\"10\"/>",
+          "line": 737,
+          "name": "conditionCorruptingCryStages",
+          "number": "10"
+        },
+        {
+          "element": "Placeholder",
+          "exact_tag": "<Placeholder name=\"sigilOfPowerStages\" number=\"1\"/>",
+          "line": 743,
+          "name": "sigilOfPowerStages",
+          "number": "1"
+        }
+      ],
+      "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+    },
+    {
+      "bytes": 106378,
+      "caution": "The bounded saved-tag text check is not a composed consumer census.",
+      "file": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "named_positive_source_text_matches": [],
+      "saved_stage_fields": [
+        {
+          "element": "Placeholder",
+          "exact_tag": "<Placeholder number=\"10\" name=\"conditionCorruptingCryStages\"/>",
+          "line": 547,
+          "name": "conditionCorruptingCryStages",
+          "number": "10"
+        },
+        {
+          "element": "Placeholder",
+          "exact_tag": "<Placeholder number=\"1\" name=\"sigilOfPowerStages\"/>",
+          "line": 552,
+          "name": "sigilOfPowerStages",
+          "number": "1"
+        }
+      ],
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "scope": {
+    "complete_applicability": false,
+    "defaults_added": false,
+    "inventory_completion": false,
+    "native_stage_mechanics": false,
+    "raw_transport_only": true,
+    "supplier_execution": false
+  }
+}

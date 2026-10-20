@@ -371,7 +371,21 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
         work: &mut usize,
         finish: impl FnOnce(&SupportSuffix<'_, I>, &OwnedPlanScratch, &mut usize) -> Result<T>,
     ) -> Result<SupportAttempt<T>> {
-        let result = self.attempt(scratch, work, finish);
+        self.evaluate_finalized(scratch, work, finish, |outcome, _, _| Ok(outcome))
+    }
+
+    /// Finalize success or preparation failure while this attempt still owns its
+    /// scratch. This preserves independent prefix evidence when a suffix is unavailable.
+    pub(super) fn evaluate_finalized<T, R>(
+        &self,
+        scratch: &mut OwnedPlanScratch,
+        work: &mut usize,
+        finish: impl FnOnce(&SupportSuffix<'_, I>, &OwnedPlanScratch, &mut usize) -> Result<T>,
+        finalize: impl FnOnce(SupportAttempt<T>, &OwnedPlanScratch, &mut usize) -> Result<R>,
+    ) -> Result<R> {
+        let result = self
+            .attempt(scratch, work, finish)
+            .and_then(|outcome| finalize(outcome, scratch, work));
         graph::clear_attempt(scratch);
         result
     }

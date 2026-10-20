@@ -1,5 +1,5 @@
 {
-  "kind": "unpublished-ordinary-outgoing-critical",
+  "kind": "ordinary-outgoing-critical-component",
   "definitions": {
     "chance": {
       "kind": "stat",
@@ -63,36 +63,46 @@
     "configured-critical-weakness"
   ],
   "baseline_program": "intrinsic-minion-attack-source",
-  "pending_members": [
-    {
-      "query": "outgoing-critical-enemy-chance-add",
-      "owner": {
-        "kind": "definition",
-        "value": {
-          "kind": "encounter",
-          "value": {
-            "kind": "encounter",
-            "namespace": {
-              "game": "poe2",
-              "version": "owned-mechanics-v1"
-            },
-            "key": "def.00000000000031d1"
-          }
-        }
-      },
-      "program": "configured-critical-weakness",
-      "effect": "critical-weakness",
-      "required_origin": "selected Encounter; not yet represented by current ContributionOrigin"
-    }
-  ],
-  "published": false,
   "ready_for_native_admission": false,
   "pending": [
-    "Encounter contribution origin and numeric Enemy read contract",
     "Complete selected and dynamic critical supplier census",
     "ApplyCriticalWeakness complete Boolean supplier census",
     "Unsupported branch source exclusion",
     "Anomalous CritMultiplier More dispatch: no compatibility behavior accepted",
     "Source-store numeric ordering and positive-supplier parity"
-  ]
+  ],
+  "encounter_member": {
+    "query": "outgoing-critical-enemy-chance-add",
+    "member": {
+      "producer": {
+        "kind": "program_effect",
+        "owner": {
+          "kind": "definition",
+          "value": {
+            "kind": "encounter",
+            "value": {
+              "kind": "encounter",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000031d1"
+            }
+          }
+        },
+        "program": "configured-critical-weakness",
+        "effect": "critical-weakness",
+        "origin": {
+          "kind": "encounter"
+        }
+      },
+      "order": {
+        "source_rank": 0,
+        "program_rank": 0,
+        "effect_rank": 0,
+        "slot_ranks": []
+      }
+    }
+  },
+  "publication_scope": "partial_component"
 }

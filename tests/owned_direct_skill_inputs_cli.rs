@@ -156,14 +156,11 @@ fn exact_rows(
     .unwrap();
     let evidence =
         SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
-    let DirectSkillInputPolicy::PobManualDirectSkillV1 { skills, .. } = package
+    let DirectSkillInputPolicy::PobManualDirectSkillV2 { skills, .. } = package
         .normalization()
         .direct_skill_inputs
         .as_ref()
-        .unwrap()
-    else {
-        panic!("fixture requires Direct V1")
-    };
+        .unwrap();
     let origins = sidecar["origins"].as_array().unwrap();
     let origin = |id| {
         origins
@@ -715,9 +712,7 @@ fn compare(
 
 fn inherited_direct_policy_rebind(next: &StagedOwnedRelease) {
     let prior_policy = next.normalization().direct_skill_inputs.as_ref().unwrap();
-    let DirectSkillInputPolicy::PobManualDirectSkillV1 { skills, .. } = prior_policy else {
-        panic!("fixture requires Direct V1")
-    };
+    let DirectSkillInputPolicy::PobManualDirectSkillV2 { skills, .. } = prior_policy;
     let parameter = &skills[0].parameters[0].slot;
     let mut slot = next
         .input()
@@ -758,12 +753,9 @@ fn inherited_direct_policy_rebind(next: &StagedOwnedRelease) {
     )
     .unwrap();
     let mut expected = prior_policy.clone();
-    let DirectSkillInputPolicy::PobManualDirectSkillV1 {
+    let DirectSkillInputPolicy::PobManualDirectSkillV2 {
         definitions, roles, ..
-    } = &mut expected
-    else {
-        panic!("fixture requires Direct V1")
-    };
+    } = &mut expected;
     *definitions = revised.receipt().definitions.clone();
     *roles = *revised.roles().identity();
     assert_eq!(
@@ -773,12 +765,9 @@ fn inherited_direct_policy_rebind(next: &StagedOwnedRelease) {
     assert!(revised.input().query_sets == next.input().query_sets);
     for field in ["definitions", "roles"] {
         let mut stale = revised.input().clone();
-        let DirectSkillInputPolicy::PobManualDirectSkillV1 {
+        let DirectSkillInputPolicy::PobManualDirectSkillV2 {
             definitions, roles, ..
-        } = stale.normalization.direct_skill_inputs.as_mut().unwrap()
-        else {
-            panic!("fixture requires Direct V1")
-        };
+        } = stale.normalization.direct_skill_inputs.as_mut().unwrap();
         if field == "definitions" {
             *definitions = next.receipt().definitions.clone();
         } else {
@@ -816,16 +805,13 @@ fn direct_skill_input_publication_preserves_five_originals_and_pending_boundarie
         if field == "tree" {
             bad.tree = prior.input().tree.clone();
         } else {
-            let DirectSkillInputPolicy::PobManualDirectSkillV1 {
+            let DirectSkillInputPolicy::PobManualDirectSkillV2 {
                 definitions,
                 roles,
                 catalog,
                 source,
                 ..
-            } = bad.normalization.direct_skill_inputs.as_mut().unwrap()
-            else {
-                panic!("fixture requires Direct V1")
-            };
+            } = bad.normalization.direct_skill_inputs.as_mut().unwrap();
             match field {
                 "definitions" => *definitions = prior.receipt().definitions.clone(),
                 "roles" => *roles = *prior.roles().identity(),

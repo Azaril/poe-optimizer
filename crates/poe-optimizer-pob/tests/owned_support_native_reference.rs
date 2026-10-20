@@ -530,9 +530,11 @@ fn package(
     let rules = OwnedRulePackage::new(
         RulePackageInput {
             support_discovery: None,
-            existing_actor_rules: None,
-            contribution_queries: None,
-            effect_applications: None,
+            // Support preparation below uses no executable shared Actor rules,
+            // contribution queries or effect applications.
+            existing_actor_rules: Some(DeclaredSet::complete(vec![])),
+            contribution_queries: Some(DeclaredSet::complete(vec![])),
+            effect_applications: Some(DeclaredSet::complete(vec![])),
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: namespace(),
             release: key("test"),

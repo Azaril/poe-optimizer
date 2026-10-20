@@ -5,6 +5,8 @@ pub(in crate::owned_normalize) struct AdapterReceipts<'a> {
     pub encounters: &'a BTreeMap<SourceOccurrenceId, encounter::ProvenEncounter>,
     pub levels: &'a BTreeMap<SourceOccurrenceId, enemy_level::ProvenEnemyLevel>,
     pub inputs: &'a BTreeMap<SourceOccurrenceId, configuration_inputs::ProvenConfigurationInputs>,
+    pub usage: &'a BTreeMap<SourceOccurrenceId, usage_inputs::ProvenConfigurationUsage>,
+    pub usage_policy: Option<&'a usage_inputs::CompiledUsageInputs<'a>>,
     pub rewards: &'a BTreeMap<
         SourceOccurrenceId,
         configuration_reward_inventory::ProvenConfigurationRewards,
@@ -229,6 +231,14 @@ pub(in crate::owned_normalize) fn account(
                 && !governed
                 && let Some(origin) = receipt.origin
             {
+                // A missing usage output is not proof that the source has no
+                // usage responsibility. Shared leaves need explicit accounting.
+                if let (Some(usage), Some(selector)) =
+                    (adapters.usage_policy, receipt.selector.as_ref())
+                    && usage.declares_configuration_selector(b, selector)?
+                {
+                    continue;
+                }
                 b.charge(b.origins[origin.ordinal() as usize].links.len())?;
                 // The raw-only adapter's pre-existing authority says nothing
                 // about another adapter already consuming this same leaf.
@@ -250,6 +260,12 @@ pub(in crate::owned_normalize) fn account(
         let Some(policy) = policy else {
             continue;
         };
+        receipts.extend(usage_inputs::checked_configuration_receipts(
+            b,
+            scope,
+            scenario,
+            adapters.usage.get(&scope),
+        )?);
         receipts.extend(configuration_reward_inventory::checked_receipts(
             b,
             scope,
@@ -323,6 +339,12 @@ pub(in crate::owned_normalize) fn account(
                                 }
                                 if !targets.contains(&receipt.target) {
                                     targets.push(receipt.target.clone());
+                                }
+                                b.charge(receipt.additional_targets.len())?;
+                                for target in &receipt.additional_targets {
+                                    if !targets.contains(target) {
+                                        targets.push(target.clone());
+                                    }
                                 }
                                 if let Some(reason) = &receipt.source_only {
                                     if source_only.as_ref().is_some_and(|old| old != reason) {

@@ -22,6 +22,7 @@ fn authored(id_value: u64, count: i64) -> UsagePolicySelection {
 fn scenario(usage: Vec<UsagePolicySelection>) -> ScenarioSpec {
     ScenarioSpec::new(
         ScenarioInput {
+            usage_intents: vec![],
             game_version: namespace(),
             enemy: EnemySpec {
                 encounter: def("encounter"),
@@ -132,8 +133,16 @@ fn preferences_follow_selected_uses_not_shared_physical_gem() {
         limits(),
     )
     .unwrap();
-    assert_eq!(first.scenario().input().usage, vec![authored(60, 2)]);
-    assert_eq!(second.scenario().input().usage, vec![authored(61, 7)]);
+    assert_eq!(
+        first.build().input().usage_preferences,
+        vec![authored(60, 2)]
+    );
+    assert_eq!(
+        second.build().input().usage_preferences,
+        vec![authored(61, 7)]
+    );
+    assert!(first.scenario().input().usage.is_empty());
+    assert!(second.scenario().input().usage.is_empty());
     assert_eq!(first.build(), &original);
     assert_eq!(
         first.build().input().gems.iter().find(|g| g.id == id(20)),
@@ -144,7 +153,7 @@ fn preferences_follow_selected_uses_not_shared_physical_gem() {
 }
 
 #[test]
-fn override_replaces_whole_record_and_only_the_exact_key() {
+fn exact_overrides_and_whole_preference_records_remain_separate_until_preparation() {
     let mut preference = authored(60, 2);
     preference.parameters.push(ParameterAssignment {
         slot: DeclaredSlot {
@@ -159,14 +168,27 @@ fn override_replaces_whole_record_and_only_the_exact_key() {
     let original = with_preferences(vec![preference, authored(61, 4), other_policy.clone()]);
     let result = request(original.clone(), vec![authored(60, 8)]);
     assert!(result.scenario().input().usage.contains(&authored(60, 8)));
-    assert!(result.scenario().input().usage.contains(&authored(61, 4)));
-    assert!(result.scenario().input().usage.contains(&other_policy));
-    assert_eq!(result.scenario().input().usage.len(), 3);
+    assert!(
+        result
+            .build()
+            .input()
+            .usage_preferences
+            .contains(&authored(61, 4))
+    );
+    assert!(
+        result
+            .build()
+            .input()
+            .usage_preferences
+            .contains(&other_policy)
+    );
+    assert_eq!(result.scenario().input().usage.len(), 1);
+    assert_eq!(result.build().input().usage_preferences.len(), 3);
     assert_eq!(
         request(original, vec![])
-            .scenario()
+            .build()
             .input()
-            .usage
+            .usage_preferences
             .iter()
             .find(|v| v.policy == def("usage") && v.target == authored(60, 1).target)
             .unwrap()
@@ -202,9 +224,18 @@ fn all_skill_supplied_symbolic_topologies_are_retained_without_resolution() {
         usage(action(support_root, actor(skill_root)), 7),
     ];
     let result = request(with_preferences(preferences.clone()), vec![]);
-    assert_eq!(result.scenario().input().usage.len(), preferences.len());
+    assert_eq!(
+        result.build().input().usage_preferences.len(),
+        preferences.len()
+    );
     for preference in preferences {
-        assert!(result.scenario().input().usage.contains(&preference));
+        assert!(
+            result
+                .build()
+                .input()
+                .usage_preferences
+                .contains(&preference)
+        );
     }
     // Definition binding, not composition, establishes that those slots really exist.
     assert_eq!(result.build().input().skills.len(), 2);
@@ -249,6 +280,7 @@ fn both_layers_reject_duplicate_keys_and_structurally_invalid_preferences_before
     assert!(
         ScenarioSpec::new(
             ScenarioInput {
+                usage_intents: vec![],
                 usage: vec![duplicate.clone(), duplicate.clone()],
                 ..scenario(vec![]).into_input()
             },
@@ -266,7 +298,7 @@ fn both_layers_reject_duplicate_keys_and_structurally_invalid_preferences_before
 }
 
 #[test]
-fn both_raw_parameter_inventories_are_bounded_before_whole_record_replacement() {
+fn both_raw_parameter_inventories_share_one_request_budget_without_replacement() {
     let mut preference = authored(60, 1);
     for index in 0..300 {
         preference.parameters.push(ParameterAssignment {
@@ -279,7 +311,7 @@ fn both_raw_parameter_inventories_are_bounded_before_whole_record_replacement() 
     }
     let project = BuildProject::new(with_preferences(vec![preference.clone()]), limits()).unwrap();
     let explicit = scenario(vec![preference]);
-    let tight = (1..1_000)
+    let sufficient = (1..1_000)
         .find_map(|max_entries| {
             let candidate = OwnedInputLimits {
                 max_entries,
@@ -290,8 +322,31 @@ fn both_raw_parameter_inventories_are_bounded_before_whole_record_replacement() 
             Some(candidate)
         })
         .expect("both independently authored layers fit a bounded request");
-    // The final result would contain just one parameter record. Both raw records
-    // still count against the pre-composition allowance before that replacement.
+    let tight = OwnedInputLimits {
+        max_entries: sufficient.max_entries - 1,
+        ..sufficient
+    };
+    let build = compose(&project, &selection(), None, tight).unwrap();
+    ScenarioSpec::new(explicit.clone().into_input(), tight).unwrap();
+    // Each complete layer fits this limit on its own. Keeping both layers must
+    // consume one shared allowance, even when their policy and target coincide.
+    OwnedEvaluationRequest::new(build.clone(), scenario(vec![]), queries(), tight).unwrap();
+    let mut without_preferences = build.clone().into_input();
+    without_preferences.usage_preferences.clear();
+    OwnedEvaluationRequest::new(
+        BuildSpec::new(without_preferences, tight).unwrap(),
+        explicit.clone(),
+        queries(),
+        tight,
+    )
+    .unwrap();
+    assert!(matches!(
+        OwnedEvaluationRequest::new(build, explicit.clone(), queries(), tight),
+        Err(StructuralError {
+            kind: StructuralErrorKind::LimitExceeded,
+            ..
+        })
+    ));
     assert!(matches!(
         compose_request(
             &project,
@@ -306,7 +361,32 @@ fn both_raw_parameter_inventories_are_bounded_before_whole_record_replacement() 
             ..
         }))
     ));
-    assert!(compose_request(&project, &selection(), None, explicit, queries(), limits()).is_ok());
+    let expected_preferences = compose(&project, &selection(), None, sufficient)
+        .unwrap()
+        .into_input()
+        .usage_preferences;
+    let expected_overrides = explicit.input().usage.clone();
+    let composed = compose_request(
+        &project,
+        &selection(),
+        None,
+        explicit,
+        queries(),
+        sufficient,
+    )
+    .unwrap();
+    assert_eq!(
+        composed.build().input().usage_preferences,
+        expected_preferences
+    );
+    assert_eq!(composed.scenario().input().usage, expected_overrides);
+    assert_eq!(
+        composed.build().input().usage_preferences[0]
+            .parameters
+            .len(),
+        301
+    );
+    assert_eq!(composed.scenario().input().usage[0].parameters.len(), 301);
 }
 
 #[test]
@@ -386,8 +466,14 @@ fn historical_scenario_usage_is_preserved_with_or_without_preset_preferences() {
             assert_eq!(composed.build(), legacy.build());
             assert_eq!(composed.queries(), legacy.queries());
             if has_preferences {
-                assert!(composed.scenario().input().usage.contains(&authored(60, 2)));
-                assert_eq!(composed.scenario().input().usage.len(), 2);
+                assert!(
+                    composed
+                        .build()
+                        .input()
+                        .usage_preferences
+                        .contains(&authored(60, 2))
+                );
+                assert_eq!(composed.scenario().input().usage.len(), 1);
             } else {
                 assert_eq!(composed, legacy);
             }
@@ -429,7 +515,7 @@ fn historical_scenario_usage_is_preserved_with_or_without_preset_preferences() {
 }
 
 #[test]
-fn composition_revalidates_tighter_limits_before_override_compaction() {
+fn composition_revalidates_tighter_limits_on_retained_preference_records() {
     let mut raw = with_preferences(vec![authored(60, 1)]);
     let preference = &mut raw
         .skill_presets

@@ -1,0 +1,909 @@
+{
+  "kind": "reviewed-gem-potential-skill-membership",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "catalog": {
+    "path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+    "bytes": 2247063,
+    "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e"
+  },
+  "sources": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Classes_SkillsTab.lua.gz",
+      "archive_bytes": 14566,
+      "archive_sha256": "10cfe57bc6dd059e2264596551a03a925662b832b99b71473a233c1c864c3249"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "bytes": 513395,
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Data_Gems.lua.gz",
+      "archive_bytes": 47092,
+      "archive_sha256": "d082011371b93f4748dd05f961418559a60b54806a49b93fa0eb2d613e95bbf8"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d",
+      "archive": "data/owned/poe2/3887ae68/self-flat-minion-store/act_int.lua.gz",
+      "archive_bytes": 141617,
+      "archive_sha256": "076f9caf8f271b4faf456497f254b69d6cab0c7864f15b9f63dd3ba475df39ac"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "bytes": 358587,
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Data_Skills_sup_int.lua.gz",
+      "archive_bytes": 42898,
+      "archive_sha256": "5bfaa0261d86313be125d073c34236e815ee02d85a83407436d2613480006e4e"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_CalcActiveSkill.lua.gz",
+      "archive_bytes": 10868,
+      "archive_sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_CalcSetup.lua.gz",
+      "archive_bytes": 21399,
+      "archive_sha256": "cdefa2fbbb4a15befdc728fd549902f4032c1cdf0b52c3070dc356f0a45e718f"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_Data.lua.gz",
+      "archive_bytes": 10604,
+      "archive_sha256": "73c2915afcc9bb90d972cd99d6aa690812ca8c2a1edd31eda7b67bd47a322af8"
+    }
+  ],
+  "boundaries": [
+    {
+      "path": "src/Modules/Data.lua",
+      "first_line": 56,
+      "last_line": 98,
+      "sha256": "cf26d4b77d158d3e491ccfc9b5c492f7b8e798e1ac7bbccfc24152f45808646c",
+      "lf_whole_file_sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "first_line": 910,
+      "last_line": 966,
+      "sha256": "86dc27a5772c5b9a26bea1c76a1776dd1cd8bdfa55ef65050d020afe84086ddd",
+      "lf_whole_file_sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "first_line": 979,
+      "last_line": 1068,
+      "sha256": "73c0d483c9845e498c52e2a1027bc5f116ae69d03e088d5e4493a9d4f5c50502",
+      "lf_whole_file_sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "first_line": 1242,
+      "last_line": 1322,
+      "sha256": "8737e8311f6cbef4b9bc10525e28831d00f52e602494a7f2bdfbccee68a33f32",
+      "lf_whole_file_sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 630,
+      "last_line": 666,
+      "sha256": "a219c7630202290c1e85f809799e7cc6f75a94ac760d244405db908cf85d3a4d",
+      "lf_whole_file_sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1987,
+      "last_line": 2107,
+      "sha256": "d31f3b136785d8b284f55b1f1e70f8166ae0d6f566c7e7b79f11ec4ec09e65dc",
+      "lf_whole_file_sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 144,
+      "last_line": 237,
+      "sha256": "c4011518900a4c198814cea5d7697fd2d490fbd5811d5b2b075808f81bd4fdd1",
+      "lf_whole_file_sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 895,
+      "last_line": 955,
+      "sha256": "63b51d94d1b70b44d78ceceaa843fcf54c1017ad596204a1df9c0fcc303bcd66",
+      "lf_whole_file_sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 1116,
+      "last_line": 1184,
+      "sha256": "f37b06a29338459f2efcdd745733b3ab25394d287d45fc92af61fb20550ff5ca",
+      "lf_whole_file_sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    }
+  ],
+  "families": [
+    {
+      "gem": "def.00000000000006c5",
+      "role": "support_assignment",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemChillingIceSupport",
+        "game_id": "Metadata/Items/Gems/SupportGemFrostNexus",
+        "variant_id": "ChillingIceSupport",
+        "name": "Frost Nexus",
+        "name_spec": null,
+        "base_type_name": null,
+        "primary_effect_id": "SupportChillingIcePlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "SupportChillingIcePlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 227
+      },
+      "skill_identity": {
+        "id": "SupportChillingIcePlayer",
+        "name": "Frost Nexus",
+        "base_type_name": null,
+        "support": true,
+        "from_tree": null,
+        "winning_declaration": 1340
+      },
+      "gem_declaration": {
+        "index": 227,
+        "key": "Metadata/Items/Gems/SkillGemChillingIceSupport",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 4797,
+          "end_line": 4815,
+          "sha256": "fe8ad61bb27b7767fd87051b44296ada6a4173f6a3d4f6db96c56e9b0f1381c4"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SupportGemFrostNexus",
+          "variant_id": "ChillingIceSupport",
+          "name": "Frost Nexus",
+          "name_spec": null,
+          "base_type_name": null,
+          "primary_effect_id": "SupportChillingIcePlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 1340,
+        "id": "SupportChillingIcePlayer",
+        "source": {
+          "path": "src/Data/Skills/sup_int.lua",
+          "line": 5118,
+          "end_line": 5148,
+          "sha256": "108a16f755907641b1d49effc4b23f6ba0ddf0475355da79313625cc6d1c751a"
+        },
+        "identity": {
+          "name": "Frost Nexus",
+          "base_type_name": null,
+          "support": true,
+          "from_tree": null
+        }
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gems/SupportGemFrostNexus"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "ChillingIceSupport"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000006c5"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "skill_mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "skill",
+            "value": {
+              "effect_id": {
+                "kind": "text",
+                "value": "SupportChillingIcePlayer"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "skill",
+                "value": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000039e"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "gem_fields": [
+        "name",
+        "gameId",
+        "variantId",
+        "grantedEffectId",
+        "tags",
+        "gemType",
+        "gemFamily",
+        "tagString",
+        "reqStr",
+        "reqDex",
+        "reqInt",
+        "Tier",
+        "naturalMaxLevel"
+      ],
+      "skill_fields": [
+        "name",
+        "description",
+        "color",
+        "support",
+        "requireSkillTypes",
+        "addSkillTypes",
+        "excludeSkillTypes",
+        "gemFamily",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_labels": [
+        "Frost Nexus"
+      ]
+    },
+    {
+      "gem": "def.0000000000000797",
+      "role": "skill_use",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemFrostBomb",
+        "game_id": "Metadata/Items/Gems/SkillGemFrostBomb",
+        "variant_id": "FrostBomb",
+        "name": "Frost Bomb",
+        "name_spec": null,
+        "base_type_name": "Frost Bomb",
+        "primary_effect_id": "FrostBombPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "FrostBombPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 103
+      },
+      "skill_identity": {
+        "id": "FrostBombPlayer",
+        "name": "Frost Bomb",
+        "base_type_name": "Frost Bomb",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 267
+      },
+      "gem_declaration": {
+        "index": 103,
+        "key": "Metadata/Items/Gems/SkillGemFrostBomb",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 2146,
+          "end_line": 2169,
+          "sha256": "c158f38b8e68d8bb2f05dd9f6ef7dbbda58d5b34599d1661cc660399bf234ddf"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemFrostBomb",
+          "variant_id": "FrostBomb",
+          "name": "Frost Bomb",
+          "name_spec": null,
+          "base_type_name": "Frost Bomb",
+          "primary_effect_id": "FrostBombPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 267,
+        "id": "FrostBombPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 9025,
+          "end_line": 9165,
+          "sha256": "ccf2e75e3d04044640da981de3b6abfc4c455cf6df1de52eb6b86ca43ad31092"
+        },
+        "identity": {
+          "name": "Frost Bomb",
+          "base_type_name": "Frost Bomb",
+          "support": null,
+          "from_tree": null
+        }
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gems/SkillGemFrostBomb"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "FrostBomb"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000797"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "skill_mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "skill",
+            "value": {
+              "effect_id": {
+                "kind": "text",
+                "value": "FrostBombPlayer"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "skill",
+                "value": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000149"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "gem_fields": [
+        "name",
+        "baseTypeName",
+        "gameId",
+        "variantId",
+        "grantedEffectId",
+        "tags",
+        "gemType",
+        "tagString",
+        "reqStr",
+        "reqDex",
+        "reqInt",
+        "Tier",
+        "naturalMaxLevel"
+      ],
+      "skill_fields": [
+        "name",
+        "baseTypeName",
+        "icon",
+        "color",
+        "description",
+        "skillTypes",
+        "castTime",
+        "qualityStats",
+        "altQualityStats",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_labels": [
+        "Frost Bomb"
+      ]
+    },
+    {
+      "gem": "def.00000000000007dd",
+      "role": "skill_use",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemIceNova",
+        "game_id": "Metadata/Items/Gems/SkillGemIceNova",
+        "variant_id": "IceNova",
+        "name": "Ice Nova",
+        "name_spec": null,
+        "base_type_name": "Ice Nova",
+        "primary_effect_id": "IceNovaPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [
+          {
+            "index": 1,
+            "id": "IceNovaPlayerOnFrostbolt"
+          },
+          {
+            "index": 2,
+            "id": "IceNovaColdInfusedPlayer"
+          }
+        ],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "IceNovaPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 1
+      },
+      "skill_identity": {
+        "id": "IceNovaPlayer",
+        "name": "Ice Nova",
+        "base_type_name": "Ice Nova",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 289
+      },
+      "gem_declaration": {
+        "index": 1,
+        "key": "Metadata/Items/Gems/SkillGemIceNova",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 5,
+          "end_line": 30,
+          "sha256": "2a11db22a9a551abdf52358045c89ee97243b69e24cc815fc0f3fd5ceff668f8"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemIceNova",
+          "variant_id": "IceNova",
+          "name": "Ice Nova",
+          "name_spec": null,
+          "base_type_name": "Ice Nova",
+          "primary_effect_id": "IceNovaPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [
+            {
+              "index": 1,
+              "id": "IceNovaPlayerOnFrostbolt"
+            },
+            {
+              "index": 2,
+              "id": "IceNovaColdInfusedPlayer"
+            }
+          ],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 289,
+        "id": "IceNovaPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 12801,
+          "end_line": 13020,
+          "sha256": "024888550af2f5827d379730a715b6e0277677c88262d3fe6399267ffeaf8e68"
+        },
+        "identity": {
+          "name": "Ice Nova",
+          "base_type_name": "Ice Nova",
+          "support": null,
+          "from_tree": null
+        }
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gems/SkillGemIceNova"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "IceNova"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000007dd"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "skill_mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "skill",
+            "value": {
+              "effect_id": {
+                "kind": "text",
+                "value": "IceNovaPlayer"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "skill",
+                "value": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000001df"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "gem_fields": [
+        "name",
+        "baseTypeName",
+        "gameId",
+        "variantId",
+        "grantedEffectId",
+        "additionalStatSet1",
+        "additionalStatSet2",
+        "tags",
+        "gemType",
+        "tagString",
+        "reqStr",
+        "reqDex",
+        "reqInt",
+        "Tier",
+        "naturalMaxLevel"
+      ],
+      "skill_fields": [
+        "name",
+        "baseTypeName",
+        "icon",
+        "color",
+        "description",
+        "skillTypes",
+        "castTime",
+        "qualityStats",
+        "altQualityStats",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_labels": [
+        "Ice Nova",
+        "Cold-Infused"
+      ]
+    },
+    {
+      "gem": "def.000000000000086b",
+      "role": "skill_use",
+      "gem_identity": {
+        "key": "Metadata/Items/Gems/SkillGemPainOffering",
+        "game_id": "Metadata/Items/Gems/SkillGemPainOffering",
+        "variant_id": "PainOffering",
+        "name": "Pain Offering",
+        "name_spec": null,
+        "base_type_name": "Pain Offering",
+        "primary_effect_id": "PainOfferingPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "PainOfferingPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 269
+      },
+      "skill_identity": {
+        "id": "PainOfferingPlayer",
+        "name": "Pain Offering",
+        "base_type_name": "Pain Offering",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 309
+      },
+      "gem_declaration": {
+        "index": 269,
+        "key": "Metadata/Items/Gems/SkillGemPainOffering",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 5740,
+          "end_line": 5761,
+          "sha256": "c6deaad2420a5964f6e4a1c90f0ada9001f869a18d4aa05a9934481299280c8e"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemPainOffering",
+          "variant_id": "PainOffering",
+          "name": "Pain Offering",
+          "name_spec": null,
+          "base_type_name": "Pain Offering",
+          "primary_effect_id": "PainOfferingPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill_declaration": {
+        "index": 309,
+        "id": "PainOfferingPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 15720,
+          "end_line": 15856,
+          "sha256": "f8c1073dc188cc1eb5d847a2c6666333e037036a8c80d07916a18e252e678989"
+        },
+        "identity": {
+          "name": "Pain Offering",
+          "base_type_name": "Pain Offering",
+          "support": null,
+          "from_tree": null
+        }
+      },
+      "mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "gem",
+            "value": {
+              "game_id": {
+                "kind": "text",
+                "value": "Metadata/Items/Gems/SkillGemPainOffering"
+              },
+              "variant_id": {
+                "kind": "text",
+                "value": "PainOffering"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "gem",
+                "value": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000086b"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "skill_mapping": {
+        "source": {
+          "kind": "definition",
+          "value": {
+            "kind": "skill",
+            "value": {
+              "effect_id": {
+                "kind": "text",
+                "value": "PainOfferingPlayer"
+              }
+            }
+          }
+        },
+        "outcome": {
+          "kind": "mapped",
+          "value": {
+            "target": {
+              "kind": "definition",
+              "value": {
+                "kind": "skill",
+                "value": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000002a2"
+                }
+              }
+            },
+            "basis": {
+              "kind": "exact"
+            }
+          }
+        }
+      },
+      "gem_fields": [
+        "name",
+        "baseTypeName",
+        "gameId",
+        "variantId",
+        "grantedEffectId",
+        "tags",
+        "gemType",
+        "tagString",
+        "reqStr",
+        "reqDex",
+        "reqInt",
+        "Tier",
+        "naturalMaxLevel"
+      ],
+      "skill_fields": [
+        "name",
+        "baseTypeName",
+        "icon",
+        "color",
+        "description",
+        "skillTypes",
+        "minionSkillTypes",
+        "castTime",
+        "qualityStats",
+        "altQualityStats",
+        "levels",
+        "statSets"
+      ],
+      "stat_set_labels": [
+        "Pain Offering"
+      ]
+    }
+  ],
+  "unresolved_control": {
+    "gem": {
+      "key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "game_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "variant_id": "SkeletalSniper",
+      "name": "Skeletal Sniper",
+      "name_spec": null,
+      "base_type_name": "Skeletal Sniper Minion",
+      "primary_effect_id": "SummonSkeletalSnipersPlayer",
+      "declared_additional_effects": [
+        {
+          "index": 1,
+          "id": "CommandSkeletalSniperPlayer"
+        }
+      ],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [
+        {
+          "index": 1,
+          "id": "CommandSkeletalSniperPlayer"
+        }
+      ],
+      "additional_effects": [],
+      "effect_list": [
+        "SummonSkeletalSnipersPlayer"
+      ],
+      "display_order": null,
+      "winning_declaration": 116
+    },
+    "missing_references": [
+      {
+        "gem_key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "kind": "declared_additional_effect",
+        "index": 1,
+        "effect_id": "CommandSkeletalSniperPlayer"
+      },
+      {
+        "gem_key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "kind": "constructed_additional_effect",
+        "index": 1,
+        "effect_id": "CommandSkeletalSniperPlayer"
+      }
+    ]
+  },
+  "scope": {
+    "potential_skill_membership_only": true,
+    "activation_certified": false,
+    "direct_declarations_certified": false,
+    "descendant_topology_certified": false,
+    "null_stat_mappings_classified": false,
+    "numerical_coverage_certified": false,
+    "scenario_census_complete": false
+  }
+}

@@ -578,13 +578,40 @@ item/tree providers from other selected axes with explicit applicability:
 proven nonselection can leave intent dormant, but stale or ambiguous sources
 remain obligations. This never grants or activates the target, and never
 retargets a preference to another source of the same skill. Validate the stored
-policy/parameters even when dormant or overridden. A shared checked composition
-operation applies the selected scenario's
-explicit whole-record overrides at exact `(policy, target)` keys and emits one
-immutable evaluation request. Physical Gem properties remain shared separately.
+policy/parameters even when dormant or overridden. Shared checked composition
+retains selected preferences on the Build and explicit overrides on the Scenario.
+Definition-aware preparation resolves these layers at exact `(policy, target)`
+keys. Physical Gem properties remain shared separately.
 Typed policy definitions and native programs supply the meanings; neither import
 nor UI code invents counts, activation, actor populations or numerical defaults.
 See the accepted [usage composition contract](owned-skill-usage-proposal.md).
+
+**Accepted October 19:** independent Scenario settings may retain
+[typed usage intent](owned-scenario-usage-intent-proposal.md) that resolves to all
+eligible exact occurrences during definition-aware composition. Complete discovery
+with no eligible source leaves intent dormant; incomplete discovery remains
+unavailable. Preset preferences, resolved Scenario intent and exact Scenario
+overrides apply in that order, replacing whole policy records. This neither
+creates occurrences nor enables disabled sources. Applicable policies, selected
+sources and resolved provenance participate in plan/cache identity. The current
+implementation has required Build preference and Scenario intent fields,
+and one required nullable applicability declaration on each UsagePolicy. Supplied
+recipients must match exact declared Grant-to-SkillGrant relations, not just a
+Skill definition. A known typed policy may retain intent while its supplied Skill
+or applicability remains incomplete. Positive source relationships do not grant
+activation or execution authority, and incomplete discovery cannot establish
+dormancy. Core/Data, Engine, configuration projection and actual raw-stage
+publication checks pass; complete imported inventories and mechanics remain pending.
+
+Imported progression alternatives use existing build Choice rewards with typed
+parameters, as accepted in the [progression decision](owned-progression-input-proposal.md)
+on October 19. This preserves independent Character and configuration axes.
+Character/Choice composition must reject duplicate authority for one progression
+fact rather than sum counters; missing imported counts have no invented default.
+The numeric import adapter and actual campaign rules are implemented. Native
+requirements assess exact authority after composition; final candidate admission
+must consume that evidence alongside metric and coverage gates. The report alone
+does not certify complete gameplay legality.
 
 The owner accepted [preset-specific generated raw inputs](owned-generated-skill-inputs-proposal.md)
 on 2026-10-05. Exact provider-backed Skill targets reuse the shared typed slots,
@@ -736,6 +763,36 @@ accounts for saved controls, source defaults and independent owned destinations
 without replicating a UI. Both retain their separate implementation and coverage
 gates; neither introduces a new native source-language contract.
 
+Complete preset-usage admission is a separate Import proof over the entire saved
+preset, including support rows, archived sources and previously converted rows.
+It must bind reviewed field destinations to the exact outputs of successful
+adapters in the same normalization attempt. A field with several consumers
+requires every destination; a transported value or an allowed source spelling
+alone is insufficient. Check present fields, declared absence behavior, group
+fields and reference descendants. Unknown fields, ambiguous correspondence and
+deferred responsibilities keep the inventory Pending. Validate and budget the
+whole retirement plan before removing any obligation links, preserving all
+unrelated obligations and known preferences. This reuses the existing preset
+inventory and native usage model; no source-field interpreter enters evaluation.
+
+Source override semantics and completeness are independent. A valid group-count
+override may intentionally suppress a malformed occurrence count during value
+projection. The inventory proof must still account for the losing source lane
+and any other consumer; it cannot infer completeness from the winning value.
+Likewise, reference action selectors do not imply gameplay activation or a
+rotation, and cold or unqueried modifier metadata cannot prove that a global
+effect switch has no possible consumer.
+
+Support and generated-input conversions feed that same preset inventory through
+private, attempt-local proofs. A Complete parameter list alone is insufficient.
+Support proofs must still match the actual Gem, assignment, authored target and
+preset membership. Generated proofs must still match the exact input/usage
+bindings and the supplying allocation or equipment/item records and source
+links. Archived syntax supplies no live-output proof. Only fields whose meaning
+was proved by the producing adapter may be accounted for; a syntactically valid
+switch or reference selector cannot inherit intrinsic-input authority. These
+checks belong to saved-build import, never to each search-candidate evaluation.
+
 Configuration accounting belongs to Import. Existing reward, encounter,
 enemy-level and scalar-input adapters produce private checked receipts; one
 accounting owner verifies exact source scope, destination and emitted output.
@@ -819,13 +876,14 @@ an implemented component boundary; it does not adopt partial-build evaluation.
 
 Shared actor mechanics use an Actor definition and an injected
 [`existing_actor_rules` applicability inventory](owned-existing-actor-rule-ownership-proposal.md).
-The current contract binds each declared owner once to the actual Player; it
-allocates no actor or build-local ID and creates no supply path. The owner runs
+The current contract binds each declared owner once to each explicitly eligible
+Player, scenario Enemy or supplied Actor occurrence; it allocates no actor or
+build-local ID and creates no supply path. The owner runs
 ordinary Actor-context contribution or derivation programs in the same dependency
 graph as provider rules and final-stat receivers. Stat receivers retain their
-Derive-only contract. Applicability currently admits only Player and requires
-Complete-empty declarations; other actor targets need separate activation,
-ancestry and readiness proof before adoption.
+Derive-only contract. Applicability requires explicit role authority and
+Complete-empty declarations; shared rules cannot acquire a supplying path or
+recipient permission merely by using the same local calculation.
 
 **Accepted structural migration, October 15:** common properties and mechanics remain
 generic across Player, scenario opponents and supplied units wherever their
@@ -841,7 +899,8 @@ Contexts without an Actor represent absence, and no Enemy context borrows Player
 identity. The migration replaces the old format in place, with no aliases or
 compatibility evaluator. Existing Player final receivers stay Player-only;
 unsupported Enemy Actions, support reception and usage fail explicitly. These
-are accepted end-state requirements; the implementation plan tracks the cutover.
+requirements are implemented by the current Actor cutover; the implementation
+plan tracks individual mechanic adoption and remaining coverage.
 
 This is one current-format contract, with no compatibility execution branch.
 An omitted inventory represents a deliberately empty applicability domain;
@@ -954,6 +1013,15 @@ Do not ship original XML/Lua just to deserialize it again at startup. Runtime st
 be compact pre-generated bytes; keep a readable authoring/review representation. Database
 or autocomplete indexing remains optional tooling over this model, outside evaluation.
 
+Keep upstream application revision, tree generation, game/client patch and raw
+content snapshot identity separate. A PoB version, tree directory or retrieval
+date does not establish the game version of its exports. Record unknown source
+version coordinates explicitly. Supplemental client data needs its own raw
+hashes, acquisition/version evidence and reconciliation against retained facts;
+do not label it the original source snapshot merely because node names agree.
+Missing exported buff payloads or Command definitions remain coverage gaps until
+their mechanics and ownership are established.
+
 Source-selection rules require an authenticated potential-supplier domain as
 well as observed reference results. Use an existing fixed choice when the owned
 declarations and reviewed source prove only one candidate is possible. An orphan
@@ -980,6 +1048,20 @@ metrics or unsupported mechanics cannot win by becoming zero. Feasibility and ag
 with PoB are distinct. Invalid-but-computable builds retain their measurements and separate
 infeasibility diagnostics; for example, a negative unreserved resource is not clamped or
 turned into an unavailable result solely because it violates a constraint.
+
+Every applicable selected `Requirement` effect participates in that feasibility
+result, independently of which metric is requested. A known false result marks
+the candidate infeasible while preserving independently computable measurements;
+an unavailable requirement or incomplete requirement inventory prevents a claim
+of complete feasibility. Retain exact source/recipient diagnostics. Generic effect
+execution reporting a Boolean is an intermediate result, not this final admission
+decision. This applies equally to progression authority, equipment legality and
+other injected rules; no mechanic-specific validator may bypass it. Assessment
+accompanies measurements from the same execution attempt, using the same graph
+and worker scratch. Coverage and individual outcomes are separate so known
+violations survive incomplete validation. The future owned search adapter must
+consume this assessment alongside the other admission gates; a diagnostic effect
+report or a successful metric calculation alone is insufficient.
 
 Candidate edits operate on semantic BuildSpec values. Reuse immutable compiled rules and
 structural plans where valid; give each Rayon worker its own scratch/state. Incremental
@@ -1263,6 +1345,18 @@ Player Commands to minion actions. Source-language missing-table behavior is
 not a native game rule. Primary and all additional
 effects need exact identity and classification evidence, independently of display
 order, current activation and numerical outcomes.
+
+Potential ability membership also differs from execution authority. A Player
+Command and a minion's resulting Action retain distinct occurrences, actors,
+costs and timing even when the source UI exposes only the resulting ability.
+The [Djinn investigation](djinn-command-investigation.md) documents a deterministic
+source limitation and the remaining design question. Any future dispatch contract
+must resolve exact recipients and participation independently of requested
+metrics, and reconcile event/rate dependencies with the accepted resource
+obligations. Existing payload links and contribution queries do not implicitly
+provide that authority. A new public execution relationship requires a reviewed
+proposal; the investigation does not introduce one.
+
 Preserve typed reference categories during offline proof: additional stat-set
 metadata is not an additional Skill or support origin. Reuse the existing typed
 catalog and reconcile every observed field; neither blanket effect lookup nor
@@ -1323,6 +1417,15 @@ with an explicit documented removal of an experimental feature. Keep independent
 and full-build validation evidence. Update this ADR only when a concrete counterexample
 requires changing the domain contract; the implementation log records progress instead.
 
+One concrete counterexample is awaiting review in the
+[support-generated Skill proposal](owned-support-generated-skills-proposal.md):
+potential source-owned children are representable, but support preparation does
+not authorize their grants or ordinary child execution. The proposal separates
+exact physical-source identity, Actor binding, preparation and execution
+dependencies without inferring gameplay authority from PoB construction or the
+first receiving application. It remains proposed; current execution permissions
+are unchanged.
+
 ## Import breadth obligations
 
 Import evidence is separate from semantic membership. The first all-five normalizer exposes
@@ -1332,6 +1435,34 @@ without fabricating concrete actor targets. These belong in project composition 
 parity adapter respectively, never PoB UI replay inside native evaluation. See the
 [owned normalization contract](owned-normalization.md) for the delivered conservative seam
 and remaining integration gates.
+
+Supported external builds must follow the ordinary import, evaluation and optimization
+path unchanged, without requiring users to repair exports or simplify their builds.
+The [breadth corpus contract](breadth-validation.md#external-corpus-expansion) adds
+curated PoB exports from sources such as poe.ninja, with immutable raw bytes, source
+references, retrieval/export metadata, game/patch/league identity and content hashes.
+Acquisition and decoding remain Import/tooling responsibilities, separate from native
+evaluation. The proposed site's export mechanism is not yet verified; this is a corpus
+requirement, not an implemented integration or bulk-collection commitment.
+
+Keep decoded and normalized artifacts separate from their raw originals. Account for
+all relevant source fields, including inactive alternatives, and retain unresolved
+meaning with precise diagnostics and provenance. Unknown or unsupported input must not
+be discarded, replaced with fixture defaults or repaired silently. A corpus failure
+becomes a reproducible regression/backlog item; it does not authorize case-specific
+production branches or a reduced build presented as the original.
+
+Validation distinguishes decode, import fidelity, semantic admission, deterministic
+evaluation, stable numerical parity, legal configurable optimization and supported
+export/reimport. Passing one gate does not imply the others. Optimization must retain
+user locks and constraints and independently validate finalists; incomplete game-legality
+coverage cannot become a claim of legal optimization. Roundtrips preserve owned meaning,
+not incidental PoB UI state. The linked breadth document defines the stage evidence.
+
+Independent holdouts must cover mechanic intersections and ordinary, non-meta and
+progression builds as well as popular endgame builds. The existing five originals
+remain development cases. Expanding that evidence preserves closest-build-first
+delivery and the first complete build's optimizer integration point.
 
 Source categories are not domain types. Offline conversion may emit zero, one or several
 owned declarations from one upstream definition. Physical gems, provider-granted actions

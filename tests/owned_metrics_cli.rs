@@ -139,6 +139,10 @@ fn ordered_cli_results_equal_native_api_and_changed_input_without_legacy_files()
             .unwrap()
         );
         assert_eq!(report["document_kind"], "owned_metric_report");
+        assert_eq!(
+            report["verification"]["requirement_scope"],
+            "injected_requirements"
+        );
         assert_eq!(report["verification"]["game_legality"], "not_checked");
         assert_eq!(
             report["verification"]["whole_build_parity"],
@@ -153,6 +157,189 @@ fn ordered_cli_results_equal_native_api_and_changed_input_without_legacy_files()
         );
         assert_eq!(fs::read(dir.path().join("report.json")).unwrap(), prior);
     }
+}
+
+fn output_owned_measurements(mut f: Fixture) -> Fixture {
+    // Keep the same measurements while isolating Actor requirements from this
+    // fixture's V14 rule for unqueried Skill-owned Action contexts.
+    let owner = subject(def::<poe_optimizer_core::owned_definitions::SkillDefinition>("skill"));
+    let programs = &mut f.owner_mut(&owner).programs.members;
+    let index = programs
+        .iter()
+        .position(|program| program.id == key("quantity"))
+        .unwrap();
+    let quantity = programs.remove(index);
+    f.owner_mut(&SchemaSubject::Slot(SlotAddress::ActionOutput(output())))
+        .programs
+        .members
+        .push(quantity);
+    f
+}
+
+fn with_requirements() -> Fixture {
+    let mut f = output_owned_measurements(fixture());
+    f.schema
+        .definitions
+        .push(DefinitionDescriptor::Stat(DefinitionEntry {
+            id: def("unknown-requirement"),
+            schema: SchemaState::Known(StatSchema {
+                value: ComputedValueType::Boolean,
+                targets: vec![RuleEntityKind::Actor],
+            }),
+        }));
+    f.owner_mut(&class_owner())
+        .programs
+        .members
+        .push(RuleProgram {
+            id: key("requirements"),
+            context: RuleEntityKind::Actor,
+            reads: vec![RuleRead {
+                id: key("unknown"),
+                value_type: ComputedValueType::Boolean,
+                source: RuleReadSource::Stat {
+                    entity: RuleEntity::Current,
+                    stat: def("unknown-requirement"),
+                },
+            }],
+            nodes: vec![
+                node(
+                    "true",
+                    RuleExpression::Literal {
+                        value: ParameterValue::Boolean(true),
+                    },
+                ),
+                node(
+                    "false",
+                    RuleExpression::Literal {
+                        value: ParameterValue::Boolean(false),
+                    },
+                ),
+                read_node("unknown", "unknown"),
+            ],
+            effects: [
+                ("satisfied", "true", None),
+                ("violated", "false", None),
+                ("unavailable", "unknown", None),
+                ("inapplicable", "false", Some("false")),
+            ]
+            .into_iter()
+            .map(|(id, value, when)| RuleEffect {
+                id: key(id),
+                when: when.map(key),
+                effect: RuleEffectKind::Requirement {
+                    satisfied: key(value),
+                    code: key(id),
+                },
+            })
+            .collect(),
+        });
+    f
+}
+
+#[test]
+fn requirements_are_reported_with_empty_or_unrelated_queries_without_hiding_measurements() {
+    let mut assessment = None;
+    for requests in 0..3 {
+        let mut baseline = output_owned_measurements(fixture());
+        let mut f = with_requirements();
+        match requests {
+            0 => {
+                baseline.queries.requests.clear();
+                f.queries.requests.clear();
+            }
+            1 => {
+                baseline
+                    .queries
+                    .requests
+                    .retain(|q| q.id.as_str() == "child-a");
+                f.queries.requests.retain(|q| q.id.as_str() == "child-a");
+            }
+            _ => {}
+        }
+        let baseline_plan = compile(&baseline);
+        let baseline = baseline_plan
+            .evaluate(&mut baseline_plan.new_scratch())
+            .unwrap();
+        let plan = compile(&f);
+        let expected = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        // Requirements describe feasibility, not the availability of otherwise
+        // independent measurements, including an unrelated supplied Actor.
+        assert_eq!(expected.results, baseline.results);
+        let dir = tempfile::tempdir().unwrap();
+        save(dir.path(), &f);
+        let output = run(dir.path(), &[]);
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let report: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(
+            report["evaluation"],
+            serde_json::to_value(&expected).unwrap()
+        );
+        assert_eq!(
+            report["verification"]["requirement_scope"],
+            "injected_requirements"
+        );
+        assert_eq!(report["verification"]["game_legality"], "not_checked");
+        let actual = &report["evaluation"]["requirements"];
+        let rows = actual["results"].as_array().unwrap();
+        assert_eq!(rows.len(), 4);
+        for state in ["satisfied", "violated", "unavailable", "inapplicable"] {
+            let row = rows.iter().find(|row| row["code"] == state).unwrap();
+            assert_eq!(row["outcome"]["status"], state);
+            assert!(!row["key"]["invocation"]["origin"].is_null());
+            assert!(!row["key"]["invocation"]["entity"].is_null());
+        }
+        assert!(expected.requirements.has_violations());
+        assert!(!expected.requirements.is_satisfied());
+        if let Some(previous) = &assessment {
+            assert_eq!(actual, previous);
+        }
+        assessment = Some(actual.clone());
+    }
+}
+
+#[test]
+fn incomplete_requirement_inventory_keeps_known_violations_and_does_not_claim_legality() {
+    let mut f = with_requirements();
+    f.queries.requests.clear();
+    f.owner_mut(&class_owner()).programs.closure = SchemaClosure::Partial {
+        gaps: vec![SchemaGap {
+            subject: class_owner(),
+            facet: SchemaFacet::GameRules,
+            code: key("unconverted-requirements"),
+        }],
+    };
+    let plan = compile(&f);
+    let expected = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    let dir = tempfile::tempdir().unwrap();
+    save(dir.path(), &f);
+    let output = run(dir.path(), &[]);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let report: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(
+        report["evaluation"],
+        serde_json::to_value(&expected).unwrap()
+    );
+    assert_eq!(
+        report["evaluation"]["requirements"]["coverage"]["status"],
+        "incomplete"
+    );
+    assert!(
+        report["evaluation"]["results"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+    assert!(expected.requirements.has_violations());
+    assert!(!expected.requirements.is_satisfied());
+    assert_eq!(report["verification"]["game_legality"], "not_checked");
 }
 #[test]
 fn stale_or_unknown_metric_artifacts_fail_before_output_publication() {

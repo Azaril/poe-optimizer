@@ -16,6 +16,57 @@ remain gates. The [real-build rollout](real-build-rollout.md) retains historical
 observations and fixed numerical expectations, not a requirement to finish two
 builds before search. Historical intake errors below are not current admission status.
 
+## External corpus expansion
+
+[poe.ninja's PoE2 builds directory](https://poe.ninja/poe2/builds) is a proposed
+source of additional real builds. This checkpoint defines intake and acceptance
+requirements; the site's export availability and format have not yet been verified
+for this project, and no bulk collection is planned here. Start with a curated
+sample of actual PoB exports when their acquisition is verified. Other independently
+sourced builds can fill gaps in the directory's population.
+
+The intended user path is to import a supported, unchanged export, evaluate it and
+optimize it without manually repairing configuration, deleting skills or replacing
+items. Preserve each acquired share string or export file byte-for-byte as an
+immutable raw artifact. Decoded XML, normalized owned input, diagnostics and optimized
+outputs are separate derived artifacts linked to that original. Never edit the raw
+build to manufacture admission or overwrite it with a later character snapshot.
+
+Each case needs a small provenance record: source page and exact export reference,
+retrieval timestamp, game, league, applicable patch and all declared build/tree
+versions, export timestamp and exporter/version when available, plus byte lengths
+and content hashes for the raw export and decoded content. Distinguish source-stated
+metadata from inferred or unavailable metadata; do not invent missing dates or
+reconcile conflicting versions silently. Evaluation evidence additionally binds the
+owned data package, importer, native evaluator and optional reference revision.
+At acquisition, establish whether the export is an authored PoB document or a
+reconstruction from character data. Record any exporter-generated configuration
+separately from observed character properties; saved combat assumptions do not
+by themselves prove player intent. This distinction has not yet been verified
+for the proposed source.
+These are requirements for extending the existing corpus index when needed, not
+a commitment to a new manifest framework or collection service.
+
+Select cases by mechanic coverage and interactions, not popularity alone. Include
+different classes/ascendancies, player and supplied-Actor skills, attacks/spells,
+hits/ailments/damage over time, triggers, support networks, item/tree grants,
+resource reservation, alternative equipment and weapon states, and both bossing and
+mapping scenarios. Exercise intersections such as a generated skill with supports
+and reservation, rather than treating each mechanic as an isolated checkbox.
+Include ordinary, non-meta and progression builds with modest equipment alongside
+specialized endgame builds; document sampling gaps instead of claiming population
+coverage from a leaderboard sample.
+
+Keep independent whole-build holdouts separate from the five development originals,
+derived mutations and minimized reproductions. Select and freeze holdouts before
+using their results to guide implementation; avoid counting near-duplicate exports
+or variants of the same build as independent evidence. A case used to diagnose and
+develop a fix becomes a development regression, with its former holdout role recorded
+and new independent holdouts added as needed. Preserve every case in stage reports,
+including unsupported and invalid cases, and link each blocker to the implementation
+backlog. This expansion does not change closest-build-first delivery or delay the
+first optimizer integration until the broader corpus is fully supported.
+
 ## Supplied corpus, 2026-09-08
 
 The user supplied five PoB share strings, one per line of [example.import.txt](../example.import.txt).
@@ -321,6 +372,24 @@ budgets as arguments. Preserve all entries and fail per entry, not by dropping u
 builds. Record exact source/effective selections and settings before comparing metrics.
 Classify import fidelity, realization, legality, supported mechanics, measurement availability
 and numerical parity independently. Cached XML stats are never the reference calculation.
+
+Apply these gates separately to every unchanged corpus entry:
+
+| Stage | Required evidence |
+| --- | --- |
+| Decode | The retained raw export decodes within bounds; decoded bytes and declared versions are recorded. Failures retain their original source and location. |
+| Import | Owned inputs preserve selections, alternatives and source meaning. Every relevant saved field is accounted for or remains an explicit obligation; no build-specific defaults or silent dropping are allowed. |
+| Admit | Selected provider/skill membership, required inputs, supported mechanics and legality/requirement coverage are checked independently. Recognized identities or successful parsing alone do not admit a complete build. |
+| Evaluate | Requested metrics and availability come from the unchanged selected build and explicit scenario. Native fresh, reused and parallel evaluations satisfy the determinism contract; partial measurements remain labelled partial. |
+| Stable parity | Fresh reference replays are stable under matched inputs and scenarios, and admitted native results meet fixed tolerances and availability expectations. Reference defects or instability have explicit discrepancy records and scoped comparison policy, never retry-until-pass or a hidden tolerance change. |
+| Optimize | The user can choose objectives, constraints, search dimensions, locked skills/items and budgets. The unchanged input is the baseline; search respects locks and records candidate violations or incomplete coverage. Successful finalists satisfy the configured constraints and applicable game-legality checks. Improving an unchecked or unavailable metric is not a success. Re-evaluate finalists independently. |
+| Export and reimport | Supported optimized outputs export and reimport with the same owned semantics, selections, requirements and evaluated results. Preserve source sidecars and diagnose unsupported external representations; byte-identical XML or reproduction of incidental UI state is not required. |
+
+Report passed, failed, unsupported and not-run stages with their denominators and
+exact identities. A later stage cannot hide an earlier failure, and a successful
+component measurement is not an end-to-end pass. Production fixes must extend shared
+import/model/evaluation mechanisms or injected game data; corpus IDs, character names,
+fixture paths and case-specific bypasses must never select production behavior.
 
 After inventory, select additional whole-build holdouts across missing mechanism families
 before implementing their shared dependencies. Keep derived small reproductions and

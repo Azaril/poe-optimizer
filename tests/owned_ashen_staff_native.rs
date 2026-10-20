@@ -371,6 +371,7 @@ impl Fixture {
             rolls,
         };
         let build = BuildInput {
+            usage_preferences: vec![],
             generated_inputs: None,
             allocator: typed(&draft["draft"]["allocator"]),
             revision: typed(&draft["draft"]["revision"]),
@@ -402,6 +403,7 @@ impl Fixture {
             choices: vec![],
         };
         let scenario = ScenarioInput {
+            usage_intents: vec![],
             game_version: namespace,
             enemy: EnemySpec {
                 encounter,

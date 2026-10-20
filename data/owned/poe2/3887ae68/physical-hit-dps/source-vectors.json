@@ -1,0 +1,2040 @@
+{
+  "schema_version": 1,
+  "kind": "ordinary-physical-hit-dps-comparisons",
+  "source_vectors": {
+    "path": "data/owned/poe2/3887ae68/enemy-physical-mitigation/source-vectors.json",
+    "bytes": 62861,
+    "sha256": "fb675c15fe80240d1a5388d534ebdcb45154970f1ab1cc94e1af6fafae4934df"
+  },
+  "source_report_sha256": "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935",
+  "rows": [
+    {
+      "source_index": 0,
+      "case": "original-05",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 1,
+      "case": "sniper-calcs-effective",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 2,
+      "case": "sniper-calcs-effective",
+      "mode": "calcs",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 3,
+      "case": "repeat-original-05",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 4,
+      "case": "warm-calcs-to-original",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 5,
+      "case": "sniper-quality-1",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 1,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 419.4970323685982,
+      "critical": 1113.729439954514,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 454.20865274789395,
+      "expected_total": 393.6474990481748,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 6,
+      "case": "sniper-quality-20",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 20,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 542.0305000558099,
+      "critical": 1398.7833507363266,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 584.8681425898357,
+      "expected_total": 506.88572357785756,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 7,
+      "case": "without-plain-node",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 361.0684213909243,
+      "critical": 974.7108836160153,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 391.7505445021788,
+      "expected_total": 339.51713856855497,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 8,
+      "case": "without-command-node",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 9,
+      "case": "without-gigantic",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 313.93410722673286,
+      "critical": 860.701835073357,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 341.27249361906405,
+      "expected_total": 295.76949446985554,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 10,
+      "case": "quality-20-without-gigantic",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 20,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 11,
+      "case": "sniper-calcs-combat",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 12,
+      "case": "sniper-calcs-combat",
+      "mode": "calcs",
+      "effective": false,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 821,
+      "critical": 1642,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 862.05,
+      "expected_total": 747.11,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 13,
+      "case": "sniper-calcs-buffed",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 14,
+      "case": "sniper-calcs-buffed",
+      "mode": "calcs",
+      "effective": false,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 684,
+      "critical": 1368,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 718.2,
+      "expected_total": 622.44,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 15,
+      "case": "sniper-calcs-unbuffed",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 16,
+      "case": "sniper-calcs-unbuffed",
+      "mode": "calcs",
+      "effective": false,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 499.5,
+      "critical": 999,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.6666666666666666,
+      "multiplier": 1,
+      "expected_post_block": 524.475,
+      "expected_total": 349.65,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 17,
+      "case": "offering-disabled",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 255.65532081377154,
+      "critical": 716.9007131102579,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.6666666666666666,
+      "multiplier": 1,
+      "expected_post_block": 278.7175904285958,
+      "expected_total": 185.8117269523972,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 18,
+      "case": "offering-level-1",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 314.9954752647808,
+      "critical": 863.289854406834,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8066666666666666,
+      "multiplier": 1,
+      "expected_post_block": 342.41019422188344,
+      "expected_total": 276.21089000565263,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 19,
+      "case": "offering-duplicate-equal",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 20,
+      "case": "offering-higher-first",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 463.47691807542265,
+      "critical": 1216.9483568075118,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.9000000000000001,
+      "multiplier": 1,
+      "expected_post_block": 501.1504900120271,
+      "expected_total": 451.03544101082446,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 21,
+      "case": "offering-higher-last",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 463.47691807542265,
+      "critical": 1216.9483568075118,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.9000000000000001,
+      "multiplier": 1,
+      "expected_post_block": 501.1504900120271,
+      "expected_total": 451.03544101082446,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 22,
+      "case": "flat-physical",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 426.3183837400353,
+      "critical": 1129.8133290327783,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 461.4931310046724,
+      "expected_total": 399.9607135373828,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 23,
+      "case": "conversion-fire-25",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 266.7904098994586,
+      "critical": 744.6519158121965,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 420.1484851950956,
+      "expected_total": 364.12868716908287,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          123.3,
+          246.6
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 24,
+      "case": "conversion-over-100",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 0,
+      "critical": 0,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 517.23,
+      "expected_total": 448.266,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          246.29999999999998,
+          492.59999999999997
+        ],
+        [
+          246.29999999999998,
+          492.59999999999997
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 25,
+      "case": "physical-gain-fire",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 552.1947491075184,
+      "expected_total": 478.5687825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          98.7,
+          197.4
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 26,
+      "case": "offering-source-buff-effect",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 499.30501208424437,
+      "critical": 1300.2543738058666,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.9666666666666666,
+      "multiplier": 1,
+      "expected_post_block": 539.3524801703254,
+      "expected_total": 521.3740641646478,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 27,
+      "case": "offering-recipient-buff-effect",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 455.37679176827453,
+      "critical": 1198.0205766146382,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.9133333333333333,
+      "multiplier": 1,
+      "expected_post_block": 492.50898101059266,
+      "expected_total": 449.824869323008,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 28,
+      "case": "offering-both-buff-effects",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 542.0305000558099,
+      "critical": 1398.7833507363266,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 1.0133333333333334,
+      "multiplier": 1,
+      "expected_post_block": 584.8681425898357,
+      "expected_total": 592.6663844910336,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 29,
+      "case": "no-physical-damage",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 0,
+      "critical": 0,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 0,
+      "expected_total": 0,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 30,
+      "case": "offering-positive-half-tie",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 304.77289650037227,
+      "critical": 838.3205325140808,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.7266666666666667,
+      "multiplier": 1,
+      "expected_post_block": 331.4502783010577,
+      "expected_total": 240.8538688987686,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 31,
+      "case": "offering-negative-half-tie",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 211.4802361204513,
+      "critical": 605.3018232369138,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.6066666666666667,
+      "multiplier": 1,
+      "expected_post_block": 231.17131547627443,
+      "expected_total": 140.2439313889398,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 32,
+      "case": "offering-combined-more",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 564.849750041202,
+      "critical": 1451.0757506262569,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 1.04,
+      "multiplier": 1,
+      "expected_post_block": 609.1610500704547,
+      "expected_total": 633.5274920732729,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 33,
+      "case": "offering-magnitude",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 499.30501208424437,
+      "critical": 1300.2543738058666,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.9666666666666666,
+      "multiplier": 1,
+      "expected_post_block": 539.3524801703254,
+      "expected_total": 521.3740641646478,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 34,
+      "case": "flat-physical-quality-20",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 20,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 556.8226260840745,
+      "critical": 1432.7058238283055,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 600.616785971286,
+      "expected_total": 520.5345478417812,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 35,
+      "case": "two-recipients-original-main-clone-calcs",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 36,
+      "case": "two-recipients-original-main-clone-calcs",
+      "mode": "calcs",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 13,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 20,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 542.0305000558099,
+      "critical": 1398.7833507363266,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 584.8681425898357,
+      "expected_total": 506.88572357785756,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 37,
+      "case": "two-recipients-clone-main-original-calcs",
+      "mode": "main",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 13,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 20,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 542.0305000558099,
+      "critical": 1398.7833507363266,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 584.8681425898357,
+      "expected_total": 506.88572357785756,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "source_index": 38,
+      "case": "two-recipients-clone-main-original-calcs",
+      "mode": "calcs",
+      "effective": true,
+      "label": "Main Hand",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "normal": 414.2081976279727,
+      "critical": 1101.2392272188865,
+      "critical_percent": 5,
+      "hit_percent": 100,
+      "rate": 0.8666666666666667,
+      "multiplier": 1,
+      "expected_post_block": 448.55974910751837,
+      "expected_total": 388.7517825598493,
+      "other_damage_types": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    }
+  ]
+}

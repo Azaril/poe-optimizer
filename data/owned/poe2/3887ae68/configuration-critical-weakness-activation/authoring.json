@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "configured-enemy-critical-weakness-activation",
+  "allocated_input": {
+    "kind": "external_input",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000033b1"
+  },
+  "condition_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000033b0"
+  },
+  "native_programs_added": 1,
+  "predecessor_status": "published-outgoing-critical",
+  "publication_ready": true,
+  "preserve_owner_and_query_closure": true,
+  "constructor_absence_is_configured_false_only": true,
+  "source_vm_runs": 0,
+  "before": "051c663ef14260a0fd10b7cfedb6f253cb1dfede2efd017831f25b7237904e64",
+  "artifacts": [
+    {
+      "file": "definitions.json",
+      "sha256": "6c6a2251613be089b8daa4b6505b86b56a506ce75091fac9156afacffdcd7ace",
+      "bytes": 474
+    },
+    {
+      "file": "extension.json",
+      "sha256": "ce23772849352b2a9f0bacb3f8ee093c137bcadabfb1dcf6cf24d12b26435207",
+      "bytes": 16458
+    },
+    {
+      "file": "input.json",
+      "sha256": "766e79bfde2f8170be98df87f0a0bc9c83a1f5e60fc252b571ea07fdc102945e",
+      "bytes": 1102
+    },
+    {
+      "file": "accounting.json",
+      "sha256": "8720d129b7745480c5fe8fe73f4b20d6874a3b0e111d914d10eb94ae0aed5749",
+      "bytes": 538
+    },
+    {
+      "file": "consumer.json",
+      "sha256": "67000fb46012e5c65c81f6aea5231af4c1c4fb744c0623b81e65aa0df7104a66",
+      "bytes": 2096
+    },
+    {
+      "file": "dependencies.json",
+      "sha256": "ba403abacafbf41641fe8e199697ce13f045a8e66fc0e86896c5c523c791b535",
+      "bytes": 18768
+    },
+    {
+      "file": "source-evidence.json",
+      "sha256": "5a1fce79aa1fb77ce34510ac445fb82ef7ec985fbfb80e093165e988f6072090",
+      "bytes": 12109
+    }
+  ]
+}

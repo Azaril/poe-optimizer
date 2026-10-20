@@ -26,6 +26,7 @@ fn input() -> OwnedDocument {
         OwnedEvaluationRequest::new(
             BuildSpec::new(
                 BuildInput {
+                    usage_preferences: vec![],
                     generated_inputs: None,
                     authored_support_order: None,
                     allocator: InstanceAllocatorState::from_parts(lineage, 1),
@@ -53,6 +54,7 @@ fn input() -> OwnedDocument {
             .unwrap(),
             ScenarioSpec::new(
                 ScenarioInput {
+                    usage_intents: vec![],
                     game_version: ns(),
                     enemy: EnemySpec {
                         encounter: def("encounter"),

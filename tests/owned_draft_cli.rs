@@ -122,6 +122,7 @@ fn draft(pending: bool) -> DraftSession {
             scenario_presets: list(vec![ScenarioPresetDraft {
                 id: id(7),
                 scenario: ScenarioInput {
+                    usage_intents: vec![],
                     game_version: namespace(),
                     enemy: EnemySpec {
                         encounter: definition("caller-encounter"),
@@ -289,7 +290,7 @@ fn selected_usage_preferences_round_trip_and_scenario_replaces_the_whole_record(
         ],
     };
     input.skill_presets.members[0].usage_preferences = Some(list(vec![preference.clone().into()]));
-    let mut replacement = preference;
+    let mut replacement = preference.clone();
     replacement.parameters.truncate(1);
     replacement.parameters[0].value = ParameterValue::Boolean(false);
     input.scenario_presets.members[0].scenario.usage = list(vec![replacement.clone().into()]);
@@ -314,6 +315,7 @@ fn selected_usage_preferences_round_trip_and_scenario_replaces_the_whole_record(
         panic!("expected a complete structural request");
     };
     assert_eq!(request.scenario().input().usage, vec![replacement]);
+    assert_eq!(request.build().input().usage_preferences, vec![preference]);
     let checked = fs::read(temp.path().join("checked.json")).unwrap();
     assert_eq!(checked, original);
     assert_eq!(decode_draft(&checked, limits()).unwrap(), authored);

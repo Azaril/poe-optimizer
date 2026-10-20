@@ -1,0 +1,1510 @@
+{
+  "owners": [
+    {
+      "owner": {
+        "kind": "slot",
+        "value": {
+          "kind": "action_output",
+          "value": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000021"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000022"
+            }
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "ordinary-armour-adjusted-physical-averages",
+            "context": "action",
+            "reads": [
+              {
+                "id": "physical-min",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d3a"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000033a0"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "physical-max",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d3a"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000033a1"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "critical-multiplier",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000033ab"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "armour-add",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "enemy",
+                    "query": "enemy-armour-add",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "armour-increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "enemy",
+                    "query": "enemy-armour-increase",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "armour-multiply",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "enemy",
+                    "query": "enemy-armour-multiply",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "armour-override-present",
+                "value_type": {
+                  "kind": "boolean"
+                },
+                "source": {
+                  "kind": "contribution_selection",
+                  "value": {
+                    "entity": "enemy",
+                    "query": "enemy-armour-override",
+                    "group": "sources",
+                    "projection": "present"
+                  }
+                }
+              },
+              {
+                "id": "armour-override-value",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_selection",
+                  "value": {
+                    "entity": "enemy",
+                    "query": "enemy-armour-override",
+                    "group": "sources",
+                    "projection": "value"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "physical-min",
+                "expression": {
+                  "kind": "read",
+                  "input": "physical-min"
+                }
+              },
+              {
+                "id": "physical-max",
+                "expression": {
+                  "kind": "read",
+                  "input": "physical-max"
+                }
+              },
+              {
+                "id": "critical-multiplier",
+                "expression": {
+                  "kind": "read",
+                  "input": "critical-multiplier"
+                }
+              },
+              {
+                "id": "armour-add",
+                "expression": {
+                  "kind": "read",
+                  "input": "armour-add"
+                }
+              },
+              {
+                "id": "armour-increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "armour-increase"
+                }
+              },
+              {
+                "id": "armour-multiply",
+                "expression": {
+                  "kind": "read",
+                  "input": "armour-multiply"
+                }
+              },
+              {
+                "id": "armour-override-present",
+                "expression": {
+                  "kind": "read",
+                  "input": "armour-override-present"
+                }
+              },
+              {
+                "id": "armour-override-value",
+                "expression": {
+                  "kind": "read",
+                  "input": "armour-override-value"
+                }
+              },
+              {
+                "id": "rating-quantum",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "damage-quantum",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "rating-zero",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "factor-zero",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "factor-one",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "factor-half",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0.5,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "factor-negative-one",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": -1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "armour-ratio",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 10,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "percent-hundred",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 100,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "percent-zero",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "negative-reduction-limit",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": -100,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "monster-reduction-cap",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 75,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "increase-factor",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "armour-increase",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "increase-multiplier",
+                "expression": {
+                  "kind": "add",
+                  "left": "factor-one",
+                  "right": "increase-factor"
+                }
+              },
+              {
+                "id": "increased-armour",
+                "expression": {
+                  "kind": "scale",
+                  "value": "armour-add",
+                  "factor": "increase-multiplier"
+                }
+              },
+              {
+                "id": "scaled-armour",
+                "expression": {
+                  "kind": "scale",
+                  "value": "increased-armour",
+                  "factor": "armour-multiply"
+                }
+              },
+              {
+                "id": "ordinary-armour",
+                "expression": {
+                  "kind": "maximum",
+                  "left": "scaled-armour",
+                  "right": "rating-zero"
+                }
+              },
+              {
+                "id": "armour",
+                "expression": {
+                  "kind": "select",
+                  "condition": "armour-override-present",
+                  "when_true": "armour-override-value",
+                  "when_false": "ordinary-armour"
+                }
+              },
+              {
+                "id": "armour-negative",
+                "expression": {
+                  "kind": "compare",
+                  "operation": "less",
+                  "left": "armour",
+                  "right": "rating-zero"
+                }
+              },
+              {
+                "id": "negated-armour",
+                "expression": {
+                  "kind": "scale",
+                  "value": "armour",
+                  "factor": "factor-negative-one"
+                }
+              },
+              {
+                "id": "armour-magnitude",
+                "expression": {
+                  "kind": "select",
+                  "condition": "armour-negative",
+                  "when_true": "negated-armour",
+                  "when_false": "armour"
+                }
+              },
+              {
+                "id": "armour-number",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "armour-magnitude",
+                  "denominator": "rating-quantum",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "armour-zero",
+                "expression": {
+                  "kind": "compare",
+                  "operation": "equal",
+                  "left": "armour-number",
+                  "right": "factor-zero"
+                }
+              },
+              {
+                "id": "physical-min-supported",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "physical-min",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000001d3a"
+                        }
+                      },
+                      "maximum": {
+                        "value": 1.7976931348623157e+308,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000001d3a"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "physical-max-supported",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "physical-max",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000001d3a"
+                        }
+                      },
+                      "maximum": {
+                        "value": 1.7976931348623157e+308,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000001d3a"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "critical-multiplier-supported",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "critical-multiplier",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      },
+                      "maximum": {
+                        "value": 1.7976931348623157e+308,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "critical-min",
+                "expression": {
+                  "kind": "scale",
+                  "value": "physical-min-supported",
+                  "factor": "critical-multiplier-supported"
+                }
+              },
+              {
+                "id": "critical-max",
+                "expression": {
+                  "kind": "scale",
+                  "value": "physical-max-supported",
+                  "factor": "critical-multiplier-supported"
+                }
+              },
+              {
+                "id": "normal-half-min",
+                "expression": {
+                  "kind": "scale",
+                  "value": "physical-min-supported",
+                  "factor": "factor-half"
+                }
+              },
+              {
+                "id": "normal-half-max",
+                "expression": {
+                  "kind": "scale",
+                  "value": "physical-max-supported",
+                  "factor": "factor-half"
+                }
+              },
+              {
+                "id": "normal-average",
+                "expression": {
+                  "kind": "add",
+                  "left": "normal-half-min",
+                  "right": "normal-half-max"
+                }
+              },
+              {
+                "id": "normal-number",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "normal-average",
+                  "denominator": "damage-quantum",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "normal-zero",
+                "expression": {
+                  "kind": "compare",
+                  "operation": "equal",
+                  "left": "normal-number",
+                  "right": "factor-zero"
+                }
+              },
+              {
+                "id": "normal-both-zero",
+                "expression": {
+                  "kind": "all",
+                  "values": [
+                    "armour-zero",
+                    "normal-zero"
+                  ]
+                }
+              },
+              {
+                "id": "normal-scaled-hit",
+                "expression": {
+                  "kind": "scale",
+                  "value": "normal-number",
+                  "factor": "armour-ratio"
+                }
+              },
+              {
+                "id": "normal-denominator",
+                "expression": {
+                  "kind": "add",
+                  "left": "armour-number",
+                  "right": "normal-scaled-hit"
+                }
+              },
+              {
+                "id": "normal-reduction-ratio",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "armour-number",
+                  "denominator": "normal-denominator",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "normal-positive-percent",
+                "expression": {
+                  "kind": "scale",
+                  "value": "percent-hundred",
+                  "factor": "normal-reduction-ratio"
+                }
+              },
+              {
+                "id": "normal-negative-percent",
+                "expression": {
+                  "kind": "scale",
+                  "value": "normal-positive-percent",
+                  "factor": "factor-negative-one"
+                }
+              },
+              {
+                "id": "normal-signed-percent",
+                "expression": {
+                  "kind": "select",
+                  "condition": "armour-negative",
+                  "when_true": "normal-negative-percent",
+                  "when_false": "normal-positive-percent"
+                }
+              },
+              {
+                "id": "normal-reduction",
+                "expression": {
+                  "kind": "select",
+                  "condition": "normal-both-zero",
+                  "when_true": "percent-zero",
+                  "when_false": "normal-signed-percent"
+                }
+              },
+              {
+                "id": "normal-lower-bounded",
+                "expression": {
+                  "kind": "maximum",
+                  "left": "normal-reduction",
+                  "right": "negative-reduction-limit"
+                }
+              },
+              {
+                "id": "normal-capped",
+                "expression": {
+                  "kind": "minimum",
+                  "left": "normal-lower-bounded",
+                  "right": "monster-reduction-cap"
+                }
+              },
+              {
+                "id": "normal-reduction-factor",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "normal-capped",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "normal-damage-factor",
+                "expression": {
+                  "kind": "subtract",
+                  "left": "factor-one",
+                  "right": "normal-reduction-factor"
+                }
+              },
+              {
+                "id": "normal-armour-adjusted-average",
+                "expression": {
+                  "kind": "scale",
+                  "value": "normal-average",
+                  "factor": "normal-damage-factor"
+                }
+              },
+              {
+                "id": "critical-half-min",
+                "expression": {
+                  "kind": "scale",
+                  "value": "critical-min",
+                  "factor": "factor-half"
+                }
+              },
+              {
+                "id": "critical-half-max",
+                "expression": {
+                  "kind": "scale",
+                  "value": "critical-max",
+                  "factor": "factor-half"
+                }
+              },
+              {
+                "id": "critical-average",
+                "expression": {
+                  "kind": "add",
+                  "left": "critical-half-min",
+                  "right": "critical-half-max"
+                }
+              },
+              {
+                "id": "critical-number",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "critical-average",
+                  "denominator": "damage-quantum",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "critical-zero",
+                "expression": {
+                  "kind": "compare",
+                  "operation": "equal",
+                  "left": "critical-number",
+                  "right": "factor-zero"
+                }
+              },
+              {
+                "id": "critical-both-zero",
+                "expression": {
+                  "kind": "all",
+                  "values": [
+                    "armour-zero",
+                    "critical-zero"
+                  ]
+                }
+              },
+              {
+                "id": "critical-scaled-hit",
+                "expression": {
+                  "kind": "scale",
+                  "value": "critical-number",
+                  "factor": "armour-ratio"
+                }
+              },
+              {
+                "id": "critical-denominator",
+                "expression": {
+                  "kind": "add",
+                  "left": "armour-number",
+                  "right": "critical-scaled-hit"
+                }
+              },
+              {
+                "id": "critical-reduction-ratio",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "armour-number",
+                  "denominator": "critical-denominator",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "critical-positive-percent",
+                "expression": {
+                  "kind": "scale",
+                  "value": "percent-hundred",
+                  "factor": "critical-reduction-ratio"
+                }
+              },
+              {
+                "id": "critical-negative-percent",
+                "expression": {
+                  "kind": "scale",
+                  "value": "critical-positive-percent",
+                  "factor": "factor-negative-one"
+                }
+              },
+              {
+                "id": "critical-signed-percent",
+                "expression": {
+                  "kind": "select",
+                  "condition": "armour-negative",
+                  "when_true": "critical-negative-percent",
+                  "when_false": "critical-positive-percent"
+                }
+              },
+              {
+                "id": "critical-reduction",
+                "expression": {
+                  "kind": "select",
+                  "condition": "critical-both-zero",
+                  "when_true": "percent-zero",
+                  "when_false": "critical-signed-percent"
+                }
+              },
+              {
+                "id": "critical-lower-bounded",
+                "expression": {
+                  "kind": "maximum",
+                  "left": "critical-reduction",
+                  "right": "negative-reduction-limit"
+                }
+              },
+              {
+                "id": "critical-capped",
+                "expression": {
+                  "kind": "minimum",
+                  "left": "critical-lower-bounded",
+                  "right": "monster-reduction-cap"
+                }
+              },
+              {
+                "id": "critical-reduction-factor",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "critical-capped",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "critical-damage-factor",
+                "expression": {
+                  "kind": "subtract",
+                  "left": "factor-one",
+                  "right": "critical-reduction-factor"
+                }
+              },
+              {
+                "id": "critical-armour-adjusted-average",
+                "expression": {
+                  "kind": "scale",
+                  "value": "critical-average",
+                  "factor": "critical-damage-factor"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "normal-average",
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033b2"
+                  },
+                  "value": "normal-armour-adjusted-average"
+                }
+              },
+              {
+                "id": "critical-average",
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033b3"
+                  },
+                  "value": "critical-armour-adjusted-average"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "slot",
+                  "value": {
+                    "kind": "action_output",
+                    "value": {
+                      "declaration": {
+                        "kind": "skill",
+                        "definition": {
+                          "kind": "skill",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000021"
+                        }
+                      },
+                      "slot": {
+                        "kind": "action_output",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000022"
+                      }
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "physical-mitigation-special-branches-not-admitted"
+              },
+              {
+                "subject": {
+                  "kind": "slot",
+                  "value": {
+                    "kind": "action_output",
+                    "value": {
+                      "declaration": {
+                        "kind": "skill",
+                        "definition": {
+                          "kind": "skill",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000021"
+                        }
+                      },
+                      "slot": {
+                        "kind": "action_output",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000022"
+                      }
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "physical-mitigation-damage-taken-not-admitted"
+              },
+              {
+                "subject": {
+                  "kind": "slot",
+                  "value": {
+                    "kind": "action_output",
+                    "value": {
+                      "declaration": {
+                        "kind": "skill",
+                        "definition": {
+                          "kind": "skill",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000021"
+                        }
+                      },
+                      "slot": {
+                        "kind": "action_output",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000022"
+                      }
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "physical-mitigation-prehit-distribution-not-admitted"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "queries": [
+    {
+      "id": "enemy-armour-add",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031e0"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ee"
+              }
+            }
+          },
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "encounter",
+                      "value": {
+                        "kind": "encounter",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000031d1"
+                      }
+                    }
+                  },
+                  "program": "configured-enemy-armour-base",
+                  "effect": "configured-base",
+                  "origin": {
+                    "kind": "encounter"
+                  }
+                },
+                "order": {
+                  "source_rank": 0,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              }
+            ],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.00000000000031e0"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "enemy-armour-source-domain-not-admitted"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "enemy-armour-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031e0"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.00000000000031e0"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "enemy-armour-source-domain-not-admitted"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "enemy-armour-multiply",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031e0"
+      },
+      "contribution": "multiply",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "product",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 1,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.00000000000031e0"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "enemy-armour-source-domain-not-admitted"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "enemy-armour-override",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031e0"
+      },
+      "contribution": "override",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "require_agreement",
+          "ordering": "unordered",
+          "empty": null,
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.00000000000031e0"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "enemy-armour-source-domain-not-admitted"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

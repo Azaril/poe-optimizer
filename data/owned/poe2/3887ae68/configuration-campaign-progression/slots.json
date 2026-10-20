@@ -1,0 +1,44 @@
+[
+  {
+    "kind": "parameter",
+    "value": {
+      "id": {
+        "declaration": {
+          "kind": "reward",
+          "definition": {
+            "kind": "reward",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033b4"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033b5"
+        }
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "value": {
+            "kind": "integer",
+            "value": {
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "presence": "required_once",
+          "sites": [
+            "reward_parameter"
+          ]
+        }
+      }
+    }
+  }
+]

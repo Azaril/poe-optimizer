@@ -1,0 +1,16 @@
+[
+  {
+    "recipe": "campaign-bosses-defeated",
+    "selector": {
+      "lane": "input_number",
+      "name": "configBossFaceBroken"
+    }
+  },
+  {
+    "recipe": "campaign-bosses-defeated",
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "configBossFaceBroken"
+    }
+  }
+]

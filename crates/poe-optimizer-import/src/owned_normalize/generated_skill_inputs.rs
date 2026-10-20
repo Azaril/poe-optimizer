@@ -3,7 +3,7 @@
 //! closes gameplay usage. Archived cross-preset correspondence remains Pending.
 use super::*;
 mod dispositions;
-pub(super) use dispositions::account;
+pub(super) use dispositions::{CheckedInputDisposition, account};
 use generated_skill_sources::{charge, invalid, recipe};
 use poe_optimizer_core::owned_preset_intent::PresetApplicability;
 

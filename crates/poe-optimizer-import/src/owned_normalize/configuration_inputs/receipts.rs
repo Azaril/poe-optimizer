@@ -120,6 +120,7 @@ pub(in crate::owned_normalize) fn checked_receipts(
                 ConfigurationSourceState::Authored
             },
             target: target.clone(),
+            additional_targets: vec![],
             source_only: None,
         });
         if let Some(origin) = input.overwritten_placeholder {
@@ -133,6 +134,7 @@ pub(in crate::owned_normalize) fn checked_receipts(
                 control,
                 source_state: ConfigurationSourceState::OverwrittenRawPlaceholder,
                 target: target.clone(),
+                additional_targets: vec![],
                 source_only: Some(key("overwritten-config-placeholder")),
             });
         }
@@ -181,6 +183,7 @@ pub(in crate::owned_normalize) fn checked_receipts(
                 ConfigurationSourceState::Authored
             },
             target: target.clone(),
+            additional_targets: vec![],
             source_only: None,
         });
         if let Some(origin) = input.ignored_placeholder {
@@ -194,6 +197,7 @@ pub(in crate::owned_normalize) fn checked_receipts(
                 control,
                 source_state: ConfigurationSourceState::IgnoredDefaultPlaceholder,
                 target: target.clone(),
+                additional_targets: vec![],
                 source_only: Some(key("unused-config-placeholder")),
             });
         }
@@ -215,6 +219,7 @@ pub(in crate::owned_normalize) fn checked_receipts(
                 },
                 source_state: ConfigurationSourceState::UnselectedProjection,
                 target: target.clone(),
+                additional_targets: vec![],
                 source_only: Some(key("unselected-config-projection")),
             });
         }

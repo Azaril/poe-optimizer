@@ -154,6 +154,7 @@ pub(super) fn checked_receipts(
             control: ConfigurationAdapterControl::Encounter,
             source_state: configuration_dispositions::ConfigurationSourceState::Absent,
             target: OwnedOriginTarget::ScenarioPreset(scenario.id),
+            additional_targets: vec![],
             source_only: None,
         },
     ])

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "checked-campaign-progression-input_number",
+    "selector": {
+      "lane": "input_number",
+      "name": "configBossFaceBroken"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "reward",
+          "recipe": "campaign-bosses-defeated"
+        }
+      }
+    ]
+  },
+  {
+    "id": "checked-campaign-progression-placeholder_number",
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "configBossFaceBroken"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "reward",
+          "recipe": "campaign-bosses-defeated"
+        }
+      }
+    ]
+  }
+]

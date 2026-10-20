@@ -1,0 +1,606 @@
+{
+  "owners": [
+    {
+      "owner": {
+        "kind": "slot",
+        "value": {
+          "kind": "action_output",
+          "value": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000021"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000022"
+            }
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "ordinary-physical-hit-dps",
+            "context": "action",
+            "reads": [
+              {
+                "id": "normal",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d3a"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000033b2"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "critical",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d3a"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000033b3"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "critical-percent",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000033aa"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "hit-percent",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003220"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "rate",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d39"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000033a3"
+                    }
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "normal",
+                "expression": {
+                  "kind": "read",
+                  "input": "normal"
+                }
+              },
+              {
+                "id": "critical",
+                "expression": {
+                  "kind": "read",
+                  "input": "critical"
+                }
+              },
+              {
+                "id": "critical-percent",
+                "expression": {
+                  "kind": "read",
+                  "input": "critical-percent"
+                }
+              },
+              {
+                "id": "hit-percent",
+                "expression": {
+                  "kind": "read",
+                  "input": "hit-percent"
+                }
+              },
+              {
+                "id": "rate",
+                "expression": {
+                  "kind": "read",
+                  "input": "rate"
+                }
+              },
+              {
+                "id": "one-factor",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "hundred-factor",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 100,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-percent",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-damage",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-rate",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d39"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-damage-per-time",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000033bb"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "critical-fraction",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "critical-percent",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "normal-fraction",
+                "expression": {
+                  "kind": "subtract",
+                  "left": "one-factor",
+                  "right": "critical-fraction"
+                }
+              },
+              {
+                "id": "weighted-normal",
+                "expression": {
+                  "kind": "scale",
+                  "value": "normal",
+                  "factor": "normal-fraction"
+                }
+              },
+              {
+                "id": "critical-percent-scalar",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "critical-percent",
+                  "denominator": "one-percent",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "critical-times-percent",
+                "expression": {
+                  "kind": "scale",
+                  "value": "critical",
+                  "factor": "critical-percent-scalar"
+                }
+              },
+              {
+                "id": "weighted-critical",
+                "expression": {
+                  "kind": "divide_factor",
+                  "value": "critical-times-percent",
+                  "divisor": "hundred-factor"
+                }
+              },
+              {
+                "id": "weighted-physical-hit",
+                "expression": {
+                  "kind": "add",
+                  "left": "weighted-normal",
+                  "right": "weighted-critical"
+                }
+              },
+              {
+                "id": "hit-percent-scalar",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "hit-percent",
+                  "denominator": "one-percent",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "weighted-times-hit-percent",
+                "expression": {
+                  "kind": "scale",
+                  "value": "weighted-physical-hit",
+                  "factor": "hit-percent-scalar"
+                }
+              },
+              {
+                "id": "post-block-physical-hit",
+                "expression": {
+                  "kind": "divide_factor",
+                  "value": "weighted-times-hit-percent",
+                  "divisor": "hundred-factor"
+                }
+              },
+              {
+                "id": "damage-scalar",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "post-block-physical-hit",
+                  "denominator": "one-damage",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "damage-per-time-basis",
+                "expression": {
+                  "kind": "scale",
+                  "value": "one-damage-per-time",
+                  "factor": "damage-scalar"
+                }
+              },
+              {
+                "id": "rate-scalar",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "rate",
+                  "denominator": "one-rate",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "physical-hit-dps-at-rate",
+                "expression": {
+                  "kind": "scale",
+                  "value": "damage-per-time-basis",
+                  "factor": "rate-scalar"
+                }
+              },
+              {
+                "id": "with-neutral-dps-multiplier",
+                "expression": {
+                  "kind": "scale",
+                  "value": "physical-hit-dps-at-rate",
+                  "factor": "one-factor"
+                }
+              },
+              {
+                "id": "ordinary-physical-hit-dps",
+                "expression": {
+                  "kind": "scale",
+                  "value": "with-neutral-dps-multiplier",
+                  "factor": "one-factor"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "weighted-physical-hit",
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033b8"
+                  },
+                  "value": "weighted-physical-hit"
+                }
+              },
+              {
+                "id": "post-block-physical-hit",
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033b9"
+                  },
+                  "value": "post-block-physical-hit"
+                }
+              },
+              {
+                "id": "ordinary-physical-hit-dps",
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033ba"
+                  },
+                  "value": "ordinary-physical-hit-dps"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "slot",
+                  "value": {
+                    "kind": "action_output",
+                    "value": {
+                      "declaration": {
+                        "kind": "skill",
+                        "definition": {
+                          "kind": "skill",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000021"
+                        }
+                      },
+                      "slot": {
+                        "kind": "action_output",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000022"
+                      }
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "remaining-game-effects-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "queries": []
+}

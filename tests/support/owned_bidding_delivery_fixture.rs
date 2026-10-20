@@ -461,6 +461,7 @@ impl World {
             owners: finite(&original_owners),
             existing_actor_rules: None,
             build: BuildInput {
+                usage_preferences: vec![],
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([119; 16]),
                     10000,
@@ -1040,6 +1041,7 @@ impl World {
             BuildSpec::new(self.build.clone(), Default::default()).unwrap(),
             ScenarioSpec::new(
                 ScenarioInput {
+                    usage_intents: vec![],
                     game_version: ns(),
                     enemy: EnemySpec {
                         encounter: def("fixture.encounter"),

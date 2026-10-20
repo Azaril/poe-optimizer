@@ -23,6 +23,7 @@ fn id<T: BuildInstanceId>(local: u64) -> T {
 }
 fn build_input() -> BuildInput {
     BuildInput {
+        usage_preferences: vec![],
         generated_inputs: None,
         authored_support_order: None,
         allocator: InstanceAllocatorState::from_parts(BuildLineage::from_bytes([0x61; 16]), 31),
@@ -100,6 +101,7 @@ fn request_input() -> OwnedRequestInput {
     OwnedRequestInput {
         build: build_input(),
         scenario: ScenarioInput {
+            usage_intents: vec![],
             game_version: namespace(),
             enemy: EnemySpec {
                 encounter: definition("caller-encounter"),

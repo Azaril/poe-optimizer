@@ -1,0 +1,53 @@
+{
+  "kind": "source-bound-passive-structural-inventories",
+  "before": "35d446c73be3aa977d55a49174aaf4656e27a38ebaeaab354e86cd7f9f36b5a5",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-structural-inventories-v1",
+    "schema_version": 7,
+    "content_sha256": "039ed902acbc526b4a8ba9e02c947d4e57a9e694a4b89966be6328cea81efdc6",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "candidate_owners": 12,
+  "reviewed_owners": 6,
+  "unresolved_owners": 6,
+  "closed_direct_inventories": 18,
+  "preserved_nonempty_grants": 2,
+  "preserved_nonempty_supplies": 2,
+  "allocated_definitions": 0,
+  "new_members": 0,
+  "reviewed_source_stat_rows": 7,
+  "remainder_source_stat_rows": 4,
+  "scope": {
+    "complete_build": false,
+    "candidate_closure_complete": false,
+    "numerical_coverage_changed": false,
+    "descendant_coverage_changed": false,
+    "source_domain_coverage_changed": false,
+    "registry_changed": false,
+    "runtime_branch_added": false
+  },
+  "artifacts": [
+    {
+      "file": "dependencies.json",
+      "bytes": 160377,
+      "sha256": "bc56b9c03648ec28a2c8e28476013107b357a995af65c3c8abb137f2dd745e98"
+    },
+    {
+      "file": "evidence.json",
+      "bytes": 83432,
+      "sha256": "0046156a594e5b849b71c6f44ee38a7681a672acf744fad0ab37edbaeeb3465b"
+    },
+    {
+      "file": "migration.json",
+      "bytes": 43500,
+      "sha256": "9f08e3c7207d147ea16a81dcdc11b9e11ee1c8a3d5918b09914a5ed99cfc5ee0"
+    }
+  ],
+  "license": {
+    "file": "sources/LICENSE.md",
+    "bytes": 66619,
+    "sha256": "b61f62cf2b8e301ef2a4a3c5f7de9460fea53327edf9f260b7c746502fc6bf97"
+  }
+}

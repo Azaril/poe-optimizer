@@ -251,6 +251,7 @@ fn input() -> SchemaPackageInput {
         DefinitionDescriptor::UsagePolicy(known(
             id("usage"),
             UsagePolicySchema {
+                scenario_skill_applicability: None,
                 targets: vec![
                     UsageTargetKind::Skill,
                     UsageTargetKind::Action,

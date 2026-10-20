@@ -328,13 +328,10 @@ fn invalid_disposition_recipes_and_guards_are_rejected_as_policy_errors() {
 }
 
 #[test]
-fn v2_requires_declared_required_raw_inputs_while_v1_keeps_subset_pending() {
+fn checked_disposition_requires_all_raw_inputs_while_explicit_empty_keeps_subset_pending() {
     let mut f = Fixture::new();
     let DirectSkillInputPolicy::PobManualDirectSkillV2 { skills, .. } =
-        f.base.policy.direct_skill_inputs.as_mut().unwrap()
-    else {
-        unreachable!()
-    };
+        f.base.policy.direct_skill_inputs.as_mut().unwrap();
     // The schema still declares both required authored inputs. The source also
     // still contains both; dropping a recipe cannot certify their inventory.
     skills[0].parameters.pop().unwrap();
@@ -356,11 +353,9 @@ fn v2_requires_declared_required_raw_inputs_while_v1_keeps_subset_pending() {
         group_attributes,
         skills,
         ..
-    } = f.base.policy.direct_skill_inputs.take().unwrap()
-    else {
-        unreachable!()
-    };
-    f.base.policy.direct_skill_inputs = Some(DirectSkillInputPolicy::PobManualDirectSkillV1 {
+    } = f.base.policy.direct_skill_inputs.take().unwrap();
+    f.base.policy.direct_skill_inputs = Some(DirectSkillInputPolicy::PobManualDirectSkillV2 {
+        dispositions: vec![],
         definitions,
         source,
         roles,
@@ -378,7 +373,7 @@ fn v2_requires_declared_required_raw_inputs_while_v1_keeps_subset_pending() {
 }
 
 #[test]
-fn direct_v1_contract_retains_raw_inputs_and_does_not_admit_nested_maps() {
+fn explicit_empty_dispositions_retain_raw_inputs_without_admitting_nested_maps() {
     let mut f = Fixture::new();
     let next = run(&f, &inventory::xml(inventory::GEM));
     let DirectSkillInputPolicy::PobManualDirectSkillV2 {
@@ -390,11 +385,9 @@ fn direct_v1_contract_retains_raw_inputs_and_does_not_admit_nested_maps() {
         group_attributes,
         skills,
         ..
-    } = f.base.policy.direct_skill_inputs.take().unwrap()
-    else {
-        unreachable!()
-    };
-    f.base.policy.direct_skill_inputs = Some(DirectSkillInputPolicy::PobManualDirectSkillV1 {
+    } = f.base.policy.direct_skill_inputs.take().unwrap();
+    f.base.policy.direct_skill_inputs = Some(DirectSkillInputPolicy::PobManualDirectSkillV2 {
+        dispositions: vec![],
         definitions,
         source,
         roles,
@@ -419,6 +412,27 @@ fn direct_v1_contract_retains_raw_inputs_and_does_not_admit_nested_maps() {
             .skills
             .members
             .is_empty()
+    );
+}
+
+#[test]
+fn current_direct_policy_requires_dispositions_and_rejects_retired_wire_tag() {
+    let f = Fixture::new();
+    let wire = serde_json::to_value(f.base.policy.direct_skill_inputs.as_ref().unwrap()).unwrap();
+    let mut absent = wire.clone();
+    absent
+        .as_object_mut()
+        .unwrap()
+        .remove("dispositions")
+        .unwrap();
+    assert!(serde_json::from_value::<DirectSkillInputPolicy>(absent).is_err());
+    let mut retired = wire.clone();
+    retired["kind"] = "pob_manual_direct_skill_v1".into();
+    assert!(serde_json::from_value::<DirectSkillInputPolicy>(retired).is_err());
+    let current: DirectSkillInputPolicy = serde_json::from_value(wire).unwrap();
+    assert_eq!(
+        &current,
+        f.base.policy.direct_skill_inputs.as_ref().unwrap()
     );
 }
 

@@ -1,0 +1,282 @@
+{
+  "gem": {
+    "kind": "gem",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000007dd"
+  },
+  "game_id": "Metadata/Items/Gems/SkillGemIceNova",
+  "variant_id": "IceNova",
+  "skill_id": "IceNovaPlayer",
+  "name_spec": "Ice Nova",
+  "primary": {
+    "kind": "skill",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000001df"
+  },
+  "supply": {
+    "declaration": {
+      "kind": "gem",
+      "definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000007dd"
+      }
+    },
+    "slot": {
+      "kind": "skill_grant_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000327e"
+    }
+  },
+  "grant": {
+    "declaration": {
+      "kind": "gem",
+      "definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000007dd"
+      }
+    },
+    "slot": {
+      "kind": "grant_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000327f"
+    }
+  },
+  "attributes": [
+    "nameSpec",
+    "gemId",
+    "variantId",
+    "skillId",
+    "level",
+    "quality",
+    "note",
+    "enabled",
+    "enableGlobal1",
+    "enableGlobal2",
+    "count",
+    "statSetIndex",
+    "statSetIndexCalcs",
+    "skillPart",
+    "skillPartCalcs",
+    "skillStageCount",
+    "skillStageCountCalcs",
+    "skillMineCount",
+    "skillMineCountCalcs",
+    "skillMinion",
+    "skillMinionCalcs",
+    "skillMinionItemSet",
+    "skillMinionItemSetCalcs",
+    "skillMinionSkill",
+    "skillMinionSkillCalcs",
+    "corrupted",
+    "corruptLevel"
+  ],
+  "guards": [],
+  "group_attributes": [
+    "active",
+    "enabled",
+    "includeInFullDPS",
+    "groupCount",
+    "label",
+    "slot",
+    "source",
+    "mainActiveSkill",
+    "mainActiveSkillCalcs",
+    "skillPart"
+  ],
+  "group_guards": [],
+  "policies": [
+    {
+      "policy": {
+        "kind": "usage_policy",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000326a"
+      },
+      "parameters": [
+        {
+          "slot": {
+            "declaration": {
+              "kind": "usage_policy",
+              "definition": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000326a"
+              }
+            },
+            "slot": {
+              "kind": "parameter_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000326b"
+            }
+          },
+          "source": {
+            "kind": "containing_group_override",
+            "group": {
+              "id": "ice-nova-groupcount",
+              "codec": {
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "whitespace": "exact",
+                "codec": {
+                  "kind": "integer",
+                  "value": {
+                    "syntax": "integer"
+                  }
+                }
+              },
+              "tiers": [
+                {
+                  "selectors": [
+                    {
+                      "lane": "attribute",
+                      "name": "groupCount"
+                    }
+                  ],
+                  "duplicates": "reject"
+                }
+              ],
+              "missing": {
+                "kind": "pending"
+              }
+            },
+            "occurrence": {
+              "id": "ice-nova-count",
+              "codec": {
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "whitespace": "exact",
+                "codec": {
+                  "kind": "integer",
+                  "value": {
+                    "syntax": "integer"
+                  }
+                }
+              },
+              "tiers": [
+                {
+                  "selectors": [
+                    {
+                      "lane": "attribute",
+                      "name": "count"
+                    }
+                  ],
+                  "duplicates": "reject"
+                }
+              ],
+              "missing": {
+                "kind": "pending"
+              }
+            },
+            "fallback_admission": {
+              "kind": "unique_reviewed_primary",
+              "companions": [
+                {
+                  "gem": {
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000740"
+                  },
+                  "game_id": "Metadata/Items/Gem/SupportGemSuffuse",
+                  "variant_id": "EncroachingGroundSupport",
+                  "skill_id": "SupportEncroachingGroundPlayer",
+                  "name_spec": "Encroaching Ground"
+                },
+                {
+                  "gem": {
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000082b"
+                  },
+                  "game_id": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "variant_id": "MagnifiedAreaSupportTwo",
+                  "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                  "name_spec": "Magnified Area II"
+                },
+                {
+                  "gem": {
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000008bf"
+                  },
+                  "game_id": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                  "variant_id": "RapidCastingSupport",
+                  "skill_id": "SupportRapidCastingPlayer",
+                  "name_spec": "Rapid Casting I"
+                },
+                {
+                  "gem": {
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000008c1"
+                  },
+                  "game_id": "Metadata/Items/Gems/SupportGemArcaneTempoTwo",
+                  "variant_id": "RapidCastingSupportTwo",
+                  "skill_id": "SupportRapidCastingPlayerTwo",
+                  "name_spec": "Rapid Casting II"
+                },
+                {
+                  "gem": {
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000065a"
+                  },
+                  "game_id": "Metadata/Items/Gem/SupportGemAstralProjection",
+                  "variant_id": "AstralProjectionSupport",
+                  "skill_id": "SupportAstralProjectionPlayer",
+                  "name_spec": "Astral Projection"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

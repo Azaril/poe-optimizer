@@ -13,9 +13,9 @@ pub fn assert_import_rebindings_only(prior: &StagedOwnedRelease, next: &StagedOw
     let old_value = json!(old);
     let mut restored = json!(new);
     // Configuration accounting commits the inherited adapters. A schema change
-    // rebinds the checked reward policy and then its inventory digest. Verify
-    // both complete dependency records before restoring just these two fields;
-    // source evidence, disposition rules and all other adapter digests survive.
+    // rebinds checked reward and usage policies, then their inventory digests.
+    // Verify both complete dependency records before restoring the listed
+    // commitments; source evidence, disposition rules and other digests survive.
     for endpoint in [prior, next] {
         if let Some(policy) = &endpoint.normalization().configuration_dispositions {
             assert_eq!(
@@ -98,6 +98,7 @@ pub fn assert_import_rebindings_only(prior: &StagedOwnedRelease, next: &StagedOw
         // The target policy kind, presence and all other fields stay exact.
         "/normalization/direct_support_targets/direct_inputs",
         "/normalization/configuration_dispositions/dependencies/reward_inventory",
+        "/normalization/configuration_dispositions/dependencies/usage_inputs",
         "/normalization/configuration_dispositions/dependencies/rewards",
     ] {
         match (old_value.pointer(path), restored.pointer_mut(path)) {

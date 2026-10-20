@@ -94,6 +94,7 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
         .push(DefinitionDescriptor::UsagePolicy(DefinitionEntry {
             id: usage.clone(),
             schema: SchemaState::Known(UsagePolicySchema {
+                scenario_skill_applicability: None,
                 targets: vec![UsageTargetKind::Skill],
                 declarations: usage_declarations,
             }),
@@ -142,12 +143,14 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
     });
     rebind_quality_schema(&mut a, &mut p, schema);
     p.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
+        inventory: None,
         definitions: a.schema.identity().clone(),
         source: a.roles.input().compilation.source.clone(),
         roles: *a.roles.identity(),
         catalog: a.roles.input().compilation.catalog_digest,
         scalar_inputs: gem_inventory_scalar_inputs_identity(&p, Default::default()).unwrap(),
         occurrences: vec![],
+        scenario: vec![],
         physical: vec![PrimarySkillUsageInput {
             gem: role.gem,
             game_id: "active".into(),
@@ -248,6 +251,7 @@ pub(super) fn add_policy(
         .push(DefinitionDescriptor::UsagePolicy(DefinitionEntry {
             id: policy.clone(),
             schema: SchemaState::Known(UsagePolicySchema {
+                scenario_skill_applicability: None,
                 targets: vec![UsageTargetKind::Skill],
                 declarations: declared,
             }),

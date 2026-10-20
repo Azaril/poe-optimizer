@@ -118,16 +118,17 @@ Enemy mitigation census.
 
 ## Native contract and shortest next steps
 
-`ExistingActorRuleTarget` currently has only Player; Data requires Actor context
-and actor-local effects, Engine binds `ActorKey::Player`, and checked ExistingActor
-contributions reject other actors. Enemy is a distinct native entity. Reusing a
-shared baseline definition on the actual Enemy requires a reviewed applicability
-and ownership extension; adding an Encounter contribution origin alone does not
-provide it. No model changes are made by this review.
+The October 16 Actor cutover resolves the earlier contract gap: Player, supplied
+units and ScenarioEnemy share one Actor execution context. Shared local rules
+bind explicit eligible roles and exact occurrences; checked contribution origins
+include the selected Encounter. No placeholder Player or distinct mechanical
+Enemy execution kind remains. This implementation does not itself close any of
+the source families reviewed above.
 
-After the Encounter query decision, reuse `31e0` for the finite selected Armour
-BASE channel and retain separate override/transform/bypass obligations. Resolve
-shared Enemy baseline ownership before delivering conditional reduction and
+The finite native armour consumer now reuses `31e0` through the checked query
+graph, with separate normal/critical averages. Retain its independent
+override/transform/bypass obligations. Use the implemented shared Actor ownership
+when delivering conditional reduction and
 damage-taken contributions. Keep actual sources, typed condition provenance and
 the Intimidate non-stacking rule; retain Spell applicability for Unnerved. Then
 combine these inputs with separate normal/critical physical hits and the actual

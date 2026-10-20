@@ -36,7 +36,14 @@ pub fn policy(prior: &StagedOwnedRelease) -> GemInventoryPolicy {
     ] {
         assert_eq!(r[field], a[field], "exact predecessor {field}");
     }
-    GemInventoryPolicy::PobFreshSingleSupportV1 {
+    GemInventoryPolicy::PobFreshPhysicalV3 {
+        usage_inputs: poe_optimizer_import::owned_normalize::usage_inputs_identity(
+            &prior.input().normalization,
+            Default::default(),
+        )
+        .unwrap(),
+        primary_skills: vec![],
+        primary_dispositions: vec![],
         definitions: prior.receipt().definitions.clone(),
         roles: prior.receipt().roles,
         catalog: serde_json::from_value(a["catalog"].clone()).unwrap(),
@@ -45,7 +52,7 @@ pub fn policy(prior: &StagedOwnedRelease) -> GemInventoryPolicy {
             Default::default(),
         )
         .unwrap(),
-        gems: inventory(),
+        supports: inventory(),
     }
 }
 pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {

@@ -1,0 +1,496 @@
+{
+  "kind": "isolated-secondary-switch-source-components",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "catalog": {
+    "path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+    "bytes": 2247063,
+    "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e"
+  },
+  "original": {
+    "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+    "bytes": 106378,
+    "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+  },
+  "license": {
+    "path": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/LICENSE.md",
+    "bytes": 67979,
+    "sha256": "22d2d075c1d361971764fbbd1e12e1485bdf35f0769ffac4eca8a79afc60dda8"
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "bytes": 239878,
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/BuildExportPoE2.lua",
+      "bytes": 13732,
+      "sha256": "1581790b106d658ebab9d75ca5e51da3ae32603e9f622b96dc7270413eeb4152"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "bytes": 513395,
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "bytes": 18651,
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    }
+  ],
+  "retained_export": {
+    "file": "data/owned/poe2/3887ae68/preset-reference-selection-source/BuildExportPoE2.lua.gz",
+    "compressed_bytes": 4608,
+    "compressed_sha256": "1bac6d86fd27eaa2c2a0be07c0f2fbcd46a921394d618b0e57f2fa7de994116a",
+    "raw_bytes": 13732,
+    "raw_sha256": "1581790b106d658ebab9d75ca5e51da3ae32603e9f622b96dc7270413eeb4152"
+  },
+  "boundaries": {
+    "copy_table": {
+      "path": "src/Modules/Common.lua",
+      "first_line": 495,
+      "last_line": 505,
+      "bytes": 198,
+      "sha256": "2e013585437512f70fd90debc4037fc3d987a91ec1ad57e144336ce558f15ae6"
+    },
+    "array_search": {
+      "path": "src/Modules/Common.lua",
+      "first_line": 584,
+      "last_line": 590,
+      "bytes": 108,
+      "sha256": "c4542515cd9dda3e8716bf27ef7075d3ab515aeccebc207aef07c828f7d2dbd3"
+    },
+    "mod_helpers": {
+      "path": "src/Modules/Data.lua",
+      "first_line": 56,
+      "last_line": 71,
+      "bytes": 467,
+      "sha256": "d93a8a1011b44dd06bb8e2b89e847b670a52258d3aad27b97c2469ef88d08d38"
+    },
+    "process_mod": {
+      "path": "src/Modules/Data.lua",
+      "first_line": 72,
+      "last_line": 98,
+      "bytes": 830,
+      "sha256": "dc4e2b95e84d4cc160d94828c52db882fe826ed3481cbc9623f3841656c29631"
+    },
+    "metadata_lazy": {
+      "path": "src/Modules/Data.lua",
+      "first_line": 910,
+      "last_line": 966,
+      "bytes": 1864,
+      "sha256": "86dc27a5772c5b9a26bea1c76a1776dd1cd8bdfa55ef65050d020afe84086ddd"
+    },
+    "constructor": {
+      "path": "src/Modules/Data.lua",
+      "first_line": 979,
+      "last_line": 1050,
+      "bytes": 2667,
+      "sha256": "2a54b2de28344b1b660bd8f731c5c7d7a137c07f71b9ea17f1d7809124cbd185"
+    },
+    "admission_prefix": {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1995,
+      "last_line": 1999,
+      "bytes": 493,
+      "sha256": "f44736ee70e78e9cf48b4b4834c38011ecb973db9f98b09a0eb4b36ccab11ca6"
+    },
+    "export_active": {
+      "path": "src/Modules/BuildExportPoE2.lua",
+      "first_line": 118,
+      "last_line": 132,
+      "bytes": 606,
+      "sha256": "0543769e097d3d1d0ae78d38f319053cb398ecd5397f263919f7a9e77ee9fa00"
+    },
+    "count_consumer": {
+      "path": "src/Modules/CalcDefence.lua",
+      "first_line": 149,
+      "last_line": 173,
+      "bytes": 1017,
+      "sha256": "57296fdf27c0eb733a02d21170d903811a8020c533c078a79c5a364dbb67c43a"
+    },
+    "load_switches": {
+      "path": "src/Classes/SkillsTab.lua",
+      "first_line": 357,
+      "last_line": 358,
+      "bytes": 168,
+      "sha256": "714c24205d098db0726faea751f6fad0f30ea443ec2c60b6d94a7f4d1b630b5a"
+    },
+    "count_visibility": {
+      "path": "src/Classes/SkillsTab.lua",
+      "first_line": 1042,
+      "last_line": 1053,
+      "bytes": 526,
+      "sha256": "2f783419f8d1fdc18b37a126294f42ed5a9a39eb8497837b6a03343a83a4b52d"
+    },
+    "corruption_visibility": {
+      "path": "src/Classes/SkillsTab.lua",
+      "first_line": 1084,
+      "last_line": 1099,
+      "bytes": 821,
+      "sha256": "9a08b08896cf3274a712baf7d51d5b412cd411e6e9558e9ade1e350eea46983c"
+    },
+    "secondary_visibility": {
+      "path": "src/Classes/SkillsTab.lua",
+      "first_line": 1140,
+      "last_line": 1143,
+      "bytes": 300,
+      "sha256": "fa9fd9bf04b6557460a982e951b9e180c6101d34815b32421c11e74cb2c9ee73"
+    }
+  },
+  "families": [
+    {
+      "primary": "SummonSkeletalSnipersPlayer",
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "game_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "variant_id": "SkeletalSniper",
+        "name": "Skeletal Sniper",
+        "name_spec": null,
+        "base_type_name": "Skeletal Sniper Minion",
+        "primary_effect_id": "SummonSkeletalSnipersPlayer",
+        "declared_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalSniperPlayer"
+          }
+        ],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalSniperPlayer"
+          }
+        ],
+        "additional_effects": [],
+        "effect_list": [
+          "SummonSkeletalSnipersPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 116
+      },
+      "gem_declaration": {
+        "index": 116,
+        "key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 2447,
+          "end_line": 2470,
+          "sha256": "dd93cb09e3f957e9bd0014384acc11303b5567166c7a76097040f49929996224"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+          "variant_id": "SkeletalSniper",
+          "name": "Skeletal Sniper",
+          "name_spec": null,
+          "base_type_name": "Skeletal Sniper Minion",
+          "primary_effect_id": "SummonSkeletalSnipersPlayer",
+          "additional_effects": [
+            {
+              "index": 1,
+              "id": "CommandSkeletalSniperPlayer"
+            }
+          ],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill": {
+        "id": "SummonSkeletalSnipersPlayer",
+        "name": "Skeletal Sniper Minion",
+        "base_type_name": "Skeletal Sniper Minion",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 332
+      },
+      "skill_declaration": {
+        "index": 332,
+        "id": "SummonSkeletalSnipersPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 18677,
+          "end_line": 18799,
+          "sha256": "fb834997a7c392e6a8e1a190ecd1f864b7537562611f2237dd650e12d54de192"
+        },
+        "identity": {
+          "name": "Skeletal Sniper Minion",
+          "base_type_name": "Skeletal Sniper Minion",
+          "support": null,
+          "from_tree": null
+        }
+      }
+    },
+    {
+      "primary": "IceNovaPlayer",
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemIceNova",
+        "game_id": "Metadata/Items/Gems/SkillGemIceNova",
+        "variant_id": "IceNova",
+        "name": "Ice Nova",
+        "name_spec": null,
+        "base_type_name": "Ice Nova",
+        "primary_effect_id": "IceNovaPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [
+          {
+            "index": 1,
+            "id": "IceNovaPlayerOnFrostbolt"
+          },
+          {
+            "index": 2,
+            "id": "IceNovaColdInfusedPlayer"
+          }
+        ],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "IceNovaPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 1
+      },
+      "gem_declaration": {
+        "index": 1,
+        "key": "Metadata/Items/Gems/SkillGemIceNova",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 5,
+          "end_line": 30,
+          "sha256": "2a11db22a9a551abdf52358045c89ee97243b69e24cc815fc0f3fd5ceff668f8"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemIceNova",
+          "variant_id": "IceNova",
+          "name": "Ice Nova",
+          "name_spec": null,
+          "base_type_name": "Ice Nova",
+          "primary_effect_id": "IceNovaPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [
+            {
+              "index": 1,
+              "id": "IceNovaPlayerOnFrostbolt"
+            },
+            {
+              "index": 2,
+              "id": "IceNovaColdInfusedPlayer"
+            }
+          ],
+          "display_order": null
+        }
+      },
+      "skill": {
+        "id": "IceNovaPlayer",
+        "name": "Ice Nova",
+        "base_type_name": "Ice Nova",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 289
+      },
+      "skill_declaration": {
+        "index": 289,
+        "id": "IceNovaPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 12801,
+          "end_line": 13020,
+          "sha256": "024888550af2f5827d379730a715b6e0277677c88262d3fe6399267ffeaf8e68"
+        },
+        "identity": {
+          "name": "Ice Nova",
+          "base_type_name": "Ice Nova",
+          "support": null,
+          "from_tree": null
+        }
+      }
+    },
+    {
+      "primary": "FireboltPlayer",
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemFirebolt",
+        "game_id": "Metadata/Items/Gems/SkillGemFirebolt",
+        "variant_id": "Firebolt",
+        "name": "Firebolt",
+        "name_spec": null,
+        "base_type_name": "Firebolt",
+        "primary_effect_id": "FireboltPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [
+          {
+            "index": 1,
+            "id": "FireboltExplosionPlayer"
+          }
+        ],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "FireboltPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 287
+      },
+      "gem_declaration": {
+        "index": 287,
+        "key": "Metadata/Items/Gems/SkillGemFirebolt",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 6170,
+          "end_line": 6193,
+          "sha256": "eaca0262e365b3442ad5d1d56129e89580ec61c0a338e9e8a66103763e32a288"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemFirebolt",
+          "variant_id": "Firebolt",
+          "name": "Firebolt",
+          "name_spec": null,
+          "base_type_name": "Firebolt",
+          "primary_effect_id": "FireboltPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [
+            {
+              "index": 1,
+              "id": "FireboltExplosionPlayer"
+            }
+          ],
+          "display_order": null
+        }
+      },
+      "skill": {
+        "id": "FireboltPlayer",
+        "name": "Firebolt",
+        "base_type_name": "Firebolt",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 260
+      },
+      "skill_declaration": {
+        "index": 260,
+        "id": "FireboltPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 7664,
+          "end_line": 7876,
+          "sha256": "4e9bdd710a28c9c20ba4eceb30f7752d38b0ea1d9070a086d43b1144d8bd2930"
+        },
+        "identity": {
+          "name": "Firebolt",
+          "base_type_name": "Firebolt",
+          "support": null,
+          "from_tree": null
+        }
+      }
+    }
+  ],
+  "original_pairs": [
+    {
+      "group_ordinal": 238,
+      "primary_ordinal": 239,
+      "group_attributes": {
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "nil",
+        "enabled": "true"
+      },
+      "primary_attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "level": "17",
+        "count": "1",
+        "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+        "enabled": "true",
+        "variantId": "IceNova",
+        "quality": "0",
+        "enableGlobal2": "true",
+        "enableGlobal1": "true",
+        "skillId": "IceNovaPlayer",
+        "nameSpec": "Ice Nova"
+      }
+    },
+    {
+      "group_ordinal": 243,
+      "primary_ordinal": 244,
+      "group_attributes": {
+        "source": "Item:28:New Item, Ashen Staff",
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "nil",
+        "enabled": "true",
+        "slot": "Weapon 1"
+      },
+      "primary_attributes": {
+        "corruptLevel": "nil",
+        "corrupted": "nil",
+        "level": "11",
+        "count": "nil",
+        "gemId": "Metadata/Items/Gems/SkillGemFirebolt",
+        "enabled": "true",
+        "variantId": "Firebolt",
+        "quality": "0",
+        "enableGlobal2": "nil",
+        "enableGlobal1": "true",
+        "skillId": "FireboltPlayer",
+        "nameSpec": "Firebolt"
+      }
+    }
+  ],
+  "scope": {
+    "full_build_parity": false,
+    "numerical_parity": false,
+    "import_accounting_implemented": false,
+    "native_runtime_authority": false,
+    "complete_skill_preparation": false,
+    "synthetic_controls_are_real_game_states": false,
+    "proven_consumers": [
+      "CalcSetup active-effect admission prefix",
+      "BuildExport activeSkillGems",
+      "CalcDefence getActiveSkillCount",
+      "SkillsTab count/corruption visibility and secondary control visibility"
+    ],
+    "claim": "For a complete final singleton granted-effect list, the indexed consumers do not read the physical occurrence secondary switch. This is a source-component theorem, not native semantics or an executable import certificate.",
+    "candidate_guard": "The test-only candidate predicate checks declared and post-constructor additional IDs, complete table membership, primary identity and resolved additional list. It rejects unresolved or late effects; observed list length alone never suffices.",
+    "vaal": "Vaal=true is a synthetic branch control: a singleton has no index2 even in the Vaal count branch. Real source declarations are separately retained.",
+    "stat_sets": "Ice Nova and Firebolt each have multiple actual stat sets; these are not additional granted effects.",
+    "limitations": [
+      "CalcSetup numerical body is replaced only by identity observation; no complete active skill is prepared.",
+      "Metatable access probes are explicit synthetic test instrumentation and do not claim ordinary source objects use metatables.",
+      "Data.processMod is called with an explicit synthetic GlobalEffect modifier to exercise the actual metadata writer; reachability of that modifier in a real build is not asserted.",
+      "The packet does not prove how a future Import matcher should transport its source authority.",
+      "Primary global semantics, all missing Commands, generated provider reconstruction and broader support usage remain unproved.",
+      "The count consumer is called on an exact supplied component envelope; this does not claim full reservation or FullDPS behavior.",
+      "Raw serialization and UI state still read/preserve the secondary field; the theorem covers only the listed indexed consumers and does not erase source data."
+    ],
+    "primary_true_control": "An exactly true primary flag adds no restriction in the tested metadata absent/false/true and Vaal branches. Other admission gates and physical counts remain separate; no false/nil/missing primary authority or native meaning follows."
+  }
+}

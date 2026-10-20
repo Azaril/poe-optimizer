@@ -1,80 +1,232 @@
 {
-  "schema_version": 1,
-  "kind": "finite-selected-quest-reward-reconciliation",
   "current_input": "121dc6bf9980fef3301d18e6f6cb4148884f50a792e38b7599f1db60318ab748",
   "files": {
-    "source": {
-      "file": "configuration-reward-source.gz",
-      "bytes": 6246344,
-      "sha256": "4fa239bb7f72b936b522a84fb6adb0139cdddb2a4b593ce69a64bb722f7a2e9d",
-      "compressed_bytes": 622821,
-      "compressed_sha256": "15040fef991fbb2c6e6ee3c9c2aedfaab51dc2d0be84f08aac0667088cdc0a76"
-    },
-    "release": {
-      "file": "configuration-reward-release.gz",
-      "bytes": 49313,
-      "sha256": "ea5e38460e1dcb8df912a4dcddfd31d3e0be89dca2f5ede339b1a7173a1f34f2",
-      "compressed_bytes": 20992,
-      "compressed_sha256": "2507f8c6800e7c169bb2211945dbce8a3c11450e408cc44fe5f7d97001dc13e0"
-    },
-    "rules": {
-      "file": "configuration-reward-rules.gz",
-      "bytes": 17267077,
-      "sha256": "5fa4e2faa69cca0413329b5ee8c4dbfd9b2a9a3999ab38f5beba029ec5d36602",
-      "compressed_bytes": 404677,
-      "compressed_sha256": "4eacd52fd940398bc7b663b18f668ffc23b9fc425dca69109be4f360a1074146"
+    "draft": {
+      "bytes": 1192050,
+      "compressed_bytes": 25350,
+      "compressed_sha256": "4fc207638d879a863a6958c4e6cc60506b2038f3a407c57232fc8896f611af1f",
+      "file": "configuration-reward-draft.gz",
+      "sha256": "2ac07856bfcb0f2994c75d26295ae989642bedd7b03295c2ea595219daa3ec96"
     },
     "mapping": {
-      "file": "configuration-reward-mapping.gz",
       "bytes": 3947027,
-      "sha256": "2754f6b9e83f63db315b6d14fa2066f5c3c7f85bd8fa11da159ebaba4be6242b",
       "compressed_bytes": 100431,
-      "compressed_sha256": "c97f33d1840fc0a56e3c1d3ba58d9920987e96065f2aa920a40ef3b9bfe2c3dd"
+      "compressed_sha256": "c97f33d1840fc0a56e3c1d3ba58d9920987e96065f2aa920a40ef3b9bfe2c3dd",
+      "file": "configuration-reward-mapping.gz",
+      "sha256": "2754f6b9e83f63db315b6d14fa2066f5c3c7f85bd8fa11da159ebaba4be6242b"
     },
     "policy": {
-      "file": "configuration-reward-policy.gz",
       "bytes": 27998,
-      "sha256": "603591249ad098a58c49739bd1dc763ac10e4fba1863126e2028448ae2c3e0d4",
       "compressed_bytes": 2723,
-      "compressed_sha256": "deaf000762911079c6074142719aae4fb097c99747d9669ba35e006289dc1e6a"
-    },
-    "draft": {
-      "file": "configuration-reward-draft.gz",
-      "bytes": 1191148,
-      "sha256": "6dfba21f2da05d68256ad6a164e7bdab5d3690c6418eea2804876fa203f1f699",
-      "compressed_bytes": 27261,
-      "compressed_sha256": "41621b5d72bb307dfa4d53ddb7d387e9912063a5163f4a62efb268ff19344f39"
-    },
-    "report": {
-      "file": "configuration-reward-report.gz",
-      "bytes": 2477,
-      "sha256": "a8f76db2b906c42f8e78bd5653a11023979b6f3456ff87dd08e04b490174f25c",
-      "compressed_bytes": 951,
-      "compressed_sha256": "d246716d26739c44d970380e8add29020d48b9017bb13f6e231c24d65d0da762"
+      "compressed_sha256": "deaf000762911079c6074142719aae4fb097c99747d9669ba35e006289dc1e6a",
+      "file": "configuration-reward-policy.gz",
+      "sha256": "603591249ad098a58c49739bd1dc763ac10e4fba1863126e2028448ae2c3e0d4"
     },
     "quest-data": {
-      "file": "configuration-reward-quest-data.gz",
       "bytes": 7183,
-      "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af",
       "compressed_bytes": 1381,
-      "compressed_sha256": "c27300ea252217c1a8233295b94a30ae85adc43185e2f841ded801a89b209380"
+      "compressed_sha256": "c27300ea252217c1a8233295b94a30ae85adc43185e2f841ded801a89b209380",
+      "file": "configuration-reward-quest-data.gz",
+      "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af"
+    },
+    "release": {
+      "bytes": 49313,
+      "compressed_bytes": 20992,
+      "compressed_sha256": "2507f8c6800e7c169bb2211945dbce8a3c11450e408cc44fe5f7d97001dc13e0",
+      "file": "configuration-reward-release.gz",
+      "sha256": "ea5e38460e1dcb8df912a4dcddfd31d3e0be89dca2f5ede339b1a7173a1f34f2"
+    },
+    "report": {
+      "bytes": 2525,
+      "compressed_bytes": 964,
+      "compressed_sha256": "7f81d0c46d3c24dfc9563c9715909e0df8a767c177a39abcfa55b1c7b11fd219",
+      "file": "configuration-reward-report.gz",
+      "sha256": "42fe06d045eb06938b41991c4dde47aa435119dff3e3f95e0056f8fd0a3c515a"
+    },
+    "rules": {
+      "bytes": 17267077,
+      "compressed_bytes": 404677,
+      "compressed_sha256": "4eacd52fd940398bc7b663b18f668ffc23b9fc425dca69109be4f360a1074146",
+      "file": "configuration-reward-rules.gz",
+      "sha256": "5fa4e2faa69cca0413329b5ee8c4dbfd9b2a9a3999ab38f5beba029ec5d36602"
     },
     "sidecar": {
-      "compressed_sha256": "726ee8a6a9fc8d09dedd3f51f0063baf9a579b2e33afdf1353980e33dfe47b58",
+      "bytes": 952139,
+      "compressed_bytes": 41153,
+      "compressed_sha256": "fb5798ebe8a5bb55af55723af44ae4c73bd6046f2206f21b99a1a132852ab157",
       "file": "configuration-reward-sidecar.gz",
-      "compressed_bytes": 39878,
-      "bytes": 952040,
-      "sha256": "21fb2960a9898f137811a12e2c834ef26b88b02310ec7f6eb1696fb82d9732cb"
+      "sha256": "2f47861e3c872bd46ed1c4cfa947b2f9cde016371bd5e1c939d7c8e009b24860"
+    },
+    "source": {
+      "bytes": 6246344,
+      "compressed_bytes": 622821,
+      "compressed_sha256": "15040fef991fbb2c6e6ee3c9c2aedfaab51dc2d0be84f08aac0667088cdc0a76",
+      "file": "configuration-reward-source.gz",
+      "sha256": "4fa239bb7f72b936b522a84fb6adb0139cdddb2a4b593ce69a64bb722f7a2e9d"
     }
   },
+  "kind": "finite-selected-quest-reward-reconciliation",
+  "schema_version": 1,
   "scope": {
-    "finite_callback_values": 39,
-    "controls": 17,
     "actual_calls_per_observation": 34,
-    "native_coverage_authorized": false,
-    "global_quest_parser_closure": false,
+    "controls": 17,
     "default_records": 9,
+    "finite_callback_values": 39,
+    "global_quest_parser_closure": false,
+    "native_coverage_authorized": false,
     "saved_records": 22,
     "selected_native_rewards": 17
+  },
+  "typed_draft_reauthoring": {
+    "authoring_sha256": "404f0a3abb51183d4e20a16e3f811a927fe223090683ed1d1387c5caa56952a4",
+    "authoring_source": "runs/scenario_draft_evidence_authoring.rs",
+    "current_archives": [
+      {
+        "bytes": 1192050,
+        "compressed_bytes": 25350,
+        "compressed_sha256": "4fc207638d879a863a6958c4e6cc60506b2038f3a407c57232fc8896f611af1f",
+        "file": "configuration-reward-draft.gz",
+        "sha256": "2ac07856bfcb0f2994c75d26295ae989642bedd7b03295c2ea595219daa3ec96"
+      },
+      {
+        "bytes": 952139,
+        "compressed_bytes": 41153,
+        "compressed_sha256": "fb5798ebe8a5bb55af55723af44ae4c73bd6046f2206f21b99a1a132852ab157",
+        "file": "configuration-reward-sidecar.gz",
+        "sha256": "2f47861e3c872bd46ed1c4cfa947b2f9cde016371bd5e1c939d7c8e009b24860"
+      },
+      {
+        "bytes": 2525,
+        "compressed_bytes": 964,
+        "compressed_sha256": "7f81d0c46d3c24dfc9563c9715909e0df8a767c177a39abcfa55b1c7b11fd219",
+        "file": "configuration-reward-report.gz",
+        "sha256": "42fe06d045eb06938b41991c4dde47aa435119dff3e3f95e0056f8fd0a3c515a"
+      }
+    ],
+    "draft_schema_after": 5,
+    "draft_schema_before": 4,
+    "enemy_assumption_targets": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        9
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        0,
+        11
+      ],
+      [
+        0,
+        12
+      ],
+      [
+        0,
+        13
+      ],
+      [
+        0,
+        14
+      ],
+      [
+        0,
+        15
+      ],
+      [
+        0,
+        17
+      ],
+      [
+        0,
+        18
+      ],
+      [
+        0,
+        19
+      ],
+      [
+        0,
+        20
+      ],
+      [
+        0,
+        21
+      ]
+    ],
+    "exact_scenario_origin_indices": [
+      423
+    ],
+    "kind": "strict-current-format-evidence",
+    "native_coverage_authorized": false,
+    "new_pending_intents": [
+      {
+        "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
+        "local": "0000000000000682"
+      }
+    ],
+    "prior_archives": [
+      {
+        "bytes": 1191148,
+        "compressed_bytes": 27261,
+        "compressed_sha256": "41621b5d72bb307dfa4d53ddb7d387e9912063a5163f4a62efb268ff19344f39",
+        "file": "configuration-reward-draft.gz",
+        "sha256": "6dfba21f2da05d68256ad6a164e7bdab5d3690c6418eea2804876fa203f1f699"
+      },
+      {
+        "bytes": 952040,
+        "compressed_bytes": 39878,
+        "compressed_sha256": "726ee8a6a9fc8d09dedd3f51f0063baf9a579b2e33afdf1353980e33dfe47b58",
+        "file": "configuration-reward-sidecar.gz",
+        "sha256": "21fb2960a9898f137811a12e2c834ef26b88b02310ec7f6eb1696fb82d9732cb"
+      },
+      {
+        "bytes": 2477,
+        "compressed_bytes": 951,
+        "compressed_sha256": "d246716d26739c44d970380e8add29020d48b9017bb13f6e231c24d65d0da762",
+        "file": "configuration-reward-report.gz",
+        "sha256": "a8f76db2b906c42f8e78bd5653a11023979b6f3456ff87dd08e04b490174f25c"
+      }
+    ],
+    "proof": "whole-draft-sidecar-report-exact-inverse",
+    "source_release_artifacts_reauthored": false,
+    "source_selections_changed": false
   }
 }

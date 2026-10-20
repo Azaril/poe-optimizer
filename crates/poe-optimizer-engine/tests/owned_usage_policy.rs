@@ -5,6 +5,8 @@
 mod fixture;
 #[path = "support/owned_reporting_inclusion_native.rs"]
 mod reporting_inclusion;
+#[path = "support/owned_scenario_usage_intent.rs"]
+mod scenario_intent;
 use fixture::*;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_project::*, owned_routing::*, owned_rules::*,
@@ -49,6 +51,7 @@ fn add_policy(f: &mut Fixture, name: &str, target: UsageTargetKind, context: Rul
         .push(DefinitionDescriptor::UsagePolicy(entry(
             def(name),
             UsagePolicySchema {
+                scenario_skill_applicability: None,
                 targets: vec![target],
                 declarations,
             },

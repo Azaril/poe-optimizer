@@ -200,6 +200,7 @@ fn all_record_families_convert_and_roundtrip_without_source_or_schema_lookup() {
     };
     roundtrip::<_, UsagePolicyDraft>(usage.clone());
     roundtrip::<_, ScenarioDraft>(ScenarioInput {
+        usage_intents: vec![],
         game_version: ns(),
         enemy,
         assumptions: vec![assumption],

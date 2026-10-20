@@ -1,0 +1,32 @@
+{
+  "artifacts": {
+    "dependencies.json": {
+      "bytes": 66260,
+      "sha256": "7a8efb30c9d206e19603b268ff93854b28db66e18292278f9bb147e0424459dd"
+    },
+    "dispositions.json": {
+      "bytes": 4571,
+      "sha256": "74a5b210fb3ca4bed57e9fe609854ec0d254236d2dfc809ebcf210b0123a1ecb"
+    },
+    "migration.json": {
+      "bytes": 105657,
+      "sha256": "82c6603e3c46b21671cb57cdb0b0f279d83335b52d69d480d5e7b823a6bd345d"
+    },
+    "source-evidence.json": {
+      "bytes": 17599,
+      "sha256": "38de259523dd59e059dc85475a24e3a0fa5230c74154755fa1d36721a8421c6c"
+    },
+    "source-handoff.json": {
+      "bytes": 100182,
+      "sha256": "ee8c995ae9a591427d6576e349a1ed17e2d93d7d4d23522c4ae85e6681c99213"
+    },
+    "usage.json": {
+      "bytes": 3730,
+      "sha256": "797e4f488c77a0052eb12132cc4e6896c4f10662a6ba5ead3706c917b021f478"
+    }
+  },
+  "before": "60827bda7dfbbf1406a123e842ebd0b28c6bead16feb6690d59232f5df2e3925",
+  "last_issued_after": 13258,
+  "last_issued_before": 13243,
+  "schema_version": 1
+}

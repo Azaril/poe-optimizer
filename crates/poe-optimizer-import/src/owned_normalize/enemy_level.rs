@@ -215,6 +215,7 @@ pub(super) fn checked_receipts(
             control: ConfigurationAdapterControl::EnemyLevel,
             source_state: configuration_dispositions::ConfigurationSourceState::Placeholder,
             target,
+            additional_targets: vec![],
             source_only: None,
         },
     ])

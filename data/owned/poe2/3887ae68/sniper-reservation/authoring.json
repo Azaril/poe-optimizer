@@ -1,19 +1,31 @@
 {
-  "schema_version": 1,
+  "allocated_range": [
+    "def.000000000000326a",
+    "def.000000000000327d"
+  ],
+  "artifact_sha256": {
+    "migration": "61909cb8d1604518f63e684e539ad77da720fc398a1caa3f5e39152202f16366",
+    "native-inputs": "d240a0f987a8bbe64ca1f5830ce26999a1db8a51ac47538ff09533667098f074",
+    "usage": "e87c3670a22b5d205cde0afbc4220313a1abb99fd4f90de89b7bd962ff39df73"
+  },
   "before": "80c07986489bdac79d7b126d53be95cf1c55a204a2a408fccfacbe0d19e7b691",
+  "catalog": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
   "definitions": {
+    "content_sha256": "6942454ead88f22b5bdf46d7784a99b65c187b1d3936424cae3ce0cb00dbc1ed",
     "game": "poe2",
     "release": "pob-3887ae68-frost-bomb-inputs-v1",
     "schema_version": 5,
-    "content_sha256": "6942454ead88f22b5bdf46d7784a99b65c187b1d3936424cae3ce0cb00dbc1ed",
     "semantics_version": "owned-mechanics-skill-inputs-v1"
   },
-  "registry": "fa12e851cd4a1a1ea30466414f088f300481cd0aaa4a9288ea7a1e80aa9467ec",
+  "native_mechanics_coverage": "partial",
+  "new_definitions": 19,
+  "new_programs": 2,
+  "new_slots": 1,
+  "new_tables": 0,
   "normalization": "40492c670532476e23a77b87faf423fe064d5ded3c53c89e2ec66e5006293a7a",
+  "registry": "fa12e851cd4a1a1ea30466414f088f300481cd0aaa4a9288ea7a1e80aa9467ec",
   "roles": "30006ae70f8135aeda06b5c8f81053b00d6d1c9171308da3395b2cf35909bb80",
-  "catalog": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
-  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
-  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "schema_version": 1,
   "source_files": [
     {
       "path": "src/HeadlessWrapper.lua",
@@ -100,34 +112,22 @@
       "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
     }
   ],
-  "artifact_sha256": {
-    "migration": "b04c59b9974d9af76b3e4bf7ba8f254be32d87fdca1d5bd876f98bbcd62084aa",
-    "usage": "e87c3670a22b5d205cde0afbc4220313a1abb99fd4f90de89b7bd962ff39df73",
-    "native-inputs": "d240a0f987a8bbe64ca1f5830ce26999a1db8a51ac47538ff09533667098f074"
-  },
-  "new_definitions": 19,
-  "new_slots": 1,
-  "new_programs": 2,
-  "new_tables": 0,
-  "allocated_range": [
-    "def.000000000000326a",
-    "def.000000000000327d"
-  ],
-  "usage_inventory": "pending",
-  "native_mechanics_coverage": "partial",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
   "source_validation": {
-    "status": "passed",
-    "scope": "ordinary-flat-reservation-component-not-build-parity",
-    "evidence_json": "runs/owned-minion-reservation-source-01/source-jit-off.json",
-    "evidence_bytes": 10530864,
-    "evidence_sha256": "c28c08a4f40bc17a930d678fc53da6656fd811befca02230119e31ec3097d98f",
-    "evidence_on_json": "runs/owned-minion-reservation-source-01/source-jit-on.json",
-    "evidence_on_bytes": 10530864,
-    "evidence_on_sha256": "c28c08a4f40bc17a930d678fc53da6656fd811befca02230119e31ec3097d98f",
-    "validation_log": "runs/owned-sniper-reservation-source-03.log",
-    "source_cases_per_mode": 21,
+    "canonical_lifecycle_selected": false,
     "complete_loads": 42,
+    "evidence_bytes": 10530864,
+    "evidence_json": "runs/owned-minion-reservation-source-01/source-jit-off.json",
+    "evidence_on_bytes": 10530864,
+    "evidence_on_json": "runs/owned-minion-reservation-source-01/source-jit-on.json",
+    "evidence_on_sha256": "c28c08a4f40bc17a930d678fc53da6656fd811befca02230119e31ec3097d98f",
+    "evidence_sha256": "c28c08a4f40bc17a930d678fc53da6656fd811befca02230119e31ec3097d98f",
+    "scope": "ordinary-flat-reservation-component-not-build-parity",
+    "source_cases_per_mode": 21,
     "stage_snapshots": 126,
-    "canonical_lifecycle_selected": false
-  }
+    "status": "passed",
+    "validation_log": "runs/owned-sniper-reservation-source-03.log"
+  },
+  "usage_inventory": "pending"
 }

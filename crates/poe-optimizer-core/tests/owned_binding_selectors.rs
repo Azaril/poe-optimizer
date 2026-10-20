@@ -302,6 +302,7 @@ impl Fixture {
         Self {
             index,
             build: BuildInput {
+                usage_preferences: vec![],
                 generated_inputs: None,
                 authored_support_order: None,
                 allocator: InstanceAllocatorState::from_parts(
@@ -334,6 +335,7 @@ impl Fixture {
                 choices: vec![],
             },
             scenario: ScenarioInput {
+                usage_intents: vec![],
                 game_version: namespace(),
                 enemy: EnemySpec {
                     encounter: def("encounter"),

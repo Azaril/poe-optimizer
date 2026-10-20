@@ -272,7 +272,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         assert_eq!(receipt[field], a[field], "exact predecessor {field}");
     }
     let b = prior.input();
-    let Some(GemInventoryPolicy::PobFreshPhysicalV2 {
+    let Some(GemInventoryPolicy::PobFreshPhysicalV3 {
         definitions,
         roles,
         catalog,
@@ -280,10 +280,12 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         usage_inputs,
         supports,
         primary_skills,
+        primary_dispositions,
     }) = &b.normalization.gem_inventory
     else {
-        panic!("exact V2 predecessor required");
+        panic!("exact prior physical inventory required");
     };
+    assert!(primary_dispositions.is_empty());
     for (field, value) in [
         ("catalog", json!(catalog)),
         ("scalar_inputs", json!(scalar_inputs)),

@@ -1,0 +1,1201 @@
+{
+  "kind": "isolated-source-reference-components",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "catalog": {
+    "path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+    "bytes": 2247063,
+    "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e"
+  },
+  "original": {
+    "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+    "bytes": 106378,
+    "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/BuildExportPoE2.lua",
+      "bytes": 13732,
+      "sha256": "1581790b106d658ebab9d75ca5e51da3ae32603e9f622b96dc7270413eeb4152"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "bytes": 35868,
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "bytes": 513395,
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "bytes": 18651,
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "bytes": 1172527,
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    }
+  ],
+  "retained_export": {
+    "file": "BuildExportPoE2.lua.gz",
+    "compressed_bytes": 4608,
+    "compressed_sha256": "1bac6d86fd27eaa2c2a0be07c0f2fbcd46a921394d618b0e57f2fa7de994116a",
+    "raw_bytes": 13732,
+    "raw_sha256": "1581790b106d658ebab9d75ca5e51da3ae32603e9f622b96dc7270413eeb4152"
+  },
+  "license": {
+    "path": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/LICENSE.md",
+    "bytes": 67979,
+    "sha256": "22d2d075c1d361971764fbbd1e12e1485bdf35f0769ffac4eca8a79afc60dda8"
+  },
+  "boundaries": {
+    "load_selectors": {
+      "path": "src/Classes/SkillsTab.lua",
+      "first_line": 315,
+      "last_line": 316,
+      "bytes": 158,
+      "sha256": "ba353a268102ae62b8b9f25c79c1f39fa098dc704fd481a1c3baa3becc6b1496"
+    },
+    "load_group": {
+      "path": "src/Classes/SkillsTab.lua",
+      "first_line": 303,
+      "last_line": 400,
+      "bytes": 5046,
+      "sha256": "2b94fdbe4f940577e232a6212cbc5cfed0487fd0a128ed5316c2b0935004cc42"
+    },
+    "process_identity": {
+      "path": "src/Classes/SkillsTab.lua",
+      "first_line": 1242,
+      "last_line": 1322,
+      "bytes": 3628,
+      "sha256": "8737e8311f6cbef4b9bc10525e28831d00f52e602494a7f2bdfbccee68a33f32"
+    },
+    "mod_helpers": {
+      "path": "src/Modules/Data.lua",
+      "first_line": 56,
+      "last_line": 71,
+      "bytes": 467,
+      "sha256": "d93a8a1011b44dd06bb8e2b89e847b670a52258d3aad27b97c2469ef88d08d38"
+    },
+    "metadata_lazy": {
+      "path": "src/Modules/Data.lua",
+      "first_line": 910,
+      "last_line": 966,
+      "bytes": 1864,
+      "sha256": "86dc27a5772c5b9a26bea1c76a1776dd1cd8bdfa55ef65050d020afe84086ddd"
+    },
+    "constructor": {
+      "path": "src/Modules/Data.lua",
+      "first_line": 979,
+      "last_line": 1050,
+      "bytes": 2667,
+      "sha256": "2a54b2de28344b1b660bd8f731c5c7d7a137c07f71b9ea17f1d7809124cbd185"
+    },
+    "constructor_dispatch": {
+      "path": "src/Modules/Data.lua",
+      "first_line": 1052,
+      "last_line": 1068,
+      "bytes": 513,
+      "sha256": "5a355199bb1ec9ca636394e4b42b79aa553e57baf153fbafb7e917f023391831"
+    },
+    "generated_group": {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1699,
+      "last_line": 1733,
+      "bytes": 1547,
+      "sha256": "e86b9eaefe5138a89e1e69df8279ca23fca9b6fea32d463347ce1cdbe93303a7"
+    },
+    "group_lists": {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1978,
+      "last_line": 1993,
+      "bytes": 989,
+      "sha256": "4e2c516873c1bbfeceeaf47016c6ba7f75f0b57dc6a352cfb4743efa16a7b741"
+    },
+    "admission_prefix": {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1995,
+      "last_line": 1999,
+      "bytes": 493,
+      "sha256": "f44736ee70e78e9cf48b4b4834c38011ecb973db9f98b09a0eb4b36ccab11ca6"
+    },
+    "complete_active_loop": {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 1994,
+      "last_line": 2124,
+      "bytes": 6516,
+      "sha256": "c290a0ee98b7c8b82a79235b62fcc0d1036c276f14f337ded2a3be1b67efe48f"
+    },
+    "select_group": {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 2141,
+      "last_line": 2154,
+      "bytes": 601,
+      "sha256": "2243d1734717c0349251cf1cc02f58019b15c978b2fbb3ca8438d9ea382c190c"
+    },
+    "fallback": {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 2197,
+      "last_line": 2209,
+      "bytes": 443,
+      "sha256": "5e085cb989d40f01ff1d298f6353d5929874f96e482f5ccfc4edc3b5f1fb128f"
+    },
+    "export_active": {
+      "path": "src/Modules/BuildExportPoE2.lua",
+      "first_line": 118,
+      "last_line": 132,
+      "bytes": 606,
+      "sha256": "0543769e097d3d1d0ae78d38f319053cb398ecd5397f263919f7a9e77ee9fa00"
+    },
+    "export_group_gate": {
+      "path": "src/Modules/BuildExportPoE2.lua",
+      "first_line": 137,
+      "last_line": 137,
+      "bytes": 74,
+      "sha256": "b0f8451541c2b31581e2115e7e0ea3d7877dbfa3388f6790db592115abc8d59e"
+    },
+    "export_reference": {
+      "path": "src/Modules/BuildExportPoE2.lua",
+      "first_line": 138,
+      "last_line": 146,
+      "bytes": 385,
+      "sha256": "9cd770fbc37d77b346c2887f75c7b5795f4eb9cd0a54d83687aac2aaeaaf9ecb"
+    },
+    "export_complete": {
+      "path": "src/Modules/BuildExportPoE2.lua",
+      "first_line": 133,
+      "last_line": 178,
+      "bytes": 1769,
+      "sha256": "e6e94fc0988b7d895c6d76ba90aaa1d3aa0324b3905bf96e9fbb603ea428359d"
+    },
+    "full_dps_init": {
+      "path": "src/Modules/Calcs.lua",
+      "first_line": 251,
+      "last_line": 255,
+      "bytes": 363,
+      "sha256": "f4ed9d13a7f78090fdf0a69491a4ff3ecedd6baf40de27dd1d4a3511167181ec"
+    },
+    "full_dps_selection": {
+      "path": "src/Modules/Calcs.lua",
+      "first_line": 289,
+      "last_line": 324,
+      "bytes": 1562,
+      "sha256": "96d357b5bf486534af5c2c3691f2d07a1dc30f3476460c042362e9795cbca883"
+    }
+  },
+  "families": [
+    {
+      "primary": "SummonSkeletalArsonistsPlayer",
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "game_id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "variant_id": "SkeletalArsonist",
+        "name": "Skeletal Arsonist",
+        "name_spec": null,
+        "base_type_name": "Skeletal Arsonist Minion",
+        "primary_effect_id": "SummonSkeletalArsonistsPlayer",
+        "declared_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalArsonistPlayer"
+          }
+        ],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalArsonistPlayer"
+          }
+        ],
+        "additional_effects": [],
+        "effect_list": [
+          "SummonSkeletalArsonistsPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 119
+      },
+      "gem_declaration": {
+        "index": 119,
+        "key": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 2515,
+          "end_line": 2537,
+          "sha256": "6d44590ebd02fc8791a67cc587668590c68e18c1dcdef974bad6cd1a1faff3a1"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+          "variant_id": "SkeletalArsonist",
+          "name": "Skeletal Arsonist",
+          "name_spec": null,
+          "base_type_name": "Skeletal Arsonist Minion",
+          "primary_effect_id": "SummonSkeletalArsonistsPlayer",
+          "additional_effects": [
+            {
+              "index": 1,
+              "id": "CommandSkeletalArsonistPlayer"
+            }
+          ],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill": {
+        "id": "SummonSkeletalArsonistsPlayer",
+        "name": "Skeletal Arsonist Minion",
+        "base_type_name": "Skeletal Arsonist Minion",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 327
+      },
+      "skill_declaration": {
+        "index": 327,
+        "id": "SummonSkeletalArsonistsPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 18047,
+          "end_line": 18170,
+          "sha256": "fb2bece57ff904a5d4a5766f3b3df28b112a90279ebd7cc25bc5153d6f5c3515"
+        },
+        "identity": {
+          "name": "Skeletal Arsonist Minion",
+          "base_type_name": "Skeletal Arsonist Minion",
+          "support": null,
+          "from_tree": null
+        }
+      }
+    },
+    {
+      "primary": "SummonSkeletalSnipersPlayer",
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "game_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "variant_id": "SkeletalSniper",
+        "name": "Skeletal Sniper",
+        "name_spec": null,
+        "base_type_name": "Skeletal Sniper Minion",
+        "primary_effect_id": "SummonSkeletalSnipersPlayer",
+        "declared_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalSniperPlayer"
+          }
+        ],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalSniperPlayer"
+          }
+        ],
+        "additional_effects": [],
+        "effect_list": [
+          "SummonSkeletalSnipersPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 116
+      },
+      "gem_declaration": {
+        "index": 116,
+        "key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 2447,
+          "end_line": 2470,
+          "sha256": "dd93cb09e3f957e9bd0014384acc11303b5567166c7a76097040f49929996224"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+          "variant_id": "SkeletalSniper",
+          "name": "Skeletal Sniper",
+          "name_spec": null,
+          "base_type_name": "Skeletal Sniper Minion",
+          "primary_effect_id": "SummonSkeletalSnipersPlayer",
+          "additional_effects": [
+            {
+              "index": 1,
+              "id": "CommandSkeletalSniperPlayer"
+            }
+          ],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill": {
+        "id": "SummonSkeletalSnipersPlayer",
+        "name": "Skeletal Sniper Minion",
+        "base_type_name": "Skeletal Sniper Minion",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 332
+      },
+      "skill_declaration": {
+        "index": 332,
+        "id": "SummonSkeletalSnipersPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 18677,
+          "end_line": 18799,
+          "sha256": "fb834997a7c392e6a8e1a190ecd1f864b7537562611f2237dd650e12d54de192"
+        },
+        "identity": {
+          "name": "Skeletal Sniper Minion",
+          "base_type_name": "Skeletal Sniper Minion",
+          "support": null,
+          "from_tree": null
+        }
+      }
+    },
+    {
+      "primary": "SummonSkeletalFrostMagesPlayer",
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "game_id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "variant_id": "SkeletalFrostMage",
+        "name": "Skeletal Frost Mage",
+        "name_spec": null,
+        "base_type_name": "Skeletal Frost Mage Minion",
+        "primary_effect_id": "SummonSkeletalFrostMagesPlayer",
+        "declared_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalFrostMagePlayer"
+          }
+        ],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalFrostMagePlayer"
+          }
+        ],
+        "additional_effects": [],
+        "effect_list": [
+          "SummonSkeletalFrostMagesPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 117
+      },
+      "gem_declaration": {
+        "index": 117,
+        "key": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 2471,
+          "end_line": 2492,
+          "sha256": "1c80a0c3f915c8ce228f66d10d04f307e1d3d06440d322c049918a3b0b23551c"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+          "variant_id": "SkeletalFrostMage",
+          "name": "Skeletal Frost Mage",
+          "name_spec": null,
+          "base_type_name": "Skeletal Frost Mage Minion",
+          "primary_effect_id": "SummonSkeletalFrostMagesPlayer",
+          "additional_effects": [
+            {
+              "index": 1,
+              "id": "CommandSkeletalFrostMagePlayer"
+            }
+          ],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill": {
+        "id": "SummonSkeletalFrostMagesPlayer",
+        "name": "Skeletal Frost Mage Minion",
+        "base_type_name": "Skeletal Frost Mage Minion",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 330
+      },
+      "skill_declaration": {
+        "index": 330,
+        "id": "SummonSkeletalFrostMagesPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 18419,
+          "end_line": 18542,
+          "sha256": "c9812f0956393628f52ef649f3d00eaa196a618a9905d9d34aa282f2518949d2"
+        },
+        "identity": {
+          "name": "Skeletal Frost Mage Minion",
+          "base_type_name": "Skeletal Frost Mage Minion",
+          "support": null,
+          "from_tree": null
+        }
+      }
+    },
+    {
+      "primary": "SummonSkeletalReaversPlayer",
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "game_id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "variant_id": "SkeletalReaver",
+        "name": "Skeletal Reaver",
+        "name_spec": null,
+        "base_type_name": "Skeletal Reaver Minion",
+        "primary_effect_id": "SummonSkeletalReaversPlayer",
+        "declared_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalReaversPlayer"
+          }
+        ],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalReaversPlayer"
+          }
+        ],
+        "additional_effects": [],
+        "effect_list": [
+          "SummonSkeletalReaversPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 114
+      },
+      "gem_declaration": {
+        "index": 114,
+        "key": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 2401,
+          "end_line": 2422,
+          "sha256": "fc492bea3933110809a152bd7eac934f503b75db2ad82477638dd0deb6610a3b"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+          "variant_id": "SkeletalReaver",
+          "name": "Skeletal Reaver",
+          "name_spec": null,
+          "base_type_name": "Skeletal Reaver Minion",
+          "primary_effect_id": "SummonSkeletalReaversPlayer",
+          "additional_effects": [
+            {
+              "index": 1,
+              "id": "CommandSkeletalReaversPlayer"
+            }
+          ],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill": {
+        "id": "SummonSkeletalReaversPlayer",
+        "name": "Skeletal Reaver Minion",
+        "base_type_name": "Skeletal Reaver Minion",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 331
+      },
+      "skill_declaration": {
+        "index": 331,
+        "id": "SummonSkeletalReaversPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 18543,
+          "end_line": 18676,
+          "sha256": "54e56cb56c42207527985611680171aeb3eeeefeef94cab28a16dd62116a01a1"
+        },
+        "identity": {
+          "name": "Skeletal Reaver Minion",
+          "base_type_name": "Skeletal Reaver Minion",
+          "support": null,
+          "from_tree": null
+        }
+      }
+    },
+    {
+      "primary": "SummonSandDjinnPlayer",
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemAscendancySummonSandDjinn",
+        "game_id": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+        "variant_id": "AscendancySummonSandDjinn",
+        "name": "Kelari, the Tainted Sands",
+        "name_spec": null,
+        "base_type_name": "Kelari, the Tainted Sands",
+        "primary_effect_id": "SummonSandDjinnPlayer",
+        "declared_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSandDjinnKnifeThrowPlayer"
+          }
+        ],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSandDjinnKnifeThrowPlayer"
+          }
+        ],
+        "additional_effects": [
+          "CommandSandDjinnKnifeThrowPlayer"
+        ],
+        "effect_list": [
+          "SummonSandDjinnPlayer",
+          "CommandSandDjinnKnifeThrowPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 425
+      },
+      "gem_declaration": {
+        "index": 425,
+        "key": "Metadata/Items/Gems/SkillGemAscendancySummonSandDjinn",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 9225,
+          "end_line": 9246,
+          "sha256": "e6637dc339801ed062ab1c79043702ce7ad759fef2f1fbefa0c5659f9253871c"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+          "variant_id": "AscendancySummonSandDjinn",
+          "name": "Kelari, the Tainted Sands",
+          "name_spec": null,
+          "base_type_name": "Kelari, the Tainted Sands",
+          "primary_effect_id": "SummonSandDjinnPlayer",
+          "additional_effects": [
+            {
+              "index": 1,
+              "id": "CommandSandDjinnKnifeThrowPlayer"
+            }
+          ],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill": {
+        "id": "SummonSandDjinnPlayer",
+        "name": "Kelari, the Tainted Sands",
+        "base_type_name": "Kelari, the Tainted Sands",
+        "support": null,
+        "from_tree": true,
+        "winning_declaration": 433
+      },
+      "skill_declaration": {
+        "index": 433,
+        "id": "SummonSandDjinnPlayer",
+        "source": {
+          "path": "src/Data/Skills/other.lua",
+          "line": 9822,
+          "end_line": 9942,
+          "sha256": "136b02d7650712d310cd545bf47344039d3c97f59a0194e624ff050c99af04c7"
+        },
+        "identity": {
+          "name": "Kelari, the Tainted Sands",
+          "base_type_name": "Kelari, the Tainted Sands",
+          "support": null,
+          "from_tree": true
+        }
+      }
+    },
+    {
+      "primary": "SummonWaterDjinnPlayer",
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemAscendancySummonWaterDjinn",
+        "game_id": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+        "variant_id": "AscendancySummonWaterDjinn",
+        "name": "Navira, the Last Mirage",
+        "name_spec": null,
+        "base_type_name": "Navira, the Last Mirage",
+        "primary_effect_id": "SummonWaterDjinnPlayer",
+        "declared_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandWaterDjinnBubblePlayer"
+          }
+        ],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandWaterDjinnBubblePlayer"
+          }
+        ],
+        "additional_effects": [
+          "CommandWaterDjinnBubblePlayer"
+        ],
+        "effect_list": [
+          "SummonWaterDjinnPlayer",
+          "CommandWaterDjinnBubblePlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 423
+      },
+      "gem_declaration": {
+        "index": 423,
+        "key": "Metadata/Items/Gems/SkillGemAscendancySummonWaterDjinn",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 9181,
+          "end_line": 9202,
+          "sha256": "700c0ed441844006fcadb811c5fe498895f427799fc5ef285023aa1efa33a3c1"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+          "variant_id": "AscendancySummonWaterDjinn",
+          "name": "Navira, the Last Mirage",
+          "name_spec": null,
+          "base_type_name": "Navira, the Last Mirage",
+          "primary_effect_id": "SummonWaterDjinnPlayer",
+          "additional_effects": [
+            {
+              "index": 1,
+              "id": "CommandWaterDjinnBubblePlayer"
+            }
+          ],
+          "additional_stat_sets": [],
+          "display_order": null
+        }
+      },
+      "skill": {
+        "id": "SummonWaterDjinnPlayer",
+        "name": "Navira, the Last Mirage",
+        "base_type_name": "Navira, the Last Mirage",
+        "support": null,
+        "from_tree": true,
+        "winning_declaration": 454
+      },
+      "skill_declaration": {
+        "index": 454,
+        "id": "SummonWaterDjinnPlayer",
+        "source": {
+          "path": "src/Data/Skills/other.lua",
+          "line": 12310,
+          "end_line": 12430,
+          "sha256": "6c5954084cd45abf8c270aa6e94f689b9869eb4e5f529f9fad2056813a5cba84"
+        },
+        "identity": {
+          "name": "Navira, the Last Mirage",
+          "base_type_name": "Navira, the Last Mirage",
+          "support": null,
+          "from_tree": true
+        }
+      }
+    },
+    {
+      "primary": "IceNovaPlayer",
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemIceNova",
+        "game_id": "Metadata/Items/Gems/SkillGemIceNova",
+        "variant_id": "IceNova",
+        "name": "Ice Nova",
+        "name_spec": null,
+        "base_type_name": "Ice Nova",
+        "primary_effect_id": "IceNovaPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [
+          {
+            "index": 1,
+            "id": "IceNovaPlayerOnFrostbolt"
+          },
+          {
+            "index": 2,
+            "id": "IceNovaColdInfusedPlayer"
+          }
+        ],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "IceNovaPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 1
+      },
+      "gem_declaration": {
+        "index": 1,
+        "key": "Metadata/Items/Gems/SkillGemIceNova",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 5,
+          "end_line": 30,
+          "sha256": "2a11db22a9a551abdf52358045c89ee97243b69e24cc815fc0f3fd5ceff668f8"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemIceNova",
+          "variant_id": "IceNova",
+          "name": "Ice Nova",
+          "name_spec": null,
+          "base_type_name": "Ice Nova",
+          "primary_effect_id": "IceNovaPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [
+            {
+              "index": 1,
+              "id": "IceNovaPlayerOnFrostbolt"
+            },
+            {
+              "index": 2,
+              "id": "IceNovaColdInfusedPlayer"
+            }
+          ],
+          "display_order": null
+        }
+      },
+      "skill": {
+        "id": "IceNovaPlayer",
+        "name": "Ice Nova",
+        "base_type_name": "Ice Nova",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 289
+      },
+      "skill_declaration": {
+        "index": 289,
+        "id": "IceNovaPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 12801,
+          "end_line": 13020,
+          "sha256": "024888550af2f5827d379730a715b6e0277677c88262d3fe6399267ffeaf8e68"
+        },
+        "identity": {
+          "name": "Ice Nova",
+          "base_type_name": "Ice Nova",
+          "support": null,
+          "from_tree": null
+        }
+      }
+    },
+    {
+      "primary": "FireboltPlayer",
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemFirebolt",
+        "game_id": "Metadata/Items/Gems/SkillGemFirebolt",
+        "variant_id": "Firebolt",
+        "name": "Firebolt",
+        "name_spec": null,
+        "base_type_name": "Firebolt",
+        "primary_effect_id": "FireboltPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [
+          {
+            "index": 1,
+            "id": "FireboltExplosionPlayer"
+          }
+        ],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "FireboltPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 287
+      },
+      "gem_declaration": {
+        "index": 287,
+        "key": "Metadata/Items/Gems/SkillGemFirebolt",
+        "source": {
+          "path": "src/Data/Gems.lua",
+          "line": 6170,
+          "end_line": 6193,
+          "sha256": "eaca0262e365b3442ad5d1d56129e89580ec61c0a338e9e8a66103763e32a288"
+        },
+        "identity": {
+          "game_id": "Metadata/Items/Gems/SkillGemFirebolt",
+          "variant_id": "Firebolt",
+          "name": "Firebolt",
+          "name_spec": null,
+          "base_type_name": "Firebolt",
+          "primary_effect_id": "FireboltPlayer",
+          "additional_effects": [],
+          "additional_stat_sets": [
+            {
+              "index": 1,
+              "id": "FireboltExplosionPlayer"
+            }
+          ],
+          "display_order": null
+        }
+      },
+      "skill": {
+        "id": "FireboltPlayer",
+        "name": "Firebolt",
+        "base_type_name": "Firebolt",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 260
+      },
+      "skill_declaration": {
+        "index": 260,
+        "id": "FireboltPlayer",
+        "source": {
+          "path": "src/Data/Skills/act_int.lua",
+          "line": 7664,
+          "end_line": 7876,
+          "sha256": "4e9bdd710a28c9c20ba4eceb30f7752d38b0ea1d9070a086d43b1144d8bd2930"
+        },
+        "identity": {
+          "name": "Firebolt",
+          "base_type_name": "Firebolt",
+          "support": null,
+          "from_tree": null
+        }
+      }
+    }
+  ],
+  "extra_declarations": [
+    {
+      "index": 434,
+      "id": "CommandSandDjinnKnifeThrowPlayer",
+      "source": {
+        "path": "src/Data/Skills/other.lua",
+        "line": 9943,
+        "end_line": 10059,
+        "sha256": "7601fc95626c7dabeb49b54e3a1ab0665e5cb29e7fc606c01af638ff27fc83c4"
+      },
+      "identity": {
+        "name": "Command: {0} ",
+        "base_type_name": null,
+        "support": null,
+        "from_tree": true
+      }
+    },
+    {
+      "index": 455,
+      "id": "CommandWaterDjinnBubblePlayer",
+      "source": {
+        "path": "src/Data/Skills/other.lua",
+        "line": 12431,
+        "end_line": 12548,
+        "sha256": "c6eb9f7efca017279dba57c2ed171e6cadae25b842af5cea37dc5f95fe8d8264"
+      },
+      "identity": {
+        "name": "Command: {0} ",
+        "base_type_name": null,
+        "support": null,
+        "from_tree": true
+      }
+    }
+  ],
+  "original_pairs": [
+    {
+      "group_ordinal": 205,
+      "primary_ordinal": 206,
+      "group_attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "nil",
+        "enabled": "true"
+      },
+      "primary_attributes": {
+        "skillMinionSkillCalcs": "1",
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "skillMinionSkill": "1",
+        "level": "20",
+        "skillMinionCalcs": "RaisedSkeletonArsonist",
+        "count": "1",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "enabled": "true",
+        "skillMinion": "RaisedSkeletonArsonist",
+        "variantId": "SkeletalArsonist",
+        "quality": "0",
+        "enableGlobal2": "true",
+        "enableGlobal1": "true",
+        "skillId": "SummonSkeletalArsonistsPlayer",
+        "nameSpec": "Skeletal Arsonist"
+      }
+    },
+    {
+      "group_ordinal": 208,
+      "primary_ordinal": 209,
+      "group_attributes": {
+        "source": "Tree:13289",
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "1",
+        "enabled": "true"
+      },
+      "primary_attributes": {
+        "skillMinionSkillCalcs": "1",
+        "corruptLevel": "nil",
+        "corrupted": "nil",
+        "skillMinionSkill": "2",
+        "level": "1",
+        "count": "nil",
+        "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+        "enabled": "true",
+        "skillMinion": "SandDjinn",
+        "variantId": "AscendancySummonSandDjinn",
+        "quality": "0",
+        "enableGlobal2": "nil",
+        "enableGlobal1": "true",
+        "skillId": "SummonSandDjinnPlayer",
+        "nameSpec": "Kelari, the Tainted Sands"
+      }
+    },
+    {
+      "group_ordinal": 210,
+      "primary_ordinal": 211,
+      "group_attributes": {
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "1",
+        "enabled": "true"
+      },
+      "primary_attributes": {
+        "skillMinionSkillCalcs": "1",
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "skillMinionSkill": "1",
+        "level": "20",
+        "count": "1",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "enabled": "true",
+        "skillMinion": "RaisedSkeletonSniper",
+        "variantId": "SkeletalSniper",
+        "quality": "0",
+        "enableGlobal2": "true",
+        "enableGlobal1": "true",
+        "skillId": "SummonSkeletalSnipersPlayer",
+        "nameSpec": "Skeletal Sniper"
+      }
+    },
+    {
+      "group_ordinal": 212,
+      "primary_ordinal": 213,
+      "group_attributes": {
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "nil",
+        "enabled": "true"
+      },
+      "primary_attributes": {
+        "skillMinionSkillCalcs": "1",
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "skillMinionSkill": "1",
+        "level": "20",
+        "count": "1",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "enabled": "true",
+        "skillMinion": "RaisedSkeletonFrostMage",
+        "variantId": "SkeletalFrostMage",
+        "quality": "0",
+        "enableGlobal2": "true",
+        "enableGlobal1": "true",
+        "skillId": "SummonSkeletalFrostMagesPlayer",
+        "nameSpec": "Skeletal Frost Mage"
+      }
+    },
+    {
+      "group_ordinal": 215,
+      "primary_ordinal": 216,
+      "group_attributes": {
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "nil",
+        "enabled": "true"
+      },
+      "primary_attributes": {
+        "skillMinionSkillCalcs": "1",
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "skillMinionSkill": "1",
+        "level": "20",
+        "count": "1",
+        "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+        "enabled": "true",
+        "skillMinion": "SandDjinn",
+        "variantId": "AscendancySummonSandDjinn",
+        "quality": "0",
+        "enableGlobal2": "true",
+        "enableGlobal1": "true",
+        "skillId": "SummonSandDjinnPlayer",
+        "nameSpec": "Kelari, the Tainted Sands"
+      }
+    },
+    {
+      "group_ordinal": 223,
+      "primary_ordinal": 224,
+      "group_attributes": {
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "nil",
+        "enabled": "true"
+      },
+      "primary_attributes": {
+        "skillMinionSkillCalcs": "1",
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "skillMinionSkill": "1",
+        "level": "20",
+        "count": "1",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "enabled": "true",
+        "skillMinion": "RaisedSkeletonReaver",
+        "variantId": "SkeletalReaver",
+        "quality": "0",
+        "enableGlobal2": "true",
+        "enableGlobal1": "true",
+        "skillId": "SummonSkeletalReaversPlayer",
+        "nameSpec": "Skeletal Reaver"
+      }
+    },
+    {
+      "group_ordinal": 226,
+      "primary_ordinal": 227,
+      "group_attributes": {
+        "source": "Tree:32705",
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "nil",
+        "enabled": "true"
+      },
+      "primary_attributes": {
+        "skillMinionSkillCalcs": "1",
+        "corruptLevel": "nil",
+        "corrupted": "nil",
+        "skillMinionSkill": "1",
+        "level": "1",
+        "count": "nil",
+        "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+        "enabled": "true",
+        "skillMinion": "WaterDjinn",
+        "variantId": "AscendancySummonWaterDjinn",
+        "quality": "0",
+        "enableGlobal2": "nil",
+        "enableGlobal1": "true",
+        "skillId": "SummonWaterDjinnPlayer",
+        "nameSpec": "Navira, the Last Mirage"
+      }
+    },
+    {
+      "group_ordinal": 228,
+      "primary_ordinal": 229,
+      "group_attributes": {
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "nil",
+        "enabled": "true"
+      },
+      "primary_attributes": {
+        "skillMinionSkillCalcs": "1",
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "skillMinionSkill": "1",
+        "level": "20",
+        "count": "1",
+        "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+        "enabled": "true",
+        "skillMinion": "WaterDjinn",
+        "variantId": "AscendancySummonWaterDjinn",
+        "quality": "0",
+        "enableGlobal2": "true",
+        "enableGlobal1": "true",
+        "skillId": "SummonWaterDjinnPlayer",
+        "nameSpec": "Navira, the Last Mirage"
+      }
+    },
+    {
+      "group_ordinal": 238,
+      "primary_ordinal": 239,
+      "group_attributes": {
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "nil",
+        "enabled": "true"
+      },
+      "primary_attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "level": "17",
+        "count": "1",
+        "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+        "enabled": "true",
+        "variantId": "IceNova",
+        "quality": "0",
+        "enableGlobal2": "true",
+        "enableGlobal1": "true",
+        "skillId": "IceNovaPlayer",
+        "nameSpec": "Ice Nova"
+      }
+    },
+    {
+      "group_ordinal": 243,
+      "primary_ordinal": 244,
+      "group_attributes": {
+        "source": "Item:28:New Item, Ashen Staff",
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "mainActiveSkill": "nil",
+        "enabled": "true",
+        "slot": "Weapon 1"
+      },
+      "primary_attributes": {
+        "corruptLevel": "nil",
+        "corrupted": "nil",
+        "level": "11",
+        "count": "nil",
+        "gemId": "Metadata/Items/Gems/SkillGemFirebolt",
+        "enabled": "true",
+        "variantId": "Firebolt",
+        "quality": "0",
+        "enableGlobal2": "nil",
+        "enableGlobal1": "true",
+        "skillId": "FireboltPlayer",
+        "nameSpec": "Firebolt"
+      }
+    }
+  ],
+  "candidate_tokens": [
+    "absent",
+    "nil",
+    "1"
+  ],
+  "scope": {
+    "whole_source_files_authenticated": true,
+    "complete_evaluator_started": false,
+    "full_build_parity": false,
+    "numerical_parity": false,
+    "native_runtime_authority": false,
+    "import_accounting_implemented": false,
+    "actual_source_constructor": true,
+    "actual_source_admission_predicate": true,
+    "host_active_skill_objects": "identity only; calcs.createActiveSkill is not executed",
+    "raw_metadata": "actual full declarations; no lazy stat-map initialization is simulated",
+    "synthetic_controls": "explicit mutations of component inputs; not actual gameplay observations",
+    "later_missing_commands": "retained as unresolved declarations; only the first admitted prefix is observed"
+  }
+}

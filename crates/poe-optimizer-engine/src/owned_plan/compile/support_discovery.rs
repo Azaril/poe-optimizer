@@ -2,65 +2,178 @@
 use super::*;
 
 impl<I: DefinitionSchemaIndex> Builder<'_, I> {
-    /// The ordinary resolver intentionally omits disabled roots. Inspect their
-    /// same declared occurrence paths for coverage only; no actor, action,
-    /// invocation, value or activation is installed in the execution graph.
-    pub(super) fn check_inactive_support_sources(&mut self, root: &ProviderKey) -> Result<()> {
-        let mut pending = BTreeSet::from([root.clone()]);
-        while let Some(key) = pending.pop_first() {
-            charge(&mut self.work, key.grant_path.len() + 1)?;
-            if self.inactive_support_providers.contains(&key) {
-                continue;
+    /// Record potential requirement owners on the existing structural traversal,
+    /// before activation or requested Actions can suppress their invocations.
+    /// Unknown declarations still leave the ordinary whole-plan coverage gaps.
+    pub(super) fn requirement_owner(&mut self, subject: SchemaSubject) -> Result<()> {
+        charge(
+            &mut self.work,
+            self.requirement_owners.len().checked_ilog2().unwrap_or(0) as usize + 1,
+        )?;
+        let key = requirements::owner_key(&subject);
+        if !self.requirement_owners.contains_key(&key) {
+            if self.requirement_owners.len() >= self.limits.max_owner_bindings {
+                return Err(PlanError::Limit("requirement owners"));
             }
-            if self.providers.len() + self.inactive_support_providers.len()
-                >= self.limits.max_providers
-            {
-                return Err(PlanError::Limit("providers"));
+            self.requirement_owners.insert(key, subject);
+        }
+        Ok(())
+    }
+
+    pub(super) fn requirement_gap(
+        &mut self,
+        provider: Option<&ProviderKey>,
+        subject: Option<SchemaSubject>,
+        reason: PlanGapReason,
+    ) -> Result<()> {
+        charge(
+            &mut self.work,
+            self.requirement_gaps.len() + provider.map_or(0, |p| p.grant_path.len()) + 1,
+        )?;
+        let gap = PlanGap {
+            provider: provider.cloned(),
+            subject,
+            reason,
+        };
+        if !self.requirement_gaps.contains(&gap) {
+            if self.requirement_gaps.len() >= self.limits.binding.max_issues {
+                return Err(PlanError::Limit("requirement gaps"));
             }
-            self.inactive_support_providers.insert(key.clone());
-            let resolved = self.resolver.structural_provider(&key)?;
-            charge(&mut self.work, resolved.work_used())?;
-            let Some(provider) = resolved.into_value() else {
-                self.gap(Some(key), None, PlanGapReason::UnresolvedTopology)?;
-                continue;
-            };
-            let mut declarations = vec![];
-            match provider.exposure() {
-                ProviderExposure::Root { owners, skills, .. } => {
-                    if let Some(skills) = skills {
-                        charge(&mut self.work, skills.members.len() + 1)?;
-                        if !skills.is_complete() {
-                            self.gap(Some(key.clone()), None, PlanGapReason::PartialDeclarations)?;
-                        }
-                        for skill in &skills.members {
-                            self.check_support_domain(
-                                &SchemaSubject::Definition(skill.address()),
-                                Some(&key),
+            self.requirement_gaps.push(gap);
+        }
+        Ok(())
+    }
+
+    fn requirement_outputs(
+        &mut self,
+        provider: &ProviderKey,
+        outputs: &DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
+    ) -> Result<()> {
+        if !outputs.is_complete() {
+            self.requirement_gap(Some(provider), None, PlanGapReason::PartialDeclarations)?;
+        }
+        charge(&mut self.work, outputs.members.len())?;
+        for output in &outputs.members {
+            self.requirement_owner(SchemaSubject::Slot(ActionOutputDefId::address(output)))?;
+        }
+        self.requirement_output_coverage(provider, &outputs.members)
+    }
+
+    fn requirement_potential_skill(
+        &mut self,
+        provider: &ProviderKey,
+        skill: &SkillDefId,
+    ) -> Result<()> {
+        let subject = SchemaSubject::Definition(skill.address());
+        self.requirement_owner(subject.clone())?;
+        match self.index.definition(skill) {
+            SchemaLookup::Known(schema) => {
+                self.requirement_outputs(provider, &schema.declarations.outputs)
+            }
+            _ => self.requirement_gap(
+                Some(provider),
+                Some(subject),
+                PlanGapReason::UnresolvedTopology,
+            ),
+        }
+    }
+
+    /// One node of the shared topology traversal. This never registers an
+    /// executable provider, actor, Action, value or activation.
+    pub(super) fn structural_children(
+        &mut self,
+        key: &ProviderKey,
+        exposure: &ProviderExposure<'_>,
+        pending: &mut BTreeSet<ProviderKey>,
+        inactive: bool,
+    ) -> Result<()> {
+        let mut declarations = vec![];
+        match exposure {
+            ProviderExposure::Root {
+                owners,
+                skills,
+                implicit_passives,
+            } => {
+                for roots in implicit_passives {
+                    if !roots.declaration().is_complete() {
+                        self.usage_census_gap(
+                            Some(key),
+                            Some(owner_subject(roots.owner())),
+                            PlanGapReason::PartialDeclarations,
+                        )?;
+                    }
+                    charge(&mut self.work, roots.nodes().len())?;
+                    for (node, schema) in roots.nodes() {
+                        if !matches!(schema, SchemaLookup::Known(_)) {
+                            self.usage_census_gap(
+                                Some(key),
+                                Some(SchemaSubject::Definition(node.address())),
+                                PlanGapReason::UnresolvedTopology,
                             )?;
                         }
                     }
-                    for owner in owners {
-                        self.check_support_domain(&owner.subject(), Some(&key))?;
-                        declarations.push(owner.declarations());
+                }
+                if let Some(skills) = skills {
+                    charge(&mut self.work, skills.members.len())?;
+                    for skill in &skills.members {
+                        self.requirement_potential_skill(key, skill)?;
+                    }
+                    if !skills.is_complete() {
+                        self.usage_census_gap(Some(key), None, PlanGapReason::PartialDeclarations)?;
+                        if inactive {
+                            self.gap(Some(key.clone()), None, PlanGapReason::PartialDeclarations)?;
+                        }
+                    }
+                    if inactive {
+                        charge(&mut self.work, skills.members.len())?;
+                        for skill in &skills.members {
+                            self.check_support_domain(
+                                &SchemaSubject::Definition(skill.address()),
+                                Some(key),
+                            )?;
+                        }
                     }
                 }
-                ProviderExposure::Skill {
-                    owner,
-                    declarations: d,
-                    ..
-                } => {
-                    self.check_support_domain(&owner_subject(owner), Some(&key))?;
-                    declarations.push(*d);
+                for owner in owners {
+                    self.requirement_owner(owner.subject())?;
+                    if inactive {
+                        self.check_support_domain(&owner.subject(), Some(key))?;
+                    }
+                    declarations.push(owner.declarations());
                 }
-                ProviderExposure::Actor {
-                    key: actor,
-                    schema,
-                    owner,
-                    ..
-                } => {
+            }
+            ProviderExposure::Skill {
+                owner,
+                declarations: d,
+                outputs,
+                ..
+            } => {
+                self.requirement_owner(owner_subject(owner))?;
+                self.requirement_outputs(key, outputs)?;
+                if inactive {
+                    self.check_support_domain(&owner_subject(owner), Some(key))?;
+                }
+                declarations.push(*d);
+            }
+            ProviderExposure::Actor {
+                key: actor,
+                schema,
+                owner,
+                ..
+            } => {
+                self.requirement_owner(SchemaSubject::Slot(ActorSlotDefId::address(&actor.slot)))?;
+                charge(&mut self.work, schema.skills.members.len())?;
+                for skill in &schema.skills.members {
+                    self.requirement_potential_skill(key, skill)?;
+                }
+                self.requirement_outputs(key, &schema.outputs)?;
+                if !schema.skills.is_complete() {
+                    self.usage_census_gap(Some(key), None, PlanGapReason::PartialDeclarations)?;
+                }
+                if inactive {
                     self.check_support_domain(
                         &SchemaSubject::Slot(ActorSlotDefId::address(&actor.slot)),
-                        Some(&key),
+                        Some(key),
                     )?;
                     if !schema.skills.is_complete() || !schema.outputs.is_complete() {
                         self.gap(Some(key.clone()), None, PlanGapReason::PartialDeclarations)?;
@@ -69,43 +182,65 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                     for skill in &schema.skills.members {
                         self.check_support_domain(
                             &SchemaSubject::Definition(skill.address()),
-                            Some(&key),
+                            Some(key),
                         )?;
                     }
-                    if let Some(owner) = owner {
-                        self.check_support_domain(&owner.subject(), Some(&key))?;
-                        declarations.push(owner.declarations());
-                    }
                 }
-                ProviderExposure::AllocationAccess { .. } => {}
+                if let Some(owner) = owner {
+                    self.requirement_owner(owner.subject())?;
+                    if inactive {
+                        self.check_support_domain(&owner.subject(), Some(key))?;
+                    }
+                    declarations.push(owner.declarations());
+                } else if !schema.skills.members.is_empty() {
+                    self.usage_census_gap(Some(key), None, PlanGapReason::UnresolvedTopology)?;
+                }
             }
-            for d in declarations {
-                if !d.grants.is_complete()
-                    || !d.actors.is_complete()
-                    || !d.skill_grants.is_complete()
-                {
+            ProviderExposure::AllocationAccess { .. } => {
+                self.usage_census_gap(Some(key), None, PlanGapReason::UnsupportedRelation)?;
+            }
+        }
+        for d in declarations {
+            self.requirement_outputs(key, &d.outputs)?;
+            if !d.grants.is_complete() || !d.actors.is_complete() || !d.skill_grants.is_complete() {
+                self.usage_census_gap(Some(key), None, PlanGapReason::PartialDeclarations)?;
+                if inactive {
                     self.gap(Some(key.clone()), None, PlanGapReason::PartialDeclarations)?;
                 }
-                charge(&mut self.work, d.grants.members.len())?;
-                for grant in &d.grants.members {
-                    if key.grant_path.len() >= self.limits.binding.input.max_provider_steps {
-                        return Err(PlanError::Limit("provider depth"));
+            }
+            charge(&mut self.work, d.grants.members.len())?;
+            for grant in &d.grants.members {
+                if !matches!(self.index.slot(grant), SchemaLookup::Known(_)) {
+                    self.usage_census_gap(
+                        Some(key),
+                        Some(SchemaSubject::Slot(GrantSlotDefId::address(grant))),
+                        PlanGapReason::UnresolvedTopology,
+                    )?;
+                    if inactive {
+                        self.gap(
+                            Some(key.clone()),
+                            Some(SchemaSubject::Slot(GrantSlotDefId::address(grant))),
+                            PlanGapReason::UnresolvedTopology,
+                        )?;
                     }
-                    if pending.len() + self.providers.len() + self.inactive_support_providers.len()
-                        >= self.limits.max_providers
-                    {
-                        return Err(PlanError::Limit("providers"));
-                    }
-                    charge(&mut self.work, key.grant_path.len() + 1)?;
-                    let mut child = key.clone();
-                    child.grant_path.push(grant.clone());
-                    pending.insert(child);
+                    continue;
                 }
+                if key.grant_path.len() >= self.limits.binding.input.max_provider_steps {
+                    return Err(PlanError::Limit("provider depth"));
+                }
+                if pending.len() + self.providers.len() + self.inactive_providers.len() + 1
+                    >= self.limits.max_providers
+                {
+                    return Err(PlanError::Limit("providers"));
+                }
+                charge(&mut self.work, key.grant_path.len() + 1)?;
+                let mut child = key.clone();
+                child.grant_path.push(grant.clone());
+                pending.insert(child);
             }
         }
         Ok(())
     }
-
     pub(super) fn check_support_domain(
         &mut self,
         subject: &SchemaSubject,

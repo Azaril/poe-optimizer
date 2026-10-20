@@ -993,6 +993,7 @@ mod occurrence_plan {
             };
             let namespace = f.recipe.schema.namespace.clone();
             let build = BuildInput {
+                usage_preferences: vec![],
                 generated_inputs: None,
                 authored_support_order: None,
                 allocator: InstanceAllocatorState::from_parts(
@@ -1057,6 +1058,7 @@ mod occurrence_plan {
                 choices: vec![],
             };
             let scenario = ScenarioInput {
+                usage_intents: vec![],
                 game_version: namespace,
                 enemy: EnemySpec {
                     encounter,

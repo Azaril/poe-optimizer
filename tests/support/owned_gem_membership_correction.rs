@@ -218,7 +218,8 @@ fn check_delta(bindings: &Value, dependencies: &Value, migration: &Value) {
         migration["schema"] == json!(expected),
         "only exact support members may be removed; every other field and closure stays exact"
     );
-    assert_eq!(migration["schema_version"], 4);
+    // Current offline authoring format, independent of the retained game schema.
+    assert_eq!(migration["schema_version"], 5);
     assert_eq!(migration["before"], bindings["before"]);
     assert_eq!(migration["release"], bindings["release"]);
     for field in ["owners", "tables", "receivers", "query_targets"] {

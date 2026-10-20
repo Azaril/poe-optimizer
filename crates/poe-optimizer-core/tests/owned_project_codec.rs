@@ -108,7 +108,7 @@ fn unpack(document: OwnedDocument) -> BuildProject {
     }
 }
 fn wire(raw: ProjectInput) -> Value {
-    json!({"schema_version":4,"document":{"kind":"project","value":raw}})
+    json!({"schema_version":5,"document":{"kind":"project","value":raw}})
 }
 fn entries(value: &Value) -> usize {
     match value {
@@ -123,7 +123,7 @@ fn project_envelope_roundtrip_retains_explicit_saved_selections_and_composes_sta
     let original = document(input());
     let bytes = encode_owned(&original, limits()).unwrap();
     let value: Value = serde_json::from_slice(&bytes).unwrap();
-    assert_eq!(value["schema_version"], 4);
+    assert_eq!(value["schema_version"], 5);
     assert_eq!(value["document"]["kind"], "project");
     let decoded = decode_owned(&bytes, limits()).unwrap();
     assert_eq!(decoded, original);

@@ -90,6 +90,7 @@ pub enum SchemaPackageErrorKind {
     UndeclaredSlot,
     WrongParameterSite,
     InvalidPresetInputPermission,
+    InvalidUsageApplicability,
     WrongSocketOwner,
     ReversedRange,
     UnitMismatch,
@@ -124,7 +125,7 @@ struct ResourceUse {
     entries: usize,
     largest_collection: usize,
     // Reused templates multiply validation work without adding wire entries.
-    actor_link_checks: usize,
+    semantic_link_checks: usize,
 }
 
 /// Immutable descriptors indexed by typed addresses. Deserialization must go
@@ -217,7 +218,7 @@ pub fn encode_schema_package(
 ) -> Result<Vec<u8>> {
     limits.validate()?;
     if package.resources.entries > limits.max_entries
-        || package.resources.actor_link_checks > limits.max_entries
+        || package.resources.semantic_link_checks > limits.max_entries
         || package.resources.largest_collection > limits.max_collection_entries
     {
         return invalid("package", SchemaPackageErrorKind::LimitExceeded);
@@ -517,8 +518,34 @@ impl Check<'_> {
                 })
             }
             DefinitionDescriptor::UsagePolicy(e) => {
-                owned!(e, UsagePolicy, |c: &mut Self, s: &mut UsagePolicySchema| c
-                    .sorted(&format!("{path}.targets"), &mut s.targets))
+                owned!(e, UsagePolicy, |c: &mut Self, s: &mut UsagePolicySchema| {
+                    c.sorted(&format!("{path}.targets"), &mut s.targets)?;
+                    if let Some(applicability) = &mut s.scenario_skill_applicability {
+                        let path = format!("{path}.scenario_skill_applicability");
+                        if !s.targets.contains(&UsageTargetKind::Skill) {
+                            return invalid(
+                                &path,
+                                SchemaPackageErrorKind::InvalidUsageApplicability,
+                            );
+                        }
+                        c.sorted(&format!("{path}.members"), &mut applicability.members)?;
+                        c.closure(&path, &mut applicability.closure)?;
+                        for (i, recipient) in applicability.members.iter().enumerate() {
+                            let path = format!("{path}.members[{i}]");
+                            match recipient {
+                                UsageSkillApplicability::AuthoredDirect { skill } => {
+                                    c.definition(&path, skill)?
+                                }
+                                UsageSkillApplicability::Supplied(supply) => {
+                                    c.definition(&format!("{path}.skill"), &supply.skill)?;
+                                    c.slot(&format!("{path}.grant"), &supply.grant)?;
+                                    c.slot(&format!("{path}.supply"), &supply.supply)?;
+                                }
+                            }
+                        }
+                    }
+                    Ok(())
+                })
             }
             DefinitionDescriptor::PointPool(e) => self.state(path, &mut e.schema, |_, _| Ok(())),
             DefinitionDescriptor::EquipmentSlot(e) => {
@@ -680,7 +707,7 @@ fn validate_and_canonicalize(
         resources: ResourceUse {
             entries: 0,
             largest_collection: 0,
-            actor_link_checks: 0,
+            semantic_link_checks: 0,
         },
     };
     check.collection("definitions", input.definitions.len())?;
@@ -713,7 +740,7 @@ fn validate_and_canonicalize(
         .definitions
         .sort_by_cached_key(DefinitionDescriptor::address);
     input.slots.sort_by_cached_key(SlotDescriptor::address);
-    resources.actor_link_checks = check_declaration_consistency(input, limits)?;
+    resources.semantic_link_checks = check_declaration_consistency(input, limits)?;
     Ok(resources)
 }
 
@@ -851,7 +878,7 @@ fn check_declaration_consistency(
             }
         }
     }
-    let mut remaining_actor_links = limits.max_entries;
+    let mut remaining_links = limits.max_entries;
     for (i, descriptor) in input.slots.iter().enumerate() {
         let SlotDescriptor::Actor(DefinitionEntry {
             schema: SchemaState::Known(actor),
@@ -871,12 +898,13 @@ fn check_declaration_consistency(
             continue;
         };
         let checks = template.declarations.skill_grants.members.len();
-        remaining_actor_links = remaining_actor_links.checked_sub(checks).ok_or_else(|| {
-            SchemaPackageError::Invalid {
-                path: format!("slots[{i}].skills"),
-                kind: SchemaPackageErrorKind::LimitExceeded,
-            }
-        })?;
+        remaining_links =
+            remaining_links
+                .checked_sub(checks)
+                .ok_or_else(|| SchemaPackageError::Invalid {
+                    path: format!("slots[{i}].skills"),
+                    kind: SchemaPackageErrorKind::LimitExceeded,
+                })?;
         for supplied in &template.declarations.skill_grants.members {
             if let SlotDescriptor::SkillGrant(DefinitionEntry {
                 schema: SchemaState::Known(skill),
@@ -892,6 +920,72 @@ fn check_declaration_consistency(
         }
     }
     for (i, descriptor) in input.definitions.iter().enumerate() {
+        if let DefinitionDescriptor::UsagePolicy(DefinitionEntry {
+            schema:
+                SchemaState::Known(UsagePolicySchema {
+                    scenario_skill_applicability: Some(applicability),
+                    ..
+                }),
+            ..
+        }) = descriptor
+        {
+            for (j, recipient) in applicability.members.iter().enumerate() {
+                let path = format!("definitions[{i}].scenario_skill_applicability.members[{j}]");
+                let checks = match recipient {
+                    UsageSkillApplicability::AuthoredDirect { .. } => 1,
+                    UsageSkillApplicability::Supplied(_) => 3,
+                };
+                remaining_links = remaining_links.checked_sub(checks).ok_or_else(|| {
+                    SchemaPackageError::Invalid {
+                        path: path.clone(),
+                        kind: SchemaPackageErrorKind::LimitExceeded,
+                    }
+                })?;
+                match recipient {
+                    UsageSkillApplicability::AuthoredDirect { skill } => {
+                        if let DefinitionDescriptor::Skill(DefinitionEntry {
+                            schema: SchemaState::Known(schema),
+                            ..
+                        }) = definitions[&skill.address()]
+                            && !schema.directly_selectable
+                        {
+                            return invalid(
+                                &path,
+                                SchemaPackageErrorKind::InvalidUsageApplicability,
+                            );
+                        }
+                    }
+                    UsageSkillApplicability::Supplied(supply) => {
+                        if let SlotDescriptor::Grant(DefinitionEntry {
+                            schema: SchemaState::Known(schema),
+                            ..
+                        }) = slots[&GrantSlotDefId::address(&supply.grant)]
+                            && schema.target != GrantTarget::Skill(supply.supply.clone())
+                        {
+                            return invalid(
+                                &path,
+                                SchemaPackageErrorKind::InvalidUsageApplicability,
+                            );
+                        }
+                        if let SlotDescriptor::SkillGrant(DefinitionEntry {
+                            schema: SchemaState::Known(schema),
+                            ..
+                        }) = slots[&SkillGrantSlotDefId::address(&supply.supply)]
+                            && schema.skill != supply.skill
+                        {
+                            return invalid(
+                                &path,
+                                SchemaPackageErrorKind::InvalidUsageApplicability,
+                            );
+                        }
+                        // Unmapped descriptors and partial declaration inventories
+                        // remain in the package. Runtime structural binding must
+                        // establish their membership; they are not absence proof.
+                        // Direct slot ownership/closed absence is checked below.
+                    }
+                }
+            }
+        }
         let implicit = match descriptor {
             DefinitionDescriptor::Class(DefinitionEntry {
                 schema: SchemaState::Known(schema),
@@ -966,5 +1060,5 @@ fn check_declaration_consistency(
             }
         }
     }
-    Ok(limits.max_entries - remaining_actor_links)
+    Ok(limits.max_entries - remaining_links)
 }

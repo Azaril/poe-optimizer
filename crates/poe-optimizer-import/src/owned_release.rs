@@ -26,6 +26,7 @@ use crate::{
     },
     owned_reward_policy::{
         OwnedRewardPolicy, RewardPolicyError, RewardPolicyInput, RewardPolicyLimits,
+        RewardRuleOutput,
     },
     owned_skill_catalog::{
         OwnedSkillRoleIndex, OwnedSkillRolePackageInput, SkillCatalogError, SkillCatalogLimits,
@@ -477,7 +478,13 @@ pub(crate) fn preflight(input: &OwnedReleaseInput, limits: OwnedReleaseLimits) -
         charge(&mut left, output.routes.members.len(), "validation entries")?;
     }
     for rule in &input.rewards.rules {
-        charge(&mut left, rule.outcomes.len(), "validation entries")?;
+        let entries = match &rule.output {
+            RewardRuleOutput::Cases(outcomes) => outcomes.len(),
+            RewardRuleOutput::NumericParameter(numeric) => {
+                numeric.fixed_parameters.len().saturating_add(1)
+            }
+        };
+        charge(&mut left, entries, "validation entries")?;
     }
     if let Some(tree) = &input.tree {
         let content = &tree.content;

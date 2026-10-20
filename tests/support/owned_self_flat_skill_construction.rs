@@ -17,7 +17,7 @@ use std::{
 pub const DIR: &str = "data/owned/poe2/3887ae68/self-flat-skill-construction";
 const BASE: &str = "data/owned/poe2/3887ae68";
 const MANIFEST: &str = "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675";
-const AUTHORITY: &str = "105b36b7a75e02cb33a5882c1d2fcc5ba75661399702f5cac815cf6592045ef9";
+const AUTHORITY: &str = "8ff24776e3338be02f13ab6d5f5c15e12707b487ada803a5987e266b2a0db5ca";
 const FILES: [(&str, &str); 5] = [
     (
         "src/Modules/CalcActiveSkill.lua",

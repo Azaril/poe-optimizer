@@ -375,8 +375,12 @@ fn checked_revision_retains_reward_authority_and_standalone_rejects_stale_commit
                 stale.rewards.version = OwnedDefinitionKey::new("different-reward-policy").unwrap()
             }
             3 => {
-                stale.rewards.rules[0]
-                    .outcomes
+                let poe_optimizer_import::owned_reward_policy::RewardRuleOutput::Cases(outcomes) =
+                    &mut stale.rewards.rules[0].output
+                else {
+                    panic!("finite reward fixture")
+                };
+                outcomes
                     .iter_mut()
                     .find(|case| matches!(case.outcome, RewardTemplate::Reward { .. }))
                     .unwrap()
@@ -732,7 +736,14 @@ fn prior_with_inert_gem_inventory() -> StagedOwnedRelease {
     };
     let original = prior();
     let mut input = original.input().clone();
-    input.normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+    input.normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV3 {
+        usage_inputs: poe_optimizer_import::owned_normalize::usage_inputs_identity(
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap(),
+        primary_skills: vec![],
+        primary_dispositions: vec![],
         definitions: original.receipt().definitions.clone(),
         roles: *original.roles().identity(),
         catalog: original.roles().input().compilation.catalog_digest,
@@ -743,7 +754,7 @@ fn prior_with_inert_gem_inventory() -> StagedOwnedRelease {
         .unwrap(),
         // An empty reviewed domain grants no source inventory authority. It
         // isolates publication binding behavior from the runtime proof tests.
-        gems: vec![],
+        supports: vec![],
     });
     input.tree = Some(
         OwnedTreeNormalizationPolicy::bind_new(
@@ -773,6 +784,8 @@ fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication
     let original = prior();
     let mut input = original.input().clone();
     input.normalization.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
+        inventory: None,
+        scenario: vec![],
         definitions: original.receipt().definitions.clone(),
         source: original.roles().input().compilation.source.clone(),
         roles: *original.roles().identity(),
@@ -787,7 +800,8 @@ fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication
     });
     let original_usage_digest =
         usage_inputs_identity(&input.normalization, Default::default()).unwrap();
-    input.normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV2 {
+    input.normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV3 {
+        primary_dispositions: vec![],
         definitions: original.receipt().definitions.clone(),
         roles: *original.roles().identity(),
         catalog: original.roles().input().compilation.catalog_digest,
@@ -817,7 +831,7 @@ fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication
     let before = serde_json::to_vec(prior.input()).unwrap();
     let revised =
         compile_owned_release_revision(&prior, correction(&prior), Default::default()).unwrap();
-    let Some(GemInventoryPolicy::PobFreshPhysicalV2 { usage_inputs, .. }) =
+    let Some(GemInventoryPolicy::PobFreshPhysicalV3 { usage_inputs, .. }) =
         &revised.normalization().gem_inventory
     else {
         panic!("physical inventory policy retained");
@@ -888,16 +902,13 @@ fn gem_inventory_publication_rejects_every_stale_commitment_even_for_empty_domai
     let wrong = digest_owned("stale-gem-inventory-test", &1, 100).unwrap();
     for kind in 0..5 {
         let mut input = prior.input().clone();
-        let GemInventoryPolicy::PobFreshSingleSupportV1 {
+        let GemInventoryPolicy::PobFreshPhysicalV3 {
             definitions,
             roles,
             catalog,
             scalar_inputs,
             ..
-        } = input.normalization.gem_inventory.as_mut().unwrap()
-        else {
-            unreachable!("legacy V1 fixture")
-        };
+        } = input.normalization.gem_inventory.as_mut().unwrap();
         match kind {
             0 => definitions.release = "stale-gem-inventory-release".into(),
             1 => *roles = wrong,
@@ -933,15 +944,12 @@ fn checked_schema_revision_rebinds_gem_inventory_without_changing_reviewed_conte
     let revised =
         compile_owned_release_revision(&prior, revision.clone(), Default::default()).unwrap();
     let mut expected = prior.normalization().gem_inventory.clone().unwrap();
-    let GemInventoryPolicy::PobFreshSingleSupportV1 {
+    let GemInventoryPolicy::PobFreshPhysicalV3 {
         definitions,
         roles,
         scalar_inputs,
         ..
-    } = &mut expected
-    else {
-        unreachable!("legacy V1 fixture")
-    };
+    } = &mut expected;
     *definitions = revised.receipt().definitions.clone();
     *roles = *revised.roles().identity();
     *scalar_inputs =

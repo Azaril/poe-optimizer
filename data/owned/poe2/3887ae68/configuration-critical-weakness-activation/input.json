@@ -1,0 +1,55 @@
+{
+  "source_name": "conditionEnemyCriticalWeakness",
+  "value_input": {
+    "kind": "external_input",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000033b1"
+  },
+  "target": "enemy",
+  "recipe": {
+    "id": "configured-enemy-critical-weakness-activation",
+    "codec": {
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "whitespace": "exact",
+      "codec": {
+        "kind": "boolean",
+        "value": {
+          "tokens": [
+            {
+              "token": "true",
+              "value": true
+            },
+            {
+              "token": "false",
+              "value": false
+            }
+          ]
+        }
+      }
+    },
+    "tiers": [
+      {
+        "selectors": [
+          {
+            "lane": "input_boolean",
+            "name": "conditionEnemyCriticalWeakness"
+          }
+        ],
+        "duplicates": "reject"
+      }
+    ],
+    "missing": {
+      "kind": "pending"
+    }
+  },
+  "constructor_default": {
+    "kind": "boolean",
+    "value": false
+  }
+}

@@ -1,0 +1,152 @@
+[
+  {
+    "policy": {
+      "kind": "usage_policy",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033bc"
+    },
+    "parameters": [
+      {
+        "slot": {
+          "declaration": {
+            "kind": "usage_policy",
+            "definition": {
+              "kind": "usage_policy",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000033bc"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033bd"
+          }
+        },
+        "recipe": {
+          "id": "sigil-raw-stage-input",
+          "codec": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "integer",
+              "value": {
+                "syntax": "integer"
+              }
+            }
+          },
+          "tiers": [
+            {
+              "selectors": [
+                {
+                  "lane": "input_number",
+                  "name": "sigilOfPowerStages"
+                }
+              ],
+              "duplicates": "reject"
+            },
+            {
+              "selectors": [
+                {
+                  "lane": "placeholder_number",
+                  "name": "sigilOfPowerStages"
+                }
+              ],
+              "duplicates": "reject"
+            }
+          ],
+          "missing": {
+            "kind": "pending"
+          }
+        },
+        "selection": "recipe_precedence"
+      }
+    ]
+  },
+  {
+    "policy": {
+      "kind": "usage_policy",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033be"
+    },
+    "parameters": [
+      {
+        "slot": {
+          "declaration": {
+            "kind": "usage_policy",
+            "definition": {
+              "kind": "usage_policy",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000033be"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033bf"
+          }
+        },
+        "recipe": {
+          "id": "cry-raw-stack-input",
+          "codec": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "integer",
+              "value": {
+                "syntax": "integer"
+              }
+            }
+          },
+          "tiers": [
+            {
+              "selectors": [
+                {
+                  "lane": "input_number",
+                  "name": "conditionCorruptingCryStages"
+                }
+              ],
+              "duplicates": "reject"
+            },
+            {
+              "selectors": [
+                {
+                  "lane": "placeholder_number",
+                  "name": "conditionCorruptingCryStages"
+                }
+              ],
+              "duplicates": "reject"
+            }
+          ],
+          "missing": {
+            "kind": "pending"
+          }
+        },
+        "selection": "nonzero_input_then_nonzero_placeholder"
+      }
+    ]
+  }
+]

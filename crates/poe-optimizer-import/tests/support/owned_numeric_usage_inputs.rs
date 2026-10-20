@@ -3,7 +3,7 @@ use super::*;
 
 const GEM: &str = r#"<Gem gemId="active" variantId="v" skillId="synthetic-effect" nameSpec="Synthetic effect" level="17" enabled="true" corrupted="false" count="3" skillMinion="ReviewedActor"/>"#;
 
-fn fixture(quantity: bool) -> (Artifacts, NormalizationPolicy) {
+pub(super) fn fixture(quantity: bool) -> (Artifacts, NormalizationPolicy) {
     let (mut a, mut p) = usage_input_tests::fixture();
     let original_row = usage_input_tests::row(&mut p).clone();
     let mut schema = a.schema.input().clone();
@@ -65,6 +65,8 @@ fn fixture(quantity: bool) -> (Artifacts, NormalizationPolicy) {
         recipe
     };
     p.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
+        inventory: None,
+        scenario: vec![],
         definitions: a.schema.identity().clone(),
         source: a.roles.input().compilation.source.clone(),
         roles: *a.roles.identity(),

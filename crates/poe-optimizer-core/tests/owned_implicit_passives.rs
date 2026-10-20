@@ -179,6 +179,7 @@ impl Fixture {
             },
         )));
         let build = BuildInput {
+            usage_preferences: vec![],
             generated_inputs: None,
             authored_support_order: None,
             game_version: ns(),
@@ -209,6 +210,7 @@ impl Fixture {
             BuildSpec::new(self.build.clone(), limits).unwrap(),
             ScenarioSpec::new(
                 ScenarioInput {
+                    usage_intents: vec![],
                     game_version: ns(),
                     enemy: EnemySpec {
                         encounter: id("encounter"),

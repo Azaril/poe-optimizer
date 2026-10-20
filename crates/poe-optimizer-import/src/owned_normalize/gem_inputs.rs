@@ -1,10 +1,15 @@
 //! Injected physical-gem input recipes. An empty declaration is not source proof.
 use super::*;
 
-/// V1 resolves immediately. V2 waits for an attached preference; V3 retains its
-/// original Pending allocation until a real preset usage obligation is proven.
+/// Resolved carries parameter results; PhysicalSupport also retains the exact
+/// support source proof. AwaitUsage requires a matching attached preference;
+/// AwaitDisposition retains its Pending allocation until destination accounting.
 pub(super) enum GemParameters {
     Resolved(DraftList<ParameterDraft>),
+    PhysicalSupport {
+        parameters: DraftList<ParameterDraft>,
+        proof: gem_inventory::PhysicalSupportInputProof,
+    },
     AwaitDisposition {
         parameters: DraftList<ParameterDraft>,
         proof: gem_inventory::PendingDisposition,
@@ -15,6 +20,19 @@ pub(super) enum GemParameters {
     },
 }
 impl GemParameters {
+    /// Preserve the successful source proof until the real Support destination
+    /// can be bound. Ordinary parameter completeness alone cannot mint it.
+    pub(super) fn into_support_proof(
+        self,
+    ) -> (Self, Option<gem_inventory::PhysicalSupportInputProof>) {
+        match self {
+            Self::PhysicalSupport { parameters, proof } => {
+                (Self::Resolved(parameters), Some(proof))
+            }
+            other => (other, None),
+        }
+    }
+
     pub(super) fn awaits_usage(&self) -> bool {
         matches!(self, Self::AwaitUsage { .. })
     }
@@ -25,7 +43,7 @@ impl GemParameters {
         usage: Option<&usage_inputs::AttachedPrimaryUsage<'_>>,
     ) -> Result<DraftList<ParameterDraft>> {
         match self {
-            Self::Resolved(parameters) => Ok(parameters),
+            Self::Resolved(parameters) | Self::PhysicalSupport { parameters, .. } => Ok(parameters),
             // No actual destination was materialized. Keep the original issue;
             // successful V3 attachments are completed by the bounded postpass.
             Self::AwaitDisposition { parameters, .. } => Ok(parameters),
@@ -382,7 +400,14 @@ impl Builder<'_, '_> {
             // retires only this physical issue after proving its real destination.
             let parameters = self.closure(source, "gem-parameters-not-converted", members)?;
             Ok(GemParameters::AwaitDisposition { parameters, proof })
-        } else if all_converted && (rule.complete || inventory_proven.is_some()) {
+        } else if let Some(gem_inventory::GemInventoryProof::PhysicalSupport(proof)) =
+            inventory_proven
+        {
+            Ok(GemParameters::PhysicalSupport {
+                parameters: complete(members),
+                proof,
+            })
+        } else if all_converted && rule.complete {
             Ok(GemParameters::Resolved(complete(members)))
         } else {
             self.closure(source, "gem-parameters-not-converted", members)

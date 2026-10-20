@@ -137,8 +137,10 @@ Retained review SHA-256:
 
 The bound import checkpoint is `owned-configuration-accounting-publication-02`, input
 `3ee48944d26b5351ecc267cc2e87637b68a8b6153b7ab2bbc5c906f11e4bd702`.
-Its exact draft, sidecar, selection, policy/query tuple, rules, release and
-manifest are compressed without altering their bytes. The preceding
+Its selection, policy/query tuple, rules, release and manifest remain compressed
+without altering their bytes. The draft, sidecar and import report are maintained
+typed evidence, with their original archive commitments retained in the receipts.
+The preceding
 `self-flat-selected-bindings` proof is authenticated and rebound using only its
 verified old lineage to the current allocator lineage. Current objects are
 never canonicalized to erase foreign identities. The sole sidecar difference
@@ -147,6 +149,17 @@ all other origins, memberships, obligations and values remain exact.
 This historical evidence binding is not the current release endpoint; later
 publications must establish their own exact preservation or changed-source
 accounting before relying on it.
+
+On 2026-10-20, both maintained draft snapshots were reauthored to schema 5.
+Scenario-enemy assumptions now use explicit Actor targets; each existing
+Scenario gains one pending `scenario-usage-intents-not-converted` inventory,
+allocated after the prior frontier and linked to its exact ConfigSet source.
+Whole-record inverse checks preserve every prior selection, value and issue
+link. The ordinary and reward reports now retain 157 and 158 unresolved issues,
+respectively. `inputs.json` and `configuration-reward-authority.json` record
+both prior and current archive commitments. Source observations, historical
+release artifacts and numerical evidence remain unchanged, and no native
+coverage is added.
 
 The correspondence retains nine equipment uses of eight item records, including
 the two distinct uses of the same ring; 55 exact allocations and two implicit

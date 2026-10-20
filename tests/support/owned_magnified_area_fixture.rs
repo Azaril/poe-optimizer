@@ -673,6 +673,7 @@ impl World {
             .push(DefinitionDescriptor::UsagePolicy(DefinitionEntry {
                 id: policy.clone(),
                 schema: SchemaState::Known(UsagePolicySchema {
+                    scenario_skill_applicability: None,
                     targets: vec![UsageTargetKind::Action],
                     declarations: DeclaredSlots {
                         parameters: DeclaredSet::complete(vec![parameter.clone()]),
@@ -742,6 +743,7 @@ impl World {
             BuildSpec::new(self.inner.build.clone(), Default::default()).unwrap(),
             ScenarioSpec::new(
                 ScenarioInput {
+                    usage_intents: vec![],
                     game_version: ns(),
                     enemy: EnemySpec {
                         encounter: def("fixture.encounter"),

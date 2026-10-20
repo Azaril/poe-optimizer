@@ -489,6 +489,21 @@ pub(super) trait ExecutionGraphView {
     fn invocation(&self, index: usize) -> Option<&Invocation>;
 }
 
+impl<I> ExecutionGraphView for OwnedEffectPlan<I> {
+    fn effect_count(&self) -> usize {
+        self.effects.len()
+    }
+    fn invocation_count(&self) -> usize {
+        self.invocations.len()
+    }
+    fn effect(&self, index: usize) -> Option<&EffectNode> {
+        self.effects.get(index)
+    }
+    fn invocation(&self, index: usize) -> Option<&Invocation> {
+        self.invocations.get(index)
+    }
+}
+
 /// Execute against the same sealed attempt after the driver has completed all
 /// binding, contributor-closure and dependency checks. The numerical path is
 /// identical for static, overridden and appended nodes.

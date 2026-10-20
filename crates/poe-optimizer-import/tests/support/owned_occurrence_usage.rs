@@ -21,6 +21,7 @@ fn usage_definitions(a: &mut Artifacts, p: &mut NormalizationPolicy) -> Vec<Occu
             .push(DefinitionDescriptor::UsagePolicy(known(
                 id.clone(),
                 UsagePolicySchema {
+                    scenario_skill_applicability: None,
                     targets: vec![UsageTargetKind::Skill],
                     declarations,
                 },
@@ -66,7 +67,7 @@ fn usage_definitions(a: &mut Artifacts, p: &mut NormalizationPolicy) -> Vec<Occu
         *definitions = a.schema.identity().clone();
         *roles = *a.roles.identity();
     }
-    if let Some(DirectSkillInputPolicy::PobManualDirectSkillV1 {
+    if let Some(DirectSkillInputPolicy::PobManualDirectSkillV2 {
         definitions, roles, ..
     }) = &mut p.direct_skill_inputs
     {
@@ -104,6 +105,7 @@ fn occurrence(
 }
 fn install(a: &Artifacts, p: &mut NormalizationPolicy, rows: Vec<OccurrenceUsageRule>) {
     p.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
+        inventory: None,
         definitions: a.schema.identity().clone(),
         source: pin(),
         roles: *a.roles.identity(),
@@ -111,6 +113,7 @@ fn install(a: &Artifacts, p: &mut NormalizationPolicy, rows: Vec<OccurrenceUsage
         scalar_inputs: gem_inventory_scalar_inputs_identity(p, Default::default()).unwrap(),
         physical: vec![],
         occurrences: rows,
+        scenario: vec![],
     });
 }
 fn generated() -> Fixture {
@@ -168,7 +171,7 @@ fn manual() -> (Artifacts, NormalizationPolicy) {
     let policies = usage_definitions(&mut a, &mut p);
     let raw = direct::row(&mut p).clone();
     direct::row(&mut p).attributes.push("count".into());
-    let Some(DirectSkillInputPolicy::PobManualDirectSkillV1 {
+    let Some(DirectSkillInputPolicy::PobManualDirectSkillV2 {
         group_attributes, ..
     }) = &mut p.direct_skill_inputs
     else {
@@ -191,7 +194,7 @@ fn manual() -> (Artifacts, NormalizationPolicy) {
     roles.mapping = *a.mapping.identity();
     a.roles = OwnedSkillRoleIndex::new(roles, &a.mapping, &a.schema, Default::default()).unwrap();
     a.rewards = empty_rewards(&a.mapping, &a.schema);
-    let Some(DirectSkillInputPolicy::PobManualDirectSkillV1 { roles, .. }) =
+    let Some(DirectSkillInputPolicy::PobManualDirectSkillV2 { roles, .. }) =
         &mut p.direct_skill_inputs
     else {
         panic!()
@@ -575,7 +578,7 @@ fn direct_occurrences_bind_independent_presets_and_reject_empty_source_ownership
             assert!(preset.skills.members.contains(&id));
         }
     }
-    let Some(DirectSkillInputPolicy::PobManualDirectSkillV1 { manual_sources, .. }) =
+    let Some(DirectSkillInputPolicy::PobManualDirectSkillV2 { manual_sources, .. }) =
         &mut p.direct_skill_inputs
     else {
         panic!()
@@ -766,7 +769,7 @@ fn separate_participation_inputs() -> (Artifacts, NormalizationPolicy) {
         }
     }
     rebind_quality_schema(&mut a, &mut p, schema);
-    let Some(DirectSkillInputPolicy::PobManualDirectSkillV1 {
+    let Some(DirectSkillInputPolicy::PobManualDirectSkillV2 {
         definitions, roles, ..
     }) = &mut p.direct_skill_inputs
     else {

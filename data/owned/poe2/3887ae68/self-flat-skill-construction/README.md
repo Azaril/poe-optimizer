@@ -11,9 +11,17 @@ make the full build evaluable.
 
 The separate `child-review.json` extends this packet with a source-level
 deduction for the 18 unchanged Sniper Basic Attack constructor pairs. It keeps
-the original `authority.json`, `bodies.json` and `review.json` byte-for-byte,
-because other proofs authenticate those artifacts. No new PoB load or query
-observation was performed.
+the original `bodies.json` and construction evidence unchanged. No new PoB load
+or query observation was performed.
+
+On 2026-10-20, the existing checked generators refreshed `review.json` and
+`child-review.json` after their typed selected-bindings evidence moved to draft
+schema 5 with an explicit pending Scenario-intent inventory. Exact inverses
+permit only the authority, acquisition and selected-membership commitments to
+change; construction, delivery, source bodies and scope remain identical.
+Dependent raw artifact hashes were refreshed with separate bounded inverse
+checks. This metadata update grants no native coverage and leaves all source
+archives unchanged.
 
 Both reviewed construction paths, `calcs.perform` and `calcs.copyActiveSkill`,
 replace the minion's modifier database with a fresh `ModDB()` before calling

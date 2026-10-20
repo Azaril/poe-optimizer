@@ -176,6 +176,7 @@ pub fn schema() -> Index {
     index.put_definition(DefinitionDescriptor::UsagePolicy(known(
         def("usage"),
         UsagePolicySchema {
+            scenario_skill_applicability: None,
             targets: vec![UsageTargetKind::Skill],
             declarations: policy,
         },
@@ -272,6 +273,7 @@ pub fn selection() -> VariantSelection {
 pub fn scenario(rows: Vec<UsagePolicySelection>) -> ScenarioSpec {
     ScenarioSpec::new(
         ScenarioInput {
+            usage_intents: vec![],
             game_version: ns(),
             enemy: EnemySpec {
                 encounter: def("enemy"),

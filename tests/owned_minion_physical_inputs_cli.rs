@@ -421,6 +421,7 @@ fn rejects_level(package: &StagedOwnedRelease, gem: &GemDraft) -> bool {
     let request = OwnedEvaluationRequest::new(
         BuildSpec::new(
             BuildInput {
+                usage_preferences: vec![],
                 generated_inputs: None,
                 allocator: InstanceAllocatorState::from_parts(lineage, 2),
                 revision: BuildRevision::from_u64(1),
@@ -459,6 +460,7 @@ fn rejects_level(package: &StagedOwnedRelease, gem: &GemDraft) -> bool {
         .unwrap(),
         ScenarioSpec::new(
             ScenarioInput {
+                usage_intents: vec![],
                 game_version: namespace.clone(),
                 enemy: EnemySpec {
                     encounter,

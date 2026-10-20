@@ -381,6 +381,7 @@ impl Fixture {
             ],
         };
         let build = BuildInput {
+            usage_preferences: vec![],
             generated_inputs: None,
             authored_support_order: None,
             allocator: InstanceAllocatorState::from_parts(BuildLineage::from_bytes([61; 16]), 100),
@@ -448,6 +449,7 @@ impl Fixture {
             schema,
             build,
             scenario: ScenarioInput {
+                usage_intents: vec![],
                 game_version: ns(),
                 enemy: EnemySpec {
                     encounter: def("encounter"),
@@ -512,6 +514,14 @@ impl Fixture {
             OwnedDefinitionSchemaPackage::new(self.schema.clone(), OwnedSchemaLimits::default())
                 .unwrap(),
         );
+        self.compile_with_index(schema, limits, operations)
+    }
+    pub fn compile_with_index<I: DefinitionSchemaIndex>(
+        &self,
+        schema: Arc<I>,
+        limits: PlanLimits,
+        operations: &str,
+    ) -> Result<OwnedEffectPlan<I>, PlanError> {
         let rules = RulePackageInput {
             support_discovery: Some(assignment_only_domains(&self.owners)),
             existing_actor_rules: None,

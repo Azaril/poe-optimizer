@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "before": "5b611f43a0eedbf556799bcbd2c295a85d58d3264a7306c24602fd4d41e6e7b6",
+  "release": "pob-3887ae68-campaign-progression-input-v1",
+  "artifacts": [
+    {
+      "sha256": "6dd5cfb315b08906191dd45386a2e6779f7bd23588950f77c206a72e5b5120cb",
+      "bytes": 3150,
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/definitions.json"
+    },
+    {
+      "sha256": "42b821a67a54eeea4acdadef48b10b40394ae22bbe530fbbd394417007fe8d29",
+      "bytes": 985,
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/slots.json"
+    },
+    {
+      "sha256": "d91b559b6f6bea4f4f816f2b8fb3fbbddeef5d0282f03aea5260e5293ef08696",
+      "bytes": 5205,
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/extension.json"
+    },
+    {
+      "sha256": "bd0f6f07b18547490eb998d3651d4cf88cc729c470a0f4dbd2a83f6f4c69b75f",
+      "bytes": 697,
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/mapping.json"
+    },
+    {
+      "sha256": "468a371e96beee0ad9acf3bfcc4a692a1d29f8d77ade08e092803bf76d436c16",
+      "bytes": 1682,
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/reward.json"
+    },
+    {
+      "sha256": "54530f273e11a9934082d575382113b515ec9ed741d9b5e34f3f912e0b3567a4",
+      "bytes": 293,
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/inventory.json"
+    },
+    {
+      "sha256": "b4c9d7f027411be7cbf1ef9199cf1f6c85968b0608081d27a7cf07def58d278d",
+      "bytes": 681,
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/accounting.json"
+    },
+    {
+      "sha256": "b09ceb02ab5fe38dafd25c03fe8d7e3ad5650f490a91db81e42403e8625429e9",
+      "bytes": 8919,
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/consumer.json"
+    },
+    {
+      "sha256": "2610dfa5cc9089d527c21ffec8071c604efbd4805193b022bfae06fdd0f519a8",
+      "bytes": 1620,
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/bindings.json"
+    },
+    {
+      "sha256": "984fb7cbbeaecca2bb651e1cd0f9b10bf651da893463cc9989ea2b14f6c4e556",
+      "bytes": 885,
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/dependencies.json"
+    },
+    {
+      "sha256": "0ab483d9c82af857252c5b259119f74017a7c9d5ac18166c1886f3c645da040d",
+      "bytes": 9923,
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/source-evidence.json"
+    }
+  ],
+  "scope": {
+    "publication_ready": true,
+    "ready_for_native_admission": false,
+    "complete_request": false,
+    "complete_build": false,
+    "candidate_source_closure": false,
+    "complete_source_supplier_coverage": false,
+    "query_closure_changed": false,
+    "existing_owner_closure_changed": false,
+    "new_source_execution": false
+  }
+}

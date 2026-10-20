@@ -55,7 +55,7 @@ pub fn check_authored() {
     assert_eq!(m.before, d.before);
     assert_eq!(
         m.contract.operations_version.as_str(),
-        OWNED_RULE_OPERATIONS_V27
+        OWNED_RULE_OPERATIONS_VERSION
     );
     assert!(
         m.schema.is_empty()

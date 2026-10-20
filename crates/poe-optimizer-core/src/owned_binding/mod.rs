@@ -55,6 +55,12 @@ pub enum BindingLocation {
     Usage {
         index: usize,
     },
+    BuildUsagePreference {
+        index: usize,
+    },
+    ScenarioUsageIntent {
+        index: usize,
+    },
     GeneratedInput {
         index: usize,
     },
@@ -313,7 +319,7 @@ fn validated_request_digest<I: DefinitionSchemaIndex>(
         });
     }
     Ok(digest_owned(
-        "owned-request-v1",
+        "owned-request-v2",
         request,
         limits.input.max_wire_bytes,
     )?)

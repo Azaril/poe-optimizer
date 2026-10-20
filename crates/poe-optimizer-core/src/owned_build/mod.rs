@@ -15,10 +15,9 @@ pub(crate) use structure::{
     PresetRecordGroup, PresetUsageScope, RecordTables, RecordTablesMut, StructuralCheck,
     build_occurrences, canonical_choice_owner, canonicalize_choices, canonicalize_item_records,
     canonicalize_record_tables, canonicalize_usage, validate_item_records, validate_record_tables,
-    validate_usage_layers,
 };
 
-pub const OWNED_INPUT_SCHEMA_VERSION: u32 = 4;
+pub const OWNED_INPUT_SCHEMA_VERSION: u32 = 5;
 
 /// A self-contained, structurally validated build. Construct via `new` or the codec.
 #[derive(Clone, Debug, PartialEq, Serialize)]

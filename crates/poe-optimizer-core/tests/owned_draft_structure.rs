@@ -224,6 +224,7 @@ fn fixture() -> DraftSessionInput {
     input.scenario_presets = list(vec![ScenarioPresetDraft {
         id: id(25),
         scenario: ScenarioInput {
+            usage_intents: vec![],
             game_version: ns(),
             enemy: EnemySpec {
                 encounter: def("encounter"),

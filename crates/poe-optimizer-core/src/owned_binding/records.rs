@@ -264,6 +264,16 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                 )?;
             }
         }
+        self.charge(build.usage_preferences.len())?;
+        for (index, preference) in build.usage_preferences.iter().enumerate() {
+            self.usage_selection(
+                preference,
+                &BindingSite::new(
+                    BindingLocation::BuildUsagePreference { index },
+                    BindingFacet::Target,
+                ),
+            )?;
+        }
         self.bind_scenario()?;
         self.bind_choices()?;
         if let Some(inputs) = &build.generated_inputs {
@@ -449,7 +459,9 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                 &enemy.at(BindingFacet::Level),
             )?;
         }
-        self.charge(scenario.assumptions.len() + scenario.usage.len())?;
+        self.charge(
+            scenario.assumptions.len() + scenario.usage.len() + scenario.usage_intents.len(),
+        )?;
         for (index, assumption) in scenario.assumptions.iter().enumerate() {
             let site =
                 BindingSite::new(BindingLocation::Assumption { index }, BindingFacet::Target);
@@ -488,7 +500,54 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             let site = BindingSite::new(BindingLocation::Usage { index }, BindingFacet::Target);
             self.usage_selection(usage, &site)?;
         }
+        for (index, intent) in scenario.usage_intents.iter().enumerate() {
+            self.scenario_usage_intent(
+                intent,
+                &BindingSite::new(
+                    BindingLocation::ScenarioUsageIntent { index },
+                    BindingFacet::Target,
+                ),
+            )?;
+        }
         Ok(())
+    }
+    pub(super) fn scenario_usage_intent(
+        &mut self,
+        intent: &ScenarioUsageIntent,
+        site: &BindingSite,
+    ) -> Result {
+        if let Some(schema) = self.definition(&intent.policy, site)? {
+            let subject = SchemaSubject::Definition(intent.policy.address());
+            self.role(
+                &schema.targets,
+                &UsageTargetKind::Skill,
+                Some(subject.clone()),
+                site,
+            )?;
+            match &schema.scenario_skill_applicability {
+                None => self.issue(
+                    site,
+                    IssueClass::Invalid,
+                    BindingIssueCode::NotDeclared,
+                    Some(subject),
+                )?,
+                Some(applicability) if !applicability.is_complete() => self.issue(
+                    site,
+                    IssueClass::Unresolved,
+                    BindingIssueCode::PartialMembership,
+                    Some(subject),
+                )?,
+                Some(_) => {}
+            }
+        }
+        // Even a dormant, overridden or unsupported intent retains its checked
+        // typed values. Recipient discovery is a separate preparation operation.
+        self.parameters(
+            &SlotOwnerDefId::UsagePolicy(intent.policy.clone()),
+            &intent.parameters,
+            ParameterSite::UsagePolicyParameter,
+            &site.at(BindingFacet::Parameter),
+        )
     }
     pub(super) fn usage_selection(
         &mut self,
