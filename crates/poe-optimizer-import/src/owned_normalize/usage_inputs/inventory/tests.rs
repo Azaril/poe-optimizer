@@ -156,67 +156,384 @@ fn refused_preset_stops_receipt_work_after_the_first_unproved_consumer() {
 }
 
 fn with_two_accountable_presets(test: impl FnOnce(&mut Builder<'_, '_>, Case)) {
-    let source_xml = SOURCE.replace("<Skill><Gem/>", r#"<Skill enabled="true"><Gem/>"#);
+    with_accountable_presets(2, test);
+}
+
+fn with_accountable_presets(count: usize, test: impl FnOnce(&mut Builder<'_, '_>, Case)) {
+    assert!(count >= 2);
+    let sets: String = (1..=count)
+        .map(|id| format!(r#"<SkillSet id="{id}"><Skill enabled="true"><Gem/></Skill></SkillSet>"#))
+        .collect();
+    let source_xml =
+        format!(r#"<PathOfBuilding2><Skills activeSkillSet="1">{sets}</Skills></PathOfBuilding2>"#);
     with_case(&source_xml, |b, mut case| {
-        let source = b
+        let sources: Vec<_> = b
             .evidence
             .rows()
             .iter()
-            .rev()
-            .find(|row| row.occurrence().name() == "Gem")
-            .unwrap()
-            .occurrence()
-            .id();
-        let group = b.evidence.rows()[source.ordinal() as usize]
-            .occurrence()
-            .parent()
-            .unwrap();
-        let set = b.evidence.rows()[group.ordinal() as usize]
-            .occurrence()
-            .parent()
-            .unwrap();
-        let gem_id: GemInstanceId = b.id().unwrap();
-        let skill_id = b.id().unwrap();
-        let preset_id = b.id().unwrap();
-        let mut gem = case.draft.gems.members[0].clone();
-        gem.id = gem_id;
-        let mut skill = case.draft.skills.members[0].clone();
-        skill.id = skill_id;
-        skill.source = DraftAuthoredSkillSource::Gem(gem_id.into());
-        let mut preset = case.draft.skill_presets.members[0].clone();
-        preset.id = preset_id;
-        preset.skills.members = vec![skill_id];
-        let usage = b
-            .closure(source, "usage-preferences-not-converted", vec![])
-            .unwrap();
-        let DraftListCompletion::Pending { id: issue, .. } = usage.completion else {
-            unreachable!()
-        };
-        preset.intent = Some(SkillPresetIntentDraftV1 {
-            schema_version: 1,
-            usage,
-            generated_inputs: super::super::super::complete(vec![]),
-        });
-        for origin in [set, group, source] {
-            b.link(origin, OwnedOriginTarget::SkillPreset(preset_id))
+            .filter(|row| row.occurrence().name() == "Gem")
+            .skip(1)
+            .map(|row| row.occurrence().id())
+            .collect();
+        for source in sources {
+            let group = b.evidence.rows()[source.ordinal() as usize]
+                .occurrence()
+                .parent()
                 .unwrap();
+            let set = b.evidence.rows()[group.ordinal() as usize]
+                .occurrence()
+                .parent()
+                .unwrap();
+            let gem_id: GemInstanceId = b.id().unwrap();
+            let skill_id = b.id().unwrap();
+            let preset_id = b.id().unwrap();
+            let mut gem = case.draft.gems.members[0].clone();
+            gem.id = gem_id;
+            let mut skill = case.draft.skills.members[0].clone();
+            skill.id = skill_id;
+            skill.source = DraftAuthoredSkillSource::Gem(gem_id.into());
+            let mut preset = case.draft.skill_presets.members[0].clone();
+            preset.id = preset_id;
+            preset.skills.members = vec![skill_id];
+            let usage = b
+                .closure(source, "usage-preferences-not-converted", vec![])
+                .unwrap();
+            let DraftListCompletion::Pending { id: issue, .. } = usage.completion else {
+                unreachable!()
+            };
+            preset.intent = Some(SkillPresetIntentDraftV1 {
+                schema_version: 1,
+                usage,
+                generated_inputs: super::super::super::complete(vec![]),
+            });
+            for origin in [set, group, source] {
+                b.link(origin, OwnedOriginTarget::SkillPreset(preset_id))
+                    .unwrap();
+            }
+            for origin in [set, group] {
+                b.link(origin, OwnedOriginTarget::Issue(issue)).unwrap();
+            }
+            b.link(source, OwnedOriginTarget::Gem(gem_id)).unwrap();
+            b.link(source, OwnedOriginTarget::Skill(skill_id)).unwrap();
+            record_input_disposition(b, source, &preset, &skill, Some(&gem), &mut case.receipts)
+                .unwrap();
+            case.draft.gems.members.push(gem);
+            case.draft.skills.members.push(skill);
+            case.presets
+                .insert(set, case.draft.skill_presets.members.len());
+            case.draft.skill_presets.members.push(preset);
         }
-        for origin in [set, group] {
-            b.link(origin, OwnedOriginTarget::Issue(issue)).unwrap();
-        }
-        b.link(source, OwnedOriginTarget::Gem(gem_id)).unwrap();
-        b.link(source, OwnedOriginTarget::Skill(skill_id)).unwrap();
-        record_input_disposition(b, source, &preset, &skill, Some(&gem), &mut case.receipts)
-            .unwrap();
-        assert_eq!(case.receipts.inputs.len(), 2);
-        case.draft.gems.members.push(gem);
-        case.draft.skills.members.push(skill);
-        case.presets
-            .insert(set, case.draft.skill_presets.members.len());
-        case.draft.skill_presets.members.push(preset);
+        assert_eq!(case.receipts.inputs.len(), count);
         case.draft.allocator = b.allocator.state();
         test(b, case);
     });
+}
+
+fn copy_authored_receipt(receipt: &InputReceipt) -> InputReceipt {
+    let InputOutput::Authored { skill, gem } = &receipt.output else {
+        unreachable!("this fixture has only checked authored receipts")
+    };
+    InputReceipt {
+        source: receipt.source,
+        group: receipt.group,
+        preset: receipt.preset,
+        identity: receipt.identity.clone(),
+        output: InputOutput::Authored {
+            skill: skill.clone(),
+            gem: gem.clone(),
+        },
+        fields: receipt.fields.clone(),
+        descendants: receipt.descendants.clone(),
+    }
+}
+
+#[test]
+fn complete_presets_do_not_multiply_unrelated_receipts_by_whole_draft_scans() {
+    let mut costs = Vec::new();
+    for count in [16, 32] {
+        with_accountable_presets(count, |b, mut case| {
+            let before = case.draft.clone();
+            let mut expected = before.clone();
+            let mut expected_origins = b.origins.clone();
+            for preset in &mut expected.skill_presets.members {
+                let usage = &mut preset.intent.as_mut().unwrap().usage;
+                let DraftListCompletion::Pending { id, .. } = usage.completion else {
+                    unreachable!()
+                };
+                for origin in &mut expected_origins {
+                    origin
+                        .links
+                        .retain(|link| *link != OwnedOriginTarget::Issue(id));
+                }
+                usage.completion = DraftListCompletion::Complete;
+            }
+            let allocator = b.allocator.state();
+            let start = b.work;
+            finish(b, &mut case).unwrap();
+            costs.push(b.work - start);
+            assert_eq!(case.draft, expected);
+            assert_eq!(b.origins, expected_origins);
+            assert_eq!(b.allocator.state(), allocator);
+        });
+    }
+    assert!(
+        costs[1] < costs[0] * 4,
+        "complete-preset work should retain bounded scans, not a receipts × draft × source product: {costs:?}"
+    );
+}
+
+#[test]
+fn unmatched_input_receipts_pay_only_the_exact_identity_scan() {
+    let mut costs = Vec::new();
+    for extra in [0, 64] {
+        with_two_accountable_presets(|b, mut case| {
+            for _ in 0..extra {
+                let mut unrelated = copy_authored_receipt(&case.receipts.inputs[0]);
+                // Both identities are real, but this combined source/preset
+                // pair cannot witness either preset's exact occurrence.
+                unrelated.preset = case.draft.skill_presets.members[1].id;
+                case.receipts.inputs.push(unrelated);
+            }
+            let start = b.work;
+            finish(b, &mut case).unwrap();
+            costs.push(b.work - start);
+            assert!(case.draft.skill_presets.members.iter().all(|preset| {
+                matches!(
+                    preset.intent.as_ref().unwrap().usage.completion,
+                    DraftListCompletion::Complete
+                )
+            }));
+        });
+    }
+    assert_eq!(costs[1] - costs[0], 2 * 64);
+}
+
+#[test]
+fn matching_input_receipts_still_reject_stale_outputs_and_wrong_recipients() {
+    for mutation in 0..6 {
+        with_two_accountable_presets(|b, mut case| {
+            let first = copy_authored_receipt(&case.receipts.inputs[0]);
+            let other = copy_authored_receipt(&case.receipts.inputs[1]);
+            match mutation {
+                0 => case.receipts.inputs[0].preset = other.preset,
+                1 => case.receipts.inputs[0].source = other.source,
+                2 => case.receipts.inputs[0].group = other.group,
+                3 => {
+                    case.receipts.inputs[0].output =
+                        copy_authored_receipt(&case.receipts.inputs[1]).output
+                }
+                4 => {
+                    let InputOutput::Authored { skill, .. } = &mut case.receipts.inputs[0].output
+                    else {
+                        unreachable!()
+                    };
+                    // The same live ID with altered data cannot use its receipt.
+                    skill.enabled = false.into();
+                }
+                _ => {
+                    b.origins[first.source.ordinal() as usize]
+                        .links
+                        .push(OwnedOriginTarget::SkillPreset(other.preset));
+                }
+            }
+            let mut expected = case.draft.clone();
+            let mut expected_origins = b.origins.clone();
+            let second = &mut expected.skill_presets.members[1]
+                .intent
+                .as_mut()
+                .unwrap()
+                .usage;
+            let DraftListCompletion::Pending { id, .. } = second.completion else {
+                unreachable!()
+            };
+            second.completion = DraftListCompletion::Complete;
+            for origin in &mut expected_origins {
+                origin
+                    .links
+                    .retain(|link| *link != OwnedOriginTarget::Issue(id));
+            }
+            let allocator = b.allocator.state();
+            finish(b, &mut case).unwrap();
+            assert_eq!(case.draft, expected, "mutation {mutation}");
+            assert_eq!(b.origins, expected_origins, "mutation {mutation}");
+            assert_eq!(b.allocator.state(), allocator, "mutation {mutation}");
+        });
+    }
+}
+
+// These checked-shape fixtures exercise receipt consumption, not proof minting.
+// Public owned_usage_inventory tests cover the actual usage adapter producer.
+fn with_two_usage_presets(test: impl FnOnce(&mut Builder<'_, '_>, Case)) {
+    with_two_accountable_presets(|b, mut case| {
+        let mut registry =
+            OwnedIdRegistry::empty(b.roles.input().namespace.clone(), Default::default()).unwrap();
+        let policy = registry
+            .allocate_definition::<UsagePolicyDefinition>()
+            .unwrap();
+        let parameter = registry
+            .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::UsagePolicy(policy.clone()))
+            .unwrap();
+        case.rows[0].fields[0]
+            .destinations
+            .push(UsageInventoryDestination::UsageParameter {
+                policy: policy.clone(),
+                parameter: parameter.clone(),
+            });
+        for (input, preset) in case
+            .receipts
+            .inputs
+            .iter()
+            .zip(&mut case.draft.skill_presets.members)
+        {
+            let binding = PresetUsageBindingDraft {
+                selection: UsagePolicyDraft {
+                    policy: policy.clone().into(),
+                    target: DraftUsageTarget::Skill(DraftSkillTarget::Authored(
+                        preset.skills.members[0].into(),
+                    )),
+                    parameters: super::super::super::complete(vec![ParameterDraft {
+                        slot: parameter.clone().into(),
+                        value: ParameterValue::Boolean(true).into(),
+                    }]),
+                },
+                applicability: PresetApplicability::Required,
+            };
+            preset
+                .intent
+                .as_mut()
+                .unwrap()
+                .usage
+                .members
+                .push(binding.clone());
+            case.receipts.usage.push(UsageReceipt {
+                source: input.source,
+                group: input.group,
+                preset: input.preset,
+                identity: input.identity.clone(),
+                binding,
+                parameter: parameter.clone(),
+                fields: [group_field("enabled")].into(),
+            });
+        }
+        test(b, case);
+    });
+}
+
+fn copy_usage_receipt(receipt: &UsageReceipt) -> UsageReceipt {
+    UsageReceipt {
+        source: receipt.source,
+        group: receipt.group,
+        preset: receipt.preset,
+        identity: receipt.identity.clone(),
+        binding: receipt.binding.clone(),
+        parameter: receipt.parameter.clone(),
+        fields: receipt.fields.clone(),
+    }
+}
+
+#[test]
+fn unmatched_usage_receipts_pay_only_identity_scans_but_matching_bindings_stay_exact() {
+    let mut costs = Vec::new();
+    for extra in [0, 64] {
+        with_two_usage_presets(|b, mut case| {
+            for _ in 0..extra {
+                let mut unrelated = copy_usage_receipt(&case.receipts.usage[0]);
+                unrelated.preset = case.draft.skill_presets.members[1].id;
+                case.receipts.usage.push(unrelated);
+            }
+            let start = b.work;
+            finish(b, &mut case).unwrap();
+            costs.push(b.work - start);
+            assert!(case.draft.skill_presets.members.iter().all(|preset| {
+                matches!(
+                    preset.intent.as_ref().unwrap().usage.completion,
+                    DraftListCompletion::Complete
+                )
+            }));
+        });
+    }
+    assert_eq!(costs[1] - costs[0], 2 * 64);
+
+    for mutation in 0..3 {
+        with_two_usage_presets(|b, mut case| {
+            match mutation {
+                0 => {
+                    case.receipts.usage[0].binding.selection.target =
+                        case.receipts.usage[1].binding.selection.target.clone();
+                }
+                1 => {
+                    case.receipts.usage[0].binding.selection.parameters.members[0].value =
+                        ParameterValue::Boolean(false).into();
+                }
+                _ => {
+                    let usage = &mut case.draft.skill_presets.members[0]
+                        .intent
+                        .as_mut()
+                        .unwrap()
+                        .usage;
+                    usage.members.push(usage.members[0].clone());
+                }
+            }
+            let mut expected = case.draft.clone();
+            let mut expected_origins = b.origins.clone();
+            let second = &mut expected.skill_presets.members[1]
+                .intent
+                .as_mut()
+                .unwrap()
+                .usage;
+            let DraftListCompletion::Pending { id, .. } = second.completion else {
+                unreachable!()
+            };
+            second.completion = DraftListCompletion::Complete;
+            for origin in &mut expected_origins {
+                origin
+                    .links
+                    .retain(|link| *link != OwnedOriginTarget::Issue(id));
+            }
+            finish(b, &mut case).unwrap();
+            assert_eq!(case.draft, expected, "usage mutation {mutation}");
+            assert_eq!(b.origins, expected_origins, "usage mutation {mutation}");
+        });
+    }
+}
+
+#[test]
+fn matching_usage_work_has_an_exact_atomic_budget_boundary() {
+    let mut cost = 0;
+    with_two_usage_presets(|b, mut case| {
+        let start = b.work;
+        finish(b, &mut case).unwrap();
+        cost = b.work - start;
+        assert!(case.draft.skill_presets.members.iter().all(|preset| {
+            matches!(
+                preset.intent.as_ref().unwrap().usage.completion,
+                DraftListCompletion::Complete
+            )
+        }));
+    });
+    for sufficient in [true, false] {
+        with_two_usage_presets(|b, mut case| {
+            let before = case.draft.clone();
+            let origins = b.origins.clone();
+            let allocator = b.allocator.state();
+            b.limits.max_work = b.work + cost - usize::from(!sufficient);
+            let result = finish(b, &mut case);
+            if sufficient {
+                result.unwrap();
+                assert!(case.draft.skill_presets.members.iter().all(|preset| {
+                    matches!(
+                        preset.intent.as_ref().unwrap().usage.completion,
+                        DraftListCompletion::Complete
+                    )
+                }));
+            } else {
+                assert!(matches!(result, Err(NormalizationError::Limit(_))));
+                assert_eq!(case.draft, before);
+                assert_eq!(b.origins, origins);
+            }
+            assert_eq!(b.allocator.state(), allocator);
+        });
+    }
 }
 
 #[test]

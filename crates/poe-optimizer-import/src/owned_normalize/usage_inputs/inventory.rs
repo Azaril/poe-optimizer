@@ -730,6 +730,48 @@ fn input_present(
     })
 }
 
+/// Charge the existing live-output and origin scans only after the cheap exact
+/// source/group/preset match. Unrelated saved presets cannot witness this row.
+fn matching_input_present(
+    b: &mut Builder<'_, '_>,
+    draft: &DraftSessionInput,
+    preset: &SkillPresetDraft,
+    receipt: &InputReceipt,
+) -> Result<bool> {
+    b.charge(
+        b.origins[receipt.source.ordinal() as usize]
+            .links
+            .len()
+            .saturating_mul(6),
+    )?;
+    b.charge(
+        b.origins[receipt.group.ordinal() as usize]
+            .links
+            .len()
+            .saturating_mul(2),
+    )?;
+    for descendant in &receipt.descendants {
+        b.charge(
+            b.origins[descendant.ordinal() as usize]
+                .links
+                .len()
+                .saturating_mul(2),
+        )?;
+    }
+    b.charge(
+        draft
+            .skills
+            .members
+            .len()
+            .saturating_add(draft.gems.members.len())
+            .saturating_add(draft.supports.members.len())
+            .saturating_add(preset.skills.members.len())
+            .saturating_add(preset.supports.members.len())
+            .saturating_add(1),
+    )?;
+    input_present(b, draft, preset, receipt)
+}
+
 fn product(b: &mut Builder<'_, '_>, factors: &[usize]) -> Result<()> {
     let cost = factors
         .iter()
@@ -844,57 +886,6 @@ pub(super) fn complete(
             b.charge(group.children().len())?;
             for source in group.children() {
                 let row = &b.evidence.rows()[source.ordinal() as usize];
-                for receipt in &receipts.inputs {
-                    b.charge(
-                        b.origins[receipt.source.ordinal() as usize]
-                            .links
-                            .len()
-                            .saturating_mul(6),
-                    )?;
-                    b.charge(
-                        b.origins[receipt.group.ordinal() as usize]
-                            .links
-                            .len()
-                            .saturating_mul(2),
-                    )?;
-                    for descendant in &receipt.descendants {
-                        b.charge(
-                            b.origins[descendant.ordinal() as usize]
-                                .links
-                                .len()
-                                .saturating_mul(2),
-                        )?;
-                    }
-                }
-                for receipt in &receipts.usage {
-                    b.charge(
-                        b.origins[receipt.source.ordinal() as usize]
-                            .links
-                            .len()
-                            .saturating_mul(2),
-                    )?;
-                    b.charge(
-                        b.origins[receipt.group.ordinal() as usize]
-                            .links
-                            .len()
-                            .saturating_mul(2),
-                    )?;
-                }
-                product(
-                    b,
-                    &[
-                        receipts.inputs.len(),
-                        draft
-                            .skills
-                            .members
-                            .len()
-                            .saturating_add(draft.gems.members.len())
-                            .saturating_add(draft.supports.members.len())
-                            .saturating_add(preset.skills.members.len())
-                            .saturating_add(preset.supports.members.len())
-                            .saturating_add(1),
-                    ],
-                )?;
                 let binding_count = preset.intent.as_ref().map_or_else(
                     || {
                         preset
@@ -904,28 +895,46 @@ pub(super) fn complete(
                     },
                     |intent| intent.usage.members.len(),
                 );
-                product(b, &[receipts.usage.len(), binding_count.saturating_add(1)])?;
+                // Identity filtering still visits every receipt. Deep scans
+                // are relevant only to receipts for this exact occurrence.
+                b.charge(receipts.inputs.len())?;
                 let mut inputs = Vec::new();
                 for receipt in &receipts.inputs {
                     if receipt.source == *source
                         && receipt.group == *group_id
                         && receipt.preset == preset_id
-                        && input_present(b, draft, preset, receipt)?
+                        && matching_input_present(b, draft, preset, receipt)?
                     {
                         inputs.push(receipt);
                     }
                 }
-                let usages: Vec<_> = receipts
-                    .usage
-                    .iter()
-                    .filter(|receipt| {
-                        receipt.source == *source
-                            && receipt.group == *group_id
-                            && receipt.preset == preset_id
-                            && preset_links(b, receipt.source, receipt.group, receipt.preset)
-                            && usage_present(preset, &receipt.binding)
-                    })
-                    .collect();
+                b.charge(receipts.usage.len())?;
+                let mut usages = Vec::new();
+                for receipt in &receipts.usage {
+                    if receipt.source != *source
+                        || receipt.group != *group_id
+                        || receipt.preset != preset_id
+                    {
+                        continue;
+                    }
+                    for origin in [receipt.source, receipt.group] {
+                        b.charge(
+                            b.origins[origin.ordinal() as usize]
+                                .links
+                                .len()
+                                .saturating_mul(2),
+                        )?;
+                    }
+                    // A compiled usage policy has at most 64 parameters.
+                    // Preserve a bound for the complete binding comparison,
+                    // not just the number of rows in the receiving preset.
+                    product(b, &[binding_count.saturating_add(1), 65])?;
+                    if preset_links(b, receipt.source, receipt.group, receipt.preset)
+                        && usage_present(preset, &receipt.binding)
+                    {
+                        usages.push(receipt);
+                    }
+                }
                 product(
                     b,
                     &[
