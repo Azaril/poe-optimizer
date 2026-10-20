@@ -6,21 +6,24 @@ use crate::owned_source_actions::{
     ImportReferenceContext, SourceActionInspection, SourceActionSelection,
 };
 
-/// A literal primary switch of `true` imposes no additional indexed source gate.
-/// Pinned admission/export use `not hasGlobalEffect or enableGlobal1`; the Vaal
-/// count branch returns `enableGlobal1 == true` without changing the count.
-/// This holds for whichever effect occupies index one, so it needs no complete
-/// effect-list or lazy metadata inference. It proves neither admission nor a
-/// count, participation, reference selection, secondary switch or native effect.
+/// An exact literal true imposes no restriction at the requested source index.
+/// Pinned admission/export use `not hasGlobalEffect or enableGlobal[index]`;
+/// the Vaal count branches return that exact Boolean without changing count.
+/// This proves neither admission nor count, participation, reference selection
+/// or native effect membership, regardless of which effect occupies the index.
 ///
-/// Only an already checked input disposition may retain this field fact. The
-/// raw source stays intact; absent/defaulted, escaped or other tokens gain no
-/// authority. Callers include this constant-size check in their charged field
-/// traversal; this helper never looks up another source or mutates a record.
-pub(super) fn exact_primary_global_gate_is_neutral(
+/// The caller selects its already reviewed field authority explicitly. Authored
+/// physical/Direct receipts request either index; generated receipts request
+/// only the primary. Support and unread-secondary proofs remain separate.
+/// Only an already checked disposition may retain the fact. Missing/defaulted,
+/// escaped and other tokens gain no authority. This constant-size check is part
+/// of the caller's charged field traversal and preserves the raw source.
+pub(super) fn exact_global_gate_is_neutral(
     attribute: &SourceAttributeEvidence<'_>,
+    requested_field: &str,
 ) -> bool {
-    attribute.origin().name == "enableGlobal1"
+    matches!(requested_field, "enableGlobal1" | "enableGlobal2")
+        && attribute.origin().name == requested_field
         && attribute.raw() == "true"
         && attribute.decoded().ok() == Some("true")
 }

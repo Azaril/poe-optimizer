@@ -178,11 +178,19 @@ under the October 20 approval; current artifacts and dependent fixtures are
 rebuilt, and all-five preservation validation passes. Retired input-policy
 readers are removed. A private secondary-switch accounting adapter is applied and
 passes its focused usage tests and strict linting. The source-component target
-now passes all eighteen tests, including support consumers, generated routing,
+now passes all nineteen tests, including support consumers, generated routing,
 retained/reconstructed group selection and missing-reference selector controls. The
-group-selector adapter is applied, with private and public checks passing.
-Both reuse the same physical construction
-predicate and charged role lookup while retaining separate field permissions.
+expanded source check proves that exact secondary `true` does not restrict its
+indexed effect, while independent admission gates and counts remain unchanged.
+The group-selector follow-up separates actual constructed selection from the
+stricter proof used by supports and unread-secondary accounting: declared missing
+effects remain visible even when the constructed list has only its primary.
+The authored physical/Direct follow-up shares the existing neutral-gate helper;
+generated inputs explicitly retain primary-only authority. These private Import
+changes pass the Import library, Direct, usage and normalization suites; remaining
+lint and real-packet preservation checks are recorded in the living plan. They
+add no native types or rules.
+All paths reuse the charged role lookup and keep separate field permissions.
 The applied support receipt uses those facts for exact neutral count/global
 fields. Complete scalar inputs permit the same independent source proof as
 partial inputs. Scalar completion, field-consumer coverage and admission as a

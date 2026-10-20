@@ -627,7 +627,7 @@ fn intrinsic_attributes(
             !matches!(
                 attribute.origin().name.as_str(),
                 "enabled" | "enableGlobal1" | "enableGlobal2" | "count"
-            ) || skill_input_disposition::exact_primary_global_gate_is_neutral(attribute)
+            ) || skill_input_disposition::exact_global_gate_is_neutral(attribute, "enableGlobal1")
         })
         .map(|attribute| attribute.origin().name.clone())
         .collect();

@@ -27,6 +27,64 @@ fn exact_neutral(group: &SourceEvidenceRow<'_>, name: &str) -> bool {
     })
 }
 
+/// Source-reference selection may retain missing additional references without
+/// treating the missing mechanic as absent. The authenticated constructor must
+/// have produced exactly the mapped primary. Every added reference must remain
+/// explicitly Missing: a mapped addition omitted from the final list is a
+/// contradiction, even if the role index accepts the individual references.
+///
+/// This is private SkillUse selector authority only. Support siblings and other
+/// consumers retain physical_source_is_singleton. The caller has charged source
+/// identity comparisons; charge every additional reference before inspecting it.
+/// Catalog reproduction authenticates these observations at publication, while
+/// this attempt still checks the actual physical source and current receipts.
+fn constructed_primary_selection(
+    b: &mut Builder<'_, '_>,
+    row: &SourceEvidenceRow<'_>,
+    gem: &GemDefId,
+    role: &OwnedGemRoleRow,
+) -> Result<bool> {
+    if &role.gem != gem
+        || role.materialization != OwnedGemMaterialization::Physical
+        || role.role != OwnedGemRole::Known(AuthoredGemRole::SkillUse)
+    {
+        return Ok(false);
+    }
+    let (OwnedPrimarySkill::Known(primary), OwnedGemSourceConstruction::Observed(facts)) =
+        (&role.primary, &role.construction)
+    else {
+        return Ok(false);
+    };
+    b.charge(
+        facts
+            .declared_additional_effects
+            .len()
+            .saturating_add(facts.constructed_additional_effects.len()),
+    )?;
+    Ok(
+        source_shape::value(row, "gemId") == Some(facts.game_id.as_str())
+            && source_shape::value(row, "variantId") == Some(facts.variant_id.as_str())
+            && source_shape::value(row, "skillId") == Some(facts.primary.effect_id.as_str())
+            && matches!(&facts.primary.resolution,
+            OwnedSourceEffectResolution::Mapped(resolved) if resolved == primary)
+            && facts.resolved_additional_effects.is_empty()
+            && facts.resolved_effects.as_slice() == std::slice::from_ref(&facts.primary)
+            && facts
+                .display_order
+                .as_deref()
+                .is_none_or(|order| order == [1])
+            && facts.declared_additional_effects.iter().all(|reference| {
+                reference.effect.resolution == OwnedSourceEffectResolution::Missing
+            })
+            && facts
+                .constructed_additional_effects
+                .iter()
+                .all(|reference| {
+                    reference.effect.resolution == OwnedSourceEffectResolution::Missing
+                }),
+    )
+}
+
 /// Same-attempt final accounting: every physical child must have a live checked
 /// intrinsic/reference receipt. One SkillUse and zero or more exact support
 /// assignments give the source admission filters at most one candidate. This
@@ -114,9 +172,6 @@ pub(super) fn prove(
         else {
             return Ok(None);
         };
-        if !skill_input_disposition::physical_source_is_singleton(row, definition, role) {
-            return Ok(None);
-        }
         match (&receipt.output, &role.role) {
             (
                 InputOutput::Authored {
@@ -126,7 +181,8 @@ pub(super) fn prove(
                 },
                 OwnedGemRole::Known(AuthoredGemRole::SkillUse),
             ) => {
-                if primary.is_some()
+                if !constructed_primary_selection(b, row, definition, role)?
+                    || primary.is_some()
                     || !matches!(&skill.source,
                         DraftAuthoredSkillSource::Gem(DraftField::Known { value }) if *value == gem.id)
                     || gem.definition.to_resolved().as_ref() != Some(definition)
@@ -139,6 +195,9 @@ pub(super) fn prove(
                 InputOutput::Support { support, gem },
                 OwnedGemRole::Known(AuthoredGemRole::SupportAssignment),
             ) => {
+                if !skill_input_disposition::physical_source_is_singleton(row, definition, role) {
+                    return Ok(None);
+                }
                 let DraftSkillTarget::Authored(DraftField::Known { value: target }) =
                     &support.target
                 else {

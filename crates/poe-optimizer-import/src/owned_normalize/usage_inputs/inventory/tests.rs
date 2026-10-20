@@ -667,7 +667,9 @@ fn neutral_primary_gate_does_not_account_other_fields_or_a_second_consumer() {
                 if extra == "count" {
                     r#" count="1""#
                 } else {
-                    r#" enableGlobal2="true""#
+                    // True now has its own neutral-gate proof. False still
+                    // needs independent construction/consumer authority.
+                    r#" enableGlobal2="false""#
                 },
                 "",
             ),

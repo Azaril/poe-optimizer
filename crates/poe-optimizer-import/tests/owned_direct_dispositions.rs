@@ -19,6 +19,8 @@ mod support_targets;
 use fixture::Fixture;
 #[path = "support/owned_generated_deferred_accounting.rs"]
 mod generated_deferred_accounting;
+#[path = "support/owned_direct_secondary_true_usage.rs"]
+mod secondary_true;
 use poe_optimizer_core::{
     build_identity::BuildLineage, owned_build::ParameterValue, owned_draft::*,
 };

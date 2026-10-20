@@ -47,8 +47,9 @@ pub enum UsageInventoryFieldSelector {
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum UsageInventoryDestination {
     /// Successful existing physical, Direct, support or generated-input disposition.
-    /// Authored/Direct and generated receipts also include the checked literal
-    /// primary-true source gate, without enabling an effect. Exact physical
+    /// Authored/Direct receipts include checked literal primary/secondary-true
+    /// source gates; generated receipts include only primary-true. Neither
+    /// enables an effect. Exact physical
     /// singleton construction can additionally account for the unread secondary
     /// source switch; Direct/generated dispatch is not covered. A checked physical
     /// SupportAssignment with complete singleton construction may account count=1
@@ -402,8 +403,13 @@ pub(in crate::owned_normalize) fn record_input_disposition(
                 && (!matches!(
                     attribute.origin().name.as_str(),
                     "count" | "enableGlobal1" | "enableGlobal2"
-                ) || skill_input_disposition::exact_primary_global_gate_is_neutral(attribute)
-                    || physical_secondary && attribute.origin().name == "enableGlobal2")
+                ) || skill_input_disposition::exact_global_gate_is_neutral(
+                    attribute,
+                    "enableGlobal1",
+                ) || skill_input_disposition::exact_global_gate_is_neutral(
+                    attribute,
+                    "enableGlobal2",
+                ) || physical_secondary && attribute.origin().name == "enableGlobal2")
         })
         .map(|attribute| occurrence_field(&attribute.origin().name))
         .collect();

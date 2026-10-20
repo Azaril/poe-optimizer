@@ -3,7 +3,8 @@
 //! preserve the actual private Builder/sidecar links while tampering snapshots.
 use super::*;
 use crate::owned_skill_catalog::{
-    ObservedGemSourceConstruction, OwnedSourceEffectReference, OwnedSourceEffectResolution,
+    ObservedGemSourceConstruction, OwnedIndexedSourceEffectReference, OwnedMissingSourceEffect,
+    OwnedMissingSourceEffectKind, OwnedSourceEffectReference, OwnedSourceEffectResolution,
 };
 use poe_optimizer_data::owned_schema::{
     OWNED_SCHEMA_PACKAGE_VERSION, OwnedDefinitionSchemaPackage, SchemaPackageInput,
@@ -22,6 +23,13 @@ fn declarations() -> DeclaredSlots {
 }
 
 fn with_joined_case(test: impl FnOnce(&mut Builder<'_, '_>, Case)) {
+    with_joined_case_roles(|_| {}, test);
+}
+
+fn with_joined_case_roles(
+    change: impl FnOnce(&mut Vec<OwnedGemRoleRow>),
+    test: impl FnOnce(&mut Builder<'_, '_>, Case),
+) {
     let xml = SOURCE.replace(
         r#"<Skill enabled="true"><Gem/>"#,
         r#"<Skill enabled="true" mainActiveSkill="nil" mainActiveSkillCalcs="1"><Gem gemId="primary" variantId="v" skillId="primary-effect" enableGlobal2="true"/><Gem gemId="support" variantId="v" skillId="support-effect" enableGlobal2="true"/>"#,
@@ -171,6 +179,7 @@ fn with_joined_case(test: impl FnOnce(&mut Builder<'_, '_>, Case)) {
                 )),
             });
         }
+        change(&mut roles.roles);
         let roles = OwnedSkillRoleIndex::new(roles, &mapping, &schema, Default::default()).unwrap();
         // Local reborrow replaces only the empty fixture's read-only catalog.
         // Other artifact families are not consulted by this private consumer.
@@ -336,4 +345,144 @@ fn joined_proof_rechecks_support_and_primary_snapshots_before_accounting() {
             assert_eq!(b.origins, origins);
         });
     }
+}
+
+fn missing_additions(role: &mut OwnedGemRoleRow, count: u32) {
+    let OwnedGemSourceConstruction::Observed(facts) = &mut role.construction else {
+        unreachable!()
+    };
+    for index in 1..=count {
+        let effect_id = format!("unresolved-command-{index}");
+        let reference = OwnedIndexedSourceEffectReference {
+            index,
+            effect: OwnedSourceEffectReference {
+                effect_id: effect_id.clone(),
+                resolution: OwnedSourceEffectResolution::Missing,
+            },
+        };
+        facts.declared_additional_effects.push(reference.clone());
+        facts.constructed_additional_effects.push(reference);
+        for kind in [
+            OwnedMissingSourceEffectKind::DeclaredAdditionalEffect,
+            OwnedMissingSourceEffectKind::ConstructedAdditionalEffect,
+        ] {
+            facts.missing_references.push(OwnedMissingSourceEffect {
+                kind,
+                index: Some(index),
+                effect_id: effect_id.clone(),
+            });
+        }
+    }
+    facts.missing_references.sort();
+}
+
+#[test]
+fn constructed_primary_selection_retains_missing_references_and_strict_consumers() {
+    with_joined_case_roles(
+        |roles| missing_additions(&mut roles[0], 1),
+        |b, case| {
+            let roles_before = b.roles.input().clone();
+            let receipt = &case.receipts.inputs[0];
+            let UsageInventorySource::Physical { gem } = &receipt.identity else {
+                unreachable!()
+            };
+            let row = &b.evidence.rows()[receipt.source.ordinal() as usize];
+            let roles = b.roles;
+            let role = skill_input_disposition::charged_source_role(b, roles, row, gem)
+                .unwrap()
+                .unwrap();
+            assert!(!skill_input_disposition::physical_source_is_singleton(
+                row, gem, role
+            ));
+            let before = case.draft.clone();
+            let origins = b.origins.clone();
+            let allocator = b.allocator.state();
+            let selector = proof(b, &case).unwrap().expect("one constructed primary");
+            for name in ["mainActiveSkill", "mainActiveSkillCalcs"] {
+                assert!(selector.proves(receipt, &group_field(name)));
+                assert!(!selector.proves(&case.receipts.inputs[1], &group_field(name)));
+            }
+            for name in ["count", "enableGlobal1", "enableGlobal2"] {
+                assert!(!selector.proves(receipt, &occurrence_field(name)));
+            }
+            assert_eq!(
+                b.roles.input(),
+                &roles_before,
+                "missing references are not consumed"
+            );
+            assert_eq!(case.draft, before);
+            assert_eq!(b.origins, origins);
+            assert_eq!(b.allocator.state(), allocator);
+        },
+    );
+}
+
+#[test]
+fn constructed_selector_refuses_omitted_mapped_additions_and_unproved_supports() {
+    for mode in 0..3 {
+        with_joined_case_roles(
+            |roles| {
+                missing_additions(&mut roles[0], 1);
+                match mode {
+                    0 => {
+                        let OwnedGemSourceConstruction::Observed(facts) =
+                            &mut roles[0].construction
+                        else {
+                            unreachable!()
+                        };
+                        // Structurally valid mapped reference, but deliberately
+                        // absent from the alleged final construction list.
+                        facts.constructed_additional_effects.push(
+                            OwnedIndexedSourceEffectReference {
+                                index: 2,
+                                effect: facts.primary.clone(),
+                            },
+                        );
+                    }
+                    1 => missing_additions(&mut roles[1], 1),
+                    _ => roles[0].construction = OwnedGemSourceConstruction::Unavailable,
+                }
+            },
+            |b, case| {
+                let before = case.draft.clone();
+                let origins = b.origins.clone();
+                assert!(proof(b, &case).unwrap().is_none(), "mode {mode}");
+                assert_eq!(case.draft, before);
+                assert_eq!(b.origins, origins);
+            },
+        );
+    }
+}
+
+#[test]
+fn constructed_reference_scans_are_precharged_and_budget_failure_is_read_only() {
+    let mut measured = Vec::new();
+    for count in [1, 40] {
+        with_joined_case_roles(
+            |roles| missing_additions(&mut roles[0], count),
+            |b, case| {
+                let start = b.work;
+                assert!(proof(b, &case).unwrap().is_some());
+                measured.push(b.work - start);
+            },
+        );
+    }
+    assert_eq!(
+        measured[1] - measured[0],
+        78,
+        "both added reference inventories are charged"
+    );
+    with_joined_case_roles(
+        |roles| missing_additions(&mut roles[0], 40),
+        |b, case| {
+            let before = case.draft.clone();
+            let origins = b.origins.clone();
+            let allocator = b.allocator.state();
+            b.limits.max_work = b.work + measured[1] - 1;
+            assert!(matches!(proof(b, &case), Err(NormalizationError::Limit(_))));
+            assert_eq!(case.draft, before);
+            assert_eq!(b.origins, origins);
+            assert_eq!(b.allocator.state(), allocator);
+        },
+    );
 }

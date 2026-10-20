@@ -9,8 +9,8 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**October 20 backup checkpoint:** `a6b61b3c` is pushed to GitHub `main` and its
-remote hash is verified. It follows `8cf6bc6c`, `983cee19`, `1ba8c7ce`, `6f6eae3f`, `f6dac721`, `dba0f661`,
+**October 20 backup checkpoint:** `4aa10b6e` is pushed to GitHub `main` and its
+remote hash is verified. It follows `a6b61b3c`, `8cf6bc6c`, `983cee19`, `1ba8c7ce`, `6f6eae3f`, `f6dac721`, `dba0f661`,
 `afc607d8` and the initial broad backup `15778b04`; push access is working.
 The earlier receipt-work correction removes irrelevant deep charges without raising
 work limits. All 18 private completion and 27 public usage tests, strict Import
@@ -1645,6 +1645,59 @@ the strict source-construction predicate unchanged. Reuse these bounded
 selector facts in the existing private Import path next; a source list and
 actual dispatch must not be mistaken for complete native mechanics.
 
+### Authored source selector and neutral-gate follow-up, October 20
+
+The optional source target now passes nineteen tests, including an explicit
+secondary-true control over actual constructor order, Vaal/non-Vaal count
+handling, absent/false/true global metadata and independent disabled, support
+and hidden gates. Counts zero and seven are preserved. This proves the narrow
+non-restricting gate, not non-consumption, native activation or missing Command
+coverage. Evidence: `runs/owned-secondary-true-source-{tests,clippy}-01.log`.
+
+The applied private Import adapters retain the current public model: primary
+selection may use the actual constructed list while preserving declared missing
+references; authored physical/Direct inputs may account for an exact secondary
+`true` after their existing input proof. Supports keep their stricter construction
+proof, and generated sources retain independent reconstruction requirements.
+Both candidates passed independent review. Their focused tests retain mapped
+addition/alias refusals, exact live recipients, work limits, independent presets
+and every other consumer. The first private run passed 24/25: an older negative
+case incorrectly required the newly supported secondary `true` to refuse. It now
+uses `false`, preserving the independent unread/construction requirement. The
+first public compile exposed two test-only API mistakes; the corrected test uses
+complete serialized sidecar comparison and the existing checked-finalizer test.
+The Import library passes all 224 tests in
+`runs/owned-authored-selector-regression-tests-02.log`. That run exposed a missing
+`source` declaration in the new Direct test fixture's allowed group frame;
+adding the declaration changes neither source data nor production behavior.
+The corrected public suites pass all 28 Direct, 377 normalization and 39 usage
+tests in `runs/owned-authored-selector-regression-tests-03.log`. No real inventory
+destinations have changed yet. This is a backup checkpoint: strict Import
+all-target lint and the maintained all-five previous-code comparison still need
+to run for these latest adapters before the real packet is updated. The nineteen
+source tests and their strict lint already pass. Hosted CI remains a separate gate.
+
+Resume with those remaining checks, then review and apply the ignored private
+reference-absence candidate and the four-row skeletal packet integration
+candidate. Neither candidate is included in this backup; the nine protected
+incoming-critical work-in-progress files also remain local. GitHub `main` was
+verified at `4aa10b6e` immediately before this follow-up backup.
+
+The real-packet review also found a subsequent absence-accounting blocker.
+Skeletal inventory rows declare `statSetIndex`/`statSetIndexCalcs`, while the
+selected original omits them; the current reference receipt records only present
+attributes. Original01 also omits a declared group label. Keep these fields in
+the identity-wide inventory. Reuse the successful source-reference/default and
+presentation proofs to account for absence explicitly before enabling the four
+skeletal inventory rows. Merely changing Deferred destinations cannot close
+those rows, and neither change closes native numerical coverage.
+The exact follow-up is retained in
+`runs/skeletal-usage-integration-review-20261020/{README.md,audit.json}`. It covers
+21 saved occurrences across Original01 and Original05 and preserves all 25 rows,
+456 fields and 20 existing typed destinations. After the private absence facts
+are transported, update the four existing rows in the same maintained packet;
+do not introduce another publisher or copy the full release into new evidence.
+
 ### Native Scenario intent checkpoint, October 20
 
 The approved [Scenario intent contract](owned-scenario-usage-intent-proposal.md)
@@ -2811,6 +2864,11 @@ At 19:07 UTC the old run has seven passes, six known failures and five running
 Windows jobs. Ubuntu CLI3 completed at 18:50:24 UTC, so all four Ubuntu CLI
 shards and Ubuntu PoB have passed. The latest run remains pending; no new
 failure appeared. Snapshot files are retained in the same evidence directory.
+At 19:17 UTC, `4aa10b6e` has run `39481892743` pending with no jobs started.
+The old run has eight passes, six unchanged known failures and four running
+Windows jobs; Windows CLI2 completed at 19:14:30 UTC. Evidence is retained at
+`runs/ci-4aa10b6e-public-review-20261020/`. This remains queue/progress evidence,
+not a passing hosted run for the latest code.
 
 ## CI receipt repair (2026-10-15)
 

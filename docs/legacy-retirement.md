@@ -46,12 +46,18 @@ provides independent component evidence only. Its singleton and exact-true
 controls do not close usage or numerical coverage. Delivery and validation remain
 in the [implementation plan](implementation.md).
 
-The exact primary `true` case now has a private Import disposition after the
-existing live source/provider/output checks. This removes a redundant source
-restriction without introducing a PoB-shaped native Boolean. It does not authorize
-changing the saved toggle, infer participation, or account for other values and
-secondary fields. Support accounting and every other usage consumer remain
-separate. The current release's inventory-disabled behavior is unchanged.
+The exact `true` gate uses one shared private helper with explicit field
+authority. Authored physical/Direct receipts can request primary and secondary;
+generated receipts still request primary only. The expanded authored adapter
+passes its Import regression suites; strict all-target lint and real-packet
+preservation checks remain in the implementation resume point. It removes a
+redundant source restriction without introducing
+a PoB-shaped native Boolean. It does not authorize changing the saved toggle,
+infer participation or account for unsupported values. Support accounting and
+every other usage consumer remain separate. The stricter construction predicate
+still owns unread-secondary and support proofs; the new primary selector checks
+the actual constructed list and retains missing references. These are different
+proof obligations, not legacy/current implementations of the same behavior.
 
 The October 20 usage-inventory controls distinguish three live proofs: scalar
 parameter completion, saved-field consumer coverage and noncompeting count

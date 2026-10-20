@@ -778,6 +778,78 @@ fn exact_true_primary_is_non_restricting_but_other_admission_gates_and_counts_re
     }
 }
 
+#[test]
+fn exact_true_secondary_is_non_restricting_without_enabling_other_gates_or_changing_count() {
+    for jit in [false, true] {
+        let lua = components(jit);
+        for reordered in [false, true] {
+            for vaal in [false, true] {
+                for metadata in [None, Some(false), Some(true)] {
+                    for count in [0, 7] {
+                        let declared = copy(&lua, &raw_gem(&lua, "IceNovaPlayer"));
+                        declared
+                            .set("additionalGrantedEffectId1", "FireboltPlayer")
+                            .unwrap();
+                        if reordered {
+                            declared
+                                .set(
+                                    "grantedEffectDisplayOrder",
+                                    lua.create_sequence_from([1, 0]).unwrap(),
+                                )
+                                .unwrap();
+                        }
+                        let gem = copy(&lua, &declared);
+                        setup(&lua, &gem, "IceNovaPlayer");
+                        gem.set("vaalGem", vaal).unwrap();
+                        let (first_id, second_id) = if reordered {
+                            ("FireboltPlayer", "IceNovaPlayer")
+                        } else {
+                            ("IceNovaPlayer", "FireboltPlayer")
+                        };
+                        let first = effect(&lua, first_id);
+                        let second = effect(&lua, second_id);
+                        set_global_metadata(&lua, &first, Some(true));
+                        set_global_metadata(&lua, &second, metadata);
+                        let (row, probe) = occurrence(&lua, &gem, Some(true));
+                        row.set("count", count).unwrap();
+                        let group = group(&lua, &row);
+                        assert_eq!(active_ids(&lua, &group, &row), [first_id, second_id]);
+                        assert_eq!(export_count(&lua, &group, &row), 2);
+                        assert_eq!(count_for(&lua, &group, &second), (count, true));
+                        if metadata == Some(true) || vaal {
+                            assert!(probe.get::<u32>("reads").unwrap() > 0);
+                        }
+
+                        // Literal true removes only its own indexed gate. It
+                        // cannot enable a disabled source or a hidden/support
+                        // effect, and it does not determine the count value.
+                        for gate in ["enabled", "support", "hidden"] {
+                            let old_support: Value = second.get("support").unwrap();
+                            let old_hidden: Value = second.get("hideFromSideBar").unwrap();
+                            match gate {
+                                "enabled" => row.set("enabled", false).unwrap(),
+                                "support" => second.set("support", true).unwrap(),
+                                "hidden" => second.set("hideFromSideBar", true).unwrap(),
+                                _ => unreachable!(),
+                            }
+                            let expected = if gate == "enabled" {
+                                vec![]
+                            } else {
+                                vec![first_id.to_owned()]
+                            };
+                            assert_eq!(active_ids(&lua, &group, &row), expected);
+                            assert_eq!(export_count(&lua, &group, &row), expected.len());
+                            row.set("enabled", true).unwrap();
+                            second.set("support", old_support).unwrap();
+                            second.set("hideFromSideBar", old_hidden).unwrap();
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 const SINGLE_SUPPORT: &str = "SupportRapidCastingPlayer";
 const CHILD_SUPPORT: &str = "SupportCorruptingCryPlayer";
 const SUPPORT_CHILD: &str = "TriggeredCorruptingCryPlayer";

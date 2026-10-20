@@ -9,6 +9,8 @@ mod fixture;
 mod inventory;
 #[path = "support/owned_primary_usage_completion.rs"]
 mod primary_completion;
+#[path = "support/owned_secondary_true_usage.rs"]
+mod secondary_true;
 use fixture::{GEM, xml};
 use poe_optimizer_core::owned_draft::*;
 use poe_optimizer_core::{owned_definitions::*, owned_schema::*};
@@ -1225,7 +1227,13 @@ fn unavailable_construction_cannot_mint_a_secondary_field_fact() {
         .push(UsageInventoryDestination::InputDisposition);
     inventory::rebind(&mut f);
     assert_eq!(
-        completed(&f.run(&xml(GEM), Default::default()).unwrap()),
+        completed(
+            &f.run(
+                &xml(&GEM.replace(r#"enableGlobal2="true""#, r#"enableGlobal2="false""#)),
+                Default::default()
+            )
+            .unwrap()
+        ),
         [false]
     );
 }
@@ -1298,7 +1306,13 @@ fn constructed_or_reordered_effects_cannot_borrow_singleton_authority() {
             }
         });
         assert_eq!(
-            completed(&f.run(&xml(GEM), Default::default()).unwrap()),
+            completed(
+                &f.run(
+                    &xml(&GEM.replace(r#"enableGlobal2="true""#, r#"enableGlobal2="false""#)),
+                    Default::default()
+                )
+                .unwrap()
+            ),
             [false],
             "mode {mode}"
         );
@@ -1803,3 +1817,6 @@ fn checked_finalizer_preserves_other_obligations_after_usage_completion() {
             .any(|issue| issue.code.as_str() == "usage-preferences-not-converted")
     );
 }
+
+#[path = "support/owned_constructed_source_selectors.rs"]
+mod constructed_source_selectors;
