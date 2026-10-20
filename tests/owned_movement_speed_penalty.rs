@@ -106,7 +106,7 @@ fn exact_current_recipe_unit_repair_rejects_stale_values_and_compiles_new_ingred
     else {
         panic!()
     };
-    *q = poe_optimizer_core::owned_build::FiniteQuantity::new(3.0, q.unit().clone()).unwrap();
+    *q = poe_optimizer_core::owned_definitions::FiniteQuantity::new(3.0, q.unit().clone()).unwrap();
     assert!(packet::correct_raw_units(&bad).is_err());
     let mut missing = prior.clone();
     missing.rules.owners.retain(|o| {
