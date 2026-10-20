@@ -54,7 +54,7 @@
     {
       "name": "MovementPenalty",
       "stat": "29ff",
-      "unit": "0002",
+      "unit": "0001",
       "presence": "2a02",
       "meaning": "Raw positive source penalty, without acquisition-time scaling or negation"
     },

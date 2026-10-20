@@ -17,7 +17,7 @@ source tables, add a runtime parser, or select behavior by example-build identit
 | BlockChance | `29fc` | Percentage points `0002` | Omit value; false presence `2a01` |
 | EnergyShield | `29fd` | Energy Shield points `29ed` | Explicit zero input |
 | Evasion | `29fe` | Defence rating `29ee` | Explicit zero input |
-| MovementPenalty | `29ff` | Percentage points `0002` | Omit value; false presence `2a02` |
+| MovementPenalty | `29ff` | Dimensionless fraction `0001` | Omit value; false presence `2a02` |
 | Ward | `2a00` | Ward points `29fa` | Explicit zero input |
 
 Keys have prefix `def.000000000000` in `poe2/owned-mechanics-v1`. The ordered definition

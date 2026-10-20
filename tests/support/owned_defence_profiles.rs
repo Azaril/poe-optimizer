@@ -148,7 +148,7 @@ pub fn check_defence_profiles(cwd: &Path, prior: &Path) -> PathBuf {
         ("BlockChance", "29fc", "0002", Some("2a01")),
         ("EnergyShield", "29fd", "29ed", None),
         ("Evasion", "29fe", "29ee", None),
-        ("MovementPenalty", "29ff", "0002", Some("2a02")),
+        ("MovementPenalty", "29ff", "0001", Some("2a02")),
         ("Ward", "2a00", "29fa", None),
     ];
     for (field, (name, stat, unit, presence)) in policy.fields.iter().zip(expected_bindings) {

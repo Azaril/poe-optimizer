@@ -1,5 +1,6 @@
 //! Explicit neutral source guards replace inferred empty-input closure.
 use super::{
+    scalar_families::recipe,
     skill_scopes::canonical_instances,
     support::{bundle, data, json, normalize, root, success},
 };
@@ -8,9 +9,11 @@ use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
     decode_build,
     owned_mapping::SourceComponent,
-    owned_normalize::NormalizationPolicy,
+    owned_normalize::{GemQualityPolicy, NormalizationPolicy},
+    owned_recipe::assemble_owned_recipe,
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
 };
+use sha2::{Digest, Sha256};
 use std::{
     fs,
     path::{Path, PathBuf},
@@ -30,9 +33,41 @@ fn publish(cwd: &Path, prior: &Path, policy: &Path, output: &Path) -> Output {
         .unwrap()
 }
 pub(super) fn check_guarded_gem_inputs(cwd: &Path, prior: &Path) -> PathBuf {
-    let policy_path = data().join("gem-inputs/normalization.json");
-    let authored_bytes = fs::read(&policy_path).unwrap();
-    let policy: NormalizationPolicy = serde_json::from_slice(&authored_bytes).unwrap();
+    let authored_path = data().join("gem-inputs/normalization.json");
+    let authored_bytes = fs::read(&authored_path).unwrap();
+    assert_eq!(authored_bytes.len(), 15_043);
+    assert_eq!(
+        format!("{:x}", Sha256::digest(&authored_bytes)),
+        "522f3d460ecb20ccd61f335bee67a9017d68739ef9ec6ee5cfa97c0c28faf238"
+    );
+    let authored: NormalizationPolicy = serde_json::from_slice(&authored_bytes).unwrap();
+    let historical_definitions = authored.gem_inputs.as_ref().unwrap().definitions.clone();
+    assert_eq!(
+        historical_definitions.content_sha256,
+        "ed335a31addcd3a76578fb864a939873e7c0772b5a8de3b3fd8fb6d5f468bedd"
+    );
+    let current = assemble_owned_recipe(recipe(prior), Default::default()).unwrap();
+    let mut expected_identity = historical_definitions.clone();
+    expected_identity.content_sha256 = current.schema().identity().content_sha256.clone();
+    assert_eq!(&expected_identity, current.schema().identity());
+    // Current raw-profile metadata changes the generated schema commitment.
+    // Replay only the two schema bindings; keep the historical packet immutable.
+    let mut policy = authored.clone();
+    let GemQualityPolicy::Attributes(quality) = &mut policy.gem_quality else {
+        panic!("reviewed quality attributes")
+    };
+    assert_eq!(quality.definitions, historical_definitions);
+    quality.definitions = expected_identity.clone();
+    policy.gem_inputs.as_mut().unwrap().definitions = expected_identity;
+    let mut inverse = policy.clone();
+    let GemQualityPolicy::Attributes(quality) = &mut inverse.gem_quality else {
+        unreachable!()
+    };
+    quality.definitions = historical_definitions.clone();
+    inverse.gem_inputs.as_mut().unwrap().definitions = historical_definitions;
+    assert_eq!(inverse, authored, "only the two schema bindings may change");
+    let policy_path = cwd.join("guarded-gem-inputs-current-policy.json");
+    fs::write(&policy_path, serde_json::to_vec(&policy).unwrap()).unwrap();
     let prior_policy: NormalizationPolicy =
         serde_json::from_value(json(prior.join("normalization.json"))).unwrap();
     assert!(prior_policy.gem_inputs.is_none());
@@ -291,6 +326,6 @@ pub(super) fn check_guarded_gem_inputs(cwd: &Path, prior: &Path) -> PathBuf {
     assert!(!publish(cwd, prior, &stale_path, &rejected).status.success());
     assert!(!rejected.exists());
     assert_eq!(bundle(prior), prior_bytes);
-    assert_eq!(fs::read(policy_path).unwrap(), authored_bytes);
+    assert_eq!(fs::read(authored_path).unwrap(), authored_bytes);
     output
 }

@@ -30,10 +30,24 @@ fn with_joined_case_roles(
     change: impl FnOnce(&mut Vec<OwnedGemRoleRow>),
     test: impl FnOnce(&mut Builder<'_, '_>, Case),
 ) {
-    let xml = SOURCE.replace(
+    with_joined_source_case(false, change, test);
+}
+
+fn with_joined_source_case(
+    direct: bool,
+    change: impl FnOnce(&mut Vec<OwnedGemRoleRow>),
+    test: impl FnOnce(&mut Builder<'_, '_>, Case),
+) {
+    let mut xml = SOURCE.replace(
         r#"<Skill enabled="true"><Gem/>"#,
         r#"<Skill enabled="true" mainActiveSkill="nil" mainActiveSkillCalcs="1"><Gem gemId="primary" variantId="v" skillId="primary-effect" enableGlobal2="true"/><Gem gemId="support" variantId="v" skillId="support-effect" enableGlobal2="true"/>"#,
     );
+    if direct {
+        xml = xml.replace(
+            "<Gem gemId=\"primary\"",
+            "<Gem enabled=\"true\" enableGlobal1=\"true\" nameSpec=\"Primary\" gemId=\"primary\"",
+        );
+    }
     with_case(&xml, |outer, mut case| {
         let ns = outer.roles.input().namespace.clone();
         let mut registry = OwnedIdRegistry::empty(ns.clone(), Default::default()).unwrap();
@@ -84,6 +98,30 @@ fn with_joined_case_roles(
                     declarations: declarations(),
                 }),
             }));
+        }
+        if direct {
+            for descriptor in &mut descriptors {
+                match descriptor {
+                    DefinitionDescriptor::Gem(row) if row.id == primary => {
+                        row.schema = SchemaState::Unmapped {
+                            gaps: vec![SchemaGap {
+                                subject: SchemaSubject::Definition(DefinitionAddress::Gem(
+                                    primary.clone(),
+                                )),
+                                facet: SchemaFacet::InputSchema,
+                                code: key("catalog-only-direct-fixture"),
+                            }],
+                        };
+                    }
+                    DefinitionDescriptor::Skill(row) if row.id == primary_effect => {
+                        let SchemaState::Known(skill) = &mut row.schema else {
+                            unreachable!()
+                        };
+                        skill.directly_selectable = true;
+                    }
+                    _ => {}
+                }
+            }
         }
         let schema = OwnedDefinitionSchemaPackage::new(
             SchemaPackageInput {
@@ -160,7 +198,11 @@ fn with_joined_case_roles(
                 gem,
                 primary: OwnedPrimarySkill::Known(effect),
                 role: OwnedGemRole::Known(role),
-                materialization: OwnedGemMaterialization::Physical,
+                materialization: if direct && role == AuthoredGemRole::SkillUse {
+                    OwnedGemMaterialization::ProviderOnly
+                } else {
+                    OwnedGemMaterialization::Physical
+                },
                 construction: OwnedGemSourceConstruction::Observed(Box::new(
                     ObservedGemSourceConstruction {
                         catalog_gem_key: game_id.into(),
@@ -241,6 +283,33 @@ fn with_joined_case_roles(
         });
         case.draft.gems.members.push(gem);
         case.draft.supports.members.push(assignment);
+        if direct {
+            let role = &roles.input().roles[0];
+            let OwnedPrimarySkill::Known(definition) = &role.primary else {
+                unreachable!()
+            };
+            let receipt = &mut case.receipts.inputs[0];
+            let InputOutput::Authored { skill, gem, .. } = &mut receipt.output else {
+                unreachable!()
+            };
+            let physical = gem.take().unwrap();
+            case.draft.gems.members.retain(|row| row.id != physical.id);
+            b.origins[receipt.source.ordinal() as usize]
+                .links
+                .retain(|link| !matches!(link, OwnedOriginTarget::Gem(_)));
+            skill.source = DraftAuthoredSkillSource::Direct(definition.clone().into());
+            case.draft.skills.members[0] = skill.as_ref().clone();
+            receipt.identity = UsageInventorySource::Occurrence {
+                target: Box::new(OccurrenceUsageTarget::AuthoredDirect {
+                    gem: role.gem.clone(),
+                    game_id: "primary".into(),
+                    variant_id: "v".into(),
+                    skill_id: "primary-effect".into(),
+                    name_spec: "Primary".into(),
+                    skill: Box::new(definition.clone()),
+                }),
+            };
+        }
         test(&mut b, case);
     });
 }
@@ -485,4 +554,79 @@ fn constructed_reference_scans_are_precharged_and_budget_failure_is_read_only() 
             assert_eq!(b.allocator.state(), allocator);
         },
     );
+}
+
+#[test]
+fn direct_prefix_joins_only_live_supports_to_the_exact_authored_occurrence() {
+    // This is a private consumer fixture, not another receipt producer. Public
+    // Direct normalizer tests separately prove successful reference attachment.
+    with_joined_source_case(
+        true,
+        |_| {},
+        |b, case| {
+            let before = case.draft.clone();
+            let origins = b.origins.clone();
+            let allocator = b.allocator.state();
+            let selectors = proof(b, &case)
+                .unwrap()
+                .expect("live Direct + physical support");
+            for name in ["mainActiveSkill", "mainActiveSkillCalcs"] {
+                assert!(selectors.proves(&case.receipts.inputs[0], &group_field(name)));
+                assert!(!selectors.proves(&case.receipts.inputs[1], &group_field(name)));
+            }
+            for name in ["count", "enableGlobal1", "enableGlobal2"] {
+                assert!(!selectors.proves(&case.receipts.inputs[0], &occurrence_field(name)));
+                assert!(!selectors.proves(&case.receipts.inputs[1], &occurrence_field(name)));
+            }
+            assert_eq!(case.draft, before);
+            assert_eq!(b.origins, origins);
+            assert_eq!(b.allocator.state(), allocator);
+        },
+    );
+    for mode in 0..7 {
+        with_joined_source_case(
+            true,
+            |_| {},
+            |b, mut case| {
+                match mode {
+                    0 => case.draft.supports.members[0].enabled = false.into(),
+                    1 => case.draft.skill_presets.members[0].supports.members.clear(),
+                    2 => case.draft.skill_presets.members[0].skills.members.clear(),
+                    3 => b.origins[case.source.ordinal() as usize]
+                        .links
+                        .retain(|link| !matches!(link, OwnedOriginTarget::Skill(_))),
+                    4 => {
+                        case.receipts.inputs.pop();
+                    }
+                    5 => case.draft.skills.members[0].enabled = false.into(),
+                    _ => {
+                        // Even a live selected alternative and consistently changed
+                        // support snapshot cannot borrow this group's Direct root.
+                        let mut other = case.draft.skills.members[0].clone();
+                        other.id = b.id().unwrap();
+                        case.draft.skill_presets.members[0]
+                            .skills
+                            .members
+                            .push(other.id);
+                        case.draft.supports.members[0].target =
+                            DraftSkillTarget::Authored(other.id.into());
+                        let InputOutput::Support { support, .. } =
+                            &mut case.receipts.inputs[1].output
+                        else {
+                            unreachable!()
+                        };
+                        support.target = DraftSkillTarget::Authored(other.id.into());
+                        case.draft.skills.members.push(other);
+                    }
+                }
+                let before = case.draft.clone();
+                let origins = b.origins.clone();
+                let allocator = b.allocator.state();
+                assert!(proof(b, &case).unwrap().is_none(), "mode {mode}");
+                assert_eq!(case.draft, before);
+                assert_eq!(b.origins, origins);
+                assert_eq!(b.allocator.state(), allocator);
+            },
+        );
+    }
 }

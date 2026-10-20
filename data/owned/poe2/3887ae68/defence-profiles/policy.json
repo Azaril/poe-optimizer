@@ -161,7 +161,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.0000000000000002"
+        "key": "def.0000000000000001"
       },
       "when_absent": {
         "kind": "omit"

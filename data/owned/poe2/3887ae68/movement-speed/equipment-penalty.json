@@ -1,0 +1,348 @@
+{
+  "definitions": [
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033cb"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "boolean"
+            },
+            "targets": [
+              "actor"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033cc"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000001"
+                }
+              }
+            },
+            "targets": [
+              "actor"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "owner": {
+    "kind": "definition",
+    "value": {
+      "kind": "actor",
+      "value": {
+        "kind": "actor",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000332a"
+      }
+    }
+  },
+  "program": {
+    "id": "selected-body-movement-penalty",
+    "context": "actor",
+    "reads": [
+      {
+        "id": "occupied",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000067"
+            },
+            "read": {
+              "kind": "occupied"
+            }
+          }
+        }
+      },
+      {
+        "id": "present",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000067"
+            },
+            "read": {
+              "kind": "capability",
+              "value": {
+                "capability": {
+                  "kind": "capability",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000002a02"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "raw",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000001"
+            }
+          }
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000067"
+            },
+            "read": {
+              "kind": "stat",
+              "value": {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000029ff"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "ignored",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "contribution_query",
+          "value": {
+            "entity": "current",
+            "query": "ignore-equipment-movement-penalties",
+            "group": "sources"
+          }
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "id": "zero",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "occupied",
+        "expression": {
+          "kind": "read",
+          "input": "occupied"
+        }
+      },
+      {
+        "id": "present",
+        "expression": {
+          "kind": "read",
+          "input": "present"
+        }
+      },
+      {
+        "id": "raw",
+        "expression": {
+          "kind": "read",
+          "input": "raw"
+        }
+      },
+      {
+        "id": "ignored",
+        "expression": {
+          "kind": "read",
+          "input": "ignored"
+        }
+      },
+      {
+        "id": "negative",
+        "expression": {
+          "kind": "subtract",
+          "left": "zero",
+          "right": "raw"
+        }
+      },
+      {
+        "id": "conditional",
+        "expression": {
+          "kind": "select",
+          "condition": "ignored",
+          "when_true": "zero",
+          "when_false": "negative"
+        }
+      },
+      {
+        "id": "profile",
+        "expression": {
+          "kind": "select",
+          "condition": "present",
+          "when_true": "conditional",
+          "when_false": "zero"
+        }
+      },
+      {
+        "id": "selected",
+        "expression": {
+          "kind": "select",
+          "condition": "occupied",
+          "when_true": "profile",
+          "when_false": "zero"
+        }
+      }
+    ],
+    "effects": [
+      {
+        "id": "body-movement-base",
+        "when": null,
+        "effect": {
+          "kind": "contribute",
+          "entity": "current",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033cc"
+          },
+          "contribution": "add",
+          "value": "selected"
+        }
+      }
+    ]
+  },
+  "query": {
+    "id": "ignore-equipment-movement-penalties",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033cb"
+    },
+    "contribution": "flag",
+    "groups": [
+      {
+        "id": "sources",
+        "reduction": "any",
+        "ordering": "unordered",
+        "empty": {
+          "kind": "boolean",
+          "value": false
+        },
+        "members": {
+          "members": [],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "stat",
+                      "value": {
+                        "kind": "stat",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000033cb"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "movement-penalty-immunity-suppliers-unconverted"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -9,6 +9,21 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
+**October 20 work-in-progress backup:** at the user's request, the current
+manual Direct selector adapter and equipment movement-penalty work are being
+committed before finishing their remaining gates. The Direct adapter's 683
+selected Import tests pass (228 library, 35 Direct dispositions, 377
+normalization and 43 usage inventory). Strict Import lint and all-five unchanged
+publication preservation still need to run for this adapter. The movement
+ingredient includes the raw fractional-unit correction, authored body-slot
+penalty, source/native controls, and two independently reviewed test-fixture
+corrections. Its Cargo/source/replay gates and full release publication remain
+pending; this backup is not a validated movement release. Resume with those
+checks, then the frozen manual Direct inventory overlay and actual Original05
+movement supplier census. The validated release remains `e8df8bdb…` below,
+and unchanged complete builds remain **0/5**. Ignored candidate/evidence files
+and the nine protected incoming-critical files are not included in this backup.
+
 **Immediate backup resume point, October 20:** `550d7bf4` is pushed to GitHub
 `main`, with the full remote hash independently verified. That checkpoint includes the
 checked reference-absence implementation, the four skeletal inventory rows and
@@ -1810,6 +1825,25 @@ assumptions, an empty exact-usage list and two typed Scenario stage intents are
 still independent incomplete inventories. Dormant intent resolution requires
 the complete composed source census; it does not justify implementing a positive
 support-child mechanic merely to transport that intent.
+
+The concrete next configuration implementation is retained in
+`runs/configuration-completion-audit-20261020/`. The acquired catalogue has 663
+ordered rows, 564 named declarations and 563 distinct names. One name has two
+different callbacks: preserve both consumers instead of deduplicating by name.
+The current leaf loop cannot consume already-checked constructor/absence receipts
+whose source origin is absent. Extend this same accounting owner with the accepted
+complete control/branch census and one scoped receipt collector; keep local
+ConfigSet proof separate from atomic retirement across every live fallback origin.
+Reuse checked scalar/reward/Encounter/usage output correspondence, including exact
+absence guards. Fresh ConfigSet structure alone does not account for custom blocks.
+The 28 installed non-reward inputs are distinct from 563 UI fallback defaults;
+24 still need semantic classification beyond the existing scalar and Encounter
+proofs. Do not install all UI defaults as native assumptions or infer irrelevant
+behavior from hidden controls. Public-normalizer fixtures must exercise absent,
+constructor, authored false/zero/None, Placeholder and duplicate-consumer branches,
+then prove exact all-origin retirement or unchanged refusal on Original05. No
+new Core/Engine model, parallel configuration adapter or compatibility reader is
+needed by this accepted milestone.
 
 ### Native Scenario intent checkpoint, October 20
 

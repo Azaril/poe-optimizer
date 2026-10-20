@@ -73,3 +73,9 @@ new entries. Selected diagnostic counts are 317/322/314/380/148. All five
 requests remain Pending, calculations are not run, and numerical coverage
 remains 0/5. `validation.json` contains the seven-line census and exact changes;
 `execution-receipt.json` records the executable hash and command/test logs.
+
+## Conditional body equipment penalty
+
+`equipment-penalty.json` adds only a shared-Player body-slot contribution. It reads the exact selected item's raw fraction `29ff` and presence `2a02`, then uses the checked Boolean immunity channel `33cb` to emit signed dimensionless BASE channel `33cc`. Empty body slots and known absent penalties yield zero; unknown profiles and incomplete immunity contributors remain unavailable. The source's raw 0.03 is dimensionless and is negated without rescaling. Existing raw profile schema and literal units are corrected together; raw numbers are unchanged.
+
+The immunity membership remains Partial. The shared owner remains Partial. Off-hand/shield penalties, modifier contributions, final movement/action-speed composition and complete game legality remain separate. Finite native tests explicitly close only their synthetic contributor domain. No item name or example identity selects runtime behavior.

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "scope": "Body-slot ingredient; no complete supplier or movement metric claim",
+  "artifacts": [
+    {
+      "path": "equipment-penalty.json",
+      "bytes": 8106,
+      "sha256": "e191d8acc73ebb014c99bd2489d4b2b516dafeb9195c018e6a828a9d72a7e80d"
+    },
+    {
+      "path": "equipment-penalty-dependencies.json",
+      "bytes": 22988,
+      "sha256": "9ee03fa0138058bf5bbfd2c5840f206789a9f9d4e92d73668426041a1a8ce2dc"
+    },
+    {
+      "path": "equipment-penalty-source.json",
+      "bytes": 2277,
+      "sha256": "6c0cef67702d866854110b8556cbf91b1c4d9d639d12bc16caa03419f20c810e"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/defence-profiles/catalog.json",
+      "bytes": 354065,
+      "sha256": "154e613cedf17a6601a2e775e7608f2be5ccfcafe20b299cfbf893986d0cff18"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/item-bases/catalog.json",
+      "bytes": 289502,
+      "sha256": "6dda4b5aa9371050b72343542219ad54d6b469ce16af7ede3c0e9cacbbec9554"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/item-bases/policy.json",
+      "bytes": 625467,
+      "sha256": "8a2880b1ce37c6d89396436f90b1a9b7897dba75ae1b161044a617142a506e81"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/Item.lua.gz",
+      "bytes": 24796,
+      "sha256": "f1d4fc1a06d7162d426e9b1d1acd3519e387eeeb29cafc3fa17f221dc020d1ee",
+      "raw": {
+        "bytes": 112268,
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      }
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/body.lua.gz",
+      "bytes": 8142,
+      "sha256": "99cf315ce43fc882927698654f67d4dfb9e34acaa26e3a77bb6400987fa28eee",
+      "raw": {
+        "bytes": 144554,
+        "sha256": "0d3156d893bcfca1eb8c9b299f2a28c62a1d4c9f1d3a39f3a087cac18d23e9cd"
+      }
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/LICENSE.md",
+      "bytes": 67979,
+      "sha256": "22d2d075c1d361971764fbbd1e12e1485bdf35f0769ffac4eca8a79afc60dda8"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "bytes": 106378,
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "profile_count": 1756,
+  "penalty_profiles": 485,
+  "penalty_categories": {
+    "BodyArmour": 342,
+    "Shield": 143
+  },
+  "penalty_profiles_with_weapon_field": 0,
+  "selected_original05": {
+    "item": 19,
+    "base": "Tattered Robe",
+    "template": "def.000000000000238c",
+    "slot": "def.0000000000000067",
+    "raw": 0.03
+  },
+  "scope": "Selected body slot only. Immunity contributors remain Partial; no final movement or complete build claim."
+}

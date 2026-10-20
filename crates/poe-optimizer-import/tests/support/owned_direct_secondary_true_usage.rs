@@ -471,3 +471,6 @@ fn direct_absence_receipts_reject_failed_foreign_and_independent_consumers() {
         );
     }
 }
+
+#[path = "owned_direct_group_selectors.rs"]
+mod group_selectors;

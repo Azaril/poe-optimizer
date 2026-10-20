@@ -476,6 +476,18 @@ pub(in crate::owned_normalize) fn record_input_disposition(
             }
             fields.insert(occurrence_field(name));
         }
+        if matches!(&identity, UsageInventorySource::Occurrence { target }
+            if matches!(target.as_ref(), OccurrenceUsageTarget::AuthoredDirect { .. }))
+        {
+            // The successful exact manual Direct reference proof already
+            // validated this source frame and its manual-source policy. Retain
+            // only genuine absence, never source="" or a generated marker.
+            // This records the authored origin, not a native scope default.
+            b.charge(group.attributes().len().saturating_add(1).saturating_mul(7))?;
+            if group.attribute("source").is_none() {
+                fields.insert(group_field("source"));
+            }
+        }
         if matches!(identity, UsageInventorySource::Physical { .. }) {
             // Separate physical presentation fact: the successful full source
             // disposition admits this group grammar; an absent label chooses

@@ -85,10 +85,73 @@ fn constructed_primary_selection(
     )
 }
 
-/// Same-attempt final accounting: every physical child must have a live checked
-/// intrinsic/reference receipt. One SkillUse and zero or more exact support
-/// assignments give the source admission filters at most one candidate. This
-/// says nothing about whether that candidate is actually admitted or executed.
+/// A reviewed manual Direct row uses the exact saved catalog tuple, not the
+/// generated reverse-catalog route. The full loader clears an initially hidden
+/// primary's entire source list. With the retained primary first, literal
+/// enabled/global1 true and no late hidden/list writers in the pinned dispatch,
+/// nil/1 selects that primary or the empty list; it cannot promote a Command.
+/// This is reference-field accounting, not proof that a Skill is admitted.
+///
+/// All observed additional/missing references remain intact. No singleton or
+/// native completeness is inferred, and unavailable observations cannot prove
+/// a prefix. Exact source-name/effect comparisons were charged by role lookup.
+fn constructed_direct_prefix(
+    b: &mut Builder<'_, '_>,
+    row: &SourceEvidenceRow<'_>,
+    gem: &GemDefId,
+    skill: &SkillDefId,
+    role: &OwnedGemRoleRow,
+) -> Result<bool> {
+    // Charge the extra Direct identity and literal-gate checks before reading
+    // them. The immutable role package already validated every list entry;
+    // this predicate reads only the first retained constructed/display entry.
+    b.charge(
+        skill
+            .namespace()
+            .game()
+            .as_str()
+            .len()
+            .saturating_add(skill.namespace().version().as_str().len())
+            .saturating_add(skill.key().as_str().len())
+            .saturating_mul(4)
+            .saturating_add(row.attributes().len().saturating_mul(24))
+            .saturating_add(4),
+    )?;
+    if &role.gem != gem
+        || role.materialization != OwnedGemMaterialization::ProviderOnly
+        || role.role != OwnedGemRole::Known(AuthoredGemRole::SkillUse)
+        || !matches!(&role.primary, OwnedPrimarySkill::Known(primary) if primary == skill)
+    {
+        return Ok(false);
+    }
+    let OwnedGemSourceConstruction::Observed(facts) = &role.construction else {
+        return Ok(false);
+    };
+    let exact_true = |name| {
+        row.attribute(name)
+            .is_some_and(|a| a.raw() == "true" && a.decoded().ok() == Some("true"))
+    };
+    Ok(
+        source_shape::value(row, "gemId") == Some(facts.game_id.as_str())
+            && source_shape::value(row, "variantId") == Some(facts.variant_id.as_str())
+            && source_shape::value(row, "skillId") == Some(facts.primary.effect_id.as_str())
+            && matches!(&facts.primary.resolution,
+            OwnedSourceEffectResolution::Mapped(resolved) if resolved == skill)
+            && facts.resolved_effects.first() == Some(&facts.primary)
+            && facts
+                .display_order
+                .as_deref()
+                .is_none_or(|order| order.first() == Some(&1))
+            && exact_true("enabled")
+            && exact_true("enableGlobal1"),
+    )
+}
+
+/// Same-attempt final accounting: every child must have a live checked
+/// intrinsic/reference receipt. One physical SkillUse uses the existing
+/// constructed-primary proof; one authored Direct uses its reviewed first-effect
+/// prefix. All other children must be exact physical support assignments to that
+/// same occurrence. Neither path proves admission or execution.
 ///
 /// Retain only exact, present, literal nil/1 selector fields on the primary
 /// receipt. Missing source is distinct from source="", and an absent selector
@@ -128,8 +191,12 @@ pub(super) fn prove(
         if matching.next().is_some() {
             return Ok(None);
         }
-        let UsageInventorySource::Physical { gem: definition } = &receipt.identity else {
-            return Ok(None);
+        let definition = match &receipt.identity {
+            UsageInventorySource::Physical { gem } => gem,
+            UsageInventorySource::Occurrence { target } => match target.as_ref() {
+                OccurrenceUsageTarget::AuthoredDirect { gem, .. } => gem,
+                _ => return Ok(None),
+            },
         };
         // input_present relies on this charged outer traversal for authored
         // records and adds its own target/set work for support records.
@@ -181,7 +248,8 @@ pub(super) fn prove(
                 },
                 OwnedGemRole::Known(AuthoredGemRole::SkillUse),
             ) => {
-                if !constructed_primary_selection(b, row, definition, role)?
+                if !matches!(receipt.identity, UsageInventorySource::Physical { .. })
+                    || !constructed_primary_selection(b, row, definition, role)?
                     || primary.is_some()
                     || !matches!(&skill.source,
                         DraftAuthoredSkillSource::Gem(DraftField::Known { value }) if *value == gem.id)
@@ -192,10 +260,38 @@ pub(super) fn prove(
                 primary = Some((*source, skill.id));
             }
             (
+                InputOutput::Authored {
+                    skill,
+                    gem: None,
+                    scope: AuthoredInputScope::ReferenceDisposition,
+                },
+                OwnedGemRole::Known(AuthoredGemRole::SkillUse),
+            ) => {
+                let UsageInventorySource::Occurrence { target } = &receipt.identity else {
+                    return Ok(None);
+                };
+                let OccurrenceUsageTarget::AuthoredDirect {
+                    skill: expected, ..
+                } = target.as_ref()
+                else {
+                    return Ok(None);
+                };
+                if primary.is_some()
+                    || !constructed_direct_prefix(b, row, definition, expected, role)?
+                    || !matches!(&skill.source,
+                        DraftAuthoredSkillSource::Direct(DraftField::Known { value }) if value == expected.as_ref())
+                {
+                    return Ok(None);
+                }
+                primary = Some((*source, skill.id));
+            }
+            (
                 InputOutput::Support { support, gem },
                 OwnedGemRole::Known(AuthoredGemRole::SupportAssignment),
             ) => {
-                if !skill_input_disposition::physical_source_is_singleton(row, definition, role) {
+                if !matches!(receipt.identity, UsageInventorySource::Physical { .. })
+                    || !skill_input_disposition::physical_source_is_singleton(row, definition, role)
+                {
                     return Ok(None);
                 }
                 let DraftSkillTarget::Authored(DraftField::Known { value: target }) =

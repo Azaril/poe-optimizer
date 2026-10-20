@@ -205,6 +205,14 @@ suites and strict scoped lint pass. Each of the four isolated skeletal groups
 can complete its usage accounting; malformed selectors, missing consumers and
 unresolved source references retain their actual obligations. The whole original
 preset still needs Direct/generated source and other independent input accounting.
+Configuration completion additionally needs a complete source-control/default
+census. Its current saved-leaf accounting cannot yet use the checked receipts for
+constructor defaults and genuine absence. The accepted next step reuses those
+receipts in one scope proof, followed by a separate all-origin retirement check.
+Source-installed values, UI fallback values and native assumptions remain distinct;
+multiple source callbacks for one control retain separate consumer obligations.
+This belongs to Import accounting, with no source-language behavior added to the
+native evaluator.
 The applied support receipt uses those facts for exact neutral count/global
 fields. Complete scalar inputs permit the same independent source proof as
 partial inputs. Scalar completion, field-consumer coverage and admission as a
