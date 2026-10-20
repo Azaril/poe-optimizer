@@ -15,6 +15,7 @@ pub(crate) fn data() -> PathBuf {
 pub(crate) fn json(path: impl AsRef<Path>) -> Value {
     serde_json::from_slice(&fs::read(path).unwrap()).unwrap()
 }
+#[track_caller]
 pub(crate) fn success(output: Output) -> Value {
     assert!(
         output.status.success(),

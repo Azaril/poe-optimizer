@@ -9,84 +9,66 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**October 20 work-in-progress backup:** `6f5186bd` and the subsequent test
-compilation fix `d6f3939b` are pushed to GitHub `main`; both full remote hashes
-were independently verified. The manual Direct selector adapter and equipment
-movement-penalty work are backed up before their remaining gates. The Direct adapter's 683
-selected Import tests pass (228 library, 35 Direct dispositions, 377
-normalization and 43 usage inventory). Strict all-target Import lint and exact
-all-five unchanged publication preservation also pass. The movement
-ingredient includes the raw fractional-unit correction, authored body-slot
-penalty, source/native controls, and two independently reviewed test-fixture
-corrections. Its Cargo/source/replay gates and full release publication remain
-pending; this backup is not a validated movement release. The two ordinary
-movement data checks and current-recipe correction/compilation check pass.
-Full extension replay found a stale historical membership-patch binding; all five
-native fixture tests refused their missing checked-readiness setup. Both bounded
-fixture repairs are now applied without changing production validation. All five
-native movement tests pass, including explicit unavailable outcome for Partial
-contributors and fresh/reused/Rayon equivalence; thirteen related campaign/critical
-tests pass. The full extension replay and remaining shared-helper gates are pending.
-The two-row manual Direct inventory overlay passes five ordinary checks after
-rebuilding a stale local executable whose copied source timestamps concealed the
-new helper. Its all-five publication attempt `06` preserved originals 01–04 but
-hit the default normalization work limit on original 05. That attempt is not a
-validated publication. Diagnose its charged work rather than increasing limits;
-the real-group controls still require a successful publication.
-The actual Original05 movement supplier observer and conditional Item construction
-now pass all three source tests (`runs/owned-movement-source-tests-03.log`). The
-observer preserves the loaded state and produces identical evidence in four fresh
-runs (JIT on/off, two each); this establishes source behavior, not complete native
-movement coverage. The validated release remains `e8df8bdb…` below,
-and unchanged complete builds remain **0/5**. Ignored candidate/evidence files
-and the nine protected incoming-critical files are not included in this backup.
+**Current Git backup:** the October 20 checkpoint following `f2680094` adds
+the tested usage work-accounting correction, regenerated allocation provenance,
+reviewed historical replay fixture repair and these resume notes. It is a
+work-in-progress backup, not a fully validated successor release. The previous
+commit's full remote hash was verified before this backup; the current commit
+and push receipt are available in Git history. Ignored candidate/evidence files
+and the nine protected incoming-critical files remain local.
 
-**Latest backup:** `c84e66f3` is pushed to GitHub `main`, with its full remote hash
-verified. It includes the two-row Direct inventory overlay, movement supplier
-observer and CI evidence retention. The subsequent independently reviewed readiness
-and historical membership fixture repairs are applied from
-`runs/movement-readiness-fixture-correction-20261020/` and
-`runs/defence-membership-schema-replay-candidate-20261020/`. Resume with their
-native/replay gates, then validate the Direct overlay before authoring the movement
-release. The source observer fixes and fixture repairs are newer than that backup.
+**Validated data baseline:**
+`runs/owned-preset-usage-inventory-publication-05/package`, input
+`e8df8bdbb4842c637fa18f822f25b32efd332753842a61f464181af2211e062d`.
+The 25-row packet preserves all five originals and all 110 queries. Earlier
+count/support/skeletal controls and strict CLI/PoB lint pass. No selected
+Original05 input obligation has retired; the current five obligations and
+remaining native mechanics are detailed below.
+
+**Latest validation:** the Direct adapter and usage work-accounting correction
+pass 687 selected Import tests and strict all-target Import lint
+(`runs/owned-usage-actual-work-tests-02.log` and
+`runs/owned-usage-actual-work-clippy-01.log`). Earlier exact all-five preservation
+also passes. The two-row
+Direct inventory overlay passes five ordinary checks. All five native movement
+controls pass, including unavailable Partial contributors and fresh/reused/Rayon
+equivalence; thirteen related campaign/critical checks pass. The three movement
+source tests pass, with identical supplier evidence across four fresh JIT-on/off
+runs. Source behavior and native component results do not establish complete
+movement coverage.
+
+**Fresh Direct publication:** attempt `07` passes all-five unchanged imports,
+all 110 queries, whole inverses and deterministic independent publication/import
+replays (`runs/owned-manual-direct-publication-08.log`). Its package is
+`runs/owned-preset-usage-inventory-publication-07/package`, input
+`32a6f01b04397ce857af5101e2a9e9f4fa40ed847ef4ea8733e9ae770186f53a`,
+release SHA-256 `14ba4405c7ebfd6f56514cd0f2da627d25ae8a4c15a3e500b153715da7cf28bc`.
+Selected issue counts remain 107/118/110/124/5; none retired. The real-group run
+passes Manual Direct, primary counts and skeletal controls, but Ice Nova and
+support expansion fail the same pinned hash assertion at
+`tests/support/owned_preset_usage_inventory_positive.rs:38`
+(`runs/owned-manual-direct-real-controls-01.log`). Keep the earlier validated
+baseline until these two failures are diagnosed and their controls pass.
+
+**Resume in this order:** diagnose those two exact fixture hash failures.
+The temporary diagnostic pinpointed the unchanged
+Original05 work-limit failure in attempt `06`; the fix charges actual retained
+parameter/destination lengths and avoids repeated whole-binding comparisons.
+The original two-million limit, full equality/duplicate checks and atomic
+retirement remain intact. The diagnostic edits are removed.
+Rerun the historical extension test after the applied item-defence supplied-policy
+fixture repair (`runs/owned-extension-replay-03.log` identified the stale schema
+binding after the earlier membership repair). It authenticates the whole historical
+recipe and both old policies before changing only transitive commitments; production
+validation is unchanged. Finish the shared-helper/lint gates
+before authoring the movement release against the validated successor. Attempt
+`06` is retained as failed evidence, not a release. The configuration inventory
+and movement authoring candidates remain unapplied/unpublished; their evidence,
+remaining prerequisites and selected-mechanics follow-up are recorded below.
 No hosted-green or complete-build claim is made.
 
-**Immediate backup resume point, October 20:** `550d7bf4` is pushed to GitHub
-`main`, with the full remote hash independently verified. That checkpoint includes the
-checked reference-absence implementation, the four skeletal inventory rows and
-the manual Direct source-selection tests. The 713 selected Import tests, strict
-Import lint, unchanged all-five preservation, four ordinary inventory checks and
-all ten source-selection tests pass. The changed skeletal packet now also passes
-all-five publication at `runs/owned-preset-usage-inventory-publication-05/package`,
-input `e8df8bdbb4842c637fa18f822f25b32efd332753842a61f464181af2211e062d`.
-All four explicit real-group suites and scoped CLI/PoB lint now pass. This is the
-current validated data checkpoint; complete unchanged builds remain **0/5**. Ignored
-candidate work and the nine protected incoming-critical files are excluded from
-this Git backup.
-
-**October 20 backup checkpoint:** `00d3c62a` is pushed to GitHub `main` and its
-remote hash is verified. It follows `4aa10b6e`, `a6b61b3c`, `8cf6bc6c`, `983cee19`, `1ba8c7ce`, `6f6eae3f`, `f6dac721`, `dba0f661`,
-`afc607d8` and the initial broad backup `15778b04`; push access is working.
-The earlier receipt-work correction removes irrelevant deep charges without raising
-work limits. All 18 private completion and 27 public usage tests, strict Import
-all-target lint, default-limit all-five publication and the real group238
-positive/nonneutral control pass. Earlier normalization and source checks are
-recorded at their checkpoints below.
-
-The maintained 25-row usage packet now passes both ordinary checks, all-five
-publication, the original group control and the expanded support controls.
-Nine inventory omissions, nine count-companion omissions and an unreviewed
-sibling all retain the expected Pending obligations. Strict CLI lint passes.
-The preceding validated successor was `fd869107…`; the private primary-input completion
-cleanup now passes its complete validation scope, including exact all-five
-comparison with the previous code under `e355f2db…`. Pain Offering/Frost
-Bomb count data now passes publication, all 29 count controls, the existing
-group/support controls and strict CLI lint. Eight exact count bindings are
-added across the originals, including two in Original05's selected preset.
-No original's selected input
-issue has retired. Hosted CI and complete
-native evaluation remain separate gates. Ignored `runs/` evidence and nine
-protected incoming-critical work-in-progress files remain local.
+Earlier October 20 backup narratives are preserved in
+[implementation history](implementation-history.md#archived-2026-10-20-backup-and-validation-notes).
 
 **Five supplied builds: 0/5 complete native evaluations.** All five import and
 run in pinned PoB. Owned native components work, but unresolved inputs and
@@ -1919,17 +1901,47 @@ The 24 controls beyond the existing scalar and Encounter proofs are now classifi
 in `runs/configuration-installed-defaults-review-20261020/`: all have mechanical
 consumers, and none has a current matching checked receipt. Seven control children
 of exact parent summons. This identifies responsibility, not complete applicability
-or native coverage. The independently reviewed private collector candidate is
-`runs/configuration-receipt-collector-candidate-20261020/` (manifest `c3d649cc…`);
-it preserves the existing scalar/raw-only/other-adapter order and retains no-origin
-receipts plus checked Encounter absence guards. It remains unapplied and untested,
-and grants no inventory-completion authority. Do not install all UI defaults as
-native assumptions or infer irrelevant
+or native coverage. The independently reviewed combined candidate is
+`runs/configuration-inventory-candidate-20261020/` (manifest `c17183e9…`),
+which supersedes the earlier private collector candidate. It retains the existing
+adapter order and no-origin/Encounter-absence receipts, adds an independent
+source-control census, and stages whole-issue retirement only after every required
+consumer and linked origin is checked. Partial or empty censuses cannot close an
+inventory, and its initial domain cannot retire the eleven outside origins.
+The current PoB census remains incomplete. The candidate is unapplied and untested;
+its fixture census supplies no authority for a real build. Do not install all UI
+defaults as native assumptions or infer irrelevant
 behavior from hidden controls. Public-normalizer fixtures must exercise absent,
 constructor, authored false/zero/None, Placeholder and duplicate-consumer branches,
 then prove exact all-origin retirement or unchanged refusal on Original05. No
 new Core/Engine model, parallel configuration adapter or compatibility reader is
 needed by this accepted milestone.
+
+The installed-default priority map separates fourteen scalar/mode/relation controls
+from ten scoped Skill controls. Transport repeat evaluation mode first through the
+existing Option-valued Environment projection, then physical-reduction and resource
+expectation modes. The repeat-mode authorer must allocate from an authenticated
+current release and reuse the maintained default-input stage; its input publication
+will not implement repeat mechanics or complete any inventory. Three cooldown
+bypasses and seven child switches need Boolean constructor transport in the existing
+Scenario-intent adapter, which currently accepts only numeric saved values. Preserve
+exact parent/child applicability; global Player flags are not a substitute.
+For these child switches, false suppresses the Config producer rather than writing
+final participation=false. Also, a Partial applicability declaration still applies
+its known matches. The current final GrantSlot/SkillGrantSlot match does not by
+itself prove an ancestor summoning Skill, so a broad child allowance cannot be made
+safe by adding a Partial label. Investigate existing exact topology evidence or an
+explicit ancestor contract before authoring those seven rows. Boolean constructor
+transport itself can reuse the existing Boolean value/default and Scenario-intent
+types without a new data-transfer object.
+
+The selected Modifier audit found actual remaining delivery work behind some
+Partial labels: movement modifiers need grouped equipment-slot bonus copies, while
+Charm capacity needs equipment-local aggregation followed by a single Player
+delivery. Reuse the existing equipment receivers and contribution graph where
+possible, preserving local consumption, grouping and scaling. Do not close an owner
+because the current observed modifier value happens to be neutral or already emitted
+by its direct path. Candidate authoring and source controls are still in progress.
 
 ### Native Scenario intent checkpoint, October 20
 
@@ -3108,6 +3120,29 @@ The older `15778b04` run has ten passes, six known failures and two Windows CLI
 jobs still running. No new failure class or hosted rerun of the fixes is proven.
 The credential-free public snapshot is
 `runs/ci-550d7bf4-public-review-20261020-201952/`.
+
+The 21:41 UTC review supersedes the older queue snapshots above. Run `39451021127`
+on `15778b04` finished: twelve jobs passed, six known test jobs failed and two
+aggregate gates failed. Run `39498631482` on `c84e66f3` exposed the already-fixed
+movement test macro error plus a new failure in both validation jobs at
+`python scripts/tests/test_export_owned_allocations.py`. The exact failing assertion
+is still unavailable: the public log API requires authentication, `gh` is absent,
+and the browser tool could not initialize. No credentials were accessed and no
+protected allocation files were edited. The latest `f2680094` run was pending at
+that snapshot; no current hosted-green claim follows. Evidence is in
+`runs/ci-public-review-20261020-214103/`.
+
+The subsequent local allocation reproduction authenticated 34 inputs and ran the
+existing offline exporter twice. Both runs produced identical rules and exactly
+one changed provenance leaf: `bundle_transition_sha256` now matches the current
+bundle (`a84e9c57648d6d8108d3291120d0b84e649632d4ae597e63a14aaae818233a7e`).
+Complete JSON and byte inverses prove no other source-facts change. The regenerated
+`data/owned/poe2/3887ae68/allocations/source-facts.json` is applied and the existing
+exporter's `--check-dir` passes. No protected Engine source/tests were edited or
+executed. This fixes a reproduced byte-validation defect; the hosted assertion
+and hosted green status remain unverified. Evidence:
+`runs/owned-allocation-provenance-reproduction-20261020-01/comparison.json` and
+`check-dir.log` in that directory.
 
 ## CI receipt repair (2026-10-15)
 

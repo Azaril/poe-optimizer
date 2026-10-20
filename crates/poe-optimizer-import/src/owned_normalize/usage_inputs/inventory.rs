@@ -715,24 +715,38 @@ pub(super) fn record_usage(
     Ok(())
 }
 
-fn usage_present(preset: &SkillPresetDraft, binding: &PresetUsageBindingDraft) -> bool {
+/// Charge the exact reference vector before comparing it with every live row.
+/// Vec equality rejects unequal lengths before reading elements; equal-length
+/// vectors can visit at most this many parameters. Keep full binding equality
+/// and count every duplicate rather than treating the first match as proof.
+fn usage_present(
+    b: &mut Builder<'_, '_>,
+    preset: &SkillPresetDraft,
+    binding: &PresetUsageBindingDraft,
+) -> Result<bool> {
+    let width = binding.selection.parameters.members.len().saturating_add(1);
     if let Some(intent) = &preset.intent {
-        intent
+        product(b, &[intent.usage.members.len(), width])?;
+        Ok(intent
             .usage
             .members
             .iter()
             .filter(|row| *row == binding)
             .count()
-            == 1
+            == 1)
+    } else if binding.applicability == PresetApplicability::Required {
+        let Some(rows) = &preset.usage_preferences else {
+            return Ok(false);
+        };
+        product(b, &[rows.members.len(), width])?;
+        Ok(rows
+            .members
+            .iter()
+            .filter(|row| **row == binding.selection)
+            .count()
+            == 1)
     } else {
-        binding.applicability == PresetApplicability::Required
-            && preset.usage_preferences.as_ref().is_some_and(|rows| {
-                rows.members
-                    .iter()
-                    .filter(|row| **row == binding.selection)
-                    .count()
-                    == 1
-            })
+        Ok(false)
     }
 }
 
@@ -831,28 +845,7 @@ fn primary_usage_present(
     {
         return Ok(false);
     }
-    let usages = preset.intent.as_ref().map_or_else(
-        || {
-            preset
-                .usage_preferences
-                .as_ref()
-                .map_or(0, |rows| rows.members.len())
-        },
-        |intent| intent.usage.members.len(),
-    );
-    product(
-        b,
-        &[
-            usages,
-            binding
-                .selection
-                .parameters
-                .members
-                .len()
-                .saturating_add(65),
-        ],
-    )?;
-    Ok(usage_present(preset, binding))
+    usage_present(b, preset, binding)
 }
 
 fn input_present(
@@ -1025,6 +1018,34 @@ fn product(b: &mut Builder<'_, '_>, factors: &[usize]) -> Result<()> {
     b.charge(cost)
 }
 
+/// Every emitted recipe lane still needs its exact declared policy/parameter.
+/// Bound the actual destination traversal instead of charging the maximum 65
+/// destinations for each field regardless of the policy's retained shape.
+fn emitted_fields_declared(
+    b: &mut Builder<'_, '_>,
+    receipt: &UsageReceipt,
+    policy: &UsageInventoryRow,
+) -> Result<bool> {
+    b.charge(policy.fields.len())?;
+    let width = policy
+        .fields
+        .iter()
+        .try_fold(0usize, |total, field| {
+            total.checked_add(field.destinations.len().saturating_add(1))
+        })
+        .ok_or(NormalizationError::Limit("usage inventory work"))?;
+    product(b, &[receipt.fields.len(), width])?;
+    Ok(receipt.fields.iter().all(|source_field| {
+        policy.fields.iter().any(|field| {
+            source_field == &field.field && field.destinations.iter().any(|destination| {
+                matches!(destination, UsageInventoryDestination::UsageParameter { policy, parameter }
+                    if receipt.binding.selection.policy.to_resolved().as_ref() == Some(policy)
+                        && &receipt.parameter == parameter)
+            })
+        })
+    }))
+}
+
 fn field_proved(
     field: &UsageInventoryField,
     inputs: &[&InputReceipt],
@@ -1131,15 +1152,6 @@ pub(super) fn complete(
             b.charge(group.children().len())?;
             for source in group.children() {
                 let row = &b.evidence.rows()[source.ordinal() as usize];
-                let binding_count = preset.intent.as_ref().map_or_else(
-                    || {
-                        preset
-                            .usage_preferences
-                            .as_ref()
-                            .map_or(0, |rows| rows.members.len())
-                    },
-                    |intent| intent.usage.members.len(),
-                );
                 // Identity filtering still visits every receipt. Deep scans
                 // are relevant only to receipts for this exact occurrence.
                 b.charge(receipts.inputs.len())?;
@@ -1170,17 +1182,13 @@ pub(super) fn complete(
                                 .saturating_mul(2),
                         )?;
                     }
-                    // A compiled usage policy has at most 64 parameters.
-                    // Preserve a bound for the complete binding comparison,
-                    // not just the number of rows in the receiving preset.
-                    product(b, &[binding_count.saturating_add(1), 65])?;
                     if usage_origins_present(
                         b,
                         receipt.source,
                         receipt.group,
                         receipt.preset,
                         receipt.group_contributes,
-                    )? && usage_present(preset, &receipt.binding)
+                    )? && usage_present(b, preset, &receipt.binding)?
                     {
                         usages.push(receipt);
                     }
@@ -1249,16 +1257,7 @@ pub(super) fn complete(
                 // Extra emitted parameters are also consumers. The authored
                 // inventory cannot omit an inconvenient successful projection.
                 for receipt in &usages {
-                    product(b, &[receipt.fields.len(), policy.fields.len(), 65])?;
-                    let declared = receipt.fields.iter().all(|source_field| {
-                        policy.fields.iter().any(|field| {
-                            source_field == &field.field && field.destinations.iter().any(|destination| {
-                                matches!(destination, UsageInventoryDestination::UsageParameter { policy, parameter }
-                                    if receipt.binding.selection.policy.to_resolved().as_ref() == Some(policy)
-                                        && &receipt.parameter == parameter)
-                            })
-                        })
-                    });
+                    let declared = emitted_fields_declared(b, receipt, policy)?;
                     if !declared {
                         continue 'presets;
                     }
@@ -1293,7 +1292,18 @@ pub(super) fn complete(
             },
             |intent| intent.usage.members.len(),
         );
-        product(b, &[binding_count, 65])?;
+        // Charge the row traversal before reading lengths, then the actual
+        // parameter members before cloning the binding records.
+        b.charge(binding_count)?;
+        if let Some(intent) = &preset.intent {
+            for binding in &intent.usage.members {
+                b.charge(binding.selection.parameters.members.len().saturating_add(1))?;
+            }
+        } else if let Some(rows) = &preset.usage_preferences {
+            for selection in &rows.members {
+                b.charge(selection.parameters.members.len().saturating_add(1))?;
+            }
+        }
         let bindings: Vec<_> = if let Some(intent) = &preset.intent {
             intent.usage.members.clone()
         } else {
@@ -1310,31 +1320,46 @@ pub(super) fn complete(
                 })
                 .collect()
         };
-        product(
-            b,
-            &[
-                bindings.len(),
-                65,
-                accounted_parameters.len().saturating_add(1),
-            ],
-        )?;
-        if !bindings.iter().all(|binding| {
-            matches!(
+        for binding in &bindings {
+            if !matches!(
                 binding.selection.parameters.completion,
                 DraftListCompletion::Complete
-            ) && binding
+            ) {
+                continue 'presets;
+            }
+            // Compare an exact binding once per receipt, not once again for
+            // every parameter. The matched set still retains duplicate receipts.
+            product(
+                b,
+                &[
+                    accounted_parameters.len(),
+                    binding.selection.parameters.members.len().saturating_add(1),
+                ],
+            )?;
+            let matching: Vec<_> = accounted_parameters
+                .iter()
+                .filter(|receipt| &receipt.binding == binding)
+                .collect();
+            product(
+                b,
+                &[
+                    binding.selection.parameters.members.len(),
+                    matching.len().saturating_add(1),
+                ],
+            )?;
+            if !binding
                 .selection
                 .parameters
                 .members
                 .iter()
                 .all(|parameter| {
-                    accounted_parameters.iter().any(|receipt| {
-                        &receipt.binding == binding
-                            && parameter.slot.to_resolved().as_ref() == Some(&receipt.parameter)
+                    matching.iter().any(|receipt| {
+                        parameter.slot.to_resolved().as_ref() == Some(&receipt.parameter)
                     })
                 })
-        }) {
-            continue 'presets;
+            {
+                continue 'presets;
+            }
         }
         let mut linked = Vec::new();
         b.charge(b.origins.len())?;

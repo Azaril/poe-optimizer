@@ -90,6 +90,15 @@ Actor/scheduling gaps. Existing support tests for generated receiving Skills do
 not prove that a physical support assignment can supply an executable child.
 The [implementation checkpoint](implementation.md#current-checkpoint-configuration-admission)
 tracks that distinction and the next focused regression.
+Configuration producer intent must also remain distinct from final participation.
+For the reviewed child-effect switches, false suppresses that configuration
+producer; it does not write a global disabled state. The existing Scenario-intent
+model can carry typed Boolean parameters, but its Import adapter still needs
+Boolean constructor transport. Parent-qualified child controls additionally need
+exact supplier-path applicability: the current final-edge match is not an ancestor
+proof, and Partial coverage does not stop known matching intents from applying.
+No such child-control rows are admitted on that weaker evidence. The implementation
+plan tracks transport and supplier-path proof separately.
 The owner also accepted
 [requirement assessment alongside metric reports](owned-requirement-assessment-proposal.md).
 Its same-attempt collector and CLI pass ordinary/support regression tests. Reports

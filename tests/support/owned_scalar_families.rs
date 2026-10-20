@@ -15,11 +15,13 @@ use poe_optimizer_engine::owned_rules::{CompiledRulePackage, EffectDisposition, 
 use poe_optimizer_import::{
     build_instance::ImportedBuildInstance,
     decode_build,
-    owned_item_lines::{LocatedItemModifier, OwnedItemLinePolicy},
-    owned_item_source::ItemSourceLayoutPolicy,
+    owned_item_lines::{ItemLinePolicyInput, LocatedItemModifier, OwnedItemLinePolicy},
+    owned_item_source::{ItemSourceLayoutPolicy, ItemSourceLayoutPolicyInput},
     owned_recipe::{OwnedRecipeInput, assemble_owned_recipe},
+    owned_recipe_extension::OwnedRecipeExtension,
     owned_recipe_membership_patch::{
         RecipeMembershipPatch, RecipeMembershipPatchBindings, RecipeMembershipPatchInput,
+        compile_owned_recipe_membership_patch,
     },
     owned_source::SourceProjectEvidence,
 };
@@ -41,7 +43,15 @@ pub(super) fn recipe(path: &Path) -> OwnedRecipeInput {
     }
 }
 
-fn publish(cwd: &Path, prior: &Path, authored: &Path, patch: &Path, output: &Path) -> Output {
+fn publish(
+    cwd: &Path,
+    prior: &Path,
+    authored: &Path,
+    patch: &Path,
+    items: &Path,
+    item_source: &Path,
+    output: &Path,
+) -> Output {
     Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
         .current_dir(cwd)
         .arg("extend-owned-recipe")
@@ -51,9 +61,9 @@ fn publish(cwd: &Path, prior: &Path, authored: &Path, patch: &Path, output: &Pat
         .arg("--membership-patch")
         .arg(patch)
         .arg("--items")
-        .arg(authored.join("items.json"))
+        .arg(items)
         .arg("--item-source")
-        .arg(authored.join("item-source.json"))
+        .arg(item_source)
         .arg("--output")
         .arg(output)
         .output()
@@ -63,7 +73,13 @@ fn publish(cwd: &Path, prior: &Path, authored: &Path, patch: &Path, output: &Pat
 /// Replay this historical membership payload against the reviewed unit-only
 /// successor. The complete historical predecessor is authenticated before any
 /// binding is replaced; neither the payload nor historical evidence is edited.
-fn current_defence_membership_patch(cwd: &Path, prior: &Path, authored: &Path) -> PathBuf {
+/// The two supplied policies are similarly authenticated on the actual historical
+/// successor before replacing only their transitive successor commitments.
+fn current_defence_fixture_inputs(
+    cwd: &Path,
+    prior: &Path,
+    authored: &Path,
+) -> (PathBuf, PathBuf, PathBuf) {
     let raw = fs::read(authored).unwrap();
     assert_eq!(raw.len(), 201_219);
     assert_eq!(
@@ -193,9 +209,105 @@ fn current_defence_membership_patch(cwd: &Path, prior: &Path, authored: &Path) -
     let mut restored = rebound.clone();
     restored.before = historical.before.clone();
     assert_eq!(restored, historical, "whole membership request inverse");
-    let path = cwd.join("item-defence-inputs-current-membership.json");
-    fs::write(&path, serde_json::to_vec(&rebound).unwrap()).unwrap();
-    path
+    let folder = authored.parent().unwrap();
+    let extension: OwnedRecipeExtension =
+        serde_json::from_value(json(folder.join("extension.json"))).unwrap();
+    // Both calls authenticate the identical extension against the sealed request.
+    // Only the already-proved predecessor metadata differs.
+    let old_stage = compile_owned_recipe_membership_patch(
+        &historical_recipe,
+        &extension,
+        &historical,
+        Default::default(),
+    )
+    .unwrap();
+    let next_stage =
+        compile_owned_recipe_membership_patch(&current, &extension, &rebound, Default::default())
+            .unwrap();
+    assert_eq!(
+        old_stage.receipt.supplied_extension,
+        next_stage.receipt.supplied_extension
+    );
+    let old_successor =
+        assemble_owned_recipe(old_stage.staged.successor, Default::default()).unwrap();
+    let next_successor =
+        assemble_owned_recipe(next_stage.staged.successor, Default::default()).unwrap();
+    let raw_items = fs::read(folder.join("items.json")).unwrap();
+    assert_eq!(raw_items.len(), 1_538_865);
+    assert_eq!(
+        format!("{:x}", Sha256::digest(&raw_items)),
+        "6c4b7874ef032ecda7058b94acd80ad31751c2c5183473f3aeb2fe1de758f8ed"
+    );
+    let old_items: ItemLinePolicyInput = serde_json::from_slice(&raw_items).unwrap();
+    let old_lines = OwnedItemLinePolicy::new(
+        old_items.clone(),
+        old_successor.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let raw_source = fs::read(folder.join("item-source.json")).unwrap();
+    assert_eq!(raw_source.len(), 1_398_468);
+    assert_eq!(
+        format!("{:x}", Sha256::digest(&raw_source)),
+        "349feabfff52eff48b8940f605c96836bd27a6316649bda29f1e7f037234b755"
+    );
+    let old_source: ItemSourceLayoutPolicyInput = serde_json::from_slice(&raw_source).unwrap();
+    ItemSourceLayoutPolicy::new(
+        old_source.clone(),
+        &old_lines,
+        old_successor.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    // Retain explicit stale-binding refusals; this is fixture replay, not a
+    // permissive production rebind or a changed historical payload.
+    assert!(
+        OwnedItemLinePolicy::new(
+            old_items.clone(),
+            next_successor.schema(),
+            Default::default(),
+        )
+        .is_err()
+    );
+    let mut next_items = old_items.clone();
+    next_items.definitions = next_successor.schema().identity().clone();
+    let mut items_inverse = next_items.clone();
+    items_inverse.definitions = old_items.definitions.clone();
+    assert_eq!(items_inverse, old_items, "whole item policy inverse");
+    let next_lines = OwnedItemLinePolicy::new(
+        next_items.clone(),
+        next_successor.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    assert!(
+        ItemSourceLayoutPolicy::new(
+            old_source.clone(),
+            &next_lines,
+            next_successor.schema(),
+            Default::default(),
+        )
+        .is_err()
+    );
+    let mut next_source = old_source.clone();
+    next_source.item_lines = next_lines.identity().clone();
+    let mut source_inverse = next_source.clone();
+    source_inverse.item_lines = old_source.item_lines.clone();
+    assert_eq!(source_inverse, old_source, "whole item source inverse");
+    ItemSourceLayoutPolicy::new(
+        next_source.clone(),
+        &next_lines,
+        next_successor.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let patch = cwd.join("item-defence-inputs-current-membership.json");
+    let items = cwd.join("item-defence-inputs-current-items.json");
+    let source = cwd.join("item-defence-inputs-current-item-source.json");
+    fs::write(&patch, serde_json::to_vec(&rebound).unwrap()).unwrap();
+    fs::write(&items, serde_json::to_vec(&next_items).unwrap()).unwrap();
+    fs::write(&source, serde_json::to_vec(&next_source).unwrap()).unwrap();
+    (patch, items, source)
 }
 
 pub(super) fn modifier_id(family: &Value) -> ModifierDefId {
@@ -770,13 +882,25 @@ pub(super) fn check_scalar_publication(
     let authored_before = bundle(&authored);
     let prior_before = bundle(prior);
     let authored_patch = authored.join("membership-patch.json");
-    let patch = if folder == "item-defence-inputs" {
-        current_defence_membership_patch(cwd, prior, &authored_patch)
+    let (patch, items, item_source) = if folder == "item-defence-inputs" {
+        current_defence_fixture_inputs(cwd, prior, &authored_patch)
     } else {
-        authored_patch
+        (
+            authored_patch,
+            authored.join("items.json"),
+            authored.join("item-source.json"),
+        )
     };
     let output = cwd.join(format!("{stem}-successor"));
-    let report = success(publish(cwd, prior, &authored, &patch, &output));
+    let report = success(publish(
+        cwd,
+        prior,
+        &authored,
+        &patch,
+        &items,
+        &item_source,
+        &output,
+    ));
     assert_eq!(report["extension"]["allocated_entries"], allocations);
     assert_eq!(report["extension"]["refined_subjects"], 1756);
     assert_eq!(report["membership_patch"]["patched_templates"], 1756);
@@ -789,24 +913,32 @@ pub(super) fn check_scalar_publication(
         report["publication"]["whole_build_parity"],
         "not_established"
     );
-    for file in ["items.json", "item-source.json"] {
+    for (file, supplied) in [("items.json", &items), ("item-source.json", &item_source)] {
         assert!(
-            json(output.join(file)) == json(authored.join(file)),
-            "authored {file} changed at publication"
+            json(output.join(file)) == json(supplied),
+            "checked supplied {file} changed at publication"
         );
     }
     let bindings = json(authored.join("bindings.json"));
     check(&output, &bindings);
     let published = bundle(&output);
     assert!(
-        !publish(cwd, prior, &authored, &patch, &output)
+        !publish(cwd, prior, &authored, &patch, &items, &item_source, &output)
             .status
             .success()
     );
     assert!(bundle(&output) == published, "published bytes changed");
     let replay = cwd.join(format!("{stem}-replay"));
     assert!(
-        success(publish(cwd, prior, &authored, &patch, &replay)) == report,
+        success(publish(
+            cwd,
+            prior,
+            &authored,
+            &patch,
+            &items,
+            &item_source,
+            &replay
+        )) == report,
         "publication replay receipt differs"
     );
     assert!(
@@ -827,9 +959,17 @@ pub(super) fn check_scalar_publication(
         fs::write(&path, serde_json::to_vec(&stale).unwrap()).unwrap();
         let rejected = cwd.join(format!("{stem}-rejected-{field}"));
         assert!(
-            !publish(cwd, prior, &authored, &path, &rejected)
-                .status
-                .success()
+            !publish(
+                cwd,
+                prior,
+                &authored,
+                &path,
+                &items,
+                &item_source,
+                &rejected
+            )
+            .status
+            .success()
         );
         assert!(!rejected.exists());
     }

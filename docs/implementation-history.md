@@ -1,10 +1,91 @@
-> Historical snapshots through the selected physical-base source boundaries on 2026-10-15.
+> Historical snapshots through 2026-10-20.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-20 backup and validation notes
+
+**October 20 work-in-progress backup:** `6f5186bd` and the subsequent test
+compilation fix `d6f3939b` are pushed to GitHub `main`; both full remote hashes
+were independently verified. The manual Direct selector adapter and equipment
+movement-penalty work are backed up before their remaining gates. The Direct adapter's 683
+selected Import tests pass (228 library, 35 Direct dispositions, 377
+normalization and 43 usage inventory). Strict all-target Import lint and exact
+all-five unchanged publication preservation also pass. The movement
+ingredient includes the raw fractional-unit correction, authored body-slot
+penalty, source/native controls, and two independently reviewed test-fixture
+corrections. Its Cargo/source/replay gates and full release publication remain
+pending; this backup is not a validated movement release. The two ordinary
+movement data checks and current-recipe correction/compilation check pass.
+Full extension replay found a stale historical membership-patch binding; all five
+native fixture tests refused their missing checked-readiness setup. Both bounded
+fixture repairs are now applied without changing production validation. All five
+native movement tests pass, including explicit unavailable outcome for Partial
+contributors and fresh/reused/Rayon equivalence; thirteen related campaign/critical
+tests pass. The full extension replay and remaining shared-helper gates are pending.
+The two-row manual Direct inventory overlay passes five ordinary checks after
+rebuilding a stale local executable whose copied source timestamps concealed the
+new helper. Its all-five publication attempt `06` preserved originals 01–04 but
+hit the default normalization work limit on original 05. That attempt is not a
+validated publication. Diagnose its charged work rather than increasing limits;
+the real-group controls still require a successful publication.
+The actual Original05 movement supplier observer and conditional Item construction
+now pass all three source tests (`runs/owned-movement-source-tests-03.log`). The
+observer preserves the loaded state and produces identical evidence in four fresh
+runs (JIT on/off, two each); this establishes source behavior, not complete native
+movement coverage. The validated release remains `e8df8bdb…` below,
+and unchanged complete builds remain **0/5**. Ignored candidate/evidence files
+and the nine protected incoming-critical files are not included in this backup.
+
+**Latest backup:** `c84e66f3` is pushed to GitHub `main`, with its full remote hash
+verified. It includes the two-row Direct inventory overlay, movement supplier
+observer and CI evidence retention. The subsequent independently reviewed readiness
+and historical membership fixture repairs are applied from
+`runs/movement-readiness-fixture-correction-20261020/` and
+`runs/defence-membership-schema-replay-candidate-20261020/`. Resume with their
+native/replay gates, then validate the Direct overlay before authoring the movement
+release. The source observer fixes and fixture repairs are newer than that backup.
+No hosted-green or complete-build claim is made.
+
+**Immediate backup resume point, October 20:** `550d7bf4` is pushed to GitHub
+`main`, with the full remote hash independently verified. That checkpoint includes the
+checked reference-absence implementation, the four skeletal inventory rows and
+the manual Direct source-selection tests. The 713 selected Import tests, strict
+Import lint, unchanged all-five preservation, four ordinary inventory checks and
+all ten source-selection tests pass. The changed skeletal packet now also passes
+all-five publication at `runs/owned-preset-usage-inventory-publication-05/package`,
+input `e8df8bdbb4842c637fa18f822f25b32efd332753842a61f464181af2211e062d`.
+All four explicit real-group suites and scoped CLI/PoB lint now pass. This is the
+current validated data checkpoint; complete unchanged builds remain **0/5**. Ignored
+candidate work and the nine protected incoming-critical files are excluded from
+this Git backup.
+
+**October 20 backup checkpoint:** `00d3c62a` is pushed to GitHub `main` and its
+remote hash is verified. It follows `4aa10b6e`, `a6b61b3c`, `8cf6bc6c`, `983cee19`, `1ba8c7ce`, `6f6eae3f`, `f6dac721`, `dba0f661`,
+`afc607d8` and the initial broad backup `15778b04`; push access is working.
+The earlier receipt-work correction removes irrelevant deep charges without raising
+work limits. All 18 private completion and 27 public usage tests, strict Import
+all-target lint, default-limit all-five publication and the real group238
+positive/nonneutral control pass. Earlier normalization and source checks are
+recorded at their checkpoints below.
+
+The maintained 25-row usage packet now passes both ordinary checks, all-five
+publication, the original group control and the expanded support controls.
+Nine inventory omissions, nine count-companion omissions and an unreviewed
+sibling all retain the expected Pending obligations. Strict CLI lint passes.
+The preceding validated successor was `fd869107…`; the private primary-input completion
+cleanup now passes its complete validation scope, including exact all-five
+comparison with the previous code under `e355f2db…`. Pain Offering/Frost
+Bomb count data now passes publication, all 29 count controls, the existing
+group/support controls and strict CLI lint. Eight exact count bindings are
+added across the originals, including two in Original05's selected preset.
+No original's selected input
+issue has retired. Hosted CI and complete
+native evaluation remain separate gates. Ignored `runs/` evidence and nine
+protected incoming-critical work-in-progress files remain local.
 
 ## Archived 2026-10-15 checkpoint: Current Energy Shield input
 
