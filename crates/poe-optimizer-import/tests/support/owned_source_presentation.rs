@@ -3,6 +3,8 @@ use super::*;
 
 #[path = "owned_source_presentation_frames.rs"]
 mod frame_tests;
+#[path = "owned_source_import_preferences.rs"]
+mod import_tests;
 #[path = "owned_source_trade_preferences.rs"]
 mod trade_tests;
 
@@ -19,6 +21,7 @@ fn enabled_policy(a: &Artifacts) -> NormalizationPolicy {
         cached_build_buffs: true,
         empty_party: false,
         trade_search_weights: false,
+        import_preferences: false,
     });
     p
 }

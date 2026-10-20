@@ -482,6 +482,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     let mut full = prior.input().clone();
     assert!(full.normalization.configuration_dispositions.is_none());
     full.normalization.configuration_dispositions = Some(ConfigurationDispositionPolicy {
+        inventory: None,
         mapping_source: *prior.mapping().source_identity(),
         catalogue_evidence: commitment(
             "owned-configuration-catalogue-evidence-v1",

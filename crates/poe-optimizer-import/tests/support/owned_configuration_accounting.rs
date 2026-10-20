@@ -9,6 +9,7 @@ pub(super) fn bind(
     let dependencies =
         configuration_disposition_dependencies(&p, &f.a.rewards, Default::default()).unwrap();
     p.configuration_dispositions = Some(ConfigurationDispositionPolicy {
+        inventory: None,
         mapping_source: *f.a.mapping.source_identity(),
         catalogue_evidence: *f.a.mapping.identity(),
         constructor_evidence: *f.a.rewards.identity(),
@@ -341,4 +342,128 @@ fn configuration_commitments_reject_changed_or_missing_adapters_and_actual_rewar
     };
     assert!(normalize(&source, &f, &p, limited).is_err());
     assert!(normalize(&source, &f, &p, Default::default()).is_ok());
+}
+
+#[test]
+fn empty_accounting_keeps_raw_only_phase_absence_and_all_origin_content() {
+    let f = fixture();
+    for body in [
+        "",
+        r#"<Placeholder name="raw-0" number="3"/>"#,
+        r#"<Input name="raw-0" number="0"/><Placeholder name="raw-0" number="3"/><Placeholder name="raw-1" number="37"/>"#,
+        r#"<Placeholder name="raw-0" number="3"/><Input name="raw-1" number="NaN"/><Input name="unknown" boolean="false"/>"#,
+        r#"<Placeholder name="raw-0" number="3"/><CustomModifierBlock title="unreviewed" enabled="true">opaque</CustomModifierBlock>"#,
+    ] {
+        let imported = source(&xml(body), 0xa1);
+        let ungoverned = fallback_tests::fallback_policy(&f);
+        let governed = bind(&f, ungoverned.clone(), vec![]);
+        let before = normalize(&imported, &f, &ungoverned, Default::default()).unwrap();
+        let after = normalize(&imported, &f, &governed, Default::default()).unwrap();
+        let repeated = normalize(&imported, &f, &governed, Default::default()).unwrap();
+        assert_eq!(after.draft(), before.draft(), "source {body}");
+        assert_eq!(
+            after.sidecar().origins,
+            before.sidecar().origins,
+            "source {body}"
+        );
+        assert_eq!(after.allocator_after(), before.allocator_after());
+        assert_eq!(after.draft(), repeated.draft());
+        assert_eq!(
+            serde_json::to_value(after.sidecar()).unwrap(),
+            serde_json::to_value(repeated.sidecar()).unwrap()
+        );
+        assert!(matches!(
+            after.draft().input().choice_presets.members[0]
+                .choices
+                .completion,
+            DraftListCompletion::Pending { .. }
+        ));
+        assert!(matches!(
+            after.draft().input().scenario_presets.members[0]
+                .scenario
+                .assumptions
+                .completion,
+            DraftListCompletion::Pending { .. }
+        ));
+        if body.contains("name=\"raw-0\"") {
+            let raw = leaf(&imported, &after, "raw-0", "Placeholder");
+            assert_eq!(
+                raw.disposition,
+                SourceDisposition::SourceOnly(key("overwritten-config-placeholder"))
+            );
+        }
+    }
+}
+
+#[test]
+fn checked_encounter_guards_do_not_hide_other_leaf_or_inventory_responsibilities() {
+    let f = fixture();
+    let raw_rule = ConfigurationDispositionRule {
+        id: key("actual-scalar-consumer"),
+        selector: ValueSelector {
+            lane: ValueLane::InputNumber,
+            name: "raw-0".into(),
+        },
+        destinations: vec![ConfigurationDestination::Adapter {
+            control: ConfigurationAdapterControl::ScalarInput {
+                input: f.inputs[0].1.clone(),
+            },
+        }],
+    };
+    let p = bind(
+        &f,
+        reviewed(&f),
+        vec![raw_rule, observation(&f, "observed")],
+    );
+    for blocked in [false, true] {
+        let guard = if blocked {
+            r#"<Input name="encounter-selector" string="other"/>"#
+        } else {
+            ""
+        };
+        let imported = source(
+            &xml(&format!(
+                r#"<Input name="raw-0" number="0"/><Placeholder name="observed" number="-3"/><Input name="unknown" boolean="false"/>{guard}"#
+            )),
+            0xa2,
+        );
+        let actual = normalize(&imported, &f, &p, Default::default()).unwrap();
+        let scalar = leaf(&imported, &actual, "raw-0", "Input");
+        let observation = leaf(&imported, &actual, "observed", "Placeholder");
+        if blocked {
+            pending(scalar);
+            pending(observation);
+        } else {
+            assert_eq!(
+                scalar.links,
+                vec![OwnedOriginTarget::ScenarioPreset(
+                    actual.draft().input().scenario_presets.members[0].id
+                )]
+            );
+            assert_eq!(
+                observation.disposition,
+                SourceDisposition::SourceOnly(key("branch-does-not-consume-observation"))
+            );
+        }
+        pending(leaf(&imported, &actual, "unknown", "Input"));
+        assert!(matches!(
+            actual.draft().input().choice_presets.members[0]
+                .choices
+                .completion,
+            DraftListCompletion::Pending { .. }
+        ));
+        let repeated = normalize(&imported, &f, &p, Default::default()).unwrap();
+        assert_eq!(actual.draft(), repeated.draft());
+        assert_eq!(actual.sidecar().origins, repeated.sidecar().origins);
+        assert_eq!(actual.allocator_after(), repeated.allocator_after());
+        let low = NormalizationLimits {
+            max_work: 1,
+            ..Default::default()
+        };
+        assert!(normalize(&imported, &f, &p, low).is_err());
+        let recovered = normalize(&imported, &f, &p, Default::default()).unwrap();
+        assert_eq!(actual.draft(), recovered.draft());
+        assert_eq!(actual.sidecar().origins, recovered.sidecar().origins);
+        assert_eq!(actual.allocator_after(), recovered.allocator_after());
+    }
 }

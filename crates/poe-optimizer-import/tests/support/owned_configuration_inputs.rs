@@ -9,6 +9,8 @@ mod default_tests;
 mod disposition_tests;
 #[path = "owned_configuration_fallbacks.rs"]
 mod fallback_tests;
+#[path = "owned_configuration_inventory.rs"]
+mod inventory_tests;
 #[path = "owned_configuration_options.rs"]
 mod option_tests;
 #[path = "owned_configuration_projections.rs"]

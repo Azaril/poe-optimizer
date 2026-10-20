@@ -132,22 +132,29 @@ impl ProvenEncounter {
     }
 }
 
-pub(super) fn checked_receipts(
+/// The exact guard set is borrowed from the successful source proof. It is not
+/// reconstructed from the emitted Encounter or treated as a complete inventory.
+pub(super) struct CheckedEncounterReceipt<'a> {
+    pub(super) receipt: configuration_dispositions::CheckedConfigurationReceipt,
+    pub(super) absent: &'a BTreeSet<String>,
+}
+
+pub(super) fn checked_receipt<'a>(
     b: &mut Builder<'_, '_>,
     scope: SourceOccurrenceId,
     scenario: &ScenarioPresetDraft,
-    proof: Option<&ProvenEncounter>,
-) -> Result<Vec<configuration_dispositions::CheckedConfigurationReceipt>> {
+    proof: Option<&'a ProvenEncounter>,
+) -> Result<Option<CheckedEncounterReceipt<'a>>> {
     let Some(proof) = proof else {
-        return Ok(vec![]);
+        return Ok(None);
     };
     b.charge(proof.absent.len().saturating_add(1))?;
     if !proof.proves_branch(scope, scenario, &proof.absent) {
-        return Ok(vec![]);
+        return Ok(None);
     }
     // This adapter proves constructor absence, never an authored leaf value.
-    Ok(vec![
-        configuration_dispositions::CheckedConfigurationReceipt {
+    Ok(Some(CheckedEncounterReceipt {
+        receipt: configuration_dispositions::CheckedConfigurationReceipt {
             scope,
             origin: None,
             selector: None,
@@ -157,7 +164,8 @@ pub(super) fn checked_receipts(
             additional_targets: vec![],
             source_only: None,
         },
-    ])
+        absent: &proof.absent,
+    }))
 }
 
 pub(super) fn collect(

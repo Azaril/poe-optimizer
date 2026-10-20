@@ -2036,6 +2036,19 @@ retirement. Reuse existing converters with precise private coverage tokens;
 preserve real unresolved ownership rather than deleting links or routing all
 unknowns to scenario assumptions. The configuration proposal records the census.
 
+**Multi-preset fallback coupling, 2026-10-20:** finite Boolean-import controls
+also demonstrate that a previously unknown leaf inside one ConfigSet acquires
+every ConfigSet's fallback choice obligation before its exact typed intent is
+materialized. Checked leaf accounting correctly refuses to remove foreign
+obligations. This is importer bookkeeping debt, not a game interaction between
+independent presets and not native evaluation semantics. During the existing
+configuration ownership cleanup, replace global fallback attribution with
+source-scoped unresolved ownership only where the actual source responsibilities
+are proved. Do not delete foreign links merely to pass completion tests. Retain
+multi-preset refusal and single-preset exact-removal controls until a deliberate
+cutover proves all affected source families, unchanged saved intent and independent
+preset semantics; rebuild current artifacts rather than adding compatibility.
+
 The optional [declared-stat witness](owned-configuration-dispositions-proposal.md#declared-stat-global-switch-witness-2026-10-05)
 uses raw source reads to avoid observer-triggered initialization, including the
 root-map lookup of stat-set names. This source-specific traversal stays in PoB

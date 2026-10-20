@@ -93,8 +93,13 @@ tracks that distinction and the next focused regression.
 Configuration producer intent must also remain distinct from final participation.
 For the reviewed child-effect switches, false suppresses that configuration
 producer; it does not write a global disabled state. The existing Scenario-intent
-model can carry typed Boolean parameters, but its Import adapter still needs
-Boolean constructor transport. Parent-qualified child controls additionally need
+model carries typed Boolean parameters; its Import adapter now implements
+checked authored and constructor Boolean transport. The 722-test Import batch
+passes, including distinct false/true/default values, exact source accounting
+and independent-preset refusal. The new independent configuration census and
+receipt matcher use bounded indices; 600-control stress tests retain the shared
+work limit, duplicate checks and incomplete-coverage failures. This does not
+certify the full PoB control catalogue. Parent-qualified child controls additionally need
 exact supplier-path applicability: the current final-edge match is not an ancestor
 proof, and Partial coverage does not stop known matching intents from applying.
 No such child-control rows are admitted on that weaker evidence. An exact child

@@ -33,8 +33,28 @@ struct BoundConfigurationUsage<'p> {
 }
 struct BoundConfigurationParameter<'p> {
     input: &'p ConfigurationUsageParameterInput,
-    recipe: ConfigurationNumericRecipe,
+    recipe: BoundRecipe,
     schema: ValueSchema,
+}
+/// One destination adapter; each recipe keeps its actual source-reader law.
+/// Numeric zero/losing-lane behavior remains in the existing shared selector.
+enum BoundRecipe {
+    Numeric(ConfigurationNumericRecipe),
+    Boolean(ValueRecipe),
+}
+impl BoundRecipe {
+    fn input(&self) -> &ValueRecipeInput {
+        match self {
+            Self::Numeric(r) => r.input(),
+            Self::Boolean(r) => r.input(),
+        }
+    }
+    fn attribute(&self) -> &'static str {
+        match self {
+            Self::Numeric(_) => "number",
+            Self::Boolean(_) => "boolean",
+        }
+    }
 }
 pub(in crate::owned_normalize) struct ProvenConfigurationUsage {
     scope: SourceOccurrenceId,
@@ -47,6 +67,9 @@ struct ProvenUsage {
 struct ProvenParameter {
     slot: DeclaredSlot<ParameterSlotDefId>,
     sources: Vec<ProvenSource>,
+    /// The exact absent Boolean source control proved by the same fresh ConfigSet census.
+    /// This records producer intent, never final Skill participation.
+    constructor: Option<ValueSelector>,
 }
 struct ProvenSource {
     origin: SourceOccurrenceId,
@@ -110,15 +133,15 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                         && unit == range.maximum.unit()
                         && matches!(definitions.definition(unit), SchemaLookup::Known(_))
                 }
+                (ValueCodecKind::Boolean { .. }, ValueSchema::Boolean) => true,
                 _ => false,
             };
             if !compatible
                 || parameter.recipe.codec.namespace != *definitions.namespace()
                 || parameter.recipe.codec.whitespace != WhitespacePolicy::Exact
-                || !matches!(parameter.recipe.missing, MissingValuePolicy::Pending)
                 || !parameter.recipe.numeric_aliases.is_empty()
             {
-                return invalid("configuration usage typed numeric recipe");
+                return invalid("configuration usage typed recipe");
             }
             charge(work, parameter.recipe.tiers.len(), limits)?;
             for tier in &parameter.recipe.tiers {
@@ -133,12 +156,47 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                     }
                 }
             }
-            let recipe = ConfigurationNumericRecipe::new(
-                parameter.recipe.clone(),
-                parameter.selection,
-                limits.value,
-            )
-            .map_err(numeric_error)?;
+            let recipe = if let ValueCodecKind::Boolean { tokens } = &parameter.recipe.codec.codec {
+                // The XML Boolean lane has exactly these two spellings. Preserve
+                // false as a value; it suppresses this producer, not all producers.
+                charge(work, tokens.len(), limits)?;
+                for token in tokens {
+                    charge(work, token.token.len(), limits)?;
+                }
+                let tokens_exact = tokens.len() == 2
+                    && tokens.iter().any(|t| t.token == "true" && t.value)
+                    && tokens.iter().any(|t| t.token == "false" && !t.value);
+                let tiers = &parameter.recipe.tiers;
+                if !tokens_exact
+                    || parameter.selection != ConfigurationNumericSelection::RecipePrecedence
+                    || tiers.len() != 1
+                    || tiers[0].selectors.len() != 1
+                    || tiers[0].selectors[0].lane != ValueLane::InputBoolean
+                    || tiers[0].duplicates != DuplicatePolicy::Reject
+                    || !matches!(
+                        parameter.recipe.missing,
+                        MissingValuePolicy::Pending
+                            | MissingValuePolicy::Explicit {
+                                value: ParameterValue::Boolean(_)
+                            }
+                    )
+                {
+                    return invalid("configuration usage Boolean source recipe");
+                }
+                BoundRecipe::Boolean(ValueRecipe::new(parameter.recipe.clone(), limits.value)?)
+            } else {
+                if !matches!(parameter.recipe.missing, MissingValuePolicy::Pending) {
+                    return invalid("configuration usage numeric default");
+                }
+                BoundRecipe::Numeric(
+                    ConfigurationNumericRecipe::new(
+                        parameter.recipe.clone(),
+                        parameter.selection,
+                        limits.value,
+                    )
+                    .map_err(numeric_error)?,
+                )
+            };
             parameters.push(BoundConfigurationParameter {
                 input: parameter,
                 recipe,
@@ -153,12 +211,12 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
 }
 
 fn lane(row: &SourceEvidenceRow<'_>) -> Option<ValueLane> {
-    match (
-        row.occurrence().name(),
-        source_shape::value(row, "number").is_some(),
-    ) {
-        ("Input", true) => Some(ValueLane::InputNumber),
-        ("Placeholder", true) => Some(ValueLane::PlaceholderNumber),
+    match row.occurrence().name() {
+        "Input" if source_shape::value(row, "number").is_some() => Some(ValueLane::InputNumber),
+        "Input" if source_shape::value(row, "boolean").is_some() => Some(ValueLane::InputBoolean),
+        "Placeholder" if source_shape::value(row, "number").is_some() => {
+            Some(ValueLane::PlaceholderNumber)
+        }
         _ => None,
     }
 }
@@ -252,7 +310,7 @@ pub(super) fn collect(
                         return Err(NormalizationError::Limit("configuration usage candidates"));
                     }
                     let Some((index, attribute)) =
-                        b.attributes[id.ordinal() as usize].get("number")
+                        b.attributes[id.ordinal() as usize].get(parameter.recipe.attribute())
                     else {
                         blocked = true;
                         continue;
@@ -273,10 +331,65 @@ pub(super) fn collect(
                     complete_row = false;
                     continue;
                 }
-                let decision = match parameter
-                    .recipe
-                    .decide(&candidates, Some(&parameter.schema))
-                {
+                if let BoundRecipe::Boolean(recipe) = &parameter.recipe {
+                    let decision = match recipe.decide(&candidates) {
+                        Ok(value) => value,
+                        Err(ValuePolicyError::MultipleValues { .. }) => {
+                            complete_row = false;
+                            continue;
+                        }
+                        Err(error) => return Err(NormalizationError::Value(error)),
+                    };
+                    let selector = &recipe.input().tiers[0].selectors[0];
+                    let (value, sources, constructor) = match decision.outcome {
+                        ValueOutcome::Selected {
+                            origin,
+                            value: ParameterValue::Boolean(value),
+                        } => {
+                            if candidates.len() != 1 || candidates[0].origin != origin {
+                                return invalid("configuration Boolean source decision");
+                            }
+                            b.charge(selector.name.len().saturating_add(1))?;
+                            (
+                                ParameterValue::Boolean(value),
+                                vec![ProvenSource {
+                                    origin: origin.occurrence,
+                                    selector: selector.clone(),
+                                    selected: true,
+                                }],
+                                None,
+                            )
+                        }
+                        ValueOutcome::Defaulted {
+                            value: ParameterValue::Boolean(value),
+                        } if candidates.is_empty() && decision.matched.is_empty() => {
+                            b.charge(selector.name.len().saturating_add(1))?;
+                            (
+                                ParameterValue::Boolean(value),
+                                vec![],
+                                Some(selector.clone()),
+                            )
+                        }
+                        _ => {
+                            complete_row = false;
+                            continue;
+                        }
+                    };
+                    assignments.push(ParameterAssignment {
+                        slot: parameter.input.slot.clone(),
+                        value,
+                    });
+                    parameters.push(ProvenParameter {
+                        slot: parameter.input.slot.clone(),
+                        sources,
+                        constructor,
+                    });
+                    continue;
+                }
+                let BoundRecipe::Numeric(recipe) = &parameter.recipe else {
+                    unreachable!()
+                };
+                let decision = match recipe.decide(&candidates, Some(&parameter.schema)) {
                     Ok(decision) => decision,
                     Err(ConfigurationNumericError::Value(ValuePolicyError::MultipleValues {
                         ..
@@ -314,6 +427,7 @@ pub(super) fn collect(
                 parameters.push(ProvenParameter {
                     slot: parameter.input.slot.clone(),
                     sources,
+                    constructor: None,
                 });
             }
             if complete_row {
@@ -465,6 +579,29 @@ pub(in crate::owned_normalize) fn checked_receipts(
         let mut valid = true;
         for parameter in &row.parameters {
             b.charge(parameter.sources.len())?;
+            if let Some(selector) = &parameter.constructor {
+                b.charge(selector.name.len().saturating_add(1))?;
+                if !parameter.sources.is_empty() || selector.lane != ValueLane::InputBoolean {
+                    valid = false;
+                    break;
+                }
+                if result.len().saturating_add(row_receipts.len()) >= b.limits.max_origin_links {
+                    return Err(NormalizationError::Limit("configuration usage receipts"));
+                }
+                row_receipts.push(CheckedConfigurationReceipt {
+                    scope,
+                    origin: None,
+                    selector: Some(selector.clone()),
+                    control: ConfigurationAdapterControl::UsageIntent {
+                        policy: row.intent.policy.clone(),
+                        parameter: parameter.slot.clone(),
+                    },
+                    source_state: ConfigurationSourceState::ConstructorDefault,
+                    target: exact.clone(),
+                    additional_targets: vec![OwnedOriginTarget::ScenarioPreset(scenario.id)],
+                    source_only: None,
+                });
+            }
             for source in &parameter.sources {
                 b.charge(
                     b.origins[source.origin.ordinal() as usize]
@@ -606,42 +743,52 @@ mod tests {
 
     #[test]
     fn receipt_requires_the_unique_complete_materialized_record() {
-        let expected = intent();
-        let row: ScenarioUsageIntentDraft = expected.clone().into();
-        assert!(matches_materialized(std::slice::from_ref(&row), &expected));
-        for mutation in 0..7 {
-            let mut rows = vec![row.clone()];
-            match mutation {
-                0 => rows.clear(),
-                1 => rows.push(row.clone()),
-                2 => {
-                    rows[0].parameters.members[0].value =
-                        ParameterValue::Integer(BoundedInteger::new(1).unwrap()).into();
+        for value in [
+            ParameterValue::Integer(BoundedInteger::new(0).unwrap()),
+            ParameterValue::Boolean(false),
+            ParameterValue::Boolean(true),
+        ] {
+            let mut expected = intent();
+            expected.parameters[0].value = value;
+            let row: ScenarioUsageIntentDraft = expected.clone().into();
+            assert!(matches_materialized(std::slice::from_ref(&row), &expected));
+            for mutation in 0..7 {
+                let mut rows = vec![row.clone()];
+                match mutation {
+                    0 => rows.clear(),
+                    1 => rows.push(row.clone()),
+                    2 => {
+                        rows[0].parameters.members[0].value = match expected.parameters[0].value {
+                            ParameterValue::Boolean(value) => ParameterValue::Boolean(!value),
+                            _ => ParameterValue::Integer(BoundedInteger::new(1).unwrap()),
+                        }
+                        .into();
+                    }
+                    3 => rows[0].parameters.members.clear(),
+                    4 => {
+                        let extra = rows[0].parameters.members[0].clone();
+                        rows[0].parameters.members.push(extra);
+                    }
+                    5 => {
+                        rows[0].parameters.completion = DraftListCompletion::Pending {
+                            id: DraftIssueId::from_instance_id(instance(9)),
+                            code: key("unresolved-parameters"),
+                        };
+                    }
+                    6 => {
+                        rows[0].policy = UsagePolicyDefId::new(
+                            expected.policy.namespace().clone(),
+                            key("different"),
+                        )
+                        .into();
+                    }
+                    _ => unreachable!(),
                 }
-                3 => rows[0].parameters.members.clear(),
-                4 => {
-                    let extra = rows[0].parameters.members[0].clone();
-                    rows[0].parameters.members.push(extra);
-                }
-                5 => {
-                    rows[0].parameters.completion = DraftListCompletion::Pending {
-                        id: DraftIssueId::from_instance_id(instance(9)),
-                        code: key("unresolved-parameters"),
-                    };
-                }
-                6 => {
-                    rows[0].policy = UsagePolicyDefId::new(
-                        expected.policy.namespace().clone(),
-                        key("different"),
-                    )
-                    .into();
-                }
-                _ => unreachable!(),
+                assert!(
+                    !matches_materialized(&rows, &expected),
+                    "mutation {mutation}"
+                );
             }
-            assert!(
-                !matches_materialized(&rows, &expected),
-                "mutation {mutation}"
-            );
         }
     }
 

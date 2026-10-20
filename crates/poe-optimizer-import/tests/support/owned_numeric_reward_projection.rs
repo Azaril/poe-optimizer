@@ -121,6 +121,7 @@ fn reviewed(a: &Artifacts, accounting: bool) -> NormalizationPolicy {
     );
     if accounting {
         p.configuration_dispositions = Some(ConfigurationDispositionPolicy {
+            inventory: None,
             mapping_source: *a.mapping.source_identity(),
             catalogue_evidence: *a.mapping.identity(),
             constructor_evidence: *a.rewards.identity(),

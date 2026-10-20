@@ -9,6 +9,7 @@ pub fn policy(
     rewards: &OwnedRewardPolicy,
 ) -> ConfigurationDispositionPolicy {
     ConfigurationDispositionPolicy {
+        inventory: None,
         mapping_source: *mapping.source_identity(),
         catalogue_evidence: *mapping.identity(),
         constructor_evidence: *rewards.identity(),

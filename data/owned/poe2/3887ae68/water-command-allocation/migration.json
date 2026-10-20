@@ -1,0 +1,81 @@
+{
+  "schema_version": 5,
+  "before": "c8705bf69798b7215053a95462ffb8e87dbc9ad36f4f52ed0df7be946609c300",
+  "release": "pob-3887ae68-water-command-allocation-v1",
+  "reason": "preserve-tree-root-through-existing-command-grant",
+  "contract": {
+    "schema_version": 7,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v28",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "schema": [
+    {
+      "kind": "slot",
+      "value": {
+        "kind": "grant",
+        "value": {
+          "id": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000032c"
+              }
+            },
+            "slot": {
+              "kind": "grant_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032bb"
+            }
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "provider_roles": [
+                "skill_use",
+                "allocation"
+              ],
+              "target": {
+                "kind": "skill",
+                "value": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000032c"
+                    }
+                  },
+                  "slot": {
+                    "kind": "skill_grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032ba"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "tables": [],
+  "owners": [],
+  "receivers": [],
+  "query_targets": [],
+  "evaluation": null
+}

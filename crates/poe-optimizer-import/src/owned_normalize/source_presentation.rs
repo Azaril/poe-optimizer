@@ -27,6 +27,10 @@ pub enum SourcePresentationPolicy {
         /// becoming gameplay inputs or native optimization objectives.
         #[serde(default, skip_serializing_if = "is_false")]
         trade_search_weights: bool,
+        /// Remembered import UI preferences with party export disabled.
+        /// Absence authorizes no disposition for this independent family.
+        #[serde(default, skip_serializing_if = "is_false")]
+        import_preferences: bool,
     },
 }
 
@@ -42,6 +46,7 @@ pub(super) struct CompiledSourcePresentation {
     cached_build_buffs: bool,
     empty_party: bool,
     trade_search_weights: bool,
+    import_preferences: bool,
 }
 
 pub(super) fn compile(
@@ -58,6 +63,7 @@ pub(super) fn compile(
         cached_build_buffs,
         empty_party,
         trade_search_weights,
+        import_preferences,
     }) = &policy.source_presentation
     else {
         return Ok(None);
@@ -79,6 +85,7 @@ pub(super) fn compile(
         cached_build_buffs: *cached_build_buffs,
         empty_party: *empty_party,
         trade_search_weights: *trade_search_weights,
+        import_preferences: *import_preferences,
     }))
 }
 
@@ -177,6 +184,7 @@ pub(super) fn apply(
         policy.empty_notes,
         policy.cached_build_buffs,
         policy.empty_party,
+        policy.import_preferences,
     )?);
     if candidates.len() > b.limits.draft.input.max_collection_entries {
         return Err(NormalizationError::Limit("source presentation rows"));

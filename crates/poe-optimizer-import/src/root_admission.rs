@@ -104,32 +104,49 @@ fn boolean(element: &SourceElement<'_>, name: &str) -> Result<(), RootAdmissionE
     }
     Ok(())
 }
-fn import(element: &SourceElement<'_>) -> Result<(), RootAdmissionError> {
-    // ImportTab.Load persists these UI fields. SetText/selection do not notify
-    // callbacks on load. exportParty=true additionally changes calculation work.
-    shape(
-        element,
-        &[
-            "lastRealm",
-            "lastLeague",
-            "lastAccountHash",
-            "lastCharacterHash",
-            "importLink",
-            "useGeneratedItemText",
-            "exportParty",
-        ],
-        true,
-    )?;
-    boolean(element, "useGeneratedItemText")?;
-    boolean(element, "exportParty")?;
-    if element
-        .attribute("exportParty")
-        .is_some_and(|v| v.decoded() == "true")
+// The MAIN structural capability and owned source-presentation adapter share
+// this complete ImportTab.Load attribute/flag law. Each caller separately
+// proves its own unique, unnamespaced, childless source frame.
+pub(crate) const IMPORT_ATTRIBUTES: &[&str] = &[
+    "lastRealm",
+    "lastLeague",
+    "lastAccountHash",
+    "lastCharacterHash",
+    "importLink",
+    "useGeneratedItemText",
+    "exportParty",
+];
+
+pub(crate) fn import_flags(
+    use_generated_item_text: Option<&str>,
+    export_party: Option<&str>,
+) -> Result<(), &'static str> {
+    if [use_generated_item_text, export_party]
+        .into_iter()
+        .flatten()
+        .any(|value| !matches!(value, "true" | "false"))
     {
-        return Err(fail(element, "party buff export is outside MAIN coverage"));
+        return Err("boolean attribute must be exactly true or false");
+    }
+    if export_party == Some("true") {
+        return Err("party buff export is outside MAIN coverage");
     }
     Ok(())
 }
+
+fn import(element: &SourceElement<'_>) -> Result<(), RootAdmissionError> {
+    // ImportTab.Load persists these UI fields. SetText/selection do not notify
+    // callbacks on load. exportParty=true additionally changes calculation work.
+    shape(element, IMPORT_ATTRIBUTES, true)?;
+    import_flags(
+        element
+            .attribute("useGeneratedItemText")
+            .map(|v| v.decoded()),
+        element.attribute("exportParty").map(|v| v.decoded()),
+    )
+    .map_err(|reason| fail(element, reason))
+}
+
 fn tree_view(element: &SourceElement<'_>) -> Result<(), RootAdmissionError> {
     shape(
         element,
