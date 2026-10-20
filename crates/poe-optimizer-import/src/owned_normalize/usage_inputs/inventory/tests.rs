@@ -1,5 +1,6 @@
 use super::*;
 mod group_selectors;
+mod primary_completion;
 
 const SOURCE: &str = r#"<PathOfBuilding2><Skills activeSkillSet="1"><SkillSet id="1"><Skill enabled="true"><Gem/></Skill></SkillSet><SkillSet id="2"><Skill><Gem/></Skill></SkillSet></Skills></PathOfBuilding2>"#;
 
@@ -57,8 +58,16 @@ fn with_case(source_xml: &str, test: impl FnOnce(&mut Builder<'_, '_>, Case)) {
                 quality: DraftQuality::Known { value: None },
             };
             let mut receipts = InventoryReceipts::default();
-            record_input_disposition(b, source, &preset, &skill, Some(&gem_record), &mut receipts)
-                .unwrap();
+            record_input_disposition(
+                b,
+                source,
+                &preset,
+                &skill,
+                Some(&gem_record),
+                AuthoredInputProof::ReferenceDisposition,
+                &mut receipts,
+            )
+            .unwrap();
             let usage = preset.usage_preferences.take().unwrap();
             let DraftListCompletion::Pending { id: issue, .. } = usage.completion else {
                 unreachable!()
@@ -215,8 +224,16 @@ fn with_accountable_presets(count: usize, test: impl FnOnce(&mut Builder<'_, '_>
             }
             b.link(source, OwnedOriginTarget::Gem(gem_id)).unwrap();
             b.link(source, OwnedOriginTarget::Skill(skill_id)).unwrap();
-            record_input_disposition(b, source, &preset, &skill, Some(&gem), &mut case.receipts)
-                .unwrap();
+            record_input_disposition(
+                b,
+                source,
+                &preset,
+                &skill,
+                Some(&gem),
+                AuthoredInputProof::ReferenceDisposition,
+                &mut case.receipts,
+            )
+            .unwrap();
             case.draft.gems.members.push(gem);
             case.draft.skills.members.push(skill);
             case.presets
@@ -230,7 +247,7 @@ fn with_accountable_presets(count: usize, test: impl FnOnce(&mut Builder<'_, '_>
 }
 
 fn copy_authored_receipt(receipt: &InputReceipt) -> InputReceipt {
-    let InputOutput::Authored { skill, gem } = &receipt.output else {
+    let InputOutput::Authored { skill, gem, scope } = &receipt.output else {
         unreachable!("this fixture has only checked authored receipts")
     };
     InputReceipt {
@@ -241,6 +258,7 @@ fn copy_authored_receipt(receipt: &InputReceipt) -> InputReceipt {
         output: InputOutput::Authored {
             skill: skill.clone(),
             gem: gem.clone(),
+            scope: scope.clone(),
         },
         fields: receipt.fields.clone(),
         descendants: receipt.descendants.clone(),
@@ -408,6 +426,7 @@ fn with_two_usage_presets(test: impl FnOnce(&mut Builder<'_, '_>, Case)) {
             case.receipts.usage.push(UsageReceipt {
                 source: input.source,
                 group: input.group,
+                group_contributes: true,
                 preset: input.preset,
                 identity: input.identity.clone(),
                 binding,
@@ -423,6 +442,7 @@ fn copy_usage_receipt(receipt: &UsageReceipt) -> UsageReceipt {
     UsageReceipt {
         source: receipt.source,
         group: receipt.group,
+        group_contributes: receipt.group_contributes,
         preset: receipt.preset,
         identity: receipt.identity.clone(),
         binding: receipt.binding.clone(),
@@ -827,8 +847,16 @@ fn group_fields_have_one_actual_owner_but_every_occurrence_still_needs_coverage(
             ] {
                 b.link(source, link).unwrap();
             }
-            record_input_disposition(b, source, preset, &skill, Some(&gem), &mut case.receipts)
-                .unwrap();
+            record_input_disposition(
+                b,
+                source,
+                preset,
+                &skill,
+                Some(&gem),
+                AuthoredInputProof::ReferenceDisposition,
+                &mut case.receipts,
+            )
+            .unwrap();
             case.draft.skills.members.push(skill);
             case.draft.gems.members.push(gem);
             case.rows.push(UsageInventoryRow {

@@ -59,6 +59,21 @@ fn publish_bounded_usage_inventory_with_all_five_unchanged() {
     let prior_files = release::inventory(&prior_path);
     let prior = release::load(&prior_path);
     let next = stage(&prior);
+    let baseline = std::env::var_os("POE_OPTIMIZER_TEST_USAGE_INVENTORY_BASELINE")
+        .map(PathBuf::from)
+        .map(|directory| {
+            let package = directory.join("package");
+            let saved = release::load(&package);
+            assert_eq!(
+                saved.input(),
+                next.input(),
+                "previous-code baseline must use this exact current release and policies"
+            );
+            assert_eq!(saved.receipt(), next.receipt());
+            let files = release::inventory(&package);
+            let validation = fs::read(directory.join("validation.json")).unwrap();
+            (directory, files, validation)
+        });
     fs::create_dir_all(&out).unwrap();
     write(out.join("endpoint.json"), next.input());
     let package = out.join("package");
@@ -74,6 +89,14 @@ fn publish_bounded_usage_inventory_with_all_five_unchanged() {
         release::inventory(&package),
         release::inventory(&out.join("rebuilt"))
     );
+    if let Some((directory, files, _)) = &baseline {
+        assert_eq!(
+            files,
+            &release::inventory(&package),
+            "previous-code baseline package must be byte-identical: {}",
+            directory.display()
+        );
+    }
     let mut cases = Vec::new();
     for case in 1..=5 {
         let source = root().join(format!(
@@ -96,6 +119,19 @@ fn publish_bounded_usage_inventory_with_all_five_unchanged() {
             checked_output(&new, &package, case, &next, &xml),
             "Original{case:02}: exact complete content, no field or issue dropping"
         );
+        if let Some((directory, _, _)) = &baseline {
+            assert_eq!(
+                checked_output(
+                    &directory.join(format!("original-{case:02}")),
+                    &directory.join("package"),
+                    case,
+                    &next,
+                    &xml,
+                ),
+                checked_output(&new, &package, case, &next, &xml),
+                "Original{case:02}: previous-code output under the exact same release"
+            );
+        }
         let old_check = selected::finalize_with_definitions(
             &xml,
             &old,
@@ -122,10 +158,32 @@ fn publish_bounded_usage_inventory_with_all_five_unchanged() {
         cases.push(json!({"original":case,"selected_pending_issues":ni.as_array().unwrap().len(),"whole_draft_inverse":true,"fresh_repeat_identical":true,"retired_issues":0}));
     }
     assert_eq!(prior_files, release::inventory(&prior_path));
-    write(
-        out.join("validation.json"),
-        &json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":cases,"queries":110,"rebuild_byte_identical":true,"fresh_repeat_identical":true,"complete_original_builds":0,"calculation":"not_run","source_builds_unchanged":true}),
-    );
+    let validation = json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":cases,"queries":110,"rebuild_byte_identical":true,"fresh_repeat_identical":true,"complete_original_builds":0,"calculation":"not_run","source_builds_unchanged":true});
+    if let Some((directory, files, saved_validation)) = &baseline {
+        assert_eq!(
+            serde_json::from_slice::<serde_json::Value>(saved_validation).unwrap(),
+            validation,
+            "baseline must retain this exact successful all-five publication summary"
+        );
+        assert_eq!(files, &release::inventory(&directory.join("package")));
+        assert_eq!(
+            saved_validation,
+            &fs::read(directory.join("validation.json")).unwrap()
+        );
+        write(
+            out.join("previous-code-baseline.json"),
+            &json!({
+                "directory":fs::canonicalize(directory).unwrap(),
+                "release_input":next.receipt().input,
+                "validation_sha256":family::sha(saved_validation),
+                "originals_compared":5,
+                "package_byte_identical":true,
+                "whole_checked_outputs_identical":true,
+                "baseline_package_and_summary_unchanged":true
+            }),
+        );
+    }
+    write(out.join("validation.json"), &validation);
 }
 
 #[test]

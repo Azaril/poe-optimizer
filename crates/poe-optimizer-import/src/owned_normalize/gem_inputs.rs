@@ -1,59 +1,78 @@
 //! Injected physical-gem input recipes. An empty declaration is not source proof.
 use super::*;
 
-/// Resolved carries parameter results; PhysicalSupport also retains the exact
-/// support source proof. AwaitUsage requires a matching attached preference;
-/// AwaitDisposition retains its Pending allocation until destination accounting.
-pub(super) enum GemParameters {
+/// Scalar completion and source accounting have independent authority. Retain
+/// the existing source proof through real output construction even when the
+/// intrinsic scalar declaration was already complete.
+pub(super) struct GemParameters {
+    completion: ParameterCompletion,
+    proof: Option<gem_inventory::GemInventoryProof>,
+    reserved_disposition: Option<DraftIssueId>,
+}
+enum ParameterCompletion {
     Resolved(DraftList<ParameterDraft>),
-    PhysicalSupport {
-        parameters: DraftList<ParameterDraft>,
-        proof: gem_inventory::PhysicalSupportInputProof,
-    },
-    AwaitDisposition {
-        parameters: DraftList<ParameterDraft>,
-        proof: gem_inventory::PendingDisposition,
-    },
-    AwaitUsage {
-        members: Vec<ParameterDraft>,
-        proof: gem_inventory::PendingPrimaryInventory,
-    },
+    AwaitUsage(Vec<ParameterDraft>),
 }
 impl GemParameters {
-    /// Preserve the successful source proof until the real Support destination
-    /// can be bound. Ordinary parameter completeness alone cannot mint it.
-    pub(super) fn into_support_proof(
-        self,
-    ) -> (Self, Option<gem_inventory::PhysicalSupportInputProof>) {
-        match self {
-            Self::PhysicalSupport { parameters, proof } => {
-                (Self::Resolved(parameters), Some(proof))
-            }
-            other => (other, None),
+    pub(super) fn resolved(parameters: DraftList<ParameterDraft>) -> Self {
+        Self {
+            completion: ParameterCompletion::Resolved(parameters),
+            proof: None,
+            reserved_disposition: None,
+        }
+    }
+    pub(super) fn with_proof(
+        parameters: DraftList<ParameterDraft>,
+        proof: gem_inventory::GemInventoryProof,
+    ) -> Self {
+        Self {
+            completion: ParameterCompletion::Resolved(parameters),
+            proof: Some(proof),
+            reserved_disposition: None,
+        }
+    }
+    pub(super) fn await_usage(
+        members: Vec<ParameterDraft>,
+        proof: gem_inventory::PendingPrimaryInventory,
+    ) -> Self {
+        Self {
+            completion: ParameterCompletion::AwaitUsage(members),
+            proof: Some(gem_inventory::GemInventoryProof::AwaitUsage(proof)),
+            reserved_disposition: None,
         }
     }
 
     pub(super) fn awaits_usage(&self) -> bool {
-        matches!(self, Self::AwaitUsage { .. })
+        matches!(
+            self.proof,
+            Some(gem_inventory::GemInventoryProof::AwaitUsage(_))
+        )
     }
     pub(super) fn finish(
         self,
         b: &mut Builder<'_, '_>,
         source: SourceOccurrenceId,
         usage: Option<&usage_inputs::AttachedPrimaryUsage<'_>>,
-    ) -> Result<DraftList<ParameterDraft>> {
-        match self {
-            Self::Resolved(parameters) | Self::PhysicalSupport { parameters, .. } => Ok(parameters),
-            // No actual destination was materialized. Keep the original issue;
-            // successful V3 attachments are completed by the bounded postpass.
-            Self::AwaitDisposition { parameters, .. } => Ok(parameters),
-            Self::AwaitUsage { members, proof } if proof.completed_by(usage) => {
-                Ok(complete(members))
-            }
-            Self::AwaitUsage { members, .. } => {
-                b.closure(source, "gem-parameters-not-converted", members)
-            }
+    ) -> Result<(
+        DraftList<ParameterDraft>,
+        Option<gem_inventory::GemInventoryProof>,
+        Option<DraftIssueId>,
+    )> {
+        let mut proof = self.proof;
+        if matches!(&proof,
+            Some(gem_inventory::GemInventoryProof::AwaitUsage(value))
+            if !value.completed_by(usage))
+        {
+            proof = None;
         }
+        let parameters = match self.completion {
+            ParameterCompletion::Resolved(parameters) => parameters,
+            ParameterCompletion::AwaitUsage(members) if proof.is_some() => complete(members),
+            ParameterCompletion::AwaitUsage(members) => {
+                b.closure(source, "gem-parameters-not-converted", members)?
+            }
+        };
+        Ok((parameters, proof, self.reserved_disposition))
     }
 }
 
@@ -267,6 +286,12 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     Ok(Some(CompiledGemInputs { rules, work }))
 }
 
+pub(super) struct GemParameterPolicies<'a, 'p> {
+    pub inputs: Option<&'a CompiledGemInputs>,
+    pub inventory: Option<&'a gem_inventory::CompiledGemInventory<'p>>,
+    pub retain_source_proof: bool,
+}
+
 impl Builder<'_, '_> {
     pub(super) fn gem_guards_match(
         &mut self,
@@ -311,9 +336,13 @@ impl Builder<'_, '_> {
         group: &SourceEvidenceRow<'_>,
         gem: &DraftField<GemDefId>,
         quality: &DraftQuality,
-        policy: Option<&CompiledGemInputs>,
-        inventory: Option<&gem_inventory::CompiledGemInventory<'_>>,
+        policies: GemParameterPolicies<'_, '_>,
     ) -> Result<GemParameters> {
+        let GemParameterPolicies {
+            inputs: policy,
+            inventory,
+            retain_source_proof,
+        } = policies;
         let source = row.occurrence().id();
         self.charge(1)?;
         let rule = match (gem, policy) {
@@ -323,12 +352,12 @@ impl Builder<'_, '_> {
         let Some(rule) = rule else {
             return self
                 .closure(source, "gem-parameters-not-converted", vec![])
-                .map(GemParameters::Resolved);
+                .map(GemParameters::resolved);
         };
         if !self.gem_guards_match(row, &rule.guards)? {
             return self
                 .closure(source, "gem-parameters-not-converted", vec![])
-                .map(GemParameters::Resolved);
+                .map(GemParameters::resolved);
         }
         let mut members = Vec::new();
         let mut all_converted = true;
@@ -373,7 +402,7 @@ impl Builder<'_, '_> {
                 );
             }
         }
-        let inventory_proven = if all_converted && !rule.complete {
+        let inventory_proven = if all_converted && (!rule.complete || retain_source_proof) {
             if let Some(inventory) = inventory {
                 inventory.prove(
                     self,
@@ -391,27 +420,41 @@ impl Builder<'_, '_> {
         } else {
             None
         };
-        if let Some(gem_inventory::GemInventoryProof::AwaitUsage(proof)) = inventory_proven {
-            Ok(GemParameters::AwaitUsage { members, proof })
+        if all_converted && rule.complete {
+            let parameters = complete(members);
+            Ok(match inventory_proven {
+                Some(proof) => GemParameters::with_proof(parameters, proof),
+                None => GemParameters::resolved(parameters),
+            })
+        } else if let Some(gem_inventory::GemInventoryProof::AwaitUsage(proof)) = inventory_proven {
+            Ok(GemParameters::await_usage(members, proof))
         } else if let Some(gem_inventory::GemInventoryProof::AwaitDisposition(proof)) =
             inventory_proven
         {
             // Preserve historical allocation order and watermark; completion
             // retires only this physical issue after proving its real destination.
             let parameters = self.closure(source, "gem-parameters-not-converted", members)?;
-            Ok(GemParameters::AwaitDisposition { parameters, proof })
+            let DraftListCompletion::Pending { id, .. } = parameters.completion else {
+                unreachable!("the just-created physical parameter closure is Pending")
+            };
+            let mut prepared = GemParameters::with_proof(
+                parameters,
+                gem_inventory::GemInventoryProof::AwaitDisposition(proof),
+            );
+            // Carry the actual allocated reservation; diagnostics do not grant
+            // scalar/source-membership retirement authority.
+            prepared.reserved_disposition = Some(id);
+            Ok(prepared)
         } else if let Some(gem_inventory::GemInventoryProof::PhysicalSupport(proof)) =
             inventory_proven
         {
-            Ok(GemParameters::PhysicalSupport {
-                parameters: complete(members),
-                proof,
-            })
-        } else if all_converted && rule.complete {
-            Ok(GemParameters::Resolved(complete(members)))
+            Ok(GemParameters::with_proof(
+                complete(members),
+                gem_inventory::GemInventoryProof::PhysicalSupport(proof),
+            ))
         } else {
             self.closure(source, "gem-parameters-not-converted", members)
-                .map(GemParameters::Resolved)
+                .map(GemParameters::resolved)
         }
     }
 }

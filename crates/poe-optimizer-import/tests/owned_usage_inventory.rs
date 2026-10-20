@@ -7,6 +7,8 @@ mod actions;
 mod fixture;
 #[path = "support/owned_usage_inventory.rs"]
 mod inventory;
+#[path = "support/owned_primary_usage_completion.rs"]
+mod primary_completion;
 use fixture::{GEM, xml};
 use poe_optimizer_core::owned_draft::*;
 use poe_optimizer_core::{owned_definitions::*, owned_schema::*};

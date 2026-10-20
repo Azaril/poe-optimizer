@@ -122,6 +122,7 @@ pub(super) fn prove(
                 InputOutput::Authored {
                     skill,
                     gem: Some(gem),
+                    ..
                 },
                 OwnedGemRole::Known(AuthoredGemRole::SkillUse),
             ) => {

@@ -9,10 +9,10 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**October 20 backup checkpoint:** `983cee19` is pushed to GitHub `main` and its
-remote hash is verified. It follows `1ba8c7ce`, `6f6eae3f`, `f6dac721`, `dba0f661`,
+**October 20 backup checkpoint:** `8cf6bc6c` is pushed to GitHub `main` and its
+remote hash is verified. It follows `983cee19`, `1ba8c7ce`, `6f6eae3f`, `f6dac721`, `dba0f661`,
 `afc607d8` and the initial broad backup `15778b04`; push access is working.
-The latest correction removes irrelevant deep receipt charges without raising
+The earlier receipt-work correction removes irrelevant deep charges without raising
 work limits. All 18 private completion and 27 public usage tests, strict Import
 all-target lint, default-limit all-five publication and the real group238
 positive/nonneutral control pass. Earlier normalization and source checks are
@@ -22,8 +22,8 @@ The maintained 25-row usage packet now passes both ordinary checks, all-five
 publication, the original group control and the expanded support controls.
 Nine inventory omissions, nine count-companion omissions and an unreviewed
 sibling all retain the expected Pending obligations. Strict CLI lint passes.
-The validated successor is `e355f2db…`; the next step is the reviewed private
-primary-input completion cleanup, then actual Pain Offering/Frost Bomb count
+The validated successor is `e355f2db…`; the private primary-input completion
+cleanup is applied and under validation, followed by actual Pain Offering/Frost Bomb count
 data. No original's selected input issue has retired. Hosted CI and complete
 native evaluation remain separate gates. Ignored `runs/` evidence and nine
 protected incoming-critical work-in-progress files remain local.
@@ -1475,7 +1475,7 @@ supports' scalar inventories Pending. Removing that insertion alone is
 insufficient: the existing Ice Nova count fallback admits only five reviewed
 companion identities. The nine new support families also need explicit
 noncompeting count-companion admission through that existing policy. Their
-complete singleton constructions are available; add the finite tuples as data,
+complete singleton constructions justify the added finite tuples as data,
 keeping original source files and runtime source-frame checks unchanged.
 The correction removes the group-header rewrite and retains both
 inventory-omission and count-companion-refusal controls. Failed evidence:
@@ -1511,23 +1511,71 @@ allocation timing during cleanup. Pain Offering/Frost Bomb requested-count
 recipes remain separately absent. Missing minion Commands, two-effect Djinn
 selection and generated Firebolt dispatch also remain genuine consumer gaps;
 the physical-singleton proof cannot account for them.
-The private completion cleanup is prepared, not applied, in
-`runs/primary-input-completion-candidate-20261020/`. Revision 2 retains an exact
+The private completion cleanup from
+`runs/primary-input-completion-candidate-20261020/` is applied. Revision 2 retains an exact
 reserved issue ID in the existing prepared result rather than deriving authority
 from a diagnostic code; it preserves the first revision separately. It removes
 the Complete-support fallback, retains narrow flat-primary proof scope and the
 exact live designated usage binding, and adds six producer plus three private
-regression tests. Rustfmt and artifact checks pass; Cargo and actual all-five
-preservation remain pending. Review and validate it after the current data
-checkpoint; do not infer that the missing Pain Offering/Frost Bomb count data
-has been supplied by this code cleanup.
+regression tests. The initial run exposed three incorrect private fixtures and
+one real occurrence-only usage-origin failure (18/21 private and 32/33 public
+passed). The fixture had removed a contributing group link while retaining its
+group-enabled consumer. Separately, the live usage checker required a group link
+even when the producing physical adapter read only occurrence values.
+
+The reviewed correction from
+`runs/usage-receipt-origin-scope-candidate-20261020/` is also applied. The existing
+private receipt now records the adapter's actual group participation. One shared
+check verifies exact source/group/set ancestry and source/set preset ownership;
+contributing groups require their sole link, while noncontributing groups may be
+absent but cannot contradict the preset. It fabricates no links, changes no
+public format, and retains exact binding checks and charged traversal.
+All 22 private inventory checks, the 10 existing Gem proof checks, 33 public
+usage checks and 377 normalization checks pass. Strict Import all-target lint
+also passes. The CLI packet, actual all-five preservation, group and support
+controls, and strict CLI lint are still running at this backup checkpoint.
+Their sequential run starts with
+`runs/owned-primary-completion-packet-tests-03.log`; do not interpret the backup
+commit as completion of those remaining gates. The maintained publication test now optionally compares
+with a successful previous-code run using
+`POE_OPTIMIZER_TEST_USAGE_INVENTORY_BASELINE`; exact package identity and every
+saved output are authenticated before comparison. Use the successful
+`runs/owned-preset-usage-inventory-publication-02/` baseline for this code cutover.
+Do not infer that this cleanup supplies missing Pain Offering/Frost Bomb count
+data.
 The next data audit confirms the existing requested-count policy can serve both
-sources, but the current flat-primary proof still requires literal count guards
+sources, but the current flat-primary proof still requires explicit count guards
 and rejects a containing `groupCount`. Keep those limits explicit: Pain's
 occurrence guard admits 1/3, Frost's admits 1; the generic numeric schema's 0–4
 domain does not broaden that source proof or establish gameplay limits.
 Retain the guards for the unchanged-build checkpoint and track their replacement
 with checked consumer evidence as import breadth/cleanup work.
+The source/dependency audit is retained under
+`runs/primary-input-guard-debt-audit-20261020/`; the compiler requires named
+guards, while the injected data supplies their allowed values. The reviewed
+count-data candidate is under `runs/offering-frost-count-inventory-candidate-20261020/`.
+The follow-on maintained Rust candidate is frozen and independently reviewed at
+`runs/offering-frost-count-stage-candidate-20261020/` (manifest
+`4dae67ef58d59febf318998a9d132011212e399350426ada40f246843b42a991`).
+It remains unapplied and unexecuted. It folds the two count policies and two
+inventory row changes into the current packet/stage, without a parallel
+publisher or compatibility path, and checks exactly eight saved count bindings
+against their real source occurrences while preserving all other output and
+allocation state. Apply only after the current completion cleanup passes.
+
+The next generated-source audit is retained under
+`runs/generated-firebolt-dispatch-review-20261020/`. Firebolt has one resolved
+effect and an additional stat-set alias, not two effects. Its generated-input
+receipt already authenticates the exact item provider, inputs and live usage;
+secondary-switch and group-selector consumers still need source-routing
+evidence. Reuse the current generated receipt only after the exact reconstruction
+and catalog/direct route are proved. Shared Djinn construction evidence does not
+by itself establish the same selector behavior. The source-component test
+candidate is separate from native mechanics and remains unexecuted. The frozen
+candidate at `runs/generated-firebolt-routing-source-candidate-20261020/` has
+passed independent source-span and assertion review; its three added Rust
+source-component tests still require execution. Neither local candidate is
+included in Git while it remains under ignored `runs/`.
 
 ### Native Scenario intent checkpoint, October 20
 

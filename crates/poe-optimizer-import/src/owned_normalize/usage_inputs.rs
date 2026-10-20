@@ -14,8 +14,8 @@ pub(super) use configuration::{
     control_matches as configuration_control_matches, materialize as materialize_configuration,
 };
 pub(super) use inventory::{
-    InventoryReceipts, record_generated_input_disposition, record_input_disposition,
-    record_support_input_disposition,
+    AuthoredInputProof, InventoryReceipts, record_generated_input_disposition,
+    record_input_disposition, record_support_input_disposition,
 };
 pub use inventory::{
     UsageInventoryDestination, UsageInventoryField, UsageInventoryFieldSelector,
@@ -176,6 +176,10 @@ pub(super) struct AttachedPrimaryUsage<'p> {
     gem: &'p GemDefId,
     policies: Vec<&'p UsagePolicyDefId>,
     source: SourceOccurrenceId,
+    group: SourceOccurrenceId,
+    preset: SkillPresetId,
+    skill: SkillUseId,
+    bindings: Vec<PresetUsageBindingDraft>,
 }
 pub(super) struct UsageInputContext<'a, 's> {
     pub row: &'a SourceEvidenceRow<'s>,
@@ -194,6 +198,30 @@ impl AttachedPrimaryUsage<'_> {
         policy: &UsagePolicyDefId,
     ) -> bool {
         self.source == source && self.gem == gem && self.policies.contains(&policy)
+    }
+
+    pub(super) fn binding(
+        &self,
+        source: SourceOccurrenceId,
+        group: SourceOccurrenceId,
+        preset: SkillPresetId,
+        skill: SkillUseId,
+        policy: &UsagePolicyDefId,
+    ) -> Option<&PresetUsageBindingDraft> {
+        if self.source != source
+            || !self.policies.contains(&policy)
+            || self.group != group
+            || self.preset != preset
+            || self.skill != skill
+        {
+            return None;
+        }
+        let mut matching = self
+            .bindings
+            .iter()
+            .filter(|binding| matches!(&binding.selection.policy, DraftField::Known { value } if value == policy));
+        let binding = matching.next()?;
+        matching.next().is_none().then_some(binding)
     }
 }
 
@@ -881,6 +909,7 @@ impl<'p> CompiledUsageInputs<'p> {
             return Ok(None);
         }
         let mut attached = Vec::new();
+        let mut bindings = Vec::new();
         for policy in &bound.policies {
             b.charge(1)?;
             let (parameters, converted) = decode_parameters(b, row, group, &policy.parameters)?;
@@ -903,6 +932,7 @@ impl<'p> CompiledUsageInputs<'p> {
                     group,
                     preset.id,
                     inventory::UsageInventorySource::Physical { gem: gem.clone() },
+                    !bound.group_attributes.is_empty(),
                     &PresetUsageBindingDraft {
                         selection: selection.clone(),
                         applicability:
@@ -911,6 +941,16 @@ impl<'p> CompiledUsageInputs<'p> {
                     &policy.parameters,
                     receipts,
                 )?;
+            }
+            if converted && inventory_proof && self.inventory.is_some() {
+                // Only whole-inventory accounting needs a live binding snapshot.
+                // The designated policy is selected by the retained source proof.
+                b.charge(selection.parameters.members.len().saturating_add(1))?;
+                bindings.push(PresetUsageBindingDraft {
+                    selection: selection.clone(),
+                    applicability:
+                        poe_optimizer_core::owned_preset_intent::PresetApplicability::Required,
+                });
             }
             preset
                 .usage_preferences
@@ -946,6 +986,10 @@ impl<'p> CompiledUsageInputs<'p> {
             gem: &bound.input.gem,
             policies: attached,
             source,
+            group: group.occurrence().id(),
+            preset: preset.id,
+            skill,
+            bindings,
         }))
     }
 }

@@ -498,6 +498,9 @@ pub(super) fn materialize(
                     UsageInventorySource::Occurrence {
                         target: Box::new(bound.row.target.clone()),
                     },
+                    // Occurrence attachment always retains its checked group
+                    // origin, including generated-source correspondence.
+                    true,
                     &PresetUsageBindingDraft {
                         selection: selection.clone(),
                         applicability: plan.applicability,

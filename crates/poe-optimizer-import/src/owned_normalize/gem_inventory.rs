@@ -220,6 +220,7 @@ impl PhysicalSupportInputProof {
 
 pub(super) struct PendingPrimaryInventory {
     source: SourceOccurrenceId,
+    group: SourceOccurrenceId,
     gem: GemDefId,
     policy: UsagePolicyDefId,
 }
@@ -229,6 +230,27 @@ impl PendingPrimaryInventory {
         usage: Option<&usage_inputs::AttachedPrimaryUsage<'_>>,
     ) -> bool {
         usage.is_some_and(|usage| usage.proves(self.source, &self.gem, &self.policy))
+    }
+
+    pub(super) fn source(&self) -> SourceOccurrenceId {
+        self.source
+    }
+    pub(super) fn group(&self) -> SourceOccurrenceId {
+        self.group
+    }
+    pub(super) fn gem(&self) -> &GemDefId {
+        &self.gem
+    }
+
+    pub(super) fn receipt_binding<'a>(
+        &self,
+        usage: &'a usage_inputs::AttachedPrimaryUsage<'_>,
+        preset: SkillPresetId,
+        skill: SkillUseId,
+    ) -> Option<&'a PresetUsageBindingDraft> {
+        self.completed_by(Some(usage))
+            .then(|| usage.binding(self.source, self.group, preset, skill, &self.policy))
+            .flatten()
     }
 }
 
@@ -827,6 +849,7 @@ impl CompiledGemInventory<'_> {
             b.charge(2)?;
             GemInventoryProof::AwaitUsage(PendingPrimaryInventory {
                 source: row.occurrence().id(),
+                group: group.occurrence().id(),
                 gem: bound.input.gem.clone(),
                 policy: usage.policy.clone(),
             })
@@ -1086,15 +1109,17 @@ mod tests {
             let before = (b.work, b.links, b.issues, b.allocator.state());
             let origins = b.origins.clone();
             let expected = complete(parameters.to_vec());
-            let value = gem_inputs::GemParameters::PhysicalSupport {
-                parameters: expected.clone(),
-                proof,
+            let value = gem_inputs::GemParameters::with_proof(
+                expected.clone(),
+                GemInventoryProof::PhysicalSupport(proof),
+            );
+            let (parameters, retained, reservation) = value.finish(b, source, None).unwrap();
+            assert!(reservation.is_none());
+            let Some(GemInventoryProof::PhysicalSupport(retained)) = retained else {
+                panic!("finishing retains exactly the support proof")
             };
-            let (value, retained) = value.into_support_proof();
-            assert_eq!(retained.unwrap().source(), source);
-            let (value, consumed) = value.into_support_proof();
-            assert!(consumed.is_none(), "proof extraction is single-use");
-            assert_eq!(value.finish(b, source, None).unwrap(), expected);
+            assert_eq!(retained.source(), source);
+            assert_eq!(parameters, expected);
             assert_eq!(before, (b.work, b.links, b.issues, b.allocator.state()));
             assert_eq!(b.origins, origins);
         });
@@ -1143,23 +1168,43 @@ mod tests {
     fn unproved_parameters_and_primary_usage_cannot_mint_support_tokens() {
         with_support_domain(&xml(GEM), |b, domain, gem, quality, parameters, source| {
             let expected = complete(parameters.to_vec());
-            let (resolved, proof) =
-                gem_inputs::GemParameters::Resolved(expected.clone()).into_support_proof();
+            let (resolved, proof, reservation) =
+                gem_inputs::GemParameters::resolved(expected.clone())
+                    .finish(b, source, None)
+                    .unwrap();
             assert!(proof.is_none());
-            assert_eq!(resolved.finish(b, source, None).unwrap(), expected);
-            let (_, proof) = gem_inputs::GemParameters::AwaitUsage {
-                members: parameters.to_vec(),
-                proof: PendingPrimaryInventory {
+            assert!(reservation.is_none());
+            assert_eq!(resolved, expected);
+            let value = gem_inputs::GemParameters::await_usage(
+                parameters.to_vec(),
+                PendingPrimaryInventory {
                     source,
+                    group: b.evidence.rows()[source.ordinal() as usize]
+                        .occurrence()
+                        .parent()
+                        .unwrap(),
                     gem: gem.to_resolved().unwrap(),
                     policy: UsagePolicyDefId::new(
                         domain.gems.keys().next().unwrap().namespace().clone(),
                         key("primary-usage"),
                     ),
                 },
-            }
-            .into_support_proof();
-            assert!(proof.is_none());
+            );
+            assert!(value.awaits_usage());
+            let (unresolved, proof, reservation) = value.finish(b, source, None).unwrap();
+            assert!(
+                reservation.is_none(),
+                "a usage failure is not a reserved reference proof"
+            );
+            assert!(
+                proof.is_none(),
+                "missing designated usage cannot mint any receipt"
+            );
+            assert!(matches!(
+                unresolved.completion,
+                DraftListCompletion::Pending { .. }
+            ));
+            assert_eq!(unresolved.members, parameters);
 
             // The normal finishing path, including imports with no inventory
             // consumer, produces exactly the same values without extra work.
@@ -1169,11 +1214,14 @@ mod tests {
                 panic!("explicit support proof")
             };
             let before = (b.work, b.links, b.issues, b.allocator.state());
-            let value = gem_inputs::GemParameters::PhysicalSupport {
-                parameters: expected.clone(),
-                proof,
-            };
-            assert_eq!(value.finish(b, source, None).unwrap(), expected);
+            let value = gem_inputs::GemParameters::with_proof(
+                expected.clone(),
+                GemInventoryProof::PhysicalSupport(proof),
+            );
+            let (parameters, proof, reservation) = value.finish(b, source, None).unwrap();
+            assert!(reservation.is_none());
+            assert_eq!(parameters, expected);
+            assert!(matches!(proof, Some(GemInventoryProof::PhysicalSupport(_))));
             assert_eq!(before, (b.work, b.links, b.issues, b.allocator.state()));
         });
     }

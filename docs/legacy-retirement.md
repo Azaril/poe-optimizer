@@ -74,12 +74,21 @@ count-companion tuples and retains unchanged source rows without a group-header
 rewrite; that correction and its refusal controls now pass. Keep this broader-frame
 follow-up visible when validating other builds.
 
-The flat-primary compiler also requires literal `count` and `enableGlobal2`
-guards. These are current proof restrictions, not game limits or consequences of
-the native count schema. Preserve them in the next unchanged-build data step;
+The flat-primary compiler also requires named `count` and `enableGlobal2`
+guards; their allowed values come from injected data. These are current proof
+restrictions, not game limits or consequences of the native count schema.
+Preserve them in the next unchanged-build data step;
 then investigate replacing redundant guards with checked evidence from the actual
 consumer, keeping intrinsic source validity and every usage destination separate.
 Do not add a second primary proof or per-skill runtime exceptions to expand them.
+
+The primary completion cutover exposed an origin-scope mismatch: the physical
+adapter emits no group attribution for occurrence-only recipes, while the old
+usage receipt checker required one. The applied correction carries actual group
+participation on the existing private receipt and shares exact source/set
+validation. It preserves contributing-group requirements and rejects
+contradictory links. Full previous-code output comparison remains a cutover gate;
+adding redundant origin links merely to satisfy the old checker is not a fix.
 
 ## Current rule-format cutover (2026-10-07)
 

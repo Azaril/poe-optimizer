@@ -1980,11 +1980,13 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             group,
             &gem_definition,
             &quality,
-            gem_inputs.as_ref(),
-            gem_inventory.as_ref(),
+            gem_inputs::GemParameterPolicies {
+                inputs: gem_inputs.as_ref(),
+                inventory: gem_inventory.as_ref(),
+                retain_source_proof: usage_inventory_enabled,
+            },
         )?;
-        let (parameters, mut support_input_proof) = parameters.into_support_proof();
-        // Keep legacy level/issue allocation before Skill creation. Additive
+        // Keep level/issue allocation before Skill creation. Additive
         // proofs finish only after their real preset destination is established.
         let level = b.level(Some(row), s, &recipes[1])?;
         let mut usage_proof = None;
@@ -1992,88 +1994,44 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         let preset = b
             .ancestor(s, "SkillSet")?
             .and_then(|s| skill_sets.get(&s).copied());
-        match role {
-            Some(AuthoredGemRole::SkillUse) if manual => {
-                let id = b.id()?;
-                b.link(s, OwnedOriginTarget::Skill(id))?;
-                let enabled = b.enabled(row, group, &recipes[2], &recipes[3])?;
-                let scope = b.skill_scope(s, group, policy.skill_scopes.as_ref())?;
-                if matches!(scope, DraftField::Known { .. }) {
-                    b.link(group_id, OwnedOriginTarget::Skill(id))?;
-                }
-                draft.skills.members.push(SkillDraft {
-                    parameters: None,
-                    id,
-                    source: DraftAuthoredSkillSource::Gem(gem_id.into()),
-                    enabled,
-                    scope,
-                });
-                group_skills.entry(group_id).or_default().push(id);
-                if let Some(preset) = preset {
-                    draft.skill_presets.members[preset].skills.members.push(id);
-                    if let Some(inputs) = &usage_inputs {
-                        usage_proof = inputs.attach(
-                            &mut b,
-                            usage_inputs::UsageInputContext {
-                                row,
-                                group,
-                                gem: &gem_definition,
-                                skill: id,
-                                preset: &mut draft.skill_presets.members[preset],
-                                inventory_proof: parameters.awaits_usage(),
-                                receipts: &mut usage_inventory_receipts,
-                            },
-                        )?;
-                    }
-                    disposition_destination = Some((draft.skills.members.len() - 1, preset));
-                }
+        if role == Some(AuthoredGemRole::SkillUse) && manual {
+            let id = b.id()?;
+            b.link(s, OwnedOriginTarget::Skill(id))?;
+            let enabled = b.enabled(row, group, &recipes[2], &recipes[3])?;
+            let scope = b.skill_scope(s, group, policy.skill_scopes.as_ref())?;
+            if matches!(scope, DraftField::Known { .. }) {
+                b.link(group_id, OwnedOriginTarget::Skill(id))?;
             }
-            Some(AuthoredGemRole::SupportAssignment) => {
-                // Complete scalar declarations do not prove the source frame,
-                // but they must not prevent its independent support proof.
-                // Preserve the scalar results and every primary deferred path.
-                if usage_inventory_enabled
-                    && support_input_proof.is_none()
-                    && let gem_inputs::GemParameters::Resolved(values) = &parameters
-                    && matches!(values.completion, DraftListCompletion::Complete)
-                    && let Some(inventory) = gem_inventory.as_ref()
-                    && let Some(gem_inventory::GemInventoryProof::PhysicalSupport(proof)) =
-                        inventory.prove(
-                            &mut b,
-                            gem_inventory::GemInventoryContext {
-                                row,
-                                group,
-                                gem: &gem_definition,
-                                quality: &quality,
-                                parameters: &values.members,
-                            },
-                        )?
-                {
-                    support_input_proof = Some(proof);
+            draft.skills.members.push(SkillDraft {
+                parameters: None,
+                id,
+                source: DraftAuthoredSkillSource::Gem(gem_id.into()),
+                enabled,
+                scope,
+            });
+            group_skills.entry(group_id).or_default().push(id);
+            if let Some(preset) = preset {
+                draft.skill_presets.members[preset].skills.members.push(id);
+                if let Some(inputs) = &usage_inputs {
+                    usage_proof = inputs.attach(
+                        &mut b,
+                        usage_inputs::UsageInputContext {
+                            row,
+                            group,
+                            gem: &gem_definition,
+                            skill: id,
+                            preset: &mut draft.skill_presets.members[preset],
+                            inventory_proof: parameters.awaits_usage(),
+                            receipts: &mut usage_inventory_receipts,
+                        },
+                    )?;
                 }
-                support_rows.push((
-                    s,
-                    group_id,
-                    gem_id,
-                    preset,
-                    manual,
-                    draft.gems.members.len(),
-                    support_input_proof,
-                ));
+                disposition_destination = Some((draft.skills.members.len() - 1, preset));
             }
-            _ => {}
         }
-        let parameters = match (parameters, disposition_destination) {
-            (
-                gem_inputs::GemParameters::AwaitDisposition { parameters, proof },
-                Some((skill, preset)),
-            ) => {
-                b.charge(1)?;
-                deferred_gem_dispositions.push((draft.gems.members.len(), skill, preset, s, proof));
-                parameters
-            }
-            (parameters, _) => parameters.finish(&mut b, s, usage_proof.as_ref())?,
-        };
+        let (parameters, proof, reserved_disposition) =
+            parameters.finish(&mut b, s, usage_proof.as_ref())?;
+
         draft.gems.members.push(GemDraft {
             id: gem_id,
             quality,
@@ -2081,6 +2039,57 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             definition: gem_definition,
             level,
         });
+        let gem_index = draft.gems.members.len() - 1;
+        match (proof, disposition_destination) {
+            (
+                Some(gem_inventory::GemInventoryProof::AwaitDisposition(proof)),
+                Some((skill, preset)),
+            ) => {
+                // A newly requested source receipt must not create an earlier
+                // usage obligation or inherit scalar-closure authority.
+                if reserved_disposition.is_some()
+                    || matches!(draft.skill_presets.members[preset].usage_preferences.as_ref(),
+                    Some(DraftList { completion: DraftListCompletion::Pending { code, .. }, .. })
+                        if code.as_str() == "usage-preferences-not-converted")
+                {
+                    b.charge(1)?;
+                    deferred_gem_dispositions.push((
+                        gem_index,
+                        skill,
+                        preset,
+                        s,
+                        proof,
+                        reserved_disposition,
+                    ));
+                }
+            }
+            (Some(gem_inventory::GemInventoryProof::AwaitUsage(proof)), Some((skill, preset)))
+                if usage_inventory_enabled =>
+            {
+                if let Some(usage) = usage_proof.as_ref() {
+                    usage_inputs::record_input_disposition(
+                        &mut b,
+                        s,
+                        &draft.skill_presets.members[preset],
+                        &draft.skills.members[skill],
+                        Some(&draft.gems.members[gem_index]),
+                        usage_inputs::AuthoredInputProof::PrimaryUsage {
+                            proof: &proof,
+                            usage,
+                        },
+                        &mut usage_inventory_receipts,
+                    )?;
+                }
+            }
+            (proof, _) if role == Some(AuthoredGemRole::SupportAssignment) => {
+                let proof = match proof {
+                    Some(gem_inventory::GemInventoryProof::PhysicalSupport(proof)) => Some(proof),
+                    _ => None,
+                };
+                support_rows.push((s, group_id, gem_id, preset, manual, gem_index, proof));
+            }
+            _ => {}
+        }
     }
     // Ordinary usage and Direct inputs retain their historical allocation order.
     // A newly reviewed physical inventory must not create an earlier preset
@@ -2088,21 +2097,31 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     // already reserved above; only attachment and retirement wait for this pass.
     // With no ordinary usage consumer, V3 still creates a real Pending inventory
     // here. Fresh V3-only imports may therefore allocate that new issue later.
-    for (gem, skill, preset, source, proof) in deferred_gem_dispositions {
+    for (gem, skill, preset, source, proof, reserved) in deferred_gem_dispositions {
         b.charge(1)?;
+        if let Some(reserved) = reserved
+            && !matches!(draft.gems.members[gem].parameters.completion,
+                DraftListCompletion::Pending { id, .. } if id == reserved)
+        {
+            return Err(NormalizationError::Policy(
+                "physical parameter reservation changed",
+            ));
+        }
         let attached = proof.attach(
             &mut b,
             &draft.skills.members[skill],
             &mut draft.skill_presets.members[preset],
         )?;
         if proof.completed_by(attached.as_ref()) {
-            skill_inventory_census.proved_nested(&mut b, source)?;
-            source_shape::retire_membership(
-                &mut b,
-                source,
-                &mut draft.gems.members[gem].parameters.completion,
-                "gem-parameters-not-converted",
-            )?;
+            if reserved.is_some() {
+                skill_inventory_census.proved_nested(&mut b, source)?;
+                source_shape::retire_membership(
+                    &mut b,
+                    source,
+                    &mut draft.gems.members[gem].parameters.completion,
+                    "gem-parameters-not-converted",
+                )?;
+            }
             if usage_inputs
                 .as_ref()
                 .is_some_and(|inputs| inputs.inventory_enabled())
@@ -2113,6 +2132,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     &draft.skill_presets.members[preset],
                     &draft.skills.members[skill],
                     Some(&draft.gems.members[gem]),
+                    usage_inputs::AuthoredInputProof::ReferenceDisposition,
                     &mut usage_inventory_receipts,
                 )?;
             }
@@ -2146,6 +2166,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     &draft.skill_presets.members[preset],
                     &draft.skills.members[skill],
                     None,
+                    usage_inputs::AuthoredInputProof::ReferenceDisposition,
                     &mut usage_inventory_receipts,
                 )?;
             }

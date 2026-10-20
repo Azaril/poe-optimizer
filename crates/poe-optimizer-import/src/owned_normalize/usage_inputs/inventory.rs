@@ -184,6 +184,7 @@ enum InputOutput {
     Authored {
         skill: Box<SkillDraft>,
         gem: Option<Box<GemDraft>>,
+        scope: AuthoredInputScope,
     },
     Support {
         support: Box<SupportDraft>,
@@ -191,9 +192,29 @@ enum InputOutput {
     },
     Generated(Box<generated_skill_inputs::CheckedInputDisposition>),
 }
+#[derive(Clone)]
+enum AuthoredInputScope {
+    ReferenceDisposition,
+    PrimaryUsage {
+        binding: Box<PresetUsageBindingDraft>,
+    },
+}
+
+/// Existing producers retain different authority. A flat intrinsic proof never
+/// borrows the complete reference correspondence of a disposition.
+pub(in crate::owned_normalize) enum AuthoredInputProof<'a, 'p> {
+    ReferenceDisposition,
+    PrimaryUsage {
+        proof: &'a gem_inventory::PendingPrimaryInventory,
+        usage: &'a AttachedPrimaryUsage<'p>,
+    },
+}
+
 struct UsageReceipt {
     source: SourceOccurrenceId,
     group: SourceOccurrenceId,
+    // Minted by the adapter's checked frame, not inferred from a later link.
+    group_contributes: bool,
     preset: SkillPresetId,
     identity: UsageInventorySource,
     binding: PresetUsageBindingDraft,
@@ -244,14 +265,16 @@ fn descendants(
     Ok(found)
 }
 
-/// Called only after an existing physical/Direct disposition has succeeded and
-/// its intrinsic parameter issue has been retired. No token is deserializable.
+/// Called only after the existing source proof has a real authored destination.
+/// Its private scope preserves reference versus flat-usage authority. No token
+/// is deserializable; scalar completeness alone cannot create one.
 pub(in crate::owned_normalize) fn record_input_disposition(
     b: &mut Builder<'_, '_>,
     source: SourceOccurrenceId,
     preset: &SkillPresetDraft,
     skill: &SkillDraft,
     gem: Option<&GemDraft>,
+    proof: AuthoredInputProof<'_, '_>,
     receipts: &mut InventoryReceipts,
 ) -> Result<()> {
     let row = &b.evidence.rows()[source.ordinal() as usize];
@@ -310,6 +333,31 @@ pub(in crate::owned_normalize) fn record_input_disposition(
         }
         _ => return Ok(()),
     };
+    let scope = match proof {
+        AuthoredInputProof::ReferenceDisposition => AuthoredInputScope::ReferenceDisposition,
+        AuthoredInputProof::PrimaryUsage { proof, usage } => {
+            let UsageInventorySource::Physical { gem } = &identity else {
+                return Ok(());
+            };
+            if proof.source() != source
+                || proof.group() != group_id
+                || proof.gem() != gem
+                || !row.children().is_empty()
+            {
+                return Ok(());
+            }
+            // Policies are bounded by compilation; only the actual designated
+            // binding can keep this source proof live.
+            b.charge(usage.bindings.len().saturating_mul(3))?;
+            let Some(binding) = proof.receipt_binding(usage, preset.id, skill.id) else {
+                return Ok(());
+            };
+            b.charge(binding.selection.parameters.members.len().saturating_add(1))?;
+            AuthoredInputScope::PrimaryUsage {
+                binding: Box::new(binding.clone()),
+            }
+        }
+    };
     b.charge(
         row.attributes()
             .len()
@@ -331,11 +379,31 @@ pub(in crate::owned_normalize) fn record_input_disposition(
         .attributes()
         .iter()
         .filter(|attribute| {
-            !matches!(
-                attribute.origin().name.as_str(),
-                "count" | "enableGlobal1" | "enableGlobal2"
-            ) || skill_input_disposition::exact_primary_global_gate_is_neutral(attribute)
-                || physical_secondary && attribute.origin().name == "enableGlobal2"
+            let name = attribute.origin().name.as_str();
+            let intrinsic = match &scope {
+                AuthoredInputScope::ReferenceDisposition => true,
+                AuthoredInputScope::PrimaryUsage { .. } => matches!(
+                    name,
+                    "gemId"
+                        | "variantId"
+                        | "skillId"
+                        | "nameSpec"
+                        | "level"
+                        | "quality"
+                        | "corrupted"
+                        | "corruptLevel"
+                        | "enabled"
+                        | "enableGlobal1"
+                        | "enableGlobal2"
+                        | "count"
+                ),
+            };
+            intrinsic
+                && (!matches!(
+                    attribute.origin().name.as_str(),
+                    "count" | "enableGlobal1" | "enableGlobal2"
+                ) || skill_input_disposition::exact_primary_global_gate_is_neutral(attribute)
+                    || physical_secondary && attribute.origin().name == "enableGlobal2")
         })
         .map(|attribute| occurrence_field(&attribute.origin().name))
         .collect();
@@ -345,10 +413,20 @@ pub(in crate::owned_normalize) fn record_input_disposition(
             .iter()
             .map(|a| a.origin().name.as_str())
             .filter(|name| {
-                !matches!(
-                    *name,
-                    "groupCount" | "includeInFullDPS" | "mainActiveSkill" | "mainActiveSkillCalcs"
-                )
+                let intrinsic = match &scope {
+                    AuthoredInputScope::ReferenceDisposition => true,
+                    AuthoredInputScope::PrimaryUsage { .. } => {
+                        matches!(*name, "enabled" | "source" | "label")
+                    }
+                };
+                intrinsic
+                    && !matches!(
+                        *name,
+                        "groupCount"
+                            | "includeInFullDPS"
+                            | "mainActiveSkill"
+                            | "mainActiveSkillCalcs"
+                    )
             })
             .map(group_field),
     );
@@ -371,6 +449,7 @@ pub(in crate::owned_normalize) fn record_input_disposition(
         output: InputOutput::Authored {
             skill: Box::new(skill.clone()),
             gem: gem.cloned().map(Box::new),
+            scope,
         },
         fields,
         descendants,
@@ -527,6 +606,7 @@ pub(super) fn record_usage(
     group: &SourceEvidenceRow<'_>,
     preset: SkillPresetId,
     identity: UsageInventorySource,
+    group_contributes: bool,
     binding: &PresetUsageBindingDraft,
     parameters: &[BoundParameter<'_>],
     receipts: &mut InventoryReceipts,
@@ -563,6 +643,7 @@ pub(super) fn record_usage(
             receipts.usage.push(UsageReceipt {
                 source: row.occurrence().id(),
                 group: group.occurrence().id(),
+                group_contributes,
                 preset,
                 identity: identity.clone(),
                 binding: binding.clone(),
@@ -618,6 +699,102 @@ fn preset_links(
     })
 }
 
+/// Both producers retain exact occurrence/set ownership. A group frame is a
+/// required origin only when that adapter actually checked it as contributing.
+/// Callers precharge source/group links; this helper charges the parent lookup
+/// and additional exact set-origin scans.
+fn usage_origins_present(
+    b: &mut Builder<'_, '_>,
+    source: SourceOccurrenceId,
+    group_id: SourceOccurrenceId,
+    preset: SkillPresetId,
+    group_contributes: bool,
+) -> Result<bool> {
+    b.charge(3)?;
+    let row = &b.evidence.rows()[source.ordinal() as usize];
+    let group = &b.evidence.rows()[group_id.ordinal() as usize];
+    if row.occurrence().parent() != Some(group_id)
+        || row.occurrence().name() != "Gem"
+        || group.occurrence().name() != "Skill"
+    {
+        return Ok(false);
+    }
+    let Some(set) = group.occurrence().parent() else {
+        return Ok(false);
+    };
+    if b.evidence.rows()[set.ordinal() as usize]
+        .occurrence()
+        .name()
+        != "SkillSet"
+    {
+        return Ok(false);
+    }
+    b.charge(
+        b.origins[set.ordinal() as usize]
+            .links
+            .len()
+            .saturating_mul(2),
+    )?;
+    Ok(
+        sole_link(b, source, &OwnedOriginTarget::SkillPreset(preset), |link| {
+            matches!(link, OwnedOriginTarget::SkillPreset(_))
+        }) && sole_link(b, set, &OwnedOriginTarget::SkillPreset(preset), |link| {
+            matches!(link, OwnedOriginTarget::SkillPreset(_))
+        }) && if group_contributes {
+            sole_link(
+                b,
+                group_id,
+                &OwnedOriginTarget::SkillPreset(preset),
+                |link| matches!(link, OwnedOriginTarget::SkillPreset(_)),
+            )
+        } else {
+            b.origins[group_id.ordinal() as usize]
+                .links
+                .iter()
+                .all(|link| !matches!(link, OwnedOriginTarget::SkillPreset(id) if *id != preset))
+        },
+    )
+}
+
+/// Flat primary attachment need not have contributed any group value; its
+/// independent usage receipt retains any required contributing-group origin.
+fn primary_usage_present(
+    b: &mut Builder<'_, '_>,
+    preset: &SkillPresetDraft,
+    receipt: &InputReceipt,
+    binding: &PresetUsageBindingDraft,
+) -> Result<bool> {
+    let row = &b.evidence.rows()[receipt.source.ordinal() as usize];
+    if !row.children().is_empty()
+        || !receipt.descendants.is_empty()
+        || !usage_origins_present(b, receipt.source, receipt.group, preset.id, false)?
+    {
+        return Ok(false);
+    }
+    let usages = preset.intent.as_ref().map_or_else(
+        || {
+            preset
+                .usage_preferences
+                .as_ref()
+                .map_or(0, |rows| rows.members.len())
+        },
+        |intent| intent.usage.members.len(),
+    );
+    product(
+        b,
+        &[
+            usages,
+            binding
+                .selection
+                .parameters
+                .members
+                .len()
+                .saturating_add(65),
+        ],
+    )?;
+    Ok(usage_present(preset, binding))
+}
+
 fn input_present(
     b: &mut Builder<'_, '_>,
     draft: &DraftSessionInput,
@@ -625,7 +802,15 @@ fn input_present(
     receipt: &InputReceipt,
 ) -> Result<bool> {
     Ok(match &receipt.output {
-        InputOutput::Authored { skill, gem } => {
+        InputOutput::Authored { skill, gem, scope } => {
+            let origin_present = match scope {
+                AuthoredInputScope::ReferenceDisposition => {
+                    preset_links(b, receipt.source, receipt.group, receipt.preset)
+                }
+                AuthoredInputScope::PrimaryUsage { binding } => {
+                    primary_usage_present(b, preset, receipt, binding)?
+                }
+            };
             draft
                 .skills
                 .members
@@ -640,7 +825,7 @@ fn input_present(
                     .filter(|id| **id == skill.id)
                     .count()
                     == 1
-                && preset_links(b, receipt.source, receipt.group, receipt.preset)
+                && origin_present
                 && sole_link(
                     b,
                     receipt.source,
@@ -929,8 +1114,13 @@ pub(super) fn complete(
                     // Preserve a bound for the complete binding comparison,
                     // not just the number of rows in the receiving preset.
                     product(b, &[binding_count.saturating_add(1), 65])?;
-                    if preset_links(b, receipt.source, receipt.group, receipt.preset)
-                        && usage_present(preset, &receipt.binding)
+                    if usage_origins_present(
+                        b,
+                        receipt.source,
+                        receipt.group,
+                        receipt.preset,
+                        receipt.group_contributes,
+                    )? && usage_present(preset, &receipt.binding)
                     {
                         usages.push(receipt);
                     }
