@@ -132,7 +132,6 @@ fn authored_false_and_constructor_intent_remain_distinct_in_independent_sets() {
 
     let imported = source(&text, 93);
     let policy = row(&mut p).policy.clone();
-    let mut expected = projected.sidecar().origins.clone();
     let leaves: Vec<_> = imported
         .occurrences()
         .iter()
@@ -147,7 +146,7 @@ fn authored_false_and_constructor_intent_remain_distinct_in_independent_sets() {
         else {
             panic!()
         };
-        let origin = &mut expected[leaf.id().ordinal() as usize];
+        let origin = &accounted.sidecar().origins[leaf.id().ordinal() as usize];
         assert_eq!(origin.disposition, SourceDisposition::Contributes);
         assert_eq!(
             origin
@@ -165,11 +164,23 @@ fn authored_false_and_constructor_intent_remain_distinct_in_independent_sets() {
                     policy: policy.clone(),
                 })
         );
-        origin
-            .links
-            .retain(|link| *link != OwnedOriginTarget::Issue(issue));
+        // The fallback pass also attached every other ConfigSet's obligation.
+        // This local receipt cannot erase or reinterpret those foreign links.
+        for other in &accounted.draft().input().choice_presets.members {
+            let DraftListCompletion::Pending { id, .. } = other.choices.completion else {
+                panic!()
+            };
+            assert_eq!(
+                origin
+                    .links
+                    .iter()
+                    .filter(|link| **link == OwnedOriginTarget::Issue(id))
+                    .count(),
+                1
+            );
+        }
     }
-    assert_eq!(expected, accounted.sidecar().origins);
+    assert_eq!(projected.sidecar().origins, accounted.sidecar().origins);
     let UsageInputPolicy::PobOccurrenceUsageV3 { scenario, .. } = p.usage_inputs.as_mut().unwrap();
     scenario.clear();
     p.configuration_dispositions = None;
@@ -179,6 +190,63 @@ fn authored_false_and_constructor_intent_remain_distinct_in_independent_sets() {
         no_projection.draft().input().skill_presets
     );
     assert_eq!(accounted.allocator_after(), no_projection.allocator_after());
+}
+
+#[test]
+fn single_scope_boolean_receipts_remove_only_their_exact_leaf_obligation() {
+    for default in [false, true] {
+        for (body, expected_value) in [
+            (String::new(), default),
+            (boolean_field("false"), false),
+            (boolean_field("true"), true),
+        ] {
+            let (a, mut p) = boolean_fixture(Some(default));
+            let text = xml(&body);
+            let projected = run(&text, &a, &p);
+            accounting(&a, &mut p);
+            let accounted = run(&text, &a, &p);
+            assert_eq!(value(&accounted, 0), Some(expected_value));
+            assert_eq!(projected.draft(), accounted.draft());
+            assert_eq!(projected.allocator_after(), accounted.allocator_after());
+            incomplete(&accounted);
+            let imported = source(&text, 93);
+            let leaves: Vec<_> = imported
+                .occurrences()
+                .iter()
+                .filter(|origin| origin.name() == "Input")
+                .collect();
+            assert_eq!(leaves.len(), usize::from(!body.is_empty()));
+            let DraftListCompletion::Pending { id: issue, .. } =
+                accounted.draft().input().choice_presets.members[0]
+                    .choices
+                    .completion
+            else {
+                panic!()
+            };
+            let mut expected = projected.sidecar().origins.clone();
+            for leaf in leaves {
+                let origin = &mut expected[leaf.id().ordinal() as usize];
+                assert_eq!(origin.disposition, SourceDisposition::Contributes);
+                assert_eq!(
+                    origin
+                        .links
+                        .iter()
+                        .filter(|link| **link == OwnedOriginTarget::Issue(issue))
+                        .count(),
+                    1
+                );
+                origin
+                    .links
+                    .retain(|link| *link != OwnedOriginTarget::Issue(issue));
+            }
+            assert_eq!(expected, accounted.sidecar().origins);
+            let before = serde_json::to_value(projected.sidecar()).unwrap();
+            let mut after = serde_json::to_value(accounted.sidecar()).unwrap();
+            after["policy"] = before["policy"].clone();
+            after["origins"] = before["origins"].clone();
+            assert_eq!(before, after);
+        }
+    }
 }
 
 #[test]

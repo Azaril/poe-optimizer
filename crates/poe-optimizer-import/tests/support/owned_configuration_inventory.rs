@@ -421,16 +421,20 @@ fn independent_sets_do_not_borrow_each_others_proof_and_late_budget_failure_retu
     let mut high = NormalizationLimits::default().max_work;
     while low < high {
         let mid = low + (high - low) / 2;
-        let mut limits = NormalizationLimits::default();
-        limits.max_work = mid;
+        let limits = NormalizationLimits {
+            max_work: mid,
+            ..Default::default()
+        };
         if normalize(&single, &f, &p, limits).is_ok() {
             high = mid;
         } else {
             low = mid + 1;
         }
     }
-    let mut limits = NormalizationLimits::default();
-    limits.max_work = low - 1;
+    let limits = NormalizationLimits {
+        max_work: low - 1,
+        ..Default::default()
+    };
     assert!(matches!(
         normalize(&single, &f, &p, limits),
         Err(NormalizationError::Limit(_))

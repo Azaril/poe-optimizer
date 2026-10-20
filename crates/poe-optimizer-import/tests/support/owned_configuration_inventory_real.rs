@@ -4,6 +4,7 @@ use super::*;
 use poe_optimizer_import::owned_release::{
     OwnedReleaseInput, OwnedReleaseReceipt, StagedOwnedRelease, assemble_owned_release,
 };
+use poe_optimizer_import::owned_tree_policy::OwnedTreeNormalizationPolicy;
 use serde_json::json;
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, fs, path::Path};
@@ -90,7 +91,22 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
             .queries;
         assert_eq!(queries.len(), 22);
         let run = |policy: &NormalizationPolicy| {
-            normalize_fresh(
+            // The tree authenticates the complete normalization policy, even
+            // when its tree semantics are unaffected by an inventory test.
+            let prior_tree = staged.tree().unwrap();
+            let tree = OwnedTreeNormalizationPolicy::bind_new(
+                prior_tree.input().content.clone(),
+                staged.assembled().registry(),
+                staged.assembled().schema(),
+                staged.mapping(),
+                policy,
+                Default::default(),
+            )
+            .unwrap();
+            let mut inverse = tree.input().clone();
+            inverse.normalization = prior_tree.input().normalization;
+            assert_eq!(&inverse, prior_tree.input());
+            let result = normalize_fresh(
                 &evidence,
                 *imported.allocator_state(),
                 NormalizationArtifacts {
@@ -101,13 +117,15 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
                     rewards: staged.rewards(),
                     items: staged.items(),
                     item_source: staged.item_source(),
-                    tree: staged.tree(),
+                    tree: Some(&tree),
                 },
                 policy,
                 queries,
                 Default::default(),
             )
-            .unwrap()
+            .unwrap();
+            assert_eq!(result.sidecar().tree_policy, Some(*tree.identity()));
+            result
         };
         let baseline = run(staged.normalization());
         for retained_control in [false, true] {
@@ -151,7 +169,18 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
                 dispositions,
             });
             let actual = run(&policy);
-            assert_unchanged(&baseline, &actual);
+            assert_eq!(baseline.draft(), actual.draft());
+            assert_eq!(baseline.allocator_after(), actual.allocator_after());
+            assert_eq!(baseline.sidecar().origins, actual.sidecar().origins);
+            let before = serde_json::to_value(baseline.sidecar()).unwrap();
+            let mut inverse = serde_json::to_value(actual.sidecar()).unwrap();
+            assert_ne!(inverse["policy"], before["policy"]);
+            assert_ne!(inverse["tree_policy"], before["tree_policy"]);
+            // Both policy/tree identities were independently checked above;
+            // preserve every other sidecar field in the exact inverse.
+            inverse["policy"] = before["policy"].clone();
+            inverse["tree_policy"] = before["tree_policy"].clone();
+            assert_eq!(before, inverse);
             assert!(completed(&actual).iter().all(|v| !*v));
             let repeated = run(&policy);
             assert_eq!(

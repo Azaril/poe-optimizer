@@ -79,6 +79,16 @@ fn charge(work: &mut usize, amount: usize, limits: NormalizationLimits) -> Resul
     Ok(())
 }
 
+// The shared limit is a logical work budget, not a CPU/comparison counter.
+// Charge actual maximum key width times logarithmic index-size units before
+// each operation. This is not an upper bound on std BTree's within-node key
+// comparisons. Finite collection/key limits and balanced indices bound those
+// operations; no source rows or receipt positions are merged.
+fn index_work(entries: usize, key_bytes: usize) -> usize {
+    let levels = usize::BITS as usize - entries.leading_zeros() as usize + 1;
+    key_bytes.saturating_add(1).saturating_mul(levels)
+}
+
 pub(super) fn compile<I: DefinitionSchemaIndex>(
     owner: &ConfigurationDispositionPolicy,
     policy: &NormalizationPolicy,
@@ -118,7 +128,29 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             }
         }
     }
+    charge(work, input.dispositions.len(), limits)?;
+    let mut dispositions = BTreeMap::new();
+    let mut disposition_width = 0usize;
+    for disposition in &input.dispositions {
+        disposition_width = disposition_width.max(disposition.source_control.as_str().len());
+        charge(
+            work,
+            index_work(dispositions.len(), disposition_width),
+            limits,
+        )?;
+        if dispositions
+            .insert(&disposition.source_control, disposition)
+            .is_some()
+        {
+            return Err(NormalizationError::Policy(
+                "configuration inventory destinations",
+            ));
+        }
+    }
     let mut ids = BTreeSet::new();
+    let mut id_width = 0usize;
+    let mut consumers = BTreeMap::new();
+    let mut consumer_width = 0usize;
     let mut controls: Vec<(
         ConfigurationInventoryControl,
         Vec<ConfigurationAdapterControl>,
@@ -133,6 +165,8 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                 .saturating_add(1),
             limits,
         )?;
+        id_width = id_width.max(row.id.as_str().len());
+        charge(work, index_work(ids.len(), id_width), limits)?;
         if !ids.insert(&row.id) || row.source_states.is_empty() || row.source_states.len() > 9 {
             return Err(NormalizationError::Policy(
                 "configuration inventory source control",
@@ -161,40 +195,32 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                 ));
             }
         }
-        // Charge comparisons before scanning the disposition list. The existing
-        // bounded IDs are compared in full, not counted as constant-time keys.
         charge(
             work,
-            input.dispositions.iter().fold(0usize, |n, d| {
-                n.saturating_add(d.source_control.as_str().len())
-                    .saturating_add(row.id.as_str().len())
-                    .saturating_add(1)
-            }),
+            index_work(
+                dispositions.len(),
+                disposition_width.max(row.id.as_str().len()),
+            ),
             limits,
         )?;
-        let mut matches = input
-            .dispositions
-            .iter()
-            .filter(|d| d.source_control == row.id);
-        let adapters = if let Some(disposition) = matches.next() {
-            if matches.next().is_some()
-                || disposition.adapters.is_empty()
+        let adapters = if let Some(disposition) = dispositions.remove(&row.id) {
+            if disposition.adapters.is_empty()
                 || disposition.adapters.len() > limits.value.max_selectors
             {
                 return Err(NormalizationError::Policy(
                     "configuration inventory destinations",
                 ));
             }
-            disposition.adapters.clone()
+            disposition.adapters.as_slice()
         } else if complete {
             return Err(NormalizationError::Policy(
                 "configuration inventory missing destination",
             ));
         } else {
-            Vec::new()
+            &[]
         };
         let mut unique = BTreeSet::new();
-        for adapter in &adapters {
+        for adapter in adapters {
             charge(
                 work,
                 serde_json::to_vec(adapter)
@@ -267,46 +293,28 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                     ));
                 }
             }
-            // Keep duplicate catalogue consumer identities distinct. One native
-            // receipt cannot stand in for two callbacks under different IDs.
-            for (old, destinations) in &controls {
-                let old: &ConfigurationInventoryControl = old;
-                charge(
-                    work,
-                    old.selector
-                        .as_ref()
-                        .map_or(1, |s| s.name.len().saturating_add(1))
-                        .saturating_add(
-                            destinations
-                                .iter()
-                                .fold(0usize, |n, d| n.saturating_add(adapter_size(d))),
-                        ),
-                    limits,
-                )?;
-                if old.selector == row.selector && destinations.contains(adapter) {
-                    return Err(NormalizationError::Policy(
-                        "configuration inventory duplicated consumer",
-                    ));
-                }
+            // Preserve exact selector/consumer equality across distinct source IDs.
+            consumer_width = consumer_width.max(selector_size(row.selector.as_ref()));
+            charge(work, index_work(consumers.len(), consumer_width), limits)?;
+            let (width, destinations) = consumers
+                .entry(row.selector.as_ref())
+                .or_insert_with(|| (0usize, BTreeSet::new()));
+            *width = (*width).max(adapter_size(adapter));
+            charge(work, index_work(destinations.len(), *width), limits)?;
+            if !destinations.insert(adapter) {
+                return Err(NormalizationError::Policy(
+                    "configuration inventory duplicated consumer",
+                ));
             }
         }
-        controls.push((row.clone(), adapters));
+        controls.push((row.clone(), adapters.to_vec()));
     }
-    for disposition in &input.dispositions {
-        charge(
-            work,
-            disposition
-                .source_control
-                .as_str()
-                .len()
-                .saturating_mul(census.controls.len().saturating_add(1)),
-            limits,
-        )?;
-        if !ids.contains(&disposition.source_control) {
-            return Err(NormalizationError::Policy(
-                "configuration inventory unknown source control",
-            ));
-        }
+    // Every removal required one exact, unique census ID. Any remaining entry
+    // names an unknown source control; a count-only match cannot consume it.
+    if !dispositions.is_empty() {
+        return Err(NormalizationError::Policy(
+            "configuration inventory unknown source control",
+        ));
     }
     Ok(Some(CompiledInventory { complete, controls }))
 }
@@ -376,6 +384,139 @@ fn adapter_size(adapter: &ConfigurationAdapterControl) -> usize {
     }
 }
 
+fn selector_size(selector: Option<&ValueSelector>) -> usize {
+    selector.map_or(1, |s| s.name.len().saturating_add(1))
+}
+
+// This is the same finite consumer relation used by prepare. Index values retain
+// every source/receipt position so ambiguity and unmatched records still refuse.
+fn match_receipts(
+    b: &mut Builder<'_, '_>,
+    scope: SourceOccurrenceId,
+    inventory: &CompiledInventory,
+    receipts: &[CheckedConfigurationReceipt],
+) -> Result<bool> {
+    if !inventory.complete {
+        return Ok(false);
+    }
+    let evidence = b.evidence;
+    let children = evidence.rows()[scope.ordinal() as usize].children();
+    b.charge(children.len())?;
+    let mut origins = BTreeMap::new();
+    let mut origin_width = 0usize;
+    for id in children {
+        let row = &evidence.rows()[id.ordinal() as usize];
+        source_shape::charge_row(b, row)?;
+        if let (Some(name), Some(lane)) = (
+            source_shape::value(row, "name"),
+            super::accounting::lane(row),
+        ) {
+            origin_width = origin_width.max(name.len().saturating_add(1));
+            b.charge(index_work(origins.len(), origin_width))?;
+            origins
+                .entry((lane, name))
+                .or_insert_with(Vec::new)
+                .push(*id);
+        }
+    }
+    b.charge(receipts.len().saturating_mul(2))?;
+    let mut by_consumer = BTreeMap::new();
+    let mut receipt_width = 0usize;
+    for (index, receipt) in receipts.iter().enumerate() {
+        receipt_width =
+            receipt_width.max(selector_size(receipt.selector.as_ref()).saturating_add(2));
+        b.charge(index_work(by_consumer.len(), receipt_width))?;
+        let (width, destinations) = by_consumer
+            .entry((receipt.scope, receipt.selector.as_ref(), receipt.origin))
+            .or_insert_with(|| (0usize, BTreeMap::new()));
+        *width = (*width).max(adapter_size(&receipt.control));
+        b.charge(index_work(destinations.len(), *width))?;
+        destinations
+            .entry(&receipt.control)
+            .or_insert_with(Vec::new)
+            .push(index);
+    }
+    let mut covered = vec![false; receipts.len()];
+    for (control, adapters) in &inventory.controls {
+        let expected_origin = if let Some(selector) = &control.selector {
+            b.charge(index_work(
+                origins.len(),
+                origin_width.max(selector.name.len().saturating_add(1)),
+            ))?;
+            match origins
+                .get(&(selector.lane, selector.name.as_str()))
+                .map(Vec::as_slice)
+            {
+                None => None,
+                Some([origin]) => Some(*origin),
+                Some(_) => return Ok(false),
+            }
+        } else {
+            None
+        };
+        for adapter in adapters {
+            let width = selector_size(control.selector.as_ref()).saturating_add(2);
+            b.charge(index_work(by_consumer.len(), receipt_width.max(width)))?;
+            let Some((adapter_width, destinations)) =
+                by_consumer.get(&(scope, control.selector.as_ref(), expected_origin))
+            else {
+                return Ok(false);
+            };
+            b.charge(index_work(
+                destinations.len(),
+                (*adapter_width).max(adapter_size(adapter)),
+            ))?;
+            let Some(indices) = destinations.get(adapter) else {
+                return Ok(false);
+            };
+            b.charge(
+                indices
+                    .len()
+                    .saturating_mul(control.source_states.len().saturating_add(1)),
+            )?;
+            let mut matches = indices.iter().copied().filter(|index| {
+                let receipt = &receipts[*index];
+                source_state_matches(receipt.source_state, receipt.origin)
+                    && control.source_states.contains(&receipt.source_state)
+            });
+            let Some(index) = matches.next() else {
+                return Ok(false);
+            };
+            if matches.next().is_some() || covered[index] {
+                return Ok(false);
+            }
+            if let Some(origin) = receipts[index].origin
+                && evidence.rows()[origin.ordinal() as usize]
+                    .occurrence()
+                    .parent()
+                    != Some(scope)
+            {
+                return Ok(false);
+            }
+            covered[index] = true;
+        }
+    }
+    b.charge(covered.len())?;
+    if covered.iter().any(|matched| !matched) {
+        return Ok(false);
+    }
+    // All indexed receipts have matched. Preserve the separate every-leaf proof.
+    let mut receipt_origins = BTreeSet::new();
+    for receipt in receipts {
+        b.charge(index_work(receipt_origins.len(), 1))?;
+        if let Some(origin) = receipt.origin {
+            receipt_origins.insert(origin);
+        }
+    }
+    for source in children {
+        b.charge(index_work(receipt_origins.len(), 1))?;
+        if !receipt_origins.contains(source) {
+            return Ok(false);
+        }
+    }
+    Ok(true)
+}
+
 pub(super) fn prepare(
     b: &mut Builder<'_, '_>,
     draft: &DraftSessionInput,
@@ -395,68 +536,7 @@ pub(super) fn prepare(
     } = authority;
     let evidence = b.evidence;
     let children = evidence.rows()[scope.ordinal() as usize].children();
-    b.charge(receipts.len())?;
-    let mut covered = vec![false; receipts.len()];
-    for (control, adapters) in &inventory.controls {
-        let expected_origin = if let Some(selector) = &control.selector {
-            b.charge(
-                children
-                    .len()
-                    .saturating_mul(selector.name.len().saturating_add(1)),
-            )?;
-            let mut matches = children.iter().filter(|id| {
-                let row = &evidence.rows()[id.ordinal() as usize];
-                source_shape::value(row, "name") == Some(selector.name.as_str())
-                    && super::accounting::lane(row) == Some(selector.lane)
-            });
-            let first = matches.next().copied();
-            if matches.next().is_some() {
-                return Ok(None);
-            }
-            first
-        } else {
-            None
-        };
-        for adapter in adapters {
-            let cost = control
-                .selector
-                .as_ref()
-                .map_or(1, |s| s.name.len().saturating_add(1))
-                .saturating_add(adapter_size(adapter));
-            b.charge(
-                receipts
-                    .len()
-                    .saturating_mul(cost.saturating_add(control.source_states.len())),
-            )?;
-            let mut matches = receipts.iter().enumerate().filter(|(_, receipt)| {
-                receipt.scope == scope
-                    && receipt.selector == control.selector
-                    && &receipt.control == adapter
-                    && receipt.origin == expected_origin
-                    && source_state_matches(receipt.source_state, receipt.origin)
-                    && control.source_states.contains(&receipt.source_state)
-            });
-            let Some((index, receipt)) = matches.next() else {
-                return Ok(None);
-            };
-            if matches.next().is_some() || covered[index] {
-                return Ok(None);
-            }
-            // Current-output checks were made by the actual producer in this
-            // same attempt; never derive them from a count or a provenance link.
-            if let Some(origin) = receipt.origin
-                && evidence.rows()[origin.ordinal() as usize]
-                    .occurrence()
-                    .parent()
-                    != Some(scope)
-            {
-                return Ok(None);
-            }
-            covered[index] = true;
-        }
-    }
-    b.charge(covered.len())?;
-    if covered.iter().any(|matched| !matched) {
+    if !match_receipts(b, scope, inventory, receipts.iter().as_slice())? {
         return Ok(None);
     }
     for source in children {
@@ -465,17 +545,10 @@ pub(super) fn prepare(
         if !matches!(row.occurrence().name(), "Input" | "Placeholder") {
             return Ok(None);
         }
-        b.charge(
-            receipts
-                .len()
-                .saturating_add(b.origins[source.ordinal() as usize].links.len()),
-        )?;
-        if !receipts
-            .iter()
-            .any(|receipt| receipt.origin == Some(*source))
-            || b.origins[source.ordinal() as usize]
-                .links
-                .contains(&OwnedOriginTarget::Issue(issue))
+        b.charge(b.origins[source.ordinal() as usize].links.len())?;
+        if b.origins[source.ordinal() as usize]
+            .links
+            .contains(&OwnedOriginTarget::Issue(issue))
         {
             return Ok(None);
         }
@@ -724,6 +797,9 @@ pub(super) fn commit(
     }
     Ok(())
 }
+
+#[cfg(test)]
+mod index_tests;
 
 #[cfg(test)]
 mod tests {

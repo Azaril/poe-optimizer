@@ -33,6 +33,18 @@ fn import_policy(a: &Artifacts, enabled: bool) -> NormalizationPolicy {
 }
 
 fn assert_only_import_changed(old: &NormalizedImport, next: &NormalizedImport, count: usize) {
+    // Real builds may select a newer profile through another enabled adapter.
+    // Toggling this family must preserve whichever profile the input selected.
+    let version = old.sidecar().schema_version;
+    assert_import_policy_delta(old, next, count, (version, version));
+}
+
+fn assert_import_policy_delta(
+    old: &NormalizedImport,
+    next: &NormalizedImport,
+    count: usize,
+    schema_versions: (u32, u32),
+) {
     assert_eq!(old.draft().input(), next.draft().input());
     assert_eq!(old.allocator_after(), next.allocator_after());
     let mut expected = old.sidecar().origins.clone();
@@ -58,12 +70,18 @@ fn assert_only_import_changed(old: &NormalizedImport, next: &NormalizedImport, c
     }
     assert_eq!(changed, count);
     assert_eq!(expected, next.sidecar().origins);
-    // The only whole-sidecar changes are the actual policy commitment and
+    // Enabling the presentation policy, even with every family disabled, selects
+    // its existing sidecar profile. Assert that exact transition rather than
+    // ignoring schema changes for all comparisons.
+    assert_eq!(old.sidecar().schema_version, schema_versions.0);
+    assert_eq!(next.sidecar().schema_version, schema_versions.1);
+    // Preserve every other field beyond the profile, policy commitment and
     // exactly the proven source-origin dispositions/links above.
     let before = serde_json::to_value(old.sidecar()).unwrap();
     let mut after = serde_json::to_value(next.sidecar()).unwrap();
     after["policy"] = before["policy"].clone();
     after["origins"] = before["origins"].clone();
+    after["schema_version"] = before["schema_version"].clone();
     assert_eq!(before, after);
 }
 
@@ -141,7 +159,7 @@ fn import_family_is_independent_and_absent_flag_grants_no_authority() {
     let input = wrap("<Import exportParty='false'/><Party destination='All'/><Notes/>");
     let old = normalize(&input, &a, &policy(), Default::default()).unwrap();
     let all_disabled = normalize(&input, &a, &disabled, Default::default()).unwrap();
-    assert_only_import_changed(&old, &all_disabled, 0);
+    assert_import_policy_delta(&old, &all_disabled, 0, (12, 18));
     let only_import = normalize(&input, &a, &import_policy(&a, true), Default::default()).unwrap();
     assert_only_import_changed(&all_disabled, &only_import, 1);
     assert_eq!(presentation_count(&only_import, "source-empty-party"), 0);

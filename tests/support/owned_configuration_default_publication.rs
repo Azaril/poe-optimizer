@@ -332,11 +332,15 @@ pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
             expectations,
         },
         0,
+        [106, 117, 109, 123, 4],
     );
 }
+/// Expected counts belong to the authenticated caller checkpoint.
+/// Whole prior/successor issue equality remains mandatory.
 pub fn run_typed_sources(
     spec: Publication<Vec<TypedSourceExpectations>>,
     expected_new_programs: usize,
+    expected_selected_issues: [usize; 5],
 ) {
     let inputs: Vec<Value> =
         crate::configuration_stage::inputs(read(spec.directory.join("input.json")))
@@ -551,7 +555,7 @@ pub fn run_typed_sources(
         assert_eq!(issues, before["finalization"]["issues"]);
         assert_eq!(
             issues.as_array().unwrap().len(),
-            [106, 117, 109, 123, 4][case - 1]
+            expected_selected_issues[case - 1]
         );
         let queries = format!("queries-original-{case:02}.json");
         assert_eq!(

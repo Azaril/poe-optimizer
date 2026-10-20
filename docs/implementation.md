@@ -9,41 +9,54 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Current Git backup:** `30e84063` is pushed to `main`; its full remote hash
-was verified equal to local HEAD. This October 20 checkpoint adds
-the tested positive-input seal repair, completed real-group and historical replay
-results, and updated resume notes. It is a work-in-progress backup,
-not a fully validated successor release. Ignored candidate/evidence files
-and the nine protected incoming-critical files remain local.
+**Remote backups preceding this checkpoint:** main `30e84063` and the separate
+32-file work-in-progress snapshot `03434e24` on `codex/backup-2026-10-20` were
+pushed and their full remote hashes verified. The latter deliberately captured
+unfinished tests before the owner's absence; the repairs and validation below
+supersede its resume notes. Ignored build outputs, candidate evidence and the
+nine protected incoming-critical files remain local.
 
-**Immediate backup checkpoint (October 20):** the current reviewed working tree
-is being saved separately on `codex/backup-2026-10-20` while `main` remains at
-`30e84063`. This includes the applied Water allocation, configuration inventory
-and Boolean transport, Import presentation, scoped lint repairs and these resume
-notes. It is deliberately an unfinished checkpoint: the latest public Import
-batch has 393 passing tests, two failures and one ignored test. The failures are
-the independent-set Boolean origin accounting expectation and the Import
-presentation disabled-policy sidecar schema expectation (12 versus 18). Preserve
-the full assertions while diagnosing both. The corrected Water publication
-harness compiles, but publication and the real configuration Partial gate have
-not run. Cargo is idle and no temporary publication hook remains installed.
-An indexed configuration census/receipt implementation is being prepared under
-ignored `runs/` to remove quadratic work without raising limits or relaxing
-validation; it is not applied or part of this checkpoint. Ignored build outputs,
-candidate evidence and the nine protected incoming-critical files remain local.
+**Work after that backup:** the Boolean failure was an overbroad test expectation:
+the fallback pass attaches all ConfigSet choice obligations to otherwise unknown
+leaves, so a local receipt must retain foreign obligations. The corrected test
+checks every such link and whole-origin equality; six new single-scope cases prove
+that false, true and constructor intent preserve values and remove only a proven
+leaf obligation. The Import test now checks the exact absent-policy 12 to
+present-policy 18 transition, while family toggles preserve the profile selected
+by other adapters (including real-build profile 19). All corrected cases now pass
+in the 722-test batch. No production acceptance check was weakened; earlier
+failed logs are retained.
+
+The reviewed configuration inventory index change is also applied. Exact
+disposition IDs, selector/consumer pairs and source/receipt positions now use
+bounded indices instead of repeated full scans. The shared two-million logical
+work limit and all ownership, duplicate, coverage and atomic-retirement checks
+remain. Five new private tests exercise 600 realistic control identities,
+populated Partial retention, late faults and exact budget boundaries. They are
+synthetic compiler/matcher tests, not proof of a complete real source catalogue.
+Retry `runs/owned-water-configuration-validation-03.ps1` passed the Import
+regressions and Water publication, then exposed the real-test binding omission
+described below; cleanup restored the temporary authoring hook. The two reviewed
+default-publication helper changes now accept explicit checkpoint issue counts;
+Repeat and physical-reduction-mode data are still ungenerated.
 
 **Validated data baseline:**
-`runs/owned-movement-penalty-publication-01/package`, input
-`c8705bf69798b7215053a95462ffb8e87dbc9ad36f4f52ed0df7be946609c300`.
-The movement successor preserves the validated Direct packet, all five originals
-and all 110 queries. Its full artifact rebuild and fresh import replays are
-byte-identical. All five Direct real-group control suites passed before this
-recipe-only successor, including Manual Direct and repaired Ice Nova/support
+`runs/owned-water-command-allocation-publication-01/package`, input
+`01a98fec169ab035f971f09f7290822436c2361e7a21abbf070fcbd3f9b39dec`.
+Release SHA-256 is
+`541781e6e1f8e0b6adbc7675cd279fcca7a4aed3d390efa6e100ad16872abfdb`,
+validation SHA-256
+`b64a11f82650e972cc832f29a3934be37dfc31b21ff223160c1ef0527ba3aaad`.
+Water adds Allocation authority to the exact Command grant without adding IDs or
+numerical rules. It preserves the movement and Direct packets, all five original
+draft bytes and all 110 queries. Full artifact rebuilds, checked sidecar inverses
+and fresh import replays pass. All five Direct real-group control suites passed
+before these recipe-only successors, including Manual Direct and repaired Ice Nova/support
 expansion. No selected
 Original05 input obligation has retired; the current five obligations and
 remaining native mechanics are detailed below.
 
-**Latest validation:** the Direct adapter and usage work-accounting correction
+**Earlier retained validation:** the Direct adapter and usage work-accounting correction
 pass 687 selected Import tests and strict all-target Import lint
 (`runs/owned-usage-actual-work-tests-02.log` and
 `runs/owned-usage-actual-work-clippy-01.log`). Earlier exact all-five preservation
@@ -76,9 +89,24 @@ authenticated seal and run its existing pin checks in the ordinary packet test.
 The full raw/semantic inverse preserves every other pin, source and assertion.
 Runtime reruns now verify the repair without changing any behavioral assertion.
 
-**Resume in this order:** validate the applied Water Command allocation packet,
-configuration inventory/Boolean transport and Import presentation family, then
-publish Water against the actual validated movement package. All five shared
+**Resume in this order:** finish scoped CLI gates, then generate a fresh
+Original05 CLI fixture from validated
+Water for the prepared Charm capacity consumer. The Import regression batch
+passes **722 tests** (241 library, 396 normalizer, 35 direct disposition,
+43 usage inventory and seven root admission; two explicit offline ignores),
+including all five 600-control inventory regressions and the Boolean/Import
+repairs (`runs/owned-configuration-import-tests-03.log`). Water publication passes
+in 32.99 seconds (`runs/owned-water-command-publication-01.log`). The subsequent
+real Partial gate failed before comparison because its test policy changed while
+the tree retained the predecessor policy commitment. The repair uses the existing
+checked tree binder and a whole-tree inverse permitting only that commitment,
+then checks all other draft/sidecar values exactly. Retry 02 passes against Water
+in 10.71 seconds (`runs/owned-configuration-inventory-real-controls-02.log`);
+the first failed evidence is retained. No production binding check was changed.
+Strict all-target Import Clippy passes after three test-initializer style repairs
+(`runs/owned-configuration-index-import-clippy-03.log`). The assertions and work
+limits are unchanged. Scoped formatting checks pass for all 30 affected Rust files.
+All five shared
 Engine helper targets pass: 63 tests
 (`runs/owned-movement-shared-engine-tests-01.log`). Scoped CLI and PoB lint now
 pass (`runs/owned-movement-replay-cli-clippy-03.log` and
@@ -103,11 +131,10 @@ prepared temporary publication harness is
 all before/after outputs and refuses validation if any import delta needs review.
 All four binder controls pass (`runs/owned-water-command-binder-tests-01.log`).
 The first temporary harness compilation found a moved-value error in its schema
-inverse assignment; harness 02 fixes that ownership error and compiles. The
-regression batch then stopped at the two failures recorded above in
-`runs/owned-configuration-import-tests-02.log`, before publication. Diagnose those
-failures and rerun the affected checks before the publication and real Partial
-gate. No Command numerical execution is claimed.
+inverse assignment; harness 02 fixes that ownership error. Import batch 03 and
+the actual publication now pass. The temporary hook was restored to its exact
+original bytes after the separate real Partial test failed. No Command numerical
+execution is claimed.
 Historical replay `04` now passes:
 two ordinary tests, one explicit offline ignore, 751.03 seconds
 (`runs/owned-extension-replay-04.log`). The test-only supplied-policy repair is
@@ -249,9 +276,10 @@ gaps preserved. The six remaining passive candidates require missing
 buff payloads or Command execution evidence.
 Candidate-bound source and special-branch admission remains blocking, as detailed
 below; no complete build is claimed.
-The latest validated Import package is
-`runs/owned-preset-usage-inventory-publication-07/package` (`32a6f01b…`), built
-from the construction cutover `b3b7c381…`. It preserves all five original outputs
+The latest validated package is the Water allocation successor
+`runs/owned-water-command-allocation-publication-01/package` (`01a98fec…`). Its Import
+inputs preserve Direct publication `32a6f01b…`, built from the construction
+cutover `b3b7c381…`. The Direct publication preserves all five original outputs
 except eight exact added count preferences, with all 110 queries and every other
 draft/sidecar/report value unchanged. The [checkpoint below](#source-construction-cutover-checkpoint-october-20)
 records the source-construction migration and subsequent usage gates.
@@ -3233,6 +3261,16 @@ and the browser tool could not initialize. No credentials were accessed and no
 protected allocation files were edited. The latest `f2680094` run was pending at
 that snapshot; no current hosted-green claim follows. Evidence is in
 `runs/ci-public-review-20261020-214103/`.
+
+The 23:20 UTC public snapshot is
+`runs/ci-public-review-20261020T231944Z/`. Main `30e84063` run `39509881623`
+remains pending with no jobs; prior `2b6179c8` was cancelled before jobs. The older
+`c84e66f3` run now has seven passes, five failures and six running jobs. The newly
+failed Ubuntu CLI3 shard reports the historical membership-fixture binding and
+movement readiness failures already repaired locally; full replay `04` and all
+five movement native controls pass. No new failure class was found. No credentials,
+workflow changes or manual cancellation were used, and hosted green remains
+unverified.
 
 The subsequent local allocation reproduction authenticated 34 inputs and ran the
 existing offline exporter twice. Both runs produced identical rules and exactly

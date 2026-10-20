@@ -255,6 +255,7 @@ fn publish_critical_weakness_activation_preserving_all_five_originals() {
             expectations: expectations(),
         },
         1,
+        [106, 117, 109, 123, 4],
     );
     // Matching duplicates must remain unresolved too. Agreeing false values
     // are still two saved records, rather than evidence of an absent checkbox.
