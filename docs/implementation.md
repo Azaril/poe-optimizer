@@ -9,14 +9,40 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Current checkpoint:** generated-skill literal enabled fields now have checked
-Import accounting, retaining their separate typed participation consumers.
-Publication and all-five preservation checks pass. Original05 Sniper
-remains the priority build. Selected input issues remain **123/137/127/144/5**,
-and **0/5 builds have complete native evaluation**. This checkpoint follows
-verified remote baseline `6de7a46f` (intrinsic and reporting field accounting).
+**Current checkpoint:** the existing Import role artifact now requires the full
+reverse-primary catalog census. Rust artifact authoring, 558 Import checks, four
+source-component checks, 52 ordinary CLI checks, the all-five publication gate
+and scoped strict Clippy pass. Original05 Sniper remains the priority build.
+Validated selected input counts remain
+**123/137/127/144/5**, and **0/5 builds have complete native evaluation**. This
+checkpoint follows verified remote baseline `32d48986` (generated enabled-field
+accounting). The census migration preserves those counts and all whole outputs.
 Finish this build before expanding coverage; begin optimizer integration once
 one unchanged build passes complete native/reference validation.
+
+The required `reverse_primary` observation covers all 1,436 actual Skills and
+joins their candidates to the existing 966 Gem rows. Explicit unavailable,
+observed zero, unique and ambiguous routes remain distinct. Local loading checks
+bounded identities and row consistency; offline publication independently
+reproduces the entire injected catalog. Canonical ordering never chooses a
+winner from PoB's unordered lookup. Both maintained seeds and their two dependent
+receipt hashes are rebuilt, with no native schema/rule change or old-format reader.
+The [checkpoint evidence](evidence/reverse-primary-census/README.md) records the
+executed Rust authorers, exact inverses and validation status.
+
+The first catalog run exposed Serde's acceptance of extra fields on an internally
+tagged unit variant (34 passed, one failed). Using an empty struct variant for
+`Unavailable {}` preserves its intended JSON while making strict unknown-field
+rejection effective. The same strict test now passes in the 42-test catalog and
+extension batch. The 516-test dependent Import batch passes with one pre-existing
+offline test ignored. This is a wire-validation fix, not a relaxed test.
+
+The first source run passed three controls and failed before the saved-dispatch
+assertions because the isolated `round` helper lacked its original local
+`math.floor` alias. Restoring that lexical context leaves every authenticated
+source span and test assertion unchanged; all four source controls now pass.
+Both failed logs are retained. Source execution remains optional PoB evidence,
+not native authority or whole-build numerical parity.
 
 The five Flask owner gaps and all ten Partial template owners remain open.
 Direct delivery does not account for late grouped slot copies, and the new
@@ -62,25 +88,24 @@ comparisons remain exact, without tolerance or live-output rewriting. New toolin
 and evidence generators use Rust, including ignored one-off authorers; the later
 web/desktop UI comparison does not add a frontend dependency now.
 
-**Next closest-build blocker:** establish the source construction and matching
-facts required by the remaining generated usage consumers. Keep group
-mainActiveSkill/mainActiveSkillCalcs and Gem count/enableGlobal2 Deferred.
-Current Firebolt role0778 records an additional stat set, not an additional
-Skill, and its observed row alone does not prove the absence of other reverse
-catalog candidates. Retain the existing alias counterexample; inspect full
-offline catalog facts before claiming unique source dispatch or transferring
-physical-Gem selector proofs to generated sources. The full pinned catalog audit
-finds unique primary routes for Firebolt and both Djinn summons, and no primary
-routes for their Command effects. A structurally valid subset cannot prove that
-census. Next implement the compiler-derived reverse-primary observation in the
-existing Import artifact, with explicit unavailable/absent/ambiguous cases and
-independent full-catalog reproduction. Rebuild current artifacts and dependent
-commitments in place, with no compatibility path or native schema change. See the
-[construction follow-up](owned-source-effect-construction-proposal.md#generated-reverse-lookup-follow-up-october-21).
-Only then consume those facts in exact-source adapters; preserve both Djinn
-effects and every independent usage consumer. Discuss significant deviations
-from the accepted Import-only construction boundary before implementing them.
-The Djinn rows, independent consumers and usage issue051b remain Pending.
+**Next closest-build blocker:** after the census gates pass, consume those facts
+in the existing exact-source generated adapters. Start with group
+`mainActiveSkill`/`mainActiveSkillCalcs` on the live Firebolt source: join its exact
+current receipt and provider to a unique observed reverse candidate and a checked
+singleton construction. Accept only the reviewed present literal `nil`/`1`
+selectors. Preserve the independent secondary-switch and typed count consumers;
+they need their own proofs even when they share this construction predicate.
+Current Firebolt role0778 has an extra stat set, not an additional Skill. Both
+Djinn summons retain their actual Command effects and cannot borrow singleton
+reasoning. The table-keyed saved/generated dispatcher and string-keyed bare
+processing fallback are different source paths; source-component evidence does
+not grant native authority. Unknown, zero, ambiguous, stale or incomplete inputs
+remain Pending. Keep the Sol Pole alternative unresolved. The bounded
+[adapter resume guidance](evidence/reverse-primary-census/next-adapter-guidance.md) records
+the exact conditions and refusal tests; the
+[construction follow-up](owned-source-effect-construction-proposal.md#generated-reverse-lookup-follow-up-october-21)
+retains the accepted boundary. No new native/public model is required for this
+step. The four live Deferred fields, Djinn rows and usage issue051b remain Pending.
 
 The next bounded audit is `runs/grouped-slot-copy-guidance-20261021/README.md`.
 It identifies the earliest missing authority as a late slot-percentage supplier
@@ -104,22 +129,27 @@ for a whole build. The retained failure was a fixture assumption, not a source
 defect or nondeterministic calculation. Native Mystic Attunement still emits only
 the earlier Amulet percentage; its missing Ring outputs remain later data work.
 
-Current validated package: `runs/owned-generated-enabled-publication-01/package`,
-input `348f0c7588e915f7b7ea6c2de9b1d2ce5089ebdb4393f5822ed818537a4c7560`;
-release SHA-256 `860994818079984781b93c742a16351819601be0693aa89796049cec7ba244bf`;
-validation SHA-256 `ce23983ca89dbdb744c8b7013d0c8220e10f8a87a2ae5669a3d3497e0f5d3a28`.
-Only the normalization policy and its dependent commitments, tree-policy
-commitment and release provenance change from predecessor `6f58eba0`;
-numerical rules and all 110 query rows are
-identical. All five whole drafts, allocators, selections and finalization issues
-are preserved. Fresh CLI replays agree, and all 18 package files rebuild
-byte-for-byte. Six Import unit tests, thirteen Import integration tests, 24 PoB
-source-component tests, nine ordinary CLI tests, the all-five publication test
-and scoped Import/PoB/CLI strict Clippy pass. Seven explicit publication tests
-remain ignored in the ordinary CLI target. No selected input issue
-retired; the original-five build status remains 0/5 complete. The
-[generated enabled checkpoint](evidence/generated-enabled-fields/README.md)
-retains the exact receipt, hashes, limits and preservation results. The
+Current validated package: `runs/owned-reverse-primary-cutover-01/package`,
+input `a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905`;
+release SHA-256 `46f233e58f7449f789a93e0b9d589892b4883fe40dbff672954aa6af22faa538`;
+publication validation SHA-256
+`fe23ed9f1593f61f657893c59a722cbcedf20d27dbd41cc5ad438c0d8e39ea2a`.
+The exact predecessor is the generated enabled-field package `348f0c75`.
+Only four package files change:
+roles, normalization, tree-normalization and release. The gate authenticates
+exactly twenty dependent digest leaves and leaves scalar-input commitments
+unchanged. All five whole drafts, sidecars (apart from their authenticated
+commitments), allocators, selections and complete selected diagnostics are
+preserved. Fresh CLI replays agree; all 110 query rows and native rules are
+identical, and all eighteen package files rebuild byte-for-byte. The 615 checks
+above pass, plus both one-off Rust authoring executions. The ordinary batches
+report one ignored Import test and three ignored CLI tests; this checkpoint's
+all-five gate is run explicitly and passes. No selected input issue retires;
+the original-five build status remains 0/5 complete. The
+[reverse-primary checkpoint](evidence/reverse-primary-census/README.md) retains
+the exact receipts, executed logs, source-host correction and resume guidance.
+The [generated enabled predecessor](evidence/generated-enabled-fields/README.md)
+retains its earlier receipts and preserved participation consumers. The
 [earlier generated field checkpoint](evidence/generated-firebolt-dispositions/README.md)
 is historical evidence. Its
 [Import preference predecessor](evidence/source-import-preferences/README.md)
@@ -885,9 +915,11 @@ positive and refusal controls. The primary-completion cleanup also passes its
 producer/liveness tests and exact comparison with saved pre-change outputs.
 The Pain Offering/Frost Bomb count data passes its full scoped gates.
 The four skeletal rows now also pass publication and all 31 real-group controls.
-Continue with authored Direct Djinn selectors/absent manual source, then generated
-routing and the remaining configuration/default accounting. The generated
-reverse-catalog proposal remains a separate unresolved decision.
+The later Direct Djinn selector/absent-source work supersedes this checkpoint's
+next-step instruction. Generated routing now uses the accepted Import-only
+construction boundary; its required census is implemented in the current
+checkpoint above. Exact-source adapters and configuration/default accounting
+remain incomplete.
 This does not close numerical coverage or any original's inventory.
 At the Actor migration checkpoint, the package and portable replay rebuilt
 successfully. Exact inverses authenticated the prior artifacts and allowed only
@@ -2468,8 +2500,9 @@ Their remaining private gaps are group-selector accounting and exact absent
 manual-source accounting. The source-selection proof must first cover the
 two-effect ordering and late-hidden-primary boundary; do not infer it from a
 catalog role. The bounded investigation is
-`runs/manual-direct-selector-priority-20261020/`. Generated reverse-catalog routing
-remains a separate public proposal and is not authorized by this Direct scope.
+`runs/manual-direct-selector-priority-20261020/`. That Direct scope did not
+authorize generated routing. The later accepted Import-only construction
+follow-up and current census checkpoint above now govern that separate work.
 Four source-component tests for that boundary are now applied to the existing
 `owned_preset_reference_selection_source` target. All ten tests in that target
 pass in `runs/owned-manual-direct-selector-source-tests-01.log`; scoped lint

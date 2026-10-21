@@ -21,6 +21,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 mod source_construction;
 pub use source_construction::*;
+mod reverse_primary;
+pub use reverse_primary::*;
 
 pub const OWNED_SKILL_ROLE_VERSION: u32 = 1;
 
@@ -68,6 +70,8 @@ pub enum SkillCatalogError {
     SchemaConflict,
     #[error("owned source construction facts are inconsistent with their bound identities")]
     ConstructionMismatch,
+    #[error("owned reverse primary routes are inconsistent with their bound identities")]
+    ReversePrimaryMismatch,
     #[error("owned role rows do not reproduce the authenticated source catalog")]
     ReproductionMismatch,
     #[error("existing selector has no unambiguous reusable identity: {0:?}")]
@@ -156,6 +160,7 @@ pub struct FreshOwnedSkillCatalog {
     pub definitions: Vec<DefinitionDescriptor>,
     pub mappings: Vec<MappingEntry>,
     pub roles: Vec<OwnedGemRoleRow>,
+    pub reverse_primary: OwnedReversePrimaryCensus,
     pub receipt: SkillCatalogReceipt,
 }
 
@@ -168,6 +173,7 @@ pub struct OwnedSkillCatalogExtension {
     pub slots: Vec<SlotDescriptor>,
     pub mappings: Vec<MappingEntry>,
     pub roles: Vec<OwnedGemRoleRow>,
+    pub reverse_primary: OwnedReversePrimaryCensus,
     pub receipt: SkillCatalogReceipt,
     pub counts: SkillCatalogExtensionCounts,
 }
@@ -362,6 +368,7 @@ pub fn compile_owned_skill_catalog_extension(
             mapping: *final_mappings.identity(),
             compilation: output.receipt.clone(),
             roles: output.roles.clone(),
+            reverse_primary: output.reverse_primary.clone(),
         },
         &final_mappings,
         &schema,
@@ -376,6 +383,7 @@ pub fn compile_owned_skill_catalog_extension(
             &slots,
             &output.mappings,
             &output.roles,
+            &output.reverse_primary,
             &output.receipt,
             counts,
         ),
@@ -387,6 +395,7 @@ pub fn compile_owned_skill_catalog_extension(
         slots,
         mappings: output.mappings,
         roles: output.roles,
+        reverse_primary: output.reverse_primary,
         receipt: output.receipt,
         counts,
     })
@@ -596,6 +605,7 @@ fn compile_catalog(
         };
         mappings.push(MappingEntry { source, outcome });
     }
+    let reverse_primary = reverse_primary::derive(catalog, &skills, &roles, &mut budget)?;
     // A cloned registry retains its construction limits; the caller may have
     // supplied tighter limits for this append operation. Recheck the full result.
     registry.validate_limits(limits.mapping)?;
@@ -614,7 +624,7 @@ fn compile_catalog(
     // Bound the combined staged output before returning any allocation authority.
     digest_owned(
         "owned-fresh-skill-output-v1",
-        &(&definitions, &mappings, &roles, &receipt),
+        &(&definitions, &mappings, &roles, &reverse_primary, &receipt),
         limits.mapping.max_wire_bytes,
     )?;
     Ok(CatalogCompilation {
@@ -623,6 +633,7 @@ fn compile_catalog(
             definitions,
             mappings,
             roles,
+            reverse_primary,
             receipt,
         },
         counts,
@@ -690,6 +701,9 @@ pub struct OwnedSkillRolePackageInput {
     pub mapping: OwnedContentDigest,
     pub compilation: SkillCatalogReceipt,
     pub roles: Vec<OwnedGemRoleRow>,
+    /// Complete compiler observation or explicit unavailability; never inferred
+    /// from the surviving role rows or from a whole-catalog digest alone.
+    pub reverse_primary: OwnedReversePrimaryCensus,
 }
 /// Immutable import-only role evidence. No source catalog or evaluator is retained.
 #[derive(Clone, Debug)]
@@ -749,6 +763,13 @@ impl OwnedSkillRoleIndex {
         budget.collection("role rows", input.roles.len())?;
         for row in &input.roles {
             source_construction::preflight(&row.construction, &mut budget)?;
+        }
+        reverse_primary::preflight(&input.reverse_primary, &mut budget)?;
+        if matches!(
+            input.reverse_primary,
+            OwnedReversePrimaryCensus::Observed { .. }
+        ) {
+            budget.collection("reverse primary role joins", input.roles.len())?;
         }
         input.roles.sort_by(|a, b| a.gem.cmp(&b.gem));
         let mut positions = BTreeMap::new();
@@ -834,6 +855,14 @@ impl OwnedSkillRoleIndex {
             }
             source_construction::validate(row, mappings, definitions, &mut construction_keys)?;
         }
+        reverse_primary::validate(
+            &mut input.reverse_primary,
+            &input.roles,
+            &positions,
+            input.compilation.skill_count,
+            mappings,
+            definitions,
+        )?;
         let identity = digest_owned(
             "owned-skill-role-package-v1",
             &input,
@@ -859,5 +888,15 @@ impl OwnedSkillRoleIndex {
     /// outcomes. A successful identity lookup still requires a separate role lookup.
     pub fn lookup(&self, source: &ExternalSelector) -> Option<&MappingOutcome> {
         self.sources.get(source)
+    }
+    /// Exact source Skill lookup. Unobserved or mismatched identities remain
+    /// unavailable; only an observed empty candidate list establishes absence.
+    /// Structural loading does not replace offline full-catalog reproduction.
+    pub fn reverse_primary(
+        &self,
+        effect_id: &str,
+        skill: &SkillDefId,
+    ) -> OwnedReversePrimaryLookup<'_> {
+        reverse_primary::lookup(&self.input.reverse_primary, effect_id, skill)
     }
 }

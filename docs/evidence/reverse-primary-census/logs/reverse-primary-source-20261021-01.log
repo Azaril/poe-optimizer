@@ -1,0 +1,36 @@
+   Compiling poe-optimizer-import v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-import)
+   Compiling poe-optimizer-pob v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-pob)
+warning: unused import: `Function`
+ --> crates\poe-optimizer-pob\tests\owned_generated_source_dispatch_source.rs:8:12
+  |
+8 | use mlua::{Function, Lua, Table, Value};
+  |            ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: linker stdout: LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: `poe-optimizer-pob` (test "owned_generated_source_dispatch_source") generated 2 warnings (run `cargo fix --test "owned_generated_source_dispatch_source" -p poe-optimizer-pob` to apply 1 suggestion)
+    Finished `test` profile [optimized] target(s) in 4m 25s
+     Running tests\owned_generated_source_dispatch_source.rs (target\debug\deps\owned_generated_source_dispatch_source-f0da128347596509.exe)
+
+running 4 tests
+
+thread 'actual_loaders_distinguish_table_reverse_dispatch_explicit_gem_and_bare_string_fallback' (15972) panicked at crates\poe-optimizer-pob\tests\owned_generated_source_dispatch_source.rs:463:20:
+called `Result::unwrap()` on an `Err` value: RuntimeError("...-pob\\tests\\owned_generated_source_dispatch_source.rs:194:5: attempt to call global 'm_floor' (a nil value)\nstack traceback:\n\t[C]: in global 'm_floor'\n\t...-pob\\tests\\owned_generated_source_dispatch_source.rs:194:5: in function 'round'\n\tauthenticated-saved-and-generated-dispatch-functions:27: in function 'calcLib.getGemStatRequirement'\n\tauthenticated-saved-and-generated-dispatch-functions:107: in function 'SkillsTabClass.ProcessSocketGroup'\n\tauthenticated-saved-and-generated-dispatch-functions:213: in function 'SkillsTabClass.LoadSkill'\n\texplicit-dispatch-component-host:11: in function 'loadDispatch'\n\t...-pob\\tests\\owned_generated_source_dispatch_source.rs:426:9: in main chunk")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test actual_loaders_distinguish_table_reverse_dispatch_explicit_gem_and_bare_string_fallback ... FAILED
+test complete_zero_candidate_commands_take_direct_route_but_deleted_map_is_not_absence_evidence ... ok
+test alias_constructor_orders_and_display_reordering_do_not_change_primary_candidate_meaning ... ok
+test complete_catalog_object_census_keeps_zero_one_and_multiple_primary_candidates_distinct ... ok
+
+failures:
+
+failures:
+    actual_loaders_distinguish_table_reverse_dispatch_explicit_gem_and_bare_string_fallback
+
+test result: FAILED. 3 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.52s
+
+error: test failed, to rerun pass `-p poe-optimizer-pob --test owned_generated_source_dispatch_source`

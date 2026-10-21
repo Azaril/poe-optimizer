@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "scope": "source-host-repair-and-retained-failure",
+  "status": "runtime-retry-pending",
+  "original_source_manifest_sha256": "1ce825fae3a32776205733d75f35150f0d512ecbfec2af2ffd7fa804e400304b",
+  "files": [
+    {
+      "source": "runs/generated-source-dispatch-host-repair-20261021/manifest.json",
+      "file": "source-host-repair/manifest.json",
+      "bytes": 1310,
+      "sha256": "c914f6d62cce42de1bcb597ffaca31585dc142c257713f355e5ae003898ac28d"
+    },
+    {
+      "source": "runs/generated-source-dispatch-host-repair-20261021/before.rs",
+      "file": "source-host-repair/before.rs",
+      "bytes": 23135,
+      "sha256": "619ab58d618a4f0df0fb189191a5440c4b772b8f310514c329c6f7bb5437086d"
+    },
+    {
+      "source": "runs/reverse-primary-source-20261021-01.log",
+      "file": "logs/reverse-primary-source-20261021-01.log",
+      "bytes": 2868,
+      "sha256": "ad077d30ebabb0e5c2fd3b6e8bdc35110c1708ab31f448c9e5b36e5358421ab6"
+    }
+  ]
+}

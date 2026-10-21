@@ -1,4 +1,4 @@
-//! Authenticate retained old bytes, then compare full current outputs.
+//! Authenticate the reverse-primary cutover, then compare full current outputs.
 //! Historical policy bytes are evidence, never deserialized as an old runtime API.
 use crate::{preservation, selected};
 use poe_optimizer_core::{
@@ -10,111 +10,118 @@ use poe_optimizer_import::{
     owned_catalog_recipe::{StagedCatalogRecipe, extend_owned_catalog_recipe},
     owned_normalize::NormalizationLimits,
     owned_release::StagedOwnedRelease,
-    owned_skill_catalog::verify_owned_skill_catalog_reproduction,
+    owned_skill_catalog::{
+        OwnedReversePrimaryCensus, OwnedSkillRoleIndex, SkillCatalogError,
+        verify_owned_skill_catalog_reproduction,
+    },
 };
 use serde::Serialize;
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeSet, fs, path::Path};
 
-pub const PRIOR_INPUT: &str = "a0176def7e3666006faa1b95f08709e81b745e15318024fe63dc147aeeb1693f";
-const PRIOR_RELEASE_SHA: &str = "238286b791a2657f63f8d43e51b49e16dc88af4e6e30ca4846c65cf38a5b35c1";
-const PRIOR_ENDPOINT_SHA: &str = "afa4244767b0445dd61cb98acf3da008ba6608d4e599f99532a2eeba65f53937";
+pub const PRIOR_INPUT: &str = "348f0c7588e915f7b7ea6c2de9b1d2ce5089ebdb4393f5822ed818537a4c7560";
+const PRIOR_RELEASE_SHA: &str = "860994818079984781b93c742a16351819601be0693aa89796049cec7ba244bf";
+const PRIOR_ENDPOINT_SHA: &str = "ee20e4b2255de4b2ba092c7127a8816e821836e47e44839d43f6d743695d5dba";
 const CATALOG_SHA: &str = "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e";
 const COMPILED_PRIOR_TRANSITION_SHA: &str =
-    "3c736dcb95a776a1049bc4f25b259a73214872ee777d5dd3179059252fbad108";
-const SELECTED: [usize; 5] = [107, 118, 110, 124, 5];
-// Independently retained stage-publication outputs: draft, sidecar, normalize
-// report and selected-request report. No regeneration of old observations.
+    "5ca97989545ed0ef5441d580dca09d9f6bf9dbe39531ee9f59f2b14b780093a0";
+const SELECTED: [usize; 5] = [123, 137, 127, 144, 5];
+const BASELINE_DIRECTORY: &str = "runs/reverse-primary-baseline-20261021";
+const BASELINE_RECEIPT_SHA: &str =
+    "9f5473d37d7e20564cf20879e28b1bd2a8d610c79c356e8b5ef4d5fc86d30ed7";
+// The first three are immutable prior-publication outputs: draft, sidecar and
+// normalization report. The fourth is independently captured by the pinned old
+// CLI in BASELINE_DIRECTORY; prior selection files are requests, not reports.
 const SAVED: [[(&str, usize); 4]; 5] = [
     [
         (
-            "717559b9faa8cde1c6683607af557793dee99cd82be3286007bcc610b9e84995",
-            413581,
+            "63ffda2d05cda6ddadba9bc3c44ebb7211013d4756191ae577388f0423eff2e0",
+            417229,
         ),
         (
-            "a2d46684fd306658951f7f876ad139dd85e0babd17f6fa5b38f6a4f6e3357435",
-            462292,
+            "a177a8c276c7362149b305cb913a926197b7f4e24d6ff7b52effea7fa4c4f5c0",
+            463818,
         ),
         (
-            "5780afd3f679d2df09e81b3eb02a86b73cf2ed4c399e89d62acf747154f0fee4",
-            2657,
+            "0a8b097bf338d7a651915e76d7a12c7410c644c2d105b54ad2f2165e43028aff",
+            2729,
         ),
         (
-            "ed2855ed9519b05ac59303d66e01296593b2053fa4af8ca0c1f6e2b7d3083b11",
-            121938,
-        ),
-    ],
-    [
-        (
-            "80cff2915e42a9bbac8d5a935b7a85c19c51258f236d9dfb57671dbf52e200da",
-            1057876,
-        ),
-        (
-            "a485561d4dedf03e7e6b7ff26bf20259551e1c0b15a0ade41c89040c0949a5a5",
-            986703,
-        ),
-        (
-            "69fee5a2b2ca0a878ec3e784b7c91733bcd5322a20f6d5a86435daeffc21b073",
-            2590,
-        ),
-        (
-            "41ded7630c124289f1120921a69a7930c657c03dd287c8599a9bacbf3671272c",
-            199463,
+            "83b9514baa93776eaa24bc2b53b6bf8ad0b8cea313aa8fd09224670c4e9aca4f",
+            225473,
         ),
     ],
     [
         (
-            "4318dba74cad31338e45fa7695fe2267748df47827da0ba04e0b70a4782bdd24",
-            379862,
+            "b2d441e7da82e4e44eb4e45d945e42d0264dcaa1ae301f757bb13c7055969465",
+            1065628,
         ),
         (
-            "a6a282618742d458db91914d86b460bfeb4db749f4a19833689a91b64a2b4e35",
-            470445,
+            "d7860003ab536f9b9b66a99eb2f19262a261550347714477b534893162e79ed0",
+            990011,
         ),
         (
-            "a36dd9a0045c4ec32993ae9136ea59c78f77e768f2c357f899144ca5328f1bba",
-            2573,
+            "84d5c8e7a36eae8d696913cec620dd50658cbc0dc5a2a647375a0621f0db47f6",
+            2662,
         ),
         (
-            "2fee64bb44b876a671da2f88795012aad2c248f6fb603c6753336d57fcf13d3f",
-            125135,
-        ),
-    ],
-    [
-        (
-            "3406864e151aef07ab5017c8754c88a8f8411944cfcb384831147d61710d1beb",
-            476541,
-        ),
-        (
-            "7e7aceff4956205056544d2830f0b20190f114cd467260ce548e2a93ed233911",
-            539149,
-        ),
-        (
-            "6bc06235f86d5c5622732ca4e83f65cf37caec19ef70e1230deaef004f55a0b4",
-            2573,
-        ),
-        (
-            "038e42975cdf9bd28b808d6aecf5884c6afd6a0f0fbd9f850c74f05db615544d",
-            137891,
+            "2fcb12d584a084bfa642bd2f47c3ea8faddd771b02f0cbb9f71ca1ac5db8cc62",
+            363746,
         ),
     ],
     [
         (
-            "5ad48f8026d22f98cc4c1134a9c63bae89100b617eccf1b21d10ae2e4d95ed90",
-            1247908,
+            "cb3e75143b058f275bc1ec7986428195108dfc70babe5a19cf808fe42cdb4748",
+            383738,
         ),
         (
-            "42cfaa5a9ee617bde46c4e6b6fbd8ce6a819fdad445190e7e73d65fe641ae832",
-            953217,
+            "628f1cb3716417b59ada043fea12f6d0968d18c1c2559cd58cfff21082f48444",
+            472070,
         ),
         (
-            "4c5feadaea47b7177470f6e846829d1ec37aa58b95ba94d86ef1724611e835eb",
-            2529,
+            "f847d9d8c597ca038ac248c095484ecd477536aa69eb9a58bbce6b3311e5b8c3",
+            2645,
         ),
         (
-            "764f7fd0a33ebed8ba19e1a6c0a8d9f3f3a579e20e00ca8bd662859fdfb4928b",
-            91124,
+            "2a827863705a1defc7c3fe19984e89569d16a1e67a8ab3be7611736e7d33b133",
+            232288,
+        ),
+    ],
+    [
+        (
+            "624a6b2efe2295e2dfa2ed432ae5a0b6bb8b2aade85a713e6d85275791ac5279",
+            482449,
+        ),
+        (
+            "f41fa6cf7f054bf7d5d65ca5db46a4355157f2c8fb693d46959a6568c8085bf3",
+            541071,
+        ),
+        (
+            "9458051f51872f865d86b943862038d6a4d25e99540af8dd6fb4d92a8908e888",
+            2645,
+        ),
+        (
+            "9a89dcd28a640e0623ac9ca825147d86c2189356b9d72c277abfb466025055af",
+            256561,
+        ),
+    ],
+    [
+        (
+            "2e13d612d308e2e919e3c400c8a03962e86abc9d6aad15cc836d44e2898d3dfe",
+            1262415,
+        ),
+        (
+            "bdd562f4e3e2bd236364ec97f26f01e05437be1b7c9d997dfd1efd5aa93a7d1f",
+            955139,
+        ),
+        (
+            "aa0408b9f77248e239f1e203aa595b92dbbd2e912fb12b0de52668e35794c2a6",
+            2601,
+        ),
+        (
+            "50a3bec8e9dd2eb422a9b2501d7a13edc25ff79b35a5095304b8291a12e5a5fc",
+            179678,
         ),
     ],
 ];
@@ -259,7 +266,7 @@ fn checked_authoring(
         "cutover authority must identify the reproduced compiler roles"
     );
     let authoring = digest_owned(
-        "owned-import-construction-cutover-v1",
+        "owned-import-reverse-primary-cutover-v1",
         &(PRIOR_INPUT, CATALOG_SHA, compiled_roles, changes),
         4 * 1024 * 1024,
     )
@@ -269,7 +276,7 @@ fn checked_authoring(
 }
 
 #[test]
-fn cutover_rejects_substituted_roles_even_with_self_consistent_authoring() {
+fn cutover_rejects_unavailable_reverse_census_even_with_self_consistent_authoring() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR"));
     let catalog = source_catalog(root);
     let compiled = reproduce_compiled_roles(root, &catalog);
@@ -281,7 +288,7 @@ fn cutover_rejects_substituted_roles_even_with_self_consistent_authoring() {
         json!({
             "compiled_roles":roles,
             "authoring":digest_owned(
-                "owned-import-construction-cutover-v1",
+                "owned-import-reverse-primary-cutover-v1",
                 &(PRIOR_INPUT,CATALOG_SHA,roles,&changes),
                 4*1024*1024
             ).unwrap()
@@ -296,17 +303,28 @@ fn cutover_rejects_substituted_roles_even_with_self_consistent_authoring() {
         )),
         honest["authoring"]
     );
-    let unrelated = digest_owned(
-        "unrelated-test-role-authority",
-        &"syntactically valid but not this compiler output",
-        1024,
+    let mut unavailable = compiled.roles().input().clone();
+    unavailable.reverse_primary = OwnedReversePrimaryCensus::Unavailable {};
+    let unavailable = OwnedSkillRoleIndex::new(
+        unavailable,
+        compiled.mapping(),
+        compiled.assembled().schema(),
+        Default::default(),
     )
     .unwrap();
-    assert_ne!(&unrelated, compiled.roles().identity());
-    let forged = make_proof(unrelated);
-    // Recomputing both caller-controlled commitments was sufficient before
-    // this repair. The same source reproduction now anchors the positive and
-    // refusal paths independently of either value supplied by the caller.
+    assert!(matches!(
+        verify_owned_skill_catalog_reproduction(
+            &catalog,
+            &unavailable,
+            compiled.mapping(),
+            Default::default(),
+        ),
+        Err(SkillCatalogError::ReproductionMismatch)
+    ));
+    assert_ne!(unavailable.identity(), compiled.roles().identity());
+    let forged = make_proof(*unavailable.identity());
+    // A valid structural artifact and freshly recomputed caller authoring hash
+    // still cannot replace the independently reproduced full catalog census.
     assert!(
         std::panic::catch_unwind(|| {
             checked_authoring(&forged, compiled.roles().identity(), &changes)
@@ -362,10 +380,13 @@ pub fn authenticate_cutover(prior: &Path, candidate: &Path, next: &StagedOwnedRe
     }
     let mut role_inverse = read(package.join("roles.json"));
     assert_eq!(role_inverse["roles"].as_array().unwrap().len(), 966);
-    for row in role_inverse["roles"].as_array_mut().unwrap() {
-        let construction = row.as_object_mut().unwrap().remove("construction").unwrap();
-        assert_eq!(construction["kind"], "observed");
-    }
+    let census = role_inverse
+        .as_object_mut()
+        .unwrap()
+        .remove("reverse_primary")
+        .unwrap();
+    assert_eq!(census["kind"], "observed");
+    assert_eq!(census["routes"].as_array().unwrap().len(), 1436);
     assert_eq!(role_inverse, read(old_package.join("roles.json")));
     let root = Path::new(env!("CARGO_MANIFEST_DIR"));
     let catalog = source_catalog(root);
@@ -375,6 +396,11 @@ pub fn authenticate_cutover(prior: &Path, candidate: &Path, next: &StagedOwnedRe
         next.roles().input().roles,
         compiled.roles().input().roles,
         "final package retains every reproduced compiler observation"
+    );
+    assert_eq!(
+        next.roles().input().reverse_primary,
+        compiled.roles().input().reverse_primary,
+        "final package retains the entire independently reproduced reverse census"
     );
     assert_eq!(
         next.roles().input().compilation,
@@ -441,12 +467,17 @@ pub fn authenticate_cutover(prior: &Path, candidate: &Path, next: &StagedOwnedRe
     );
     assert_eq!(proof["input"], json!(next.receipt().input));
     assert_eq!(proof["dependency_changes"], json!(changes));
+    assert_eq!(proof["roles"], 966);
+    assert_eq!(proof["reverse_primary_routes"], 1436);
+    assert_eq!(proof["query_rows"], 110);
+    assert_eq!(proof["native_recipe"], "exactly_unchanged");
+    assert_eq!(proof["calculation"], "not_run");
     let authoring = checked_authoring(&proof, compiled.roles().identity(), &changes);
     let mut provenance = json!(next.receipt().provenance);
     assert_eq!(
         provenance.as_array_mut().unwrap().pop().unwrap(),
         json!({
-            "kind":"import-source-construction-cutover","prior_input":PRIOR_INPUT,"authoring_input":authoring
+            "kind":"import-reverse-primary-cutover","prior_input":PRIOR_INPUT,"authoring_input":authoring
         })
     );
     assert_eq!(provenance, old["provenance"]);
@@ -496,8 +527,18 @@ fn authenticate_saved(prior: &Path, case: usize) {
         );
     }
     let (sha, bytes) = SAVED[case - 1][3];
+    let baseline = Path::new(env!("CARGO_MANIFEST_DIR")).join(BASELINE_DIRECTORY);
+    let receipt: Value =
+        serde_json::from_slice(&pinned(baseline.join("receipt.json"), BASELINE_RECEIPT_SHA))
+            .unwrap();
+    assert_eq!(receipt["source_input"], PRIOR_INPUT);
+    assert_eq!(receipt["head"], "32d48986992c252938231269b8df5a56e8ca4d69");
     assert_eq!(
-        pinned(prior.join(format!("report-{case:02}.json")), sha).len(),
+        receipt["binary_sha256"],
+        "01e5d703e3062f388ef2fddd1d549359d44e6c4ae7cccf7f29af2a1f70fc5dbf"
+    );
+    assert_eq!(
+        pinned(baseline.join(format!("report-{case:02}.json")), sha).len(),
         bytes
     );
 }
@@ -668,8 +709,14 @@ pub fn compare(
         &package.join("schema.json"),
     );
     write(out.join(format!("report-{case:02}.json")), &actual);
-    let expected =
-        finalization_report(read(prior.join(format!("report-{case:02}.json"))), &old_dir);
+    let expected = finalization_report(
+        read(
+            Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join(BASELINE_DIRECTORY)
+                .join(format!("report-{case:02}.json")),
+        ),
+        &old_dir,
+    );
     let actual = finalization_report(actual, &first);
     assert_eq!(
         expected, actual,

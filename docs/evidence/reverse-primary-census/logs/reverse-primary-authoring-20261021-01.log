@@ -1,0 +1,9 @@
+   Compiling poe-optimizer-import v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-import)
+    Finished `test` profile [optimized] target(s) in 3m 37s
+     Running unittests src\lib.rs (target\debug\deps\poe_optimizer_import-3756f42caef128b3.exe)
+
+running 1 test
+test reverse_primary_cutover::author_reverse_primary_cutover ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 244 filtered out; finished in 8.41s
+

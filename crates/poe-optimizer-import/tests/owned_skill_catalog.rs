@@ -223,6 +223,7 @@ fn role_input(
         mapping: *mappings.identity(),
         compilation: compiled.receipt.clone(),
         roles: compiled.roles.clone(),
+        reverse_primary: compiled.reverse_primary.clone(),
     }
 }
 
@@ -341,6 +342,7 @@ fn compilation_is_deterministic_from_the_same_base_and_explicitly_appends_fresh_
     assert_eq!(a.definitions, b.definitions);
     assert_eq!(a.mappings, b.mappings);
     assert_eq!(a.roles, b.roles);
+    assert_eq!(a.reverse_primary, b.reverse_primary);
     assert_eq!(a.receipt, b.receipt);
     let appended = compile_fresh_owned_skill_catalog(
         &catalog,
@@ -445,6 +447,20 @@ fn ambiguous_catalog_rows_remain_diagnostic_but_cannot_certify_exchanged_owned_o
     let mut changed = input.clone();
     changed.roles[first].construction = input.roles[second].construction.clone();
     changed.roles[second].construction = input.roles[first].construction.clone();
+    // A consistent candidate swap is still only a serialized claim, not an
+    // independent source-row/owned-Gem pairing witness for an ambiguous selector.
+    for candidate in &mut reverse_routes_mut(&mut changed)
+        .iter_mut()
+        .find(|route| route.skill.effect_id == "support-effect")
+        .unwrap()
+        .candidates
+    {
+        if candidate.gem == input.roles[first].gem {
+            candidate.catalog_gem_key = observed(&input.roles[second]).catalog_gem_key.clone();
+        } else if candidate.gem == input.roles[second].gem {
+            candidate.catalog_gem_key = observed(&input.roles[first]).catalog_gem_key.clone();
+        }
+    }
     let exchanged = OwnedSkillRoleIndex::new(changed, &mapping, &schema, limits()).unwrap();
     assert_ne!(original.identity(), exchanged.identity());
     assert!(matches!(
@@ -735,6 +751,7 @@ fn construction_is_required_and_explicit_unavailable_never_passes_catalog_reprod
     for row in &mut input.roles {
         row.construction = OwnedGemSourceConstruction::Unavailable;
     }
+    input.reverse_primary = OwnedReversePrimaryCensus::Unavailable {};
     let roles = OwnedSkillRoleIndex::new(input, &mapping, &schema, limits()).unwrap();
     assert!(matches!(
         verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, limits()),
@@ -818,6 +835,14 @@ fn offline_reproduction_rejects_structurally_valid_forgery_even_with_fresh_packa
             7 => facts.catalog_gem_key = "invented-catalog-row".into(),
             _ => unreachable!(),
         }
+        if mutation == 7 {
+            let candidate = reverse_routes_mut(&mut changed)
+                .iter_mut()
+                .flat_map(|route| &mut route.candidates)
+                .find(|candidate| candidate.catalog_gem_key == "active-gem-key")
+                .unwrap();
+            candidate.catalog_gem_key = "invented-catalog-row".into();
+        }
         let forged = OwnedSkillRoleIndex::new(changed, &mapping, &schema, limits()).unwrap();
         assert_ne!(forged.identity(), original.identity());
         assert!(matches!(
@@ -842,19 +867,20 @@ fn reproduction_retains_historical_registry_ancestry_but_rejects_wrong_catalog_c
     assert_eq!(roles.input().compilation, receipt);
     assert_ne!(mapping.input().registry, receipt.staged_registry);
     verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, limits()).unwrap();
-    for mutation in 0..2 {
-        let mut changed = input.clone();
-        match mutation {
-            0 => changed.compilation.catalog_digest = "0".repeat(64).parse().unwrap(),
-            1 => changed.compilation.skill_count += 1,
-            _ => unreachable!(),
-        }
-        let forged = OwnedSkillRoleIndex::new(changed, &mapping, &schema, limits()).unwrap();
-        assert!(matches!(
-            verify_owned_skill_catalog_reproduction(&catalog, &forged, &mapping, limits()),
-            Err(SkillCatalogError::ReproductionMismatch)
-        ));
-    }
+    let mut changed = input.clone();
+    changed.compilation.catalog_digest = "0".repeat(64).parse().unwrap();
+    let forged = OwnedSkillRoleIndex::new(changed, &mapping, &schema, limits()).unwrap();
+    assert!(matches!(
+        verify_owned_skill_catalog_reproduction(&catalog, &forged, &mapping, limits()),
+        Err(SkillCatalogError::ReproductionMismatch)
+    ));
+    // The required observed census now also checks the receipt's local count.
+    let mut changed = input;
+    changed.compilation.skill_count += 1;
+    assert!(matches!(
+        OwnedSkillRoleIndex::new(changed, &mapping, &schema, limits()),
+        Err(SkillCatalogError::ReversePrimaryMismatch)
+    ));
 }
 
 #[test]
@@ -993,8 +1019,8 @@ fn resource_failures_leave_the_base_unchanged_including_after_staged_allocations
     assert_eq!(base.input(), &before);
     let source = SkillIdentityCatalog::new(data()).unwrap();
     let mut exact = limits();
-    // Two additional ordered construction positions are now retained explicitly.
-    exact.mapping.max_entries = 24;
+    // Construction positions plus two reverse role joins/routes/candidates.
+    exact.mapping.max_entries = 30;
     assert!(
         compile_fresh_owned_skill_catalog(
             &source,
@@ -1005,10 +1031,10 @@ fn resource_failures_leave_the_base_unchanged_including_after_staged_allocations
         )
         .is_ok()
     );
-    // The immutable base was constructed with looser bounds. Its 21 entries
+    // The immutable base was constructed with looser bounds. Its 27 entries
     // fit the requested limit, but the four newly staged IDs do not.
     let mut populated = base.clone();
-    for _ in 0..21 {
+    for _ in 0..27 {
         populated.allocate_definition::<SkillDefinition>().unwrap();
     }
     let populated_before = populated.input().clone();
@@ -1023,7 +1049,7 @@ fn resource_failures_leave_the_base_unchanged_including_after_staged_allocations
         .is_err()
     );
     assert_eq!(populated.input(), &populated_before);
-    exact.mapping.max_entries = 23;
+    exact.mapping.max_entries = 29;
     assert!(matches!(
         compile_fresh_owned_skill_catalog(
             &source,
@@ -1269,6 +1295,7 @@ fn empty_owned_artifacts_supply_no_guessed_identity_or_role() {
     staged.definitions.clear();
     staged.mappings.clear();
     staged.roles.clear();
+    staged.reverse_primary = OwnedReversePrimaryCensus::Unavailable {};
     staged.receipt.gem_count = 0;
     staged.receipt.skill_count = 0;
     staged.receipt.base_registry = staged.registry.identity().unwrap();
@@ -1573,6 +1600,7 @@ fn historical_role_receipt_retains_exact_subset_of_expanded_catalog_pins() {
     let index = OwnedSkillRoleIndex::new(rebound, &next, &schema, limits()).unwrap();
     assert_eq!(index.input().compilation, roles.compilation);
     assert_eq!(index.input().roles, roles.roles);
+    assert_eq!(index.input().reverse_primary, roles.reverse_primary);
     assert_ne!(index.input().mapping, roles.mapping);
     // An expanded source footprint does not relax the exact final mapping binding.
     assert!(OwnedSkillRoleIndex::new(roles, &next, &schema, limits()).is_err());
@@ -1661,6 +1689,14 @@ fn structurally_valid_role_subset_cannot_prove_reverse_primary_uniqueness() {
     let mut subset = input.clone();
     subset.roles.retain(|row| row.gem != alias);
     subset.compilation.gem_count = subset.roles.len();
+    // A one-sided omission no longer passes the local candidate joins.
+    assert!(matches!(
+        OwnedSkillRoleIndex::new(subset.clone(), &mapping, &schema, limits()),
+        Err(SkillCatalogError::ReversePrimaryMismatch)
+    ));
+    for route in reverse_routes_mut(&mut subset) {
+        route.candidates.retain(|candidate| candidate.gem != alias);
+    }
     // The source pin, catalog commitment, schema, mapping and surviving row
     // stay unchanged; structural loading has no independent catalog census.
     assert_eq!(
@@ -1670,12 +1706,397 @@ fn structurally_valid_role_subset_cannot_prove_reverse_primary_uniqueness() {
     assert_eq!(subset.compilation.source, input.compilation.source);
     assert_eq!(subset.mapping, input.mapping);
     assert_eq!(subset.definitions, input.definitions);
-    let subset = OwnedSkillRoleIndex::new(subset, &mapping, &schema, limits()).unwrap();
-    assert_eq!(subset.role(&target), Some(&target_row));
-    assert_eq!(candidates(&subset), 1);
-    assert_ne!(subset.identity(), full.identity());
+    for omit_mapping in [false, true] {
+        let mut mapping_input = mapping.input().clone();
+        if omit_mapping {
+            mapping_input
+                .entries
+                .retain(|entry| entry.source != selector("external-colliding", "v-c"));
+        }
+        let subset_mapping =
+            OwnedMappingIndex::new(mapping_input, &compiled.registry, &schema, limits().mapping)
+                .unwrap();
+        let mut subset_input = subset.clone();
+        subset_input.mapping = *subset_mapping.identity();
+        let subset =
+            OwnedSkillRoleIndex::new(subset_input, &subset_mapping, &schema, limits()).unwrap();
+        assert_eq!(subset.role(&target), Some(&target_row));
+        assert_eq!(candidates(&subset), 1);
+        assert_ne!(subset.identity(), full.identity());
+        assert!(matches!(
+            verify_owned_skill_catalog_reproduction(&catalog, &subset, &subset_mapping, limits()),
+            Err(SkillCatalogError::ReproductionMismatch)
+        ));
+    }
+}
+
+fn reverse_routes_mut(
+    input: &mut OwnedSkillRolePackageInput,
+) -> &mut Vec<OwnedReversePrimaryRoute> {
+    let OwnedReversePrimaryCensus::Observed { routes } = &mut input.reverse_primary else {
+        panic!("compiled reverse-primary observation")
+    };
+    routes
+}
+
+fn source_skill(compiled: &FreshOwnedSkillCatalog, effect_id: &str) -> SkillDefId {
+    let selector = ExternalSelector::Definition(ExternalOwnerSelector::Skill {
+        effect_id: SourceComponent::Text(effect_id.into()),
+    });
+    let outcome = &compiled
+        .mappings
+        .iter()
+        .find(|entry| entry.source == selector)
+        .unwrap()
+        .outcome;
+    let MappingOutcome::Mapped {
+        target: SchemaSubject::Definition(DefinitionAddress::Skill(skill)),
+        ..
+    } = outcome
+    else {
+        panic!("exact source Skill mapping")
+    };
+    skill.clone()
+}
+
+fn reverse_data() -> SkillIdentityData {
+    let mut source = construction_data();
+    add_gem(
+        &mut source,
+        "another-active-key",
+        "another-active-external",
+        "another-variant",
+        "active-effect",
+    );
+    source
+}
+
+#[test]
+fn reverse_primary_preserves_zero_one_many_and_actual_effects_without_selecting_a_winner() {
+    let mut source = reverse_data();
+    add_gem(
+        &mut source,
+        "missing-primary-key",
+        "missing-primary-external",
+        "missing-primary-variant",
+        "absent-primary",
+    );
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source.clone(), AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    let index = OwnedSkillRoleIndex::new(input, &mapping, &schema, limits()).unwrap();
+    verify_owned_skill_catalog_reproduction(&catalog, &index, &mapping, limits()).unwrap();
+    for (effect_id, expected) in [
+        (
+            "active-effect",
+            vec!["active-gem-key", "another-active-key"],
+        ),
+        ("support-effect", vec!["support-gem-key"]),
+        ("late-effect", vec![]),
+    ] {
+        let skill = source_skill(&compiled, effect_id);
+        let OwnedReversePrimaryLookup::Observed(route) = index.reverse_primary(effect_id, &skill)
+        else {
+            panic!("every actual source Skill must retain an explicit observation")
+        };
+        assert_eq!(route.skill.effect_id, effect_id);
+        assert_eq!(
+            route.skill.resolution,
+            OwnedSourceEffectResolution::Mapped(skill)
+        );
+        assert_eq!(
+            route
+                .candidates
+                .iter()
+                .map(|candidate| candidate.catalog_gem_key.as_str())
+                .collect::<Vec<_>>(),
+            expected
+        );
+        for candidate in &route.candidates {
+            let row = index.role(&candidate.gem).unwrap();
+            assert_eq!(observed(row).catalog_gem_key, candidate.catalog_gem_key);
+            assert_eq!(observed(row).primary, route.skill);
+        }
+    }
+    let active = source_skill(&compiled, "active-effect");
+    for effect_id in [
+        "absent-primary",
+        "missing-command",
+        "additional-stat-set",
+        "unknown",
+    ] {
+        assert_eq!(
+            index.reverse_primary(effect_id, &active),
+            OwnedReversePrimaryLookup::Unavailable,
+            "missing Skills and stat sets are not observed empty routes"
+        );
+    }
+    let active_gem = gem_id(&compiled, "external-active", "v-b");
+    assert_eq!(
+        observed(index.role(&active_gem).unwrap())
+            .resolved_effects
+            .len(),
+        3
+    );
+    assert_eq!(
+        observed(index.role(&active_gem).unwrap())
+            .additional_stat_sets
+            .len(),
+        1
+    );
+    // Source iteration order affects its source digest, not canonical census order.
+    source.skills.reverse();
+    source.gems.reverse();
+    let reordered = compile(source, AbsentSupportPolicy::NonSupport);
+    assert_eq!(compiled.reverse_primary, reordered.reverse_primary);
+    assert_ne!(
+        compiled.receipt.catalog_digest,
+        reordered.receipt.catalog_digest
+    );
+}
+
+#[test]
+fn reverse_primary_requires_explicit_observation_and_exact_source_and_owned_skill() {
+    let source = reverse_data();
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source, AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    let active = source_skill(&compiled, "active-effect");
+    let support = source_skill(&compiled, "support-effect");
+    let index = OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, limits()).unwrap();
+    assert_eq!(
+        index.reverse_primary("active-effect", &support),
+        OwnedReversePrimaryLookup::Unavailable
+    );
+    let foreign =
+        DefId::parse(GameVersionNamespace::new("foreign", "v1").unwrap(), "skill").unwrap();
+    assert_eq!(
+        index.reverse_primary("active-effect", &foreign),
+        OwnedReversePrimaryLookup::Unavailable
+    );
+    let mut unavailable = input.clone();
+    unavailable.reverse_primary = OwnedReversePrimaryCensus::Unavailable {};
+    let unavailable = OwnedSkillRoleIndex::new(unavailable, &mapping, &schema, limits()).unwrap();
+    assert_eq!(
+        unavailable.reverse_primary("active-effect", &active),
+        OwnedReversePrimaryLookup::Unavailable
+    );
+    assert_ne!(unavailable.identity(), index.identity());
+    assert!(matches!(
+        verify_owned_skill_catalog_reproduction(&catalog, &unavailable, &mapping, limits()),
+        Err(SkillCatalogError::ReproductionMismatch)
+    ));
+    let mut wire = serde_json::to_value(&input).unwrap();
+    wire.as_object_mut().unwrap().remove("reverse_primary");
+    assert!(serde_json::from_value::<OwnedSkillRolePackageInput>(wire).is_err());
+    let mut wire = serde_json::to_value(&input).unwrap();
+    wire["reverse_primary"]["kind"] = serde_json::json!("unavailable");
+    assert!(serde_json::from_value::<OwnedSkillRolePackageInput>(wire).is_err());
+}
+
+#[test]
+fn reverse_primary_validates_exact_candidates_and_never_turns_a_missing_member_into_zero() {
+    let compiled = compile(reverse_data(), AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    let active = source_skill(&compiled, "active-effect");
+    let support = source_skill(&compiled, "support-effect");
+    let support_gem = gem_id(&compiled, "external-support", "v-a");
+    for mutation in 0..14 {
+        let mut changed = input.clone();
+        let routes = reverse_routes_mut(&mut changed);
+        let active_index = routes
+            .iter()
+            .position(|route| route.skill.effect_id == "active-effect")
+            .unwrap();
+        match mutation {
+            0 => {
+                routes.remove(active_index);
+            }
+            1 => {
+                routes.push(routes[active_index].clone());
+                changed.compilation.skill_count += 1;
+            }
+            2 => routes[active_index].skill.resolution = OwnedSourceEffectResolution::Missing,
+            3 => {
+                routes[active_index].skill.resolution =
+                    OwnedSourceEffectResolution::Mapped(support.clone());
+            }
+            4 => routes[active_index].skill.effect_id = "unmapped-source".into(),
+            5 => {
+                routes[active_index].skill.resolution = OwnedSourceEffectResolution::Mapped(
+                    DefId::parse(GameVersionNamespace::new("foreign", "v1").unwrap(), "skill")
+                        .unwrap(),
+                );
+            }
+            6 => routes[active_index].candidates[0].catalog_gem_key = "other-key".into(),
+            7 => {
+                routes[active_index].candidates[0].gem =
+                    DefId::parse(GameVersionNamespace::new("foreign", "v1").unwrap(), "gem")
+                        .unwrap();
+            }
+            8 => routes[active_index].candidates[0].gem = support_gem.clone(),
+            9 => {
+                let duplicate = routes[active_index].candidates[0].clone();
+                routes[active_index].candidates.push(duplicate);
+            }
+            10 => routes[active_index].candidates.clear(),
+            11 => changed.roles[0].construction = OwnedGemSourceConstruction::Unavailable,
+            12 => routes[active_index].skill.effect_id.clear(),
+            13 => routes[active_index].candidates[0].catalog_gem_key = "bad\0key".into(),
+            _ => unreachable!(),
+        }
+        assert!(
+            OwnedSkillRoleIndex::new(changed, &mapping, &schema, limits()).is_err(),
+            "accepted reverse-primary mutation {mutation}"
+        );
+    }
+    let index = OwnedSkillRoleIndex::new(input, &mapping, &schema, limits()).unwrap();
+    let OwnedReversePrimaryLookup::Observed(route) =
+        index.reverse_primary("active-effect", &active)
+    else {
+        panic!("unchanged full route")
+    };
+    assert_eq!(route.candidates.len(), 2);
+}
+
+#[test]
+fn reverse_primary_sorting_changes_no_identity_and_does_not_reorder_effect_positions() {
+    let source = reverse_data();
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source, AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    let original = OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, limits()).unwrap();
+    let mut reordered = input;
+    let routes = reverse_routes_mut(&mut reordered);
+    routes.reverse();
+    for route in routes {
+        route.candidates.reverse();
+    }
+    let reordered = OwnedSkillRoleIndex::new(reordered, &mapping, &schema, limits()).unwrap();
+    assert_eq!(original.input(), reordered.input());
+    assert_eq!(original.identity(), reordered.identity());
+    verify_owned_skill_catalog_reproduction(&catalog, &reordered, &mapping, limits()).unwrap();
+}
+
+#[test]
+fn reverse_primary_empty_route_omission_is_still_a_fabricated_catalog_subset() {
+    let source = reverse_data();
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source, AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, mut input) = assemble(&compiled);
+    let removed = reverse_routes_mut(&mut input).remove(1);
+    assert_eq!(removed.skill.effect_id, "late-effect");
+    assert!(removed.candidates.is_empty());
+    input.compilation.skill_count -= 1;
+    let subset = OwnedSkillRoleIndex::new(input, &mapping, &schema, limits()).unwrap();
+    let late = source_skill(&compiled, "late-effect");
+    assert_eq!(
+        subset.reverse_primary("late-effect", &late),
+        OwnedReversePrimaryLookup::Unavailable
+    );
     assert!(matches!(
         verify_owned_skill_catalog_reproduction(&catalog, &subset, &mapping, limits()),
         Err(SkillCatalogError::ReproductionMismatch)
     ));
+}
+
+#[test]
+fn reverse_primary_candidate_and_nested_limits_apply_to_compile_load_and_reproduction() {
+    let source = reverse_data();
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source, AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    let index = OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, limits()).unwrap();
+    let mut exact = limits();
+    exact.mapping.max_candidates = 2;
+    verify_owned_skill_catalog_reproduction(&catalog, &index, &mapping, exact).unwrap();
+    OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, exact).unwrap();
+    let mut tight = exact;
+    tight.mapping.max_candidates = 1;
+    assert!(matches!(
+        OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, tight),
+        Err(SkillCatalogError::LimitExceeded(
+            "reverse primary candidates"
+        ))
+    ));
+    assert!(matches!(
+        verify_owned_skill_catalog_reproduction(&catalog, &index, &mapping, tight),
+        Err(SkillCatalogError::LimitExceeded(
+            "reverse primary candidates"
+        ))
+    ));
+    let registry = base();
+    let before = registry.input().clone();
+    assert!(matches!(
+        compile_fresh_owned_skill_catalog(
+            &catalog,
+            &registry,
+            &pin(),
+            &policy(AbsentSupportPolicy::NonSupport),
+            tight,
+        ),
+        Err(SkillCatalogError::LimitExceeded(
+            "reverse primary candidates"
+        ))
+    ));
+    assert_eq!(registry.input(), &before);
+    compile_fresh_owned_skill_catalog(
+        &catalog,
+        &registry,
+        &pin(),
+        &policy(AbsentSupportPolicy::NonSupport),
+        exact,
+    )
+    .unwrap();
+    let mut oversized = input.clone();
+    let route = reverse_routes_mut(&mut oversized)[0].clone();
+    *reverse_routes_mut(&mut oversized) = vec![route; 32];
+    tight = limits();
+    tight.mapping.max_collection_entries = 31;
+    assert!(matches!(
+        OwnedSkillRoleIndex::new(oversized, &mapping, &schema, tight),
+        Err(SkillCatalogError::LimitExceeded("reverse primary routes"))
+    ));
+    let mut oversized = input;
+    reverse_routes_mut(&mut oversized)[0].candidates[0].catalog_gem_key = "k".repeat(128);
+    tight = limits();
+    tight.mapping.max_string_bytes = 127;
+    assert!(matches!(
+        OwnedSkillRoleIndex::new(oversized, &mapping, &schema, tight),
+        Err(SkillCatalogError::LimitExceeded("source text"))
+    ));
+}
+
+#[test]
+fn reverse_primary_aggregate_work_and_text_cannot_hide_behind_small_outer_role_counts() {
+    let compiled = compile(reverse_data(), AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, observed) = assemble(&compiled);
+    let mut unavailable = observed.clone();
+    unavailable.reverse_primary = OwnedReversePrimaryCensus::Unavailable {};
+    for text_budget in [false, true] {
+        let minimum = |input: &OwnedSkillRolePackageInput| {
+            (1..4096)
+                .find(|limit| {
+                    let mut bound = limits();
+                    if text_budget {
+                        bound.mapping.max_total_string_bytes = *limit;
+                    } else {
+                        bound.mapping.max_entries = *limit;
+                    }
+                    OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, bound).is_ok()
+                })
+                .unwrap()
+        };
+        let absent_minimum = minimum(&unavailable);
+        let observed_minimum = minimum(&observed);
+        assert!(observed_minimum > absent_minimum);
+        let mut bound = limits();
+        if text_budget {
+            bound.mapping.max_total_string_bytes = observed_minimum - 1;
+        } else {
+            bound.mapping.max_entries = observed_minimum - 1;
+        }
+        assert!(OwnedSkillRoleIndex::new(observed.clone(), &mapping, &schema, bound).is_err());
+        assert!(OwnedSkillRoleIndex::new(unavailable.clone(), &mapping, &schema, bound).is_ok());
+    }
 }

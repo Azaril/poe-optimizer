@@ -97,11 +97,18 @@ references in the existing **Import-only** role artifact. These are compiler
 facts about an external format, not native Skill membership or execution rules.
 Runtime Import validates their bounded bindings; offline publication additionally
 reproduces them from the authenticated catalog, refusing ambiguous owned-row
-pairings. No Lua evaluator or compatibility reader is added. The candidate
-package and both maintained seeds rebuild with unchanged native mechanics.
-Dependent-fixture, all-five preservation and all 377 normalizer checks pass. The
-superseded usage-transport migration harness is removed, with its historical
-evidence retained.
+pairings. The original construction cutover passed its dependent-fixture,
+all-five preservation and 377 normalizer checks; its superseded usage-transport
+migration harness was removed with historical evidence retained.
+
+The required `reverse_primary` census is now implemented in that same artifact.
+It distinguishes unavailable observations from an observed zero, one or multiple
+primary Gem candidates for an exact source/owned Skill. Multiple candidates
+remain ambiguous. Runtime checks enforce bounded local consistency; offline
+reproduction against the complete catalog rejects coherent omissions as well as
+altered candidates. No native schema, calculation behavior, Lua evaluator or old
+reader is added. Rebuild and validation status belong to the implementation plan;
+the census itself retires no selected input issue.
 
 Two input contracts were accepted October 19:
 numeric progression imported through existing Choice rewards, with unique
@@ -311,13 +318,15 @@ passes its full scoped validation and is tracked in the implementation plan.
 Source tests alone grant no native execution or import-completion
 authority. Primary-switch semantics and exact occurrence/selector correspondence
 remain separate obligations.
-Generated reverse routing additionally needs a complete catalog observation.
-Structural validation of the supplied role rows cannot prove that an omitted
-row does not share a primary. The proposed
-[compiler-derived candidate fact](owned-generated-catalog-routing-proposal.md)
-would preserve this information in the existing Import-only artifact; the
-alternative requires full catalog reproduction during loading. Neither
-approach belongs in the native evaluator, and neither is implemented yet.
+Generated reverse routing now has the required Import-only
+[compiler-derived census](owned-source-effect-construction-proposal.md#generated-reverse-lookup-follow-up-october-21).
+Structural role validation alone cannot prove that an omitted row shares no
+primary, so publication must reproduce the complete census offline. New source
+component controls distinguish table-keyed `LoadSkill`/generated dispatch from
+string-keyed bare `ProcessSocketGroup` processing and its direct-effect fallback.
+That evidence does not authorize an adapter by itself: exact provider, source,
+slot, level and field-consumer checks remain necessary. Count and secondary
+selection remain separate obligations, and both Djinn effects must be preserved.
 The existing count policy now also imports Ice Nova's saved count. All-five
 preservation verifies exactly four added bindings across Original05's presets,
 including one in the selected preset, with every other input and unresolved

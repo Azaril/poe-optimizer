@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "scope": "exact-historical-source-and-receipt-archive",
+  "status": "validation-in-progress",
+  "files": [
+    {
+      "source": "runs/owned_reverse_primary_cutover.rs",
+      "file": "authoring/owned_reverse_primary_cutover.rs",
+      "bytes": 10853,
+      "sha256": "23a5d1c4380301e9d9233d7ff54a03cee0727ec8c37adfcc94cf2115bd250881"
+    },
+    {
+      "source": "runs/owned_reverse_primary_seed_rebuild.rs",
+      "file": "authoring/owned_reverse_primary_seed_rebuild.rs",
+      "bytes": 9967,
+      "sha256": "45b3f0634136926dcad4c35f7322414e311ad7a512f1c3fe81c2e55ce6f133d9"
+    },
+    {
+      "source": "runs/owned_reverse_primary_receipt_rebind.rs",
+      "file": "authoring/owned_reverse_primary_receipt_rebind.rs",
+      "bytes": 9923,
+      "sha256": "2ad0c717767af20662f27fbdbcd373d8308de6a1110fb3abe9778bc71f87a8d7"
+    },
+    {
+      "source": "runs/owned-reverse-primary-cutover-01/cutover-proof.json",
+      "file": "cutover-proof.json",
+      "bytes": 6004,
+      "sha256": "932265e185522a5c45c12b05b477115f97d2dedb9bfdccbaa93e5d2cbef3ae78"
+    },
+    {
+      "source": "runs/owned-reverse-primary-receipts-01/report.json",
+      "file": "receipt-rebind-report.json",
+      "bytes": 4937,
+      "sha256": "dd750d5c8eca98d5b25909930cb946e1ef140698f8ba9540f324f31c8901c551"
+    },
+    {
+      "source": "runs/generated-source-dispatch-review-20261021/manifest.json",
+      "file": "source-review/manifest.json",
+      "bytes": 825,
+      "sha256": "1ce825fae3a32776205733d75f35150f0d512ecbfec2af2ffd7fa804e400304b"
+    },
+    {
+      "source": "runs/generated-source-dispatch-review-20261021/README.md",
+      "file": "source-review/README.md",
+      "bytes": 5391,
+      "sha256": "bf3beaf57be31dd529ef6f108cf2dce0b21df0f1dc8fcd4803c27c20e0b6ed64"
+    },
+    {
+      "source": "runs/reverse-primary-baseline-20261021/receipt.json",
+      "file": "baseline-receipt.json",
+      "bytes": 235,
+      "sha256": "9f5473d37d7e20564cf20879e28b1bd2a8d610c79c356e8b5ef4d5fc86d30ed7"
+    },
+    {
+      "source": "runs/reverse-primary-rebuild-audit-20261021/README.md",
+      "file": "rebuild-audit.md",
+      "bytes": 13093,
+      "sha256": "bfe037345eb2277949aacffae18fd71b12e57d0dfd09e38c8becbd67b3b2165a"
+    },
+    {
+      "source": "runs/generated-source-adapter-next-20261021.md",
+      "file": "next-adapter-guidance.md",
+      "bytes": 6444,
+      "sha256": "29c80292ed8bf6759ba4f56fd6828fe5eeca7752d31a72fb3c9d4f645985eaa2"
+    },
+    {
+      "source": "runs/reverse-primary-authoring-20261021-01.log",
+      "file": "logs/reverse-primary-authoring-20261021-01.log",
+      "bytes": 440,
+      "sha256": "5c5ce60fb574e4adbc8ca70408820857fc5591da41a58b485ca8275abf6e045a"
+    },
+    {
+      "source": "runs/reverse-primary-import-catalog-20261021-01.log",
+      "file": "logs/reverse-primary-import-catalog-20261021-01.log",
+      "bytes": 4169,
+      "sha256": "d01af9c950b8787bd791c906ac4c0c66b5fab4f3058601ef6818ea69791fb5fa"
+    },
+    {
+      "source": "runs/reverse-primary-receipts-20261021-01.log",
+      "file": "logs/reverse-primary-receipts-20261021-01.log",
+      "bytes": 459,
+      "sha256": "5b1060945c63493e69b8af0e6e896e9528420238d6d11c5a6863122ee2fc392e"
+    },
+    {
+      "source": "crates/poe-optimizer-import/tests/reverse_primary_receipt_authoring_temp.rs",
+      "file": "authoring/reverse_primary_receipt_authoring_temp.rs",
+      "bytes": 700,
+      "sha256": "f0b28963222fdb1ad56876b1aa156585c7b9223a2d8aebd1bd2f3b353504698e"
+    }
+  ]
+}

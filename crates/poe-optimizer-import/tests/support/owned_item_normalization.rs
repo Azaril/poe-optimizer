@@ -452,6 +452,7 @@ pub fn artifacts() -> Artifacts {
     .unwrap();
     let roles = OwnedSkillRoleIndex::new(
         OwnedSkillRolePackageInput {
+            reverse_primary: OwnedReversePrimaryCensus::Unavailable {},
             schema_version: OWNED_SKILL_ROLE_VERSION,
             namespace: ns(),
             definitions: schema.identity().clone(),

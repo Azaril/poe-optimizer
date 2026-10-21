@@ -1,0 +1,56 @@
+   Compiling poe-optimizer-import v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-import)
+    Finished `test` profile [optimized] target(s) in 17.68s
+     Running tests\owned_skill_catalog.rs (target\debug\deps\owned_skill_catalog-13d4a5f107ea8f46.exe)
+
+running 35 tests
+test shared_source_pin_may_include_other_domains_but_binds_every_catalog_file ... ok
+test compilation_is_deterministic_from_the_same_base_and_explicitly_appends_fresh_ids ... ok
+test absent_support_policy_is_explicit_and_injected_role_changes_are_observed ... ok
+test resource_failures_leave_the_base_unchanged_including_after_staged_allocations ... ok
+test empty_owned_artifacts_supply_no_guessed_identity_or_role ... ok
+test missing_primary_effect_does_not_invent_a_skill_definition_or_support_role ... ok
+test bound_role_index_rejects_roles_outside_known_schema_permissions ... ok
+test colliding_exact_selectors_remain_ambiguous_without_selecting_a_role ... ok
+test source_and_final_binding_conflicts_are_rejected ... ok
+test final_mapping_can_bind_a_valid_registry_successor_after_other_domain_allocation ... ok
+test unknown_primary_cannot_claim_known_materialization ... ok
+test construction_preserves_sparse_missing_declared_and_late_repeated_display_positions ... ok
+test exact_identity_and_roles_bind_without_claiming_complete_input_schema ... ok
+test historical_role_receipt_retains_exact_subset_of_expanded_catalog_pins ... ok
+test reverse_primary_empty_route_omission_is_still_a_fabricated_catalog_subset ... ok
+test ambiguous_catalog_rows_remain_diagnostic_but_cannot_certify_exchanged_owned_observations ... ok
+test reproduction_retains_historical_registry_ancestry_but_rejects_wrong_catalog_commitment ... ok
+test reverse_primary_sorting_changes_no_identity_and_does_not_reorder_effect_positions ... ok
+test observed_singleton_retains_missing_command_and_stat_sets_without_guessing_completeness ... ok
+test historical_role_pin_subset_rejects_missing_changed_and_foreign_contexts ... ok
+test construction_is_required_and_explicit_unavailable_never_passes_catalog_reproduction ... ok
+test provider_only_placeholder_cannot_be_bound_as_a_known_physical_gem_schema ... ok
+test absent_from_tree_requires_explicit_policy_and_changed_evidence_changes_immutable_role_binding ... ok
+test reverse_primary_preserves_zero_one_many_and_actual_effects_without_selecting_a_winner ... ok
+test runtime_construction_rejects_wrong_identity_joins_and_inconsistent_missing_census ... ok
+test structurally_valid_role_subset_cannot_prove_reverse_primary_uniqueness ... ok
+test reverse_primary_candidate_and_nested_limits_apply_to_compile_load_and_reproduction ... ok
+test reverse_primary_validates_exact_candidates_and_never_turns_a_missing_member_into_zero ... ok
+test catalogue_support_primary_is_not_required_as_an_executable_skill_supply ... ok
+test reproduction_bounds_shadowed_declaration_history_independently_of_final_rows ... ok
+test reverse_primary_requires_explicit_observation_and_exact_source_and_owned_skill ... ok
+test explicit_from_tree_controls_materialization_independently_of_support_role_or_absence_policy ... ok
+test offline_reproduction_rejects_structurally_valid_forgery_even_with_fresh_package_digest ... ok
+test reverse_primary_aggregate_work_and_text_cannot_hide_behind_small_outer_role_counts ... ok
+test construction_nested_collections_text_and_total_reproduction_work_are_bounded ... ok
+
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\owned_skill_catalog_extension.rs (target\debug\deps\owned_skill_catalog_extension-770d5ecad4867264.exe)
+
+running 7 tests
+test aggregate_resource_limits_include_preserved_state_and_fail_without_publishing ... ok
+test stale_registry_schema_pin_policy_and_retired_schema_subjects_fail_atomically ... ok
+test affected_ambiguous_unmapped_and_duplicate_source_selectors_never_allocate_replacements ... ok
+test extends_only_missing_ids_preserving_known_ports_aliases_partial_gaps_and_tombstones ... ok
+test known_schema_role_and_materialization_conflicts_are_not_overwritten ... ok
+test missing_primary_and_provider_only_source_evidence_remain_explicit ... ok
+test repeating_the_extension_allocates_nothing_and_preserves_snapshot_identities ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

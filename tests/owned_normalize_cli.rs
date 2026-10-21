@@ -163,6 +163,7 @@ fn save(directory: &Path) {
     .unwrap();
     let roles = OwnedSkillRoleIndex::new(
         OwnedSkillRolePackageInput {
+            reverse_primary: OwnedReversePrimaryCensus::Unavailable {},
             schema_version: 1,
             namespace: namespace(),
             definitions: definitions.identity().clone(),

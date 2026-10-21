@@ -1,0 +1,9 @@
+   Compiling poe-optimizer-import v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-import)
+    Finished `test` profile [optimized] target(s) in 3m 20s
+     Running tests\reverse_primary_receipt_authoring_temp.rs (target\debug\deps\reverse_primary_receipt_authoring_temp-f5745329b21eb992.exe)
+
+running 1 test
+test rebind_reverse_primary_receipts ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+

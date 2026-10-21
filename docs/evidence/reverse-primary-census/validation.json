@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "scope": "required-import-reverse-primary-census",
+  "status": "local-checkpoint-passed",
+  "prior_git_commit": "32d48986992c252938231269b8df5a56e8ca4d69",
+  "prior_input": "348f0c7588e915f7b7ea6c2de9b1d2ce5089ebdb4393f5822ed818537a4c7560",
+  "input": "a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905",
+  "checks": [
+    {
+      "gate": "import-catalog-fixed",
+      "status": "passed",
+      "tests_passed": 42,
+      "tests_ignored": 0,
+      "log": "logs/reverse-primary-import-catalog-fixed-20261021-01.log",
+      "bytes": 4389,
+      "sha256": "6a406840fa5960f47c9fd73974d8886ff55f295c0ddcfdf580e8466445e617a7"
+    },
+    {
+      "gate": "import-dependents",
+      "status": "passed",
+      "tests_passed": 516,
+      "tests_ignored": 1,
+      "log": "logs/reverse-primary-import-dependents-20261021-01.log",
+      "bytes": 65316,
+      "sha256": "e626e20e1bc27eb209748a0c46057d70b1caf26820474b1aa35d3c575fa97545"
+    },
+    {
+      "gate": "source-fixed",
+      "status": "passed",
+      "tests_passed": 4,
+      "tests_ignored": 0,
+      "log": "logs/reverse-primary-source-fixed-20261021-01.log",
+      "bytes": 1100,
+      "sha256": "e8a94e6cb5eb44edd20ba1f58b59663bc9ee06c95612e2500f1cd2c52d24076d"
+    },
+    {
+      "gate": "cli",
+      "status": "passed",
+      "tests_passed": 52,
+      "tests_ignored": 3,
+      "log": "logs/reverse-primary-cli-20261021-01.log",
+      "bytes": 7219,
+      "sha256": "31522aaf7636572ac8fad33708498191773b843d6369bbc9c968f960908b2f6a"
+    },
+    {
+      "gate": "publication",
+      "status": "passed",
+      "tests_passed": 1,
+      "tests_ignored": 0,
+      "log": "logs/reverse-primary-publication-20261021-01.log",
+      "bytes": 387,
+      "sha256": "42c69b4257df8b011b3fd5f9e9e92665a1b847bb3034fc334e03c06a3e21f871"
+    },
+    {
+      "gate": "import-clippy",
+      "status": "passed",
+      "tests_passed": 0,
+      "tests_ignored": 0,
+      "log": "logs/reverse-primary-import-clippy-20261021-01.log",
+      "bytes": 156,
+      "sha256": "3610aa85f4bd9fe12fa411e2f19bdcf1a137a5449b899c6d53530a979179a37a"
+    },
+    {
+      "gate": "source-clippy",
+      "status": "passed",
+      "tests_passed": 0,
+      "tests_ignored": 0,
+      "log": "logs/reverse-primary-source-clippy-20261021-01.log",
+      "bytes": 244,
+      "sha256": "1765dc1e37d3216d7d7a86e5f21a5fd8cb496bc01d4806dc5c48fc942c3e1d11"
+    },
+    {
+      "gate": "cli-clippy",
+      "status": "passed",
+      "tests_passed": 0,
+      "tests_ignored": 0,
+      "log": "logs/reverse-primary-cli-clippy-20261021-01.log",
+      "bytes": 219,
+      "sha256": "b061d293633dc0c7eb8d867265a3eba7a18d8ef4ed36d16f2fef989ba62b5456"
+    }
+  ],
+  "workspace_pins": [
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/endpoint.json",
+      "bytes": 66145838,
+      "sha256": "337266997cd5ead1949288f29aad62b9b9604b2acda2b96fb0aacf0cea505ad2"
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/release.json",
+      "bytes": 58133,
+      "sha256": "46f233e58f7449f789a93e0b9d589892b4883fe40dbff672954aa6af22faa538"
+    },
+    {
+      "path": "runs/owned-reverse-primary-validation-01/validation.json",
+      "bytes": 1431,
+      "sha256": "fe23ed9f1593f61f657893c59a722cbcedf20d27dbd41cc5ad438c0d8e39ea2a"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/owned_generated_source_dispatch_source.rs",
+      "bytes": 23304,
+      "sha256": "77175e9c09a5162cf016d9d32dcaf4553c0888d3db6293ade58e57112eae10f7"
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_skill_catalog.rs",
+      "bytes": 36010,
+      "sha256": "7e85645c17d969309080fd3589dd0dd6c9a5a8ac4d38eeb4af556d8cfb3d968c"
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_skill_catalog/reverse_primary.rs",
+      "bytes": 8998,
+      "sha256": "eedc51465f46485b6e2e9099edfd857b46543a5b5aaf0179cf7ad1e0fbbab897"
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_skill_catalog/source_construction.rs",
+      "bytes": 20257,
+      "sha256": "754b6e2cf9e7a15d2a5d10316b6d1031904fbfde273db9f405da90b17933ed56"
+    },
+    {
+      "path": "tests/owned_source_construction_cli.rs",
+      "bytes": 4032,
+      "sha256": "cb84e9b9c320a7a24be59686817b4b754c75df969b660ccb40049485d0c8a504"
+    },
+    {
+      "path": "tests/support/owned_source_construction_preservation.rs",
+      "bytes": 27624,
+      "sha256": "df8eb065d59c73177709e83a2eab72e0bcb323e24cd250e994f30acc56b176e2"
+    }
+  ],
+  "publication": "publication-validation.json",
+  "seed_installation": "seed-installation.json",
+  "authoring": "cutover-proof.json",
+  "receipt_authoring": "receipt-rebind-report.json",
+  "preserved_failures": [
+    "logs/reverse-primary-import-catalog-20261021-01.log",
+    "logs/reverse-primary-source-20261021-01.log"
+  ],
+  "profile": {
+    "offline": true,
+    "locked": true,
+    "jobs": 2,
+    "dev_debug": 0,
+    "test_debug": 0,
+    "incremental": false,
+    "test_opt_level": 2,
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "cli_default_features": false
+  },
+  "full_build_calculation": "not_run",
+  "complete_original_builds": 0,
+  "retired_selected_input_issues": 0,
+  "hosted_ci": "not_established_by_local_validation"
+}

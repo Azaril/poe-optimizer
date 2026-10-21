@@ -394,6 +394,7 @@ pub(super) mod tests {
         let roles = OwnedSkillRoleIndex::new(
             OwnedSkillRolePackageInput {
                 schema_version: OWNED_SKILL_ROLE_VERSION,
+                reverse_primary: OwnedReversePrimaryCensus::Unavailable {},
                 namespace: ns.clone(),
                 definitions: schema.identity().clone(),
                 mapping: *mappings.identity(),

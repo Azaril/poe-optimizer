@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "status": "frozen-not-executed",
+  "target": "crates/poe-optimizer-pob/tests/owned_generated_source_dispatch_source.rs",
+  "bytes": 23135,
+  "sha256": "619ab58d618a4f0df0fb189191a5440c4b772b8f310514c329c6f7bb5437086d",
+  "test_count": 4,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "catalog_path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+  "catalog_sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e",
+  "readme_sha256": "bf3beaf57be31dd529ef6f108cf2dce0b21df0f1dc8fcd4803c27c20e0b6ed64",
+  "validation": [
+    "rustfmt --check passed",
+    "independent read-only review clear",
+    "Cargo and Lua execution pending root"
+  ]
+}

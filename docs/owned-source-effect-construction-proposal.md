@@ -141,15 +141,21 @@ not a runtime dispatch certificate: a structurally valid role artifact may omit
 another candidate even when its surviving row retains the catalog commitment.
 The existing alias/subset controls must remain.
 
-The next construction checkpoint should preserve the compiler-derived reverse
-primary census in this same Import-only artifact. An observed route needs every
-candidate's existing Gem/catalog-row identity, explicit empty candidates for
-known Skills with no primary Gem, and an unavailable state for missing
-observations. Multiple candidates must stay ambiguous; sorted serialization
-does not select a winner from PoB's unordered iteration. Validate exact candidate
-joins, bounds and namespaces at loading, and reproduce the entire census from
-the authenticated catalog during publication. Rebuild the current artifacts
-and dependent commitments in place, without compatibility readers.
+The required `OwnedSkillRolePackageInput.reverse_primary` census is now
+implemented in this same Import-only artifact. Fresh compilation and catalog
+extension carry the compiler observation forward. `Unavailable` means there is
+no observation; an observed route with zero candidates proves absence for that
+exact source/owned Skill. Each candidate retains its existing Gem and catalog-row
+identity. Multiple candidates stay ambiguous; canonical sorting never chooses
+PoB's unordered winner. A missing route or a different owned Skill remains
+unavailable, not an observed zero.
+
+Loading validates exact joins, namespaces and bounded nested work. Offline
+publication additionally reproduces every route and candidate from the complete
+authenticated catalog. This rejects a coherent edited subset even if its local
+counts and commitments agree. The required field has no missing-field default
+or old reader. Artifact rebuilding and validation are tracked in the
+implementation plan; this update does not claim those checks have completed.
 
 Requiring equality between role IDs and all mapped Gem targets is insufficient:
 a mapping can also omit an alias, and a combined mapping can legitimately retain
@@ -157,11 +163,18 @@ unrelated older catalog entries. A whole-catalog commitment is not a substitute
 for the facts needed by a consumer. Keep source observations out of the native
 model and do not copy upstream lookup behavior into the evaluator.
 
-Only then may the existing generated-field adapters consume unique/absent/
-ambiguous routing facts alongside their exact live provider, source, slot and
-level checks. Count, secondary-switch and reference-selection proofs remain
-independent. This follow-up must preserve both Djinn effects and retain
-unresolved cases, rather than generalizing Firebolt's singleton behavior.
+The new source-component controls distinguish the actual dispatchers:
+`LoadSkill` and generated-skill construction use a Skill-table-keyed reverse
+lookup, while bare `ProcessSocketGroup` processing uses a string-keyed lookup
+and can take the direct-effect fallback. Complete source construction, explicit
+Gem selection and both alias-construction orders are separate observations.
+These tests supply source evidence, not runtime Import or native authority.
+
+Existing generated-field adapters still need their exact live provider, source,
+slot and level checks before consuming the census. Count, secondary-switch and
+reference-selection proofs remain independent. Both Djinn effects and unresolved
+cases must survive; Firebolt's singleton cannot stand in for them. This change
+adds no native behavior or schema revision and retires no selected input issue.
 The bounded audit is `runs/generated-source-reverse-routes-audit-20261021/README.md`;
 the implementation plan records its priority and execution status.
 

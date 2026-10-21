@@ -1,0 +1,106 @@
+   Compiling poe-optimizer-import v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-import)
+   Compiling poe-optimizer-cli v0.1.0 (C:\code\poe-optimizer)
+    Finished `test` profile [optimized] target(s) in 12m 25s
+     Running tests\owned_catalog_cli.rs (target\debug\deps\owned_catalog_cli-89b9da19d16756d2.exe)
+
+running 9 tests
+test publish_executable_membership_correction_preserving_all_five_originals ... ignored, requires POE_OPTIMIZER_TEST_GEM_MEMBERSHIP_PRIOR and a fresh POE_OPTIMIZER_TEST_GEM_MEMBERSHIP_OUTPUT; checks all five originals
+test preservation::selected_baseline_tests::historical_count_preserves_current_diagnostics_and_other_obligations ... ok
+test preservation::selected_baseline_tests::historical_exclusion_rejects_duplicate_issue_or_item_authority ... ok
+test preservation::selected_baseline_tests::historical_exclusion_requires_exact_item_pending_field ... ok
+test executable_membership_correction_censuses_all_catalogue_references ... ok
+test executable_membership_correction_rejects_active_loss_or_false_completion ... ok
+test stale_mapping_and_existing_destinations_never_publish_or_clobber ... ok
+test real_catalog_cli_reproduces_nine_artifacts_and_second_pass_reuses_every_identity ... ok
+test all_five_normalize_with_persisted_ids_quality_rewards_and_every_query_still_pending ... ok
+
+test result: ok. 8 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.88s
+
+     Running tests\owned_evaluation_release_cli.rs (target\debug\deps\owned_evaluation_release_cli-7321d1e2ca85ed36.exe)
+
+running 8 tests
+test legacy_release_without_metrics_is_valid_but_not_an_evaluation_release ... ok
+test legacy_authoring_cannot_silently_drop_validated_evaluation_artifacts ... ok
+test partial_authored_evaluation_packages_are_rejected_before_publication ... ok
+test full_publication_and_directory_rebuild_match_the_explicit_native_api ... ok
+test release_mode_cannot_mix_manual_artifacts_and_still_requires_an_explicit_request ... ok
+test evaluation_migration_rejects_stale_or_missing_endpoint_packages_without_publication ... ok
+test missing_stale_extra_and_rehashed_incoherent_artifacts_never_fall_back ... ok
+test explicit_evaluation_migration_publishes_exact_endpoint_and_runs_the_same_native_request ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.63s
+
+     Running tests\owned_ice_nova_count_inputs.rs (target\debug\deps\owned_ice_nova_count_inputs-192f2782c7516a62.exe)
+
+running 8 tests
+test retained_controls_separate_exact_count_source_from_per_copy_damage_and_aggregate_labels ... ok
+test independent_presets_disabled_sources_and_origin_links_survive_transport ... ok
+test duplicate_physical_sources_preserve_independent_targets_without_first_copy_fallback ... ok
+test unique_reviewed_companions_are_required_only_for_occurrence_fallback ... ok
+test count_zero_group_override_and_malformed_selected_values_do_not_invent_defaults ... ok
+test authenticated_packet_binds_count_policy_exact_source_and_reviewed_companions ... ok
+test dependencies_and_companion_identity_cannot_be_silently_rebound ... ok
+test count_append_is_exact_and_rejects_missing_ambiguous_or_already_converted_sources ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+
+     Running tests\owned_normalize_cli.rs (target\debug\deps\owned_normalize_cli-d0c018f576c5b6b9.exe)
+
+running 10 tests
+test item_policy_path_is_required_even_when_other_artifacts_are_present ... ok
+test explicit_artifacts_produce_a_checked_pending_draft_sidecar_and_summary ... ok
+test help_and_missing_required_artifacts_do_not_need_runtime_data ... ok
+test missing_or_stale_reward_policy_rejects_before_output_publication ... ok
+test source_layout_policy_is_required_and_must_bind_the_exact_item_line_artifact ... ok
+test repeated_fresh_imports_have_distinct_lineages_and_preserve_existing_output ... ok
+test malformed_missing_or_oversized_policy_never_publishes_a_directory ... ok
+test strict_roles_queries_and_wrong_bindings_fail_before_publication ... ok
+test source_layout_malformed_missing_and_oversized_inputs_never_publish_output ... ok
+test malformed_stale_missing_or_oversized_item_policy_never_publishes_output ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+
+     Running tests\owned_scenario_stage_inputs.rs (target\debug\deps\owned_scenario_stage_inputs-4d45667ed91fd85d.exe)
+
+running 10 tests
+test author_scenario_stage_packet_from_current_predecessor ... ignored, explicit offline Rust authoring from authenticated current predecessor
+test authenticated_packet_preserves_unknown_mechanics_and_exact_positive_relations ... ok
+test missing_registered_supply_and_contradictory_grant_are_rejected ... ok
+test real_stages_are_retained_without_a_consumer_and_keep_inventory_obligations ... ok
+test zero_selection_and_missing_lanes_follow_each_actual_source_reader ... ok
+test independent_config_sets_do_not_copy_intents_into_skill_presets ... ok
+test complete_intent_receipts_account_both_lanes_but_not_missing_extra_destinations ... ok
+test stale_dependencies_required_parameters_and_work_bounds_are_rejected ... ok
+test malformed_losing_lanes_duplicates_and_unsupported_domains_do_not_emit_intent ... ok
+test append_is_exact_atomic_and_rejects_duplicates ... ok
+
+test result: ok. 9 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests\owned_source_construction_cli.rs (target\debug\deps\owned_source_construction_cli-aa3f79e86fb903db.exe)
+
+running 5 tests
+test reverse_primary_cutover_preserves_all_five_imports_and_pending_requests ... ignored, explicit candidate and fresh output paths; preserves five authenticated originals
+test preservation::selected_baseline_tests::historical_count_preserves_current_diagnostics_and_other_obligations ... ok
+test preservation::selected_baseline_tests::historical_exclusion_rejects_duplicate_issue_or_item_authority ... ok
+test preservation::selected_baseline_tests::historical_exclusion_requires_exact_item_pending_field ... ok
+test proof::cutover_rejects_unavailable_reverse_census_even_with_self_consistent_authoring ... ok
+
+test result: ok. 4 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+     Running tests\owned_successor_cli.rs (target\debug\deps\owned_successor_cli-b54ecceb6a08c679.exe)
+
+running 2 tests
+test stale_bindings_and_existing_destinations_never_publish_or_clobber ... ok
+test checked_publication_preserves_all_five_inputs_and_adds_real_item_conversion ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.77s
+
+     Running tests\owned_tree_cli.rs (target\debug\deps\owned_tree_cli-177c2ca44d1aff7b.exe)
+
+running 3 tests
+test all_five_xml_censuses_match_independent_spec_allocations_choices_roots_and_queries ... ok
+test real_tree_publication_reproduces_twenty_files_and_reuses_every_tree_identity ... ok
+test malformed_hash_omission_stale_tree_and_existing_output_never_publish ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.40s
+

@@ -177,6 +177,7 @@ pub fn extend_owned_catalog_recipe(
             mapping: *mapping.identity(),
             compilation: extended.receipt.clone(),
             roles: extended.roles,
+            reverse_primary: extended.reverse_primary,
         },
         &mapping,
         &schema,

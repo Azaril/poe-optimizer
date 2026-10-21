@@ -1,0 +1,38 @@
+[
+  {
+    "Before": "7a2191cdc79594cf25955a1204aadd7287766fafa323ac48c662cd553f6e0d1f",
+    "After": "3cb3eff6809f1a1eca2985bef2e5112f70ac17459cf1b849888e30836615481f",
+    "Path": "data/owned/poe2/3887ae68/import/compiled/roles.json",
+    "Source": "C:\\code\\poe-optimizer\\runs\\owned-reverse-primary-cutover-01\\compiled\\roles.json"
+  },
+  {
+    "Before": "5ca97989545ed0ef5441d580dca09d9f6bf9dbe39531ee9f59f2b14b780093a0",
+    "After": "b2344ac74901d1bdd4557f1dd5b5484465eb7e380ac9a0513f803370177eea81",
+    "Path": "data/owned/poe2/3887ae68/import/compiled/transition.json",
+    "Source": "C:\\code\\poe-optimizer\\runs\\owned-reverse-primary-cutover-01\\compiled\\transition.json"
+  },
+  {
+    "Before": "611713865bbf4ab237dd132ee79c232c6e81eb76c35dbf2e998233121874e04b",
+    "After": "25a6315574b8f4fe822440e4b39d95f03b86e4d3d6caec0f5237854002e97082",
+    "Path": "data/owned/poe2/3887ae68/current/roles.json",
+    "Source": "C:\\code\\poe-optimizer\\runs\\owned-reverse-primary-cutover-01\\current\\roles.json"
+  },
+  {
+    "Before": "a84e9c57648d6d8108d3291120d0b84e649632d4ae597e63a14aaae818233a7e",
+    "After": "94366d5423119f47228ca5019fba0d4732c0420287b9d628672262c0cb7810c6",
+    "Path": "data/owned/poe2/3887ae68/current/transition.json",
+    "Source": "C:\\code\\poe-optimizer\\runs\\owned-reverse-primary-cutover-01\\current\\transition.json"
+  },
+  {
+    "Before": "c0e958785176c256794547ce400e4980f5e24b9ef178bf43e981b8ff7c87c4db",
+    "After": "d9fad8cb88adb815c24f38eba2a7577089c3ea25f47389bc76bbeb96f6414549",
+    "Path": "data/owned/poe2/3887ae68/import/policies/transition.json",
+    "Source": "C:\\code\\poe-optimizer\\runs\\owned-reverse-primary-receipts-01\\files\\data\\owned\\poe2\\3887ae68\\import\\policies\\transition.json"
+  },
+  {
+    "Before": "e92aecb56d7674a11f15c3e6df28ffdb618829b63c94332df2116d473d741c23",
+    "After": "98afd229106a59f279d4423487d57772a706279a2f4d78bbf335d4751bb88ef8",
+    "Path": "data/owned/poe2/3887ae68/allocations/source-facts.json",
+    "Source": "C:\\code\\poe-optimizer\\runs\\owned-reverse-primary-receipts-01\\files\\data\\owned\\poe2\\3887ae68\\allocations\\source-facts.json"
+  }
+]

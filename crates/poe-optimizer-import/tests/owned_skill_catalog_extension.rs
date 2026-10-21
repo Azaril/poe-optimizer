@@ -367,6 +367,7 @@ fn assembled(
     let mapping = mapping(&result.registry, &schema, result.mappings.clone());
     let roles = OwnedSkillRoleIndex::new(
         OwnedSkillRolePackageInput {
+            reverse_primary: result.reverse_primary.clone(),
             schema_version: OWNED_SKILL_ROLE_VERSION,
             namespace: ns(),
             definitions: schema.identity().clone(),
@@ -472,6 +473,7 @@ fn repeating_the_extension_allocates_nothing_and_preserves_snapshot_identities()
     assert_eq!(second.slots, first.slots);
     assert_eq!(second.mappings, first.mappings);
     assert_eq!(second.roles, first.roles);
+    assert_eq!(second.reverse_primary, first.reverse_primary);
     let (schema, mapping, roles) = assembled(&next, &second);
     verify_owned_skill_catalog_reproduction(&catalog, &roles, &mapping, limits()).unwrap();
     assert_eq!(schema.identity(), next.schema.identity());

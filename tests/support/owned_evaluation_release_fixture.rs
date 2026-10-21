@@ -402,6 +402,7 @@ fn build_fixture(contract: Option<(&str, &str)>) -> Fixture {
         },
         mapping: mapping.input().clone(),
         roles: OwnedSkillRolePackageInput {
+            reverse_primary: OwnedReversePrimaryCensus::Unavailable {},
             schema_version: OWNED_SKILL_ROLE_VERSION,
             namespace: namespace.clone(),
             definitions: definitions.identity().clone(),

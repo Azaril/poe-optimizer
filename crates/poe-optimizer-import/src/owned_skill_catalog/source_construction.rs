@@ -95,7 +95,7 @@ pub struct ObservedGemSourceConstruction {
     pub missing_references: Vec<OwnedMissingSourceEffect>,
 }
 
-type SourceSkills<'a> = BTreeMap<&'a str, (SkillDefId, Option<bool>, Option<bool>)>;
+pub(super) type SourceSkills<'a> = BTreeMap<&'a str, (SkillDefId, Option<bool>, Option<bool>)>;
 
 fn source_text(value: &str, budget: &mut Budget) -> Result<()> {
     budget.text(value)?;
@@ -299,7 +299,7 @@ fn effect_selector(effect_id: &str) -> ExternalSelector {
     })
 }
 
-fn check_effect<I: DefinitionSchemaIndex>(
+pub(super) fn check_effect<I: DefinitionSchemaIndex>(
     reference: &OwnedSourceEffectReference,
     mappings: &OwnedMappingIndex,
     definitions: &I,
@@ -537,6 +537,11 @@ pub fn verify_owned_skill_catalog_reproduction(
         }
     }
     if !by_key.is_empty() {
+        return Err(SkillCatalogError::ReproductionMismatch);
+    }
+    if input.reverse_primary
+        != reverse_primary::derive(catalog, &skills, &input.roles, &mut budget)?
+    {
         return Err(SkillCatalogError::ReproductionMismatch);
     }
     Ok(())

@@ -1094,6 +1094,7 @@ impl Fixture {
         .unwrap();
         let roles = OwnedSkillRoleIndex::new(
             OwnedSkillRolePackageInput {
+                reverse_primary: OwnedReversePrimaryCensus::Unavailable {},
                 schema_version: OWNED_SKILL_ROLE_VERSION,
                 namespace: namespace(),
                 definitions: schema.identity().clone(),

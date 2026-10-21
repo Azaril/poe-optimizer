@@ -1,4 +1,4 @@
-//! Explicit offline migration proof; no old-format runtime or numerical evaluation.
+//! Reverse-primary cutover proof; no old-format runtime or numerical evaluation.
 #[allow(dead_code)]
 #[path = "support/owned_physical_inventory_preservation.rs"]
 mod preservation;
@@ -31,20 +31,39 @@ fn publish(input: &std::path::Path, output: &std::path::Path) -> Value {
 
 #[test]
 #[ignore = "explicit candidate and fresh output paths; preserves five authenticated originals"]
-fn source_construction_cutover_preserves_all_five_imports_and_pending_requests() {
+fn reverse_primary_cutover_preserves_all_five_imports_and_pending_requests() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let candidate =
-        PathBuf::from(std::env::var_os("POE_OPTIMIZER_CONSTRUCTION_CANDIDATE").unwrap());
+        PathBuf::from(std::env::var_os("POE_OPTIMIZER_REVERSE_PRIMARY_CANDIDATE").unwrap());
     let out =
-        PathBuf::from(std::env::var_os("POE_OPTIMIZER_CONSTRUCTION_VALIDATION_OUTPUT").unwrap());
+        PathBuf::from(std::env::var_os("POE_OPTIMIZER_REVERSE_PRIMARY_VALIDATION_OUTPUT").unwrap());
     assert!(
         !out.exists(),
         "validation evidence must use a fresh directory"
     );
-    let prior = root.join("runs/owned-scenario-stage-inputs-publication-01");
+    let prior = root.join("runs/owned-generated-enabled-publication-01");
     let package = candidate.join("package");
     let old_files = release::inventory(&prior.join("package"));
     let new_files = release::inventory(&package);
+    assert_eq!(old_files.len(), 18);
+    assert_eq!(
+        old_files.keys().collect::<Vec<_>>(),
+        new_files.keys().collect::<Vec<_>>()
+    );
+    let changed_files: Vec<_> = new_files
+        .iter()
+        .filter(|(name, hash)| old_files[*name] != **hash)
+        .map(|(name, _)| name.as_str())
+        .collect();
+    assert_eq!(
+        changed_files,
+        [
+            "normalization.json",
+            "release.json",
+            "roles.json",
+            "tree-normalization.json"
+        ]
+    );
     let staged = release::load(&package);
     let old_receipt = proof::authenticate_cutover(&prior, &candidate, &staged);
     fs::create_dir_all(&out).unwrap();
@@ -82,6 +101,8 @@ fn source_construction_cutover_preserves_all_five_imports_and_pending_requests()
             "before":proof::PRIOR_INPUT,"after":staged.receipt().input,
             "originals":cases,"query_rows":110,"rebuild_byte_identical":true,
             "native_recipe_unchanged":true,"fresh_imports_identical":true,
+            "reverse_primary_census_reproduced":true,
+            "package_files":18,"changed_package_files":changed_files,
             "complete_original_builds":0,"retired_input_issues":0,
             "calculation":"not_run","whole_build_parity":"not_established"
         }),

@@ -1,0 +1,8 @@
+    Finished `test` profile [optimized] target(s) in 0.17s
+     Running tests\owned_source_construction_cli.rs (target\debug\deps\owned_source_construction_cli-aa3f79e86fb903db.exe)
+
+running 1 test
+test reverse_primary_cutover_preserves_all_five_imports_and_pending_requests ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 14.63s
+
