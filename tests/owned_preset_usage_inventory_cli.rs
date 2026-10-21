@@ -247,3 +247,17 @@ fn manual_direct_inventory_preserves_source_dispatch_and_every_other_consumer() 
 fn real_manual_direct_groups_require_reference_and_usage_accounting() {
     manual_direct::run_controls();
 }
+
+#[path = "support/owned_generated_firebolt_dispositions.rs"]
+mod generated_firebolt;
+
+#[test]
+fn generated_firebolt_destinations_preserve_every_other_consumer() {
+    generated_firebolt::mutation_controls();
+}
+
+#[test]
+#[ignore = "exact published predecessor; all five originals, fresh replay and byte-identical rebuild"]
+fn publish_generated_firebolt_destinations_with_all_five_unchanged() {
+    generated_firebolt::run();
+}

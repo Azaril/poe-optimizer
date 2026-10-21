@@ -52,6 +52,16 @@ all-five draft, query and selected-issue preservation, fresh CLI replay and an
 identical package rebuild. This retires one source-origin link per build, not a
 whole configuration or usage obligation.
 
+Generated-skill accounting uses the same distinction at field level. A checked
+raw-input receipt proves the exact supplying occurrence and the values preserved
+on its generated Skill; a reporting receipt proves a separate typed preference.
+Neither substitutes for participation, count or effect-selection evidence.
+Every declared consumer of a saved field must have its own matching receipt.
+These temporary Import proofs do not become evaluator types or game rules.
+The [generated field bindings](../data/owned/poe2/3887ae68/generated-firebolt-dispositions/README.md)
+apply that existing contract through data, retaining unresolved consumers and
+requiring fresh source matching after an equipment or preset change.
+
 The October 20 [coverage assessment](../runs/coverage-audit-20261020/assessment.md)
 audits the last validated release separately from current migration work.
 Imported identities, complete structural inventories, mechanical implementation

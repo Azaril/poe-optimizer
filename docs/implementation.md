@@ -9,11 +9,11 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Current checkpoint:** grouped slot-copy contract checks and the source
-Import-preference policy publication pass. Original05 Sniper
+**Current checkpoint:** generated-skill intrinsic and reporting field accounting
+passes publication and all-five preservation checks. Original05 Sniper
 remains the priority build. Selected input issues remain **123/137/127/144/5**,
-and **0/5 builds have complete native evaluation**. The latest pushed checkpoint
-is Flask delivery `0bd89d1c`; its remote hash was verified.
+and **0/5 builds have complete native evaluation**. This checkpoint follows
+verified remote baseline `61a5b400` (Import preferences and grouped-copy controls).
 
 The five Flask owner gaps and all ten Partial template owners remain open.
 Direct delivery does not account for late grouped slot copies, and the new
@@ -29,20 +29,39 @@ The fresh checked Original05 report identifies the selected usage issue as
 `051b`, with five total selected issues; earlier `0507` references below belong
 to older imports and must not be used as current occurrence identities.
 
-Next connect the generated Firebolt intrinsic fields already covered by checked
-input receipts to their existing inventory destinations. Original05's exact
+The generated Firebolt intrinsic fields already covered by checked input receipts
+now use their existing inventory destinations. Original05's exact
 group243/Gem244 is supplied by Item28/EquipmentUse02e8/Modifier02be through
-Modifier definition31c6 and SkillGrant slot31c9. Thirteen current Deferred fields have an existing
-`InputDisposition` producer: group source/slot/label; Gem corrupted/corruptLevel,
+Modifier definition31c6 and SkillGrant slot31c9. Thirteen Deferred fields now
+require their existing `InputDisposition` producer: group source/slot/label; Gem corrupted/corruptLevel,
 gemId/variantId/skillId/nameSpec, level/quality/enableGlobal1; and reference
-descendants. Reuse `generated_skill_inputs/dispositions.rs` and the existing
-inventory consumer. Verify the actual receipt and exact field accounting on
-the unchanged build; unchanged Pending counts alone are insufficient evidence.
-Keep group enabled/includeInFullDPS/mainActiveSkill/mainActiveSkillCalcs and Gem
-enabled/count/enableGlobal2 Deferred until their own proofs are complete. Keep
-typed participation/count/reporting consumers conjunctive, the separate SolPole
-provider refusal, and usage issue051b Pending. This is an existing-model data
-step, not a new schema or a declaration that the whole skill is implemented.
+descendants. Separately, both Firebolt policy rows remove only the redundant
+Deferred destination for group `includeInFullDPS`, preserving the exact typed
+reporting policy338e/parameter338f. Six Deferred fields remain on the live source;
+nineteen remain on its unresolved Sol Pole alternative. No runtime Rust changes,
+new schema or completion claim were needed.
+
+Nine Import tests prove synthetic private-receipt consumption, including all
+thirteen fields, missing and additional consumers, exact providers and reporting
+values. The real-build gate separately authenticates the unchanged persisted
+bindings, source links, provider and reporting Boolean false. It does not claim
+direct observation of private receipts from that real import. Whole-draft and
+fresh-replay comparisons remain exact. The first publication attempt caught an
+expected-snapshot JSON representation error (`0` versus declared `f64` `0.0`);
+only expected records now round-trip through their declared Rust types, with
+strict lineage and malformed-value controls. The failed log is retained, and no
+live comparison, production rule or numeric tolerance changed.
+
+**Next closest-build blocker:** establish the source construction and matching
+facts required by the remaining generated usage consumers. Keep group enabled,
+mainActiveSkill/mainActiveSkillCalcs and Gem enabled/count/enableGlobal2 Deferred.
+Current Firebolt role0778 records an additional stat set, not an additional
+Skill, and its observed row alone does not prove the absence of other reverse
+catalog candidates. Retain the existing alias counterexample; inspect full
+offline catalog facts before claiming unique source dispatch or transferring
+physical-Gem selector proofs to generated sources. Reuse the existing Import
+fact boundary where sufficient; discuss any significant public-model extension.
+The Djinn rows, independent consumers and usage issue051b remain Pending.
 
 The next bounded audit is `runs/grouped-slot-copy-guidance-20261021/README.md`.
 It identifies the earliest missing authority as a late slot-percentage supplier
@@ -66,21 +85,24 @@ for a whole build. The retained failure was a fixture assumption, not a source
 defect or nondeterministic calculation. Native Mystic Attunement still emits only
 the earlier Amulet percentage; its missing Ring outputs remain later data work.
 
-Current validated package: `runs/owned-import-preferences-publication-01/package`,
-input `6f58eba00e71984264123419f51114f375bdce23440eaa4ff3ffa4999e2beb11`;
-release SHA-256 `73393bbd6b8629e564ad31073c90eeb69133932d9bad77510fc9874b36dcc856`;
-validation SHA-256 `9b11ca157080a83cda815369f5a010d01d33a795352a00cb54ffd8fcda4594a9`.
-Only the normalization policy, its tree-policy commitment and release provenance
-change from predecessor `720d65ca`; numerical rules and all 110 query rows are
+Current validated package: `runs/owned-generated-firebolt-dispositions-publication-02/package`,
+input `a8317fccf1cdf6bad38be2308e5ac69f7d32695d6439b7afb169d42b6c9fceca`;
+release SHA-256 `fac8c4522ec39de0c3c4130fab9e5956239cab4a72f5775b3ff76adc235eb190`;
+validation SHA-256 `d8fb315810aaa3a74c18c986971518b2bf9383e0263fb02e1157f6a1dca89d89`.
+Only the normalization policy and its dependent commitments, tree-policy
+commitment and release provenance change from predecessor `6f58eba0`;
+numerical rules and all 110 query rows are
 identical. All five whole drafts, allocators, selections and finalization issues
 are preserved. Fresh CLI replays agree, and all 18 package files rebuild
-byte-for-byte. Five adapter controls, fifteen ordinary presentation tests, the
-all-five publication test and scoped strict Clippy pass. Four other explicit
-publication tests remain ignored in the ordinary target. No selected input issue
+byte-for-byte. Nine Import tests, nine ordinary CLI tests, the all-five publication
+test and scoped Import/CLI strict Clippy pass. Seven explicit publication tests
+remain ignored in the ordinary CLI target. No selected input issue
 retired; the original-five build status remains 0/5 complete. The
-[Import preference checkpoint](evidence/source-import-preferences/README.md)
+[generated field checkpoint](evidence/generated-firebolt-dispositions/README.md)
 retains the exact receipt, hashes and preservation results. Its
-[Flask predecessor](evidence/flask-charge-delivery/validation.json) retains the
+[Import preference predecessor](evidence/source-import-preferences/README.md)
+retains the prior source-origin retirement, and the
+[Flask checkpoint](evidence/flask-charge-delivery/validation.json) retains the
 earlier numerical addition and source checks.
 
 Current grouping logs and exact source/module pins are in its
