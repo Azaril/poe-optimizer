@@ -1,0 +1,124 @@
+[
+  {
+    "source_name": "enemyCritChance",
+    "presence_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003353"
+    },
+    "value_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003354"
+    },
+    "recipe": {
+      "id": "raw-enemycritchance",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "quantity",
+          "value": {
+            "syntax": "scientific",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000002"
+            },
+            "scale": {
+              "numerator": 1,
+              "denominator": 1
+            }
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "input_number",
+              "name": "enemyCritChance"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    }
+  },
+  {
+    "source_name": "enemyCritDamage",
+    "presence_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003355"
+    },
+    "value_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003356"
+    },
+    "recipe": {
+      "id": "raw-enemycritdamage",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "quantity",
+          "value": {
+            "syntax": "scientific",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000002"
+            },
+            "scale": {
+              "numerator": 1,
+              "denominator": 1
+            }
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "input_number",
+              "name": "enemyCritDamage"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    }
+  }
+]

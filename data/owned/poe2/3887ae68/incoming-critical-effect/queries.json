@@ -1,0 +1,155 @@
+[
+  {
+    "id": "incoming-critical-never",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003359"
+    },
+    "contribution": "flag",
+    "groups": [
+      {
+        "id": "all",
+        "reduction": "any",
+        "ordering": "unordered",
+        "empty": {
+          "kind": "boolean",
+          "value": false
+        },
+        "members": {
+          "members": [],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "stat",
+                      "value": {
+                        "kind": "stat",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003359"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "incoming-critical-flag-domain-unproved"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "incoming-critical-always",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000335a"
+    },
+    "contribution": "flag",
+    "groups": [
+      {
+        "id": "all",
+        "reduction": "any",
+        "ordering": "unordered",
+        "empty": {
+          "kind": "boolean",
+          "value": false
+        },
+        "members": {
+          "members": [],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "stat",
+                      "value": {
+                        "kind": "stat",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000335a"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "incoming-critical-flag-domain-unproved"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "incoming-critical-unlucky",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000335b"
+    },
+    "contribution": "flag",
+    "groups": [
+      {
+        "id": "all",
+        "reduction": "any",
+        "ordering": "unordered",
+        "empty": {
+          "kind": "boolean",
+          "value": false
+        },
+        "members": {
+          "members": [],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "stat",
+                      "value": {
+                        "kind": "stat",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000335b"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "incoming-critical-flag-domain-unproved"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+]
