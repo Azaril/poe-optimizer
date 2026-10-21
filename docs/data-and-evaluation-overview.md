@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-20. The owned path imports an external build into explicit
+Snapshot: 2026-10-21. The owned path imports an external build into explicit
 occurrences, validates it against injected definitions and rules, and executes
 the resulting graph in Rust. The CLI, future UI and optimizer share those public
 contracts. Native calculation has no Lua state or PoB subprocess. Optional
@@ -16,6 +16,16 @@ checkpoints below explain what each component proves without implying complete
 build support.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
+
+Items now carry independent contribution and numeric-transform orders over the
+same modifier occurrences. Each order requires its own completeness proof;
+record storage order supplies neither. The migration is implemented and validated
+across all five imports. Native rules still consume canonical numeric inputs.
+The newer source controls expose a fixed/ranged text discrepancy when transforms
+cancel; that parser behavior remains an Import investigation, not a native rule.
+The Flask delivery addition uses the existing equipment-to-Actor contribution
+graph and preserves every other owner and input obligation. Component parity and
+publication checks do not establish complete Player aggregation or a working build.
 
 The October 20 [coverage assessment](../runs/coverage-audit-20261020/assessment.md)
 audits the last validated release separately from current migration work.

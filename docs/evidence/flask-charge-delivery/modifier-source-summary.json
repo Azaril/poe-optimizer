@@ -1,0 +1,15 @@
+{
+  "cases_per_replay": 59,
+  "catalog_metadata_sha256": "82c8f94503ee19ef094c5a44262a6d67c6ada81d985120d915f60bee351338bd",
+  "closure_authority": false,
+  "fresh_replays": 4,
+  "full_build_evaluation": false,
+  "native_parity": false,
+  "original_functions_preserved": true,
+  "scalability_rows": 47,
+  "scope": "Original magnitude producer discovery, eligibility, arithmetic kind, encoding and order; diagnostics are not adopted native semantics",
+  "source_admission_authority": false,
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "status": "source_controls_passed",
+  "upstream_modifier_ids": 15
+}

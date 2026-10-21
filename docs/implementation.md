@@ -9,6 +9,50 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
+**Active next step:** the modifier-order checkpoint `41269604` is pushed
+and its remote hash verified. The reviewed Flask delivery and Charm consumer
+controls pass: seven Flask native controls, fifteen Charm controls, twenty Flask
+observations in independent fresh PoB VMs, and 59 modifier-source cases replayed
+four times with JIT on/off. Scoped native and source strict Clippy checks pass.
+The all-five Flask publication test passes through the existing current-release
+migration seam. Its initial compile exposed a test-only moved
+value in the whole-recipe inverse; obtaining the destination reference before
+moving the old owner fixes the borrow without changing any assertion. The fresh
+serial script `runs/flask-publication-validation-02.ps1` passed ordinary tests,
+publication and strict lint. No Cargo process remains active. All five Flask
+owner gaps remain open in that publication. The proposed 5-to-4 retirement is
+on hold: direct delivery does not cover the existing late grouped equipment-slot
+copy path. A broad Partial item-template marker is not proof that this remaining
+responsibility has another complete owner. Next implement or explicitly account
+for that shared copy/supplier path through the existing graph; it also affects
+Life, resistance and movement. Preserve all ten Partial template owners and
+current import counts.
+No complete-build result is claimed.
+
+Current validated package: `runs/owned-flask-charge-delivery-publication-01/package`,
+input `720d65ca89ec10a9ec57d26324abc52d963b6246cbfae618105c86e9e129eacf`;
+release SHA-256 `297f262f30c53957958b89d7c16deeffd888591c1bc9c0b379fb41bb555019c3`;
+validation SHA-256 `f2de89b603a575f547ca184dce457c63968fa6909a8a9c184dd75b4dbcabfb52`.
+It adds one Stat and one contribution program, preserves all five original imports
+and 110 query rows, and rebuilds byte-for-byte. No selected input issue retired.
+The [archived checkpoint receipt](evidence/flask-charge-delivery/validation.json)
+records the passing tests, source summaries, exact publication and protected-file
+checks. The original-five build status remains 0/5 complete.
+
+Validation logs: `runs/flask-native-controls-03.log`,
+`runs/flask-charm-native-controls-01.log` (Charm section),
+`runs/flask-charge-delivery-source-02.log`,
+`runs/charm-ordered-consumer-source-01.log`, and both
+`runs/flask-charm-{native,source}-clippy-01.log` files. Original failed runs remain
+available. The fixes were confined to test setup and observation: the shared V28
+fixture now supplies its mandatory empty contribution-query inventory; the actual
+Partial owner's negative test checks the early `IncompleteContributors` refusal;
+the source observer uses the original `build.calcsTab.calcs` table with module
+identity guards. No production acceptance check or source calculation changed.
+Exact repair receipts are in `runs/flask-v28-fixture-inventory-repair-20261021`,
+`runs/flask-partial-owner-refusal-repair-20261021` and
+`runs/flask-source-module-repair-20261021`.
+
 **Validated checkpoint: independent modifier orders.** The user-approved
 two-order model is implemented from remote main `c7e53685` and the data baseline
 below. Core/Draft records, Import source proofs and both evaluation binders have
@@ -111,7 +155,7 @@ Import were independently reviewed; Core received a second review by its
 original migration author. All 45 final fixture hashes, eight literal-pin files,
 the separate Mana anchor and nine protected files were rechecked. The next
 implementation step is the reviewed Flask native/source controls and Charm
-ordered-consumer controls described below; their candidates remain unapplied.
+ordered-consumer controls described below, now running as a separate checkpoint.
 The last public CI check for existing main `c7e53685` at 03:47:52 UTC on
 October 21 showed eight jobs passed, ten running and no failures. This does not
 establish that the whole run is green; the new backup intentionally skips CI.
@@ -252,8 +296,8 @@ authenticated seal and run its existing pin checks in the ordinary packet test.
 The full raw/semantic inverse preserves every other pin, source and assertion.
 Runtime reruns now verify the repair without changing any behavioral assertion.
 
-**Resume in this order:** finish and validate the approved two-order migration,
-then audit the remaining obligations on the closest build's actual modifier owners
+**Resume in this order:** the approved two-order migration is validated and pushed.
+Flask direct delivery is published locally. Audit and implement the closest build's remaining shared modifier delivery obligations
 before expanding absent producer families. Fine Belt has three exact siblings
 (`3172`, `318c`, `3100`) and no transform producer among them. That physical proof
 does not authorize a complete-empty native transform channel: the current plan
@@ -263,8 +307,9 @@ make an empty example execute. Review whether the consumer's
 `remaining-ordered-magnitude-transforms-unconverted` gap still describes missing
 consumer semantics, or whether its proven generic fold already fulfills that
 responsibility. External producer definitions and Import encoding/admission
-remain separate obligations. Flask owner `318c` still has actual missing local
-delivery; completing the closest build takes precedence over unrelated catalog expansion.
+remain separate obligations. Flask owner `318c` now has validated direct delivery;
+its grouped-copy remainder still blocks closure. Completing the closest build
+takes precedence over unrelated catalog expansion.
 
 The read-only Flask audit confirms a concrete next step using the existing
 contribution graph: route `318c`'s computed effective rate `31a6`, through the
@@ -273,15 +318,16 @@ Player flask-generation rate in existing unit `31a5`. Original05 has no equipped
 flasks; per-flask charge gain and analytical uptime are separate consumers, not
 prerequisites for this producer. Its five current gaps stay open until the
 corresponding evidence exists. No new public model is indicated by the source
-trace. The proposed data candidate remains unapplied to maintained data; audit and
+trace. Its finite payload and migration request are now installed for validation;
+the production package is unchanged. Audit and
 exact current records are in `runs/flask-charge-delivery-audit-20261021`.
 The subsequent CLI probe compiled and assembled that one-Stat/one-program
 candidate through the existing current release migration path. Its provisional
 input is `720d65ca89ec10a9ec57d26324abc52d963b6246cbfae618105c86e9e129eacf`;
 `runs/flask-charge-delivery-extension-probe-01/postcheck.json` proves exact
 registry/schema/rule inverses, all five retained gaps and all 110 query bytes.
-No maintained data changes or native/source numerical parity are claimed.
-Six focused native controls are prepared, not executed, under
+That probe established no native/source numerical parity. The first six-control
+native candidate was prepared, but not applied, under
 `runs/flask-charge-delivery-native-candidate-20261021` (manifest
 `4588485817813f0e747dcbb425e023e9843c7c153515fcc2381f8385c364c87f`).
 They extend the existing Fine Belt target, preserve its numeric tests, reuse
@@ -293,12 +339,13 @@ candidate. The independently reviewed successor is
 `97d76b14b04a454f7c9f8bd0971f719126a87e127415f836afae493035f93e0d`.
 It uses the existing support/stage fixture path, explicit Execution requirements
 and a missing-readiness refusal control, and adds exact payload pins and the
-source-matching zero and 0.175-to-0.18 cases. Read-only verification and rustfmt
-pass; compilation and native execution have not run.
-No production API change or operation-version downgrade is needed. Authenticate
-the successor's before/after paths before applying after this structural
-checkpoint; no production coverage is closed by preparing these tests.
-The five-control source candidate is staged, unexecuted, in
+source-matching zero and 0.175-to-0.18 cases. All before/after pins were checked
+before application; read-only verification and rustfmt pass. Native execution
+exposed the shared-fixture inventory omission and incorrect negative-report
+expectation recorded above; both are repaired and all seven controls pass.
+No production API change or operation-version downgrade is
+needed, and no production coverage is closed by installing these tests.
+The five-control source candidate is applied and passes twenty fresh-VM observations, from
 `runs/flask-charge-delivery-source-candidate-20261021-02` (manifest
 `ee934b8048f398c8564b2afee8f3c66c2022dbbe753d4fa400f77b3b652405ce`).
 Its initial candidate is retained separately. Review found that the source
@@ -307,9 +354,10 @@ no-rebuild branch and checks list/state identities before and after observation.
 An unsupported loaded state must fail without observer repair.
 It extends the existing Fine Belt source target and full-build observer with
 original, formatted nonneutral, zero, removed-modifier and unequipped-source
-cases. Expected results remain predictions until independent fresh JIT-off/on
-replays pass. Independent review cleared the guarded successor; add its existing
-JSON/log output paths to the workflow's failure-evidence upload so diagnostics
+cases. Independent fresh JIT-off/on replays agree on every result. The initial
+observer's module binding was corrected as recorded above, preserving all
+guards and numerical expectations. Independent review cleared the guarded successor; its JSON/log
+output paths are added to the workflow's failure-evidence upload so diagnostics
 survive CI. This is test-only Lua; no new native Lua behavior or host is added.
 The baseline also round-trips byte-for-byte. The older `extend-owned-recipe`
 path instead failed with stale configuration-accounting dependencies after
@@ -327,26 +375,47 @@ pass before this publication. Its reviewed one-file candidate is
 `runs/flask-charge-delivery-publication-candidate-20261021`, manifest
 `74dd0098767efffca186336f8f396749b020d565f83f025e302552113dd65608`.
 It preserves the existing target's exact prefix, reuses the shared helpers and
-pins the already compiled migration request. Rustfmt and static correspondence
-checks pass; compilation and publication have not run. No parallel publisher
+pins the already compiled migration request. It is applied; the first compile's
+test-only moved-value error is corrected and the serial rerun passes: five
+ordinary tests, the explicit publication in 25.80 seconds, and strict Clippy.
+No assertion or data changed in that correction. No parallel publisher
 or compatibility path is needed.
+The five-gap program publication passes. A proposed metadata-only retirement
+using the existing Charm scalability overlay was reviewed and **held**:
+`CalcPerform.lua:1490–1537` also copies grouped non-Amulet slot bonuses, and the
+actual Flask modifier remains in that list. The direct Add program does not
+implement this path. Do not reinterpret `flask-charge-rate-delivery-unconverted`
+as direct-only merely because a template has a broad Partial marker. The frozen
+candidate in `runs/flask-charge-delivery-coverage-candidate-20261021` is not
+approved publication evidence; its successor remains review-only. The current
+migration compiler correctly preserves closure; do not widen it to bypass this.
+Guard `3306` proves the Talisman exclusion, not all item routing: retain all ten
+templates' Partial coverage, unavailable predicates and incomplete contributor
+refusals. The next shared copy/supplier implementation must preserve grouping
+before scaling/rounding, exact source and recipient identities, and incomplete
+membership failures. Early per-record Amulet copying is not an equivalent
+implementation. Per-Flask uptime remains unnecessary for the unchanged build's
+empty Flask slots; the four scalar/input gaps are independently retained.
 
 The follow-up consumer audit found no missing Add/Multiply fold operation in
-`3172`; current evidence proves its numerical lowering and generic producer
-graph separately. The next bounded proof must connect them through the existing
-real-program fixtures: a nonneutral catalyst seed, cancellation to unity, upper
-raw/corruption boundaries and typed non-finite refusal. Extend the existing
-source cases with fixed/ranged unity cancellation and recipient corruption with
-transforms; distinguish numeric behavior from PoB reparsing/cache behavior.
-Only then consider an exact-owner metadata retirement for this single gap,
+`3172`. The new passing controls connect its numerical lowering to the generic
+producer graph through the existing real-program fixtures: a nonneutral catalyst
+seed, cancellation to unity, upper raw/corruption boundaries and typed non-finite
+refusal. The extended source cases also pass, distinguishing canonical numeric
+behavior from PoB reparsing/cache behavior. After the Flask checkpoint, consider
+an exact-owner metadata retirement for this single consumer gap,
 retaining both source/admission gaps, full domains and supplier refusals.
 Do not add new producer families or another harness merely to make this proof.
 Detailed audit: `runs/charm-ordered-consumer-audit-20261021/README.md`.
-A reviewed but unexecuted three-file candidate is staged under
+A reviewed three-file candidate is now applied from
 `runs/charm-ordered-consumer-controls-candidate-20261021` (manifest
 `d4bb0675288947401feb564f8ea97fbcd8a4ff06450383596ca04e881d5505f9`).
-Its three new source expectations are reading-based predictions, not observations;
-verify the existing source runner before using them as coverage evidence.
+All fifteen native controls pass. The three added source cases pass in the
+59-case suite across four fresh JIT-on/off replays: fixed cancellation leaves
+capacity 6, equivalent ranged text yields 4, and ranged corruption plus scaling
+yields 9. These are observed source results, not adopted native cache behavior
+or new raw-input admission authority. See the ordering proposal and retirement
+register for the retained encoding investigation.
 The [retirement register](legacy-retirement.md#one-off-format-proof-retirement-2026-10-20)
 also records remaining ignored historical gates with brittle issue literals.
 

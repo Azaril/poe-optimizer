@@ -20,6 +20,7 @@ use poe_optimizer_core::{
 };
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_engine::owned_plan::*;
+use poe_optimizer_engine::owned_rules::NumericalFailure;
 use rayon::prelude::*;
 use serde::{Serialize, de::DeserializeOwned};
 use serde_json::Value;
@@ -664,12 +665,13 @@ fn charm_modifier_value(report: &OwnedEffectsReport, stat: &str) -> EffectValue 
 }
 fn assert_charm_scalar_chain(
     report: &OwnedEffectsReport,
+    catalyst: f64,
     corruption: f64,
     magnitude: f64,
     amount: f64,
 ) {
     for (stat, value) in [
-        ("def.0000000000000a1b", 1.0),
+        ("def.0000000000000a1b", catalyst),
         ("def.0000000000002541", corruption),
         ("def.000000000000253d", magnitude),
     ] {
@@ -732,7 +734,7 @@ fn released_charm_scalar_rounding_precedes_corruption_then_actual_magnitude_tran
             ModifierTransformOperation::Multiply,
             magnitude,
         );
-        assert_charm_scalar_chain(&w.report(), corruption, magnitude, expected);
+        assert_charm_scalar_chain(&w.report(), 1.0, corruption, magnitude, expected);
     }
 }
 
@@ -759,15 +761,15 @@ fn released_charm_delivery_observes_modifier_transform_order_and_ignores_storage
     );
     // raw 2 -> corruption 3 -> magnitude ((1 + .5) * 2) -> delivered 9.
     let first = w.report();
-    assert_charm_scalar_chain(&first, 1.5, 3.0, 9.0);
+    assert_charm_scalar_chain(&first, 1.0, 1.5, 3.0, 9.0);
     w.f.build.items[0].modifiers.reverse();
     w.f.owners.reverse();
-    assert_charm_scalar_chain(&w.report(), 1.5, 3.0, 9.0);
+    assert_charm_scalar_chain(&w.report(), 1.0, 1.5, 3.0, 9.0);
     // The actual semantic order changes the scalar and the final truncation:
     // magnitude ((1 * 2) + .5) -> trunc(3 * 2.5) -> delivered 7.
     w.f.build.items[0].modifier_orders.numeric_transforms =
         vec![occurrence(4), occurrence(91), occurrence(90)];
-    assert_charm_scalar_chain(&w.report(), 1.5, 2.5, 7.0);
+    assert_charm_scalar_chain(&w.report(), 1.0, 1.5, 2.5, 7.0);
 }
 
 #[test]
@@ -887,5 +889,165 @@ fn released_charm_transform_dependencies_cannot_default_missing_or_partial_suppl
                 );
             }
         }
+    }
+}
+
+fn set_charm_life_catalyst(w: &mut World, amount: f64) {
+    // Change only the existing finite item's boundary input. The actual
+    // catalyst-scalar program selects the declared Life property and computes
+    // its result; no derived scalar or transform result is injected.
+    w.roll("def.0000000000003179", ParameterValue::Boolean(true));
+    let boundary =
+        w.f.owner_mut(&item_owner())
+            .programs
+            .members
+            .iter_mut()
+            .find(|p| p.id == key("fixture-catalyst-boundary"))
+            .unwrap();
+    boundary
+        .nodes
+        .iter_mut()
+        .find(|n| n.id == key("amount"))
+        .unwrap()
+        .expression = RuleExpression::Literal {
+        value: quantity(amount, "def.0000000000000002"),
+    };
+}
+
+#[test]
+fn released_charm_transforms_start_from_computed_catalyst_across_raw_domain_endpoints() {
+    for (raw, corruption, expected) in [
+        (0.0, 0.0, 0.0),
+        (4.0, 1.0, 14.0),
+        (4.0, 1.5, 21.0),
+        (1_000_000.0, 1_000_000.0, 3_500_000_000_000.0),
+    ] {
+        let mut w = World::new();
+        w.raw(raw);
+        w.roll(
+            "def.0000000000003189",
+            quantity(corruption, "def.0000000000000001"),
+        );
+        set_charm_life_catalyst(&mut w, 25.0);
+        add_charm_transform(
+            &mut w,
+            "fixture-seeded-add",
+            90,
+            ModifierTransformOperation::Add,
+            0.5,
+        );
+        add_charm_transform(
+            &mut w,
+            "fixture-seeded-multiply",
+            91,
+            ModifierTransformOperation::Multiply,
+            2.0,
+        );
+        // (1.25 + 0.5) * 2 = 3.5. Corruption is applied to the rounded
+        // component before this factor; no intermediate component is rescaled.
+        assert_charm_scalar_chain(&w.report(), 1.25, corruption, 3.5, expected);
+    }
+}
+
+#[test]
+fn released_charm_transform_cancellation_uses_final_factor_and_explicit_sequence() {
+    let mut w = World::new();
+    w.raw(4.0);
+    w.roll(
+        "def.0000000000003189",
+        quantity(1.5, "def.0000000000000001"),
+    );
+    set_charm_life_catalyst(&mut w, 25.0);
+    add_charm_transform(
+        &mut w,
+        "fixture-cancel-add",
+        90,
+        ModifierTransformOperation::Add,
+        0.75,
+    );
+    add_charm_transform(
+        &mut w,
+        "fixture-cancel-multiply",
+        91,
+        ModifierTransformOperation::Multiply,
+        0.5,
+    );
+    // The intermediate scalar is 2; the final scalar is 1. Applying an
+    // intermediate rounded component or retaining its result would give 12.
+    assert_charm_scalar_chain(&w.report(), 1.25, 1.5, 1.0, 6.0);
+    w.f.build.items[0].modifier_orders.numeric_transforms =
+        vec![occurrence(4), occurrence(91), occurrence(90)];
+    // Reversed semantic order gives 1.375, then trunc(6 * 1.375) = 8.
+    assert_charm_scalar_chain(&w.report(), 1.25, 1.5, 1.375, 8.0);
+}
+
+#[test]
+fn released_charm_nonfinite_transform_or_component_never_becomes_a_capacity() {
+    for fold_overflow in [false, true] {
+        let mut w = World::new();
+        w.raw(1_000_000.0);
+        w.roll(
+            "def.0000000000003189",
+            quantity(1_000_000.0, "def.0000000000000001"),
+        );
+        add_charm_transform(
+            &mut w,
+            "fixture-huge-factor",
+            90,
+            ModifierTransformOperation::Multiply,
+            f64::MAX,
+        );
+        if fold_overflow {
+            add_charm_transform(
+                &mut w,
+                "fixture-overflow-factor",
+                91,
+                ModifierTransformOperation::Multiply,
+                2.0,
+            );
+        }
+        let report = w.report();
+        let scalar = charm_modifier_value(&report, "def.000000000000253d");
+        let effective = charm_modifier_value(&report, "def.000000000000295b");
+        assert!(matches!(
+            &effective,
+            EffectValue::NumericalError {
+                reason: NumericalFailure::NonFinite,
+                ..
+            }
+        ));
+        if fold_overflow {
+            assert_eq!(
+                scalar, effective,
+                "the exact fold failure propagates unchanged"
+            );
+        } else {
+            assert_eq!(
+                scalar,
+                EffectValue::Known {
+                    value: quantity(f64::MAX, "def.0000000000000001")
+                }
+            );
+            assert_eq!(
+                effective,
+                EffectValue::NumericalError {
+                    node: key("magnitude-scaled"),
+                    reason: NumericalFailure::NonFinite
+                }
+            );
+        }
+        let local: Vec<_> = report
+            .effects
+            .iter()
+            .filter(|e| e.key.invocation.program == key("local-charm-capacity-contribution"))
+            .collect();
+        assert_eq!(local.len(), 1);
+        assert_eq!(local[0].value, effective);
+        let delivered = deliveries(&report);
+        assert_eq!(delivered.len(), 1);
+        assert_eq!(
+            delivered[0].value, effective,
+            "delivery retains the typed numerical failure"
+        );
     }
 }

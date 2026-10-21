@@ -770,6 +770,45 @@
           ]
         ]
       }
+    },
+    {
+      "id": "consumer-fixed-cancellation-to-unity",
+      "scope": "consumer-lifecycle-control",
+      "expectation_basis": "Source-reading prediction awaiting original-source execution: the final scalar returns to 1, skipping ParseRaw replacement; fixed text has no ranged refresh, so the prior parsed capacity6 is retained. This is not adopted native behavior.",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}Has 4 Charm Slot\n{tags:life}+10 to maximum Life\n50% increased Implicit Modifier magnitudes\n50% reduced Implicit Modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 2,
+        "producer_quality": [50, -50],
+        "producer_operations": ["add", "add"]
+      }
+    },
+    {
+      "id": "consumer-ranged-cancellation-to-unity",
+      "scope": "consumer-lifecycle-control",
+      "expectation_basis": "Source-reading prediction awaiting original-source execution: final scalar1 is applied by the existing ranged refresh, restoring raw capacity4. No cache emulation or source admission follows.",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased Implicit Modifier magnitudes\n50% reduced Implicit Modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 2,
+        "producer_quality": [50, -50],
+        "producer_operations": ["add", "add"]
+      }
+    },
+    {
+      "id": "consumer-ranged-corruption-and-transform",
+      "scope": "consumer-lifecycle-control",
+      "expectation_basis": "Source-reading prediction awaiting original-source execution: recipient raw4 times corruption1.5 yields6, then final magnitude1.5 yields9. This tests recipient corruption, unlike the existing producer-strength controls.",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}{corruptedRange:1.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased Implicit Modifier magnitudes",
+      "expected": {
+        "capacity": 9,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [50],
+        "producer_operations": ["add"]
+      }
     }
   ]
 }

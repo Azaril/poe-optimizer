@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-10-20 for the owner's aggressive retirement direction. This is a living companion to
+Updated 2026-10-21 for the owner's aggressive retirement direction. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -10,6 +10,44 @@ review and Lua behavior/type pass. Track delivery order in the
 do not create a parallel cleanup plan or treat the archived checkpoints below as
 new work. Recent discussion findings must be classified here with a live consumer,
 retirement condition and validation boundary.
+
+## Finite fixture capability initialization (2026-10-21)
+
+The Flask delivery controls exposed two setup omissions before native mechanics
+could execute: stage-less compilation of V28, then an absent mandatory named
+contribution-query inventory in the shared numeric-component helper. The first
+now reuses the existing checked support/stage fixture; the second supplies an
+explicit complete empty query inventory only for this finite V28 fixture. It
+contains direct contribution reads and no named queries. Neither correction
+changes production validators, fills unknown game coverage or downgrades the
+operation version. Older fixture branches remain unchanged for this checkpoint.
+
+Follow up on the helper's duplicated operation-version admission and inventory
+initialization when consolidating finite fixtures. Reuse the current checked
+fixture construction seam and retire obsolete branches only after their live
+controls have moved; do not add another compatibility reader or parallel fixture
+framework. The retirement condition is preserved numerical/refusal coverage for
+all current consumers, explicit mandatory inventories and checked preparation
+requirements. The immediate priority remains the corrected Flask runtime and
+source checks, not a broad fixture rewrite.
+
+## Fixed/ranged transform cancellation (2026-10-21)
+
+The expanded original-source modifier suite now observes a reproducible
+reparsing discrepancy: authored fixed Charm capacity 4 with Add 50% then
+Add -50% remains 6, whereas equivalent ranged text returns to 4. The source's
+intermediate parsed value survives the fixed-text path when the final factor
+returns to one. All four fresh JIT-on/off replays agree; this is not flaky
+native arithmetic. Ranged recipient corruption also composes as 4 × 1.5 × 1.5 = 9.
+
+Keep these existing source controls and classify the fixed/ranged behavior at
+the Import encoding boundary before admitting such layouts. No native cache
+state, text-format switch or alternate numeric evaluator is justified. The
+retirement condition for any corresponding source restriction is demonstrated
+canonical-input authority over the admitted lifecycle, not equality from one
+rendered value. Evidence: `runs/modifier-transform-source-YD4AvL`; current suite
+59 cases in four fresh replays. The accepted independent-order model remains
+unchanged.
 
 ## Source global-effect switches and native meaning (2026-10-20)
 
@@ -2777,7 +2815,9 @@ checks whole-rule/schema/registry inverses and the unchanged 110 query bytes.
 Evidence and both command outcomes are under
 `runs/flask-charge-delivery-extension-probe-01`; the source diagnosis is
 `runs/flask-charge-delivery-audit-20261021/extension-probe-diagnosis.md`.
-Runtime and source parity remain unproved for this candidate.
+The later direct-delivery checkpoint passes seven native controls, twenty fresh
+source observations and full original-build publication/rebuild checks. This
+validates that bounded delivery; it does not retire the duplicate authoring route.
 
 Use the current release seam for the build work. At the next authoring cleanup,
 move needed behavior from the older successor orchestration to
@@ -2830,3 +2870,20 @@ and declare direct and derived dependencies together; do not promote the
 archived token-preserving scripts into another maintained serialization system.
 Keep this follow-up with the existing test-support cleanup after the closest
 build's missing mechanics, rather than introducing a new evaluator layer.
+
+## Coverage retirement must retain exact responsibilities (2026-10-21)
+
+The Flask direct-delivery program passes, but the proposed removal of
+`flask-charge-rate-delivery-unconverted` was held after independent review.
+The same upstream modifier remains eligible for late grouped equipment-slot
+copying in `CalcPerform.lua:1490–1537`. None of the four proposed residual modifier
+gaps describes that delivery, and a generic `item-template-rules-unconverted`
+marker does not certify that another owner accounts for it. All five gaps remain.
+
+Implement the shared grouped-copy/supplier behavior or establish its explicit
+checked ownership before retiring this label. Reuse the contribution graph and
+preserve exact recipients, grouping before scaling/rounding, exclusions and
+incomplete-source failures. This applies to Life, movement and resistance as well
+as Flask rate; avoid per-family copies of the source traversal or another numeric
+engine. The corrected review-only retirement candidate under `runs/` is not a
+published certificate or a compatibility path to maintain.

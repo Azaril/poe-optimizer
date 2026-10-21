@@ -259,7 +259,7 @@ fn original_modifier_transform_sources_preserve_discovery_order_and_recipient_el
         .keep();
     let cases: Json =
         serde_json::from_str(include_str!("modifier_transform_source_cases.json")).unwrap();
-    assert_eq!(cases["cases"].as_array().unwrap().len(), 56);
+    assert_eq!(cases["cases"].as_array().unwrap().len(), 59);
     let metadata_text =
         include_str!("modifier_transform_source_metadata.json").replace("\r\n", "\n");
     let metadata: Json = serde_json::from_str(&metadata_text).unwrap();
@@ -313,7 +313,7 @@ fn original_modifier_transform_sources_preserve_discovery_order_and_recipient_el
         check(&row["case"], &row["source"]);
     }
     fs::write(output.join("summary.json"),serde_json::to_vec_pretty(&json!({
-        "status":"source_controls_passed","fresh_replays":4,"cases_per_replay":56,
+        "status":"source_controls_passed","fresh_replays":4,"cases_per_replay":59,
         "catalog_metadata_sha256":metadata_digest,"scalability_rows":47,"upstream_modifier_ids":15,
         "source_manifest_sha256":poe_optimizer_pob::source::manifest_sha256(),
         "source_admission_authority":false,"closure_authority":false,"native_parity":false,

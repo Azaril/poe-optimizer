@@ -1,0 +1,350 @@
+{
+  "status": "passed",
+  "date": "2026-10-21",
+  "parent_main": "41269604edd1aaff76b759c04267713214ae4a03",
+  "scope": "Flask direct delivery program and Charm canonical ordered consumer controls; five Flask owner gaps retained",
+  "complete_builds": 0,
+  "native": {
+    "flask": 7,
+    "charm": 15
+  },
+  "source": {
+    "flask_fresh_vms": 20,
+    "modifier_cases": 59,
+    "modifier_fresh_replays": 4
+  },
+  "publication": {
+    "after": "720d65ca89ec10a9ec57d26324abc52d963b6246cbfae618105c86e9e129eacf",
+    "artifacts": 18,
+    "authoring_payloads_excluded": true,
+    "before": "b8851ea50c9d5fd97e1695e536c89dba185f136d51d6e77da31bd22f8f4a67a9",
+    "closed_rule_owners": 0,
+    "complete_original_builds": 0,
+    "evaluation_bundle_added": false,
+    "final_flask_uptime": false,
+    "new_definitions": 1,
+    "new_programs": 1,
+    "originals": [
+      {
+        "exact_local_ids": true,
+        "original": 1,
+        "physical_lists_completed": 0,
+        "selected_after": 123,
+        "selected_before": 123,
+        "usage_pending": true
+      },
+      {
+        "exact_local_ids": true,
+        "original": 2,
+        "physical_lists_completed": 0,
+        "selected_after": 137,
+        "selected_before": 137,
+        "usage_pending": true
+      },
+      {
+        "exact_local_ids": true,
+        "original": 3,
+        "physical_lists_completed": 0,
+        "selected_after": 127,
+        "selected_before": 127,
+        "usage_pending": true
+      },
+      {
+        "exact_local_ids": true,
+        "original": 4,
+        "physical_lists_completed": 0,
+        "selected_after": 144,
+        "selected_before": 144,
+        "usage_pending": true
+      },
+      {
+        "exact_local_ids": true,
+        "original": 5,
+        "physical_lists_completed": 0,
+        "selected_after": 5,
+        "selected_before": 5,
+        "usage_pending": true
+      }
+    ],
+    "passive_refinement": false,
+    "prior_unchanged": true,
+    "provenance_preserved": true,
+    "queries": 110,
+    "rebuild_byte_identical": true,
+    "retained_modifier_gaps": 5,
+    "retired_input_issues": 0,
+    "retired_modifier_gaps": 0,
+    "source_admission_changed": false,
+    "whole_build_parity": false
+  },
+  "logs": [
+    {
+      "path": "runs/flask-native-controls-03.log",
+      "bytes": 1624,
+      "sha256": "78caba83b3cbe006f0d90674a54c3802b30b8aea01f7d4e24400ce3e740e08fb",
+      "result": "test result: ok. 7 passed; 0 failed; 4 ignored;"
+    },
+    {
+      "path": "runs/flask-charm-native-controls-01.log",
+      "bytes": 6884,
+      "sha256": "2e3a9f711411dadfe77499b823f659092715605a56ff05475540c8c78bdcb42d",
+      "result": "test result: ok. 15 passed; 0 failed; 0 ignored;",
+      "scope": "Charm target only; later Flask setup failure is retained in this same historical log"
+    },
+    {
+      "path": "runs/flask-charge-delivery-source-02.log",
+      "bytes": 863,
+      "sha256": "052fb1328c24743c2a3a1dec65cdef50211a527123b4770f9172515098fafebb",
+      "result": "test result: ok. 1 passed; 0 failed;"
+    },
+    {
+      "path": "runs/charm-ordered-consumer-source-01.log",
+      "bytes": 916,
+      "sha256": "ea11b50d9c5424eafa270f575de21f6287944259f3286f9ce6a3febffa128697",
+      "result": "test result: ok. 1 passed; 0 failed;"
+    },
+    {
+      "path": "runs/flask-publication-ordinary-02.log",
+      "bytes": 1331,
+      "sha256": "28d3d6e34bde5ee2e3033d7d4ccdf259daeed91f62038b4945aaac0c79ecf2d3",
+      "result": "test result: ok. 5 passed; 0 failed; 3 ignored;"
+    },
+    {
+      "path": "runs/flask-publication-preservation-01.log",
+      "bytes": 367,
+      "sha256": "ff363649636663ae8b61976d78f8597142475357b807d1b78ffeb9274c2bb538",
+      "result": "test result: ok. 1 passed; 0 failed;"
+    },
+    {
+      "path": "runs/flask-charm-native-clippy-01.log",
+      "bytes": 124,
+      "sha256": "9d53cb31a9a71b5a99735bc61d882cccdf21b74a65244e129ceb3aabfca4b35b",
+      "result": "strict Clippy passed"
+    },
+    {
+      "path": "runs/flask-charm-source-clippy-01.log",
+      "bytes": 518,
+      "sha256": "6f05dea5ee2fa05502f30706dce6ea97be7e84ed4f1aace0eb75acb43aa45ff7",
+      "result": "strict Clippy passed"
+    },
+    {
+      "path": "runs/flask-publication-clippy-01.log",
+      "bytes": 124,
+      "sha256": "86fdebf05873ce2f566c535215573317e128d92d49aa975f84dc7e5a2ca4c94d",
+      "result": "strict Clippy passed"
+    }
+  ],
+  "maintained_artifacts": [
+    {
+      "path": "tests/owned_fine_belt_native.rs",
+      "bytes": 42951,
+      "sha256": "fb0cca5a7fc9999e7b3b809c9ff7bb0b8cd004f85f540cf3ed2a7a1e334b2619"
+    },
+    {
+      "path": "tests/owned_fine_belt_modifiers.rs",
+      "bytes": 56491,
+      "sha256": "88fca3680baaba405d3ab6d8eef9a9830e7e2d2b28b2c91878e47c821e856abb"
+    },
+    {
+      "path": "tests/owned_charm_capacity_native.rs",
+      "bytes": 37430,
+      "sha256": "0f433d248dfdfc1885c167178794035d983de7ced6428eecaff856b69fbc0da9"
+    },
+    {
+      "path": "tests/support/owned_global_minion_level_native.rs",
+      "bytes": 45716,
+      "sha256": "5fdc6581e98e4b78b9151a136c9bf2cb8eb2ea9839d96c47ccbc56e1646b21e8"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/owned_fine_belt_source.rs",
+      "bytes": 21762,
+      "sha256": "9cb280750f1c7c0225d543850c1b507c0736115a8d3868149280507efaa0c99b"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/flask_charge_delivery_source.rs",
+      "bytes": 12100,
+      "sha256": "303c02090fc02eee458a62e8ca354ccdb8b6402c4fb61793d50e5a76cc17466a"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/flask_charge_delivery_source.lua",
+      "bytes": 7380,
+      "sha256": "e88140b182ec0aba88ee6449cc5a3c10b540fc2a77d0ed36cd71b2d31d522dfd"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/modifier_transform_source.rs",
+      "bytes": 12765,
+      "sha256": "dfdb8b29f1267967569be363d71907cd2c7b3f752fd2420de81b3aad69cd89de"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/modifier_transform_source_cases.json",
+      "bytes": 30028,
+      "sha256": "8723a363a8b94378393a245010b0859704d0b0428523b69e8b75e00008112e52"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/fine-belt-modifiers/flask-charge-delivery.json",
+      "bytes": 147818,
+      "sha256": "f6ad7fc98631cc9803a5e68f178f8c4e658b7f06c4be17867330661811e8f9b1"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/fine-belt-modifiers/flask-charge-delivery-migration.json",
+      "bytes": 7998,
+      "sha256": "e16a0a61309e91c766947bb92ead1f446f5e1a4c8200baad06bf0f06006f4812"
+    }
+  ],
+  "source_reports": {
+    "flask": [
+      {
+        "path": "runs/owned-flask-charge-delivery-source-VMTBdF/off-0.json",
+        "bytes": 13081,
+        "sha256": "34db7e8b72f64d922d8676bddc7a8ea61319e7ff014040949d08ed925699e44a"
+      },
+      {
+        "path": "runs/owned-flask-charge-delivery-source-VMTBdF/off-1.json",
+        "bytes": 13081,
+        "sha256": "34db7e8b72f64d922d8676bddc7a8ea61319e7ff014040949d08ed925699e44a"
+      },
+      {
+        "path": "runs/owned-flask-charge-delivery-source-VMTBdF/on-0.json",
+        "bytes": 13081,
+        "sha256": "34db7e8b72f64d922d8676bddc7a8ea61319e7ff014040949d08ed925699e44a"
+      },
+      {
+        "path": "runs/owned-flask-charge-delivery-source-VMTBdF/on-1.json",
+        "bytes": 13081,
+        "sha256": "34db7e8b72f64d922d8676bddc7a8ea61319e7ff014040949d08ed925699e44a"
+      }
+    ],
+    "modifier": [
+      {
+        "path": "runs/modifier-transform-source-YD4AvL/jit-false-replay-0.json",
+        "bytes": 1017637,
+        "sha256": "4ca4acefe93a2fd4ceb87920dfdc3a9dc71b1f19492fa931264e0e462d1148ad"
+      },
+      {
+        "path": "runs/modifier-transform-source-YD4AvL/jit-false-replay-1.json",
+        "bytes": 1017637,
+        "sha256": "55a695619e191f8080ec81b0a17e670a47f7ba48190a1d15f6695d4e37bb664f"
+      },
+      {
+        "path": "runs/modifier-transform-source-YD4AvL/jit-true-replay-0.json",
+        "bytes": 1017636,
+        "sha256": "d00237159d116d878982c71da79aecdb3179c3da201b9f84ef204584793f7dc2"
+      },
+      {
+        "path": "runs/modifier-transform-source-YD4AvL/jit-true-replay-1.json",
+        "bytes": 1017636,
+        "sha256": "541f55f522202587b6acf5ca04136cb3c853c358c2be5be221b1bfb8d07af803"
+      }
+    ]
+  },
+  "archives": [
+    {
+      "source": {
+        "path": "runs/owned-flask-charge-delivery-source-VMTBdF/summary.json",
+        "bytes": 2400,
+        "sha256": "05d3adf676b174907bd111b2285e348ae8913b9e97a8bb49ce50ec631fd44139"
+      },
+      "archive": {
+        "path": "docs\\evidence\\flask-charge-delivery\\flask-source-summary.json",
+        "bytes": 2400,
+        "sha256": "05d3adf676b174907bd111b2285e348ae8913b9e97a8bb49ce50ec631fd44139"
+      }
+    },
+    {
+      "source": {
+        "path": "runs/owned-flask-charge-delivery-source-VMTBdF/off-0.json",
+        "bytes": 13081,
+        "sha256": "34db7e8b72f64d922d8676bddc7a8ea61319e7ff014040949d08ed925699e44a"
+      },
+      "archive": {
+        "path": "docs\\evidence\\flask-charge-delivery\\flask-source-observations.json",
+        "bytes": 13081,
+        "sha256": "34db7e8b72f64d922d8676bddc7a8ea61319e7ff014040949d08ed925699e44a"
+      }
+    },
+    {
+      "source": {
+        "path": "runs/modifier-transform-source-YD4AvL/summary.json",
+        "bytes": 655,
+        "sha256": "9a1084d2fc7459c36f260f6682697d49bd9468d303d1a2981ce190529a55be86"
+      },
+      "archive": {
+        "path": "docs\\evidence\\flask-charge-delivery\\modifier-source-summary.json",
+        "bytes": 655,
+        "sha256": "9a1084d2fc7459c36f260f6682697d49bd9468d303d1a2981ce190529a55be86"
+      }
+    },
+    {
+      "source": {
+        "path": "runs/owned-flask-charge-delivery-publication-01/validation.json",
+        "bytes": 1275,
+        "sha256": "f2de89b603a575f547ca184dce457c63968fa6909a8a9c184dd75b4dbcabfb52"
+      },
+      "archive": {
+        "path": "docs\\evidence\\flask-charge-delivery\\publication.json",
+        "bytes": 1275,
+        "sha256": "f2de89b603a575f547ca184dce457c63968fa6909a8a9c184dd75b4dbcabfb52"
+      }
+    }
+  ],
+  "protected_files": [
+    {
+      "path": "data/owned/poe2/3887ae68/incoming-critical-effect/README.md",
+      "git_blob": "b9c2264db11f589e38e813ba04bef1de725b98a3"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/incoming-critical-effect/extension.json",
+      "git_blob": "932a225f047491a48f28a0d2f9301013d4127af4"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/incoming-critical-effect/native-inputs.json",
+      "git_blob": "4510ccaa354ae1b4e3dfc84f562bd462392fc8ee"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/incoming-critical-effect/policy.json",
+      "git_blob": "3579c4794b387b06f331891a69b92d09fc029fb0"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/incoming-critical-effect/queries.json",
+      "git_blob": "6ffa1b270a731e6a7fd99fd44c46a9ea4656117f"
+    },
+    {
+      "path": "tests/owned_incoming_critical_cli.rs",
+      "git_blob": "5b72203ac2e2a6df6f60843fcced3fe150d08990"
+    },
+    {
+      "path": "tests/owned_incoming_critical_native.rs",
+      "git_blob": "f6d106a235ddffb3a7b9c1808ff6c20cf27aede0"
+    },
+    {
+      "path": "tests/support/owned_incoming_critical_native.rs",
+      "git_blob": "f7486e89299cfd560c7e85dcc7b59ba47c0a81f8"
+    },
+    {
+      "path": "tests/support/owned_incoming_critical_publication.rs",
+      "git_blob": "dfa5784a8ec1bae914f2f20d0d3fbed7b53682aa"
+    }
+  ],
+  "retained_failures": [
+    {
+      "path": "runs/flask-charm-native-controls-01.log",
+      "bytes": 6884,
+      "sha256": "2e3a9f711411dadfe77499b823f659092715605a56ff05475540c8c78bdcb42d"
+    },
+    {
+      "path": "runs/flask-native-controls-02.log",
+      "bytes": 2344,
+      "sha256": "696fb05e23bd790704249734951ae02caf4018bad3b7595dfba1c82cbc75c4c3"
+    },
+    {
+      "path": "runs/flask-charge-delivery-source-01.log",
+      "bytes": 1721,
+      "sha256": "be9a13016d0de3b15eee1cd90bff00833179bb040daad1096a02daa117f4e086"
+    },
+    {
+      "path": "runs/flask-publication-ordinary-01.log",
+      "bytes": 1073,
+      "sha256": "0053075c2e1709eaf3dfb524f6bf09dc102ecb4b42c5af2a0e67227e47fe210e"
+    }
+  ]
+}

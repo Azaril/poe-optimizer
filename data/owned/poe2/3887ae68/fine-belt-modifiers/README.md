@@ -115,3 +115,26 @@ The exact reports are `validation.json`, `package/release.json` and
 inside that output. The publication log is
 `runs/fine-belt-publication-tests-02.log`. Numerical component validation is
 recorded separately and does not change these original-build results.
+
+## Current Flask delivery checkpoint (October 21)
+
+The sections above describe the original admission publication. The current
+`flask-charge-delivery.json` and its migration request add one Stat and one
+guarded contribution program: the modifier's computed effective rate reaches
+the Player through its exact selected EquipmentUse. This uses the existing
+native contribution graph. The payload's false validation/closure flags describe
+its authoring scope; the separate test reports supply execution evidence.
+
+Seven native controls pass, including duplicate occurrences, storage-order
+independence, selected/removed sources, present zero, unknown applicability and
+the actual Partial owner's refusal. Twenty fresh PoB observations agree across
+JIT modes for the unchanged build and four legal controls. They establish the
+direct delivery, not per-Flask uptime or completeness of every Player supplier.
+
+The publication at `runs/owned-flask-charge-delivery-publication-01/package`
+has input `720d65ca89ec10a9ec57d26324abc52d963b6246cbfae618105c86e9e129eacf`.
+It preserves all five imports, 110 query rows and all five modifier gaps;
+rebuilding produces identical bytes. Selected issue counts stay
+123/137/127/144/5. The remaining coverage transition is recorded separately in
+the [implementation plan](../../../../../docs/implementation.md); no unchanged
+example build is complete.

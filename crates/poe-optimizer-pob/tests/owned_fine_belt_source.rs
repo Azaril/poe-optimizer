@@ -543,3 +543,6 @@ fn check(result: &Json) {
     assert_eq!(active[0]["name"], "CharmLimit");
     assert_eq!(active[0]["source"], "Item:27:New Item, Fine Belt");
 }
+
+#[path = "support/flask_charge_delivery_source.rs"]
+mod flask_charge_delivery_source;

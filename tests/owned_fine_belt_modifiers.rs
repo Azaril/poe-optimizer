@@ -1253,3 +1253,234 @@ fn current_charm_admission_census_and_boundaries_do_not_certify_final_scaling() 
         }
     }
 }
+// Current-release publication uses the same all-original preservation gate as
+// other owned data additions. No legacy extension/successor path is involved.
+#[path = "support/owned_release_migration_preservation.rs"]
+mod migration_preservation;
+#[allow(dead_code)]
+#[path = "support/owned_physical_inventory_preservation.rs"]
+mod preservation;
+#[path = "support/owned_support_delivery_publication.rs"]
+mod publication;
+
+fn stage_flask_charge_delivery(
+    prior: &poe_optimizer_import::owned_release::StagedOwnedRelease,
+) -> poe_optimizer_import::owned_release::StagedOwnedRelease {
+    use poe_optimizer_core::{
+        owned_definitions::StatDefinition,
+        owned_rules::{DefinitionRules, RuleProgram},
+        owned_schema::{SchemaDefinitionId, SchemaSubject},
+    };
+    use poe_optimizer_import::{
+        owned_mapping::OwnedIdRegistry,
+        owned_release_migration::{OwnedReleaseMigrationInput, compile_owned_release_migration},
+    };
+    let packet_bytes = fs::read(family::data().join("flask-charge-delivery.json")).unwrap();
+    assert_eq!(
+        format!("{:x}", Sha256::digest(&packet_bytes)),
+        "f6ad7fc98631cc9803a5e68f178f8c4e658b7f06c4be17867330661811e8f9b1",
+        "exact payload from the checked current-release probe"
+    );
+    let migration_bytes =
+        fs::read(family::data().join("flask-charge-delivery-migration.json")).unwrap();
+    assert_eq!(
+        format!("{:x}", Sha256::digest(&migration_bytes)),
+        "e16a0a61309e91c766947bb92ead1f446f5e1a4c8200baad06bf0f06006f4812",
+        "exact already compiled migration, including its release/reason labels"
+    );
+    let packet: Value = serde_json::from_slice(&packet_bytes).unwrap();
+    let migration: OwnedReleaseMigrationInput = serde_json::from_slice(&migration_bytes).unwrap();
+    assert_eq!(migration.schema_version, 5);
+    assert_eq!(migration.before, prior.receipt().input);
+    assert_eq!(json!(migration.before), packet["predecessor_input"]);
+    assert_eq!(
+        migration.contract.schema_version,
+        prior.input().recipe.schema.schema_version
+    );
+    assert_eq!(
+        migration.contract.schema_semantics_version,
+        prior.input().recipe.schema.semantics_version
+    );
+    assert_eq!(
+        migration.contract.rule_semantics_version,
+        prior.input().recipe.rules.semantics_version
+    );
+    assert_eq!(
+        migration.contract.operations_version,
+        prior.input().recipe.rules.operations_version
+    );
+    assert!(
+        migration.tables.is_empty()
+            && migration.receivers.is_empty()
+            && migration.query_targets.is_empty()
+    );
+    assert!(migration.evaluation.is_none() && prior.evaluation().is_none());
+
+    let before: DefinitionRules = serde_json::from_value(packet["owner_before"].clone()).unwrap();
+    assert_eq!(before.programs.members.len(), 4);
+    let SchemaClosure::Partial { gaps } = &before.programs.closure else {
+        panic!("the actual modifier owner must remain Partial");
+    };
+    assert_eq!(gaps.len(), 5);
+    assert!(
+        gaps.iter()
+            .any(|gap| gap.code.as_str() == "flask-charge-rate-delivery-unconverted")
+    );
+    let actual: Vec<_> = prior
+        .input()
+        .recipe
+        .rules
+        .owners
+        .iter()
+        .filter(|owner| owner.owner == before.owner)
+        .collect();
+    assert_eq!(actual, vec![&before]);
+    assert_eq!(migration.owners.len(), 1);
+    assert_eq!(migration.owners[0].owner, before.owner);
+    assert_eq!(
+        migration.owners[0].programs.closure,
+        before.programs.closure
+    );
+    let program: RuleProgram = serde_json::from_value(packet["program"].clone()).unwrap();
+    assert_eq!(migration.owners[0].programs.members, vec![program.clone()]);
+    let definition: DefinitionDescriptor =
+        serde_json::from_value(packet["definition"].clone()).unwrap();
+    assert_eq!(
+        migration.schema,
+        vec![SchemaExtensionEntry::Definition(definition.clone())]
+    );
+
+    // Require the actual selected template's existing guard producer. The new
+    // program reads that value; it must not invent true applicability itself.
+    let applicability: RuleProgram =
+        serde_json::from_value(packet["applicability_program"].clone()).unwrap();
+    let bindings = family::bindings();
+    assert_eq!(bindings.flask.templates.len(), 1);
+    let template = SchemaSubject::Definition(bindings.flask.templates[0].address());
+    let templates: Vec<_> = prior
+        .input()
+        .recipe
+        .rules
+        .owners
+        .iter()
+        .filter(|owner| owner.owner == template)
+        .collect();
+    assert_eq!(templates.len(), 1);
+    assert_eq!(
+        templates[0]
+            .programs
+            .members
+            .iter()
+            .filter(|p| **p == applicability)
+            .count(),
+        1
+    );
+
+    let next = compile_owned_release_migration(prior, migration, Default::default()).unwrap();
+    assert_eq!(json!(next.receipt().input), packet["compiled_probe_input"]);
+    let mut expected_owner = before.clone();
+    expected_owner.programs.members.push(program);
+    let next_owners: Vec<_> = next
+        .input()
+        .recipe
+        .rules
+        .owners
+        .iter()
+        .filter(|owner| owner.owner == before.owner)
+        .collect();
+    assert_eq!(next_owners, vec![&expected_owner]);
+    assert_eq!(next_owners[0].programs.closure, before.programs.closure);
+
+    let mut registry =
+        OwnedIdRegistry::new(prior.input().recipe.registry.clone(), Default::default()).unwrap();
+    let added = registry
+        .allocate_definition::<StatDefinition>()
+        .unwrap()
+        .address();
+    assert_eq!(added, definition.address());
+    assert_eq!(next.input().recipe.registry, *registry.input());
+    let mut restored = next.input().recipe.clone();
+    assert_eq!(
+        restored.schema.definitions.len(),
+        prior.input().recipe.schema.definitions.len() + 1
+    );
+    let at = restored
+        .schema
+        .definitions
+        .iter()
+        .position(|d| *d == definition)
+        .unwrap();
+    restored.schema.definitions.remove(at);
+    let restored_owner = restored
+        .rules
+        .owners
+        .iter_mut()
+        .find(|owner| owner.owner == before.owner)
+        .unwrap();
+    *restored_owner = before;
+    restored.registry = prior.input().recipe.registry.clone();
+    restored.schema.release = prior.input().recipe.schema.release.clone();
+    restored.rules.definitions = prior.input().recipe.rules.definitions.clone();
+    restored.routing.definitions = prior.input().recipe.routing.definitions.clone();
+    assert_eq!(
+        restored,
+        prior.input().recipe,
+        "exact one-Stat/one-program recipe inverse"
+    );
+    migration_preservation::assert_import_rebindings_only(prior, &next);
+    assert_eq!(next.query_sets(), prior.query_sets());
+    assert_eq!(next.receipt().query_rows, 110);
+    assert!(next.evaluation().is_none());
+    next
+}
+
+#[test]
+#[ignore = "requires reviewed native/source proofs, exact FLASK_CHARGE_DELIVERY_PRIOR and fresh OUTPUT"]
+fn publish_flask_charge_delivery_preserving_all_five_originals() {
+    let prior = PathBuf::from(
+        std::env::var_os("POE_OPTIMIZER_TEST_FLASK_CHARGE_DELIVERY_PRIOR")
+            .expect("checked predecessor"),
+    );
+    let out = PathBuf::from(
+        std::env::var_os("POE_OPTIMIZER_TEST_FLASK_CHARGE_DELIVERY_OUTPUT").expect("fresh output"),
+    );
+    publication::run_with_expected_selected_counts(
+        prior.clone(),
+        out.clone(),
+        &family::data(),
+        &[],
+        &[
+            "flask-charge-delivery.json",
+            "flask-charge-delivery-migration.json",
+        ],
+        stage_flask_charge_delivery,
+        json!({
+            "new_definitions":1,"new_programs":1,"retired_modifier_gaps":0,"retained_modifier_gaps":5,
+            "source_admission_changed":false,"whole_build_parity":false,"final_flask_uptime":false
+        }),
+        // The shared gate separately checks each new Pending numeric-order
+        // owner/path. Reports retain full current totals, checked again below.
+        [107, 118, 110, 124, 5],
+    );
+    let validation: Value = read(out.join("validation.json"));
+    let originals = validation["originals"].as_array().unwrap();
+    assert_eq!(originals.len(), 5);
+    for (index, expected) in [123, 137, 127, 144, 5].into_iter().enumerate() {
+        assert_eq!(originals[index]["original"], index + 1);
+        assert_eq!(originals[index]["selected_before"], expected);
+        assert_eq!(originals[index]["selected_after"], expected);
+        let name = format!("queries-original-{:02}.json", index + 1);
+        assert_eq!(
+            fs::read(prior.join(&name)).unwrap(),
+            fs::read(out.join("package").join(name)).unwrap()
+        );
+    }
+    assert_eq!(validation["queries"], 110);
+    assert_eq!(validation["artifacts"], 18);
+    assert_eq!(validation["closed_rule_owners"], 0);
+    assert_eq!(validation["retired_input_issues"], 0);
+    assert_eq!(validation["complete_original_builds"], 0);
+    assert_eq!(validation["evaluation_bundle_added"], false);
+    assert_eq!(validation["retired_modifier_gaps"], 0);
+    assert_eq!(validation["retained_modifier_gaps"], 5);
+}

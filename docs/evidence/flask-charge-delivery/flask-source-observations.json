@@ -1,0 +1,431 @@
+{
+  "cases": [
+    {
+      "name": "original",
+      "state": {
+        "item_id": 27,
+        "item_source": "Item:27:New Item, Fine Belt",
+        "loaded_item_preserved": true,
+        "loaded_item_records": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "FlaskChargesGenerated",
+            "source": "Item:27:New Item, Fine Belt",
+            "source_slot": "Belt",
+            "tags": {},
+            "type": "BASE",
+            "value": 0.17
+          }
+        ],
+        "modes": {
+          "CALCS": {
+            "build_breakdown": true,
+            "item_belt_base": 0.17,
+            "item_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0.17
+              }
+            ],
+            "item_total_base": 0.17,
+            "mode": "CALCS",
+            "output_flask_charge_gen": 0.17,
+            "player_belt_base": 0.17,
+            "player_breakdown_present": true,
+            "player_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0.17
+              }
+            ],
+            "player_total_base": 0.17,
+            "selected_belt_id": 27
+          },
+          "MAIN": {
+            "build_breakdown": true,
+            "item_belt_base": 0.17,
+            "item_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0.17
+              }
+            ],
+            "item_total_base": 0.17,
+            "mode": "MAIN",
+            "output_flask_charge_gen": 0.17,
+            "player_belt_base": 0.17,
+            "player_breakdown_present": true,
+            "player_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0.17
+              }
+            ],
+            "player_total_base": 0.17,
+            "selected_belt_id": 27
+          }
+        },
+        "original_functions_preserved": true,
+        "outputs_preserved": true,
+        "saved": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "saved_selection_preserved": true
+      },
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    },
+    {
+      "name": "formatted-nonneutral",
+      "state": {
+        "item_id": 27,
+        "item_source": "Item:27:New Item, Fine Belt",
+        "loaded_item_preserved": true,
+        "loaded_item_records": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "FlaskChargesGenerated",
+            "source": "Item:27:New Item, Fine Belt",
+            "source_slot": "Belt",
+            "tags": {},
+            "type": "BASE",
+            "value": 0.18
+          }
+        ],
+        "modes": {
+          "CALCS": {
+            "build_breakdown": true,
+            "item_belt_base": 0.18,
+            "item_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0.18
+              }
+            ],
+            "item_total_base": 0.18,
+            "mode": "CALCS",
+            "output_flask_charge_gen": 0.18,
+            "player_belt_base": 0.18,
+            "player_breakdown_present": true,
+            "player_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0.18
+              }
+            ],
+            "player_total_base": 0.18,
+            "selected_belt_id": 27
+          },
+          "MAIN": {
+            "build_breakdown": true,
+            "item_belt_base": 0.18,
+            "item_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0.18
+              }
+            ],
+            "item_total_base": 0.18,
+            "mode": "MAIN",
+            "output_flask_charge_gen": 0.18,
+            "player_belt_base": 0.18,
+            "player_breakdown_present": true,
+            "player_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0.18
+              }
+            ],
+            "player_total_base": 0.18,
+            "selected_belt_id": 27
+          }
+        },
+        "original_functions_preserved": true,
+        "outputs_preserved": true,
+        "saved": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "saved_selection_preserved": true
+      },
+      "xml_sha256": "20ed5c5d8045ad2057d939bff736c40ce852d30d9963e8e933ace527b83dd4a5"
+    },
+    {
+      "name": "present-zero",
+      "state": {
+        "item_id": 27,
+        "item_source": "Item:27:New Item, Fine Belt",
+        "loaded_item_preserved": true,
+        "loaded_item_records": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "FlaskChargesGenerated",
+            "source": "Item:27:New Item, Fine Belt",
+            "source_slot": "Belt",
+            "tags": {},
+            "type": "BASE",
+            "value": 0
+          }
+        ],
+        "modes": {
+          "CALCS": {
+            "build_breakdown": true,
+            "item_belt_base": 0,
+            "item_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "item_total_base": 0,
+            "mode": "CALCS",
+            "output_flask_charge_gen": 0,
+            "player_belt_base": 0,
+            "player_breakdown_present": true,
+            "player_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "player_total_base": 0,
+            "selected_belt_id": 27
+          },
+          "MAIN": {
+            "build_breakdown": true,
+            "item_belt_base": 0,
+            "item_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "item_total_base": 0,
+            "mode": "MAIN",
+            "output_flask_charge_gen": 0,
+            "player_belt_base": 0,
+            "player_breakdown_present": true,
+            "player_records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskChargesGenerated",
+                "source": "Item:27:New Item, Fine Belt",
+                "source_slot": "Belt",
+                "store_depth": 1,
+                "tags": {},
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "player_total_base": 0,
+            "selected_belt_id": 27
+          }
+        },
+        "original_functions_preserved": true,
+        "outputs_preserved": true,
+        "saved": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "saved_selection_preserved": true
+      },
+      "xml_sha256": "abe700f9533b60ce3221bf0fb834f6105e6b08636fce6c81d7c4605069dd0c47"
+    },
+    {
+      "name": "removed-modifier",
+      "state": {
+        "item_id": 27,
+        "item_source": "Item:27:New Item, Fine Belt",
+        "loaded_item_preserved": true,
+        "loaded_item_records": {},
+        "modes": {
+          "CALCS": {
+            "build_breakdown": true,
+            "item_belt_base": 0,
+            "item_records": {},
+            "item_total_base": 0,
+            "mode": "CALCS",
+            "output_flask_charge_gen": 0,
+            "player_belt_base": 0,
+            "player_breakdown_present": true,
+            "player_records": {},
+            "player_total_base": 0,
+            "selected_belt_id": 27
+          },
+          "MAIN": {
+            "build_breakdown": true,
+            "item_belt_base": 0,
+            "item_records": {},
+            "item_total_base": 0,
+            "mode": "MAIN",
+            "output_flask_charge_gen": 0,
+            "player_belt_base": 0,
+            "player_breakdown_present": true,
+            "player_records": {},
+            "player_total_base": 0,
+            "selected_belt_id": 27
+          }
+        },
+        "original_functions_preserved": true,
+        "outputs_preserved": true,
+        "saved": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "saved_selection_preserved": true
+      },
+      "xml_sha256": "656cd5e619bd37e88759a30eaa78c6945b393bdc7b273d890a8b5a53541cf7cc"
+    },
+    {
+      "name": "unequipped-source",
+      "state": {
+        "item_id": 27,
+        "item_source": "Item:27:New Item, Fine Belt",
+        "loaded_item_preserved": true,
+        "loaded_item_records": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "FlaskChargesGenerated",
+            "source": "Item:27:New Item, Fine Belt",
+            "source_slot": "Belt",
+            "tags": {},
+            "type": "BASE",
+            "value": 0.17
+          }
+        ],
+        "modes": {
+          "CALCS": {
+            "build_breakdown": true,
+            "item_belt_base": 0,
+            "item_records": {},
+            "item_total_base": 0,
+            "mode": "CALCS",
+            "output_flask_charge_gen": 0,
+            "player_belt_base": 0,
+            "player_breakdown_present": true,
+            "player_records": {},
+            "player_total_base": 0
+          },
+          "MAIN": {
+            "build_breakdown": true,
+            "item_belt_base": 0,
+            "item_records": {},
+            "item_total_base": 0,
+            "mode": "MAIN",
+            "output_flask_charge_gen": 0,
+            "player_belt_base": 0,
+            "player_breakdown_present": true,
+            "player_records": {},
+            "player_total_base": 0
+          }
+        },
+        "original_functions_preserved": true,
+        "outputs_preserved": true,
+        "saved": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "saved_selection_preserved": true
+      },
+      "xml_sha256": "4eefecae4524378e222a5933136889f8c0c381dcc453caa89cd60ab5ed3dc922"
+    }
+  ],
+  "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+}

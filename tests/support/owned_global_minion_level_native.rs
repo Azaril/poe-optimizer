@@ -327,7 +327,7 @@ impl Fixture {
             ) || (!compile_numeric
                 && matches!(
                     RuleOperationsVersion::parse(operations_version.as_str()),
-                    Some(RuleOperationsVersion::V20)
+                    Some(RuleOperationsVersion::V20 | RuleOperationsVersion::V28)
                 ))
         );
         assert_eq!(extension.owners.len(), 1);
@@ -788,11 +788,17 @@ impl Fixture {
                         .collect(),
                 }),
                 existing_actor_rules: None,
-                contribution_queries: None,
-                // The compiled-only V20 component has no application rules. Keep
-                // historical V13/V14 omission and wire behavior unchanged.
-                effect_applications: (operations_version.as_str() == OWNED_RULE_OPERATIONS_V20)
+                // V28 requires an explicit inventory even though this finite
+                // component declares no named contribution queries.
+                contribution_queries: (operations_version.as_str() == OWNED_RULE_OPERATIONS_V28)
                     .then(|| DeclaredSet::complete(vec![])),
+                // These compiled-only components supply no application rules.
+                // Keep the older operation-subset fixture boundaries unchanged.
+                effect_applications: matches!(
+                    operations_version.as_str(),
+                    OWNED_RULE_OPERATIONS_V20 | OWNED_RULE_OPERATIONS_V28
+                )
+                .then(|| DeclaredSet::complete(vec![])),
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: namespace.clone(),
                 release: key(release),

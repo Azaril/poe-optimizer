@@ -74,3 +74,13 @@ Publish finite authored recipient predicates across matching canonical families,
 **Accepted:** two explicit native ordering domains and Import-only encoding authority, with raw canonical native slots retained. The source controls establish that the existing single-order assumption is insufficient. Approval authorizes the structural migration; it does not close the remaining source evidence or production coverage obligations below.
 
 **Still open implementation evidence:** exact contribution ordering for each non-Charm family; full producer syntax/category/tag coverage; pre-transform amount precision/catalyst/corruption domains; mathematically justified recovery of already-transformed raw values; how to classify the observed legacy inactive-producer anomaly. That anomaly should remain a source discrepancy until reviewed, not become a native rule allowing inactive modifiers to affect other occurrences.
+
+The October 21 expansion passes 59 cases in four fresh JIT-on/off replays
+(`runs/modifier-transform-source-YD4AvL`). With authored raw Charm capacity 4,
+Add 50% followed by Add -50% leaves fixed text at 6, while the equivalent ranged
+text returns to 4. Ranged raw 4 with recipient corruption 1.5 and magnitude 1.5
+produces 9. These observations confirm distinct source reparsing paths; they do
+not establish intended game behavior or new Import admission authority. Retain
+the fixed/ranged discrepancy in the source-boundary investigation. Native rules
+continue to consume canonical inputs and the final ordered factor without
+copying the source's intermediate parsed state.
