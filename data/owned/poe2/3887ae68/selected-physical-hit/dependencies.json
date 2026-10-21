@@ -2969,7 +2969,7 @@
     {
       "bytes": 1412,
       "path": "data/owned/poe2/3887ae68/selected-physical-base/authoring.json",
-      "sha256": "ee92e9d9ee00176baf91ea987cfb977426f8787051c831ffb83ef9acf51a0459"
+      "sha256": "8b8e30b3d16f80e09690949ba5d9afc5370f426593c6eaaf0e95656b4640e71c"
     },
     {
       "bytes": 4207,
@@ -2987,9 +2987,9 @@
       "sha256": "73fccde2ec8d35b1a1d40c2023fedf02f0521b8303aaae5bb260122adb1217f2"
     },
     {
-      "bytes": 29836,
+      "bytes": 29837,
       "path": "data/owned/poe2/3887ae68/selected-physical-base/source-evidence.json",
-      "sha256": "d667589ae2f6b6e0d83c539df225ad83e4c3e71620aefcb34ba96528474f8e43"
+      "sha256": "41f5c027d782b2934a55b50f8e982a6d16e9b1ceb6ea39c9ff2a34b7f49344fd"
     },
     {
       "bytes": 5653,

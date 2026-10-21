@@ -92,14 +92,22 @@ fn allocation_work(row: &AllocationDraft) -> usize {
 }
 
 fn item_work(row: &ItemDraft) -> usize {
+    let orders = [
+        &row.modifier_orders.contributions,
+        &row.modifier_orders.numeric_transforms,
+    ]
+    .into_iter()
+    .fold(0usize, |work, order| {
+        work.saturating_add(match order {
+            DraftField::Known { value } => value.len(),
+            DraftField::Pending(_) => 1,
+        })
+    });
     row.modifiers.members.iter().fold(
-        row.parameters.members.len().saturating_add(
-            match &row.modifier_order {
-                DraftField::Known { value } => value.len(),
-                DraftField::Pending(_) => 1,
-            }
-            .saturating_add(1),
-        ),
+        row.parameters
+            .members
+            .len()
+            .saturating_add(orders.saturating_add(1)),
         |work, modifier| work.saturating_add(modifier.rolls.members.len().saturating_add(1)),
     )
 }
@@ -985,7 +993,10 @@ mod tests {
                     item_level: None.into(),
                     quality: DraftQuality::Known { value: None },
                     modifiers: complete(vec![rolled.clone()]),
-                    modifier_order: vec![rolled.id].into(),
+                    modifier_orders: ItemModifierOrdersDraft {
+                        contributions: vec![rolled.id].into(),
+                        numeric_transforms: vec![rolled.id].into(),
+                    },
                 };
                 let equipment = EquipmentDraft {
                     id: b.id().unwrap(),

@@ -257,6 +257,8 @@ fn publish_charm_scalability_preserving_all_five_originals() {
             "expected_retired_item_text_diagnostics":0,
             "expected_retired_selected_input_issues":0
         }),
+        // Historical-facet scope: the shared preservation check separately
+        // authenticates numeric-order obligations and reports full current totals.
         [107, 118, 110, 124, 5],
     );
 }

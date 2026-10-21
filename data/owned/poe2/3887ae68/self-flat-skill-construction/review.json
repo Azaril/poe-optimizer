@@ -1,6 +1,6 @@
 {
   "acquisition_and_correspondence_sha256": "88bea790e333ba0f80a97a59d9207bdfa85e79eb24e9a997c2f76d8e59490921",
-  "authority_sha256": "8ff24776e3338be02f13ab6d5f5c15e12707b487ada803a5987e266b2a0db5ca",
+  "authority_sha256": "9bb0652de6b27a2b5714f03e38b7d7769d89ac35f125baf11fd53d61cd2e21f1",
   "bodies_sha256": "3fb2c74fa8c42bc3561b82749818fdb623efee9e363501a07bb8e95a1b2e3711",
   "construction": {
     "basic_attack_pairs": 18,

@@ -522,7 +522,11 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
             assert_eq!(m["rolls"]["members"].as_array().unwrap().len(), 24);
         }
         assert_eq!(
-            updated["modifier_order"],
+            updated["modifier_orders"]["contributions"],
+            json!({"kind":"known","value":[updated["modifiers"]["members"][0]["id"],updated["modifiers"]["members"][1]["id"]]})
+        );
+        assert_eq!(
+            updated["modifier_orders"]["numeric_transforms"],
             json!({"kind":"known","value":[updated["modifiers"]["members"][0]["id"],updated["modifiers"]["members"][1]["id"]]})
         );
         assert_eq!(original["quality"], updated["quality"]);
@@ -550,12 +554,19 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
             after[field].as_object_mut().unwrap().remove("completion");
         }
         assert_eq!(
-            before["modifier_order"]["code"],
-            "item-modifier-order-not-converted"
+            before["modifier_orders"]["contributions"]["code"],
+            "item-modifier-contribution-order-not-converted"
         );
-        assert!(retired.insert(local(&before["modifier_order"]["id"])));
-        before.as_object_mut().unwrap().remove("modifier_order");
-        after.as_object_mut().unwrap().remove("modifier_order");
+        assert_eq!(
+            before["modifier_orders"]["numeric_transforms"]["code"],
+            "item-modifier-numeric-transform-order-not-converted"
+        );
+        assert!(retired.insert(local(&before["modifier_orders"]["contributions"]["id"])));
+        assert!(retired.insert(local(
+            &before["modifier_orders"]["numeric_transforms"]["id"]
+        )));
+        before.as_object_mut().unwrap().remove("modifier_orders");
+        after.as_object_mut().unwrap().remove("modifier_orders");
         assert_eq!(after["parameters"]["members"].as_array().unwrap().len(), 6);
         for expected in raw_assignments(&after["template"]["value"], 12, 0) {
             let rows = after["parameters"]["members"].as_array_mut().unwrap();
@@ -608,7 +619,7 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
     let issued = |v: &Value| u64::from_str_radix(v["last_issued"].as_str().unwrap(), 16).unwrap();
     assert_eq!(
         issued(&pa) - issued(&na),
-        2 * withdrawn.len() as u64 + complete as u64 + if case == 5 { 3 } else { 0 }
+        2 * withdrawn.len() as u64 + complete as u64 + if case == 5 { 4 } else { 0 }
     );
     b["draft"]["allocator"] = pa.clone();
     let mut ids = BTreeMap::new();
@@ -789,14 +800,14 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
         "every other selected obligation remains"
     );
     let removed = count - new_issues.as_array().unwrap().len();
-    assert_eq!(removed, [3, 1, 1, 3, 4][case - 1]);
+    assert_eq!(removed, [3, 1, 1, 3, 5][case - 1]);
     let mut first = selected::selection(xml, old);
     let mut second = selected::selection(xml, new);
     selected::canonical(&mut first);
     selected::canonical(&mut second);
     relocate(&mut second, &ids);
     assert_eq!(first, second);
-    json!({"original":case,"selected_before":count,"selected_after":new_issues.as_array().unwrap().len(),"selected_withdrawals":([3,1,1,3,0][case-1]),"selected_positive_retirements":if case==5{4}else{0},"cold_completed":complete,"cold_withdrawn":withdrawn.len(),"cold_changes":changes,"retired":retired,"ring_raw_assignments":if case==5{4}else{0},"ring_uses":if case==5{8}else{0},"selected_ring_uses":if case==5{2}else{0},"allocator_after":na,"selected_issue_summary":after["selected_issue_summary"]})
+    json!({"original":case,"selected_before":count,"selected_after":new_issues.as_array().unwrap().len(),"selected_withdrawals":([3,1,1,3,0][case-1]),"selected_positive_retirements":if case==5{5}else{0},"cold_completed":complete,"cold_withdrawn":withdrawn.len(),"cold_changes":changes,"retired":retired,"ring_raw_assignments":if case==5{4}else{0},"ring_uses":if case==5{8}else{0},"selected_ring_uses":if case==5{2}else{0},"allocator_after":na,"selected_issue_summary":after["selected_issue_summary"]})
 }
 
 fn probes(package: &Path, out: &Path) -> usize {

@@ -450,7 +450,10 @@ impl Fixture {
                 parameters: vec![],
                 item_level: None,
                 quality: None,
-                modifier_order: vec![id(31)],
+                modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                    contributions: vec![id(31)],
+                    numeric_transforms: vec![id(31)],
+                },
                 modifiers: vec![RolledModifier {
                     id: id(31),
                     definition: staff_modifier.clone(),

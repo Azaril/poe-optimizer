@@ -86,7 +86,10 @@ pub(crate) fn fixture() -> ReplayInput {
         item_level: source.item_level.to_resolved().unwrap(),
         quality: source.quality.to_resolved().unwrap(),
         modifiers: vec![],
-        modifier_order: vec![],
+        modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+            contributions: vec![],
+            numeric_transforms: vec![],
+        },
     });
     assert!(
         !i.build

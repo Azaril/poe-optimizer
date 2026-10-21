@@ -39,14 +39,18 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         let item = self
             .item_read_record(context)?
             .ok_or_else(|| PlanError::Invalid("transform producer has no owning item".into()))?;
-        charge(&mut self.work, item.modifier_order.len())?;
+        charge(
+            &mut self.work,
+            item.modifier_orders.numeric_transforms.len(),
+        )?;
         let position = item
-            .modifier_order
+            .modifier_orders
+            .numeric_transforms
             .iter()
             .position(|id| *id == modifier)
             .ok_or_else(|| {
                 PlanError::Invalid(
-                    "transform producer is absent from semantic modifier order".into(),
+                    "transform producer is absent from numeric transform order".into(),
                 )
             })?;
         // Target definitions select potential sibling occurrences. Their Boolean

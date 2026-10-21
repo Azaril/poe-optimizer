@@ -65,7 +65,10 @@ fn bare_item(local: u64) -> ItemDraft {
         parameters: vec![],
         item_level: Some(77),
         quality: None,
-        modifier_order: vec![],
+        modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+            contributions: vec![],
+            numeric_transforms: vec![],
+        },
         modifiers: vec![],
     }
     .into()
@@ -106,7 +109,10 @@ fn fixture() -> DraftSessionInput {
             parameters: vec![parameter(SlotOwnerDefId::ItemTemplate(def("item")))],
             item_level: Some(77),
             quality: None,
-            modifier_order: vec![id(3)],
+            modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                contributions: vec![id(3)],
+                numeric_transforms: vec![id(3)],
+            },
             modifiers: vec![RolledModifier {
                 id: id(3),
                 definition: def("modifier"),

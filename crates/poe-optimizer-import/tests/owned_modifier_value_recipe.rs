@@ -1018,7 +1018,10 @@ mod occurrence_plan {
                         item_level: Some(20),
                         quality: None,
                         modifiers: vec![rolled(4, 2.43, 1.5, 1.2), rolled(5, 3.5, 1.0, 1.6)],
-                        modifier_order: vec![occurrence(4), occurrence(5)],
+                        modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                            contributions: vec![occurrence(4), occurrence(5)],
+                            numeric_transforms: vec![occurrence(4), occurrence(5)],
+                        },
                     },
                     ItemRecord {
                         id: occurrence(30),
@@ -1027,7 +1030,10 @@ mod occurrence_plan {
                         item_level: Some(20),
                         quality: None,
                         modifiers: vec![rolled(31, 7.125, 1.0, 1.2)],
-                        modifier_order: vec![occurrence(31)],
+                        modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                            contributions: vec![occurrence(31)],
+                            numeric_transforms: vec![occurrence(31)],
+                        },
                     },
                 ],
                 equipment: vec![

@@ -129,7 +129,12 @@ fn world(donors: &native::ItemDonors) -> sand::World {
         for modifier in &mut item.modifiers {
             modifier.id = sand::occurrence(modifier.id.local());
         }
-        for modifier in &mut item.modifier_order {
+        for modifier in item
+            .modifier_orders
+            .contributions
+            .iter_mut()
+            .chain(item.modifier_orders.numeric_transforms.iter_mut())
+        {
             *modifier = sand::occurrence(modifier.local());
         }
     }

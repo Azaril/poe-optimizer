@@ -177,7 +177,12 @@ impl Inputs {
         f.build.equipment.truncate(2);
         f.build.items[0].modifiers.retain(|m| m.id != occurrence(5));
         f.build.items[0]
-            .modifier_order
+            .modifier_orders
+            .contributions
+            .retain(|id| *id != occurrence(5));
+        f.build.items[0]
+            .modifier_orders
+            .numeric_transforms
             .retain(|id| *id != occurrence(5));
         f.build.items[0].modifiers[0].rolls = self.rolls.clone();
         f.complete_domain();

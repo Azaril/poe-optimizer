@@ -210,7 +210,11 @@ fn check_complete(item: &Value, requirement: u64) {
     assert_eq!(modifier["rolls"]["completion"], json!({"kind":"complete"}));
     assert_eq!(modifier["rolls"]["members"].as_array().unwrap().len(), 24);
     assert_eq!(
-        item["modifier_order"],
+        item["modifier_orders"]["contributions"],
+        json!({"kind":"known","value":[modifier["id"]]})
+    );
+    assert_eq!(
+        item["modifier_orders"]["numeric_transforms"],
         json!({"kind":"known","value":[modifier["id"]]})
     );
     assert_eq!(item["quality"], json!({"kind":"known","value":null}));
@@ -297,7 +301,8 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
         assert_eq!(index, item_index(&b, new_id));
         let old_item = &a["draft"]["items"]["members"][index];
         let new_item = &b["draft"]["items"]["members"][index];
-        assert_eq!(old_id["local"], "0000000000000094");
+        assert_eq!(&old_item["id"], old_id, "exact source 171 prior Item");
+        assert_eq!(&new_item["id"], new_id, "exact source 171 successor Item");
         assert_eq!(old_item["parameters"]["members"], json!([]));
         for (field, code) in [
             (
@@ -309,8 +314,12 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
                 "item-modifiers-not-converted",
             ),
             (
-                &old_item["modifier_order"],
-                "item-modifier-order-not-converted",
+                &old_item["modifier_orders"]["contributions"],
+                "item-modifier-contribution-order-not-converted",
+            ),
+            (
+                &old_item["modifier_orders"]["numeric_transforms"],
+                "item-modifier-numeric-transform-order-not-converted",
             ),
         ] {
             assert_eq!(field["kind"], "pending");
@@ -321,7 +330,9 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
         expected["items"]["members"][index]["parameters"]["completion"] =
             json!({"kind":"complete"});
         expected["items"]["members"][index]["modifiers"]["completion"] = json!({"kind":"complete"});
-        expected["items"]["members"][index]["modifier_order"] =
+        expected["items"]["members"][index]["modifier_orders"]["contributions"] =
+            json!({"kind":"known","value":[old_item["modifiers"]["members"][0]["id"]]});
+        expected["items"]["members"][index]["modifier_orders"]["numeric_transforms"] =
             json!({"kind":"known","value":[old_item["modifiers"]["members"][0]["id"]]});
         actual["items"]["members"][index]["parameters"]["members"] = json!([]);
         let old_row = row_mut(&mut expected_side, 171);
@@ -362,6 +373,7 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
         assert_eq!(new_row["defaults"]["parameters"], json!(defaults));
         old_row["defaults"]["parameters"] = json!(defaults);
     }
+    assert_eq!(retired.len(), if case == 4 { 4 } else { 0 });
     let issued = |d: &Value| {
         u64::from_str_radix(d["allocator"]["last_issued"].as_str().unwrap(), 16).unwrap()
     };
@@ -450,15 +462,20 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
     identity::relocate(&mut actual_issues, &ids);
     assert_eq!(
         actual_issues, expected_issues,
-        "only the three Ruby physical obligations retire"
+        "only the four Ruby physical obligations retire"
     );
     let mut selection = selected::selection(xml, new);
     identity::relocate(&mut selection, &ids);
     assert_eq!(selection, selected::selection(xml, old));
     let count = before["finalization"]["issues"].as_array().unwrap().len();
     let next_count = after["finalization"]["issues"].as_array().unwrap().len();
-    assert_eq!(count, [123, 124, 116, 153, 20][case - 1]);
-    assert_eq!(next_count, [123, 124, 116, 150, 20][case - 1]);
+    let prior_orders =
+        selected::numeric_transform_order_issue_count(&before["finalization"]["issues"]);
+    let next_orders =
+        selected::numeric_transform_order_issue_count(&after["finalization"]["issues"]);
+    assert_eq!(prior_orders - next_orders, usize::from(case == 4));
+    assert_eq!(count - prior_orders, [123, 124, 116, 153, 20][case - 1]);
+    assert_eq!(next_count - next_orders, [123, 124, 116, 150, 20][case - 1]);
     json!({"original":case,"selected_before":count,"selected_after":next_count,"retired_issues":retired,"raw_assignments":if case==4 {6}else{0},"allocator_before":a["draft"]["allocator"],"allocator_after":b["draft"]["allocator"],"calculation":"not_run"})
 }
 fn probes(package: &Path, out: &Path) -> usize {
@@ -582,7 +599,8 @@ fn probes(package: &Path, out: &Path) -> usize {
         for field in [
             &item["parameters"]["completion"],
             &item["modifiers"]["completion"],
-            &item["modifier_order"],
+            &item["modifier_orders"]["contributions"],
+            &item["modifier_orders"]["numeric_transforms"],
         ] {
             assert_eq!(
                 field["kind"], "pending",

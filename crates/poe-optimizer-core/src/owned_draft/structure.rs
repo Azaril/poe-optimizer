@@ -626,14 +626,22 @@ impl Visit<'_> {
         )?;
         self.scalar(&format!("{path}.item_level"), &value.item_level)?;
         self.quality(&format!("{path}.quality"), &value.quality)?;
-        self.field(
-            &format!("{path}.modifier_order"),
-            &value.modifier_order,
-            |v, p, order| {
-                v.check
-                    .modifier_order(p, value.id, order, value.modifiers.members.len())
-            },
-        )?;
+        for (domain, order) in [
+            ("contributions", &value.modifier_orders.contributions),
+            (
+                "numeric_transforms",
+                &value.modifier_orders.numeric_transforms,
+            ),
+        ] {
+            self.field(
+                &format!("{path}.modifier_orders.{domain}"),
+                order,
+                |v, p, order| {
+                    v.check
+                        .modifier_order(p, value.id, order, value.modifiers.members.len())
+                },
+            )?;
+        }
         self.list(&format!("{path}.modifiers"), &value.modifiers, |v, p, m| {
             if v.gathering {
                 v.check

@@ -2737,3 +2737,24 @@ evidence. Its checker resolves those two pins explicitly to that archive;
 there is no old runtime, fallback parser or historical format reader. The
 current driver authenticates new reports independently. Existing report and
 publication provenance bytes remain unchanged.
+
+## One-off format proof retirement (2026-10-20)
+
+The independent modifier-order migration retains no old native wire reader.
+Its two temporary Rust authoring/preservation targets were removed after their
+checks passed. Their exact executed sources and reports are
+[archived for review](evidence/modifier-order-fixture-migration/README.md), outside
+Cargo's test discovery. Reusable order, malformed-input, identity, import and
+execution controls remain in the normal Core/Import/Engine/CLI suites.
+
+A read-only audit found no further ordinary fresh-import test blocked by the
+new issue allocations. Four ignored historical/publication targets still contain
+old selected-issue totals or allocated issue identities:
+`owned_nonphysical_skill_inventory_cli`, `owned_source_presentation_cli`,
+`owned_item_range_origins_cli`, and `owned_preset_usage_inventory_cli`.
+These gates were not executed or repaired in this checkpoint. Before using one,
+classify whether it still proves needed acquisition/parity behavior or is an
+obsolete one-off migration. Archive and remove obsolete targets; reauthor needed
+ones against exact source/field ownership, preserving full diagnostics. Do not
+keep an old importer or shared issue allocator to satisfy historical literals.
+This cleanup must not distract from completing the closest unchanged build.

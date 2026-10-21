@@ -303,7 +303,10 @@ fn project_item_level_null_survives_selection_and_requires_explicit_wire_presenc
         parameters: vec![],
         item_level: None,
         quality: None,
-        modifier_order: vec![],
+        modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+            contributions: vec![],
+            numeric_transforms: vec![],
+        },
         modifiers: vec![],
     });
     raw.equipment.push(EquipmentUse {

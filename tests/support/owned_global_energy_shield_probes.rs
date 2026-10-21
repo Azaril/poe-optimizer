@@ -90,7 +90,11 @@ pub fn run(package: &Path, out: &Path) -> usize {
             assert_eq!(records.len(), 1, "{name}");
             let (item, modifier) = records[0];
             assert_eq!(item["modifiers"]["completion"]["kind"], "pending");
-            assert_eq!(item["modifier_order"]["kind"], "pending");
+            assert_eq!(item["modifier_orders"]["contributions"]["kind"], "pending");
+            assert_eq!(
+                item["modifier_orders"]["numeric_transforms"]["kind"],
+                "pending"
+            );
             assert_eq!(item["parameters"]["completion"]["kind"], "pending");
             assert_eq!(modifier["rolls"]["completion"]["kind"], "complete");
             let rolls = modifier["rolls"]["members"].as_array().unwrap();

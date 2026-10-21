@@ -336,13 +336,16 @@ impl Sources<'_> {
                     },
                 ) => {
                     let (slot, item) = self.equipment(*equipment_use, slots, work)?;
-                    charge(work, item.modifier_order.len())?;
+                    charge(work, item.modifier_orders.contributions.len())?;
                     let position = item
-                        .modifier_order
+                        .modifier_orders
+                        .contributions
                         .iter()
                         .position(|id| id == modifier)
                         .ok_or_else(|| {
-                            invalid("ordered contribution modifier has no explicit item order")
+                            invalid(
+                                "ordered contribution modifier has no explicit contribution order",
+                            )
                         })?;
                     (Self::slot_rank(slot, policy, work)?, position)
                 }

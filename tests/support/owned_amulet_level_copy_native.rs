@@ -465,7 +465,14 @@ impl Fixture {
     }
     pub fn original_pair(&mut self) {
         self.native.build.items[0].modifiers.truncate(1);
-        self.native.build.items[0].modifier_order.truncate(1);
+        self.native.build.items[0]
+            .modifier_orders
+            .contributions
+            .truncate(1);
+        self.native.build.items[0]
+            .modifier_orders
+            .numeric_transforms
+            .truncate(1);
     }
     /// Arithmetic-only boundary at the copy rule's resolved Modifier stat. The
     /// real numeric producer formats raw amounts first, so its admitted raw

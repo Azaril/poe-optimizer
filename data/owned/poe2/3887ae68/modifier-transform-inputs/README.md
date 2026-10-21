@@ -13,7 +13,10 @@ shared publisher rebinds the existing import/tree artifacts without overwriting 
 Each transform producer has an explicit step number and typed finite target definitions.
 Recipient eligibility is an ordinary Boolean Modifier stat; its rules can use the existing
 expression language. Binding uses the same receiving equipment use and backing item,
-orders producers by `ItemRecord.modifier_order`, then orders steps within each producer.
+orders producers by `ItemRecord.modifier_orders.numeric_transforms`, then orders steps
+within each producer. Later numeric contributions use the independent `contributions`
+sequence over the same exact modifier occurrences. Both sequences require complete
+membership and preserve semantic precedence independently of record storage.
 Unknown predicates, activation, initial values or contributor membership do not become
 identity factors. An explicitly complete empty sequence preserves its initial scalar.
 

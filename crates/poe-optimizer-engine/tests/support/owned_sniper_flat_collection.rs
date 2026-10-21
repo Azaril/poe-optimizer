@@ -441,7 +441,8 @@ fn synthetic_item_admission(
                 })
                 .collect(),
         });
-        item.modifier_order.push(id);
+        item.modifier_orders.contributions.push(id);
+        item.modifier_orders.numeric_transforms.push(id);
     }
     i.build.allocator = allocator.state();
     i.rebind_test_edit().unwrap();
@@ -758,19 +759,21 @@ fn explicit_modifier_order_is_observed_and_storage_order_is_not() {
         .build
         .items
         .iter_mut()
-        .find(|t| t.modifier_order.contains(&ids[0]))
+        .find(|t| t.modifier_orders.contributions.contains(&ids[0]))
         .unwrap();
     let a = item
-        .modifier_order
+        .modifier_orders
+        .contributions
         .iter()
         .position(|id| *id == ids[1])
         .unwrap();
     let b = item
-        .modifier_order
+        .modifier_orders
+        .contributions
         .iter()
         .position(|id| *id == ids[2])
         .unwrap();
-    item.modifier_order.swap(a, b);
+    item.modifier_orders.contributions.swap(a, b);
     check_path(&i, &run(&i), [0., 0.], 3);
 }
 

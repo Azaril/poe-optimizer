@@ -9,15 +9,52 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Remote checkpoint preceding this update:** main `06c5690f` contains the first 31-case
-modifier-source controls and ordering proposal, following Charm delivery and
-validated scalar/source-cache controls in `4eb2a112`. A fresh push succeeded and
+**Active approved migration:** the user accepted the two-order modifier model.
+Starting from verified remote main `c7e53685` and the validated data baseline below,
+migrate Core/Draft records, Import source proofs and both evaluation binders together.
+Each Item retains one occurrence set with independent `contributions` and
+`numeric_transforms` permutations. Draft orders have separate Pending/Known states;
+no storage-order fallback or compatibility reader is permitted. The checkpoint must
+include malformed/independent order controls, noncommutative arithmetic with distinct
+orders, all-five reimports and all 110 query rows. Raw/baked encoding remains an
+Import obligation; this structural change alone does not close producer coverage.
+See the [accepted decision](owned-modifier-ordering-proposal.md). Implementation
+and validation are in progress; the last fully validated baseline remains below.
+
+The migration's fresh all-five imports now pass twice independently per original,
+with exact draft/sidecar inverses, source-to-occurrence correspondence and all
+110 query rows preserved. Current selected counts are **123/137/127/144/5**:
+the additional **16/19/17/20/0** issues are exclusively separately owned,
+unproved numeric-transform orders. They do not remove or replace any previous
+obligation. Original05 remains the closest build, with five selected obligations;
+**0/5 builds are complete**. The current-format drafts and reports are in
+`runs/owned-modifier-orders-originals-01`, validated against the unchanged data
+package below. These supersede the old-format imported drafts, not its rules.
+Core passes 322 tests, and the selected Import suite passes 676 tests (one
+offline test ignored). Engine passes 136 tests, including independent-order
+arithmetic and 45 joined Sniper replay checks. Core/Import strict all-target
+Clippy passes. Retained fixtures are migrated with exact inverses and 40 checked
+dependency edges; the [archived proof](evidence/modifier-order-fixture-migration/README.md)
+records the one-off tools and hashes without installing a compatibility reader.
+An independent scan found no old `modifier_order` object keys in maintained
+JSON/gzip data; all nine protected incoming-critical files remain unchanged.
+CLI execution and downstream strict lint remain in progress.
+Logs: `runs/owned-modifier-orders-core-01.log`,
+`runs/owned-modifier-orders-import-01.log`,
+`runs/owned-modifier-orders-migration-01.log`,
+`runs/owned-modifier-orders-engine-01.log`,
+`runs/owned-modifier-orders-core-import-clippy-01.log`, and
+`runs/owned-modifier-orders-authoring-03.log`.
+
+**Remote checkpoint preceding this update:** main `c7e53685` contains the 56-case
+modifier-source controls, Charm scalability publication and strengthened admission
+controls, following the initial proposal in `06c5690f` and Charm delivery in
+`4eb2a112`. A fresh push succeeded and
 `ls-remote` verified its complete hash. The nine protected incoming-critical
 source/data files are now backed up byte-for-byte in `ac6df890` on
 `codex/backup-2026-10-20-incoming-critical`, without changing main, the checkout
 or the normal index. Ignored build outputs and investigation candidates remain
-local. The expanded source controls and metadata publication below are subsequent
-work.
+local. The approved two-order migration described above is subsequent work.
 
 **Current validated data baseline:**
 `runs/owned-charm-scalability-publication-01/package`, input
@@ -126,10 +163,45 @@ authenticated seal and run its existing pin checks in the ordinary packet test.
 The full raw/semantic inverse preserves every other pin, source and assertion.
 Runtime reruns now verify the repair without changing any behavioral assertion.
 
-**Resume in this order:** use the validated admission boundary checks to finish
-the canonical-admission argument for the existing checked grammar,
-resolve the reviewed semantic-order contract, then convert actual catalog magnitude
-suppliers and recipient facts through the existing graph. The Charm metadata proof
+**Resume in this order:** finish and validate the approved two-order migration,
+then audit the remaining obligations on the closest build's actual modifier owners
+before expanding absent producer families. Fine Belt has three exact siblings
+(`3172`, `318c`, `3100`) and no transform producer among them. That physical proof
+does not authorize a complete-empty native transform channel: the current plan
+uses global selected-owner coverage, and these owners remain Partial. Do not
+replace the channel with a literal identity or mark a partial owner complete to
+make an empty example execute. Review whether the consumer's
+`remaining-ordered-magnitude-transforms-unconverted` gap still describes missing
+consumer semantics, or whether its proven generic fold already fulfills that
+responsibility. External producer definitions and Import encoding/admission
+remain separate obligations. Flask owner `318c` still has actual missing local
+delivery; completing the closest build takes precedence over unrelated catalog expansion.
+
+The follow-up consumer audit found no missing Add/Multiply fold operation in
+`3172`; current evidence proves its numerical lowering and generic producer
+graph separately. The next bounded proof must connect them through the existing
+real-program fixtures: a nonneutral catalyst seed, cancellation to unity, upper
+raw/corruption boundaries and typed non-finite refusal. Extend the existing
+source cases with fixed/ranged unity cancellation and recipient corruption with
+transforms; distinguish numeric behavior from PoB reparsing/cache behavior.
+Only then consider an exact-owner metadata retirement for this single gap,
+retaining both source/admission gaps, full domains and supplier refusals.
+Do not add new producer families or another harness merely to make this proof.
+Detailed audit: `runs/charm-ordered-consumer-audit-20261021/README.md`.
+A reviewed but unexecuted three-file candidate is staged under
+`runs/charm-ordered-consumer-controls-candidate-20261021` (manifest
+`d4bb0675288947401feb564f8ea97fbcd8a4ff06450383596ca04e881d5505f9`).
+Its three new source expectations are reading-based predictions, not observations;
+verify the existing source runner before using them as coverage evidence.
+The [retirement register](legacy-retirement.md#one-off-format-proof-retirement-2026-10-20)
+also records remaining ignored historical gates with brittle issue literals.
+
+Finish the canonical-admission argument for the existing checked grammar using
+the validated boundary checks. Where production producer conversion is needed,
+start with authenticated catalog families and the existing graph. The 47 source
+scalability templates include Implicit increased/reduced and doubled forms;
+they do not certify the synthetic Charm-tag producer spelling. Do not assign
+that spelling Unscaled strength from the catalog proof. The Charm metadata proof
 is now published above. Source encoding and owner/contributor coverage remain
 separate obligations. The item-reconstruction differences are isolated below. A fresh CLI
 normalization of unchanged Original05 against Water now produced
@@ -256,16 +328,17 @@ source text remains 4 where authored/ranged source input yields 6, confirming
 that source encoding must be accounted for before canonical raw inputs are
 emitted. This is source evidence, not native producer coverage.
 
-The current single `modifier_order` drives both transform folding and ordered
-contribution reductions. The [ordering proposal](owned-modifier-ordering-proposal.md)
-recommends two independently validated semantic orders over the same occurrences,
-with source encoding retained only in Import. User review is pending; no public
-model migration is applied yet. Exact catalog-spelling and nonneutral producer
-strength controls are the next evidence step. The legacy inactive-producer
+The earlier single `modifier_order` drove both transform folding and ordered
+contribution reductions. The accepted [ordering decision](owned-modifier-ordering-proposal.md)
+requires two independently validated semantic orders over the same occurrences,
+with source encoding retained only in Import. Core, Import and Engine migration
+is now in progress, including current fixture regeneration and exact all-five
+preservation checks. The catalog-spelling and nonneutral producer strength
+controls below are already validated. The legacy inactive-producer
 control yields 6 while versioned/grouped variants yield 4; retain this as an
 unresolved source discrepancy, not a native participation rule or an approved
 parity exception. CI now retains these source reports on failure. Independent
-Charm metadata/admission work can continue while the order contract is reviewed.
+Charm metadata/admission work remains independent of the structural migration.
 
 **Exact catalog strength controls also pass:** the same source suite now runs
 56 cases per fresh VM, preserving the original 31 and adding 25. Every VM joins

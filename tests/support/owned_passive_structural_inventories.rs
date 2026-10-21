@@ -12,7 +12,7 @@ use std::{fs, io::Read, path::PathBuf};
 mod evidence;
 
 const BEFORE: &str = "35d446c73be3aa977d55a49174aaf4656e27a38ebaeaab354e86cd7f9f36b5a5";
-const AUTHORING: &str = "c49f7876697584c0043048c80574be45be60418bcdb1a838e71db84268306913";
+const AUTHORING: &str = "7879f2a670d186294253c4e3707cb4b976e53a70d71fa307f463435ac4814799";
 const FAMILIES: [(u64, &str); 6] = [
     (13289, "def.0000000000000b34"),
     (19318, "def.0000000000000d0f"),

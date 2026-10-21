@@ -110,9 +110,19 @@ pub struct ItemRecord {
     #[serde(deserialize_with = "required_option")]
     pub quality: Option<QualitySelection>,
     pub modifiers: Vec<RolledModifier>,
-    /// Semantic precedence, independent of record storage and occurrence IDs.
-    /// Exactly one entry for every modifier on this item; never canonicalized.
-    pub modifier_order: Vec<ModifierInstanceId>,
+    /// Independently established precedence for contributions and numeric
+    /// transformations. Neither order is inferred from record storage or IDs.
+    pub modifier_orders: ItemModifierOrders,
+}
+
+/// Two mechanical ordering domains over the same exact modifier occurrences.
+/// Each sequence contains every modifier on its item exactly once. Both orders
+/// are preserved during canonicalization and contribute to content identity.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemModifierOrders {
+    pub contributions: Vec<ModifierInstanceId>,
+    pub numeric_transforms: Vec<ModifierInstanceId>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

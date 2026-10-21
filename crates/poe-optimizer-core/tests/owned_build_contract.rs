@@ -64,7 +64,10 @@ fn build_input() -> BuildInput {
                 parameters: vec![],
                 item_level: Some(60),
                 quality: None,
-                modifier_order: vec![],
+                modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                    contributions: vec![],
+                    numeric_transforms: vec![],
+                },
                 modifiers: vec![],
             },
             ItemRecord {
@@ -79,7 +82,10 @@ fn build_input() -> BuildInput {
                 }],
                 item_level: Some(60),
                 quality: Some(quality()),
-                modifier_order: vec![id(15)],
+                modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                    contributions: vec![id(15)],
+                    numeric_transforms: vec![id(15)],
+                },
                 modifiers: vec![RolledModifier {
                     id: id(15),
                     definition: definition("rolled-modifier"),
@@ -1171,7 +1177,14 @@ fn modifier_providers_distinguish_repeated_modifiers_and_shared_item_uses() {
     let mut input = build_input();
     let mut repeated = input.items[1].modifiers[0].clone();
     repeated.id = id(21);
-    input.items[1].modifier_order.push(repeated.id);
+    input.items[1]
+        .modifier_orders
+        .contributions
+        .push(repeated.id);
+    input.items[1]
+        .modifier_orders
+        .numeric_transforms
+        .push(repeated.id);
     input.items[1].modifiers.push(repeated);
     let build = BuildSpec::new(input, limits()).unwrap();
     let providers = vec![
@@ -1239,7 +1252,14 @@ fn modifier_provider_requires_the_modifier_to_belong_to_its_receiving_use() {
     let mut input = build_input();
     let mut elsewhere = input.items[1].modifiers[0].clone();
     elsewhere.id = id(22);
-    input.items[0].modifier_order.push(elsewhere.id);
+    input.items[0]
+        .modifier_orders
+        .contributions
+        .push(elsewhere.id);
+    input.items[0]
+        .modifier_orders
+        .numeric_transforms
+        .push(elsewhere.id);
     input.items[0].modifiers.push(elsewhere);
     let wrong_parent = ProviderRoot::ItemModifier {
         equipment_use: id(4),

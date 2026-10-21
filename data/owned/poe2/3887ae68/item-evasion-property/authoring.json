@@ -1,46 +1,46 @@
 {
-  "schema_version": 1,
-  "before": "e282b4bb142200944d84f30aaf35ccc77eb3fae9d6084be2c0229b9960489af9",
-  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
   "artifacts": [
     {
-      "name": "consumer.json",
       "bytes": 103759,
+      "name": "consumer.json",
       "sha256": "08edc27dccf182dfa4b6315aaa2b94e73e8669c240113fe3a8b97ac92ca79f60"
     },
     {
+      "bytes": 3931734,
       "name": "dependencies.json",
-      "bytes": 3930590,
-      "sha256": "8e0e97074a48dbf3a5866d8b8befa3d7696f7164e09c39afbb18b5c62e9398f6"
+      "sha256": "95b2abbb555337ab866a21a13a01c5abcab443fc17fe07aa8fb6a230ef846a67"
     },
     {
-      "name": "source-evidence.json",
       "bytes": 6036,
+      "name": "source-evidence.json",
       "sha256": "e27c23831b703a983a4076a6f567ab1cc348266d5cc41b47061d3c4e318f8c43"
     },
     {
-      "name": "source-vectors.json",
       "bytes": 327935,
+      "name": "source-vectors.json",
       "sha256": "b0f8f4708b96d547a4dcdb72e5403dc16141e74c9486382b54c58d4690e6e1c4"
     },
     {
-      "name": "source-report.json.gz",
       "bytes": 461911,
+      "name": "source-report.json.gz",
       "sha256": "eeecc1d941eb22b01865a8539bdcc7a2cb1eae6a0f33bf3ba2232ed9adafc184"
     },
     {
-      "name": "migration.json",
       "bytes": 4233,
+      "name": "migration.json",
       "sha256": "bcedd097b77069cdb09782212948a6aa096b334bd475535f9ba1d781855f468c"
     }
   ],
+  "before": "e282b4bb142200944d84f30aaf35ccc77eb3fae9d6084be2c0229b9960489af9",
+  "schema_version": 1,
   "scope": {
-    "publication_ready": true,
-    "whole_build_complete": false,
-    "selected_template_owners_closed": false,
     "canonical_modifier_owners_closed": false,
-    "positive_local_controls_authorize_source_admission": false,
     "nonzero_per_level_supported": false,
-    "positive_property_replacement_supported": false
-  }
+    "positive_local_controls_authorize_source_admission": false,
+    "positive_property_replacement_supported": false,
+    "publication_ready": true,
+    "selected_template_owners_closed": false,
+    "whole_build_complete": false
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
 }

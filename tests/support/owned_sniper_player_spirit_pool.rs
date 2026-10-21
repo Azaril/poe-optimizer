@@ -73,7 +73,12 @@ fn selected_sources() -> (RolledModifier, Vec<RewardSelection>) {
         .collect();
     assert_eq!(mods.len(), 1);
     let mut modifier = mods[0].clone();
-    assert!(item.modifier_order.contains(&modifier.id));
+    assert!(item.modifier_orders.contributions.contains(&modifier.id));
+    assert!(
+        item.modifier_orders
+            .numeric_transforms
+            .contains(&modifier.id)
+    );
     assert_eq!(modifier.rolls.len(), 24);
     assert_eq!(
         modifier
@@ -148,7 +153,8 @@ fn build_world() -> World {
             .iter()
             .any(|m| m.definition == modifier.definition)
     );
-    amulet.modifier_order.push(modifier.id);
+    amulet.modifier_orders.contributions.push(modifier.id);
+    amulet.modifier_orders.numeric_transforms.push(modifier.id);
     amulet.modifiers.push(modifier.clone());
 
     let uses: Vec<_> = f

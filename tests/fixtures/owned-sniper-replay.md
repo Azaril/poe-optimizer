@@ -5,7 +5,7 @@ joined Sniper test graph, exported from
 `runs/owned-selected-physical-base-publication-02/package`, input
 `3207283619e0224714b005bfbf352c5f92d40e598e4bd8be4c837013664a5851`.
 It is test data, not a production release or an admitted complete build.
-Original05 still has four selected input obligations and incomplete mechanics
+Original05 currently has five selected input obligations and incomplete mechanics
 coverage. Previous refreshes are recorded in the
 [implementation history](../../docs/implementation-history.md).
 
@@ -96,10 +96,21 @@ require deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
 The current fixture has **957 definitions, 625 owners and 37 stages**.
-It is 139,874 compressed bytes and 5,442,921 JSON bytes. Gzip SHA-256:
-`d52b4af0d05a1d38ca108acf3f043977c2bfa93c3416ddfe51a7f34cce73013e`.
+It is 139,930 compressed bytes and 5,443,617 JSON bytes. Gzip SHA-256:
+`434c378e68db98f9633f1d51c65c234bca927711bd424c955bd19cb49a4a53ea`.
 Decoded JSON SHA-256:
-`c0b1138b72edbb7de0c3bb000d56f405b9ccea663ff48d7d1a2c350970ae2810`.
+`643cf3518c4af608ae7203daf434310aed2b22f50958b73b6e5f1030e6ca7bc5`.
+
+The October 20 modifier-order update replaces each of six fixture Items' single
+order with explicit contribution and numeric-transform sequences. This finite
+fixture deliberately retains the prior sequence in both domains. A full inverse
+restores every other JSON value and dependency identity against prior gzip
+`d52b4af0d05a1d38ca108acf3f043977c2bfa93c3416ddfe51a7f34cce73013e`.
+Fresh and reused-scratch reports agree, and gzip re-encoding is deterministic.
+Evidence: `runs/owned-modifier-orders-replay-01/proof.json` and
+`runs/owned-modifier-orders-migration-01.log`. This fixture migration does not
+certify either order for arbitrary imported Items; fresh imports prove each
+domain independently or retain its exact pending obligation.
 
 The October 19 Scenario-intent format update adds an explicit null applicability
 declaration to the existing UsagePolicy and empty Build preference/Scenario intent

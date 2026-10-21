@@ -1,6 +1,6 @@
-# Proposal: separate modifier ordering contracts and preserve canonical numeric inputs
+# Decision: separate modifier ordering contracts and preserve canonical numeric inputs
 
-Status: proposal for review, not applied. Based on current main `4eb2a112`, Charm package `e85a165738460fa2bc37f3eda92a0732c26771192e4faf999827d8f29864a9f6`, and the now-passing original-source controls in `runs/modifier-transform-source-02Oawm`. No compatibility path is proposed.
+Status: accepted by the user on 2026-10-20; implementation in progress. The initial evidence came from main `4eb2a112`, Charm package `e85a165738460fa2bc37f3eda92a0732c26771192e4faf999827d8f29864a9f6`, and original-source controls in `runs/modifier-transform-source-02Oawm`. The migration starts from main `c7e53685` and the validated Charm scalability package `b8851ea50c9d5fd97e1695e536c89dba185f136d51d6e77da31bd22f8f4a67a9`. Change the current format in place; retain no compatibility path.
 
 ## The demonstrated problem
 
@@ -10,11 +10,11 @@ The source test passed 31 cases in four independent fresh VMs, with JIT on/off, 
 - An explicit Add producer discovered before a later tagged implicit doubled producer still yields 12. Grouping the records implicit-before-explicit would yield 10.
 - Later sorting of explicit records also preserves the earlier producer discovery order.
 
-The current native `ItemRecord.modifier_order` is used for both magnitude-transform folding and ordered numeric-contribution reduction. The current Import census constructs implicit ordinals followed by explicit ordinals. These source observations prove that this one field cannot generally describe both required orders. They do not prove that every source contribution family has correct ordering today, or that PoB's ordering is universally the live game's intended arithmetic.
+Before this migration, native `ItemRecord.modifier_order` was used for both magnitude-transform folding and ordered numeric-contribution reduction. The Import contribution census constructs implicit ordinals followed by explicit ordinals. These source observations prove that this one field cannot generally describe both required orders. They do not prove that every source contribution family has correct ordering today, or that PoB's ordering is universally the live game's intended arithmetic.
 
 The encoding distinction is also observed: ordinary fixed source text remains 4 while authored fixed or ranged input produces 6 under the same 50% producer. Source comments state that ordinary/trade data may already be scaled. These cases prove that importing every spelling as raw and applying every producer would be wrong. They do not prove an inverse from a rendered value to an original raw roll.
 
-## Recommended native contract
+## Accepted native contract
 
 Keep one item record and one set of modifier occurrences. Replace the ambiguous single order with two explicitly named semantic orders, for example:
 
@@ -38,7 +38,7 @@ This preserves exact occurrences, duplicate producers, current applicability rul
 
 Alternative: keep a single sequence and accept only imported layouts where both orders provably agree. This is a valid temporary admission restriction, but it cannot represent the demonstrated inputs and gives the optimizer an unnecessary structural limit. It should not be the end-state model. A general map of named order domains is another option, but adds validation and policy surface without evidence of a third required order.
 
-## Recommended Import contract
+## Accepted Import contract
 
 Keep native roll slots canonical and source-free. Do not add `crafted`, `advancedCopy`, `already_baked`, or source-version switches to native records or evaluator rules. Extend the existing item attribution and normalization accounting to establish these facts before it emits canonical values and order identities:
 
@@ -53,7 +53,7 @@ For already-transformed values, the first production policy should require eithe
 
 Longer-term direct support for resolved values whose raw rolls are irrecoverable may need a separate, generic partial-knowledge contract. That is not necessary to establish the current raw-input path and should be a deliberate future model decision. The current proposal does not invent a second native value path merely to bypass admission.
 
-## Data authoring after the contract is agreed
+## Subsequent producer-data authoring
 
 Use the existing ProjectModifierTransform instructions. Percentage producer amounts emit dimensionless Add steps through `PercentAsFactor`; doubled definitions emit Multiply 2. Preserve the producer's pre-transform amount separately from its own final transformed value. Do not introduce feedback by reading the producer's final `253d` output or silently bind a pre-transform scalar to the numeric compiler's final-factor field.
 
@@ -71,6 +71,6 @@ Publish finite authored recipient predicates across matching canonical families,
 
 ## Decisions versus further evidence
 
-**Ready for design review:** two explicit native ordering domains and Import-only encoding authority, with raw canonical native slots retained. The source controls establish that the existing single-order assumption is insufficient.
+**Accepted:** two explicit native ordering domains and Import-only encoding authority, with raw canonical native slots retained. The source controls establish that the existing single-order assumption is insufficient. Approval authorizes the structural migration; it does not close the remaining source evidence or production coverage obligations below.
 
 **Still open implementation evidence:** exact contribution ordering for each non-Charm family; full producer syntax/category/tag coverage; pre-transform amount precision/catalyst/corruption domains; mathematically justified recovery of already-transformed raw values; how to classify the observed legacy inactive-producer anomaly. That anomaly should remain a source discrepancy until reviewed, not become a native rule allowing inactive modifiers to affect other occurrences.

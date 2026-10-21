@@ -265,7 +265,14 @@ pub fn check_modifier_transforms(cwd: &Path, prior: &Path) -> PathBuf {
                 .find(|item| serde_json::to_value(item.id).unwrap() == *item_id)
                 .unwrap();
             assert!(item.to_resolved().is_none());
-            assert!(matches!(item.modifier_order, DraftField::Pending(_)));
+            assert!(matches!(
+                item.modifier_orders.contributions,
+                DraftField::Pending(_)
+            ));
+            assert!(matches!(
+                item.modifier_orders.numeric_transforms,
+                DraftField::Pending(_)
+            ));
             assert!(matches!(
                 item.modifiers.completion,
                 DraftListCompletion::Pending { .. }

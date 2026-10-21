@@ -61,7 +61,10 @@ fn item(local: u64) -> ItemRecord {
             slot: slot(SlotOwnerDefId::ItemTemplate(def("item")), "rarity"),
             value: ParameterValue::Integer(BoundedInteger::new(2).unwrap()),
         }],
-        modifier_order: vec![id(local + 1)],
+        modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+            contributions: vec![id(local + 1)],
+            numeric_transforms: vec![id(local + 1)],
+        },
         modifiers: vec![RolledModifier {
             id: id(local + 1),
             definition: def("modifier"),
@@ -1213,14 +1216,20 @@ fn explicit_unspecified_item_level_finalizes_but_pending_level_preserves_issue_a
 }
 
 #[test]
-fn modifier_order_pending_and_open_membership_each_block_selected_finalization() {
-    for open_membership in [false, true] {
+fn each_modifier_order_and_open_membership_independently_block_selected_finalization() {
+    for pending_domain in ["contributions", "numeric_transforms", "membership"] {
         let mut raw = input();
-        if open_membership {
-            raw.items.members[0].modifiers.completion = open(905);
-        } else {
-            raw.items.members[0].modifier_order =
-                DraftField::Pending(pending(905, vec![vec![id(11)]]));
+        match pending_domain {
+            "contributions" => {
+                raw.items.members[0].modifier_orders.contributions =
+                    DraftField::Pending(pending(905, vec![vec![id(11)]]))
+            }
+            "numeric_transforms" => {
+                raw.items.members[0].modifier_orders.numeric_transforms =
+                    DraftField::Pending(pending(905, vec![vec![id(11)]]))
+            }
+            "membership" => raw.items.members[0].modifiers.completion = open(905),
+            _ => unreachable!(),
         }
         let session = DraftSession::new(raw, limits()).unwrap();
         let (issues, _) = pending_result(&session);
@@ -1230,16 +1239,27 @@ fn modifier_order_pending_and_open_membership_each_block_selected_finalization()
                 .any(|issue| issue.id == id::<DraftIssueId>(905)
                     && issue.owner == Some(id::<ItemRecordId>(10).instance_id()))
         );
+        assert_eq!(issues.len(), 1);
+        if pending_domain != "membership" {
+            assert!(
+                issues[0]
+                    .path
+                    .ends_with(&format!(".modifier_orders.{pending_domain}"))
+            );
+        }
     }
 }
 
 #[test]
-fn modifier_order_survives_project_selection_and_invalidates_finalized_request_identity() {
+fn independent_modifier_orders_survive_composition_and_change_finalized_identity() {
     let mut project_raw = project_input();
     let mut modifier = project_raw.items[0].modifiers[0].clone();
     modifier.id = id(14);
     project_raw.items[0].modifiers.push(modifier.clone());
-    project_raw.items[0].modifier_order = vec![id(14), id(11)];
+    project_raw.items[0].modifier_orders = ItemModifierOrders {
+        contributions: vec![id(14), id(11)],
+        numeric_transforms: vec![id(11), id(14)],
+    };
     let project = BuildProject::new(project_raw, limits().input).unwrap();
     let project_bytes = encode_owned(
         &OwnedDocument::Project(Box::new(project.clone())),
@@ -1252,19 +1272,17 @@ fn modifier_order_survives_project_selection_and_invalidates_finalized_request_i
     );
     let composed = compose(&project, &selection().build, None, limits().input).unwrap();
     assert_eq!(
-        composed.input().items[0].modifier_order,
-        vec![id(14), id(11)]
+        composed.input().items[0].modifier_orders,
+        project.input().items[0].modifier_orders,
     );
     let mut raw = input();
     raw.items.members[0].modifiers.members.push(modifier.into());
-    raw.items.members[0].modifier_order = DraftField::Known {
-        value: vec![id(14), id(11)],
-    };
+    raw.items.members[0].modifier_orders = project.input().items[0].modifier_orders.clone().into();
     let session = DraftSession::new(raw.clone(), limits()).unwrap();
     let a = ready(&session, selection());
     assert_eq!(
-        a.request().build().input().items[0].modifier_order,
-        vec![id(14), id(11)]
+        a.request().build().input().items[0].modifier_orders,
+        project.input().items[0].modifier_orders,
     );
     assert_eq!(
         a.request().build().input().items[0]
@@ -1274,11 +1292,20 @@ fn modifier_order_survives_project_selection_and_invalidates_finalized_request_i
             .collect::<Vec<_>>(),
         vec![id(11), id(14)]
     );
-    raw.items.members[0].modifier_order = DraftField::Known {
-        value: vec![id(11), id(14)],
-    };
-    let changed = DraftSession::new(raw, limits()).unwrap();
-    let b = ready(&changed, selection());
-    assert_ne!(a.draft_digest(), b.draft_digest());
-    assert_ne!(a.request_digest(), b.request_digest());
+    for numeric in [false, true] {
+        let mut changed = raw.clone();
+        let order = if numeric {
+            &mut changed.items.members[0].modifier_orders.numeric_transforms
+        } else {
+            &mut changed.items.members[0].modifier_orders.contributions
+        };
+        let DraftField::Known { value } = order else {
+            panic!()
+        };
+        value.reverse();
+        let changed = DraftSession::new(changed, limits()).unwrap();
+        let b = ready(&changed, selection());
+        assert_ne!(a.draft_digest(), b.draft_digest());
+        assert_ne!(a.request_digest(), b.request_digest());
+    }
 }

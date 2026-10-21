@@ -202,8 +202,11 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
         assert_eq!(x["item_level"]["kind"], "pending");
         assert_eq!(y["item_level"], json!({"kind":"known","value":null}));
         retired.push(x["item_level"]["id"].clone());
-        for field in ["quality", "parameters", "modifier_order"] {
-            assert_eq!(x[field]["kind"].as_str().unwrap_or("pending"), "pending");
+        assert_eq!(x["quality"]["kind"], "pending");
+        assert_eq!(x["parameters"]["completion"]["kind"], "pending");
+        for order in ["contributions", "numeric_transforms"] {
+            assert_eq!(x["modifier_orders"][order]["kind"], "pending");
+            assert_eq!(y["modifier_orders"][order]["kind"], "pending");
         }
         assert_eq!(y["modifiers"]["completion"]["kind"], "pending");
         assert_eq!(y["parameters"]["completion"]["kind"], "pending");

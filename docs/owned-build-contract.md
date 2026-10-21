@@ -11,7 +11,7 @@ The source audit is in `runs/owned-build-contract-01/source-audit.md`.
 `core::owned_definitions` implements typed owned IDs and bounded authored values.
 `core::owned_build` implements raw `BuildInput`, `ScenarioInput`, `QueryInput` records,
 private immutable `BuildSpec`, `ScenarioSpec`, `QuerySpec` wrappers and an
-`OwnedEvaluationRequest`. Constructors validate structure; the version-3 JSON codec
+`OwnedEvaluationRequest`. Constructors validate structure; the current JSON codec
 roundtrips standalone documents (including inventory and projects) and combined requests. `check-owned-input` is the first
 CLI consumer and can write canonical owned JSON without XML, PoB or a game package.
 
@@ -23,9 +23,11 @@ snapshot digests; content claims gain authority only when binding recomputes the
 `core::owned_project` now composes independent typed presets through the shared record
 validator. `core::owned_binding` checks a combined request against an injected schema index.
 The [composition/binding contract](owned-binding.md) details exact occurrence selection,
-choice aliases, concrete required values and schema-versus-resolution status. Draft repair,
-revisioned editing, legality, computability and the five-case adapter remain open. Numerical
-evaluation still uses legacy inputs; these additions do not establish native rule coverage.
+choice aliases, concrete required values and schema-versus-resolution status. The native
+evaluation path consumes these owned inputs and injected rules; it does not require legacy
+calculation inputs. Complete mechanical coverage and final candidate admission remain open.
+See the [current execution overview](data-and-evaluation-overview.md) and
+[implementation checkpoint](implementation.md) for the five-build adapter and evaluation status.
 
 The envelope is `{ schema_version: 4, document: { kind, value } }`, where kind is `build`,
 `project`, `inventory`, `scenario`, `query` or `request`. Required optional fields use explicit null; omission
@@ -40,11 +42,14 @@ Unknown/duplicate fields reject. Defaults bound wire bytes to
 8 MiB, collection entries to 16,384, total entries to 100,000 and provider paths to 64 steps;
 callers can tighten these resource limits. These are not game-level caps. Unordered
 occurrence/assignment collections canonicalize; ordered queries and grant paths retain
-order. Each item has a required `modifier_order`: an exact permutation of that item's
-modifier occurrence IDs. It is semantic precedence for order-sensitive operations, independent
-of the canonical ID-sorted modifier record table. Duplicate, foreign, unissued or cross-item
-IDs reject; membership edits must update and revalidate the permutation. Reordering storage
-alone leaves identity unchanged; changing semantic precedence changes it. Operation stages
+order. Each item requires `modifier_orders.contributions` and
+`modifier_orders.numeric_transforms`, two independently established exact permutations
+of that item's same modifier occurrence IDs. They define contribution reduction and
+modifier magnitude-transform precedence respectively, independently of the canonical
+ID-sorted record table. Duplicate, foreign, unissued or cross-item IDs reject;
+membership edits must update and revalidate both permutations. Drafts retain separate
+Pending/Known states for each order. Reordering storage alone leaves identity unchanged;
+changing either semantic sequence changes it. Operation stages
 and program/effect order still belong to rules. No PoB category ordering or parser traversal
 is built into this contract. Decoding establishes no prepared-plan reuse or stock authority.
 

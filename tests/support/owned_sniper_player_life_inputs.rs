@@ -375,10 +375,22 @@ fn import(package: &Path) -> Census {
             quantity(expected[0]["value"].as_f64().unwrap(), &d(0x295a)),
             "source individual amount agrees with the exact imported raw roll in this unscaled domain"
         );
-        assert!(original.modifier_order.contains(&item.modifiers[0].id));
+        assert!(
+            original
+                .modifier_orders
+                .contributions
+                .contains(&item.modifiers[0].id)
+        );
+        assert!(
+            original
+                .modifier_orders
+                .numeric_transforms
+                .contains(&item.modifiers[0].id)
+        );
         item.id = id(7800 + 10 * index as u64);
         item.modifiers[0].id = id(7801 + 10 * index as u64);
-        item.modifier_order = vec![item.modifiers[0].id];
+        item.modifier_orders.contributions = vec![item.modifiers[0].id];
+        item.modifier_orders.numeric_transforms = vec![item.modifiers[0].id];
         for actual in uses {
             assert_eq!(actual.scope, LoadoutScope::Shared);
             let mut e = actual.clone();
@@ -1042,7 +1054,8 @@ fn add_amulet_life(w: &mut World, amount: f64) {
         .iter_mut()
         .find(|i| i.template == d(0x2343))
         .unwrap();
-    amulet.modifier_order.push(modifier.id);
+    amulet.modifier_orders.contributions.push(modifier.id);
+    amulet.modifier_orders.numeric_transforms.push(modifier.id);
     amulet.modifiers.push(modifier);
     let DefinitionDescriptor::ItemTemplate(DefinitionEntry {
         schema: SchemaState::Known(schema),

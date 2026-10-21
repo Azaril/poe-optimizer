@@ -245,7 +245,7 @@ pub fn check_source() {
                 &data().join("source-domain.json"),
                 2 * 1024 * 1024
             )),
-            "c16d1ecb4d53a90845a87219988de4c5105f0941f5f446aef5c4a84e826ed09c"
+            "84164a2372abcc269c186f8b3bb6928657c2e21b8c5d53cd050374ae04eb0946"
         );
         assert_eq!(d["inputs"].as_array().unwrap().len(), 2);
         assert_eq!(d["complete_bodies"].as_array().unwrap().len(), 11);

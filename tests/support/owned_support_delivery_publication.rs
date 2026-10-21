@@ -91,6 +91,8 @@ pub fn run_with_payloads(
 
 /// Successor packets can commit an updated diagnostic census without changing
 /// the exact historical expectations of earlier publication fixtures.
+/// Counts use `preservation::Comparison`'s historical-facet scope; checked new
+/// numeric-order obligations remain present in every current report and inverse.
 #[allow(dead_code, clippy::too_many_arguments)]
 pub fn run_with_expected_selected_counts(
     prior_path: PathBuf,

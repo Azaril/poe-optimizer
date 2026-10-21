@@ -144,7 +144,14 @@ pub fn fixture() -> CatalystFixture {
         inputs,
     );
     native.build.items[0].modifiers.truncate(1);
-    native.build.items[0].modifier_order.truncate(1);
+    native.build.items[0]
+        .modifier_orders
+        .contributions
+        .truncate(1);
+    native.build.items[0]
+        .modifier_orders
+        .numeric_transforms
+        .truncate(1);
     for index in 0..2 {
         native.set_raw(index, 0, 10.0);
         for parameter in &mut native.build.items[index].modifiers[0].rolls {

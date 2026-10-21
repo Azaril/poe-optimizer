@@ -69,7 +69,8 @@ The recipient read starts from its own explicitly derived factor stat. Both oper
 require the same dimensionless-factor unit; this is not general collection execution.
 
 Cold binding expands direct ItemModifier producers onto matching sibling occurrences on
-the same backing item and receiving equipment use. It sorts by `ItemRecord.modifier_order`,
+the same backing item and receiving equipment use. It sorts by
+`ItemRecord.modifier_orders.numeric_transforms`,
 then by the producer's explicit step. Source/recipient activation and recipient predicates
 are ordinary dependencies. Duplicate positions, missing facts, cycles, incompatible scopes
 and units are rejected or unresolved through the existing contracts. Target, effect, edge

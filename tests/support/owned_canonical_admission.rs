@@ -876,7 +876,14 @@ fn check_originals(
                     item.modifiers.completion,
                     DraftListCompletion::Pending { .. }
                 ));
-                assert!(matches!(item.modifier_order, DraftField::Pending(_)));
+                assert!(matches!(
+                    item.modifier_orders.contributions,
+                    DraftField::Pending(_)
+                ));
+                assert!(matches!(
+                    item.modifier_orders.numeric_transforms,
+                    DraftField::Pending(_)
+                ));
                 canonical_count += 1;
             }
         }

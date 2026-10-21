@@ -403,7 +403,12 @@ impl Inputs {
         for item in &mut f.build.items {
             item.item_level = Some(55);
             item.modifiers.retain(|m| m.id != occurrence(5));
-            item.modifier_order.retain(|m| *m != occurrence(5));
+            item.modifier_orders
+                .contributions
+                .retain(|m| *m != occurrence(5));
+            item.modifier_orders
+                .numeric_transforms
+                .retain(|m| *m != occurrence(5));
             assert_eq!(item.modifiers.len(), 1);
             item.modifiers[0].rolls = rolls.clone();
         }

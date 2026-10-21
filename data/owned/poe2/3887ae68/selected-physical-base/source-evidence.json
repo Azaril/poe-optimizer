@@ -526,24 +526,24 @@
       "sha256": "7b3d1971be77acfa1a9166659e7e06df26cf95e669d6b60305e7138940e51640"
     },
     {
-      "bytes": 1814005,
+      "bytes": 1820785,
       "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/bindings.json",
-      "sha256": "d4e773a5f44f88f2e36463754484613da541c09ec1239eab368766ea804a7b4f"
+      "sha256": "2b54e203a49e35da80e92a0a3dd09e990ff79574cb5629d9852634ca185727b4"
     },
     {
-      "bytes": 25287,
+      "bytes": 25527,
       "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/draft.json.gz",
-      "sha256": "7bff6c94b96095459e696138a3ad9afb5394d3b77ec74bbb9d28f0fa4b02a920"
+      "sha256": "2d03cf1ae6bd4ee4808c4d7d985205df07c66f7319d9e3e6c6a7f1c4962b2678"
     },
     {
-      "bytes": 964,
+      "bytes": 980,
       "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/import-report.json.gz",
-      "sha256": "c544ce5e3d5bb2f7cb1438f5f4b1c9bf0c2c0548532ccbb3b842dda88a6542aa"
+      "sha256": "a09d51a3472e106868eed8fc6ab58e6386ff20dd12715c89b3529b6a959a3ed7"
     },
     {
-      "bytes": 5495,
+      "bytes": 27421,
       "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/inputs.json",
-      "sha256": "224f026299025c262ec57a04c5f0c86feb6802f6b1a16e698266133595ca108f"
+      "sha256": "8c62c1236094763485c149583e0163a2e79f091ed1ba9ab7ac24f2a19b05d00d"
     },
     {
       "bytes": 801,
@@ -566,14 +566,14 @@
       "sha256": "f431b0fd608ed975fa81a5d5c075c6de50717bb084aeadf2d8da2fc7b6b9d7ea"
     },
     {
-      "bytes": 41112,
+      "bytes": 41200,
       "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/sidecar.json.gz",
-      "sha256": "bcf63064205b8e991b0d3b1845e58a5b2d4bc52b65998c2d7558e77587f20779"
+      "sha256": "7eb87222eb0a463e8bd1fdd9280d9cfe02b4c5136f8a3460aba6efd84f82b281"
     },
     {
       "bytes": 1861,
       "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/authority.json",
-      "sha256": "8ff24776e3338be02f13ab6d5f5c15e12707b487ada803a5987e266b2a0db5ca"
+      "sha256": "9bb0652de6b27a2b5714f03e38b7d7769d89ac35f125baf11fd53d61cd2e21f1"
     },
     {
       "bytes": 29244,
@@ -593,12 +593,12 @@
     {
       "bytes": 1856,
       "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/child-review.json",
-      "sha256": "ef1a1dbc2161d170e99a8ccb3811b605efcc32a0ff2c01f6be92d6913f114021"
+      "sha256": "92087edac8db0bb60f181af49ac9aa3ce7d69e37b2378970dce9b3fabe81e61c"
     },
     {
       "bytes": 69320,
       "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/review.json",
-      "sha256": "fd4f6dd13f6766351bf9118063972e0202e7d8663c5323c4114c4b5c42075c3d"
+      "sha256": "bfb49b34c1ee0db3e0234060768f7c8849cda4498aba1a8eaa8958374e287d44"
     },
     {
       "bytes": 106378,
@@ -619,7 +619,7 @@
       "review": {
         "bytes": 69320,
         "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/review.json",
-        "sha256": "fd4f6dd13f6766351bf9118063972e0202e7d8663c5323c4114c4b5c42075c3d"
+        "sha256": "bfb49b34c1ee0db3e0234060768f7c8849cda4498aba1a8eaa8958374e287d44"
       }
     },
     {
@@ -681,9 +681,9 @@
     {
       "family": "self-flat-selected-bindings",
       "review": {
-        "bytes": 1814005,
+        "bytes": 1820785,
         "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/bindings.json",
-        "sha256": "d4e773a5f44f88f2e36463754484613da541c09ec1239eab368766ea804a7b4f"
+        "sha256": "2b54e203a49e35da80e92a0a3dd09e990ff79574cb5629d9852634ca185727b4"
       }
     },
     {

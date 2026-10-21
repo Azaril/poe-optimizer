@@ -423,7 +423,8 @@ fn partial_provider_programs_or_receiver_membership_retain_incomplete_totals() {
 fn complete_empty_modifier_membership_uses_the_integer_sum_identity() {
     let mut f = fixture();
     f.build.items[0].modifiers.clear();
-    f.build.items[0].modifier_order.clear();
+    f.build.items[0].modifier_orders.contributions.clear();
+    f.build.items[0].modifier_orders.numeric_transforms.clear();
     let report = evaluate(&f);
     assert!(report.gaps.is_empty());
     known_totals(&report, 0);

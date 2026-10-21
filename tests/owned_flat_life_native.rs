@@ -114,7 +114,11 @@ fn one_physical_life_roll_projects_once_per_selected_equipment_use() {
     f.set_raw(0, 0, 10.0);
     f.build.items.truncate(1);
     f.build.items[0].modifiers.truncate(1);
-    f.build.items[0].modifier_order.truncate(1);
+    f.build.items[0].modifier_orders.contributions.truncate(1);
+    f.build.items[0]
+        .modifier_orders
+        .numeric_transforms
+        .truncate(1);
     f.build.equipment.truncate(2);
     for roll in &mut f.build.items[0].modifiers[0].rolls {
         if let ParameterValue::Boolean(value) = &mut roll.value {

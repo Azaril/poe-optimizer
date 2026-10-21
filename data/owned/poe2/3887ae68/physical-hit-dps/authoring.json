@@ -21,7 +21,7 @@
     {
       "path": "data/owned/poe2/3887ae68/physical-hit-dps/dependencies.json",
       "bytes": 333328,
-      "sha256": "7d4307849940a04ca5b8897993471aed412e47264807c59df0b5adee8e487875"
+      "sha256": "a57bd3aed1eeb3eec1620a853ddcb8217e3f7dfdff29d37235b97c8e777197db"
     },
     {
       "path": "data/owned/poe2/3887ae68/physical-hit-dps/migration.json",
@@ -36,7 +36,7 @@
     {
       "path": "data/owned/poe2/3887ae68/physical-hit-dps/source-domain.json",
       "bytes": 36814,
-      "sha256": "f496f546abaf97eebe08c154875c5364845e4524ef49093246b9588f11a03afd"
+      "sha256": "b8a15ca867275371c71136acd4adfe0651eb9ef82e121459737c14c05221fc92"
     },
     {
       "path": "data/owned/poe2/3887ae68/physical-hit-dps/source-vectors.json",

@@ -336,7 +336,7 @@ explicit lines in separate groups; source item preparation can also transform
 those lists. Saved text-line order alone cannot establish contribution order.
 
 Owned item normalization already requires a reviewed complete membership/order
-proof before assigning `modifier_order`. Reuse that boundary. Next authenticate
+proof before assigning `modifier_orders.contributions`. Reuse that boundary. Next authenticate
 the actual prepared item-to-Player contributions and their ordering, identify
 what the admitted native domain can prove, and discuss any remaining numerical
 semantics change. Source UI/cache behavior is not automatically a native game

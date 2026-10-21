@@ -27,7 +27,7 @@ const PINS: [(&str, &str, &str); 6] = [
     (
         "selected_bindings",
         "data/owned/poe2/3887ae68/self-flat-selected-bindings/bindings.json",
-        "d4e773a5f44f88f2e36463754484613da541c09ec1239eab368766ea804a7b4f",
+        "2b54e203a49e35da80e92a0a3dd09e990ff79574cb5629d9852634ca185727b4",
     ),
     (
         "catalog",

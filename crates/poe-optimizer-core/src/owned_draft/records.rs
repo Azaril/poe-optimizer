@@ -699,6 +699,12 @@ draft_record! { ModifierDraft=>RolledModifier {
     definition:DraftField<ModifierDefId> =>draft,
     rolls:DraftList<ParameterDraft> =>draft,
 }}
+// Establishing one sequence does not certify the other. Pending alternatives
+// remain independently checked against the item's known modifier membership.
+draft_record! { ItemModifierOrdersDraft=>ItemModifierOrders {
+    contributions:DraftField<Vec<ModifierInstanceId>> =>draft,
+    numeric_transforms:DraftField<Vec<ModifierInstanceId>> =>draft,
+}}
 draft_record! { ItemDraft=>ItemRecord {
     id:ItemRecordId=>copy,
     template:DraftField<ItemTemplateDefId> =>draft,
@@ -706,7 +712,7 @@ draft_record! { ItemDraft=>ItemRecord {
     item_level:DraftField<Option<u16>> =>draft,
     quality:DraftQuality=>draft,
     modifiers:DraftList<ModifierDraft> =>draft,
-    modifier_order:DraftField<Vec<ModifierInstanceId>> =>draft,
+    modifier_orders:ItemModifierOrdersDraft =>draft,
 }}
 draft_record! { GemDraft=>GemInstance {
     id:GemInstanceId=>copy,

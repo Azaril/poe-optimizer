@@ -253,7 +253,14 @@ pub fn check_skill_scopes(cwd: &Path, prior: &Path) -> PathBuf {
                 item.modifiers.completion,
                 DraftListCompletion::Pending { .. }
             ));
-            assert!(matches!(item.modifier_order, DraftField::Pending(_)));
+            assert!(matches!(
+                item.modifier_orders.contributions,
+                DraftField::Pending(_)
+            ));
+            assert!(matches!(
+                item.modifier_orders.numeric_transforms,
+                DraftField::Pending(_)
+            ));
         }
         if matches!(case, 2 | 3) {
             assert!(matches!(

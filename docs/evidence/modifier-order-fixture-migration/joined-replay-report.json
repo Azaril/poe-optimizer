@@ -1,0 +1,11 @@
+{
+  "deterministic_encoding": true,
+  "format_inverse": true,
+  "fresh_and_reused_reports_equal": true,
+  "gzip_bytes": 139930,
+  "gzip_sha256": "434c378e68db98f9633f1d51c65c234bca927711bd424c955bd19cb49a4a53ea",
+  "items": 6,
+  "json_bytes": 5443617,
+  "json_sha256": "643cf3518c4af608ae7203daf434310aed2b22f50958b73b6e5f1030e6ca7bc5",
+  "prior_sha256": "d52b4af0d05a1d38ca108acf3f043977c2bfa93c3416ddfe51a7f34cce73013e"
+}

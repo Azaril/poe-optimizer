@@ -478,8 +478,12 @@ fn check_originals(cwd: &Path, prior: &Path, package: &Path) {
                 .items
                 .members
                 .iter()
-                .any(|item| matches!(item.modifier_order, DraftField::Pending(_)))
+                .any(|item| matches!(item.modifier_orders.contributions, DraftField::Pending(_)))
         );
+        assert!(input.items.members.iter().any(|item| matches!(
+            item.modifier_orders.numeric_transforms,
+            DraftField::Pending(_)
+        )));
         for item in &input.items.members {
             for parameter in &item.parameters.members {
                 if let (Some(template), Some(slot)) =

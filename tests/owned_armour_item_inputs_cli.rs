@@ -261,7 +261,7 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
     let pa = a["draft"]["allocator"].clone();
     let na = b["draft"]["allocator"].clone();
     let issued = |a: &Value| u64::from_str_radix(a["last_issued"].as_str().unwrap(), 16).unwrap();
-    assert_eq!(issued(&pa) - issued(&na), if case == 5 { 6 } else { 0 });
+    assert_eq!(issued(&pa) - issued(&na), if case == 5 { 8 } else { 0 });
     b["draft"]["allocator"] = pa.clone();
     let mut retired = BTreeSet::new();
     let aa = a["draft"]["items"]["members"].as_array_mut().unwrap();
@@ -280,7 +280,14 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
                     &x["modifiers"]["completion"],
                     "item-modifiers-not-converted",
                 ),
-                (&x["modifier_order"], "item-modifier-order-not-converted"),
+                (
+                    &x["modifier_orders"]["contributions"],
+                    "item-modifier-contribution-order-not-converted",
+                ),
+                (
+                    &x["modifier_orders"]["numeric_transforms"],
+                    "item-modifier-numeric-transform-order-not-converted",
+                ),
             ] {
                 assert_eq!(pending["kind"], "pending");
                 assert_eq!(pending["code"], code);
@@ -290,7 +297,11 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
             assert_eq!(x["modifiers"]["members"].as_array().unwrap().len(), 1);
             assert_eq!(y["modifiers"]["completion"], json!({"kind":"complete"}));
             assert_eq!(
-                y["modifier_order"],
+                y["modifier_orders"]["contributions"],
+                json!({"kind":"known","value":[y["modifiers"]["members"][0]["id"]]})
+            );
+            assert_eq!(
+                y["modifier_orders"]["numeric_transforms"],
                 json!({"kind":"known","value":[y["modifiers"]["members"][0]["id"]]})
             );
             assert_eq!(
@@ -323,17 +334,17 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
                     .unwrap()
                     .remove("completion");
                 v["modifiers"].as_object_mut().unwrap().remove("completion");
-                v.as_object_mut().unwrap().remove("modifier_order");
+                v.as_object_mut().unwrap().remove("modifier_orders");
             }
         }
     }
-    assert_eq!(retired.len(), if case == 5 { 6 } else { 0 });
+    assert_eq!(retired.len(), if case == 5 { 8 } else { 0 });
     let mut ids = BTreeMap::new();
     correspond(
         &a,
         &mut b,
         &mut ids,
-        "only twelve assignments and six inventory/order obligations change",
+        "only twelve assignments and eight inventory/order obligations change",
     );
     if case != 5 {
         assert!(
@@ -503,8 +514,13 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
     assert_eq!(x, y);
     assert_eq!(count - y.as_array().unwrap().len(), retired.len());
     if case == 5 {
-        assert_eq!(count, 49);
-        assert_eq!(y.as_array().unwrap().len(), 43);
+        let prior_orders =
+            selected::numeric_transform_order_issue_count(&before["finalization"]["issues"]);
+        let next_orders =
+            selected::numeric_transform_order_issue_count(&after["finalization"]["issues"]);
+        assert_eq!(prior_orders - next_orders, 2);
+        assert_eq!(count - prior_orders, 49);
+        assert_eq!(y.as_array().unwrap().len() - next_orders, 43);
     }
     let mut first = selected::selection(xml, old);
     let mut second = selected::selection(xml, new);

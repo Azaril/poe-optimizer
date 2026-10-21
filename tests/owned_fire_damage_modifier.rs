@@ -355,8 +355,27 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
         assert_eq!(i, ruby_index(&b));
         let x = &a["draft"]["items"]["members"][i];
         let y = &b["draft"]["items"]["members"][i];
-        assert_eq!(x["id"]["local"], "0000000000000094");
-        assert_eq!(x["quality"]["id"]["local"], "0000000000000095");
+        assert_eq!(i, source_item_index(&a, &sa, 171));
+        assert_eq!(i, source_item_index(&b, &sb, 171));
+        assert_eq!(x["quality"]["kind"], "pending");
+        assert_eq!(x["quality"]["code"], "quality-not-converted");
+        let origins: Vec<_> = sa["origins"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|origin| origin["source"]["ordinal"] == 171)
+            .collect();
+        assert_eq!(origins.len(), 1);
+        assert_eq!(
+            origins[0]["links"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .filter(|link| link["kind"] == "issue" && link["value"] == x["quality"]["id"])
+                .count(),
+            1,
+            "exact source 171 quality issue"
+        );
         assert_eq!(x["modifiers"]["members"], json!([]));
         assert_eq!(y["modifiers"]["members"].as_array().unwrap().len(), 1);
         let modifier = &y["modifiers"]["members"][0];
@@ -367,7 +386,11 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
         assert_eq!(y["item_level"], json!({"kind":"known","value":55}));
         assert_eq!(y["parameters"]["completion"]["kind"], "pending");
         assert_eq!(y["modifiers"]["completion"]["kind"], "pending");
-        assert_eq!(y["modifier_order"]["kind"], "pending");
+        assert_eq!(y["modifier_orders"]["contributions"]["kind"], "pending");
+        assert_eq!(
+            y["modifier_orders"]["numeric_transforms"]["kind"],
+            "pending"
+        );
         expected["items"]["members"][i]["quality"] = y["quality"].clone();
         actual["items"]["members"][i]["modifiers"]["members"] = json!([]);
         let mut ruby = row(&sa, 171).clone();
@@ -603,14 +626,25 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
     identity::relocate(&mut actual_issues, &ids);
     assert_eq!(
         actual_issues, expected_issues,
-        "only selected Ruby quality0095 retires"
+        "only the exact selected Ruby quality obligation retires"
     );
     let mut selection = selected::selection(xml, new);
     identity::relocate(&mut selection, &ids);
     assert_eq!(selection, selected::selection(xml, old));
     let before_count = before["finalization"]["issues"].as_array().unwrap().len();
     let after_count = after["finalization"]["issues"].as_array().unwrap().len();
-    assert_eq!(before_count, [123, 124, 116, 153, 20][case - 1]);
+    let prior_orders =
+        selected::numeric_transform_order_issue_count(&before["finalization"]["issues"]);
+    let next_orders =
+        selected::numeric_transform_order_issue_count(&after["finalization"]["issues"]);
+    assert_eq!(
+        prior_orders, next_orders,
+        "both order facets remain pending"
+    );
+    assert_eq!(
+        before_count - prior_orders,
+        [123, 124, 116, 153, 20][case - 1]
+    );
     let selected_additions = if case == 4 {
         added_issues.clone()
     } else {
@@ -724,7 +758,14 @@ fn probes(package: &Path, out: &Path) -> usize {
             item["modifiers"]["completion"]["kind"], "pending",
             "{label}"
         );
-        assert_eq!(item["modifier_order"]["kind"], "pending", "{label}");
+        assert_eq!(
+            item["modifier_orders"]["contributions"]["kind"], "pending",
+            "{label}"
+        );
+        assert_eq!(
+            item["modifier_orders"]["numeric_transforms"]["kind"], "pending",
+            "{label}"
+        );
         if !label.starts_with("quality-") {
             assert_eq!(
                 row(&s, 171)["attribution"]["layout"]["status"],
@@ -778,7 +819,11 @@ fn probes(package: &Path, out: &Path) -> usize {
         assert_eq!(row(&s, 171)["defaults"]["quality_absent"], true);
         assert_eq!(item["parameters"]["completion"]["kind"], "pending");
         assert_eq!(item["modifiers"]["completion"]["kind"], "pending");
-        assert_eq!(item["modifier_order"]["kind"], "pending");
+        assert_eq!(item["modifier_orders"]["contributions"]["kind"], "pending");
+        assert_eq!(
+            item["modifier_orders"]["numeric_transforms"]["kind"],
+            "pending"
+        );
     }
     replacements.len() + positives.len()
 }

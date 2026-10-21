@@ -71,7 +71,7 @@ output-graph parity.
 Pinned `Item.lua:2764–2777` constructs enchant, rune, class-requirement, implicit and
 explicit groups in that order. Slot preparation filters their copies while
 preserving surviving order. Existing owned normalization already requires a
-reviewed complete member/order proof before assigning `modifier_order`; retain
+reviewed complete member/order proof before assigning `modifier_orders.contributions`; retain
 that boundary rather than sorting saved text lines.
 
 `CalcSetup.lua:1473–1530` can combine Focus or corrupted-jewel modifiers before

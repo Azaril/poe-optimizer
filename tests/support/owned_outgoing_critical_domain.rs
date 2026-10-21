@@ -4,7 +4,7 @@ use super::family;
 use serde_json::{Value, json};
 use std::{collections::BTreeMap, sync::OnceLock};
 
-const DOMAIN: &str = "d7670e571d5eaa279615c017cf687861deb2e2a1e2844ab6a0b413c2f985900f";
+const DOMAIN: &str = "ada4bce844087810a90d25acf9d074e8a9e53a777ef88f7767dea43ce54f6417";
 const FAMILIES: [&str; 6] = [
     "baseline",
     "configuration",

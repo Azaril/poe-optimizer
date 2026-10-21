@@ -1,0 +1,66 @@
+{
+  "complete_builds": 0,
+  "originals": [
+    {
+      "draft_and_sidecar_inverse": true,
+      "exact_pending_item_origins": true,
+      "extra_order_obligations": 16,
+      "fresh_imports_equal_after_lineage_canonicalization": true,
+      "independent_source_orders": true,
+      "original": 1,
+      "queries": 22,
+      "selected_extra_order_obligations": 16,
+      "selected_issues": 123,
+      "source_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+    },
+    {
+      "draft_and_sidecar_inverse": true,
+      "exact_pending_item_origins": true,
+      "extra_order_obligations": 34,
+      "fresh_imports_equal_after_lineage_canonicalization": true,
+      "independent_source_orders": true,
+      "original": 2,
+      "queries": 22,
+      "selected_extra_order_obligations": 19,
+      "selected_issues": 137,
+      "source_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+    },
+    {
+      "draft_and_sidecar_inverse": true,
+      "exact_pending_item_origins": true,
+      "extra_order_obligations": 17,
+      "fresh_imports_equal_after_lineage_canonicalization": true,
+      "independent_source_orders": true,
+      "original": 3,
+      "queries": 22,
+      "selected_extra_order_obligations": 17,
+      "selected_issues": 127,
+      "source_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    },
+    {
+      "draft_and_sidecar_inverse": true,
+      "exact_pending_item_origins": true,
+      "extra_order_obligations": 20,
+      "fresh_imports_equal_after_lineage_canonicalization": true,
+      "independent_source_orders": true,
+      "original": 4,
+      "queries": 22,
+      "selected_extra_order_obligations": 20,
+      "selected_issues": 144,
+      "source_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+    },
+    {
+      "draft_and_sidecar_inverse": true,
+      "exact_pending_item_origins": true,
+      "extra_order_obligations": 20,
+      "fresh_imports_equal_after_lineage_canonicalization": true,
+      "independent_source_orders": true,
+      "original": 5,
+      "queries": 22,
+      "selected_extra_order_obligations": 0,
+      "selected_issues": 5,
+      "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "queries": 110
+}

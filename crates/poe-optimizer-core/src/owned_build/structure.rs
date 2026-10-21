@@ -705,12 +705,20 @@ impl<'a> StructuralCheck<'a> {
                 &SlotOwnerDefId::ItemTemplate(item.template.clone()),
             )?;
             self.quality(&path, &item.quality)?;
-            self.modifier_order(
-                &format!("{path}.modifier_order"),
-                item.id,
-                &item.modifier_order,
-                item.modifiers.len(),
-            )?;
+            for (domain, order) in [
+                ("contributions", &item.modifier_orders.contributions),
+                (
+                    "numeric_transforms",
+                    &item.modifier_orders.numeric_transforms,
+                ),
+            ] {
+                self.modifier_order(
+                    &format!("{path}.modifier_orders.{domain}"),
+                    item.id,
+                    order,
+                    item.modifiers.len(),
+                )?;
+            }
             for (j, modifier) in item.modifiers.iter().enumerate() {
                 let path = format!("{path}.modifiers[{j}]");
                 self.definition(&path, &modifier.definition)?;

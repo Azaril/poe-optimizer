@@ -349,7 +349,8 @@ fn add_life(w: &mut replay::ReplayInput, values: &[f64]) {
             .find(|r| r.slot.slot == def(0x3101))
             .unwrap()
             .value = ParameterValue::Quantity(FiniteQuantity::new(*value, def(0x295a)).unwrap());
-        item.modifier_order.push(m.id);
+        item.modifier_orders.contributions.push(m.id);
+        item.modifier_orders.numeric_transforms.push(m.id);
         item.modifiers.push(m);
     }
     w.build.allocator = allocator.state();
@@ -716,7 +717,12 @@ fn source_removal_and_storage_permutations_preserve_exact_copies() {
         .map(|m| m.id)
         .collect();
     item.modifiers.retain(|m| !removed.contains(&m.id));
-    item.modifier_order.retain(|id| !removed.contains(id));
+    item.modifier_orders
+        .contributions
+        .retain(|id| !removed.contains(id));
+    item.modifier_orders
+        .numeric_transforms
+        .retain(|id| !removed.contains(id));
     let removed_report = report(w);
     assert_eq!(copies(&removed_report).len(), 5);
     assert!(active(&removed_report).is_empty());

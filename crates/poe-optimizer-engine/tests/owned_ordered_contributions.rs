@@ -453,9 +453,16 @@ fn storage_ids_and_rebased_lineages_cannot_replace_semantic_modifier_order() {
     third.id = occurrence(31);
     third.rolls[0].value = q(1.);
     w.f.build.items[0].modifiers.push(third);
-    w.f.build.items[0].modifier_order.push(occurrence(31));
+    w.f.build.items[0]
+        .modifier_orders
+        .contributions
+        .push(occurrence(31));
+    w.f.build.items[0]
+        .modifier_orders
+        .numeric_transforms
+        .push(occurrence(31));
     number(&w.evaluate(), "result", 1.);
-    w.f.build.items[0].modifier_order.swap(1, 2);
+    w.f.build.items[0].modifier_orders.contributions.swap(1, 2);
     number(&w.evaluate(), "result", 0.);
 }
 #[test]
@@ -956,7 +963,10 @@ fn boolean_scratch_reuse_permutation_and_four_worker_evaluation_agree_after_fail
     permuted.members().reverse();
     permuted.f.build.equipment.reverse();
     permuted.f.build.items[0].modifiers.reverse();
-    permuted.f.build.items[0].modifier_order.reverse();
+    permuted.f.build.items[0]
+        .modifier_orders
+        .contributions
+        .reverse();
     boolean(&permuted.evaluate(), "result", true);
     rebase_occurrences(&mut permuted.f.build);
     boolean(&permuted.evaluate(), "result", true);

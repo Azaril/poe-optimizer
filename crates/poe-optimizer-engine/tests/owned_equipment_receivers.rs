@@ -179,7 +179,8 @@ fn exact_template_applicability_does_not_create_or_guess_equipment() {
 fn complete_empty_channels_use_identity_but_partial_coverage_never_does() {
     let mut f = fixture();
     f.build.items[0].modifiers.clear();
-    f.build.items[0].modifier_order.clear();
+    f.build.items[0].modifier_orders.contributions.clear();
+    f.build.items[0].modifier_orders.numeric_transforms.clear();
     f.owner_mut(&item_owner()).programs.members.clear();
     known_value(&report(&f), 6, 0);
     for owner in [stat_owner(), item_owner(), modifier_owner()] {

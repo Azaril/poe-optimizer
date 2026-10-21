@@ -55,7 +55,14 @@ pub(super) fn normalize_item(
             item_level: b.pending(source, "item-level-not-converted")?,
             quality: b.quality(source)?,
             modifiers: b.closure(source, "item-modifiers-not-converted", vec![])?,
-            modifier_order: b.pending(source, "item-modifier-order-not-converted")?,
+            modifier_orders: ItemModifierOrdersDraft {
+                contributions: b
+                    .pending(source, "item-modifier-contribution-order-not-converted")?,
+                numeric_transforms: b.pending(
+                    source,
+                    "item-modifier-numeric-transform-order-not-converted",
+                )?,
+            },
         });
     }
     let content_entry = attribution
@@ -141,7 +148,7 @@ pub(super) fn normalize_item(
         .collect();
     let mut modifiers = Vec::new();
     let mut emitted_modifiers = Vec::new();
-    let member_order = if let Some(proof) = &membership_proof {
+    let (contribution_order, numeric_transform_order) = if let Some(proof) = &membership_proof {
         let DraftField::Known { value } = &template else {
             return Err(NormalizationError::Policy(
                 "item member proof template mismatch",
@@ -153,52 +160,30 @@ pub(super) fn normalize_item(
                 .ok_or(NormalizationError::Policy(
                     "item member proof identity mismatch",
                 ))?;
-        let order = proof.ordered_for(source, value);
-        match (construction.kind, order) {
-            (item_modifier_membership::ModifierConstructionKind::SingletonV1, None) => {}
-            (
-                item_modifier_membership::ModifierConstructionKind::PairV2
-                | item_modifier_membership::ModifierConstructionKind::DeclaredV3,
-                Some(values),
-            ) if Some(values.len())
-                == construction
-                    .implicit_count
-                    .checked_add(construction.explicit_count) => {}
-            _ => {
-                return Err(NormalizationError::Policy(
-                    "item member proof order mismatch",
-                ));
-            }
+        let orders = proof
+            .orders_for(source, value)
+            .ok_or(NormalizationError::Policy(
+                "item member proof order identity mismatch",
+            ))?;
+        let count = construction
+            .implicit_count
+            .checked_add(construction.explicit_count);
+        if Some(orders.contributions.len()) != count
+            || orders
+                .numeric_transforms
+                .is_some_and(|values| Some(values.len()) != count)
+        {
+            return Err(NormalizationError::Policy(
+                "item member proof order mismatch",
+            ));
         }
-        order
+        (Some(orders.contributions), orders.numeric_transforms)
     } else {
-        None
-    };
-    let mut member_ids = if let Some(order) = member_order {
-        b.charge(order.len())?;
-        vec![None; order.len()]
-    } else {
-        vec![]
+        (None, None)
     };
     for modifier in converted.modifiers {
         b.charge(modifier.rolls.len())?;
         let modifier_id = b.id()?;
-        if let Some(order) = member_order {
-            b.charge(order.len())?;
-            let Some(position) = order
-                .iter()
-                .position(|v| *v == (modifier.line, modifier.emission))
-            else {
-                return Err(NormalizationError::Policy(
-                    "item member proof emission mismatch",
-                ));
-            };
-            if member_ids[position].replace(modifier_id).is_some() {
-                return Err(NormalizationError::Policy(
-                    "duplicate proved item member emission",
-                ));
-            }
-        }
         b.link(source, OwnedOriginTarget::Modifier(modifier_id))?;
         emitted_modifiers.push(item_range_origins::EmittedModifier {
             line: modifier.line,
@@ -253,22 +238,26 @@ pub(super) fn normalize_item(
     } else {
         b.closure(source, "item-parameters-not-converted", parameters)?
     };
-    let (modifiers, modifier_order) = if membership_proof.is_some() {
-        let order =
-            if member_order.is_some() {
-                member_ids.into_iter().collect::<Option<Vec<_>>>().ok_or(
-                    NormalizationError::Policy("incomplete proved item member order"),
-                )?
-            } else {
-                // Historical singleton order and allocation behavior are unchanged.
-                vec![modifiers[0].id]
-            };
-        (modifiers.into(), order.into())
+    let modifiers = if membership_proof.is_some() {
+        modifiers.into()
     } else {
-        (
-            b.closure(source, "item-modifiers-not-converted", modifiers)?,
-            b.pending(source, "item-modifier-order-not-converted")?,
-        )
+        b.closure(source, "item-modifiers-not-converted", modifiers)?
+    };
+    let modifier_orders = ItemModifierOrdersDraft {
+        contributions: materialize_modifier_order(
+            b,
+            source,
+            contribution_order,
+            &emitted_modifiers,
+            "item-modifier-contribution-order-not-converted",
+        )?,
+        numeric_transforms: materialize_modifier_order(
+            b,
+            source,
+            numeric_transform_order,
+            &emitted_modifiers,
+            "item-modifier-numeric-transform-order-not-converted",
+        )?,
     };
     let item = ItemDraft {
         id,
@@ -279,9 +268,7 @@ pub(super) fn normalize_item(
         // Static declarations and owner/contributor coverage remain independent.
         parameters,
         modifiers,
-        // Physical record identity and source line positions do not determine
-        // semantic transform order. Only a reviewed complete conversion can.
-        modifier_order,
+        modifier_orders,
     };
     let attached =
         item_range_origins::attach(b, row, &attribution, &item, &lines, &emitted_modifiers)?;
@@ -297,6 +284,49 @@ pub(super) fn normalize_item(
         attribution: attribution.into_report(),
     });
     Ok(item)
+}
+
+fn materialize_modifier_order(
+    b: &mut Builder<'_, '_>,
+    source: SourceOccurrenceId,
+    order: Option<&[(usize, usize)]>,
+    emitted: &[item_range_origins::EmittedModifier],
+    pending: &str,
+) -> Result<DraftField<Vec<ModifierInstanceId>>> {
+    let Some(order) = order else {
+        return b.pending(source, pending);
+    };
+    b.charge(order.len().saturating_mul(emitted.len().saturating_add(1)))?;
+    if order.len() != emitted.len() {
+        return Err(NormalizationError::Policy(
+            "incomplete proved item member order",
+        ));
+    }
+    let by_source: BTreeMap<_, _> = emitted
+        .iter()
+        .map(|member| ((member.line, member.emission), member.id))
+        .collect();
+    if by_source.len() != emitted.len() {
+        return Err(NormalizationError::Policy(
+            "duplicate proved item member emission",
+        ));
+    }
+    let mut seen = BTreeSet::new();
+    let mut ids = Vec::with_capacity(order.len());
+    for position in order {
+        let Some(id) = by_source.get(position) else {
+            return Err(NormalizationError::Policy(
+                "item member proof emission mismatch",
+            ));
+        };
+        if !seen.insert(*id) {
+            return Err(NormalizationError::Policy(
+                "duplicate proved item member order",
+            ));
+        }
+        ids.push(*id);
+    }
+    Ok(ids.into())
 }
 
 /// XML Item/Slot enumeration does not close semantic membership when socketed

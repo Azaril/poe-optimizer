@@ -226,7 +226,8 @@ impl World {
         let item = &mut f.build.items[0];
         item.id = item_id;
         item.modifiers[0].id = cold_id;
-        item.modifier_order = vec![cold_id];
+        item.modifier_orders.contributions = vec![cold_id];
+        item.modifier_orders.numeric_transforms = vec![cold_id];
         item.item_level = decode(known(&ring["item_level"]));
         item.quality = quality(&ring["quality"]);
         assert_eq!(item.parameters, assignments(&ring["parameters"]));
@@ -472,9 +473,17 @@ fn original_ring_inputs_and_source_range_controls_deliver_once_per_selected_use(
     let baseline = removed.evaluate();
     let item = &mut removed.f.build.items[0];
     let saved = item.modifiers.pop().unwrap();
-    item.modifier_order.clear();
+    item.modifier_orders.contributions.clear();
+    item.modifier_orders.numeric_transforms.clear();
     removed.assert_values(&removed.evaluate(), &[]);
-    removed.f.build.items[0].modifier_order.push(saved.id);
+    removed.f.build.items[0]
+        .modifier_orders
+        .contributions
+        .push(saved.id);
+    removed.f.build.items[0]
+        .modifier_orders
+        .numeric_transforms
+        .push(saved.id);
     removed.f.build.items[0].modifiers.push(saved);
     assert_eq!(removed.evaluate(), baseline);
 }
@@ -497,7 +506,8 @@ fn source_use_removal_and_independent_item_inputs_preserve_delivery_identity() {
     let mut other = w.f.build.items[0].clone();
     other.id = ItemRecordId::from_instance_id(next(0));
     other.modifiers[0].id = ModifierInstanceId::from_instance_id(next(1));
-    other.modifier_order = vec![other.modifiers[0].id];
+    other.modifier_orders.contributions = vec![other.modifiers[0].id];
+    other.modifier_orders.numeric_transforms = vec![other.modifiers[0].id];
     other.modifiers[0]
         .rolls
         .iter_mut()

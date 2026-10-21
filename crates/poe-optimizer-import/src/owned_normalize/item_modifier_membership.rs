@@ -469,12 +469,13 @@ pub(super) struct ModifierMembershipProof {
     source: SourceOccurrenceId,
     template: ItemTemplateDefId,
     construction: ModifierConstructionEvidence,
-    order: Option<ModifierMemberOrder>,
+    contributions: Vec<(usize, usize)>,
+    numeric_transforms: Option<Vec<(usize, usize)>>,
 }
 
-enum ModifierMemberOrder {
-    Pair([(usize, usize); 2]),
-    Census(Vec<(usize, usize)>),
+pub(super) struct ModifierSourceOrders<'a> {
+    pub contributions: &'a [(usize, usize)],
+    pub numeric_transforms: Option<&'a [(usize, usize)]>,
 }
 
 impl ModifierMembershipProof {
@@ -486,26 +487,49 @@ impl ModifierMembershipProof {
         (self.source == source && &self.template == template).then_some(&self.construction)
     }
 
-    pub(super) fn ordered_for(
+    pub(super) fn orders_for(
         &self,
         source: SourceOccurrenceId,
         template: &ItemTemplateDefId,
-    ) -> Option<&[(usize, usize)]> {
+    ) -> Option<ModifierSourceOrders<'_>> {
         if self.source != source || &self.template != template {
             return None;
         }
-        self.order.as_ref().map(|order| {
-            let values = match order {
-                ModifierMemberOrder::Pair(values) => values.as_slice(),
-                ModifierMemberOrder::Census(values) => values.as_slice(),
-            };
-            debug_assert_eq!(
-                values.len(),
-                self.construction.implicit_count + self.construction.explicit_count
-            );
-            values
+        Some(ModifierSourceOrders {
+            contributions: &self.contributions,
+            numeric_transforms: self.numeric_transforms.as_deref(),
         })
     }
+}
+
+/// Source producers are discovered while reading the admitted physical text,
+/// before members are regrouped by category. This proof is independent of the
+/// contribution sequence: it joins exact source positions, never owned IDs or
+/// converter record storage. Call only after the complete physical census and
+/// fresh lifecycle have been checked.
+fn numeric_transform_order(
+    layout: &ItemLayoutStatus,
+    lines: &[ItemAttributedLine],
+    contributions: &[(usize, usize)],
+) -> Option<Vec<(usize, usize)>> {
+    let expected: BTreeSet<_> = contributions.iter().copied().collect();
+    if expected.len() != contributions.len() || !matches!(layout, ItemLayoutStatus::Proven) {
+        return None;
+    }
+    let mut discovery = BTreeMap::new();
+    for line in lines {
+        let Some(member) = line.member else { continue };
+        let position = (line.index, 0);
+        if line.presentation
+            || !line.blockers.is_empty()
+            || member.line != line.index
+            || !expected.contains(&position)
+            || discovery.insert(line.index, position).is_some()
+        {
+            return None;
+        }
+    }
+    (discovery.len() == expected.len()).then(|| discovery.into_values().collect())
 }
 
 fn charge_template_copy(b: &mut Builder<'_, '_>, template: &ItemTemplateDefId) -> Result<()> {
@@ -657,6 +681,7 @@ impl CompiledItemModifierMembership<'_> {
             return Ok(None);
         }
         charge_template_copy(b, template)?;
+        b.charge(report.lines.len().saturating_add(1))?;
         Ok(Some(ModifierMembershipProof {
             source: row.occurrence().id(),
             template: template.clone(),
@@ -667,7 +692,12 @@ impl CompiledItemModifierMembership<'_> {
                 socket_capacity: fresh.socket_capacity,
                 imported: None,
             },
-            order: None,
+            contributions: vec![(modifier.line, modifier.emission)],
+            numeric_transforms: numeric_transform_order(
+                &report.layout,
+                &report.lines,
+                &[(modifier.line, modifier.emission)],
+            ),
         }))
     }
 
@@ -784,6 +814,7 @@ impl CompiledItemModifierMembership<'_> {
             return Ok(None);
         }
         charge_template_copy(b, template)?;
+        b.charge(report.lines.len().saturating_add(2))?;
         Ok(Some(ModifierMembershipProof {
             source: row.occurrence().id(),
             template: template.clone(),
@@ -794,7 +825,12 @@ impl CompiledItemModifierMembership<'_> {
                 socket_capacity: fresh.socket_capacity,
                 imported: None,
             },
-            order: Some(ModifierMemberOrder::Pair([implicit, explicit])),
+            contributions: vec![implicit, explicit],
+            numeric_transforms: numeric_transform_order(
+                &report.layout,
+                &report.lines,
+                &[implicit, explicit],
+            ),
         }))
     }
 
@@ -930,7 +966,10 @@ impl CompiledItemModifierMembership<'_> {
             return Ok(None);
         };
         charge_template_copy(b, &census.template)?;
-        b.charge(count)?;
+        b.charge(report.lines.len().saturating_add(count))?;
+        let contributions: Vec<_> = ordered.into_iter().flatten().collect();
+        let numeric_transforms =
+            numeric_transform_order(&report.layout, &report.lines, &contributions);
         Ok(Some(ModifierMembershipProof {
             source: row.occurrence().id(),
             template: census.template.clone(),
@@ -941,9 +980,107 @@ impl CompiledItemModifierMembership<'_> {
                 socket_capacity: fresh.socket_capacity,
                 imported: fresh.imported,
             },
-            order: Some(ModifierMemberOrder::Census(
-                ordered.into_iter().flatten().collect(),
-            )),
+            contributions,
+            numeric_transforms,
         }))
+    }
+}
+
+#[cfg(test)]
+mod order_tests {
+    use super::*;
+
+    fn member(index: usize, category: SourceModifierCategory) -> ItemAttributedLine {
+        ItemAttributedLine {
+            index,
+            decoded_span: index..index + 1,
+            raw: "fixture member".into(),
+            semantic_text: "fixture member".into(),
+            rule: Some(key("fixture-member")),
+            presentation: false,
+            pending_candidates: vec![],
+            member: Some(SourceModifierSlot {
+                category,
+                ordinal: 1,
+                line: index,
+            }),
+            blockers: vec![],
+            range: ItemRangeDecision::Absent,
+            property_tokens: vec![],
+            flag_tokens: vec![],
+            properties: BTreeMap::new(),
+        }
+    }
+
+    #[test]
+    fn cross_category_discovery_does_not_reuse_the_contribution_sequence_or_storage() {
+        let mut lines = vec![
+            member(4, SourceModifierCategory::Explicit),
+            member(9, SourceModifierCategory::Implicit),
+        ];
+        let contributions = [(9, 0), (4, 0)];
+        let expected = Some(vec![(4, 0), (9, 0)]);
+        assert_eq!(
+            numeric_transform_order(&ItemLayoutStatus::Proven, &lines, &contributions),
+            expected
+        );
+        lines.reverse();
+        assert_eq!(
+            numeric_transform_order(&ItemLayoutStatus::Proven, &lines, &contributions),
+            expected
+        );
+        assert_eq!(contributions, [(9, 0), (4, 0)]);
+    }
+
+    #[test]
+    fn discovery_requires_complete_exact_source_correspondence_without_order_fallback() {
+        let original = vec![
+            member(4, SourceModifierCategory::Explicit),
+            member(9, SourceModifierCategory::Implicit),
+        ];
+        let contributions = [(9, 0), (4, 0)];
+        for mutation in [
+            "pending-layout",
+            "unsupported-layout",
+            "missing",
+            "extra",
+            "duplicate",
+            "position",
+            "blocked",
+            "presentation",
+        ] {
+            let mut lines = original.clone();
+            let mut layout = ItemLayoutStatus::Proven;
+            match mutation {
+                "pending-layout" => {
+                    layout = ItemLayoutStatus::Pending(vec![ItemSourceProblem::UnknownMember])
+                }
+                "unsupported-layout" => {
+                    layout = ItemLayoutStatus::Unsupported(vec![
+                        ItemSourceProblem::UnsupportedContentOrder,
+                    ])
+                }
+                "missing" => {
+                    lines.pop();
+                }
+                "extra" => lines.push(member(12, SourceModifierCategory::Explicit)),
+                "duplicate" => lines.push(lines[0].clone()),
+                "position" => lines[0].member.as_mut().unwrap().line = 3,
+                "blocked" => lines[0].blockers.push(ItemSourceProblem::UnsupportedTag),
+                "presentation" => lines[0].presentation = true,
+                _ => unreachable!(),
+            }
+            assert_eq!(
+                numeric_transform_order(&layout, &lines, &contributions),
+                None,
+                "{mutation}"
+            );
+        }
+        for positions in [vec![(4, 0), (4, 0)], vec![(4, 1), (9, 0)], vec![(4, 0)]] {
+            assert_eq!(
+                numeric_transform_order(&ItemLayoutStatus::Proven, &original, &positions),
+                None
+            );
+        }
     }
 }
