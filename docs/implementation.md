@@ -9,13 +9,29 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Current remote checkpoint:** main `4eb2a112` contains Charm delivery and the
-validated scalar/source-cache controls below. A fresh push succeeded and
+**Remote checkpoint preceding this update:** main `06c5690f` contains the first 31-case
+modifier-source controls and ordering proposal, following Charm delivery and
+validated scalar/source-cache controls in `4eb2a112`. A fresh push succeeded and
 `ls-remote` verified its complete hash. The nine protected incoming-critical
 source/data files are now backed up byte-for-byte in `ac6df890` on
 `codex/backup-2026-10-20-incoming-critical`, without changing main, the checkout
 or the normal index. Ignored build outputs and investigation candidates remain
-local. New modifier-transform controls described below are subsequent work.
+local. The expanded source controls and metadata publication below are subsequent
+work.
+
+**Current validated data baseline:**
+`runs/owned-charm-scalability-publication-01/package`, input
+`b8851ea50c9d5fd97e1695e536c89dba185f136d51d6e77da31bd22f8f4a67a9`.
+Release SHA-256 is
+`5041d56b85e593ea4350400396e82e47b65e26fce04403faa648af88fcde777a`;
+validation SHA-256 is
+`f5901c124d3ef7c5c6e3cd6dc49dfcf0a44a037b34596fa613db36ff6679e01f`.
+Only Modifier `3172`'s source-component scalability obligation retires, reducing
+its gaps from four to three. All numerical programs, native domains, import
+guards, queries and other owners remain unchanged. The all-five shared CLI
+publication passes, including exact import preservation, byte-identical package
+rebuild and selected counts 107/118/110/124/5. This is a metadata proof, not
+complete modifier coverage or a complete build.
 
 **Remote checkpoints preceding Charm:** validated main `02efb394`
 includes the configuration inventory, Boolean/Import accounting, Water allocation
@@ -110,9 +126,12 @@ authenticated seal and run its existing pin checks in the ordinary packet test.
 The full raw/semantic inverse preserves every other pin, source and assertion.
 Runtime reruns now verify the repair without changing any behavioral assertion.
 
-**Resume in this order:** join the proved Charm metadata and admission evidence to
-the actual owner, then convert its missing magnitude suppliers through the existing
-transform graph. The item-reconstruction differences are now isolated below. A fresh CLI
+**Resume in this order:** use the validated admission boundary checks to finish
+the canonical-admission argument for the existing checked grammar,
+resolve the reviewed semantic-order contract, then convert actual catalog magnitude
+suppliers and recipient facts through the existing graph. The Charm metadata proof
+is now published above. Source encoding and owner/contributor coverage remain
+separate obligations. The item-reconstruction differences are isolated below. A fresh CLI
 normalization of unchanged Original05 against Water now produced
 `runs/owned-charm-capacity-current-fixture-01`; reauthoring verifies all current
 dependencies and the whole item/source inverse. The seven-file candidate
@@ -207,11 +226,18 @@ Multiply steps separately; preserve exact recipient category/property predicates
 unscalable behavior, active occurrences and semantic order. Account for PoB's
 advanced-copy/crafted loading and sorting behavior in offline/Import evidence,
 without adding UI-state inputs to native mechanics. Unknown producer forms remain
-blocking. A reviewed metadata-only scalability certificate and existing-helper
-integration fragment are prepared in `runs/charm-3172-gap-review-20261020/`; they
-are not applied or Rust-validated. Integrate that proof into this owner-completion
-work, verify numeric compiler idempotence, then use the existing all-five release
-publication path. Canonical admission still needs the exact all-emitter/guard
+blocking. The reviewed metadata-only scalability certificate is now maintained
+under `fine-belt-modifiers/scalability-certificate.json`; its historical acquisition
+status is not an execution result. The Rust helper verifies the entire owner
+inverse, all current emitters/guards and real numeric-compiler idempotence at both
+endpoints. Five ordinary packet checks and twelve native controls pass; strict
+lint passes (`runs/owned-charm-scalability-{tests-02,clippy-01}.log`). The first
+compile failure was a moved-value error in the test inverse; binding the target
+before moving the original owner fixed it without changing assertions. The
+existing shared all-five publication passes in 22.83 seconds
+(`runs/owned-charm-scalability-publication-01.log`) after authenticating the exact
+source bodies and retained reports. No new publisher or runtime path is added.
+Canonical admission still needs the exact all-emitter/guard
 census, range boundaries and all 25 inputs accounted for; it must not narrow the
 broader native corruption or magnitude domains merely because today's importer
 uses a neutral corruption literal.
@@ -240,6 +266,43 @@ control yields 6 while versioned/grouped variants yield 4; retain this as an
 unresolved source discrepancy, not a native participation rule or an approved
 parity exception. CI now retains these source reports on failure. Independent
 Charm metadata/admission work can continue while the order contract is reviewed.
+
+**Exact catalog strength controls also pass:** the same source suite now runs
+56 cases per fresh VM, preserving the original 31 and adding 25. Every VM joins
+47 scalability rows and 15 upstream modifier IDs to the authenticated live source
+tables. All eight source tests and strict lint pass
+(`runs/owned-modifier-transform-strength-{source,clippy}-01.log`). Reports are in
+`runs/modifier-transform-source-n2B2lo`; summary SHA-256 is
+`937c8ce781c4eb36d374e4fe885b5bd6e5d80e25d937083503140307d8e863db`.
+Catalog numeric producer components are unscaled: nonneutral catalyst/corruption
+controls preserve their prepared strength. Use the existing
+`ModifierValueScaling::Unscaled` compiler followed by `PercentAsFactor` and an
+Add transform; doubled forms remain Multiply 2. This avoids a new compiler stage
+and feedback through the producer's final magnitude channel. These 47 metadata
+rows and the separate 47-recipient-family inventory are different censuses.
+
+Case-sensitive metadata lookup gives a noncatalog lowercase ranged strength of
+61 where its exact catalog spelling gives 30 under the same nonneutral factors.
+The catalog's tripled implicit form creates no source producer in the tested
+Item path. Both remain explicit source discrepancies; neither is adopted as a
+native game rule or used to close coverage. The ordering proposal records the
+updated authoring path without changing its pending review status.
+
+**Admission checks pass against the actual successor:** the existing Fine Belt
+target now checks all 25 typed input writes and every installed emitter/guard.
+Five positives cover bounds, wide unrounded interpolation, consumed properties
+and an absent Charm tag. Twelve refusals and the missing generated-member proof
+require exactly one retained Pending source row and no canonical Charm emission;
+the negative real CLI witness also requires a Pending modifier inventory.
+Two current-package CLI witnesses pass against `b8851ea5`. The target has two
+passing ordinary tests, and the explicit current-package test passes in 3.92
+seconds; strict lint passes
+(`runs/owned-charm-admission-{ordinary-02,current-01,clippy-01}.log`). The first
+compile failure was a test iterator capturing a borrowed loop binding; capturing
+the rule and shared modifier reference by value fixes it without changing any
+domain or assertion. Original 23 historical probes remain intact. These tests
+strengthen admission evidence; they do not alone retire the canonical-admission,
+source-encoding or transform-coverage obligations.
 
 The Import regression batch
 passes **722 tests** (241 library, 396 normalizer, 35 direct disposition,

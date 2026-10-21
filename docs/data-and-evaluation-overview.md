@@ -1431,6 +1431,16 @@ PoB crafting or display flags. Inactive legacy source variants also show a
 distinct producer-participation result, retained as an unresolved discrepancy.
 These tests establish neither production transform coverage nor complete builds.
 
+The subsequent catalog controls extend that suite to 56 cases, checking 47
+scalability rows and 15 source modifier identities in every fresh VM. Canonical
+numeric producer strengths use unscaled component metadata, so the existing
+native numeric compiler can prepare them without reading their final transformed
+value. Noncatalog spelling differences and an unimplemented tripled source form
+remain discrepancies, not native semantics. Separately, the source-bound Charm
+metadata proof is now published: it removes one of four owner obligations while
+preserving every numerical program, input domain and all five imported builds.
+Three owner obligations remain, including producer coverage and input admission.
+
 Actual default parsing also rejects seven selected Puppet/Archon nodes. Two
 Djinn unlocking lines are unknown even though their child actions are supplied
 through parent profiles. Exact source graphs now distinguish accepted records,

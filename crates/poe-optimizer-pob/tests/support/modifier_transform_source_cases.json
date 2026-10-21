@@ -350,6 +350,426 @@
           false
         ]
       }
+    },
+    {
+      "id": "catalog-implicit-increased",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased Implicit Modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [
+          50
+        ]
+      }
+    },
+    {
+      "id": "catalog-implicit-reduced",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% reduced Implicit Modifier magnitudes",
+      "expected": {
+        "capacity": 2,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [
+          -50
+        ]
+      }
+    },
+    {
+      "id": "catalog-implicit-doubled",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\nImplicit Modifier magnitudes are doubled",
+      "expected": {
+        "capacity": 8,
+        "life": 10,
+        "producer_count": 1,
+        "producer_operations": [
+          "multiply"
+        ]
+      }
+    },
+    {
+      "id": "catalog-tripled-source-discrepancy",
+      "scope": "source-catalog-diagnostic",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\nImplicit Modifier magnitudes are tripled",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 0,
+        "unknown_line_contains": "tripled"
+      }
+    },
+    {
+      "id": "catalog-strength-catalyst",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nCatalyst: Flesh\nCatalystQuality: 37\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n+10 to maximum Life\n{tags:life}50% increased Implicit Modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [
+          50
+        ],
+        "producer_value_scalars": [
+          1.37
+        ]
+      }
+    },
+    {
+      "id": "catalog-strength-corruption",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n+10 to maximum Life\n{corruptedRange:1.5}50% increased Implicit Modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [
+          50
+        ],
+        "producer_value_scalars": [
+          1
+        ],
+        "producer_corrupted_ranges": [
+          1.5
+        ]
+      }
+    },
+    {
+      "id": "catalog-strength-catalyst-and-corruption",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nCatalyst: Flesh\nCatalystQuality: 37\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n+10 to maximum Life\n{tags:life}{corruptedRange:1.5}50% increased Implicit Modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [
+          50
+        ],
+        "producer_value_scalars": [
+          1.37
+        ],
+        "producer_corrupted_ranges": [
+          1.5
+        ]
+      }
+    },
+    {
+      "id": "catalog-ranged-strength-catalyst-and-corruption",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nCatalyst: Flesh\nCatalystQuality: 37\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n+10 to maximum Life\n{tags:life}{range:0.5}{corruptedRange:1.5}(20-40)% increased Implicit Modifier magnitudes",
+      "expected": {
+        "capacity": 5,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [
+          30
+        ],
+        "producer_value_scalars": [
+          1.37
+        ],
+        "producer_corrupted_ranges": [
+          1.5
+        ]
+      }
+    },
+    {
+      "id": "catalog-strength-rounding",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (100-100) Charm Slot\n{tags:life}+10 to maximum Life\n{range:0.5}(20-41)% increased Implicit Modifier magnitudes",
+      "expected": {
+        "capacity": 131,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [
+          31
+        ]
+      }
+    },
+    {
+      "id": "catalog-negative-reduced-strength",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n{range:0.5}(-40--20)% reduced Implicit Modifier magnitudes",
+      "expected": {
+        "capacity": 5,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [
+          30
+        ]
+      }
+    },
+    {
+      "id": "noncatalog-strength-spelling-diagnostic",
+      "scope": "source-spelling-diagnostic",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nCatalyst: Flesh\nCatalystQuality: 37\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n+10 to maximum Life\n{tags:life}{range:0.5}{corruptedRange:1.5}(20-40)% increased implicit modifier magnitudes",
+      "expected": {
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "catalog-prefix-increased",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{prefix}{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased Effect of Prefixes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1,
+        "producer_tags": [
+          [
+            "prefix"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "catalog-prefix-reduced",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{prefix}{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% reduced Effect of Prefixes",
+      "expected": {
+        "capacity": 2,
+        "life": 10,
+        "producer_count": 1,
+        "producer_tags": [
+          [
+            "prefix"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "catalog-suffix-increased",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{suffix}{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased Effect of Suffixes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1,
+        "producer_tags": [
+          [
+            "suffix"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "catalog-suffix-reduced",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{suffix}{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% reduced Effect of Suffixes",
+      "expected": {
+        "capacity": 2,
+        "life": 10,
+        "producer_count": 1,
+        "producer_tags": [
+          [
+            "suffix"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "catalog-prefix-unflagged",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased Effect of Prefixes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 1,
+        "producer_tags": [
+          [
+            "prefix"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "catalog-defence-alias",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:defences}+10 to maximum Life\n50% increased Explicit Defence Modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 15,
+        "producer_count": 1,
+        "producer_tags": [
+          [
+            "defences"
+          ]
+        ],
+        "producer_mod_types": [
+          "explicit"
+        ]
+      }
+    },
+    {
+      "id": "source-enchantment-alias",
+      "scope": "source-selector-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{enchant}{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\nenchantment modifier magnitudes are doubled",
+      "expected": {
+        "capacity": 8,
+        "life": 10,
+        "producer_count": 1,
+        "producer_mod_types": [
+          "enchant"
+        ]
+      }
+    },
+    {
+      "id": "catalog-physical-chaos-physical",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:damage,physical}+10 to maximum Life\n50% increased Explicit Physical and Chaos Damage Modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 15,
+        "producer_count": 1,
+        "producer_mod_types": [
+          "explicit"
+        ],
+        "producer_tags": [
+          [
+            "damage"
+          ]
+        ],
+        "producer_any_tags": [
+          [
+            "physical",
+            "chaos"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "catalog-physical-chaos-chaos",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:damage,chaos}+10 to maximum Life\n50% increased Explicit Physical and Chaos Damage Modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 15,
+        "producer_count": 1,
+        "producer_mod_types": [
+          "explicit"
+        ],
+        "producer_tags": [
+          [
+            "damage"
+          ]
+        ],
+        "producer_any_tags": [
+          [
+            "physical",
+            "chaos"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "catalog-physical-chaos-both",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:damage,physical,chaos}+10 to maximum Life\n50% increased Explicit Physical and Chaos Damage Modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 15,
+        "producer_count": 1,
+        "producer_mod_types": [
+          "explicit"
+        ],
+        "producer_tags": [
+          [
+            "damage"
+          ]
+        ],
+        "producer_any_tags": [
+          [
+            "physical",
+            "chaos"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "catalog-physical-chaos-neither",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:damage,fire}+10 to maximum Life\n50% increased Explicit Physical and Chaos Damage Modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 1,
+        "producer_mod_types": [
+          "explicit"
+        ],
+        "producer_tags": [
+          [
+            "damage"
+          ]
+        ],
+        "producer_any_tags": [
+          [
+            "physical",
+            "chaos"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "catalog-physical-chaos-missing-damage",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:physical}+10 to maximum Life\n50% increased Explicit Physical and Chaos Damage Modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 1,
+        "producer_mod_types": [
+          "explicit"
+        ],
+        "producer_tags": [
+          [
+            "damage"
+          ]
+        ],
+        "producer_any_tags": [
+          [
+            "physical",
+            "chaos"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "catalog-desecrated-flag",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{desecrated}{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n{range:0.5}(60-80)% increased Desecrated Modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [
+          70
+        ],
+        "producer_tags": [
+          [
+            "desecrated"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "catalog-desecrated-unflagged",
+      "scope": "catalog-strength-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n70% increased Desecrated Modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [
+          70
+        ],
+        "producer_tags": [
+          [
+            "desecrated"
+          ]
+        ]
+      }
     }
   ]
 }

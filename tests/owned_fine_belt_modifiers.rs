@@ -759,3 +759,479 @@ fn fine_belt_layout_preserves_every_original_request_and_independent_gap() {
         &json!({"before":prior.receipt().input,"after":next.receipt().input,"definitions":next.receipt().definitions,"registry":next.receipt().registry,"prior_provenance":prior.input().provenance.len(),"final_provenance":next.input().provenance.len(),"queries":110,"originals":reports,"probes":probe_count,"prior_unchanged":true,"rebuild_byte_identical":true,"complete_original_builds":0}),
     );
 }
+
+fn assert_pending_charm_line(
+    lines: &[poe_optimizer_import::owned_item_lines::ItemLineEvidence<'_>],
+    label: &str,
+) {
+    let charm_lines: Vec<_> = lines
+        .iter()
+        .filter(|line| line.text.contains("Charm Slot") && !line.text.contains("Charm Slots:"))
+        .collect();
+    assert_eq!(
+        charm_lines.len(),
+        1,
+        "{label}: retain the exact Charm source row"
+    );
+    assert!(
+        matches!(
+            charm_lines[0].outcome,
+            poe_optimizer_import::owned_item_lines::ItemLineOutcome::Pending { .. }
+        ),
+        "{label}: failed admission must retain explicit unresolved evidence"
+    );
+}
+
+fn charm_admission_attribution(
+    xml: &str,
+    source: &poe_optimizer_import::owned_item_source::ItemSourceLayoutPolicy,
+    lines: &poe_optimizer_import::owned_item_lines::OwnedItemLinePolicy,
+) -> poe_optimizer_import::owned_item_source::ItemRangeAttribution {
+    use poe_optimizer_core::build_identity::BuildLineage;
+    use poe_optimizer_import::{
+        build_instance::ImportedBuildInstance, decode_build, owned_source::SourceProjectEvidence,
+    };
+    let imported = ImportedBuildInstance::from_decoded(
+        decode_build(xml.as_bytes()).unwrap(),
+        BuildLineage::from_bytes([103; 16]),
+        Default::default(),
+    )
+    .unwrap();
+    let evidence = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
+    let item = evidence
+        .rows()
+        .iter()
+        .find(|row| {
+            row.occurrence().name() == "Item"
+                && row.attributes().iter().any(|a| {
+                    a.origin().namespace.is_none()
+                        && a.origin().name == "id"
+                        && a.decoded().is_ok_and(|v| v == "27")
+                })
+        })
+        .unwrap();
+    source
+        .attribute(&evidence, item.occurrence().id(), lines)
+        .unwrap()
+}
+
+fn check_converted_charm(
+    m: &poe_optimizer_import::owned_item_lines::LocatedItemModifier,
+    b: &family::FamilyBindings,
+    amount: f64,
+    true_properties: &[&str],
+) {
+    assert_eq!(m.rolls_closure, SchemaClosure::Complete);
+    assert_eq!(m.emission, 0);
+    // Reuse the exact 25-input assertion already used for normalized drafts.
+    // Wrapping these known assignments does not confer inventory authority.
+    let draft = json!({
+        "definition": {"kind":"known","value":m.definition},
+        "rolls": {
+            "completion":{"kind":"complete"},
+            "members":m.rolls.iter().map(|r| json!({
+                "slot":{"kind":"known","value":r.slot},
+                "value":{"kind":"known","value":r.value}
+            })).collect::<Vec<_>>()
+        }
+    });
+    check_modifier(&draft, b, amount, true_properties);
+}
+
+#[test]
+fn charm_admission_recipe_accounts_for_every_required_input_and_guard() {
+    use poe_optimizer_import::owned_item_lines::ItemEmission;
+    let b = family::bindings().charm;
+    let expected_modifier = &b.modifier;
+    let rules = family::item_rules();
+    let emissions: Vec<_> = rules
+        .iter()
+        .flat_map(|r| {
+            r.emissions.iter().filter_map(move |e| match e {
+                ItemEmission::Modifier { definition, rolls } if definition == expected_modifier => {
+                    Some((r, rolls))
+                }
+                _ => None,
+            })
+        })
+        .collect();
+    assert_eq!(emissions.len(), 1, "complete authored emitter census");
+    let (rule, rolls) = emissions[0];
+    assert_eq!(rule.id.as_str(), "ranged-charm-slots");
+    assert_eq!(rule.emissions.len(), 1);
+    let mut expected = vec![
+        b.amount.clone(),
+        b.corrupted_base.clone(),
+        b.category.clone(),
+    ];
+    expected.extend(b.properties.values().cloned());
+    assert_eq!(expected.len(), 25);
+    assert_eq!(rolls.len(), expected.len());
+    for slot in &expected {
+        assert_eq!(
+            rolls.iter().filter(|r| &r.slot == slot).count(),
+            1,
+            "one exact writer per slot"
+        );
+    }
+    let e = family::extension();
+    let declaration = e
+        .schema
+        .iter()
+        .find_map(|d| match d {
+            SchemaExtensionEntry::Definition(DefinitionDescriptor::Modifier(d))
+                if d.id == b.modifier =>
+            {
+                Some(d)
+            }
+            _ => None,
+        })
+        .unwrap();
+    let SchemaState::Known(schema) = &declaration.schema else {
+        panic!()
+    };
+    assert_eq!(schema.declarations.parameters.members.len(), expected.len());
+    for slot in &expected {
+        assert_eq!(
+            schema
+                .declarations
+                .parameters
+                .members
+                .iter()
+                .filter(|s| *s == slot)
+                .count(),
+            1
+        );
+    }
+    let value = |slot: &_| {
+        serde_json::to_value(&rolls.iter().find(|r| &r.slot == slot).unwrap().value).unwrap()
+    };
+    assert_eq!(
+        value(&b.amount),
+        json!({"kind":"numeric_projection","value":{
+            "source":{"kind":"interpolate_unrounded_offset","value":{"lower":"lower","upper":"upper"}},
+            "negate":false,"decimal":{"kind":"significant_digits","value":{"digits":14}},
+            "result":{"kind":"signed_quantity"}
+        }})
+    );
+    assert_eq!(
+        value(&b.category),
+        json!({"kind":"context_option","value":{"input":"modifier-source-category"}})
+    );
+    assert_eq!(
+        value(&b.corrupted_base),
+        json!({"kind":"literal","value":{"kind":"quantity","value":{"value":1.0,"unit":b.factor_unit}}})
+    );
+    for (name, slot) in &b.properties {
+        let expected = if name == "unscalable" {
+            json!({"kind":"literal","value":{"kind":"boolean","value":false}})
+        } else {
+            json!({"kind":"property","value":{"property":name}})
+        };
+        assert_eq!(value(slot), expected, "{name}");
+    }
+    let conditions = family::source_conditions();
+    let guards: Vec<_> = conditions.iter().filter(|g| g.rule == rule.id).collect();
+    assert_eq!(guards.len(), 1);
+    assert_eq!(
+        serde_json::to_value(&guards[0].all).unwrap(),
+        json!([
+            {"kind":"initial_scaling_is_one"},
+            {"kind":"no_generated_buff_members"},
+            {"kind":"unsigned_integer_capture","value":{"capture":"lower","min":1,"max":1000000}},
+            {"kind":"unsigned_integer_capture","value":{"capture":"upper","min":1,"max":1000000}}
+        ])
+    );
+}
+
+#[test]
+#[ignore = "requires an explicit checked current release with the Charm family"]
+fn current_charm_admission_census_and_boundaries_do_not_certify_final_scaling() {
+    use poe_optimizer_import::{
+        owned_item_lines::{ItemEmission, OwnedItemLinePolicy},
+        owned_item_source::{
+            ItemLoadIndexPrefix, ItemRuleSourceRole, ItemSourceDialect, ItemSourceLayoutPolicy,
+        },
+    };
+    let package = PathBuf::from(
+        std::env::var_os("POE_OPTIMIZER_TEST_CHARM_ADMISSION_PACKAGE")
+            .expect("explicit current release"),
+    );
+    let release = release::load(&package);
+    let input = release.input();
+    let b = family::bindings().charm;
+    let authored = family::item_rules()
+        .into_iter()
+        .find(|r| r.id.as_str() == "ranged-charm-slots")
+        .unwrap();
+    let emitters: Vec<_> = input
+        .items
+        .rules
+        .iter()
+        .filter(|r| {
+            r.emissions.iter().any(|e| {
+        matches!(e, ItemEmission::Modifier { definition, .. } if *definition == b.modifier)
+    })
+        })
+        .collect();
+    assert_eq!(
+        emitters,
+        vec![&authored],
+        "full installed emitter census, not a searched subset"
+    );
+    let layouts: Vec<_> = input
+        .item_source
+        .rule_layouts
+        .iter()
+        .filter(|r| r.rule == authored.id)
+        .collect();
+    assert_eq!(layouts.len(), 1);
+    assert_eq!(layouts[0].role, ItemRuleSourceRole::Unresolved);
+    let ItemSourceDialect::PobExportedSingleTextCategoriesV1 {
+        single_modifier_conditions,
+        ..
+    } = &input.item_source.dialect
+    else {
+        panic!()
+    };
+    let installed: Vec<_> = single_modifier_conditions
+        .iter()
+        .filter(|g| g.rule == authored.id)
+        .collect();
+    let authored_guards = family::source_conditions();
+    let expected: Vec<_> = authored_guards
+        .iter()
+        .filter(|g| g.rule == authored.id)
+        .collect();
+    assert_eq!(
+        installed, expected,
+        "every installed emitter has its exact source guard"
+    );
+    let lines = OwnedItemLinePolicy::new(
+        input.items.clone(),
+        release.assembled().schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let source = ItemSourceLayoutPolicy::new(
+        input.item_source.clone(),
+        &lines,
+        release.assembled().schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let original =
+        fs::read_to_string(root().join("tests/fixtures/builds/breadth-20260908/build-05.xml"))
+            .unwrap();
+    let start = original.find("<Item id=\"27\">").unwrap();
+    let end = start + original[start..].find("</Item>").unwrap() + 7;
+    // Isolate inline range authority; the previous 23 probes already cover XML
+    // overlay values 0, 1, .25 and malformed overlay spelling.
+    let raw = original[start..end]
+        .lines()
+        .filter(|line| !line.trim_start().starts_with("<ModRange "))
+        .collect::<Vec<_>>()
+        .join("\n");
+    let charm = "{tags:charm}{range:0.5}Has (1-3) Charm Slot";
+    assert!(raw.contains(charm));
+    let xml = |raw: &str| format!("{}{}{}", &original[..start], raw, &original[end..]);
+    let all_properties: Vec<_> = b
+        .properties
+        .keys()
+        .filter(|p| p.as_str() != "unscalable")
+        .map(String::as_str)
+        .collect();
+    let positive = vec![
+        (
+            "minimum-endpoints",
+            raw.replace(charm, "{tags:charm}{range:0}Has (1-1) Charm Slot"),
+            1.0,
+            vec!["charm"],
+        ),
+        (
+            "maximum-endpoints",
+            raw.replace(
+                charm,
+                "{tags:charm}{range:1}Has (1000000-1000000) Charm Slot",
+            ),
+            1000000.0,
+            vec!["charm"],
+        ),
+        (
+            "wide-unrounded",
+            raw.replace(charm, "{tags:charm}{range:0.25}Has (1-1000000) Charm Slot"),
+            250000.75,
+            vec!["charm"],
+        ),
+        (
+            "all-consumed-properties",
+            raw.replace(
+                "{tags:charm}",
+                &format!("{{tags:{}}}", all_properties.join(",")),
+            ),
+            2.0,
+            all_properties,
+        ),
+        (
+            "absent-charm-tag",
+            raw.replace("{tags:charm}", ""),
+            2.0,
+            vec![],
+        ),
+    ];
+    for (label, raw, amount, properties) in &positive {
+        let a = charm_admission_attribution(&xml(raw), &source, &lines);
+        let converted = a.convert(&lines).unwrap();
+        let modifiers: Vec<_> = converted
+            .modifiers
+            .iter()
+            .filter(|m| m.definition == b.modifier)
+            .collect();
+        assert_eq!(modifiers.len(), 1, "{label}");
+        check_converted_charm(modifiers[0], &b, *amount, properties);
+    }
+    let negative_lines = [
+        (
+            "upper-outside-domain",
+            "{tags:charm}{range:0.5}Has (1-1000001) Charm Slot",
+        ),
+        (
+            "lower-outside-domain",
+            "{tags:charm}{range:0.5}Has (1000001-1000001) Charm Slot",
+        ),
+        (
+            "reversed-endpoints",
+            "{tags:charm}{range:0.5}Has (3-1) Charm Slot",
+        ),
+        (
+            "negative-endpoint",
+            "{tags:charm}{range:0.5}Has (-1-3) Charm Slot",
+        ),
+        (
+            "decimal-endpoint",
+            "{tags:charm}{range:0.5}Has (1.5-3) Charm Slot",
+        ),
+        (
+            "fraction-below-zero",
+            "{tags:charm}{range:-0.01}Has (1-3) Charm Slot",
+        ),
+        (
+            "fraction-above-one",
+            "{tags:charm}{range:1.01}Has (1-3) Charm Slot",
+        ),
+        (
+            "fraction-nan",
+            "{tags:charm}{range:NaN}Has (1-3) Charm Slot",
+        ),
+        (
+            "unscalable-tag",
+            "{unscalable}{tags:charm}{range:0.5}Has (1-3) Charm Slot",
+        ),
+        (
+            "unconsumed-known-tag",
+            "{tags:charm,damage}{range:0.5}Has (1-3) Charm Slot",
+        ),
+        (
+            "fractured-tag",
+            "{fractured}{tags:charm}{range:0.5}Has (1-3) Charm Slot",
+        ),
+    ];
+    let mut negatives: Vec<_> = negative_lines
+        .iter()
+        .map(|(label, text)| (*label, raw.replace(charm, text)))
+        .collect();
+    negatives.push((
+        "explicit-catalyst-context",
+        raw.replace(
+            "LevelReq: 62",
+            "Catalyst: Flesh\nCatalystQuality: 20\nLevelReq: 62",
+        )
+        .replace("{tags:charm}", "{tags:charm,life}"),
+    ));
+    for (label, raw) in &negatives {
+        let a = charm_admission_attribution(&xml(raw), &source, &lines);
+        let converted = a.convert(&lines).unwrap();
+        assert!(
+            converted
+                .modifiers
+                .iter()
+                .all(|m| m.definition != b.modifier),
+            "{label}: failed admission cannot retain a canonical Charm modifier"
+        );
+        assert_pending_charm_line(&converted.lines, label);
+    }
+    let mut missing_prefix = input.item_source.clone();
+    let prefixes: Vec<_> = missing_prefix
+        .template_layouts
+        .iter_mut()
+        .filter(|r| b.templates.contains(&r.template))
+        .collect();
+    assert_eq!(prefixes.len(), 1);
+    for prefix in prefixes {
+        assert_eq!(
+            prefix.load_index_prefix,
+            ItemLoadIndexPrefix::NoGeneratedBuffMembers
+        );
+        prefix.load_index_prefix = ItemLoadIndexPrefix::Unresolved;
+    }
+    let missing_prefix = ItemSourceLayoutPolicy::new(
+        missing_prefix,
+        &lines,
+        release.assembled().schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let a = charm_admission_attribution(&xml(&raw), &missing_prefix, &lines);
+    let converted = a.convert(&lines).unwrap();
+    assert!(
+        converted
+            .modifiers
+            .iter()
+            .all(|m| m.definition != b.modifier),
+        "missing generated-member proof is not an empty generated set"
+    );
+    assert_pending_charm_line(&converted.lines, "missing-generated-member-proof");
+    // Two public CLI witnesses ensure the checked conversion reaches drafts,
+    // while the fast cases above isolate specific admission responsibilities.
+    let out = tempfile::tempdir().unwrap();
+    for (label, raw, expected) in [
+        ("wide-unrounded", &positive[2].1, Some(positive[2].2)),
+        ("unconsumed-known-tag", &negatives[9].1, None),
+    ] {
+        let input = out.path().join(format!("{label}.xml"));
+        fs::write(&input, xml(raw)).unwrap();
+        let dest = out.path().join(label);
+        release::normalize(&package, &input, 5, &dest);
+        let draft: Value = read(dest.join("draft.json"));
+        let item = &draft["draft"]["items"]["members"][belt_index(&draft)];
+        let modifiers: Vec<_> = item["modifiers"]["members"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|m| m["definition"]["value"] == json!(b.modifier))
+            .collect();
+        if let Some(amount) = expected {
+            assert_eq!(modifiers.len(), 1);
+            check_modifier(modifiers[0], &b, amount, &["charm"]);
+        } else {
+            assert!(modifiers.is_empty());
+            assert_eq!(
+                item["modifiers"]["completion"]["kind"], "pending",
+                "failed admission cannot certify an empty modifier inventory"
+            );
+            let sidecar: Value = read(dest.join("sidecar.json"));
+            let item_text = row(&sidecar, 590);
+            let charm_lines: Vec<_> = item_text["lines"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .filter(|line| {
+                    let text = line["text"].as_str().unwrap();
+                    text.contains("Charm Slot") && !text.contains("Charm Slots:")
+                })
+                .collect();
+            assert_eq!(charm_lines.len(), 1, "retain the exact Charm source row");
+            assert_eq!(charm_lines[0]["outcome"]["kind"], "pending");
+        }
+    }
+}

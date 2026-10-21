@@ -1,0 +1,766 @@
+{
+  "schema_version": 1,
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Data/ModItem.lua",
+      "bytes": 1063203,
+      "sha256": "019c586b060d6992b693d8372e0fdb0ac6b067d41037869d344094d739b26dde"
+    },
+    {
+      "path": "src/Data/ModItemExclusive.lua",
+      "bytes": 1865392,
+      "sha256": "cf62173964e66206fcd8c9dd66225c5f363a64b171f3eed292330508dfcd7e58"
+    },
+    {
+      "path": "src/Data/ModJewel.lua",
+      "bytes": 150371,
+      "sha256": "090c3dbdefc0d7716456b8641d6bf222fe2e261159f9c5b3a59448b3872910c2"
+    }
+  ],
+  "scalability": [
+    {
+      "template": "#% increased Desecrated Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Effect of Prefixes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Effect of Suffixes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Ailment Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Attribute Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Caster Damage Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Chaos Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Cold Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Critical Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Damage Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Defence Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Elemental Damage Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Fire Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Life Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Lightning Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Mana Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Minion Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Physical Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Physical and Chaos Damage Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Resistance Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Explicit Speed Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% increased Implicit Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": null
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Effect of Prefixes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Effect of Suffixes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Ailment Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Attribute Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Caster Damage Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Chaos Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Cold Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Critical Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Damage Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Defence Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Elemental Damage Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Fire Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Life Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Lightning Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Mana Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Minion Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Physical Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Physical and Chaos Damage Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Resistance Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Explicit Speed Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "#% reduced Implicit Modifier magnitudes",
+      "components": [
+        {
+          "is_scalable": false,
+          "formats": [
+            "negate"
+          ]
+        }
+      ]
+    },
+    {
+      "template": "Implicit Modifier magnitudes are doubled",
+      "components": []
+    },
+    {
+      "template": "Implicit Modifier magnitudes are tripled",
+      "components": []
+    }
+  ],
+  "catalog_modifiers": [
+    {
+      "table": "Exclusive",
+      "id": "LocalDoubleImplicitMods",
+      "lines": [
+        "Implicit Modifier magnitudes are doubled"
+      ],
+      "type": null,
+      "group": "LocalModifiesImplicitMods",
+      "level": 65,
+      "mod_tags": [],
+      "stat_order": [
+        52
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Exclusive",
+      "id": "LocalTripleImplicitModsUnique__1__",
+      "lines": [
+        "Implicit Modifier magnitudes are tripled"
+      ],
+      "type": null,
+      "group": "LocalModifiesImplicitMods",
+      "level": 1,
+      "mod_tags": [],
+      "stat_order": [
+        52
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Exclusive",
+      "id": "UniqueDesecratedModEffect1",
+      "lines": [
+        "(60-80)% increased Desecrated Modifier magnitudes"
+      ],
+      "type": null,
+      "group": "UniqueDesecratedModEffect",
+      "level": 1,
+      "mod_tags": [],
+      "stat_order": [
+        50
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Item",
+      "id": "AlloyEffectOfResistanceMods1",
+      "lines": [
+        "(20-30)% increased Explicit Resistance Modifier magnitudes"
+      ],
+      "type": "Prefix",
+      "group": "ArmourEnchantmentHeistResistanceModifierEffect",
+      "level": 65,
+      "mod_tags": [],
+      "stat_order": [
+        45
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Item",
+      "id": "DestructionInfluenceChaosModifierEffect",
+      "lines": [
+        "(15-20)% increased Explicit Chaos Modifier magnitudes"
+      ],
+      "type": "Suffix",
+      "group": "DestructionInfluenceChaosModifierEffect",
+      "level": 65,
+      "mod_tags": [
+        "chaos"
+      ],
+      "stat_order": [
+        35
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Item",
+      "id": "DestructionInfluenceColdModifierEffect",
+      "lines": [
+        "(15-20)% increased Explicit Cold Modifier magnitudes"
+      ],
+      "type": "Suffix",
+      "group": "DestructionInfluenceColdModifierEffect",
+      "level": 65,
+      "mod_tags": [
+        "elemental",
+        "cold"
+      ],
+      "stat_order": [
+        36
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Item",
+      "id": "DestructionInfluenceCriticalModifierEffect",
+      "lines": [
+        "(20-30)% increased Explicit Critical Modifier magnitudes"
+      ],
+      "type": "Prefix",
+      "group": "DestructionInfluenceCriticalModifierEffect",
+      "level": 65,
+      "mod_tags": [
+        "critical"
+      ],
+      "stat_order": [
+        37
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Item",
+      "id": "DestructionInfluenceElementalModifierEffect",
+      "lines": [
+        "(15-20)% increased Explicit Elemental Damage Modifier magnitudes"
+      ],
+      "type": "Suffix",
+      "group": "DestructionInfluenceElementalModifierEffect",
+      "level": 65,
+      "mod_tags": [
+        "elemental"
+      ],
+      "stat_order": [
+        47
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Item",
+      "id": "DestructionInfluenceFireModifierEffect",
+      "lines": [
+        "(15-20)% increased Explicit Fire Modifier magnitudes"
+      ],
+      "type": "Suffix",
+      "group": "DestructionInfluenceFireModifierEffect",
+      "level": 65,
+      "mod_tags": [
+        "elemental",
+        "fire"
+      ],
+      "stat_order": [
+        40
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Item",
+      "id": "DestructionInfluenceLightningModifierEffect",
+      "lines": [
+        "(15-20)% increased Explicit Lightning Modifier magnitudes"
+      ],
+      "type": "Suffix",
+      "group": "DestructionInfluenceLightningModifierEffect",
+      "level": 65,
+      "mod_tags": [
+        "elemental",
+        "lightning"
+      ],
+      "stat_order": [
+        42
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Item",
+      "id": "DestructionInfluenceManaModifierEffect",
+      "lines": [
+        "(25-30)% increased Explicit Mana Modifier magnitudes"
+      ],
+      "type": "Suffix",
+      "group": "DestructionInfluenceManaModifierEffect",
+      "level": 65,
+      "mod_tags": [
+        "resource",
+        "mana"
+      ],
+      "stat_order": [
+        43
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Item",
+      "id": "DestructionInfluencePhysicalModifierEffect",
+      "lines": [
+        "(10-15)% increased Explicit Physical Modifier magnitudes"
+      ],
+      "type": "Suffix",
+      "group": "DestructionInfluencePhysicalModifierEffect",
+      "level": 65,
+      "mod_tags": [
+        "physical"
+      ],
+      "stat_order": [
+        44
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Item",
+      "id": "DestructionInfluenceSpeedModifierEffect",
+      "lines": [
+        "(25-30)% increased Explicit Speed Modifier magnitudes"
+      ],
+      "type": "Prefix",
+      "group": "DestructionInfluenceSpeedModifierEffect",
+      "level": 65,
+      "mod_tags": [
+        "speed"
+      ],
+      "stat_order": [
+        46
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Jewel",
+      "id": "CraftedJewelPrefixEffect",
+      "lines": [
+        "(40-60)% increased Effect of Prefixes"
+      ],
+      "type": "Suffix",
+      "group": "LocalPrefixEffect",
+      "level": 1,
+      "mod_tags": [],
+      "stat_order": [
+        7804
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    },
+    {
+      "table": "Jewel",
+      "id": "CraftedJewelSuffixEffect",
+      "lines": [
+        "(40-60)% increased Effect of Suffixes"
+      ],
+      "type": "Prefix",
+      "group": "LocalSuffixEffect",
+      "level": 1,
+      "mod_tags": [],
+      "stat_order": [
+        7805
+      ],
+      "source_only_identity": true,
+      "owned_producer_definition_exists": false
+    }
+  ],
+  "source_catalog_claim": "Exact catalog rows, not an owned/native definition allocation or completeness declaration"
+}

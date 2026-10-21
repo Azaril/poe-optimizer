@@ -1,5 +1,21 @@
 # Fine Belt numerical inputs
 
+This document preserves the original family-conversion checkpoint below.
+The current resume point is [implementation](../../../../../docs/implementation.md).
+Subsequent `charm-capacity-*` data adds exact local consumption and one Player
+delivery. `scalability-certificate.json` is the immutable source-metadata proof
+used by `tests/support/owned_charm_scalability.rs`; its historical acquisition
+status is not a current execution flag. The shared publication now verifies the
+real numeric compiler and all five unchanged imports, retiring only
+`numeric-component-scalability-unproved`. Three Charm owner obligations remain.
+Neither the certificate nor source Lua is deployed in the native rule package.
+
+The current admission tests also cover all 25 input writes, the installed
+emitter/guard census, range boundaries and refusal cases. Refused input retains
+its Pending source row and inventory; absence of an emitted modifier is never
+treated as a complete empty inventory. These checks change no admission guard or
+native numerical domain.
+
 This profile adds the two missing physical source families on the original
 Fine Belt: ranged `Has (1-3) Charm Slot` and fixed decimal
 `Flasks gain 0.17 charges per Second`. The recipes accept bounded source values;
@@ -57,7 +73,7 @@ profile does not generalize those cache histories.
 ```powershell
 $env:POE_OPTIMIZER_TEST_FINE_BELT_PRIOR = 'runs/owned-sapphire-item-inputs-03/package'
 $env:POE_OPTIMIZER_TEST_FINE_BELT_OUTPUT = 'runs/owned-fine-belt-modifiers-02'
-cargo test --locked --test owned_fine_belt_modifiers -- --include-ignored
+cargo test --locked --test owned_fine_belt_modifiers fine_belt_layout_preserves_every_original_request_and_independent_gap -- --ignored --exact
 ```
 
 Use a new output directory. The helper compiles both numerical programs, performs
