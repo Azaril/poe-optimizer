@@ -48,8 +48,10 @@ pub enum UsageInventoryFieldSelector {
 pub enum UsageInventoryDestination {
     /// Successful existing physical, Direct, support or generated-input disposition.
     /// Authored/Direct receipts include checked literal primary/secondary-true
-    /// source gates; generated receipts include only primary-true. Neither
-    /// enables an effect. Exact physical
+    /// source gates; generated receipts include primary-true and exact literal
+    /// group/Gem enabled=true gates. These add no restriction and enable no effect;
+    /// the generated enabled fields retain their independent typed participation
+    /// destinations. Exact physical
     /// singleton construction can additionally account for the unread secondary
     /// source switch; Direct/generated dispatch is not covered. A checked physical
     /// SupportAssignment with complete singleton construction may account count=1

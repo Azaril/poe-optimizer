@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "thirteen existing generated intrinsic InputDisposition destinations and two reporting Deferred removals; no new producer or completion",
+  "scope": "fifteen checked generated InputDisposition destinations and two reporting Deferred removals; enabled=true is nonrestricting and retains typed participation; no completion",
   "predecessor": {
     "input": "6f58eba00e71984264123419f51114f375bdce23440eaa4ff3ffa4999e2beb11",
     "release": {
@@ -18,8 +18,8 @@
   "producer_consumer_files": [
     {
       "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_inputs/dispositions.rs",
-      "sha256": "8d3c96a72793ec4de4500e5811e3785e8eb9eeea8ad6172d3900f3d13afa204b",
-      "bytes": 64138,
+      "sha256": "d6c1de786efeb5054a9d7c1e3b98b18bb67c76082d9f8553c8fd5d92cb52a532",
+      "bytes": 68898,
       "encoding": "utf8-lf"
     },
     {
@@ -30,14 +30,14 @@
     },
     {
       "path": "crates/poe-optimizer-import/src/owned_normalize/usage_inputs/inventory.rs",
-      "sha256": "cf3975f2d9088df92d86e87bb1446df2746834d3b817406a3caeb5b5f5aa45fd",
-      "bytes": 53185,
+      "sha256": "1cbf661f798019bf336d945d3230d6c98c592162967f484c291155f23b202273",
+      "bytes": 53351,
       "encoding": "utf8-lf"
     },
     {
       "path": "crates/poe-optimizer-import/src/owned_normalize/skill_input_disposition.rs",
-      "sha256": "3c05ecadf56d8f203a4a8edadc534fa526f13c561476f6b04a33596da07fff17",
-      "bytes": 26267,
+      "sha256": "ab4831f2e15de533cc7201a0a7f16b3ddbd738ccf1ceaf0f61cc26fd73f64815",
+      "bytes": 26966,
       "encoding": "utf8-lf"
     },
     {
@@ -104,6 +104,14 @@
     },
     {
       "kind": "reference_descendants"
+    },
+    {
+      "kind": "group_attribute",
+      "name": "enabled"
+    },
+    {
+      "kind": "occurrence_attribute",
+      "name": "enabled"
     }
   ],
   "reporting": {
@@ -228,7 +236,8 @@
     "group": [
       "source",
       "slot",
-      "label"
+      "label",
+      "enabled"
     ],
     "occurrence": [
       "corrupted",
@@ -239,16 +248,14 @@
       "nameSpec",
       "level",
       "quality",
-      "enableGlobal1"
+      "enableGlobal1",
+      "enabled"
     ],
     "reference_descendants": "actual checked empty descendants; no default selector",
-    "primary_gate": "raw and decoded literal true only; no participation result"
+    "primary_gate": "raw and decoded literal true only; no participation result",
+    "enabled_gate": "raw and decoded literal true only; retain exact typed participation destinations; no activation or topology claim"
   },
   "unchanged_deferred_fields": [
-    {
-      "kind": "group_attribute",
-      "name": "enabled"
-    },
     {
       "kind": "group_attribute",
       "name": "mainActiveSkill"
@@ -260,10 +267,6 @@
     {
       "kind": "occurrence_attribute",
       "name": "count"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "enabled"
     },
     {
       "kind": "occurrence_attribute",
@@ -1676,7 +1679,7 @@
                   "value": {
                     "kind": "quantity",
                     "value": {
-                      "value": 0,
+                      "value": 0.0,
                       "unit": {
                         "kind": "unit",
                         "namespace": {
@@ -2206,7 +2209,7 @@
                 "value": {
                   "kind": "quantity",
                   "value": {
-                    "value": 20,
+                    "value": 20.0,
                     "unit": {
                       "kind": "unit",
                       "namespace": {
@@ -2384,7 +2387,7 @@
             "amount": {
               "kind": "known",
               "value": {
-                "value": 20,
+                "value": 20.0,
                 "unit": {
                   "kind": "unit",
                   "namespace": {
@@ -2504,7 +2507,7 @@
                       "value": {
                         "kind": "quantity",
                         "value": {
-                          "value": 128,
+                          "value": 128.0,
                           "unit": {
                             "kind": "unit",
                             "namespace": {
@@ -3240,7 +3243,7 @@
                       "value": {
                         "kind": "quantity",
                         "value": {
-                          "value": 1,
+                          "value": 1.0,
                           "unit": {
                             "kind": "unit",
                             "namespace": {
@@ -3398,5 +3401,204 @@
     "numerical_evaluation": false,
     "source_execution": false,
     "private_receipts_serialized": false
+  },
+  "enabled_gate": {
+    "schema_version": 1,
+    "scope": "literal-enabled-true-nonrestricting",
+    "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+    "status": "tests-pending",
+    "law": {
+      "raw_token": "true",
+      "decoded_token": "true",
+      "source_fields": [
+        "Skill.enabled",
+        "Gem.enabled"
+      ],
+      "claim": "Literal true adds no restriction at the authenticated enabled predicates; other predicates and consumers remain independent.",
+      "retained_usage_destinations": [
+        {
+          "field": "Skill.enabled",
+          "policy": "def.000000000000332b",
+          "parameter": "def.000000000000332c"
+        },
+        {
+          "field": "Gem.enabled",
+          "policy": "def.000000000000332b",
+          "parameter": "def.000000000000332d"
+        }
+      ],
+      "excluded": [
+        "false, missing or escaped raw tokens",
+        "effect existence or activation",
+        "complete source topology or reverse-catalog uniqueness",
+        "GroupProperty or support-count absence",
+        "native mechanical coverage",
+        "count, secondary switch or selector authority",
+        "whole-build completion or numerical parity"
+      ]
+    },
+    "reader_census": [
+      {
+        "path": "src/Modules/CalcSetup.lua",
+        "enabled_lines": [
+          1788,
+          1790,
+          1912,
+          1964,
+          1981,
+          1996,
+          2131,
+          2166,
+          2184,
+          2187,
+          2254
+        ],
+        "checked_full_file": true
+      },
+      {
+        "path": "src/Modules/BuildExportPoE2.lua",
+        "enabled_lines": [
+          121,
+          137,
+          155
+        ],
+        "checked_full_file": true
+      },
+      {
+        "path": "src/Classes/SkillsTab.lua",
+        "mechanical_count_lines": [
+          1582,
+          1584,
+          1597
+        ],
+        "loader_lines": [
+          309,
+          356
+        ],
+        "other_readers": "README census retains display, serialization, UI mutation and tooltip readers"
+      }
+    ],
+    "component_tests": 5,
+    "validation": {
+      "rustfmt": "passed",
+      "parent_exact_append_bytes": 79,
+      "cargo": "not run by candidate author",
+      "lua_execution": "not run by candidate author",
+      "runtime_result": "root records actual outcome separately"
+    },
+    "files": [
+      {
+        "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+        "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+        "bytes": 217603,
+        "encoding": "raw"
+      },
+      {
+        "path": "data/owned/poe2/3887ae68/secondary-effect-switch-source/authoring.json",
+        "sha256": "7dd2c02757f37c723c8fd4eaebd276e54f666c9c065b238b76a614f3f1c446c9",
+        "bytes": 568,
+        "encoding": "raw"
+      },
+      {
+        "path": "data/owned/poe2/3887ae68/secondary-effect-switch-source/evidence.json",
+        "sha256": "0ab9da94682212c300209d6de0f0514e2a6510e97651343c4a56d87f4f6d76d8",
+        "bytes": 16988,
+        "encoding": "raw"
+      },
+      {
+        "path": "data/owned/poe2/3887ae68/secondary-effect-switch-source/README.md",
+        "sha256": "cfdce0d0be96a0a89c9a6aa32ce50072cb7dd88697788419d22be7bbe2cb6a72",
+        "bytes": 4220,
+        "encoding": "raw"
+      },
+      {
+        "path": "crates/poe-optimizer-pob/tests/owned_secondary_effect_switch_source.rs",
+        "sha256": "b7ef77023caf8a4f5e556723f79e3c82df893248fc9aa8fcc61a834ce78f6946",
+        "bytes": 75256,
+        "encoding": "raw"
+      },
+      {
+        "path": "crates/poe-optimizer-pob/tests/support/generated_enabled_source.rs",
+        "sha256": "009679a3658d80e41f10d0b367744b06250aa50873c8102a7d44aaf537058daa",
+        "bytes": 21823,
+        "encoding": "raw"
+      }
+    ],
+    "source_files": [
+      {
+        "path": "src/Modules/CalcSetup.lua",
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+        "bytes": 100609,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Classes/SkillsTab.lua",
+        "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08",
+        "bytes": 69652,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/BuildExportPoE2.lua",
+        "sha256": "1581790b106d658ebab9d75ca5e51da3ae32603e9f622b96dc7270413eeb4152",
+        "bytes": 13732,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/CalcDefence.lua",
+        "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2",
+        "bytes": 239878,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/CalcTools.lua",
+        "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c",
+        "bytes": 11517,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/ModTools.lua",
+        "sha256": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246",
+        "bytes": 9130,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/CalcPerform.lua",
+        "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae",
+        "bytes": 181097,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/Common.lua",
+        "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8",
+        "bytes": 30833,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Classes/ImportTab.lua",
+        "sha256": "ba2933b2268ba9cb8a4ecfb529a01612781100975272a4bc2ef3e9555eb9f5e2",
+        "bytes": 71408,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Classes/SkillListControl.lua",
+        "sha256": "632813711a16b1dab998ab00785202eeb30c7115fe1d9ce19caad35d397a398a",
+        "bytes": 9522,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/ModParser.lua",
+        "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+        "bytes": 677245,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Classes/ModStore.lua",
+        "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62",
+        "bytes": 36471,
+        "encoding": "utf8-lf"
+      }
+    ],
+    "portability": "Ordinary CLI checks compare source_files to the bundled authenticated manifest; only the PoB source target requires vendor source."
   }
 }

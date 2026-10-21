@@ -1,0 +1,8 @@
+    Finished `test` profile [optimized] target(s) in 0.44s
+     Running tests\owned_preset_usage_inventory_cli.rs (target\debug\deps\owned_preset_usage_inventory_cli-6ff109a11d85aded.exe)
+
+running 1 test
+test publish_generated_firebolt_destinations_with_all_five_unchanged ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 15 filtered out; finished in 25.63s
+

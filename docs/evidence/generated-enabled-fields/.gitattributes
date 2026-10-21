@@ -1,0 +1,3 @@
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Preserve the original command output, including its terminal blank line.
+logs/*.log -whitespace

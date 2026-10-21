@@ -1,0 +1,13 @@
+[package]
+name = "generated-firebolt-enabled-authoring"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[workspace]
+
+[dependencies]
+poe-optimizer-core = { path = "../../crates/poe-optimizer-core" }
+serde = "1"
+serde_json = { version = "1", features = ["float_roundtrip", "preserve_order"] }
+sha2 = "0.10"

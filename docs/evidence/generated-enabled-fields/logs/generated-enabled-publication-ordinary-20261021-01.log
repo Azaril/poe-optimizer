@@ -1,0 +1,25 @@
+   Compiling poe-optimizer-import v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-import)
+   Compiling poe-optimizer-cli v0.1.0 (C:\code\poe-optimizer)
+    Finished `test` profile [optimized] target(s) in 7m 24s
+     Running tests\owned_preset_usage_inventory_cli.rs (target\debug\deps\owned_preset_usage_inventory_cli-6ff109a11d85aded.exe)
+
+running 16 tests
+test checked_packet_preserves_the_complete_saved_source_census ... ok
+test companion_evidence_cannot_drop_or_relabel_source_construction ... ok
+test generated_firebolt_destinations_preserve_every_other_consumer ... ok
+test manual_direct_inventory_preserves_source_dispatch_and_every_other_consumer ... ok
+test preservation::selected_baseline_tests::historical_count_preserves_current_diagnostics_and_other_obligations ... ok
+test preservation::selected_baseline_tests::historical_exclusion_rejects_duplicate_issue_or_item_authority ... ok
+test preservation::selected_baseline_tests::historical_exclusion_requires_exact_item_pending_field ... ok
+test primary_count_packet_preserves_existing_guards_and_every_prior_consumer ... ok
+test publish_bounded_usage_inventory_with_all_five_unchanged ... ignored, explicit immutable predecessor/output paths; all five originals and independent repeats
+test publish_generated_firebolt_destinations_with_all_five_unchanged ... ignored, exact published predecessor; all five originals, fresh replay and byte-identical rebuild
+test real_ice_nova_group_completes_only_its_usage_inventory ... ignored, published prior/successor packages; exact real-group positive and nonneutral refusal
+test real_manual_direct_groups_require_reference_and_usage_accounting ... ignored, published packages; exact manual Direct source groups and independent refusal controls
+test real_primary_groups_require_count_and_every_existing_usage_consumer ... ignored, actual published packages; exact source groups and independent count/guard controls
+test real_skeletal_groups_require_every_reference_and_typed_usage_consumer ... ignored, published packages; four unchanged raw groups and independent refusal controls
+test real_support_expansion_needs_every_added_family ... ignored, published expanded package; source-byte accounting frame and nine omission controls
+test skeletal_inventory_changes_only_checked_destinations_and_keeps_absent_lanes ... ok
+
+test result: ok. 9 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 0.45s
+

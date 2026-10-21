@@ -1,12 +1,6 @@
-//! Data-only, exact generated field destinations using the maintained release path.
+//! Exact generated field destinations using the maintained release path.
 use crate::{family, release, selected};
-use poe_optimizer_core::{
-    build_identity::BuildLineage,
-    owned_definitions::OwnedDefinitionKey,
-    owned_draft::{
-        EquipmentDraft, GeneratedSkillInputBindingDraft, ItemDraft, PresetUsageBindingDraft,
-    },
-};
+use poe_optimizer_core::owned_definitions::OwnedDefinitionKey;
 use poe_optimizer_import::{
     owned_normalize::{
         GemInventoryPolicy, configuration_disposition_dependencies, usage_inputs_identity,
@@ -14,7 +8,6 @@ use poe_optimizer_import::{
     owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
     owned_successor::{SuccessorBundleInput, transition_owned_normalization_with_tree_compact},
 };
-use serde::{Serialize, de::DeserializeOwned};
 use serde_json::{Value, json};
 use std::{
     fs,
@@ -22,8 +15,8 @@ use std::{
 };
 
 const BEFORE: &str = "6f58eba00e71984264123419f51114f375bdce23440eaa4ff3ffa4999e2beb11";
-const BINDINGS: &str = "4206a1fd027da710478a789acfd00277f54a21d5f2465d2f1ffdc84d23c67924";
-const REVIEW: &str = "e19c90d5fb3a3cac549e6a19095711b8d3643e2f6d17e4cec92a3309feb4ec94";
+const BINDINGS: &str = "bfbbd8e70a5d4a777700322624323a6f0809923a53b55671d118ef0862a9ecfe";
+const REVIEW: &str = "fe21b428e73a8b285d7d08b7c2ad51dc46739e1e48726126de4308dbe9ef5f38";
 fn data() -> PathBuf {
     family::root().join("data/owned/poe2/3887ae68/generated-firebolt-dispositions")
 }
@@ -42,7 +35,7 @@ pub fn check() -> (Value, Value) {
         review["predecessor"]["inventory_evidence"]
     );
     assert_eq!(bindings["selectors"], review["selectors"]);
-    assert_eq!(bindings["selectors"].as_array().unwrap().len(), 13);
+    assert_eq!(bindings["selectors"].as_array().unwrap().len(), 15);
     for pin in review["producer_consumer_files"].as_array().unwrap() {
         let bytes = fs::read(family::root().join(pin["path"].as_str().unwrap())).unwrap();
         let normalized = String::from_utf8(bytes).unwrap().replace("\r\n", "\n");
@@ -83,6 +76,7 @@ pub fn check() -> (Value, Value) {
             .collect();
         assert_eq!(matches, vec![pin]);
     }
+    check_enabled_evidence(&review["enabled_gate"], &manifest);
     let source_evidence = family::read(
         family::root().join("data/owned/poe2/3887ae68/reporting-inclusion/source-evidence.json"),
     );
@@ -104,6 +98,51 @@ pub fn check() -> (Value, Value) {
     check_rows(&bindings);
     (bindings, review)
 }
+fn check_enabled_evidence(proof: &Value, manifest: &Value) {
+    assert_eq!(proof["schema_version"], 1);
+    assert_eq!(proof["scope"], "literal-enabled-true-nonrestricting");
+    assert_eq!(proof["source_revision"], manifest["upstream_revision"]);
+    // This is an authenticated authoring record, not the execution result.
+    // The separate source-test gate records actual validation at publication.
+    assert_eq!(proof["status"], "tests-pending");
+    assert_eq!(proof["law"]["raw_token"], "true");
+    assert_eq!(proof["law"]["decoded_token"], "true");
+    assert_eq!(
+        proof["law"]["retained_usage_destinations"],
+        json!([
+            {"field":"Skill.enabled","policy":"def.000000000000332b","parameter":"def.000000000000332c"},
+            {"field":"Gem.enabled","policy":"def.000000000000332b","parameter":"def.000000000000332d"}
+        ])
+    );
+    assert_eq!(proof["component_tests"], 5);
+    for pin in proof["files"].as_array().unwrap() {
+        let bytes = fs::read(family::root().join(pin["path"].as_str().unwrap())).unwrap();
+        let bytes = match pin["encoding"].as_str().unwrap() {
+            "raw" => bytes,
+            "utf8-lf" => String::from_utf8(bytes)
+                .unwrap()
+                .replace("\r\n", "\n")
+                .into_bytes(),
+            _ => panic!("unrecognized evidence encoding"),
+        };
+        assert_eq!(family::sha(&bytes), pin["sha256"]);
+        assert_eq!(bytes.len(), pin["bytes"]);
+    }
+    // Ordinary native CLI checks use the bundled manifest; no vendor checkout
+    // or Lua host is introduced into this test target.
+    for pin in proof["source_files"].as_array().unwrap() {
+        assert_eq!(pin["encoding"], "utf8-lf");
+        let matches: Vec<_> = manifest["files"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|row| row["path"] == pin["path"])
+            .collect();
+        assert_eq!(matches.len(), 1);
+        assert_eq!(matches[0]["sha256"], pin["sha256"]);
+        assert_eq!(matches[0]["bytes"], pin["bytes"]);
+    }
+}
 fn check_rows(packet: &Value) {
     let selectors = packet["selectors"].as_array().unwrap();
     let rows = packet["rows"].as_array().unwrap();
@@ -121,9 +160,34 @@ fn check_rows(packet: &Value) {
         for (old, new) in before_fields.iter().zip(after_fields) {
             assert_eq!(old["field"], new["field"]);
             if i == 0 && selectors.contains(&new["field"]) {
-                assert_eq!(old["destinations"].as_array().unwrap().len(), 1);
-                assert_eq!(old["destinations"][0]["kind"], "deferred");
-                assert_eq!(new["destinations"], json!([{"kind":"input_disposition"}]));
+                let mut destinations = old["destinations"].as_array().unwrap().clone();
+                let deferred: Vec<_> = destinations
+                    .iter()
+                    .enumerate()
+                    .filter(|(_, destination)| destination["kind"] == "deferred")
+                    .map(|(index, _)| index)
+                    .collect();
+                assert_eq!(deferred.len(), 1);
+                destinations[deferred[0]] = json!({"kind":"input_disposition"});
+                if new["field"]["name"] == "enabled" {
+                    assert_eq!(destinations.len(), 2);
+                    let usage = destinations
+                        .iter()
+                        .find(|destination| destination["kind"] == "usage_parameter")
+                        .unwrap();
+                    assert_eq!(usage["policy"]["key"], "def.000000000000332b");
+                    assert_eq!(
+                        usage["parameter"]["slot"]["key"],
+                        if new["field"]["kind"] == "group_attribute" {
+                            "def.000000000000332c"
+                        } else {
+                            "def.000000000000332d"
+                        }
+                    );
+                } else {
+                    assert_eq!(destinations.len(), 1);
+                }
+                assert_eq!(new["destinations"], json!(destinations));
                 intrinsic += 1;
             } else if new["field"] == json!({"kind":"group_attribute","name":"includeInFullDPS"}) {
                 let original = old["destinations"].as_array().unwrap();
@@ -162,14 +226,13 @@ fn check_rows(packet: &Value) {
                     .iter()
                     .any(|d| d["kind"] == "deferred"))
                 .count(),
-            [6, 19][i]
+            [4, 19][i]
         );
     }
-    assert_eq!((intrinsic, reporting), (13, 2));
+    assert_eq!((intrinsic, reporting), (15, 2));
 }
 pub fn mutation_controls() {
-    let (packet, review) = check();
-    snapshot_type_controls(&review["original05"]["observations"]);
+    let (packet, _) = check();
     for selector in packet["selectors"].as_array().unwrap() {
         let mut changed = packet.clone();
         let row = changed["rows"][0]["after"]["fields"]
@@ -180,6 +243,25 @@ pub fn mutation_controls() {
             .unwrap();
         row["destinations"] = json!([{"kind":"deferred","reason":"missing-checked-proof"}]);
         assert!(std::panic::catch_unwind(|| check_rows(&changed)).is_err());
+    }
+    for kind in ["group_attribute", "occurrence_attribute"] {
+        for omitted in ["input_disposition", "usage_parameter"] {
+            let mut changed = packet.clone();
+            let row = changed["rows"][0]["after"]["fields"]
+                .as_array_mut()
+                .unwrap()
+                .iter_mut()
+                .find(|field| field["field"] == json!({"kind":kind,"name":"enabled"}))
+                .unwrap();
+            row["destinations"]
+                .as_array_mut()
+                .unwrap()
+                .retain(|destination| destination["kind"] != omitted);
+            assert!(
+                std::panic::catch_unwind(|| check_rows(&changed)).is_err(),
+                "the reviewed policy retains both independent enabled consumers"
+            );
+        }
     }
     for index in 0..2 {
         let mut changed = packet.clone();
@@ -286,100 +368,6 @@ fn stage(prior: &StagedOwnedRelease, packet: &Value) -> StagedOwnedRelease {
     assert_eq!(&inverse, old);
     assemble_owned_release(full, Default::default()).unwrap()
 }
-// The authored JSON snapshot was transported through JavaScript, which writes
-// integral f64 values as integer tokens. Restore only the declared Rust record
-// representation; no tolerance, numeric coercion rule or live-output rewrite.
-fn typed_snapshot_record<T: DeserializeOwned + Serialize>(value: &Value) -> Value {
-    fn lineage(value: &mut Value, from: &Value, to: &Value) -> usize {
-        match value {
-            Value::Object(fields) => {
-                let mut count = 0;
-                if let Some(current) = fields.get_mut("lineage") {
-                    assert_eq!(
-                        current, from,
-                        "only the checked test lineage may be rebound"
-                    );
-                    *current = to.clone();
-                    count += 1;
-                }
-                count
-                    + fields
-                        .values_mut()
-                        .map(|child| lineage(child, from, to))
-                        .sum::<usize>()
-            }
-            Value::Array(rows) => rows.iter_mut().map(|child| lineage(child, from, to)).sum(),
-            _ => 0,
-        }
-    }
-    let canonical = json!("checked-test-lineage");
-    let temporary = json!(BuildLineage::from_bytes([93; 16]));
-    let mut source = value.clone();
-    let count = lineage(&mut source, &canonical, &temporary);
-    assert!(count > 0);
-    let record: T = serde_json::from_value(source).unwrap();
-    let mut result = serde_json::to_value(record).unwrap();
-    assert_eq!(lineage(&mut result, &temporary, &canonical), count);
-    result
-}
-fn typed_snapshot(snapshot: &Value) -> Value {
-    let mut expected = snapshot.clone();
-    expected["bindings"] =
-        typed_snapshot_record::<Vec<GeneratedSkillInputBindingDraft>>(&snapshot["bindings"]);
-    expected["usages"] = typed_snapshot_record::<Vec<PresetUsageBindingDraft>>(&snapshot["usages"]);
-    expected["equipment"] = typed_snapshot_record::<EquipmentDraft>(&snapshot["equipment"]);
-    expected["item"] = typed_snapshot_record::<ItemDraft>(&snapshot["item"]);
-    expected
-}
-fn snapshot_type_controls(snapshot: &Value) {
-    let expected = typed_snapshot(snapshot);
-    assert_eq!(
-        expected["bindings"][0]["parameters"]["members"][0]["value"]["value"]["value"]["value"],
-        json!(0.0)
-    );
-    assert_eq!(
-        expected["usages"][0]["selection"]["parameters"]["members"][0]["value"]["value"],
-        json!({"kind":"integer","value":1})
-    );
-    assert_eq!(
-        typed_snapshot(&expected),
-        expected,
-        "typed representation is stable"
-    );
-    assert_eq!(expected["origins"], snapshot["origins"]);
-    assert_eq!(expected["archived"], snapshot["archived"]);
-    assert_eq!(expected["completion"], snapshot["completion"]);
-    let mut changed = snapshot["bindings"].clone();
-    changed[0]["parameters"]["members"][0]["value"]["value"]["value"]["value"] = json!(1);
-    assert_ne!(
-        typed_snapshot_record::<Vec<GeneratedSkillInputBindingDraft>>(&changed),
-        expected["bindings"]
-    );
-    let mut changed = snapshot["usages"].clone();
-    changed[0]["selection"]["parameters"]["members"][0]["value"]["value"]["value"] = json!(1.5);
-    assert!(
-        std::panic::catch_unwind(|| typed_snapshot_record::<Vec<PresetUsageBindingDraft>>(
-            &changed
-        ))
-        .is_err(),
-        "fractional integer is rejected by its declared type"
-    );
-    let mut changed = snapshot["bindings"].clone();
-    changed[0]["unexpected"] = json!(true);
-    assert!(
-        std::panic::catch_unwind(
-            || typed_snapshot_record::<Vec<GeneratedSkillInputBindingDraft>>(&changed)
-        )
-        .is_err(),
-        "unknown record fields remain invalid"
-    );
-    let mut changed = snapshot["equipment"].clone();
-    changed["id"]["lineage"] = json!(BuildLineage::from_bytes([94; 16]));
-    assert!(
-        std::panic::catch_unwind(|| typed_snapshot_record::<EquipmentDraft>(&changed)).is_err(),
-        "foreign lineage is not normalized away"
-    );
-}
 fn actual_bindings(output: &family::Output, expected: &Value) {
     let origins = output.sidecar["origins"].as_array().unwrap();
     let origin = |n| {
@@ -389,7 +377,7 @@ fn actual_bindings(output: &family::Output, expected: &Value) {
             .unwrap()
             .clone()
     };
-    let snapshot = typed_snapshot(&expected["original05"]["observations"]);
+    let snapshot = &expected["original05"]["observations"];
     let draft = &output.draft["draft"];
     let preset = draft["skill_presets"]["members"]
         .as_array()
@@ -434,6 +422,26 @@ fn actual_bindings(output: &family::Output, expected: &Value) {
         parameters[0]["value"],
         json!({"kind":"known","value":{"kind":"boolean","value":false}})
     );
+    let participation: Vec<_> = usages
+        .iter()
+        .filter(|usage| usage["selection"]["policy"]["value"]["key"] == "def.000000000000332b")
+        .collect();
+    assert_eq!(participation.len(), 1);
+    let parameters = participation[0]["selection"]["parameters"]["members"]
+        .as_array()
+        .unwrap();
+    assert_eq!(parameters.len(), 2);
+    for slot in ["def.000000000000332c", "def.000000000000332d"] {
+        let matching: Vec<_> = parameters
+            .iter()
+            .filter(|parameter| parameter["slot"]["value"]["slot"]["key"] == slot)
+            .collect();
+        assert_eq!(matching.len(), 1);
+        assert_eq!(
+            matching[0]["value"],
+            json!({"kind":"known","value":{"kind":"boolean","value":true}})
+        );
+    }
     for (collection, key) in [("equipment", "equipment"), ("items", "item")] {
         let matches: Vec<_> = draft[collection]["members"]
             .as_array()
@@ -542,6 +550,6 @@ pub fn run() {
     assert_eq!(prior_files, release::inventory(&prior_path));
     family::write(
         out.join("validation.json"),
-        &json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":cases,"intrinsic_destinations":13,"reporting_deferred_destinations_removed":2,"retired_issues":0,"complete_original_builds":0,"queries_unchanged":110,"rebuild_byte_identical":true,"actual_persisted_bindings_and_origins_preserved":true,"private_actual_receipts_observed":false,"calculation":"not_run"}),
+        &json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":cases,"intrinsic_destinations":15,"enabled_nonrestricting_destinations":2,"retained_enabled_participation_destinations":2,"reporting_deferred_destinations_removed":2,"retired_issues":0,"complete_original_builds":0,"queries_unchanged":110,"rebuild_byte_identical":true,"actual_persisted_bindings_and_origins_preserved":true,"private_actual_receipts_observed":false,"calculation":"not_run"}),
     );
 }

@@ -1698,3 +1698,6 @@ fn generated_singleton_selector_neutrality_survives_actual_group_replacement() {
 
 #[path = "support/constructed_source_selector.rs"]
 mod constructed_source_selector;
+
+#[path = "support/generated_enabled_source.rs"]
+mod generated_enabled_source;

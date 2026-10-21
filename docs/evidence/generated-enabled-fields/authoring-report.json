@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "scope": "reviewed two-field data authoring and exact typed snapshot representation",
+  "authorer": {
+    "rust_sha256": "0846d553df1e785920a595c4353eaa6f11e9591bb2a9e171e43366799be34f55",
+    "cargo_sha256": "65dc4f90d7fc04d1d290da0d81786bbedec9520d3ed4beb3f156b52482a2add5"
+  },
+  "predecessor_input": "6f58eba00e71984264123419f51114f375bdce23440eaa4ff3ffa4999e2beb11",
+  "enabled_proof": {
+    "path": "runs/generated-enabled-source-candidate-20261021/enabled-proof.json",
+    "sha256": "ae570f0fb93df01f1abd018e8d4116cb9b11ceb1ab9a7418a09af6e355d0b68d",
+    "bytes": 6306,
+    "encoding": "raw"
+  },
+  "source_execution_by_authorer": false,
+  "validation_by_authorer": "data inverses and file pins only; no Cargo tests, CLI publication or source execution",
+  "source_proof_status": "tests-pending",
+  "producer_pins": [
+    {
+      "before": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_inputs/dispositions.rs",
+        "sha256": "8d3c96a72793ec4de4500e5811e3785e8eb9eeea8ad6172d3900f3d13afa204b",
+        "bytes": 64138,
+        "encoding": "utf8-lf"
+      },
+      "after": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_inputs/dispositions.rs",
+        "sha256": "d6c1de786efeb5054a9d7c1e3b98b18bb67c76082d9f8553c8fd5d92cb52a532",
+        "bytes": 68898,
+        "encoding": "utf8-lf"
+      }
+    },
+    {
+      "before": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_inputs.rs",
+        "sha256": "1d78e4599bb55d94c77210bb6e9989419f6da22c6c2ce77f74e1ddf7419f5763",
+        "bytes": 16954,
+        "encoding": "utf8-lf"
+      },
+      "after": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_inputs.rs",
+        "sha256": "1d78e4599bb55d94c77210bb6e9989419f6da22c6c2ce77f74e1ddf7419f5763",
+        "bytes": 16954,
+        "encoding": "utf8-lf"
+      }
+    },
+    {
+      "before": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/usage_inputs/inventory.rs",
+        "sha256": "cf3975f2d9088df92d86e87bb1446df2746834d3b817406a3caeb5b5f5aa45fd",
+        "bytes": 53185,
+        "encoding": "utf8-lf"
+      },
+      "after": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/usage_inputs/inventory.rs",
+        "sha256": "1cbf661f798019bf336d945d3230d6c98c592162967f484c291155f23b202273",
+        "bytes": 53351,
+        "encoding": "utf8-lf"
+      }
+    },
+    {
+      "before": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/skill_input_disposition.rs",
+        "sha256": "3c05ecadf56d8f203a4a8edadc534fa526f13c561476f6b04a33596da07fff17",
+        "bytes": 26267,
+        "encoding": "utf8-lf"
+      },
+      "after": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/skill_input_disposition.rs",
+        "sha256": "ab4831f2e15de533cc7201a0a7f16b3ddbd738ccf1ceaf0f61cc26fd73f64815",
+        "bytes": 26966,
+        "encoding": "utf8-lf"
+      }
+    },
+    {
+      "before": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_sources.rs",
+        "sha256": "2412cfa342033b8007334b1b0eef21f4aa82bf3f754d7d38ad8f217d7ef5a6a9",
+        "bytes": 36864,
+        "encoding": "utf8-lf"
+      },
+      "after": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_sources.rs",
+        "sha256": "2412cfa342033b8007334b1b0eef21f4aa82bf3f754d7d38ad8f217d7ef5a6a9",
+        "bytes": 36864,
+        "encoding": "utf8-lf"
+      }
+    },
+    {
+      "before": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/usage_inputs/occurrences.rs",
+        "sha256": "8168fdc66990a6b3b49584738c5f5ae49be643e3389c0aad5fc3d9b924dd9435",
+        "bytes": 22027,
+        "encoding": "utf8-lf"
+      },
+      "after": {
+        "path": "crates/poe-optimizer-import/src/owned_normalize/usage_inputs/occurrences.rs",
+        "sha256": "8168fdc66990a6b3b49584738c5f5ae49be643e3389c0aad5fc3d9b924dd9435",
+        "bytes": 22027,
+        "encoding": "utf8-lf"
+      }
+    }
+  ],
+  "integer_to_declared_f64_representation": [
+    {
+      "pointer": "/original05/observations/bindings/0/parameters/members/0/value/value/value/value",
+      "before": 0,
+      "after": 0.0
+    },
+    {
+      "pointer": "/original05/observations/item/parameters/members/1/value/value/value/value",
+      "before": 20,
+      "after": 20.0
+    },
+    {
+      "pointer": "/original05/observations/item/quality/value/amount/value/value",
+      "before": 20,
+      "after": 20.0
+    },
+    {
+      "pointer": "/original05/observations/item/modifiers/members/1/rolls/members/0/value/value/value/value",
+      "before": 128,
+      "after": 128.0
+    },
+    {
+      "pointer": "/original05/observations/item/modifiers/members/1/rolls/members/22/value/value/value/value",
+      "before": 1,
+      "after": 1.0
+    }
+  ],
+  "destination_changes": [
+    {
+      "pointer": "/rows/0/after/fields/0/destinations/0",
+      "before": {
+        "kind": "deferred",
+        "reason": "group-field-consumers-not-yet-reviewed"
+      },
+      "after": {
+        "kind": "input_disposition"
+      }
+    },
+    {
+      "pointer": "/rows/0/after/fields/11/destinations/0",
+      "before": {
+        "kind": "deferred",
+        "reason": "source-field-consumers-not-yet-reviewed"
+      },
+      "after": {
+        "kind": "input_disposition"
+      }
+    }
+  ],
+  "live_deferred": {
+    "before": 6,
+    "after": 4
+  },
+  "alternative_deferred": {
+    "before": 19,
+    "after": 19
+  },
+  "selectors": {
+    "before": 13,
+    "after": 15
+  },
+  "reporting_transition_preserved": true,
+  "whole_byte_inverses": true,
+  "files": [
+    {
+      "path": "data/owned/poe2/3887ae68/generated-firebolt-dispositions/review.json",
+      "before": {
+        "path": "originals/review.json",
+        "sha256": "e19c90d5fb3a3cac549e6a19095711b8d3643e2f6d17e4cec92a3309feb4ec94",
+        "bytes": 106059,
+        "encoding": "raw"
+      },
+      "after": {
+        "path": "files/review.json",
+        "sha256": "fe21b428e73a8b285d7d08b7c2ad51dc46739e1e48726126de4308dbe9ef5f38",
+        "bytes": 112799,
+        "encoding": "raw"
+      }
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/generated-firebolt-dispositions/bindings.json",
+      "before": {
+        "path": "originals/bindings.json",
+        "sha256": "4206a1fd027da710478a789acfd00277f54a21d5f2465d2f1ffdc84d23c67924",
+        "bytes": 66889,
+        "encoding": "raw"
+      },
+      "after": {
+        "path": "files/bindings.json",
+        "sha256": "bfbbd8e70a5d4a777700322624323a6f0809923a53b55671d118ef0862a9ecfe",
+        "bytes": 66915,
+        "encoding": "raw"
+      }
+    }
+  ],
+  "claims": {
+    "retired_issues": 0,
+    "complete_builds": 0,
+    "native_rules_changed": false,
+    "private_actual_receipts_observed": false
+  }
+}

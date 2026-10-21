@@ -1,0 +1,14 @@
+   Compiling poe-optimizer-import v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-import)
+    Finished `test` profile [optimized] target(s) in 1m 23s
+     Running unittests src\lib.rs (target\debug\deps\poe_optimizer_import-3756f42caef128b3.exe)
+
+running 6 tests
+test owned_normalize::generated_skill_inputs::dispositions::tests::ambiguous_selector_proofs_never_have_precedence_even_when_equal ... ok
+test owned_normalize::generated_skill_inputs::dispositions::tests::generated_enabled_receipts_require_exact_raw_and_decoded_true_per_field ... ok
+test owned_normalize::generated_skill_inputs::dispositions::tests::generated_intrinsic_receipts_only_add_exact_nonrestricting_gates ... ok
+test owned_normalize::generated_skill_inputs::dispositions::tests::generated_provider_receipts_reject_stale_records_memberships_and_origins ... ok
+test owned_normalize::generated_skill_inputs::dispositions::tests::live_generated_account_emits_only_after_existing_checks_and_preserves_absent_sink ... ok
+test owned_normalize::generated_skill_inputs::dispositions::tests::materialized_receipts_require_exact_live_values_targets_and_single_binding ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 238 filtered out; finished in 0.00s
+

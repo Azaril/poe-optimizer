@@ -132,6 +132,39 @@ Only subsequent adapter tests and the whole-preset gate can retire an input
 obligation. Neither source-component tests nor the format migration alone makes
 a complete native build.
 
+### Generated reverse lookup follow-up, October 21
+
+The full pinned catalog has one primary Gem candidate for Firebolt and for each
+Djinn summon. Firebolt has one constructed effect plus an additional stat set;
+each Djinn has two actual effects, summon and Command. These observations are
+not a runtime dispatch certificate: a structurally valid role artifact may omit
+another candidate even when its surviving row retains the catalog commitment.
+The existing alias/subset controls must remain.
+
+The next construction checkpoint should preserve the compiler-derived reverse
+primary census in this same Import-only artifact. An observed route needs every
+candidate's existing Gem/catalog-row identity, explicit empty candidates for
+known Skills with no primary Gem, and an unavailable state for missing
+observations. Multiple candidates must stay ambiguous; sorted serialization
+does not select a winner from PoB's unordered iteration. Validate exact candidate
+joins, bounds and namespaces at loading, and reproduce the entire census from
+the authenticated catalog during publication. Rebuild the current artifacts
+and dependent commitments in place, without compatibility readers.
+
+Requiring equality between role IDs and all mapped Gem targets is insufficient:
+a mapping can also omit an alias, and a combined mapping can legitimately retain
+unrelated older catalog entries. A whole-catalog commitment is not a substitute
+for the facts needed by a consumer. Keep source observations out of the native
+model and do not copy upstream lookup behavior into the evaluator.
+
+Only then may the existing generated-field adapters consume unique/absent/
+ambiguous routing facts alongside their exact live provider, source, slot and
+level checks. Count, secondary-switch and reference-selection proofs remain
+independent. This follow-up must preserve both Djinn effects and retain
+unresolved cases, rather than generalizing Firebolt's singleton behavior.
+The bounded audit is `runs/generated-source-reverse-routes-audit-20261021/README.md`;
+the implementation plan records its priority and execution status.
+
 ## Implementation and rebuild plan
 
 The migration stays in Import. Preserve the native recipe, definition identities,

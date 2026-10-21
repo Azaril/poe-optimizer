@@ -28,6 +28,18 @@ pub(super) fn exact_global_gate_is_neutral(
         && attribute.decoded().ok() == Some("true")
 }
 
+/// An exact saved enabled=true request adds no restriction to its own source
+/// or containing group. It proves neither source admission nor activation,
+/// topology, participation or coverage. Generated input accounting may retain
+/// this fact only in its existing checked live source/provider receipt; typed
+/// participation inputs remain independently required by their declared owner.
+/// Missing, false, nil, escaped and unrecognized tokens gain no such receipt.
+pub(super) fn exact_enabled_gate_is_neutral(attribute: &SourceAttributeEvidence<'_>) -> bool {
+    attribute.origin().name == "enabled"
+        && attribute.raw() == "true"
+        && attribute.decoded().ok() == Some("true")
+}
+
 /// Shared bounded source-role lookup for private field receipts. Role package
 /// construction sorts this immutable slice and rejects duplicate Gem identities.
 /// This preserves the secondary receipt's existing charges exactly, including

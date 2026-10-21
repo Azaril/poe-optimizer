@@ -62,6 +62,14 @@ The [generated field bindings](../data/owned/poe2/3887ae68/generated-firebolt-di
 apply that existing contract through data, retaining unresolved consumers and
 requiring fresh source matching after an equipment or preset change.
 
+Generated group and Gem `enabled=true` accounting is likewise a bounded input
+law: the literal true gate adds no restriction. It must retain the separate typed
+participation destination; it does not establish positive activation or prove
+that support counts, GroupProperty delivery or other mechanical consumers are
+absent. Those remain obligations of their respective mechanics. False, missing,
+`nil`, escaped and unknown spellings are outside this neutral-field proof.
+The current implementation plan records the validation and publication status.
+
 The October 20 [coverage assessment](../runs/coverage-audit-20261020/assessment.md)
 audits the last validated release separately from current migration work.
 Imported identities, complete structural inventories, mechanical implementation

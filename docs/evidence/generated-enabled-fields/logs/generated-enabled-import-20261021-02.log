@@ -1,0 +1,21 @@
+   Compiling poe-optimizer-import v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-import)
+    Finished `test` profile [optimized] target(s) in 2m 11s
+     Running tests\owned_normalize.rs (target\debug\deps\owned_normalize-3c84adf8c5ec44ea.exe)
+
+running 13 tests
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_accounting_preserves_absence_empty_nil_and_unproved_structure ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_accounting_requires_actual_known_raw_and_count_receipts ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_accounting_retires_only_selected_pairs_and_preserves_real_pending_owner ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_accounting_unknown_semantics_preserve_successful_raw_and_count_transport ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_enabled_inventory_requires_its_declared_typed_consumers ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_enabled_nontrue_never_borrows_the_other_lane_or_provider ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_enabled_true_accounts_both_fields_with_exact_live_participation ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_escaped_enabled_fails_source_admission_without_inventory_retirement ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_inventory_accounts_literal_primary_true_only_with_live_provider_proof ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_inventory_does_not_promote_lexical_switches_or_reference_selection ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_inventory_uses_actual_provider_and_value_proofs_without_closing_archived_presets ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_item_inventory_consumes_all_thirteen_intrinsic_destinations ... ok
+test equipment_membership_tests::item_modifier_membership_tests::generated_skill_input_tests::occurrence_usage_tests::generated_field_accounting::generated_reporting_inventory_requires_exact_typed_reporting_receipt ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 390 filtered out; finished in 0.20s
+

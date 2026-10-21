@@ -625,9 +625,9 @@ fn intrinsic_attributes(
     row: &SourceEvidenceRow<'_>,
     group: &SourceEvidenceRow<'_>,
 ) -> (BTreeSet<String>, BTreeSet<String>) {
-    // The literal primary-true gate adds no restriction; it does not prove
-    // participation or effects. Other enabled/global/count fields and group
-    // Action selectors have only lexical or deferred checks here.
+    // Literal enabled/primary-true gates add no restriction; they do not prove
+    // participation or effects. Other global/count fields and group Action
+    // selectors have only lexical or deferred checks here.
     let occurrence = row
         .attributes()
         .iter()
@@ -636,15 +636,20 @@ fn intrinsic_attributes(
                 attribute.origin().name.as_str(),
                 "enabled" | "enableGlobal1" | "enableGlobal2" | "count"
             ) || skill_input_disposition::exact_global_gate_is_neutral(attribute, "enableGlobal1")
+                || skill_input_disposition::exact_enabled_gate_is_neutral(attribute)
         })
         .map(|attribute| attribute.origin().name.clone())
         .collect();
     let group = group
         .attributes()
         .iter()
-        .map(|a| a.origin().name.as_str())
-        .filter(|name| matches!(*name, "source" | "slot" | "label"))
-        .map(str::to_owned)
+        .filter(|attribute| {
+            matches!(
+                attribute.origin().name.as_str(),
+                "source" | "slot" | "label"
+            ) || skill_input_disposition::exact_enabled_gate_is_neutral(attribute)
+        })
+        .map(|attribute| attribute.origin().name.clone())
         .collect();
     (occurrence, group)
 }
@@ -955,7 +960,7 @@ mod tests {
         item: bool,
         test: impl FnOnce(&mut Builder<'_, '_>, DraftSessionInput, ProviderSnapshot, OwnedOriginTarget),
     ) {
-        let xml = r#"<PathOfBuilding2><Tree><Spec/></Tree><Items><Item/><ItemSet><Slot/></ItemSet></Items><Skills><SkillSet><Skill><Gem enableGlobal1="true"/></Skill></SkillSet><SkillSet><Skill><Gem/></Skill></SkillSet></Skills></PathOfBuilding2>"#;
+        let xml = r#"<PathOfBuilding2><Tree><Spec/></Tree><Items><Item/><ItemSet><Slot/></ItemSet></Items><Skills><SkillSet><Skill enabled="true"><Gem enabled="true" enableGlobal1="true"/></Skill></SkillSet><SkillSet><Skill><Gem/></Skill></SkillSet></Skills></PathOfBuilding2>"#;
         gem_inventory::with_usage_inventory_destination(xml, |b, _, preset, _, _| {
             let ns = b.roles.input().namespace.clone();
             let mut draft = blank(b);
@@ -1191,7 +1196,7 @@ mod tests {
     }
 
     #[test]
-    fn generated_intrinsic_receipts_only_add_the_exact_neutral_primary_gate() {
+    fn generated_intrinsic_receipts_only_add_exact_nonrestricting_gates() {
         let xml = r#"<PathOfBuilding2><Skills><SkillSet><Skill source="Tree:1" label="" enabled="false" groupCount="3" includeInFullDPS="true" mainActiveSkill="1" mainActiveSkillCalcs="1"><Gem gemId="g" variantId="v" skillId="s" nameSpec="n" level="1" quality="2" corrupted="nil" corruptLevel="nil" count="1" enabled="true" enableGlobal1="true" enableGlobal2="false"/></Skill></SkillSet><SkillSet><Skill><Gem/></Skill></SkillSet></Skills></PathOfBuilding2>"#;
         gem_inventory::with_usage_inventory_destination(xml, |b, _, _, _, source| {
             let row = &b.evidence.rows()[source.ordinal() as usize];
@@ -1208,6 +1213,7 @@ mod tests {
                     "quality",
                     "corrupted",
                     "corruptLevel",
+                    "enabled",
                     "enableGlobal1"
                 ]
                 .into_iter()
@@ -1219,6 +1225,52 @@ mod tests {
                 ["source", "label"].into_iter().map(str::to_owned).collect()
             );
         });
+    }
+
+    #[test]
+    fn generated_enabled_receipts_require_exact_raw_and_decoded_true_per_field() {
+        for token in [
+            None,
+            Some("true"),
+            Some("false"),
+            Some("nil"),
+            Some(""),
+            Some(" true"),
+            Some("true "),
+            Some("TRUE"),
+            Some("1"),
+            Some("unknown"),
+            Some("tr&#117;e"),
+        ] {
+            for group_changed in [false, true] {
+                let changed =
+                    token.map_or_else(String::new, |token| format!(r#" enabled="{token}""#));
+                let (group, gem) = if group_changed {
+                    (changed.as_str(), r#" enabled="true""#)
+                } else {
+                    (r#" enabled="true""#, changed.as_str())
+                };
+                let xml = format!(
+                    r#"<PathOfBuilding2><Skills><SkillSet><Skill{group}><Gem{gem}/></Skill></SkillSet><SkillSet><Skill><Gem/></Skill></SkillSet></Skills></PathOfBuilding2>"#
+                );
+                gem_inventory::with_usage_inventory_destination(&xml, |b, _, _, _, source| {
+                    let row = &b.evidence.rows()[source.ordinal() as usize];
+                    let parent =
+                        &b.evidence.rows()[row.occurrence().parent().unwrap().ordinal() as usize];
+                    let (occurrence, group) = intrinsic_attributes(row, parent);
+                    assert_eq!(
+                        occurrence.contains("enabled"),
+                        group_changed || token == Some("true"),
+                        "Gem {token:?}, group_changed={group_changed}"
+                    );
+                    assert_eq!(
+                        group.contains("enabled"),
+                        !group_changed || token == Some("true"),
+                        "group {token:?}, group_changed={group_changed}"
+                    );
+                });
+            }
+        }
     }
 
     #[test]
@@ -1346,7 +1398,7 @@ mod tests {
                         parameters: complete(vec![ParameterDraft {
                             slot: DeclaredSlot {
                                 declaration: SlotOwnerDefId::UsagePolicy(policy),
-                                slot: ParameterSlotDefId::new(ns, key("count-value")),
+                                slot: ParameterSlotDefId::new(ns.clone(), key("count-value")),
                             }
                             .into(),
                             value: ParameterValue::Integer(BoundedInteger::new(1).unwrap()).into(),
@@ -1354,6 +1406,36 @@ mod tests {
                     },
                 },
             };
+            let participation = UsagePolicyDefId::new(ns.clone(), key("participation"));
+            let participation_usage = usage_inputs::MaterializedUsage {
+                source,
+                group,
+                preset: *skill_preset,
+                counts: false,
+                binding: PresetUsageBindingDraft {
+                    applicability: PresetApplicability::WhenExactSourceSelected,
+                    selection: UsagePolicyDraft {
+                        target: usage.binding.selection.target.clone(),
+                        policy: participation.clone().into(),
+                        parameters: complete(
+                            ["group-enabled", "occurrence-enabled"]
+                                .into_iter()
+                                .map(|name| ParameterDraft {
+                                    slot: DeclaredSlot {
+                                        declaration: SlotOwnerDefId::UsagePolicy(
+                                            participation.clone(),
+                                        ),
+                                        slot: ParameterSlotDefId::new(ns.clone(), key(name)),
+                                    }
+                                    .into(),
+                                    value: ParameterValue::Boolean(true).into(),
+                                })
+                                .collect(),
+                        ),
+                    },
+                },
+            };
+            let usages = [usage, participation_usage];
             let prior_usage = draft.skill_presets.members[0]
                 .usage_preferences
                 .take()
@@ -1362,7 +1444,7 @@ mod tests {
                 schema_version: 1,
                 usage: DraftList {
                     completion: prior_usage.completion,
-                    members: vec![usage.binding.clone()],
+                    members: usages.iter().map(|row| row.binding.clone()).collect(),
                 },
                 generated_inputs: complete(vec![binding.clone()]),
             });
@@ -1405,12 +1487,15 @@ mod tests {
                 None,
                 None,
                 &inputs,
-                std::slice::from_ref(&usage),
+                &usages,
                 Some(&mut emitted),
             )
             .unwrap();
             assert_eq!(emitted.len(), 1);
             assert!(emitted[0].occurrence_attributes().contains("enableGlobal1"));
+            assert!(emitted[0].occurrence_attributes().contains("enabled"));
+            assert!(emitted[0].group_attributes().contains("enabled"));
+            assert_eq!(emitted[0].usage_bindings().len(), 2);
             assert!(!emitted[0].occurrence_attributes().contains("enableGlobal2"));
             assert!(
                 emitted[0]
@@ -1428,7 +1513,7 @@ mod tests {
                 None,
                 None,
                 &inputs,
-                std::slice::from_ref(&usage),
+                &usages,
                 None,
             )
             .unwrap();
@@ -1444,12 +1529,12 @@ mod tests {
                 None,
                 None,
                 &inputs,
-                std::slice::from_ref(&usage),
+                &usages,
                 None,
             )
             .unwrap();
             assert_eq!(b.work - before_work, absent_work);
-            for mutation in 0..5 {
+            for mutation in 0..8 {
                 let mut changed = draft.clone();
                 let intent = changed.skill_presets.members[0].intent.as_mut().unwrap();
                 match mutation {
@@ -1468,7 +1553,21 @@ mod tests {
                             ParameterValue::Integer(BoundedInteger::new(3).unwrap()).into();
                         intent.generated_inputs.members.push(duplicate);
                     }
-                    _ => intent.usage.members.push(intent.usage.members[0].clone()),
+                    4 => intent.usage.members.push(intent.usage.members[0].clone()),
+                    5 | 6 => {
+                        intent.usage.members[1].selection.parameters.members[mutation - 5].value =
+                            ParameterValue::Boolean(false).into();
+                    }
+                    _ => {
+                        let mut changed_target = target.clone();
+                        changed_target.provider.root =
+                            ProviderRoot::Allocation(AllocationId::from_instance_id(
+                                InstanceId::from_parts(draft.allocator.lineage(), 999).unwrap(),
+                            ));
+                        intent.usage.members[1].selection.target =
+                            UsageTarget::Skill(SkillTarget::Generated(Box::new(changed_target)))
+                                .into();
+                    }
                 }
                 b.origins = prior_origins.clone();
                 let mut rejected = vec![];
@@ -1479,7 +1578,7 @@ mod tests {
                     None,
                     None,
                     &inputs,
-                    std::slice::from_ref(&usage),
+                    &usages,
                     Some(&mut rejected),
                 )
                 .unwrap();

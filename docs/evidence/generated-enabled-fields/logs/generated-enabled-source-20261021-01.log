@@ -1,0 +1,38 @@
+   Compiling poe-optimizer-import v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-import)
+   Compiling poe-optimizer-pob v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-pob)
+warning: linker stdout: LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: `poe-optimizer-pob` (test "owned_secondary_effect_switch_source") generated 1 warning
+    Finished `test` profile [optimized] target(s) in 4m 37s
+     Running tests\owned_secondary_effect_switch_source.rs (target\debug\deps\owned_secondary_effect_switch_source-88a4cca08ccfe40f.exe)
+
+running 24 tests
+test a_real_support_child_has_its_own_source_count_and_secondary_gate ... ok
+test a_real_unresolved_declaration_or_synthetic_gap_cannot_be_certified_from_length_one ... ok
+test actual_saved_generated_singleton_uses_catalog_routing_in_independent_lifecycles ... ok
+test constructed_source_selector::additional_effects_supports_and_other_admission_gates_remain_distinct ... ok
+test constructed_source_selector::late_sparse_reordered_or_parallel_list_mutations_cannot_borrow_constructed_primary_proof ... ok
+test constructed_source_selector::missing_command_is_retained_while_actual_constructed_source_selection_is_exact ... ok
+test constructed_source_selector::source_decoder_defaults_do_not_authorize_absent_zero_or_other_selector_tokens ... ok
+test direct_vaal_support_count_probe_is_not_an_actual_active_effect_consumer ... ok
+test exact_true_primary_is_non_restricting_but_other_admission_gates_and_counts_remain_distinct ... ok
+test exact_true_secondary_is_non_restricting_without_enabling_other_gates_or_changing_count ... ok
+test generated_enabled_source::enabled_reader_census_retains_each_mechanical_gate_and_different_missing_defaults ... ok
+test generated_enabled_source::enabled_true_does_not_claim_group_property_thorns_or_energy_blade_absence ... ok
+test generated_enabled_source::enabled_true_preserves_assignment_counts_without_promoting_generated_skill_slots ... ok
+test generated_enabled_source::enabled_true_preserves_real_support_dispatch_socket_delivery_and_rgb_consumers ... ok
+test generated_enabled_source::literal_true_keeps_generated_identity_and_does_not_override_other_admission_or_export_gates ... ok
+test generated_routing_counterexamples_preserve_exact_source_and_cardinality_boundaries ... ok
+test generated_singleton_secondary_and_independent_selectors_survive_zero_one_zero_filters ... ok
+test generated_singleton_selector_neutrality_survives_actual_group_replacement ... ok
+test late_resolved_sparse_and_constructor_generated_additions_reject_singleton_authority ... ok
+test packet_authenticates_real_singletons_and_retains_missing_reference_counterexample ... ok
+test primary_gate_and_source_loader_remain_separate_from_secondary_non_consumption ... ok
+test singleton_secondary_is_unread_with_multiple_stat_sets_vaal_and_global_metadata ... ok
+test singleton_support_usage_fields_cannot_donate_to_a_distinct_admitted_receiver ... ok
+test two_effects_and_actual_display_reordering_expose_secondary_reads_and_exact_effect_identity ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+

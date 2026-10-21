@@ -1,0 +1,14 @@
+     Locking 25 packages to latest Rust 1.98.1 compatible versions
+error: failed to download `equivalent v1.0.2`
+
+Caused by:
+  unable to get packages from source
+
+Caused by:
+  failed to unpack package `equivalent v1.0.2`
+
+Caused by:
+  failed to create directory `C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\equivalent-1.0.2`
+
+Caused by:
+  Access is denied. (os error 5)

@@ -291,7 +291,6 @@ fn generated_inventory_accounts_literal_primary_true_only_with_live_provider_pro
 #[test]
 fn generated_inventory_does_not_promote_lexical_switches_or_reference_selection() {
     for field in [
-        "enabled",
         "enableGlobal2",
         "mainActiveSkill",
         "mainActiveSkillCalcs",
@@ -741,36 +740,7 @@ fn generated_item_inventory_consumes_all_thirteen_intrinsic_destinations() {
     assert_eq!(after.allocator_after(), repeat.allocator_after());
 }
 
-// Append to owned_generated_field_accounting.rs. These are synthetic exact
-// providers with the maintained reporting grammar, not Original05 identities.
-fn generated_reporting_inventory_fixture() -> (Fixture, OccurrenceUsagePolicy) {
-    let mut f = inventory_fixture();
-    let mut reporting: serde_json::Value = serde_json::from_slice(include_bytes!(
-        "../../../../data/owned/poe2/3887ae68/reporting-inclusion/usage.json"
-    ))
-    .unwrap();
-    reporting["parameters"][0]["source"]["value"]["codec"]["namespace"] =
-        serde_json::json!(f.artifacts.schema.input().namespace);
-    let source: UsageValueSource =
-        serde_json::from_value(reporting["parameters"][0]["source"].clone()).unwrap();
-    for row in new_rows(&mut f.policy) {
-        row.policies[0].parameters[0].source = source.clone();
-    }
-    let reporting = new_rows(&mut f.policy)[0].policies[0].clone();
-    let slot = reporting.parameters[0].slot.clone();
-    let mut schema = f.artifacts.schema.input().clone();
-    let entry = schema
-        .slots
-        .iter_mut()
-        .find_map(|entry| match entry {
-            SlotDescriptor::Parameter(entry) if entry.id == slot => Some(entry),
-            _ => None,
-        })
-        .unwrap();
-    let SchemaState::Known(value) = &mut entry.schema else {
-        panic!()
-    };
-    value.value = ValueSchema::Boolean;
+fn rebind_generated_field_schema(f: &mut Fixture, schema: SchemaPackageInput) {
     rebind_quality_schema(&mut f.artifacts, &mut f.policy, schema);
     let Some(GeneratedSkillInputPolicy::PobSavedGeneratedInputsV1 {
         definitions, roles, ..
@@ -806,6 +776,39 @@ fn generated_reporting_inventory_fixture() -> (Fixture, OccurrenceUsagePolicy) {
     *definitions = f.artifacts.schema.identity().clone();
     *item_lines = *f.items.identity();
     *item_source = *f.item_source.identity();
+}
+
+// Synthetic exact providers with the maintained reporting grammar, not
+// Original05 identities.
+fn generated_reporting_inventory_fixture() -> (Fixture, OccurrenceUsagePolicy) {
+    let mut f = inventory_fixture();
+    let mut reporting: serde_json::Value = serde_json::from_slice(include_bytes!(
+        "../../../../data/owned/poe2/3887ae68/reporting-inclusion/usage.json"
+    ))
+    .unwrap();
+    reporting["parameters"][0]["source"]["value"]["codec"]["namespace"] =
+        serde_json::json!(f.artifacts.schema.input().namespace);
+    let source: UsageValueSource =
+        serde_json::from_value(reporting["parameters"][0]["source"].clone()).unwrap();
+    for row in new_rows(&mut f.policy) {
+        row.policies[0].parameters[0].source = source.clone();
+    }
+    let reporting = new_rows(&mut f.policy)[0].policies[0].clone();
+    let slot = reporting.parameters[0].slot.clone();
+    let mut schema = f.artifacts.schema.input().clone();
+    let entry = schema
+        .slots
+        .iter_mut()
+        .find_map(|entry| match entry {
+            SlotDescriptor::Parameter(entry) if entry.id == slot => Some(entry),
+            _ => None,
+        })
+        .unwrap();
+    let SchemaState::Known(value) = &mut entry.schema else {
+        panic!()
+    };
+    value.value = ValueSchema::Boolean;
+    rebind_generated_field_schema(&mut f, schema);
     let rows = new_rows(&mut f.policy).clone();
     let UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. } =
         f.policy.usage_inputs.as_mut().unwrap();
@@ -1055,4 +1058,451 @@ fn generated_reporting_inventory_requires_exact_typed_reporting_receipt() {
     assert_eq!(after.draft().input(), repeat.draft().input());
     assert_eq!(after.sidecar().origins, repeat.sidecar().origins);
     assert_eq!(after.allocator_after(), repeat.allocator_after());
+}
+
+fn generated_enabled_inventory_fixture() -> (Fixture, OccurrenceUsagePolicy) {
+    let mut f = inventory_fixture();
+    let mut participation: OccurrenceUsagePolicy = serde_json::from_slice(include_bytes!(
+        "../../../../data/owned/poe2/3887ae68/generated-participation/usage.json"
+    ))
+    .unwrap();
+    participation.policy = f
+        .artifacts
+        .registry
+        .allocate_definition::<UsagePolicyDefinition>()
+        .unwrap();
+    let mut schema = f.artifacts.schema.input().clone();
+    let mut declarations = ports();
+    assert_eq!(participation.parameters.len(), 2);
+    for parameter in &mut participation.parameters {
+        parameter.slot = f
+            .artifacts
+            .registry
+            .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::UsagePolicy(
+                participation.policy.clone(),
+            ))
+            .unwrap();
+        let value = match &mut parameter.source {
+            UsageValueSource::ContainingGroup { value }
+            | UsageValueSource::Occurrence { value } => value,
+            _ => panic!("exact maintained participation lanes"),
+        };
+        value.codec.namespace = schema.namespace.clone();
+        declarations.parameters.members.push(parameter.slot.clone());
+        schema.slots.push(SlotDescriptor::Parameter(known(
+            parameter.slot.clone(),
+            ParameterSlotSchema {
+                value: ValueSchema::Boolean,
+                presence: SlotPresence::RequiredOnce,
+                sites: vec![ParameterSite::UsagePolicyParameter],
+                skill_input: None,
+            },
+        )));
+    }
+    schema
+        .definitions
+        .push(DefinitionDescriptor::UsagePolicy(known(
+            participation.policy.clone(),
+            UsagePolicySchema {
+                scenario_skill_applicability: None,
+                targets: vec![UsageTargetKind::Skill],
+                declarations,
+            },
+        )));
+    for row in new_rows(&mut f.policy) {
+        row.policies.push(participation.clone());
+    }
+    rebind_generated_field_schema(&mut f, schema);
+    let rows = new_rows(&mut f.policy).clone();
+    let UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. } =
+        f.policy.usage_inputs.as_mut().unwrap();
+    let mut inventory = inventory.take().unwrap();
+    for row in &mut inventory.rows {
+        for parameter in &participation.parameters {
+            let field = match parameter.source {
+                UsageValueSource::ContainingGroup { .. } => {
+                    UsageInventoryFieldSelector::GroupAttribute {
+                        name: "enabled".into(),
+                    }
+                }
+                UsageValueSource::Occurrence { .. } => {
+                    UsageInventoryFieldSelector::OccurrenceAttribute {
+                        name: "enabled".into(),
+                    }
+                }
+                _ => panic!(),
+            };
+            row.fields.push(UsageInventoryField {
+                field,
+                destinations: vec![
+                    UsageInventoryDestination::InputDisposition,
+                    UsageInventoryDestination::UsageParameter {
+                        policy: participation.policy.clone(),
+                        parameter: parameter.slot.clone(),
+                    },
+                ],
+            });
+        }
+    }
+    install(&f.artifacts, &mut f.policy, rows);
+    let UsageInputPolicy::PobOccurrenceUsageV3 {
+        inventory: target, ..
+    } = f.policy.usage_inputs.as_mut().unwrap();
+    *target = Some(inventory);
+    (f, participation)
+}
+
+fn generated_enabled_source(group: Option<&str>, occurrence: Option<&str>) -> String {
+    let attribute = |token: Option<&str>| {
+        token.map_or_else(String::new, |token| format!(r#" enabled="{token}""#))
+    };
+    source()
+        .replace(
+            "<Skill source=",
+            &format!("<Skill{} source=", attribute(group)),
+        )
+        .replace(
+            "<Gem gemId=",
+            &format!("<Gem{} gemId=", attribute(occurrence)),
+        )
+}
+
+fn generated_usage_completion(result: &NormalizedImport) -> &DraftListCompletion {
+    &result.draft().input().skill_presets.members[1]
+        .intent
+        .as_ref()
+        .unwrap()
+        .usage
+        .completion
+}
+
+fn without_generated_usage_inventory(f: &Fixture) -> NormalizationPolicy {
+    let mut policy = f.policy.clone();
+    let UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. } =
+        policy.usage_inputs.as_mut().unwrap();
+    *inventory = None;
+    policy
+}
+
+#[test]
+fn generated_enabled_true_accounts_both_fields_with_exact_live_participation() {
+    let (f, participation) = generated_enabled_inventory_fixture();
+    let text = generated_enabled_source(Some("true"), Some("true"));
+    let without = without_generated_usage_inventory(&f);
+    let before = normalize(&text, &f, &without, Default::default()).unwrap();
+    let after =
+        normalize_queries_with_retired(&text, &f, &f.policy, &[], Default::default(), 1).unwrap();
+    assert_eq!(
+        generated_usage_completion(&after),
+        &DraftListCompletion::Complete
+    );
+    let intent = after.draft().input().skill_presets.members[1]
+        .intent
+        .as_ref()
+        .unwrap();
+    let rows: Vec<_> = intent
+        .usage
+        .members
+        .iter()
+        .filter(|row| row.selection.policy.to_resolved().as_ref() == Some(&participation.policy))
+        .collect();
+    assert_eq!(rows.len(), 2, "separate exact Tree and Item providers");
+    assert_ne!(rows[0].selection.target, rows[1].selection.target);
+    for row in rows {
+        assert_eq!(
+            row.applicability,
+            PresetApplicability::WhenExactSourceSelected
+        );
+        let parameters = row.selection.parameters.to_resolved().unwrap();
+        assert_eq!(parameters.len(), 2);
+        for (parameter, declared) in parameters.iter().zip(&participation.parameters) {
+            assert_eq!(parameter.slot, declared.slot);
+            assert_eq!(parameter.value, ParameterValue::Boolean(true));
+        }
+        assert!(intent.generated_inputs.members.iter().any(|input| {
+            row.selection.target.to_resolved()
+                == Some(UsageTarget::Skill(SkillTarget::Generated(Box::new(
+                    input.target.to_resolved().unwrap(),
+                ))))
+        }));
+    }
+    let UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. } =
+        f.policy.usage_inputs.as_ref().unwrap();
+    for row in &inventory.as_ref().unwrap().rows {
+        for (index, field) in row.fields.iter().filter(|field| matches!(&field.field,
+            UsageInventoryFieldSelector::GroupAttribute { name } | UsageInventoryFieldSelector::OccurrenceAttribute { name } if name == "enabled"
+        )).enumerate() {
+            assert_eq!(field.destinations, [UsageInventoryDestination::InputDisposition, UsageInventoryDestination::UsageParameter {
+                policy: participation.policy.clone(), parameter: participation.parameters[index].slot.clone(),
+            }]);
+        }
+        assert_eq!(row.fields.iter().filter(|field| matches!(&field.field,
+            UsageInventoryFieldSelector::GroupAttribute { name } | UsageInventoryFieldSelector::OccurrenceAttribute { name } if name == "enabled"
+        )).count(), 2);
+    }
+    // Only the selected inventory issue is retired. No activation, topology,
+    // generated raw input, coverage or other preset changes are permitted.
+    let mut expected = before.draft().input().clone();
+    let usage = &mut expected.skill_presets.members[1]
+        .intent
+        .as_mut()
+        .unwrap()
+        .usage;
+    let DraftListCompletion::Pending { id, .. } = usage.completion else {
+        panic!()
+    };
+    usage.completion = DraftListCompletion::Complete;
+    assert_eq!(&expected, after.draft().input());
+    let mut origins = before.sidecar().origins.clone();
+    for origin in &mut origins {
+        origin
+            .links
+            .retain(|link| *link != OwnedOriginTarget::Issue(id));
+    }
+    assert_eq!(origins, after.sidecar().origins);
+    assert_eq!(before.allocator_after(), after.allocator_after());
+    assert!(after.draft().input().skills.members.is_empty());
+    assert!(matches!(
+        after.draft().input().skill_presets.members[0]
+            .intent
+            .as_ref()
+            .unwrap()
+            .usage
+            .completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    let repeat =
+        normalize_queries_with_retired(&text, &f, &f.policy, &[], Default::default(), 1).unwrap();
+    assert_eq!(after.draft().input(), repeat.draft().input());
+    assert_eq!(after.sidecar().origins, repeat.sidecar().origins);
+    assert_eq!(after.allocator_after(), repeat.allocator_after());
+}
+
+#[test]
+fn generated_enabled_nontrue_never_borrows_the_other_lane_or_provider() {
+    let (f, participation) = generated_enabled_inventory_fixture();
+    let without = without_generated_usage_inventory(&f);
+    for token in [
+        None,
+        Some("false"),
+        Some("nil"),
+        Some(""),
+        Some(" true"),
+        Some("true "),
+        Some("TRUE"),
+        Some("1"),
+        Some("unknown"),
+    ] {
+        for group_changed in [false, true] {
+            let text = if group_changed {
+                generated_enabled_source(token, Some("true"))
+            } else {
+                generated_enabled_source(Some("true"), token)
+            };
+            let result = run(&text, &f);
+            let baseline = normalize(&text, &f, &without, Default::default()).unwrap();
+            assert!(
+                matches!(
+                    generated_usage_completion(&result),
+                    DraftListCompletion::Pending { .. }
+                ),
+                "{token:?}, group_changed={group_changed}"
+            );
+            assert_eq!(result.draft().input(), baseline.draft().input());
+            assert_eq!(result.sidecar().origins, baseline.sidecar().origins);
+            assert_eq!(result.allocator_after(), baseline.allocator_after());
+            if token == Some("false") {
+                let rows: Vec<_> = usage(&result, 1)
+                    .into_iter()
+                    .filter(|row| row.policy.to_resolved().as_ref() == Some(&participation.policy))
+                    .collect();
+                assert_eq!(rows.len(), 2);
+                for row in rows {
+                    let parameters = row.parameters.to_resolved().unwrap();
+                    assert_eq!(parameters[0].value, ParameterValue::Boolean(!group_changed));
+                    assert_eq!(parameters[1].value, ParameterValue::Boolean(group_changed));
+                }
+            }
+        }
+    }
+    let text = generated_enabled_source(Some("true"), Some("true"));
+    for changed in [
+        text.replace("Tree:7", "Tree:8"),
+        text.replace(
+            "Item:1:Test Title, Ordinary Base",
+            "Item:2:Test Title, Ordinary Base",
+        ),
+        text.replace(r#"quality="12.5""#, r#"quality="bad""#),
+        text.replace(r#"quality="20.25""#, r#"quality="bad""#),
+    ] {
+        assert_ne!(changed, text);
+        let result = run(&changed, &f);
+        let baseline = normalize(&changed, &f, &without, Default::default()).unwrap();
+        assert!(matches!(
+            generated_usage_completion(&result),
+            DraftListCompletion::Pending { .. }
+        ));
+        assert_eq!(result.draft().input(), baseline.draft().input());
+        assert_eq!(result.sidecar().origins, baseline.sidecar().origins);
+        assert_eq!(result.allocator_after(), baseline.allocator_after());
+    }
+}
+
+#[test]
+fn generated_escaped_enabled_fails_source_admission_without_inventory_retirement() {
+    let (f, _) = generated_enabled_inventory_fixture();
+    let without = without_generated_usage_inventory(&f);
+    for group_changed in [false, true] {
+        let text = if group_changed {
+            generated_enabled_source(Some("tr&#117;e"), Some("true"))
+        } else {
+            generated_enabled_source(Some("true"), Some("tr&#117;e"))
+        };
+        let imported = crate::source(&text, 93);
+        assert_eq!(imported.source_xml(), text);
+        let evidence = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
+        for (name, escaped) in [("Skill", group_changed), ("Gem", !group_changed)] {
+            let attributes: Vec<_> = evidence
+                .rows()
+                .iter()
+                .filter(|row| row.occurrence().name() == name)
+                .filter_map(|row| row.attribute("enabled"))
+                .collect();
+            assert_eq!(
+                attributes.len(),
+                4,
+                "both providers in both nonempty presets"
+            );
+            for attribute in attributes {
+                if escaped {
+                    assert_eq!(attribute.raw(), "tr&#117;e");
+                    assert!(attribute.decoded().is_err());
+                } else {
+                    assert_eq!(attribute.raw(), "true");
+                    assert_eq!(attribute.decoded().ok(), Some("true"));
+                }
+            }
+        }
+        let result = run(&text, &f);
+        let baseline = normalize(&text, &f, &without, Default::default()).unwrap();
+        // plain_row rejects undecodable attributes before generated provider
+        // resolution. No projection creates a Pending usage list in this case:
+        // the existing empty usage list stays Complete, while generated-input
+        // responsibility and source fallback remain Pending. This is not an
+        // inventory retirement or evidence of an enabled/disabled skill.
+        for actual in [&baseline, &result] {
+            assert_eq!(
+                generated_usage_completion(actual),
+                &DraftListCompletion::Complete
+            );
+            assert!(usage(actual, 1).is_empty());
+            let inputs = bindings(actual, 1);
+            assert!(inputs.members.is_empty());
+            assert!(
+                matches!(&inputs.completion, DraftListCompletion::Pending { code, .. }
+                if code.as_str() == "generated-skill-inputs-not-converted")
+            );
+            assert_retained(actual, &text);
+        }
+        assert_eq!(result.draft().input(), baseline.draft().input());
+        assert_eq!(result.sidecar().origins, baseline.sidecar().origins);
+        assert_eq!(result.allocator_after(), baseline.allocator_after());
+    }
+}
+
+#[test]
+fn generated_enabled_inventory_requires_its_declared_typed_consumers() {
+    let (f, participation) = generated_enabled_inventory_fixture();
+    let text = generated_enabled_source(Some("true"), Some("true"));
+    let without = without_generated_usage_inventory(&f);
+    let baseline = normalize(&text, &f, &without, Default::default()).unwrap();
+    for group in [false, true] {
+        for defer in [false, true] {
+            let mut policy = f.policy.clone();
+            let UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. } =
+                policy.usage_inputs.as_mut().unwrap();
+            for row in &mut inventory.as_mut().unwrap().rows {
+                let selector = if group {
+                    UsageInventoryFieldSelector::GroupAttribute {
+                        name: "enabled".into(),
+                    }
+                } else {
+                    UsageInventoryFieldSelector::OccurrenceAttribute {
+                        name: "enabled".into(),
+                    }
+                };
+                let field = row
+                    .fields
+                    .iter_mut()
+                    .find(|field| field.field == selector)
+                    .unwrap();
+                if defer {
+                    field
+                        .destinations
+                        .push(UsageInventoryDestination::Deferred {
+                            reason: key("enabled-consumer-unproved"),
+                        });
+                } else {
+                    field.destinations.retain(|destination| {
+                        *destination == UsageInventoryDestination::InputDisposition
+                    });
+                }
+            }
+            let result = normalize(&text, &f, &policy, Default::default()).unwrap();
+            assert_eq!(result.draft().input(), baseline.draft().input());
+            assert_eq!(result.sidecar().origins, baseline.sidecar().origins);
+            assert_eq!(result.allocator_after(), baseline.allocator_after());
+        }
+    }
+    for mutation in 0..3 {
+        let mut policy = f.policy.clone();
+        let UsageInputPolicy::PobOccurrenceUsageV3 {
+            occurrences,
+            inventory,
+            ..
+        } = policy.usage_inputs.as_mut().unwrap();
+        match mutation {
+            0 => occurrences[0]
+                .policies
+                .last_mut()
+                .unwrap()
+                .parameters
+                .clear(),
+            1 => {
+                let field = inventory.as_mut().unwrap().rows[0]
+                    .fields
+                    .iter_mut()
+                    .find(|field| {
+                        field.field
+                            == UsageInventoryFieldSelector::GroupAttribute {
+                                name: "enabled".into(),
+                            }
+                    })
+                    .unwrap();
+                field.destinations[1] = UsageInventoryDestination::UsageParameter {
+                    policy: participation.policy.clone(),
+                    parameter: participation.parameters[1].slot.clone(),
+                };
+            }
+            _ => {
+                let row = inventory.as_mut().unwrap().rows.iter_mut().find(|row| matches!(&row.source, UsageInventorySource::Occurrence { target } if matches!(target.as_ref(), OccurrenceUsageTarget::Generated { correspondence } if matches!(correspondence.provider, GeneratedSkillInputProvider::ItemModifier { .. })))).unwrap();
+                let UsageInventorySource::Occurrence { target } = &mut row.source else {
+                    panic!()
+                };
+                let OccurrenceUsageTarget::Generated { correspondence } = target.as_mut() else {
+                    panic!()
+                };
+                let GeneratedSkillInputProvider::ItemModifier { source_name, .. } =
+                    &mut correspondence.provider
+                else {
+                    panic!()
+                };
+                *source_name = "Different provider".into();
+            }
+        }
+        assert!(
+            normalize(&text, &f, &policy, Default::default()).is_err(),
+            "mutation {mutation}"
+        );
+    }
 }

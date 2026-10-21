@@ -9,11 +9,14 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Current checkpoint:** generated-skill intrinsic and reporting field accounting
-passes publication and all-five preservation checks. Original05 Sniper
+**Current checkpoint:** generated-skill literal enabled fields now have checked
+Import accounting, retaining their separate typed participation consumers.
+Publication and all-five preservation checks pass. Original05 Sniper
 remains the priority build. Selected input issues remain **123/137/127/144/5**,
 and **0/5 builds have complete native evaluation**. This checkpoint follows
-verified remote baseline `61a5b400` (Import preferences and grouped-copy controls).
+verified remote baseline `6de7a46f` (intrinsic and reporting field accounting).
+Finish this build before expanding coverage; begin optimizer integration once
+one unchanged build passes complete native/reference validation.
 
 The five Flask owner gaps and all ten Partial template owners remain open.
 Direct delivery does not account for late grouped slot copies, and the new
@@ -29,38 +32,54 @@ The fresh checked Original05 report identifies the selected usage issue as
 `051b`, with five total selected issues; earlier `0507` references below belong
 to older imports and must not be used as current occurrence identities.
 
-The generated Firebolt intrinsic fields already covered by checked input receipts
-now use their existing inventory destinations. Original05's exact
+The generated Firebolt fields covered by checked input receipts use their existing
+inventory destinations. Original05's exact
 group243/Gem244 is supplied by Item28/EquipmentUse02e8/Modifier02be through
-Modifier definition31c6 and SkillGrant slot31c9. Thirteen Deferred fields now
-require their existing `InputDisposition` producer: group source/slot/label; Gem corrupted/corruptLevel,
-gemId/variantId/skillId/nameSpec, level/quality/enableGlobal1; and reference
-descendants. Separately, both Firebolt policy rows remove only the redundant
-Deferred destination for group `includeInFullDPS`, preserving the exact typed
-reporting policy338e/parameter338f. Six Deferred fields remain on the live source;
-nineteen remain on its unresolved Sol Pole alternative. No runtime Rust changes,
-new schema or completion claim were needed.
+Modifier definition31c6 and SkillGrant slot31c9. Fifteen fields now require their
+existing `InputDisposition` producer: the previous thirteen intrinsic fields,
+plus group and Gem literal `enabled="true"`. The two new receipts remove only
+their Deferred destinations; independent typed participation policy332b and
+parameters332c/332d remain and both resulting values are true. The separate reporting
+policy338e/parameter338f remains false. Four Deferred fields remain on the live
+source; nineteen remain on its unresolved Sol Pole alternative. No public schema,
+native evaluator rule, source-topology proof or completion claim was added.
 
-Nine Import tests prove synthetic private-receipt consumption, including all
-thirteen fields, missing and additional consumers, exact providers and reporting
-values. The real-build gate separately authenticates the unchanged persisted
-bindings, source links, provider and reporting Boolean false. It does not claim
-direct observation of private receipts from that real import. Whole-draft and
-fresh-replay comparisons remain exact. The first publication attempt caught an
-expected-snapshot JSON representation error (`0` versus declared `f64` `0.0`);
-only expected records now round-trip through their declared Rust types, with
-strict lineage and malformed-value controls. The failed log is retained, and no
-live comparison, production rule or numeric tolerance changed.
+Six Import unit tests and thirteen integration tests pass, including malformed
+tokens, independent consumers, exact providers and changed live outputs. All
+24 optional PoB source-component tests pass, including five new enabled-consumer
+checks. Those establish the nonrestricting true gate within the tested paths,
+not absent consumers or whole-build parity. The real-build gate authenticates
+unchanged persisted bindings, source links, provider and reporting values; it
+does not claim direct observation of private receipts from those real imports.
+An initial escaped-token test expected the wrong rejection stage. Its correction
+asserts the existing earlier refusal and whole-output preservation, with no
+production acceptance change; the failed log is retained.
+
+Rust authoring now writes five expected snapshot quantities in their declared
+`f64` representation, with exact typed round trips and inverse checks. The old
+test-time snapshot repair and workaround-only tests are removed. Whole-output
+comparisons remain exact, without tolerance or live-output rewriting. New tooling
+and evidence generators use Rust, including ignored one-off authorers; the later
+web/desktop UI comparison does not add a frontend dependency now.
 
 **Next closest-build blocker:** establish the source construction and matching
-facts required by the remaining generated usage consumers. Keep group enabled,
-mainActiveSkill/mainActiveSkillCalcs and Gem enabled/count/enableGlobal2 Deferred.
+facts required by the remaining generated usage consumers. Keep group
+mainActiveSkill/mainActiveSkillCalcs and Gem count/enableGlobal2 Deferred.
 Current Firebolt role0778 records an additional stat set, not an additional
 Skill, and its observed row alone does not prove the absence of other reverse
 catalog candidates. Retain the existing alias counterexample; inspect full
 offline catalog facts before claiming unique source dispatch or transferring
-physical-Gem selector proofs to generated sources. Reuse the existing Import
-fact boundary where sufficient; discuss any significant public-model extension.
+physical-Gem selector proofs to generated sources. The full pinned catalog audit
+finds unique primary routes for Firebolt and both Djinn summons, and no primary
+routes for their Command effects. A structurally valid subset cannot prove that
+census. Next implement the compiler-derived reverse-primary observation in the
+existing Import artifact, with explicit unavailable/absent/ambiguous cases and
+independent full-catalog reproduction. Rebuild current artifacts and dependent
+commitments in place, with no compatibility path or native schema change. See the
+[construction follow-up](owned-source-effect-construction-proposal.md#generated-reverse-lookup-follow-up-october-21).
+Only then consume those facts in exact-source adapters; preserve both Djinn
+effects and every independent usage consumer. Discuss significant deviations
+from the accepted Import-only construction boundary before implementing them.
 The Djinn rows, independent consumers and usage issue051b remain Pending.
 
 The next bounded audit is `runs/grouped-slot-copy-guidance-20261021/README.md`.
@@ -85,21 +104,24 @@ for a whole build. The retained failure was a fixture assumption, not a source
 defect or nondeterministic calculation. Native Mystic Attunement still emits only
 the earlier Amulet percentage; its missing Ring outputs remain later data work.
 
-Current validated package: `runs/owned-generated-firebolt-dispositions-publication-02/package`,
-input `a8317fccf1cdf6bad38be2308e5ac69f7d32695d6439b7afb169d42b6c9fceca`;
-release SHA-256 `fac8c4522ec39de0c3c4130fab9e5956239cab4a72f5775b3ff76adc235eb190`;
-validation SHA-256 `d8fb315810aaa3a74c18c986971518b2bf9383e0263fb02e1157f6a1dca89d89`.
+Current validated package: `runs/owned-generated-enabled-publication-01/package`,
+input `348f0c7588e915f7b7ea6c2de9b1d2ce5089ebdb4393f5822ed818537a4c7560`;
+release SHA-256 `860994818079984781b93c742a16351819601be0693aa89796049cec7ba244bf`;
+validation SHA-256 `ce23983ca89dbdb744c8b7013d0c8220e10f8a87a2ae5669a3d3497e0f5d3a28`.
 Only the normalization policy and its dependent commitments, tree-policy
 commitment and release provenance change from predecessor `6f58eba0`;
 numerical rules and all 110 query rows are
 identical. All five whole drafts, allocators, selections and finalization issues
 are preserved. Fresh CLI replays agree, and all 18 package files rebuild
-byte-for-byte. Nine Import tests, nine ordinary CLI tests, the all-five publication
-test and scoped Import/CLI strict Clippy pass. Seven explicit publication tests
+byte-for-byte. Six Import unit tests, thirteen Import integration tests, 24 PoB
+source-component tests, nine ordinary CLI tests, the all-five publication test
+and scoped Import/PoB/CLI strict Clippy pass. Seven explicit publication tests
 remain ignored in the ordinary CLI target. No selected input issue
 retired; the original-five build status remains 0/5 complete. The
-[generated field checkpoint](evidence/generated-firebolt-dispositions/README.md)
-retains the exact receipt, hashes and preservation results. Its
+[generated enabled checkpoint](evidence/generated-enabled-fields/README.md)
+retains the exact receipt, hashes, limits and preservation results. The
+[earlier generated field checkpoint](evidence/generated-firebolt-dispositions/README.md)
+is historical evidence. Its
 [Import preference predecessor](evidence/source-import-preferences/README.md)
 retains the prior source-origin retirement, and the
 [Flask checkpoint](evidence/flask-charge-delivery/validation.json) retains the
@@ -5461,7 +5483,10 @@ displace the five-build MVP. No native seed provider/search is implemented.
 
 ## Tooling and checkpoint workflow
 
-New maintained tools and tests use Rust. Existing Python exporter/intake tests
+New tools, tests and ad-hoc evidence/data generators use Rust, including ignored
+`runs/` generators. Do not add Python or JavaScript tooling before the UI phase.
+Shell orchestration may run builds, Git and CI, but should not duplicate owned
+types or implement a second data transformation layer. Existing Python exporter/intake tests
 remain useful; the owner explicitly deferred converting them. Their eventual
 coherent replacement is [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
 
@@ -5507,17 +5532,32 @@ limits. Do not edit
 `crates/poe-optimizer-engine/src/owned_allocations.rs` or its tests during this work.
 The owner authorizes commits/pushes to main and CI-log inspection.
 
-**Local publication status, October 20:** the checkout is still at `24d12cd8`.
-Subsequent critical/armour, progression-adapter, requirement-report and
-Scenario-intent, configuration projection, CI-repair, structural-inventory and
-ordinary physical-DPS work
-is local. A commit/push
-attempt was not executed because the automatic approval
-service reached its usage limit; this was a service limitation, not a safety
-rejection or missing owner authorization. Preserve the tested files and evidence;
-resume normal Git publication when that service is available. Hosted CI cannot
-validate these unpushed changes yet.
+**Checkpoint baseline, October 21:** main and remote main were verified at
+`6de7a46f8c806cbfd9d285675afe9364595cdcec` after the generated-field checkpoint.
+The current generated-enabled successor is recorded at the top of this document;
+this hash identifies its starting point, not a claim about the latest remote HEAD.
+The earlier October 20 approval-service interruption is resolved; its old
+`24d12cd8` resume instruction is obsolete. The nine incoming-critical work files
+remain outside main and are separately backed up on
+`codex/backup-2026-10-20-incoming-critical` at
+`ac6df890be9525f62a614c225aa54b9be317433b`. Keep their baseline hashes intact
+until that work is explicitly resumed. A successful push does not establish
+hosted CI success; record CI results separately.
 
 Deferred product decisions: distribution license before a public release,
 frontend/packaging before GUI delivery, and acquisition sources before live
 trade ingestion. They do not block current native build support or cleanup.
+
+The frontend evaluation follows the first complete unchanged build and usable
+CLI optimization. Compare Tauri with a shared web/desktop UI such as Yew or
+Dioxus, including native/Wasm builds, workers and parallel evaluation, cancellation,
+progress, file access and distribution. Keep the owned Rust model, evaluator and
+search independent of the chosen host and view framework. JavaScript/TypeScript
+may be used for that UI if justified; no framework decision or UI implementation
+is needed to unblock Sniper.
+After that gate, compare the same import/objective-edit/run/cancel/results slice
+on both native and browser targets. Measure native/Wasm calculation agreement,
+startup and data memory, throughput, cancellation latency, tree rendering and
+accessibility before selecting the framework. The
+[design criteria and primary references](domain-architecture.md#tooling-and-test-language)
+distinguish a Rust-authored UI from its generated browser glue.

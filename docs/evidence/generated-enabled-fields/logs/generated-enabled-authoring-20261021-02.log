@@ -1,0 +1,17 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling serde_json v1.0.151
+   Compiling quote v1.0.47
+   Compiling syn v3.0.6
+   Compiling equivalent v1.0.2
+   Compiling hashbrown v0.16.1
+   Compiling indexmap v2.13.0
+   Compiling cfg-if v1.0.5
+   Compiling serde_derive v1.0.229
+   Compiling sha2 v0.10.9
+   Compiling serde v1.0.229
+   Compiling poe-optimizer-core v0.1.0 (C:\code\poe-optimizer\crates\poe-optimizer-core)
+   Compiling generated-firebolt-enabled-authoring v0.0.0 (C:\code\poe-optimizer\runs\generated-firebolt-enabled-authoring-20261021)
+    Finished `dev` profile [unoptimized] target(s) in 15.42s
+     Running `target\debug\generated-firebolt-enabled-authoring.exe C:\code\poe-optimizer runs/generated-firebolt-enabled-data-01 runs/generated-enabled-source-candidate-20261021/enabled-proof.json ae570f0fb93df01f1abd018e8d4116cb9b11ceb1ab9a7418a09af6e355d0b68d`
+Wrote reviewed data candidate only: \\?\C:\code\poe-optimizer\runs\generated-firebolt-enabled-data-01
+report SHA-256: d3a4ca9b9ddb223e65f8bc4edb1bf35e18dd5f65e6e1190a466e02fcf9f6409a

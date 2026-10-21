@@ -1130,8 +1130,11 @@ them. New semantic work must not extend the frozen legacy interpreter frontier.
 ## Tooling and test language
 
 The end state is Rust for project-maintained tooling and tests as well as the evaluator.
-New tooling and test suites should use Rust, sharing the owned types and validators where
-appropriate. Existing Python exporters, corpus/expectation checks and boundary checks are
+New tooling, tests and ad-hoc evidence or data generators use Rust, sharing the owned
+types and validators where appropriate. This also applies to generators kept under
+ignored `runs/`: temporary placement does not justify another implementation language.
+Shell commands may orchestrate builds, Git and CI or inspect files; they should not become
+a parallel data-model implementation. Existing Python exporters, corpus/expectation checks and boundary checks are
 transitional utilities; their Python tests protect those utilities, not a separate game
 calculation implementation. Maintain that coverage until each utility is replaced.
 
@@ -1141,6 +1144,27 @@ does not complete migration. The supported build, data-generation and validation
 should ultimately require no Python interpreter. Optional upstream PoB/Lua remains a
 separate reference oracle; this policy does not require rewriting upstream tests.
 See the [T1 migration milestone](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
+
+JavaScript or TypeScript is an option for a later UI, not for new evaluator or data
+tooling. Evaluate the UI after one unchanged build passes complete native evaluation
+and the CLI can exercise optimization. Compare a Tauri desktop host with browser delivery
+and a shared UI framework such as Yew or Dioxus before choosing a stack. The application
+boundary must support the same owned Rust model and evaluation/search APIs on native and
+Wasm targets, with explicit host capabilities for workers, cancellation, progress and
+file access. Browser execution must not assume native thread or filesystem availability.
+No UI framework is selected by this direction.
+
+The later comparison must distinguish host from view framework:
+[Tauri hosts a Rust core and WebView](https://v2.tauri.app/concept/process-model/),
+while [Yew provides a Rust/Wasm UI](https://yew.rs/docs/getting-started/introduction).
+[Dioxus desktop executes Rust natively](https://dioxuslabs.com/learn/0.7/guides/platforms/desktop/)
+and also provides a browser target; graphics and browser-API portability need a
+prototype. Rust-authored application code may still require generated JavaScript
+loaders and HTML/CSS. Assess that separately from introducing handwritten JavaScript
+tooling. Recheck [browser Rayon requirements](https://docs.rs/wasm-bindgen-rayon/latest/wasm_bindgen_rayon/)
+at the prototype rather than imposing its toolchain or hosting requirements on
+the current native project. Keep evaluation off the UI thread and retain a
+responsive single-worker mode when shared-memory parallelism is unavailable.
 
 ## Preparation and execution readiness
 
