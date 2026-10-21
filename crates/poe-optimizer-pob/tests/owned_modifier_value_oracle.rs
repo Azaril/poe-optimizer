@@ -1362,3 +1362,6 @@ fn direct_resistance_source_admission_depends_on_rendered_sign() {
 
 #[path = "support/charm_domain_observation.rs"]
 mod charm_domain_observation;
+
+#[path = "support/modifier_transform_source.rs"]
+mod modifier_transform_source;

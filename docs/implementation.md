@@ -9,7 +9,15 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Remote checkpoints preceding current Charm work:** validated main `02efb394`
+**Current remote checkpoint:** main `4eb2a112` contains Charm delivery and the
+validated scalar/source-cache controls below. A fresh push succeeded and
+`ls-remote` verified its complete hash. The nine protected incoming-critical
+source/data files are now backed up byte-for-byte in `ac6df890` on
+`codex/backup-2026-10-20-incoming-critical`, without changing main, the checkout
+or the normal index. Ignored build outputs and investigation candidates remain
+local. New modifier-transform controls described below are subsequent work.
+
+**Remote checkpoints preceding Charm:** validated main `02efb394`
 includes the configuration inventory, Boolean/Import accounting, Water allocation
 binder and the passing checks below. It was pushed and its full remote hash
 verified. Earlier main `30e84063` and the separate
@@ -17,8 +25,8 @@ verified. Earlier main `30e84063` and the separate
 pushed and their full remote hashes verified. The snapshot supersedes
 `03434e24` and includes the Import repairs and validated Water publication below;
 the scoped CLI checks were still running when this immediate backup was requested.
-Ignored build outputs, candidate evidence and the
-nine protected incoming-critical files remain local.
+The nine incoming-critical files were excluded from that earlier snapshot;
+their later dedicated backup is recorded above.
 
 **Immediate Charm backup checkpoint:** the eleven current Charm, source-probe
 and documentation paths were pushed as `fad698f3` on
@@ -26,8 +34,8 @@ and documentation paths were pushed as `fad698f3` on
 runtime and strict-lint reruns were still pending at that snapshot and now pass as
 described below. The current Charm checkpoint includes the additional validated
 transform and source-cache controls described below. Ignored generated
-artifacts and the nine protected incoming-critical files are excluded, as in the
-earlier backups.
+artifacts are excluded. The nine protected incoming-critical files have their
+own later backup above.
 
 **Work after that backup:** the Boolean failure was an overbroad test expectation:
 the fallback pass attaches all ConfigSet choice obligations to otherwise unknown
@@ -207,6 +215,31 @@ publication path. Canonical admission still needs the exact all-emitter/guard
 census, range boundaries and all 25 inputs accounted for; it must not narrow the
 broader native corruption or magnitude domains merely because today's importer
 uses a neutral corruption literal.
+
+**Magnitude-source ordering and encoding are now reproduced:** all eight tests
+in `owned_modifier_value_oracle` pass, as does strict Clippy
+(`runs/owned-modifier-transform-{source,clippy}-01.log`). The new test executes
+31 cases in four fixed fresh JIT-on/off VMs, comparing original construction,
+two rebuilds and an independent original ParseRaw call. Reports are retained in
+`runs/modifier-transform-source-02Oawm`; summary SHA-256 is
+`7e6b919ca2d50fb517e04fbfc84c0a319f56f3c8a20ac7f21f0f9d9ce0853899`.
+Add 50% followed by doubling yields 12 from 4; reversing them yields 10.
+Producer discovery order survives later explicit-record sorting and differs
+from implicit-before-explicit category order in a tested case. Ordinary fixed
+source text remains 4 where authored/ranged source input yields 6, confirming
+that source encoding must be accounted for before canonical raw inputs are
+emitted. This is source evidence, not native producer coverage.
+
+The current single `modifier_order` drives both transform folding and ordered
+contribution reductions. The [ordering proposal](owned-modifier-ordering-proposal.md)
+recommends two independently validated semantic orders over the same occurrences,
+with source encoding retained only in Import. User review is pending; no public
+model migration is applied yet. Exact catalog-spelling and nonneutral producer
+strength controls are the next evidence step. The legacy inactive-producer
+control yields 6 while versioned/grouped variants yield 4; retain this as an
+unresolved source discrepancy, not a native participation rule or an approved
+parity exception. CI now retains these source reports on failure. Independent
+Charm metadata/admission work can continue while the order contract is reviewed.
 
 The Import regression batch
 passes **722 tests** (241 library, 396 normalizer, 35 direct disposition,

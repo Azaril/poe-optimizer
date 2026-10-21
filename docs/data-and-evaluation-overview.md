@@ -1420,6 +1420,17 @@ that Reward capacity already uses Actor Add channel `32f3`; item channel `33cf`
 duplicates that meaning. Consolidate these producers before adding the final
 cap/override result, using their existing exact origins for provenance.
 
+Original-source magnitude controls now pass 31 cases across four fresh VMs.
+They distinguish producer discovery order from later item-record sorting and
+already-scaled source text from raw authored inputs. The existing native item
+order currently serves both transform folding and contribution accumulation;
+the [proposed separation](owned-modifier-ordering-proposal.md) keeps one set of
+occurrences with two explicit orders. This public contract is awaiting review.
+Raw/baked source classification stays in Import; native rules must not read
+PoB crafting or display flags. Inactive legacy source variants also show a
+distinct producer-participation result, retained as an unresolved discrepancy.
+These tests establish neither production transform coverage nor complete builds.
+
 Actual default parsing also rejects seven selected Puppet/Archon nodes. Two
 Djinn unlocking lines are unknown even though their child actions are supplied
 through parent profiles. Exact source graphs now distinguish accepted records,

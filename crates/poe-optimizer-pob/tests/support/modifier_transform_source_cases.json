@@ -1,0 +1,355 @@
+{
+  "schema_version": 1,
+  "scope": "Source-only controls; no native parity, import admission or closure authority",
+  "cases": [
+    {
+      "id": "implicit-increased",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "implicit-reduced",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% reduced implicit modifier magnitudes",
+      "expected": {
+        "capacity": 2,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "tagged-increased",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased charm modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "tagged-reduced",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% reduced charm modifier magnitudes",
+      "expected": {
+        "capacity": 2,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "implicit-doubled",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\nimplicit modifier magnitudes are doubled",
+      "expected": {
+        "capacity": 8,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "tagged-doubled",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\ncharm modifier magnitudes are doubled",
+      "expected": {
+        "capacity": 8,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "add-add",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes\n50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 8,
+        "life": 10,
+        "producer_count": 2
+      }
+    },
+    {
+      "id": "add-then-multiply",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes\nimplicit modifier magnitudes are doubled",
+      "expected": {
+        "capacity": 12,
+        "life": 10,
+        "producer_count": 2
+      }
+    },
+    {
+      "id": "multiply-then-add",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\nimplicit modifier magnitudes are doubled\n50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 10,
+        "life": 10,
+        "producer_count": 2
+      }
+    },
+    {
+      "id": "wrong-tag",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased fire modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "all-tags-required",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased charm life modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "all-tags-present",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm,life}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased charm life modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "explicit-category",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased explicit modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 15,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "category-and-tag-match",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit charm modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "category-and-tag-mismatch",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased explicit charm modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "unscalable-recipient",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{unscalable}{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "disabled-recipient",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{disabled}{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 0,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "disabled-producer",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n{disabled}50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 0
+      }
+    },
+    {
+      "id": "ranged-producer-amount",
+      "scope": "mechanics-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (10-10) Charm Slot\n{tags:life}+10 to maximum Life\n{range:0.5}(20-40)% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 13,
+        "life": 10,
+        "producer_count": 1,
+        "producer_quality": [
+          30
+        ]
+      }
+    },
+    {
+      "id": "raw-trade-fixed",
+      "scope": "source-encoding-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nImplicits: 1\n{tags:charm}Has 4 Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "authored-fixed",
+      "scope": "source-encoding-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}Has 4 Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "advanced-range-without-crafted",
+      "scope": "source-encoding-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "crafted-sort-does-not-change-discovery-order",
+      "scope": "source-order-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n{crafted}50% increased implicit modifier magnitudes\nimplicit modifier magnitudes are doubled",
+      "expected": {
+        "capacity": 12,
+        "life": 10,
+        "producer_count": 2,
+        "source_storage_indices": [
+          3,
+          2
+        ],
+        "producer_operations": [
+          "add",
+          "multiply"
+        ]
+      }
+    },
+    {
+      "id": "fractured-sort-does-not-change-discovery-order",
+      "scope": "source-order-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes\n{fractured}implicit modifier magnitudes are doubled",
+      "expected": {
+        "capacity": 12,
+        "life": 10,
+        "producer_count": 2,
+        "source_storage_indices": [
+          3,
+          1
+        ],
+        "producer_operations": [
+          "add",
+          "multiply"
+        ]
+      }
+    },
+    {
+      "id": "cross-category-discovery-order",
+      "scope": "source-order-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes\n{implicit}implicit modifier magnitudes are doubled",
+      "expected": {
+        "capacity": 12,
+        "life": 10,
+        "producer_count": 2,
+        "source_storage_categories": [
+          "explicit",
+          "implicit"
+        ],
+        "producer_operations": [
+          "add",
+          "multiply"
+        ]
+      }
+    },
+    {
+      "id": "legacy-inactive-producer",
+      "scope": "source-variant-diagnostic",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nVariant: A\nVariant: B\nSelected Variant: 1\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n{variant:2}50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1,
+        "producer_active": [
+          false
+        ]
+      }
+    },
+    {
+      "id": "legacy-inactive-recipient",
+      "scope": "source-variant-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nVariant: A\nVariant: B\nSelected Variant: 1\nCrafted: true\nImplicits: 1\n{variant:2}{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 0,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "versioned-inactive-producer",
+      "scope": "source-variant-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nVersion: A\nVersion: B\nSelected Version: 1\nVariant: A\nVariant: B\nSelected Variant: 1\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n{version:2}50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 1,
+        "producer_active": [
+          false
+        ]
+      }
+    },
+    {
+      "id": "versioned-active-producer",
+      "scope": "source-variant-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nVersion: A\nVersion: B\nSelected Version: 1\nVariant: A\nVariant: B\nSelected Variant: 1\nCrafted: true\nImplicits: 1\n{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n{version:1}50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 6,
+        "life": 10,
+        "producer_count": 1,
+        "producer_active": [
+          true
+        ]
+      }
+    },
+    {
+      "id": "versioned-inactive-recipient",
+      "scope": "source-variant-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nVersion: A\nVersion: B\nSelected Version: 1\nVariant: A\nVariant: B\nSelected Variant: 1\nCrafted: true\nImplicits: 1\n{version:2}{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 0,
+        "life": 10,
+        "producer_count": 1
+      }
+    },
+    {
+      "id": "grouped-inactive-producer",
+      "scope": "source-variant-control",
+      "raw": "Rarity: Rare\nMagnitude Probe\nFine Belt\nVariant: A\nVariant: B\nSelected Variant Group: 1=1\nCrafted: true\nImplicits: 1\n{group:1}{variant:1}{tags:charm}{range:0.5}Has (4-4) Charm Slot\n{tags:life}+10 to maximum Life\n{group:1}{variant:2}50% increased implicit modifier magnitudes",
+      "expected": {
+        "capacity": 4,
+        "life": 10,
+        "producer_count": 1,
+        "producer_active": [
+          false
+        ]
+      }
+    }
+  ]
+}

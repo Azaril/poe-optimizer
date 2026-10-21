@@ -680,6 +680,14 @@ canonical occurrences; a public diagnostic status or recognized header alone can
 grant completeness. The evaluator consumes the resulting owned facts and explicit
 order without needing source syntax or source runtime state.
 
+Ordering domains must be justified independently: numeric modifier transforms
+and later contribution accumulation can have different precedence. The current
+single-order implementation is under review in the
+[modifier-ordering proposal](owned-modifier-ordering-proposal.md); its proposed
+two-order public format is not yet adopted. Source text that already includes
+scaling also requires checked conversion to canonical inputs. Formatting flags
+and ambiguous inverse arithmetic must not become native gameplay conditions.
+
 Ordered aggregation must account for every admitted provider destination,
 including character slots, passive sockets and item sockets. Physical source
 records, prepared contributions and grouped/scaled bonus copies are different

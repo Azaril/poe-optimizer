@@ -165,6 +165,7 @@ jobs:
           name: pob-source-${{ runner.os }}-${{ github.run_attempt }}
           path: |
             runs/charm-domain-observation-*/*.json
+            runs/modifier-transform-source-*/*.json
             runs/r2ad-item-sets-01/source/**/*.log
             runs/r2ad-item-sets-01/source/**/*.json
             runs/r2an-loadout-sync-01/source/**/*.log
