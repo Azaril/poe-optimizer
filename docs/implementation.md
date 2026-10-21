@@ -9,49 +9,86 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Active next step:** the modifier-order checkpoint `41269604` is pushed
-and its remote hash verified. The reviewed Flask delivery and Charm consumer
-controls pass: seven Flask native controls, fifteen Charm controls, twenty Flask
-observations in independent fresh PoB VMs, and 59 modifier-source cases replayed
-four times with JIT on/off. Scoped native and source strict Clippy checks pass.
-The all-five Flask publication test passes through the existing current-release
-migration seam. Its initial compile exposed a test-only moved
-value in the whole-recipe inverse; obtaining the destination reference before
-moving the old owner fixes the borrow without changing any assertion. The fresh
-serial script `runs/flask-publication-validation-02.ps1` passed ordinary tests,
-publication and strict lint. No Cargo process remains active. All five Flask
-owner gaps remain open in that publication. The proposed 5-to-4 retirement is
-on hold: direct delivery does not cover the existing late grouped equipment-slot
-copy path. A broad Partial item-template marker is not proof that this remaining
-responsibility has another complete owner. Next implement or explicitly account
-for that shared copy/supplier path through the existing graph; it also affects
-Life, resistance and movement. Preserve all ten Partial template owners and
-current import counts.
-No complete-build result is claimed.
+**Current checkpoint:** grouped slot-copy contract checks and the source
+Import-preference policy publication pass. Original05 Sniper
+remains the priority build. Selected input issues remain **123/137/127/144/5**,
+and **0/5 builds have complete native evaluation**. The latest pushed checkpoint
+is Flask delivery `0bd89d1c`; its remote hash was verified.
 
-Current validated package: `runs/owned-flask-charge-delivery-publication-01/package`,
-input `720d65ca89ec10a9ec57d26324abc52d963b6246cbfae618105c86e9e129eacf`;
-release SHA-256 `297f262f30c53957958b89d7c16deeffd888591c1bc9c0b379fb41bb555019c3`;
-validation SHA-256 `f2de89b603a575f547ca184dce457c63968fa6909a8a9c184dd75b4dbcabfb52`.
-It adds one Stat and one contribution program, preserves all five original imports
-and 110 query rows, and rebuilds byte-for-byte. No selected input issue retired.
-The [archived checkpoint receipt](evidence/flask-charge-delivery/validation.json)
-records the passing tests, source summaries, exact publication and protected-file
-checks. The original-five build status remains 0/5 complete.
+The five Flask owner gaps and all ten Partial template owners remain open.
+Direct delivery does not account for late grouped slot copies, and the new
+contract tests do not supply complete canonical producers or group membership.
+The proposed 5-to-4 gap retirement remains on hold.
 
-Validation logs: `runs/flask-native-controls-03.log`,
-`runs/flask-charm-native-controls-01.log` (Charm section),
-`runs/flask-charge-delivery-source-02.log`,
-`runs/charm-ordered-consumer-source-01.log`, and both
-`runs/flask-charm-{native,source}-clippy-01.log` files. Original failed runs remain
-available. The fixes were confined to test setup and observation: the shared V28
-fixture now supplies its mandatory empty contribution-query inventory; the actual
-Partial owner's negative test checks the early `IncompleteContributors` refusal;
-the source observer uses the original `build.calcsTab.calcs` table with module
-identity guards. No production acceptance check or source calculation changed.
-Exact repair receipts are in `runs/flask-v28-fixture-inventory-repair-20261021`,
-`runs/flask-partial-owner-refusal-repair-20261021` and
-`runs/flask-source-module-repair-20261021`.
+**Validated input change:** the existing `import_preferences` source disposition
+is enabled in the published policy. All-five publication validation confirms
+that only one exact Import origin per original becomes source-only:
+configuration-linked counts 31/66/22/18/13 become
+30/65/21/17/12, with all selected issues and gameplay inputs unchanged.
+The fresh checked Original05 report identifies the selected usage issue as
+`051b`, with five total selected issues; earlier `0507` references below belong
+to older imports and must not be used as current occurrence identities.
+
+Next connect the generated Firebolt intrinsic fields already covered by checked
+input receipts to their existing inventory destinations. Original05's exact
+group243/Gem244 is supplied by Item28/EquipmentUse02e8/Modifier02be through
+Modifier definition31c6 and SkillGrant slot31c9. Thirteen current Deferred fields have an existing
+`InputDisposition` producer: group source/slot/label; Gem corrupted/corruptLevel,
+gemId/variantId/skillId/nameSpec, level/quality/enableGlobal1; and reference
+descendants. Reuse `generated_skill_inputs/dispositions.rs` and the existing
+inventory consumer. Verify the actual receipt and exact field accounting on
+the unchanged build; unchanged Pending counts alone are insufficient evidence.
+Keep group enabled/includeInFullDPS/mainActiveSkill/mainActiveSkillCalcs and Gem
+enabled/count/enableGlobal2 Deferred until their own proofs are complete. Keep
+typed participation/count/reporting consumers conjunctive, the separate SolPole
+provider refusal, and usage issue051b Pending. This is an existing-model data
+step, not a new schema or a declaration that the whole skill is implemented.
+
+The next bounded audit is `runs/grouped-slot-copy-guidance-20261021/README.md`.
+It identifies the earliest missing authority as a late slot-percentage supplier
+census; the pre-Amulet percentage `32e4` belongs to an earlier calculation stage.
+The pinned parser/cache has Ring, Amulet, Quiver and Focus bonus channels, but
+the bounded scan found no Belt/Boots producer. None of its eight tree bonus
+nodes is selected in Original05's active Spec3. These observations do not prove
+complete native admission or authorize a zero for unknown sources. Do not invent
+a Belt producer to exercise the generic source loop.
+
+The [grouped-copy checkpoint](evidence/grouped-slot-copy/README.md) retains the
+initial failed prediction: Original03's FireResist22 and ElementalResist16 are
+separate groups. At 30%, they copy 6 and 4. A controlled single-line change to
+two FireResist members copies 11 after grouping. Six controls pass in 36 fresh
+PoB VMs, with exact JIT on/off, independent replay and unhooked-output equality.
+The earlier LIST/timing witness also passes in 38 fresh VMs. Thirteen native
+equipment-slot tests, including five new synthetic grouping controls, pass;
+native and source strict Clippy and scoped rustfmt checks pass. This establishes
+the bounded integral composition, not canonical group admission or native parity
+for a whole build. The retained failure was a fixture assumption, not a source
+defect or nondeterministic calculation. Native Mystic Attunement still emits only
+the earlier Amulet percentage; its missing Ring outputs remain later data work.
+
+Current validated package: `runs/owned-import-preferences-publication-01/package`,
+input `6f58eba00e71984264123419f51114f375bdce23440eaa4ff3ffa4999e2beb11`;
+release SHA-256 `73393bbd6b8629e564ad31073c90eeb69133932d9bad77510fc9874b36dcc856`;
+validation SHA-256 `9b11ca157080a83cda815369f5a010d01d33a795352a00cb54ffd8fcda4594a9`.
+Only the normalization policy, its tree-policy commitment and release provenance
+change from predecessor `720d65ca`; numerical rules and all 110 query rows are
+identical. All five whole drafts, allocators, selections and finalization issues
+are preserved. Fresh CLI replays agree, and all 18 package files rebuild
+byte-for-byte. Five adapter controls, fifteen ordinary presentation tests, the
+all-five publication test and scoped strict Clippy pass. Four other explicit
+publication tests remain ignored in the ordinary target. No selected input issue
+retired; the original-five build status remains 0/5 complete. The
+[Import preference checkpoint](evidence/source-import-preferences/README.md)
+retains the exact receipt, hashes and preservation results. Its
+[Flask predecessor](evidence/flask-charge-delivery/validation.json) retains the
+earlier numerical addition and source checks.
+
+Current grouping logs and exact source/module pins are in its
+[validation receipt](evidence/grouped-slot-copy/validation.json). Five existing
+Import-preference adapter controls also pass; the first mistyped test filter
+selected zero tests and is excluded from passing evidence. Original failed logs
+remain available. No calculation, native assertion or production acceptance
+check was relaxed.
 
 **Validated checkpoint: independent modifier orders.** The user-approved
 two-order model is implemented from remote main `c7e53685` and the data baseline
@@ -2520,7 +2557,9 @@ explicit `import_preferences` family to the current source-presentation policy,
 shares that law, and accounts only a proven whole Import origin before fallback.
 It refuses exportParty=true, unknown fields, children, duplicates and malformed
 frames; it neither completes configuration nor changes native ownership. It is
-applied and passes the 722-test Import batch; no current policy opts in. Evidence and candidate:
+applied and passes the 722-test Import batch. The October 21 production policy
+now opts in, with the all-five preservation evidence recorded in the current
+checkpoint above. Earlier adapter evidence and candidate:
 `runs/configuration-external-origins-review-20261020/` (audit `227963a6…`),
 `runs/import-presentation-candidate-20261020/` (manifest `89d983f8…`).
 The current PoB census remains incomplete. The combined candidate passes the Import

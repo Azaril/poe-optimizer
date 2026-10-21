@@ -27,6 +27,31 @@ The Flask delivery addition uses the existing equipment-to-Actor contribution
 graph and preserves every other owner and input obligation. Component parity and
 publication checks do not establish complete Player aggregation or a working build.
 
+The next equipment-copy work separates direct delivery, early individual Amulet
+copies and late grouped slot bonuses. Grouping must use owned semantic identities
+and declared contribution order; Lua-formatted keys and `pairs` iteration are
+reference observations, not native contracts. The existing exact EquipmentUse
+queries and shared Player slot reads express the bounded integral composition,
+as verified by the [contract controls](evidence/grouped-slot-copy/README.md).
+Late percentage supplier completeness and group presence must be established
+explicitly, including the distinction between no group and a present zero.
+Modifiers that eventually affect the same final metric can still require
+different groups. For example, the source keeps fire resistance and all-elemental
+resistance separate when copying Ring bonuses. Combining them before rounding
+changes the result. Owned group identities must preserve that mechanical
+distinction without retaining PoB's formatted string keys.
+Any admitted cross-slot feedback or dynamic grouping that those seams cannot
+represent needs a concrete design review before extending the public model.
+
+The published import policy now enables the existing checked accounting for
+saved Import-tab preferences. It preserves these fields as source-only evidence;
+it creates no native objective, scenario input or evaluator behavior. Party-export
+settings and unknown or ambiguous frames retain their mechanical obligations.
+The [publication checkpoint](evidence/source-import-preferences/README.md) proves
+all-five draft, query and selected-issue preservation, fresh CLI replay and an
+identical package rebuild. This retires one source-origin link per build, not a
+whole configuration or usage obligation.
+
 The October 20 [coverage assessment](../runs/coverage-audit-20261020/assessment.md)
 audits the last validated release separately from current migration work.
 Imported identities, complete structural inventories, mechanical implementation

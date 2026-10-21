@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "before": "720d65ca89ec10a9ec57d26324abc52d963b6246cbfae618105c86e9e129eacf",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "artifact_sha256": {
+    "policy": "db1fdb85f2b30df74fac08afd538ebbe43c6e0e1a93a12245a2259f649d4a5f2",
+    "source_facts": "a040c32d77105afee7452980b8c0fe2f22d96afa4c809ed48f78c4092bdbb9aa"
+  },
+  "new_definitions": 0,
+  "new_slots": 0,
+  "new_programs": 0,
+  "new_tables": 0,
+  "inventory_retirement": "none",
+  "complete_original_builds": 0
+}

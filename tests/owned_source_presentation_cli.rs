@@ -1,6 +1,8 @@
 //! Checked presentation dispositions preserve every original native obligation.
 #[path = "support/owned_source_empty_party.rs"]
 mod empty_party;
+#[path = "support/owned_source_import_preferences.rs"]
+mod import_preferences;
 #[allow(dead_code)]
 #[path = "support/owned_physical_inventory_preservation.rs"]
 mod preservation;
@@ -17,6 +19,7 @@ enum Slice {
     CachedBuffs,
     EmptyParty,
     TradeWeights,
+    ImportPreferences,
 }
 impl Slice {
     fn directory(self) -> &'static str {
@@ -24,6 +27,7 @@ impl Slice {
             Self::CachedBuffs => "source-presentation-v1",
             Self::EmptyParty => "source-empty-party",
             Self::TradeWeights => "source-trade-preferences",
+            Self::ImportPreferences => "source-import-preferences",
         }
     }
     fn disposition(self) -> &'static str {
@@ -31,6 +35,7 @@ impl Slice {
             Self::CachedBuffs => "source-cached-build-buffs",
             Self::EmptyParty => "source-empty-party",
             Self::TradeWeights => "source-trade-search-weights",
+            Self::ImportPreferences => "source-import-preferences",
         }
     }
     fn config_count(self) -> usize {
@@ -38,11 +43,12 @@ impl Slice {
             Self::CachedBuffs => 27,
             Self::EmptyParty => 26,
             Self::TradeWeights => 19,
+            Self::ImportPreferences => 13,
         }
     }
     fn changed_origins(self, case: usize) -> usize {
         match self {
-            Self::CachedBuffs | Self::EmptyParty => 1,
+            Self::CachedBuffs | Self::EmptyParty | Self::ImportPreferences => 1,
             Self::TradeWeights => [1, 1, 1, 0, 3][case - 1],
         }
     }
@@ -115,10 +121,15 @@ fn check_authoring(slice: Slice) {
     let SourcePresentationPolicy::PobFreshPresentationV1 {
         empty_party,
         trade_search_weights,
+        import_preferences,
         ..
     } = &policy;
     assert_eq!(*empty_party, slice != Slice::CachedBuffs);
-    assert_eq!(*trade_search_weights, slice == Slice::TradeWeights);
+    assert_eq!(
+        *trade_search_weights,
+        matches!(slice, Slice::TradeWeights | Slice::ImportPreferences)
+    );
+    assert_eq!(*import_preferences, slice == Slice::ImportPreferences);
     for (field, file) in [
         ("policy", "policy.json"),
         ("source_facts", "source-facts.json"),
@@ -146,6 +157,11 @@ fn check_authoring(slice: Slice) {
     if slice == Slice::TradeWeights {
         assert_eq!(data(slice), trade_preferences::data());
         trade_preferences::authenticate(&facts);
+        return;
+    }
+    if slice == Slice::ImportPreferences {
+        assert_eq!(data(slice), import_preferences::data());
+        import_preferences::authenticate(&facts);
         return;
     }
     for excerpt in facts["excerpts"].as_array().unwrap() {
@@ -208,11 +224,13 @@ fn stage_presentation(prior: &StagedOwnedRelease, slice: Slice) -> StagedOwnedRe
     let SourcePresentationPolicy::PobFreshPresentationV1 {
         empty_party,
         trade_search_weights,
+        import_preferences,
         ..
     } = &mut inherited;
     let new_flag = match slice {
         Slice::EmptyParty => empty_party,
         Slice::TradeWeights => trade_search_weights,
+        Slice::ImportPreferences => import_preferences,
         Slice::CachedBuffs => unreachable!(),
     };
     assert!(*new_flag);
@@ -227,6 +245,7 @@ fn stage_presentation(prior: &StagedOwnedRelease, slice: Slice) -> StagedOwnedRe
         kind: key(match slice {
             Slice::EmptyParty => "reviewed-empty-party",
             Slice::TradeWeights => "reviewed-trade-search-preferences",
+            Slice::ImportPreferences => "reviewed-import-preferences",
             Slice::CachedBuffs => unreachable!(),
         }),
         prior_input: prior.receipt().input,
@@ -234,6 +253,7 @@ fn stage_presentation(prior: &StagedOwnedRelease, slice: Slice) -> StagedOwnedRe
             match slice {
                 Slice::EmptyParty => "owned-source-empty-party",
                 Slice::TradeWeights => "owned-source-trade-preferences",
+                Slice::ImportPreferences => "owned-source-import-preferences",
                 Slice::CachedBuffs => unreachable!(),
             },
             &(authoring, &policy.source_presentation),
@@ -413,6 +433,53 @@ fn trade_origins(
     expected
 }
 
+/// Independently derive the source-only Import boundary from the unchanged XML.
+/// This census does not call the production presentation matcher.
+fn import_origins(
+    evidence: &SourceProjectEvidence<'_>,
+) -> std::collections::BTreeMap<u64, &'static str> {
+    let root = &evidence.rows()[0];
+    assert_eq!(root.occurrence().name(), "PathOfBuilding2");
+    plain_source_row(root, &[], false);
+    let frames: Vec<_> = root
+        .children()
+        .iter()
+        .map(|id| &evidence.rows()[id.ordinal() as usize])
+        .filter(|row| row.occurrence().name() == "Import")
+        .collect();
+    assert!(
+        frames.len() <= 1,
+        "one complete saved Import frame required"
+    );
+    let Some(frame) = frames.first() else {
+        return Default::default();
+    };
+    assert_eq!(frame.occurrence().parent(), Some(root.occurrence().id()));
+    plain_source_row(
+        frame,
+        &[
+            "lastRealm",
+            "lastLeague",
+            "lastAccountHash",
+            "lastCharacterHash",
+            "importLink",
+            "useGeneratedItemText",
+            "exportParty",
+        ],
+        true,
+    );
+    for name in ["useGeneratedItemText", "exportParty"] {
+        if let Some(attribute) = frame.attribute(name) {
+            let value = attribute.decoded().unwrap();
+            assert!(matches!(value, "true" | "false"));
+            assert!(name != "exportParty" || value == "false");
+        }
+    }
+    std::collections::BTreeMap::from([(
+        u64::from(frame.occurrence().id().ordinal()),
+        "source-import-preferences",
+    )])
+}
 fn compare(
     case: usize,
     xml: &[u8],
@@ -478,15 +545,15 @@ fn compare(
     .unwrap();
     let evidence =
         SourceProjectEvidence::collect(&instance, SourceEvidenceLimits::default()).unwrap();
-    let mut expected = if slice == Slice::TradeWeights {
-        trade_origins(&evidence)
-    } else {
-        Default::default()
+    let mut expected = match slice {
+        Slice::TradeWeights => trade_origins(&evidence),
+        Slice::ImportPreferences => import_origins(&evidence),
+        _ => Default::default(),
     };
     for row in evidence
         .rows()
         .iter()
-        .filter(|_| slice != Slice::TradeWeights)
+        .filter(|_| !matches!(slice, Slice::TradeWeights | Slice::ImportPreferences))
     {
         let parent = row
             .occurrence()
@@ -550,6 +617,12 @@ fn compare(
             }
         }
     }
+    if slice == Slice::ImportPreferences && case == 5 {
+        assert_eq!(
+            expected,
+            std::collections::BTreeMap::from([(797, "source-import-preferences")])
+        );
+    }
     let configuration_issues: std::collections::BTreeSet<_> =
         before["draft"]["choice_presets"]["members"]
             .as_array()
@@ -604,7 +677,7 @@ fn compare(
                 .iter()
                 .filter(|origin| {
                     origin["links"].as_array().unwrap().iter().any(|link| {
-                        link["kind"] == "issue" && link["value"]["local"] == "00000000000001f2"
+                        link["kind"] == "issue" && link["value"]["local"] == issue_local
                     })
                 })
                 .count()
@@ -672,6 +745,14 @@ fn compare(
         assert_eq!(counts_before, (19, 5, 14));
         assert_eq!(counts_after, (16, 5, 11));
     }
+    if slice == Slice::ImportPreferences {
+        assert_eq!(counts_before.0, [31, 66, 22, 18, 13][case - 1]);
+        assert_eq!(counts_after.0, [30, 65, 21, 17, 12][case - 1]);
+        if case == 5 {
+            assert_eq!(counts_before, (13, 2, 11));
+            assert_eq!(counts_after, (12, 2, 10));
+        }
+    }
     let mut old_side = before_side;
     for field in [
         "schema_version",
@@ -736,7 +817,12 @@ fn compare(
     selected::canonical(&mut old_final);
     selected::canonical(&mut new_final);
     assert_eq!(old_final, new_final, "every selected obligation survives");
-    if slice != Slice::CachedBuffs {
+    if slice == Slice::ImportPreferences {
+        assert_eq!(
+            new_final["issues"].as_array().unwrap().len(),
+            [123, 137, 127, 144, 5][case - 1]
+        );
+    } else if slice != Slice::CachedBuffs {
         assert_eq!(
             new_final["issues"].as_array().unwrap().len(),
             [106, 117, 109, 123, 4][case - 1]
@@ -769,6 +855,41 @@ fn run_presentation_publication(slice: Slice) {
     publish_checked(&prior_path, &out, &prior, &next, slice);
 }
 
+fn import_preferences_fresh_replay(case: usize, xml: &Path, out: &Path, next: &StagedOwnedRelease) {
+    let package = out.join("package");
+    let original = out.join(format!("original-{case:02}"));
+    let replay = out.join(format!("replay-original-{case:02}"));
+    release::normalize(&package, xml, case, &replay);
+    let mut a: Value = read(original.join("draft.json"));
+    let mut b: Value = read(replay.join("draft.json"));
+    let mut sa: Value = read(original.join("sidecar.json"));
+    let mut sb: Value = read(replay.join("sidecar.json"));
+    for (draft, side, directory) in [(&a, &sa, &original), (&b, &sb, &replay)] {
+        preservation::authenticate(side, directory, &package, case, next);
+        let lineage = &draft["draft"]["allocator"]["lineage"];
+        audit_lineages(draft, lineage);
+        audit_lineages(side, lineage);
+        assert_eq!(side["allocator_after"], draft["draft"]["allocator"]);
+        let bytes = fs::read(xml).unwrap();
+        assert_eq!(
+            side["source_sha256"],
+            format!("{:x}", Sha256::digest(&bytes))
+        );
+        assert_eq!(side["source_bytes"], bytes.len());
+    }
+    selected::canonical(&mut a);
+    selected::canonical(&mut b);
+    assert_eq!(a, b, "fresh CLI imports preserve the whole semantic draft");
+    // Each digest was authenticated above against its own actual typed draft.
+    // CLI lineages intentionally differ; no other sidecar field is normalized.
+    sa["draft"] = sb["draft"].clone();
+    selected::canonical(&mut sa);
+    selected::canonical(&mut sb);
+    assert_eq!(
+        sa, sb,
+        "fresh CLI imports preserve every source disposition"
+    );
+}
 fn publish_checked(
     prior_path: &Path,
     out: &Path,
@@ -829,13 +950,16 @@ fn publish_checked(
         );
         originals.push(compare(
             case,
-            &fs::read(xml).unwrap(),
+            &fs::read(&xml).unwrap(),
             prior_path,
             out,
             slice,
             prior,
             next,
         ));
+        if slice == Slice::ImportPreferences {
+            import_preferences_fresh_replay(case, &xml, out, next);
+        }
     }
     assert_eq!(old_files, release::inventory(prior_path));
     write(
@@ -843,7 +967,8 @@ fn publish_checked(
         &json!({
             "before":prior.receipt().input,"after":next.receipt().input,"originals":originals,
             "queries":110,"rebuild_byte_identical":true,"complete_original_builds":0,
-            "numerical_rules_unchanged":true,"source_execution":"not_run"
+            "numerical_rules_unchanged":true,"source_execution":"not_run",
+            "fresh_cli_replay_semantic_equality":slice == Slice::ImportPreferences
         }),
     );
 }
@@ -1006,6 +1131,103 @@ fn presentation_comparison_rejects_foreign_row_lineage() {
     audit_lineages(&original, &lineage);
     original["origins"][0]["source"]["lineage"] = json!("foreign");
     assert!(std::panic::catch_unwind(|| audit_lineages(&original, &lineage)).is_err());
+}
+
+#[test]
+fn import_preferences_authoring_is_source_bound_without_native_completion() {
+    check_authoring(Slice::ImportPreferences);
+}
+
+#[test]
+fn import_preferences_source_proof_rejects_changed_authority_and_scope() {
+    let original = import_preferences::facts();
+    for index in 0..7 {
+        let mut changed = original.clone();
+        match index {
+            0 => changed["archives"][1]["sha256"] = json!("0".repeat(64)),
+            1 => changed["archives"][1]["archive"] = json!("evidence/EditControl.lua.gz"),
+            2 => changed["excerpts"][1]["first"] = json!(557),
+            3 => changed["excerpts"][1]["sha256"] = json!("0".repeat(64)),
+            4 => changed["scope"]["native_inventory_completion"] = json!(true),
+            5 => changed["review"]["export_party_true"] = json!("source-only"),
+            6 => changed["review"]["saved_fields"] = json!(["importLink"]),
+            _ => unreachable!(),
+        }
+        assert!(
+            std::panic::catch_unwind(|| import_preferences::authenticate(&changed)).is_err(),
+            "control {index}"
+        );
+    }
+}
+
+fn import_census(xml: &[u8]) -> std::collections::BTreeMap<u64, &'static str> {
+    let instance = ImportedBuildInstance::from_decoded(
+        decode_build(xml).unwrap(),
+        BuildLineage::from_bytes([117; 16]),
+        InstanceImportLimits::default(),
+    )
+    .unwrap();
+    let evidence =
+        SourceProjectEvidence::collect(&instance, SourceEvidenceLimits::default()).unwrap();
+    import_origins(&evidence)
+}
+
+#[test]
+fn import_preferences_census_accounts_for_every_original_saved_frame() {
+    for case in 1..=5 {
+        let xml = fs::read(root().join(format!(
+            "tests/fixtures/builds/breadth-20260908/build-{case:02}.xml"
+        )))
+        .unwrap();
+        let census = import_census(&xml);
+        assert_eq!(census.len(), 1);
+        if case == 5 {
+            assert_eq!(
+                census,
+                std::collections::BTreeMap::from([(797, "source-import-preferences")])
+            );
+        }
+    }
+    for body in [
+        "",
+        "<Import/>",
+        "<Import exportParty='false'/>",
+        "<Import useGeneratedItemText='true'/>",
+        "<Import useGeneratedItemText='false'/>",
+    ] {
+        let xml = format!("<PathOfBuilding2>{body}</PathOfBuilding2>");
+        assert_eq!(
+            import_census(xml.as_bytes()).len(),
+            usize::from(!body.is_empty())
+        );
+    }
+}
+
+#[test]
+fn import_preferences_census_refuses_effectful_or_incomplete_frames() {
+    for body in [
+        "<Import exportParty='true'/>",
+        "<Import exportParty='False'/>",
+        "<Import useGeneratedItemText='1'/>",
+        "<Import future='x'/>",
+        "<Import><Future/></Import>",
+        "<Import><!-- hidden --></Import>",
+        "<Import>payload</Import>",
+        "<Import xmlns='future'/>",
+        "<Import/><Import/>",
+    ] {
+        let xml = format!("<PathOfBuilding2>{body}</PathOfBuilding2>");
+        assert!(
+            std::panic::catch_unwind(|| import_census(xml.as_bytes())).is_err(),
+            "{body}"
+        );
+    }
+}
+
+#[test]
+#[ignore = "requires the checked Flask predecessor; portable Import source archives"]
+fn import_preferences_publication_preserves_all_five_original_requests() {
+    run_presentation_publication(Slice::ImportPreferences);
 }
 
 fn cached_buffs_roundtrip() {

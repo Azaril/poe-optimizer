@@ -1,0 +1,2029 @@
+{
+  "scope": {
+    "all_slot_families_proved": false,
+    "fractional_group_precision_proved": false,
+    "native_parity": false,
+    "new_belt_bonus_producer": false,
+    "one_explicit_same_stat_ring_line_control": true,
+    "original_call": "CalcPerform.lua1533",
+    "original_grouping": "CalcPerform.lua1513-1521",
+    "original_scaling": "ModStore.lua82",
+    "owner_closure": false,
+    "real_selected_ingenuity_and_rings": true,
+    "socketed_or_conditional_group_exclusion_proved": false,
+    "whole_item_legality": false
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "methods": {
+    "add_database": {
+      "first": 31,
+      "last": 37,
+      "path": "Classes/ModDB.lua"
+    },
+    "assembly": {
+      "first": 426,
+      "last": 1113,
+      "path": "Modules/CalcActiveSkill.lua"
+    },
+    "callback": {
+      "first": 17,
+      "last": 23,
+      "path": "HeadlessWrapper.lua"
+    },
+    "initialization": {
+      "first": 717,
+      "last": 2309,
+      "path": "Modules/CalcSetup.lua"
+    },
+    "list_sum_internal": {
+      "first": 125,
+      "last": 141,
+      "path": "Classes/ModList.lua"
+    },
+    "ordinary": {
+      "first": 550,
+      "last": 575,
+      "path": "Modules/CalcSetup.lua"
+    },
+    "performance": {
+      "first": 1193,
+      "last": 3676,
+      "path": "Modules/CalcPerform.lua"
+    },
+    "scale": {
+      "first": 82,
+      "last": 119,
+      "path": "Classes/ModStore.lua"
+    },
+    "sum": {
+      "first": 202,
+      "last": 217,
+      "path": "Classes/ModStore.lua"
+    },
+    "sum_internal": {
+      "first": 137,
+      "last": 161,
+      "path": "Classes/ModDB.lua"
+    },
+    "tabulate": {
+      "first": 345,
+      "last": 364,
+      "path": "Classes/ModStore.lua"
+    }
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/CompareTab.lua",
+      "sha256": "b4fcfa06fc6cea277e6f473a1ce7085ba7373d64abbb6758fd87a63688ce7ba5"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/ModCache.lua",
+      "sha256": "8ac20aeca963e8b3745525da0444828e294632da0b57535144268489faa22b8b"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+    },
+    {
+      "path": "src/Data/Skills/sup_str.lua",
+      "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+    },
+    {
+      "path": "src/Data/Uniques/belt.lua",
+      "sha256": "4f1050dc4a7ac721e4cf0035574f00cc079c96dd2b14a1c3517f06c18464db5c"
+    },
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/ModTools.lua",
+      "sha256": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+    }
+  ],
+  "validation": {
+    "fresh_vms": 36,
+    "lifecycle_stages": [
+      "fresh",
+      "rebuilt_once",
+      "rebuilt_twice"
+    ],
+    "modes": [
+      "MAIN",
+      "CALCS"
+    ],
+    "exact_jit_reports": true,
+    "exact_fresh_replays": true,
+    "exact_unhooked_full_outputs": true,
+    "exact_unhooked_physical_inputs": true,
+    "equality_checked_before_deduplication": true
+  },
+  "observations": [
+    {
+      "name": "original-03",
+      "xml_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490",
+      "source_identity": {
+        "allocator": {
+          "last_issued": "000000000000007a",
+          "lineage": "75757575757575757575757575757575"
+        },
+        "instance_import_schema": 1,
+        "lineage": "75757575757575757575757575757575",
+        "revision": "0000000000000000",
+        "source_bytes": 46532,
+        "source_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+      },
+      "control": {
+        "native_owner_closure": false,
+        "numeric_grouping": true,
+        "rings": [
+          {
+            "expected": [
+              5,
+              25,
+              34,
+              8
+            ],
+            "slot": "Ring 1"
+          },
+          {
+            "expected": [
+              7,
+              28,
+              22,
+              6
+            ],
+            "slot": "Ring 2"
+          }
+        ],
+        "roll_legality_authority": false,
+        "same_stat_ring_edit": false,
+        "supplier_equipped": true
+      },
+      "exact_fresh_replay": true,
+      "exact_unhooked_full_outputs": true,
+      "exact_unhooked_physical_inputs": true,
+      "variants": [
+        {
+          "observation_sha256": "1e8687f968dc413752cb4ed031af70a01d63a5daf10db828a5008730a13122e7",
+          "contexts": [
+            {
+              "stage": "fresh",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "fresh",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "CALCS"
+            }
+          ],
+          "observation": {
+            "formatter": {
+              "first": 265,
+              "last": 267,
+              "path": "Modules/ModTools.lua"
+            },
+            "queries": [
+              {
+                "before": [
+                  {
+                    "depth": 0,
+                    "kind": "database",
+                    "parent_kind": "false_sentinel",
+                    "rows": [
+                      {
+                        "index": 1,
+                        "record": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "EffectOfBonusesFromRing 1",
+                          "source": "Item:3:Ingenuity, Utility Belt",
+                          "sourceSlot": "Belt",
+                          "type": "INC",
+                          "value": 25
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 5,
+                  "slot": "Ring 1",
+                  "source": "Item:5:Bramble Loop, Breach Ring",
+                  "type": "Ring"
+                },
+                "name": "EffectOfBonusesFromRing 1",
+                "numeric_source_records": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:5:Bramble Loop, Breach Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 34
+                    },
+                    "source_index": 6
+                  }
+                ],
+                "original_return": true,
+                "result": 25,
+                "slot": "Ring 1"
+              },
+              {
+                "before": [
+                  {
+                    "depth": 0,
+                    "kind": "database",
+                    "parent_kind": "false_sentinel",
+                    "rows": [
+                      {
+                        "index": 1,
+                        "record": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "EffectOfBonusesFromRing 2",
+                          "source": "Item:3:Ingenuity, Utility Belt",
+                          "sourceSlot": "Belt",
+                          "type": "INC",
+                          "value": 28
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 2",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "name": "EffectOfBonusesFromRing 2",
+                "numeric_source_records": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 22
+                    },
+                    "source_index": 1
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "ElementalResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 16
+                    },
+                    "source_index": 8
+                  }
+                ],
+                "original_return": true,
+                "result": 28,
+                "slot": "Ring 2"
+              }
+            ],
+            "copies": [
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "FireResist",
+                  "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 34
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.25,
+                "group_index": 6,
+                "group_key": "FireResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 8
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 5,
+                  "slot": "Ring 1",
+                  "source": "Item:5:Bramble Loop, Breach Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:5:Bramble Loop, Breach Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 34
+                    },
+                    "source_index": 6
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 1",
+                "source_records_preserved": true
+              },
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "FireResist",
+                  "source": "Many Sources:^x88FFFF28% Ring 2 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 22
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.28,
+                "group_index": 1,
+                "group_key": "FireResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Many Sources:^x88FFFF28% Ring 2 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 6
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 2",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 22
+                    },
+                    "source_index": 1
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 2",
+                "source_records_preserved": true
+              },
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "ElementalResist",
+                  "source": "Many Sources:^x88FFFF28% Ring 2 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 16
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.28,
+                "group_index": 8,
+                "group_key": "ElementalResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "ElementalResist",
+                      "source": "Many Sources:^x88FFFF28% Ring 2 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 4
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 2",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "ElementalResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 16
+                    },
+                    "source_index": 8
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 2",
+                "source_records_preserved": true
+              }
+            ],
+            "fire_output": {
+              "FireResist": 75,
+              "FireResistTotal": 75,
+              "FireResistOverCap": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "right-ring-endpoint-30",
+      "xml_sha256": "19ef619d8ca2f1b92f37db25118fc30ecd001f19148b0b92eea153f9f0695c67",
+      "source_identity": {
+        "allocator": {
+          "last_issued": "000000000000007a",
+          "lineage": "75757575757575757575757575757575"
+        },
+        "instance_import_schema": 1,
+        "lineage": "75757575757575757575757575757575",
+        "revision": "0000000000000000",
+        "source_bytes": 46532,
+        "source_sha256": "19ef619d8ca2f1b92f37db25118fc30ecd001f19148b0b92eea153f9f0695c67"
+      },
+      "control": {
+        "native_owner_closure": false,
+        "numeric_grouping": true,
+        "rings": [
+          {
+            "expected": [
+              5,
+              25,
+              34,
+              8
+            ],
+            "slot": "Ring 1"
+          },
+          {
+            "expected": [
+              7,
+              30,
+              22,
+              6
+            ],
+            "slot": "Ring 2"
+          }
+        ],
+        "roll_legality_authority": false,
+        "same_stat_ring_edit": false,
+        "supplier_equipped": true
+      },
+      "exact_fresh_replay": true,
+      "exact_unhooked_full_outputs": true,
+      "exact_unhooked_physical_inputs": true,
+      "variants": [
+        {
+          "observation_sha256": "3b2331373b71b2d10ad5cba65780c94807e7f693730c57c21551882c5b43695a",
+          "contexts": [
+            {
+              "stage": "fresh",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "fresh",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "CALCS"
+            }
+          ],
+          "observation": {
+            "formatter": {
+              "first": 265,
+              "last": 267,
+              "path": "Modules/ModTools.lua"
+            },
+            "queries": [
+              {
+                "before": [
+                  {
+                    "depth": 0,
+                    "kind": "database",
+                    "parent_kind": "false_sentinel",
+                    "rows": [
+                      {
+                        "index": 1,
+                        "record": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "EffectOfBonusesFromRing 1",
+                          "source": "Item:3:Ingenuity, Utility Belt",
+                          "sourceSlot": "Belt",
+                          "type": "INC",
+                          "value": 25
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 5,
+                  "slot": "Ring 1",
+                  "source": "Item:5:Bramble Loop, Breach Ring",
+                  "type": "Ring"
+                },
+                "name": "EffectOfBonusesFromRing 1",
+                "numeric_source_records": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:5:Bramble Loop, Breach Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 34
+                    },
+                    "source_index": 6
+                  }
+                ],
+                "original_return": true,
+                "result": 25,
+                "slot": "Ring 1"
+              },
+              {
+                "before": [
+                  {
+                    "depth": 0,
+                    "kind": "database",
+                    "parent_kind": "false_sentinel",
+                    "rows": [
+                      {
+                        "index": 1,
+                        "record": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "EffectOfBonusesFromRing 2",
+                          "source": "Item:3:Ingenuity, Utility Belt",
+                          "sourceSlot": "Belt",
+                          "type": "INC",
+                          "value": 30
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 2",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "name": "EffectOfBonusesFromRing 2",
+                "numeric_source_records": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 22
+                    },
+                    "source_index": 1
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "ElementalResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 16
+                    },
+                    "source_index": 8
+                  }
+                ],
+                "original_return": true,
+                "result": 30,
+                "slot": "Ring 2"
+              }
+            ],
+            "copies": [
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "FireResist",
+                  "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 34
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.25,
+                "group_index": 6,
+                "group_key": "FireResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 8
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 5,
+                  "slot": "Ring 1",
+                  "source": "Item:5:Bramble Loop, Breach Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:5:Bramble Loop, Breach Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 34
+                    },
+                    "source_index": 6
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 1",
+                "source_records_preserved": true
+              },
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "FireResist",
+                  "source": "Many Sources:^x88FFFF30% Ring 2 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 22
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.3,
+                "group_index": 1,
+                "group_key": "FireResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Many Sources:^x88FFFF30% Ring 2 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 6
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 2",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 22
+                    },
+                    "source_index": 1
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 2",
+                "source_records_preserved": true
+              },
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "ElementalResist",
+                  "source": "Many Sources:^x88FFFF30% Ring 2 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 16
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.3,
+                "group_index": 8,
+                "group_key": "ElementalResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "ElementalResist",
+                      "source": "Many Sources:^x88FFFF30% Ring 2 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 4
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 2",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "ElementalResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 16
+                    },
+                    "source_index": 8
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 2",
+                "source_records_preserved": true
+              }
+            ],
+            "fire_output": {
+              "FireResist": 75,
+              "FireResistTotal": 75,
+              "FireResistOverCap": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "same-stat-right-ring-30",
+      "xml_sha256": "94f067d9e86fec24694809a4c824bccc348dec74e03ba77e0337ab7d4ed6606d",
+      "source_identity": {
+        "allocator": {
+          "last_issued": "000000000000007a",
+          "lineage": "75757575757575757575757575757575"
+        },
+        "instance_import_schema": 1,
+        "lineage": "75757575757575757575757575757575",
+        "revision": "0000000000000000",
+        "source_bytes": 46522,
+        "source_sha256": "94f067d9e86fec24694809a4c824bccc348dec74e03ba77e0337ab7d4ed6606d"
+      },
+      "control": {
+        "native_owner_closure": false,
+        "numeric_grouping": true,
+        "rings": [
+          {
+            "expected": [
+              5,
+              25,
+              34,
+              8
+            ],
+            "slot": "Ring 1"
+          },
+          {
+            "expected": [
+              7,
+              30,
+              38,
+              11
+            ],
+            "slot": "Ring 2"
+          }
+        ],
+        "roll_legality_authority": false,
+        "same_stat_ring_edit": true,
+        "supplier_equipped": true
+      },
+      "exact_fresh_replay": true,
+      "exact_unhooked_full_outputs": true,
+      "exact_unhooked_physical_inputs": true,
+      "variants": [
+        {
+          "observation_sha256": "ee39ffcc7b88d84dabc39530fe386f5018345a4930c4d1568b1db647f20b4fb9",
+          "contexts": [
+            {
+              "stage": "fresh",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "fresh",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "CALCS"
+            }
+          ],
+          "observation": {
+            "formatter": {
+              "first": 265,
+              "last": 267,
+              "path": "Modules/ModTools.lua"
+            },
+            "queries": [
+              {
+                "before": [
+                  {
+                    "depth": 0,
+                    "kind": "database",
+                    "parent_kind": "false_sentinel",
+                    "rows": [
+                      {
+                        "index": 1,
+                        "record": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "EffectOfBonusesFromRing 1",
+                          "source": "Item:3:Ingenuity, Utility Belt",
+                          "sourceSlot": "Belt",
+                          "type": "INC",
+                          "value": 25
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 5,
+                  "slot": "Ring 1",
+                  "source": "Item:5:Bramble Loop, Breach Ring",
+                  "type": "Ring"
+                },
+                "name": "EffectOfBonusesFromRing 1",
+                "numeric_source_records": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:5:Bramble Loop, Breach Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 34
+                    },
+                    "source_index": 6
+                  }
+                ],
+                "original_return": true,
+                "result": 25,
+                "slot": "Ring 1"
+              },
+              {
+                "before": [
+                  {
+                    "depth": 0,
+                    "kind": "database",
+                    "parent_kind": "false_sentinel",
+                    "rows": [
+                      {
+                        "index": 1,
+                        "record": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "EffectOfBonusesFromRing 2",
+                          "source": "Item:3:Ingenuity, Utility Belt",
+                          "sourceSlot": "Belt",
+                          "type": "INC",
+                          "value": 30
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 2",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "name": "EffectOfBonusesFromRing 2",
+                "numeric_source_records": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 22
+                    },
+                    "source_index": 1
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 16
+                    },
+                    "source_index": 8
+                  }
+                ],
+                "original_return": true,
+                "result": 30,
+                "slot": "Ring 2"
+              }
+            ],
+            "copies": [
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "FireResist",
+                  "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 34
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.25,
+                "group_index": 6,
+                "group_key": "FireResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 8
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 5,
+                  "slot": "Ring 1",
+                  "source": "Item:5:Bramble Loop, Breach Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:5:Bramble Loop, Breach Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 34
+                    },
+                    "source_index": 6
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 1",
+                "source_records_preserved": true
+              },
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "FireResist",
+                  "source": "Many Sources:^x88FFFF30% Ring 2 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 38
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.3,
+                "group_index": 1,
+                "group_key": "FireResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Many Sources:^x88FFFF30% Ring 2 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 11
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 2",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 22
+                    },
+                    "source_index": 1
+                  },
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 16
+                    },
+                    "source_index": 8
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 2",
+                "source_records_preserved": true
+              }
+            ],
+            "fire_output": {
+              "FireResist": 75,
+              "FireResistTotal": 76,
+              "FireResistOverCap": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "unequipped-supplier",
+      "xml_sha256": "87791fe356aa4852e1c5c293f5befb63bab3f4aae0096a37d55aee31d43d6a3c",
+      "source_identity": {
+        "allocator": {
+          "last_issued": "000000000000007a",
+          "lineage": "75757575757575757575757575757575"
+        },
+        "instance_import_schema": 1,
+        "lineage": "75757575757575757575757575757575",
+        "revision": "0000000000000000",
+        "source_bytes": 46532,
+        "source_sha256": "87791fe356aa4852e1c5c293f5befb63bab3f4aae0096a37d55aee31d43d6a3c"
+      },
+      "control": {
+        "native_owner_closure": false,
+        "numeric_grouping": true,
+        "rings": [
+          {
+            "expected": [
+              5,
+              0,
+              34,
+              0
+            ],
+            "slot": "Ring 1"
+          },
+          {
+            "expected": [
+              7,
+              0,
+              22,
+              0
+            ],
+            "slot": "Ring 2"
+          }
+        ],
+        "roll_legality_authority": false,
+        "same_stat_ring_edit": false,
+        "supplier_equipped": false
+      },
+      "exact_fresh_replay": true,
+      "exact_unhooked_full_outputs": true,
+      "exact_unhooked_physical_inputs": true,
+      "variants": [
+        {
+          "observation_sha256": "9f661558177d6f93c656819e75a21300144b6bcf8848bdcb65bdf77312336717",
+          "contexts": [
+            {
+              "stage": "fresh",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "fresh",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "CALCS"
+            }
+          ],
+          "observation": {
+            "formatter": {
+              "first": 265,
+              "last": 267,
+              "path": "Modules/ModTools.lua"
+            },
+            "queries": [
+              {
+                "before": [
+                  {
+                    "depth": 0,
+                    "kind": "database",
+                    "parent_kind": "false_sentinel",
+                    "rows": {}
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 5,
+                  "slot": "Ring 1",
+                  "source": "Item:5:Bramble Loop, Breach Ring",
+                  "type": "Ring"
+                },
+                "name": "EffectOfBonusesFromRing 1",
+                "numeric_source_records": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:5:Bramble Loop, Breach Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 34
+                    },
+                    "source_index": 6
+                  }
+                ],
+                "original_return": true,
+                "result": 0,
+                "slot": "Ring 1"
+              },
+              {
+                "before": [
+                  {
+                    "depth": 0,
+                    "kind": "database",
+                    "parent_kind": "false_sentinel",
+                    "rows": {}
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 2",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "name": "EffectOfBonusesFromRing 2",
+                "numeric_source_records": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 22
+                    },
+                    "source_index": 1
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "ElementalResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 16
+                    },
+                    "source_index": 8
+                  }
+                ],
+                "original_return": true,
+                "result": 0,
+                "slot": "Ring 2"
+              }
+            ],
+            "copies": [],
+            "fire_output": {
+              "FireResist": 57,
+              "FireResistTotal": 57,
+              "FireResistOverCap": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "unequipped-recipient",
+      "xml_sha256": "e987f36662229a8d5739dda0e136d28b51feb008dbf3e1159ebd4a12750dd83e",
+      "source_identity": {
+        "allocator": {
+          "last_issued": "000000000000007a",
+          "lineage": "75757575757575757575757575757575"
+        },
+        "instance_import_schema": 1,
+        "lineage": "75757575757575757575757575757575",
+        "revision": "0000000000000000",
+        "source_bytes": 46532,
+        "source_sha256": "e987f36662229a8d5739dda0e136d28b51feb008dbf3e1159ebd4a12750dd83e"
+      },
+      "control": {
+        "native_owner_closure": false,
+        "numeric_grouping": true,
+        "rings": [
+          {
+            "expected": [
+              5,
+              25,
+              34,
+              8
+            ],
+            "slot": "Ring 1"
+          },
+          {
+            "expected": null,
+            "slot": "Ring 2"
+          }
+        ],
+        "roll_legality_authority": false,
+        "same_stat_ring_edit": false,
+        "supplier_equipped": true
+      },
+      "exact_fresh_replay": true,
+      "exact_unhooked_full_outputs": true,
+      "exact_unhooked_physical_inputs": true,
+      "variants": [
+        {
+          "observation_sha256": "b879c3f37d56c7822099c079c9ba8a03fe96f0f44ed50d08223a43208dc67d00",
+          "contexts": [
+            {
+              "stage": "fresh",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "fresh",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "CALCS"
+            }
+          ],
+          "observation": {
+            "formatter": {
+              "first": 265,
+              "last": 267,
+              "path": "Modules/ModTools.lua"
+            },
+            "queries": [
+              {
+                "before": [
+                  {
+                    "depth": 0,
+                    "kind": "database",
+                    "parent_kind": "false_sentinel",
+                    "rows": [
+                      {
+                        "index": 1,
+                        "record": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "EffectOfBonusesFromRing 1",
+                          "source": "Item:3:Ingenuity, Utility Belt",
+                          "sourceSlot": "Belt",
+                          "type": "INC",
+                          "value": 25
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 5,
+                  "slot": "Ring 1",
+                  "source": "Item:5:Bramble Loop, Breach Ring",
+                  "type": "Ring"
+                },
+                "name": "EffectOfBonusesFromRing 1",
+                "numeric_source_records": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:5:Bramble Loop, Breach Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 34
+                    },
+                    "source_index": 6
+                  }
+                ],
+                "original_return": true,
+                "result": 25,
+                "slot": "Ring 1"
+              }
+            ],
+            "copies": [
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "FireResist",
+                  "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 34
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.25,
+                "group_index": 6,
+                "group_key": "FireResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 8
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 5,
+                  "slot": "Ring 1",
+                  "source": "Item:5:Bramble Loop, Breach Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:5:Bramble Loop, Breach Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 34
+                    },
+                    "source_index": 6
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 1",
+                "source_records_preserved": true
+              }
+            ],
+            "fire_output": {
+              "FireResist": 27,
+              "FireResistTotal": 27,
+              "FireResistOverCap": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "swapped-ring-occurrences",
+      "xml_sha256": "627262f0d9e19261175f4b8890e4a4f7b47d5f6709144ebe570e952b8c217f64",
+      "source_identity": {
+        "allocator": {
+          "last_issued": "000000000000007a",
+          "lineage": "75757575757575757575757575757575"
+        },
+        "instance_import_schema": 1,
+        "lineage": "75757575757575757575757575757575",
+        "revision": "0000000000000000",
+        "source_bytes": 46532,
+        "source_sha256": "627262f0d9e19261175f4b8890e4a4f7b47d5f6709144ebe570e952b8c217f64"
+      },
+      "control": {
+        "native_owner_closure": false,
+        "numeric_grouping": true,
+        "rings": [
+          {
+            "expected": [
+              7,
+              25,
+              22,
+              5
+            ],
+            "slot": "Ring 1"
+          },
+          {
+            "expected": [
+              5,
+              30,
+              34,
+              10
+            ],
+            "slot": "Ring 2"
+          }
+        ],
+        "roll_legality_authority": false,
+        "same_stat_ring_edit": false,
+        "supplier_equipped": true
+      },
+      "exact_fresh_replay": true,
+      "exact_unhooked_full_outputs": true,
+      "exact_unhooked_physical_inputs": true,
+      "variants": [
+        {
+          "observation_sha256": "66f4a741cdb5d1585e42db0d7f998dd4e155b2483a68280984f84fb2080eb2c1",
+          "contexts": [
+            {
+              "stage": "fresh",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "fresh",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_once",
+              "mode": "CALCS"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "MAIN"
+            },
+            {
+              "stage": "rebuilt_twice",
+              "mode": "CALCS"
+            }
+          ],
+          "observation": {
+            "formatter": {
+              "first": 265,
+              "last": 267,
+              "path": "Modules/ModTools.lua"
+            },
+            "queries": [
+              {
+                "before": [
+                  {
+                    "depth": 0,
+                    "kind": "database",
+                    "parent_kind": "false_sentinel",
+                    "rows": [
+                      {
+                        "index": 1,
+                        "record": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "EffectOfBonusesFromRing 1",
+                          "source": "Item:3:Ingenuity, Utility Belt",
+                          "sourceSlot": "Belt",
+                          "type": "INC",
+                          "value": 25
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 1",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "name": "EffectOfBonusesFromRing 1",
+                "numeric_source_records": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 22
+                    },
+                    "source_index": 1
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "ElementalResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 16
+                    },
+                    "source_index": 8
+                  }
+                ],
+                "original_return": true,
+                "result": 25,
+                "slot": "Ring 1"
+              },
+              {
+                "before": [
+                  {
+                    "depth": 0,
+                    "kind": "database",
+                    "parent_kind": "false_sentinel",
+                    "rows": [
+                      {
+                        "index": 1,
+                        "record": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "EffectOfBonusesFromRing 2",
+                          "source": "Item:3:Ingenuity, Utility Belt",
+                          "sourceSlot": "Belt",
+                          "type": "INC",
+                          "value": 30
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 5,
+                  "slot": "Ring 2",
+                  "source": "Item:5:Bramble Loop, Breach Ring",
+                  "type": "Ring"
+                },
+                "name": "EffectOfBonusesFromRing 2",
+                "numeric_source_records": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:5:Bramble Loop, Breach Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 34
+                    },
+                    "source_index": 6
+                  }
+                ],
+                "original_return": true,
+                "result": 30,
+                "slot": "Ring 2"
+              }
+            ],
+            "copies": [
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "FireResist",
+                  "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 22
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.25,
+                "group_index": 1,
+                "group_key": "FireResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 5
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 1",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 22
+                    },
+                    "source_index": 1
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 1",
+                "source_records_preserved": true
+              },
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "ElementalResist",
+                  "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 16
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.25,
+                "group_index": 8,
+                "group_key": "ElementalResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "ElementalResist",
+                      "source": "Many Sources:^x88FFFF25% Ring 1 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 4
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 7,
+                  "slot": "Ring 1",
+                  "source": "Item:7:Doom Eye, Ruby Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "ElementalResist",
+                      "source": "Item:7:Doom Eye, Ruby Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 16
+                    },
+                    "source_index": 8
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 1",
+                "source_records_preserved": true
+              },
+              {
+                "argument": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "FireResist",
+                  "source": "Many Sources:^x88FFFF30% Ring 2 Bonus Effect",
+                  "sourceSlot": "Ring 2",
+                  "type": "BASE",
+                  "value": 34
+                },
+                "exact_group_argument": true,
+                "exact_player_destination": true,
+                "exact_source_list": true,
+                "factor": 0.3,
+                "group_index": 6,
+                "group_key": "FireResist|BASE|-|-|-",
+                "insertions": [
+                  {
+                    "exact_inserted_object": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Many Sources:^x88FFFF30% Ring 2 Bonus Effect",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 10
+                    },
+                    "same_as_argument": false
+                  }
+                ],
+                "item": {
+                  "exact_registered": true,
+                  "id": 5,
+                  "slot": "Ring 2",
+                  "source": "Item:5:Bramble Loop, Breach Ring",
+                  "type": "Ring"
+                },
+                "members": [
+                  {
+                    "original_format_call": true,
+                    "record": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "FireResist",
+                      "source": "Item:5:Bramble Loop, Breach Ring",
+                      "sourceSlot": "Ring 2",
+                      "type": "BASE",
+                      "value": 34
+                    },
+                    "source_index": 6
+                  }
+                ],
+                "original_query": true,
+                "return_observed": true,
+                "slot": "Ring 2",
+                "source_records_preserved": true
+              }
+            ],
+            "fire_output": {
+              "FireResist": 75,
+              "FireResistTotal": 76,
+              "FireResistOverCap": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

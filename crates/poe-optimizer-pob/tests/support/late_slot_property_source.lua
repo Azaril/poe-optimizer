@@ -21,6 +21,7 @@ local tabulate,ta=original(common.classes.ModStore.Tabulate,"Classes/ModStore.lu
 local apply,aa=original(upvalue(init,"applyGemMods"),"Modules/CalcSetup.lua",550)
 local assemble,ba=original(calcs.buildActiveSkillModList,"Modules/CalcActiveSkill.lua",426)
 local callback,ca=original(runCallback,"HeadlessWrapper.lua",17)
+local format,fa=original(modLib.formatModParams,"Modules/ModTools.lua",265)
 local load=assert(djinnOriginals.refs.load_skill)
 local methods={initialization=ia,performance=pa,sum=sa,sum_internal=si,list_sum_internal=li,
  scale=sca,add_database=ada,tabulate=ta,ordinary=aa,assembly=ba,callback=ca}
@@ -62,6 +63,7 @@ local api={loaded={}}
 function api.install()
  assert(not debug.gethook()and jit.status()==lateSlotJit);work=0
  local sequence,byEnv,envs,queries,ordinary,assemblies=0,{},{},{},{},{}
+ local formatted={}
  local applyFrames,assemblyFrames,sumFrames,copyFrames={},{},{},{}
  local failure
  local function skills(env)
@@ -70,12 +72,13 @@ function api.install()
   end end;return out
  end
  local wanted={[perform]=true,[sum]=true,[internal]=true,[listInternal]=true,[scale]=true,[add]=true,[tabulate]=true,[apply]=true,[assemble]=true,[load]=true}
+ if lateSlotNumeric then wanted[format]=true end
  local function hook(event)
   if event~="call"and event~="return"then return end
   local f=debug.getinfo(2,"f").func;if not wanted[f]then return end
   local v={};for i=1,160 do local n,x=debug.getlocal(2,i);if not n then break end;v[n]=x end
   local caller=debug.getinfo(3,"fl");local cv={}
-  if f==sum or f==scale then for i=1,192 do local n,x=debug.getlocal(3,i);if not n then break end;cv[n]=x end end
+  if f==sum or f==scale or f==format then for i=1,192 do local n,x=debug.getlocal(3,i);if not n then break end;cv[n]=x end end
   local ok,err=xpcall(function()
   sequence=sequence+1;assert(sequence<1000000)
   if f==load and event=="return"and v.node.elem=="Skill"then
@@ -100,7 +103,7 @@ function api.install()
   elseif f==perform then
    if event=="call"then
     assert(not byEnv[v.env],"same environment performed twice in finite witness")
-    local r={env=v.env,skills=skills(v.env),start=sequence,queries={},copies={},display={},before_bucket=chain(v.env.modDB,"GemProperty")}
+    local r={env=v.env,skills=skills(v.env),start=sequence,queries={},copies={},numeric_copies={},display={},before_bucket=chain(v.env.modDB,"GemProperty")}
     byEnv[v.env]=r;envs[#envs+1]=r;assert(#envs<128)
    else local r=assert(byEnv[v.env]);r.finish=sequence;r.after_bucket=chain(v.env.modDB,"GemProperty")
     for _,s in ipairs(r.skills)do s.after=input(s.effect);s.after_lookup=plain(s.effect.grantedEffectLevel)end
@@ -108,6 +111,7 @@ function api.install()
   elseif f==sum and event=="call"and caller.func==perform and caller.currentline==1491 then
    local r=assert(byEnv[cv.env]);local slot=assert(cv.slot);assert(v.self==cv.env.modDB and v.modType=="INC"and v.cfg==nil)
    local name="EffectOfBonusesFrom"..slot;local q={slot=slot,name=name,item=item(slot,assert(cv.item)),before=chain(v.self,name),internal={},sequence=sequence}
+   if lateSlotNumeric then q.numeric_source_records={};for i,m in ipairs(cv.item.modList or cv.item.slotModList[2])do if (m.name=="FireResist"or m.name=="ElementalResist")then q.numeric_source_records[#q.numeric_source_records+1]={source_index=i,record=plain(m)}end end end
    assert(cv.env.player.itemList[slot]==cv.item and not r.queries[slot]);r.queries[slot]=q
    sumFrames[v.self]={owner=r,row=q,name=name,store=v.self}
   elseif f==sum and event=="call"and caller.func==perform and caller.currentline>=3630 and caller.currentline<=3633 then
@@ -119,6 +123,39 @@ function api.install()
   elseif(f==internal or f==listInternal)and event=="return"then
    local r=sumFrames[v.context];if not r or r.name~=v.modName then return end
    if v.self==r.store then assert(type(v.result)=="number");r.row.result=v.result;r.row.original_return=true;sumFrames[v.context]=nil end
+  elseif lateSlotNumeric and f==format and event=="call"and caller.func==perform and caller.currentline==1513 and (v.mod.name=="FireResist"or v.mod.name=="ElementalResist")then
+   assert(v.mod==cv.mod and(v.mod.type=="BASE"or v.mod.type=="INC")and type(v.mod.value)=="number")
+   local r=assert(byEnv[cv.env]);local sourceList=cv.item.modList or cv.item.slotModList[2];local found={}
+   for i,m in ipairs(sourceList)do if m==v.mod then found[#found+1]=i end end;assert(#found==1)
+   for _,tag in ipairs(v.mod)do assert(tag.type~="SocketedIn")end
+   formatted[r]=formatted[r]or{};formatted[r][cv.slot]=formatted[r][cv.slot]or{}
+   assert(not formatted[r][cv.slot][v.mod]);formatted[r][cv.slot][v.mod]={source_index=found[1],record=plain(v.mod),original_format_call=true}
+  elseif lateSlotNumeric and f==scale and v.mod and (v.mod.name=="FireResist"or v.mod.name=="ElementalResist")and caller.func==perform and caller.currentline==1533 then
+   local r=assert(byEnv[cv.env]);local q=assert(r.queries[cv.slot]);assert(q.original_return)
+   if event=="call"then
+    assert(v.self==cv.modDB and v.self==r.env.modDB and v.mod==cv.mod and v.scale==q.result/100 and v.roundToNearest==nil)
+    assert(cv.item==r.env.player.itemList[cv.slot]and cv.slot~="Amulet")
+    local index,key;for i,m in ipairs(cv.groupedModOrder)do if m==v.mod then assert(not index);index=i end end;assert(index)
+    for k,m in pairs(cv.groupedMods)do if m==v.mod then assert(not key);key=k end end;assert(key)
+    local sourceList=cv.item.modList or cv.item.slotModList[2];local members,refs,total={}, {},0
+    for i,m in ipairs(sourceList)do if m.name==v.mod.name and m.type==v.mod.type and m.flags==v.mod.flags and m.keywordFlags==v.mod.keywordFlags then
+     local tags,groupTags={},{};for j,t in ipairs(m)do tags[j]=plain(t)end;for j,t in ipairs(v.mod)do groupTags[j]=plain(t)end
+     if equal(tags,groupTags)then
+      local proof=assert(formatted[r]and formatted[r][cv.slot]and formatted[r][cv.slot][m],"member did not enter original grouping formatter")
+      assert(proof.source_index==i and equal(proof.record,plain(m))and type(m.value)=="number")
+      members[#members+1]=proof;refs[#refs+1]=m;total=total+m.value
+     end
+    end end
+    assert(#members>0 and total==v.mod.value)
+    local row={slot=cv.slot,item=item(cv.slot,cv.item),members=members,argument=plain(v.mod),factor=v.scale,group_key=key,group_index=index,
+     original_query=true,exact_source_list=true,exact_group_argument=true,exact_player_destination=true,insertions={},objects={}}
+    copyFrames[#copyFrames+1]={owner=r,row=row,argument=v.mod,sources=refs,destination=v.self,numeric=true}
+   else
+    local frame=assert(table.remove(copyFrames));assert(frame.numeric and frame.owner==r and frame.argument==v.mod)
+    for i,m in ipairs(frame.sources)do assert(equal(frame.row.members[i].record,plain(m)))end
+    assert(equal(frame.row.argument,plain(v.mod))and #frame.row.insertions==1)
+    frame.row.source_records_preserved=true;frame.row.return_observed=true;r.numeric_copies[#r.numeric_copies+1]=frame.row
+   end
   elseif f==scale and v.mod and v.mod.name=="GemProperty"and caller.func==perform and caller.currentline==1526 then
    local r=assert(byEnv[cv.env]);local q=assert(r.queries[cv.slot]);assert(q.original_return)
    if event=="call"then
@@ -148,6 +185,7 @@ function api.install()
   assert(calcs.perform==perform and calcs.initEnv==init and calcs.buildActiveSkillModList==assemble and upvalue(init,"applyGemMods")==apply)
   assert(common.classes.ModStore.Sum==sum and common.classes.ModStore.Tabulate==tabulate and common.classes.ModStore.ScaleAddMod==scale
    and common.classes.ModDB.AddMod==add and common.classes.ModDB.SumInternal==internal and common.classes.ModList.SumInternal==listInternal)
+  assert(modLib.formatModParams==format)
   api.state={byEnv=byEnv,ordinary=ordinary,assemblies=assemblies,complete=next(applyFrames)==nil and next(assemblyFrames)==nil and next(sumFrames)==nil and #copyFrames==0}
   assert(jit.status()==lateSlotJit)
  end
@@ -177,8 +215,14 @@ function api.observe()
   local row={mode=mode,exact_selected_environment=true,queries={},copies={},skills={},display={}}
   if r then
    local slots={};for slot in pairs(r.queries)do slots[#slots+1]=slot end;table.sort(slots)
-   for _,slot in ipairs(slots)do local q=r.queries[slot];assert(q.original_return);row.queries[#row.queries+1]={slot=q.slot,name=q.name,item=q.item,before=q.before,result=q.result,original_return=true}end
+   for _,slot in ipairs(slots)do local q=r.queries[slot];assert(q.original_return);local visible={slot=q.slot,name=q.name,item=q.item,before=q.before,result=q.result,original_return=true};if lateSlotNumeric then visible.numeric_source_records=q.numeric_source_records end;row.queries[#row.queries+1]=visible end
    for _,c in ipairs(r.copies)do local copy={};for k,v in pairs(c)do if k~="sequence"and k~="objects"then copy[k]=v end end;copy.after_preparation=c.sequence>r.start;row.copies[#row.copies+1]=copy end
+   if lateSlotNumeric then
+    row.numeric_copies={}
+    for _,c in ipairs(r.numeric_copies)do local copy={};for k,v in pairs(c)do if k~="objects"then copy[k]=v end end;row.numeric_copies[#row.numeric_copies+1]=copy end
+    table.sort(row.numeric_copies,function(a,b)if a.slot~=b.slot then return a.slot<b.slot end;return a.group_index<b.group_index end)
+    row.numeric_formatter=fa
+   end
    row.before_bucket=r.before_bucket;row.after_bucket=r.after_bucket
    for _,q in ipairs(r.display)do assert(q.original_return);row.display[#row.display+1]={name=q.name,result=q.result,before=q.before,original_call=true,original_return=true,exact_skill=true}end
   end

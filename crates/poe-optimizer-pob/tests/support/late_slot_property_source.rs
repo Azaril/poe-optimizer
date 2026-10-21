@@ -88,6 +88,7 @@ fn child(root: &Path, out: &Path, enabled: bool) {
         "src/Classes/Item.lua",
         "src/Classes/ItemsTab.lua",
         "src/Modules/ModParser.lua",
+        "src/Modules/ModTools.lua",
         "src/Data/ModCache.lua",
         "src/Data/Skills/act_int.lua",
     ]);
@@ -137,6 +138,12 @@ fn observe(
         lua.globals().set("lateSlotInstrumented", instrumented)?;
         lua.globals().set("lateSlotJit", enabled)?;
         lua.globals().set("lateSlotXml", xml)?;
+        lua.globals().set(
+            "lateSlotNumeric",
+            control
+                .as_ref()
+                .is_some_and(|c| c["numeric_grouping"] == true),
+        )?;
         lua.load("if lateSlotJit then jit.on() else jit.off();jit.flush() end")
             .exec()?;
         Ok(())
@@ -607,4 +614,399 @@ fn check(report: &Json) {
     let b = named(report, "remove-ring-copy-supplier");
     assert_eq!(a["xml_sha256"], b["xml_sha256"]);
     same(&a["states"], &b["states"], "exact supplier removal replay");
+}
+
+// These controls use the saved, selected Ingenuity and rings from Original03.
+// The changed unique roll remains inside the pinned current 20–30 range. One
+// separate controlled ring line tests same-stat grouping; it is not an unchanged
+// corpus build or a proof of complete item legality.
+#[test]
+#[ignore = "requires pinned PoB; actual grouped Ring numeric-copy calls"]
+fn late_slot_numeric_groups_scale_after_source_aggregation() {
+    super::physical_support::run_modes(
+        super::physical_support::Witness {
+            name: "late_slot_property::late_slot_numeric_groups_scale_after_source_aggregation",
+            child_env: "POE_LATE_SLOT_NUMERIC_SOURCE_CHILD",
+            output_env: "POE_LATE_SLOT_NUMERIC_SOURCE_OUT",
+            default_output: "runs/owned-late-slot-numeric-source-01",
+            label: "Late slot numeric groups",
+        },
+        numeric_child,
+    );
+}
+
+fn select_numeric_item(xml: &str, slot: &str, id: &str) -> String {
+    let doc = roxmltree::Document::parse(xml).unwrap();
+    let items = doc.descendants().find(|n| n.has_tag_name("Items")).unwrap();
+    let set = items
+        .children()
+        .find(|n| {
+            n.has_tag_name("ItemSet") && n.attribute("id") == items.attribute("activeItemSet")
+        })
+        .unwrap();
+    let node = set
+        .children()
+        .find(|n| n.has_tag_name("Slot") && n.attribute("name") == Some(slot))
+        .unwrap();
+    let replacement = set_attr(&xml[node.range()], "itemId", id);
+    let mut result = xml.to_owned();
+    result.replace_range(node.range(), &replacement);
+    result
+}
+
+fn numeric_child(root: &Path, out: &Path, enabled: bool) {
+    let dir = root.join("tests/fixtures/builds/breadth-20260908");
+    let bytes = fs::read(dir.join("build-03.xml")).unwrap();
+    let index: Json = serde_json::from_slice(&fs::read(dir.join("index.json")).unwrap()).unwrap();
+    assert_eq!(digest(&bytes), index["builds"][2]["xml_sha256"]);
+    let original = std::str::from_utf8(&bytes).unwrap();
+    let doc = roxmltree::Document::parse(original).unwrap();
+    for (slot, id) in [("Belt", "3"), ("Ring 1", "5"), ("Ring 2", "7")] {
+        assert_eq!(selected_item(&doc, slot).attribute("id"), Some(id));
+    }
+    let old = "28% increased bonuses gained from right Equipped Ring";
+    let new = "30% increased bonuses gained from right Equipped Ring";
+    let belt = selected_item(&doc, "Belt");
+    let body = &original[belt.range()];
+    assert_eq!(body.matches(old).count(), 1);
+    let mut endpoint = original.to_owned();
+    endpoint.replace_range(belt.range(), &body.replacen(old, new, 1));
+    assert_eq!(endpoint.replacen(new, old, 1), original);
+    let endpoint_doc = roxmltree::Document::parse(&endpoint).unwrap();
+    let ring = selected_item(&endpoint_doc, "Ring 2");
+    let ring_body = &endpoint[ring.range()];
+    let elemental = "+16% to all Elemental Resistances";
+    let fire = "+16% to Fire Resistance";
+    assert_eq!(ring_body.matches(&format!("\n{elemental}\n")).count(), 1);
+    assert!(!ring_body.contains(fire));
+    let mut same_stat = endpoint.clone();
+    same_stat.replace_range(ring.range(), &ring_body.replacen(elemental, fire, 1));
+    assert_eq!(same_stat.replacen(fire, elemental, 1), endpoint);
+    let without_belt = select_numeric_item(&endpoint, "Belt", "0");
+    assert_eq!(select_numeric_item(&without_belt, "Belt", "3"), endpoint);
+    let without_ring = select_numeric_item(&endpoint, "Ring 2", "0");
+    assert_eq!(select_numeric_item(&without_ring, "Ring 2", "7"), endpoint);
+    let swapped = select_numeric_item(
+        &select_numeric_item(&endpoint, "Ring 1", "7"),
+        "Ring 2",
+        "5",
+    );
+    assert_eq!(
+        select_numeric_item(&select_numeric_item(&swapped, "Ring 1", "5"), "Ring 2", "7"),
+        endpoint
+    );
+    let controls = [
+        (
+            "original-03",
+            original.to_owned(),
+            true,
+            Some((5, 25, 34, 8)),
+            Some((7, 28, 22, 6)),
+        ),
+        (
+            "right-ring-endpoint-30",
+            endpoint,
+            true,
+            Some((5, 25, 34, 8)),
+            Some((7, 30, 22, 6)),
+        ),
+        (
+            "same-stat-right-ring-30",
+            same_stat,
+            true,
+            Some((5, 25, 34, 8)),
+            Some((7, 30, 38, 11)),
+        ),
+        (
+            "unequipped-supplier",
+            without_belt,
+            false,
+            Some((5, 0, 34, 0)),
+            Some((7, 0, 22, 0)),
+        ),
+        (
+            "unequipped-recipient",
+            without_ring,
+            true,
+            Some((5, 25, 34, 8)),
+            None,
+        ),
+        (
+            "swapped-ring-occurrences",
+            swapped,
+            true,
+            Some((7, 25, 22, 5)),
+            Some((5, 30, 34, 10)),
+        ),
+    ];
+    let mut cases = Vec::new();
+    for (name, xml, supplier, left, right) in controls {
+        let control = json!({"numeric_grouping":true,"same_stat_ring_edit":name == "same-stat-right-ring-30","supplier_equipped":supplier,"rings":[
+            {"slot":"Ring 1","expected":left},{"slot":"Ring 2","expected":right}],
+            "roll_legality_authority":false,"native_owner_closure":false});
+        for (prefix, instrumented) in [("", true), ("repeat-", true), ("unhooked-", false)] {
+            cases.push(observe(
+                root,
+                &format!("{prefix}{name}"),
+                &xml,
+                enabled,
+                instrumented,
+                Some(control.clone()),
+            ));
+        }
+    }
+    let mut paths = FILES.to_vec();
+    paths.extend([
+        "src/Classes/ModStore.lua",
+        "src/Classes/ModDB.lua",
+        "src/Classes/ModList.lua",
+        "src/Classes/Item.lua",
+        "src/Classes/ItemsTab.lua",
+        "src/Modules/ModParser.lua",
+        "src/Modules/ModTools.lua",
+        "src/Data/ModCache.lua",
+        "src/Data/Uniques/belt.lua",
+    ]);
+    paths.sort_unstable();
+    paths.dedup();
+    let report = json!({"schema_version":1,"source_revision":pinned::UPSTREAM_REVISION,
+        "manifest_sha256":pinned::manifest_sha256(),"observer_sha256":digest(OBSERVER.as_bytes()),"lifecycle_sha256":digest(LIFECYCLE.as_bytes()),
+        "source_path":"tests/fixtures/builds/breadth-20260908/build-03.xml","source_sha256":digest(&bytes),
+        "files":paths.into_iter().map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})).collect::<Vec<_>>(),
+        "scope":{"original_call":"CalcPerform.lua1533","original_grouping":"CalcPerform.lua1513-1521","original_scaling":"ModStore.lua82",
+            "real_selected_ingenuity_and_rings":true,"one_explicit_same_stat_ring_line_control":true,"whole_item_legality":false,"new_belt_bonus_producer":false,"native_parity":false,"owner_closure":false,
+            "socketed_or_conditional_group_exclusion_proved":false,"fractional_group_precision_proved":false,"all_slot_families_proved":false},
+        "cases":cases});
+    let suffix = if enabled { "on" } else { "off" };
+    let encoded = serde_json::to_vec(&report).unwrap();
+    assert!(encoded.len() <= 32 * 1024 * 1024);
+    fs::write(out.join(format!("source-jit-{suffix}.raw.json")), &encoded).unwrap();
+    check_numeric(&report);
+    fs::write(out.join(format!("source-jit-{suffix}.json")), encoded).unwrap();
+    assert_eq!(fs::read(dir.join("build-03.xml")).unwrap(), bytes);
+}
+
+fn check_numeric(report: &Json) {
+    assert_eq!(rows(&report["cases"]).len(), 18);
+    for case in rows(&report["cases"]) {
+        assert_eq!(case["independent_source_bindings_verified"], true);
+        for stage in STAGES {
+            let state = &case["states"][stage];
+            for key in ["original_methods_preserved", "hook_removed"] {
+                assert_eq!(state[key], true);
+            }
+            for key in [
+                "business_wrappers",
+                "source_tables_mutated",
+                "diagnostic_requery",
+                "native_owner_closure",
+            ] {
+                assert_eq!(state[key], false);
+            }
+            assert_eq!(rows(&state["environments"]).len(), 2);
+            if case["instrumented"] == false {
+                continue;
+            }
+            for env in rows(&state["environments"]) {
+                let copies = rows(&env["numeric_copies"]);
+                for ring in rows(&case["control"]["rings"]) {
+                    let slot = ring["slot"].as_str().unwrap();
+                    let queries: Vec<_> = rows(&env["queries"])
+                        .iter()
+                        .filter(|q| q["slot"] == slot)
+                        .collect();
+                    let slot_copies: Vec<_> = copies.iter().filter(|c| c["slot"] == slot).collect();
+                    if ring["expected"].is_null() {
+                        assert!(queries.is_empty());
+                        assert!(slot_copies.is_empty());
+                        continue;
+                    }
+                    let expected = rows(&ring["expected"]);
+                    let id = expected[0].as_i64().unwrap();
+                    let same_stat = case["control"]["same_stat_ring_edit"] == true;
+                    let fire_values = if id == 7 {
+                        if same_stat { vec![22, 16] } else { vec![22] }
+                    } else {
+                        vec![34]
+                    };
+                    let mut groups = vec![(
+                        "FireResist",
+                        fire_values,
+                        expected[2].as_i64().unwrap(),
+                        expected[3].as_i64().unwrap(),
+                    )];
+                    if id == 7 && !same_stat {
+                        groups.push(("ElementalResist", vec![16], 16, 4));
+                    }
+                    assert_eq!(queries.len(), 1);
+                    let q = queries[0];
+                    assert_eq!(q["item"]["id"], id);
+                    assert_eq!(q["item"]["exact_registered"], true);
+                    assert_eq!(q["original_return"], true);
+                    assert_eq!(q["result"], expected[1]);
+                    let raw_values: Vec<_> = rows(&q["numeric_source_records"])
+                        .iter()
+                        .map(|r| {
+                            (
+                                r["record"]["name"].as_str().unwrap(),
+                                r["record"]["value"].as_i64().unwrap(),
+                            )
+                        })
+                        .collect();
+                    let expected_raw: Vec<_> = groups
+                        .iter()
+                        .flat_map(|(name, values, _, _)| {
+                            values.iter().map(move |value| (*name, *value))
+                        })
+                        .collect();
+                    assert_eq!(raw_values, expected_raw);
+                    let producer_records: Vec<_> = rows(&q["before"])
+                        .iter()
+                        .flat_map(|store| rows(&store["rows"]))
+                        .map(|r| &r["record"])
+                        .collect();
+                    assert_eq!(
+                        producer_records.len(),
+                        usize::from(case["control"]["supplier_equipped"] == true)
+                    );
+                    for p in producer_records {
+                        assert_eq!(p["name"], q["name"]);
+                        assert_eq!(p["type"], "INC");
+                        assert_eq!(p["value"], expected[1]);
+                        assert!(
+                            p["source"]
+                                .as_str()
+                                .unwrap()
+                                .starts_with("Item:3:Ingenuity")
+                        );
+                        assert_eq!(p["flags"], 0);
+                        assert_eq!(p["keywordFlags"], 0);
+                        assert!(p.get("positions").is_none());
+                    }
+                    if expected[1] == 0 {
+                        assert!(slot_copies.is_empty());
+                        continue;
+                    }
+                    assert_eq!(slot_copies.len(), groups.len());
+                    for (name, values, sum, copied) in groups {
+                        let group: Vec<_> = slot_copies
+                            .iter()
+                            .filter(|copy| copy["argument"]["name"] == name)
+                            .collect();
+                        assert_eq!(group.len(), 1, "one original group for {slot}/{name}");
+                        let copy = group[0];
+                        for key in [
+                            "original_query",
+                            "exact_source_list",
+                            "exact_group_argument",
+                            "exact_player_destination",
+                            "return_observed",
+                            "source_records_preserved",
+                        ] {
+                            assert_eq!(copy[key], true);
+                        }
+                        assert_eq!(copy["item"]["id"], id);
+                        assert_eq!(copy["item"]["exact_registered"], true);
+                        assert_eq!(
+                            copy["factor"].as_f64(),
+                            Some(expected[1].as_f64().unwrap() / 100.0)
+                        );
+                        assert_eq!(copy["argument"]["value"], sum);
+                        assert_eq!(copy["group_key"], format!("{name}|BASE|-|-|-"));
+                        let members = rows(&copy["members"]);
+                        assert_eq!(members.len(), values.len());
+                        for (member, value) in members.iter().zip(values) {
+                            assert_eq!(member["original_format_call"], true);
+                            assert_eq!(member["record"]["value"], value);
+                            assert_eq!(member["record"]["name"], name);
+                            assert_eq!(member["record"]["type"], "BASE");
+                            assert_eq!(member["record"]["flags"], 0);
+                            assert_eq!(member["record"]["keywordFlags"], 0);
+                            assert!(member["record"].get("positions").is_none());
+                            assert!(
+                                member["record"]["source"]
+                                    .as_str()
+                                    .unwrap()
+                                    .starts_with(&format!("Item:{id}:"))
+                            );
+                        }
+                        assert_eq!(rows(&copy["insertions"]).len(), 1);
+                        let inserted = &copy["insertions"][0];
+                        assert_eq!(inserted["exact_inserted_object"], true);
+                        assert_eq!(inserted["same_as_argument"], false);
+                        assert_eq!(inserted["record"]["name"], name);
+                        assert_eq!(inserted["record"]["value"], copied);
+                        assert_eq!(inserted["record"]["source"], copy["argument"]["source"]);
+                        assert!(
+                            inserted["record"]["source"]
+                                .as_str()
+                                .unwrap()
+                                .ends_with(&format!("% {slot} Bonus Effect"))
+                        );
+                    }
+                }
+                assert!(
+                    copies
+                        .iter()
+                        .all(|c| c["slot"] == "Ring 1" || c["slot"] == "Ring 2")
+                );
+            }
+        }
+    }
+    for name in [
+        "original-03",
+        "right-ring-endpoint-30",
+        "same-stat-right-ring-30",
+        "unequipped-supplier",
+        "unequipped-recipient",
+        "swapped-ring-occurrences",
+    ] {
+        let a = named(report, name);
+        let b = named(report, &format!("repeat-{name}"));
+        let unhooked = named(report, &format!("unhooked-{name}"));
+        same(
+            &a["states"],
+            &b["states"],
+            "independent numeric group replay",
+        );
+        for stage in STAGES {
+            same(
+                &a["states"][stage]["outputs"],
+                &unhooked["states"][stage]["outputs"],
+                "unhooked numeric group output equality",
+            );
+            same(
+                &physical_inputs(&a["states"][stage]),
+                &physical_inputs(&unhooked["states"][stage]),
+                "unhooked physical inputs",
+            );
+        }
+    }
+    for stage in STAGES {
+        let separate = &named(report, "right-ring-endpoint-30")["states"][stage];
+        let grouped = &named(report, "same-stat-right-ring-30")["states"][stage];
+        for (a, b) in rows(&separate["environments"])
+            .iter()
+            .zip(rows(&grouped["environments"]))
+        {
+            assert_eq!(a["mode"], b["mode"]);
+            let amounts = |env: &Json| {
+                rows(&env["numeric_copies"])
+                    .iter()
+                    .filter(|c| c["slot"] == "Ring 2")
+                    .map(|c| c["insertions"][0]["record"]["value"].as_i64().unwrap())
+                    .collect::<Vec<_>>()
+            };
+            assert_eq!(
+                amounts(a),
+                vec![6, 4],
+                "distinct FireResist and ElementalResist groups"
+            );
+            assert_eq!(
+                amounts(b),
+                vec![11],
+                "two FireResist members grouped before rounding"
+            );
+        }
+    }
 }

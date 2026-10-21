@@ -1,0 +1,11 @@
+# Grouped slot-copy contract checkpoint
+
+The receipt records passing source controls, the unchanged earlier LIST witness, thirteen native slot tests and scoped strict lint. Five native tests exercise the existing Engine contract; they do not load canonical modifier data or establish native/source parity.
+
+Original03 supplies the actual selected Ingenuity and rings. Its FireResist 22 and ElementalResist 16 remain distinct groups; at a right-ring roll of 30%, they copy 6 and 4. One controlled Item7 line edit from +16% all elemental resistance to +16% fire resistance then supplies a same-stat group 22+16, whose copy is 11. That edited case is not the unchanged corpus build or a complete item-legality proof. The source controls also retain 28%, remove the supplier or recipient, and swap exact ring occurrences. The compact observations retain original-query/formatter/group/insertion identity and verified replay evidence. Equal fragments are deduplicated only after exact comparison; all contexts remain listed. Full reports stay local and are hashed in validation.json.
+
+This proves a bounded integer BASE source example. Fractional precision, conditional and SocketedIn exclusions, Kalandra routing and other slot families remain unproved. There is no new production supplier, native group membership admission, owner completion or release. The prior 720d65ca release, five Flask gaps, 123/137/127/144/5 selected counts and 110 queries are unchanged. The fresh selected Original05 report still has five pending input issues, and calculation was not run.
+
+The first source test failed because it incorrectly merged the meanings of fire and all-elemental resistance. Its failed log and raw observations remain authenticated in the receipt. The corrected test preserves distinct source names and adds an explicit same-stat fixture; no source behavior, runtime rule or native assertion was changed to hide the failure.
+
+Reproduce the commands in the authenticated serial script and the separate native target. Use fresh output directories. Next supply canonical percentage and semantic group authority through existing data seams; do not treat this contract test as a complete contributor census.

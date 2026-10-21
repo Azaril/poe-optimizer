@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "archives": [
+    {
+      "path": "src/Modules/Build.lua",
+      "archive": "../source-empty-party/evidence/Build.lua.gz",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d",
+      "bytes": 116017,
+      "compressed_sha256": "3f6a44249269eeb28cde364af74eadcc293d28aa3e2807f321cf3382aef8e0b6",
+      "compressed_bytes": 26180
+    },
+    {
+      "path": "src/Classes/ImportTab.lua",
+      "archive": "../configuration-campaign-progression/ImportTab.lua.gz",
+      "sha256": "ba2933b2268ba9cb8a4ecfb529a01612781100975272a4bc2ef3e9555eb9f5e2",
+      "bytes": 71408,
+      "compressed_sha256": "6e7da474dda76b3af022e2b003d0e9f651a212be3cf563acee99baccf0404946",
+      "compressed_bytes": 16017
+    },
+    {
+      "path": "src/Classes/DropDownControl.lua",
+      "archive": "../source-empty-party/evidence/DropDownControl.lua.gz",
+      "sha256": "a20fe837f44f8ca028b4cc3447fee72e6f6f102224e9b8331edbdcafa8601a8f",
+      "bytes": 17071,
+      "compressed_sha256": "f811cdf5c39b15c0fb3d9dd08759685531b49fe6e0a388456eed0575f72a65b6",
+      "compressed_bytes": 4148
+    },
+    {
+      "path": "src/Classes/EditControl.lua",
+      "archive": "evidence/EditControl.lua.gz",
+      "sha256": "6af3f270ec07ddf2e3594effd868332c76c9e3039e6a49309965a51419dcf2d4",
+      "bytes": 24662,
+      "compressed_sha256": "9e49370e3a2506e591278e4f1469dc7212786a326454017b7ede48e56661d86e",
+      "compressed_bytes": 4812
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "archive": "../configuration-distance-inputs/CalcPerform.lua.gz",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae",
+      "bytes": 181097,
+      "compressed_sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575",
+      "compressed_bytes": 34408
+    }
+  ],
+  "excerpts": [
+    {
+      "path": "src/Modules/Build.lua",
+      "first": 34,
+      "last": 635,
+      "role": "fresh_build_construction_and_saver_load",
+      "sha256": "2cb5cb8e2cc4efc889a92a0e29d1c4355286f2477de667603e884faeb53fd1e1"
+    },
+    {
+      "path": "src/Classes/ImportTab.lua",
+      "first": 556,
+      "last": 574,
+      "role": "complete_import_load",
+      "sha256": "cbb306dad0a8dde031224c78ab3c64c1cf006fdae1591e8c81edbec7e300c7d0"
+    },
+    {
+      "path": "src/Classes/ImportTab.lua",
+      "first": 576,
+      "last": 592,
+      "role": "complete_import_save",
+      "sha256": "e861ede7f36e3c77a8444dc2844b5d9e0b8a255c5c8624ef8538ba0b2fded7c9"
+    },
+    {
+      "path": "src/Classes/DropDownControl.lua",
+      "first": 142,
+      "last": 156,
+      "role": "selection_without_callback",
+      "sha256": "cd7f442005c6549f64c684a32b7be344c02a398964bb969f4500ebe6bea580f2"
+    },
+    {
+      "path": "src/Classes/EditControl.lua",
+      "first": 100,
+      "last": 108,
+      "role": "text_notification_requires_explicit_argument",
+      "sha256": "e54699972ffd645bf0459388765805066711899b23830ca03cd67707f7fd962f"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "first": 1214,
+      "last": 1222,
+      "role": "party_export_is_a_calculation_input",
+      "sha256": "099e798eb631d33244564acd4f185756b2c0af381917f271a6f3aaf29dcb374b"
+    }
+  ],
+  "upstream_license": {
+    "path": "../configuration-accounting/evidence/pob/LICENSE.md",
+    "sha256": "22d2d075c1d361971764fbbd1e12e1485bdf35f0769ffac4eca8a79afc60dda8"
+  },
+  "runtime_observations": "none",
+  "scope": {
+    "fresh_load_only": true,
+    "unique_ordinary_root_import": true,
+    "childless_complete_frame_required": true,
+    "source_preferences_preserved": true,
+    "native_gameplay_inputs": false,
+    "native_inventory_completion": false,
+    "future_import_or_export_actions_implemented": false
+  },
+  "review": {
+    "saved_fields": [
+      "lastRealm",
+      "lastLeague",
+      "lastAccountHash",
+      "lastCharacterHash",
+      "importLink",
+      "useGeneratedItemText",
+      "exportParty"
+    ],
+    "boolean_fields": [
+      "useGeneratedItemText",
+      "exportParty"
+    ],
+    "boolean_domain": [
+      "true",
+      "false"
+    ],
+    "export_party_true": "retain fallback obligation",
+    "absent_export_party": "fresh Load explicitly sets false",
+    "load_callbacks": "SelByValue does not invoke a callback; SetText without notify does not invoke changeFunc",
+    "native_policy": "source-only metadata; no build or scenario inputs",
+    "unsupported_frames": "retain fallback obligations"
+  }
+}

@@ -1,0 +1,336 @@
+{
+  "status": "passed",
+  "generated_at": "2026-10-21T05:41:11.606Z",
+  "scope": "Integer BASE Ring source grouping plus separate synthetic Engine contract; no production data publication or owner closure",
+  "complete_builds": 0,
+  "native": {
+    "target": "owned_player_equipment_slots",
+    "passed": 13,
+    "new_contract_tests": [
+      "same_group_is_rounded_after_sum_and_direct_values_are_delivered_once",
+      "present_zero_absent_group_empty_slot_and_nonpositive_bonus_stay_distinct",
+      "selected_slot_reads_exact_use_and_rebinds_alternatives_without_cross_slot_copy",
+      "subtotal_follows_contribution_order_and_query_selection_does_not_change_it",
+      "partial_subtotal_census_is_unavailable_not_a_present_zero_or_usable_copy"
+    ],
+    "canonical_data_admission": false,
+    "source_parity": false
+  },
+  "source": {
+    "numeric_fresh_vms": 36,
+    "numeric_cases": 6,
+    "list_regression_fresh_vms": 38,
+    "jit_modes": [
+      "off",
+      "on"
+    ],
+    "lifecycle_stages": [
+      "fresh",
+      "rebuilt_once",
+      "rebuilt_twice"
+    ]
+  },
+  "logs": [
+    {
+      "kind": "native",
+      "path": "runs/grouped-slot-native-20261021-01.log",
+      "bytes": 1746,
+      "sha256": "dedf7ea50bcd45c64110b3848c6494ff1d65acd279740a774555349035753805",
+      "result": "test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s"
+    },
+    {
+      "kind": "source",
+      "path": "runs/grouped-slot-source-20261021-02.log",
+      "bytes": 905,
+      "sha256": "e14ea754f8a31e67b8831c5ae63093455b79e47eaa459fcb423ba16549814c27",
+      "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 22 filtered out; finished in 285.98s"
+    },
+    {
+      "kind": "list_regression",
+      "path": "runs/grouped-slot-source-regression-20261021-01.log",
+      "bytes": 802,
+      "sha256": "eb9d678721e7c0938f84d7e8d8e7f811642a596568746bb444850512898f4ab7",
+      "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 22 filtered out; finished in 403.32s"
+    },
+    {
+      "kind": "native_clippy",
+      "path": "runs/grouped-slot-native-clippy-20261021-01.log",
+      "bytes": 245,
+      "sha256": "68a9f85ee7cdc55838efafe14faffc5bdd1960994ed3e0fc0f0164bb089563c6",
+      "result": "Finished `dev` profile [unoptimized] target(s) in 9.10s"
+    },
+    {
+      "kind": "source_clippy",
+      "path": "runs/grouped-slot-source-clippy-20261021-01.log",
+      "bytes": 149,
+      "sha256": "11d516c0e80288d14a06c6b91fd9580db37491c02d915cdf89c503a2a5718c18",
+      "result": "Finished `dev` profile [unoptimized] target(s) in 1.16s"
+    }
+  ],
+  "source_reports": [
+    {
+      "path": "runs/owned-late-slot-numeric-source-20261021-02/source-jit-off.json",
+      "bytes": 2748803,
+      "sha256": "38f6f2b44252674bd0d8affec42d3de6fc1c1b65806c370c911d52cc1b26815a"
+    },
+    {
+      "path": "runs/owned-late-slot-numeric-source-20261021-02/source-jit-on.json",
+      "bytes": 2748803,
+      "sha256": "38f6f2b44252674bd0d8affec42d3de6fc1c1b65806c370c911d52cc1b26815a"
+    },
+    {
+      "path": "runs/owned-late-slot-property-source-20261021-01/source-jit-off.json",
+      "bytes": 3186009,
+      "sha256": "9581cf43fedaed206defcf41cd3ab725d10b83d3527d19d58e904aa955a054e5"
+    },
+    {
+      "path": "runs/owned-late-slot-property-source-20261021-01/source-jit-on.json",
+      "bytes": 3186009,
+      "sha256": "9581cf43fedaed206defcf41cd3ab725d10b83d3527d19d58e904aa955a054e5"
+    }
+  ],
+  "maintained_inputs": [
+    {
+      "path": "crates/poe-optimizer-engine/tests/owned_player_equipment_slots.rs",
+      "bytes": 34555,
+      "sha256": "53b52ec326c65234879b584d4656711155fc750062ff5654e9af2063d446e79f"
+    },
+    {
+      "path": "crates/poe-optimizer-engine/tests/support/owned_player_equipment_slots_fixture.rs",
+      "bytes": 9059,
+      "sha256": "e6fd703645b44ccf553f7e52762b076b53ee18222e2f24d8abd22f313a14a8d3"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/owned_djinn_support_preparation_source.rs",
+      "bytes": 28894,
+      "sha256": "8d010d70f6fd8d891f33c6589d7a56e97424b8eaccee85c87b6556791de036e3"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/late_slot_property_source.rs",
+      "bytes": 44266,
+      "sha256": "9aa652bf124b2fa3476875c4959f807a8dd59dcdbdb9f6b0ba67cab6b367366d"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/late_slot_property_source.lua",
+      "bytes": 20664,
+      "sha256": "f168ccc59ae264969c2e2bbc1ee61478b4cc6d640eafc6b9d4f54978f32626db"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/physical_support_source.rs",
+      "bytes": 4777,
+      "sha256": "1df2276202100cda9779694352f1e9805544369561c07a015dd972c73a44fd27"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/configuration_preparation_source.rs",
+      "bytes": 14535,
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/djinn_provider_source.lua",
+      "bytes": 16210,
+      "sha256": "4710d7fcf625cefbbf94de81076fc51dc70da65b357f7f40be512d1b58229007"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/json_evidence.rs",
+      "bytes": 4597,
+      "sha256": "55175219a711f968167eb2b12c19efbdef9442992f07954a508ec32bd40ba95a"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+      "bytes": 217603,
+      "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/index.json",
+      "bytes": 14516,
+      "sha256": "c611bb6ee9c504c870e853febd44c8f5feafb58e63dc07adb84946c264d456dd"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+      "bytes": 46532,
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    }
+  ],
+  "serial_script": {
+    "path": "runs/validate-grouped-slot-controls-20261021-02.ps1",
+    "bytes": 2222,
+    "sha256": "3d2941a4b628fcd74c3650811bc555246bac47d842f328e8ee103a74a60ec780"
+  },
+  "generator": {
+    "path": "runs/grouped-slot-checkpoint-20261021/generate.cjs",
+    "bytes": 15568,
+    "sha256": "4d9a59542b69cdf40f5d4cfb9a29ec4fbab314b45a1bae50f2219fdfe31bf8d8"
+  },
+  "retained_failure": {
+    "status": "retained failure, not a passing replay",
+    "log": {
+      "path": "runs/grouped-slot-source-20261021-01.log",
+      "bytes": 7736,
+      "sha256": "42142ddc665f3296f04a1ea212bbbdd6ea03b725fa3587ffcdc9924eb896d537"
+    },
+    "child_log": {
+      "path": "runs/owned-late-slot-numeric-source-20261021-01/source-jit-off.log",
+      "bytes": 8352,
+      "sha256": "b1fd1fb1b7fca0facf0a6dbe88e66e1d28dcc6091d6d3572c9fb8344bb57c17a"
+    },
+    "raw_report": {
+      "path": "runs/owned-late-slot-numeric-source-20261021-01/source-jit-off.raw.json",
+      "bytes": 2244308,
+      "sha256": "74be66400cc1e6087d199fe3f60f415704609fe66db48123f408dfff687d567c"
+    },
+    "cause": "The test incorrectly expected all-elemental16 to be a second FireResist member; source FireResist census was [22].",
+    "correction": "Keep FireResist and ElementalResist as distinct groups in original controls, and add one explicit same-stat line variant with an exact XML inverse.",
+    "source_files_changed": false,
+    "native_assertions_changed": false,
+    "retry_until_pass": false,
+    "repair_manifest": {
+      "path": "runs/late-slot-numeric-source-repair-20261021/manifest.json",
+      "bytes": 2383,
+      "sha256": "f2d09a4c2dbc160fcb52f0512335e496fa27143fc0f19019866384adc9b4827b"
+    }
+  },
+  "unchanged_release": {
+    "input": "720d65ca89ec10a9ec57d26324abc52d963b6246cbfae618105c86e9e129eacf",
+    "release": {
+      "path": "runs/owned-flask-charge-delivery-publication-01/package/release.json",
+      "bytes": 57488,
+      "sha256": "297f262f30c53957958b89d7c16deeffd888591c1bc9c0b379fb41bb555019c3"
+    },
+    "prior_publication": {
+      "path": "runs/owned-flask-charge-delivery-publication-01/validation.json",
+      "bytes": 1275,
+      "sha256": "f2de89b603a575f547ca184dce457c63968fa6909a8a9c184dd75b4dbcabfb52"
+    },
+    "selected_counts": [
+      123,
+      137,
+      127,
+      144,
+      5
+    ],
+    "queries": 110,
+    "flask_owner_gaps": 5,
+    "new_publication_this_checkpoint": false
+  },
+  "current_original05": {
+    "report": {
+      "path": "runs/owned-flask-selected-05-check-20261021.json",
+      "bytes": 179678,
+      "sha256": "23c5fd46f6295579cc679d7f18b1ac8dca707265012909c2b7eb693823798cc8"
+    },
+    "draft_digest": "fa2e83a68f39d5670f36e15fb395ae03f8712bdd396a2a42b3433e7bffe34a80",
+    "selection": {
+      "build": {
+        "active_weapon_loadout": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "00000000000002cc"
+        },
+        "allocations": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "00000000000001bf"
+        },
+        "character": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "00000000000001c1"
+        },
+        "choices": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "00000000000001f1"
+        },
+        "equipment": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "00000000000002c0"
+        },
+        "skills": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "00000000000001dd"
+        }
+      },
+      "queries": {
+        "lineage": "cabf626d3347680e4058302056cfafd9",
+        "local": "000000000000068f"
+      },
+      "scenario": {
+        "lineage": "cabf626d3347680e4058302056cfafd9",
+        "local": "0000000000000206"
+      }
+    },
+    "status": "pending",
+    "selected_issues": [
+      {
+        "code": "usage-preferences-not-converted",
+        "id": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "000000000000051b"
+        },
+        "owner": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "00000000000001dd"
+        },
+        "path": "skill_presets.members[2].intent.usage.completion"
+      },
+      {
+        "code": "configuration-roles-not-converted",
+        "id": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "00000000000001f2"
+        },
+        "owner": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "00000000000001f1"
+        },
+        "path": "choice_presets.members[0].choices.completion"
+      },
+      {
+        "code": "external-assumptions-not-converted",
+        "id": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "0000000000000208"
+        },
+        "owner": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "0000000000000206"
+        },
+        "path": "scenario_presets.members[0].scenario.assumptions.completion"
+      },
+      {
+        "code": "usage-not-converted",
+        "id": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "0000000000000209"
+        },
+        "owner": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "0000000000000206"
+        },
+        "path": "scenario_presets.members[0].scenario.usage.completion"
+      },
+      {
+        "code": "scenario-usage-intents-not-converted",
+        "id": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "000000000000020a"
+        },
+        "owner": {
+          "lineage": "cabf626d3347680e4058302056cfafd9",
+          "local": "0000000000000206"
+        },
+        "path": "scenario_presets.members[0].scenario.usage_intents.completion"
+      }
+    ],
+    "selected_query_rows": 22,
+    "schema_issue_count": 0,
+    "unresolved_skill_preset_dependency_sets": 6,
+    "verification": {
+      "calculation": "not_run",
+      "definitions": "not_bound",
+      "legality": "not_checked",
+      "structure": "valid"
+    }
+  },
+  "compact_observations": {
+    "file": "source-observations.json",
+    "bytes": 66562,
+    "sha256": "09c7bd593341de5dd263db8e39ffa01388d0bd5626a1566713ade18463192021"
+  }
+}
