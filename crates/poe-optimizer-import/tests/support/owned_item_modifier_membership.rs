@@ -125,9 +125,10 @@ fn closed(result: &NormalizedImport) -> bool {
     let Some(i) = result.draft().input().items.members.first() else {
         return false;
     };
+    let expected: Vec<_> = i.modifiers.members.iter().map(|v| v.id).collect();
     matches!(i.modifiers.completion, DraftListCompletion::Complete)
-        && i.modifier_order.to_resolved()
-            == Some(i.modifiers.members.iter().map(|v| v.id).collect())
+        && i.modifier_orders.contributions.to_resolved() == Some(expected.clone())
+        && i.modifier_orders.numeric_transforms.to_resolved() == Some(expected)
 }
 
 #[test]
@@ -179,7 +180,21 @@ fn omission_preserves_wire_and_original_pending_behavior() {
         i.modifiers.completion,
         DraftListCompletion::Pending { .. }
     ));
-    assert!(matches!(i.modifier_order, DraftField::Pending(_)));
+    assert!(matches!(
+        i.modifier_orders.contributions,
+        DraftField::Pending(_)
+    ));
+    assert!(matches!(
+        i.modifier_orders.numeric_transforms,
+        DraftField::Pending(_)
+    ));
+    let (DraftField::Pending(contributions), DraftField::Pending(transforms)) = (
+        &i.modifier_orders.contributions,
+        &i.modifier_orders.numeric_transforms,
+    ) else {
+        panic!()
+    };
+    assert_ne!(contributions.id, transforms.id);
     assert_eq!(i.modifiers.members.len(), 1);
 }
 

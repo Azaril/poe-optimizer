@@ -839,7 +839,14 @@ pub(super) fn check_scalar_originals(
                 item.modifiers.completion,
                 DraftListCompletion::Pending { .. }
             ));
-            assert!(matches!(item.modifier_order, DraftField::Pending(_)));
+            assert!(matches!(
+                item.modifier_orders.contributions,
+                DraftField::Pending(_)
+            ));
+            assert!(matches!(
+                item.modifier_orders.numeric_transforms,
+                DraftField::Pending(_)
+            ));
             assert!(item.to_resolved().is_none());
             for modifier in &item.modifiers.members {
                 if matches!(&modifier.definition, DraftField::Known { value } if families.iter().any(|family| modifier_id(family) == *value))

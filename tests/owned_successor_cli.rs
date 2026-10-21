@@ -99,7 +99,14 @@ fn checked_publication_preserves_all_five_inputs_and_adds_real_item_conversion()
             );
             assert_eq!(ring.parameters.members.len(), 2);
             assert!(
-                matches!(&ring.modifier_order, DraftField::Pending(_)),
+                matches!(&ring.modifier_orders.contributions, DraftField::Pending(_)),
+                "source execution order has not been converted"
+            );
+            assert!(
+                matches!(
+                    &ring.modifier_orders.numeric_transforms,
+                    DraftField::Pending(_)
+                ),
                 "source execution order has not been converted"
             );
         }

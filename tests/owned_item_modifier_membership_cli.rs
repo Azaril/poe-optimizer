@@ -122,7 +122,7 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
     let issued = |a: &Value| u64::from_str_radix(a["last_issued"].as_str().unwrap(), 16).unwrap();
     assert_eq!(
         issued(&prior_allocator) - issued(&next_allocator),
-        if case == 5 { 4 } else { 0 }
+        if case == 5 { 6 } else { 0 }
     );
     b["draft"]["allocator"] = prior_allocator.clone();
     let aa = a["draft"]["items"]["members"].as_array_mut().unwrap();
@@ -135,7 +135,11 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
             assert_eq!(y["modifiers"]["members"].as_array().unwrap().len(), 1);
             assert_eq!(y["modifiers"]["completion"], json!({"kind":"complete"}));
             assert_eq!(
-                y["modifier_order"],
+                y["modifier_orders"]["contributions"],
+                json!({"kind":"known","value":[y["modifiers"]["members"][0]["id"]]})
+            );
+            assert_eq!(
+                y["modifier_orders"]["numeric_transforms"],
                 json!({"kind":"known","value":[y["modifiers"]["members"][0]["id"]]})
             );
             for (old_issue, code) in [
@@ -143,7 +147,14 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
                     &x["modifiers"]["completion"],
                     "item-modifiers-not-converted",
                 ),
-                (&x["modifier_order"], "item-modifier-order-not-converted"),
+                (
+                    &x["modifier_orders"]["contributions"],
+                    "item-modifier-contribution-order-not-converted",
+                ),
+                (
+                    &x["modifier_orders"]["numeric_transforms"],
+                    "item-modifier-numeric-transform-order-not-converted",
+                ),
             ] {
                 assert_eq!(old_issue["kind"], "pending");
                 assert_eq!(old_issue["code"], code);
@@ -151,17 +162,17 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
             }
             for v in [x, y] {
                 v["modifiers"].as_object_mut().unwrap().remove("completion");
-                v.as_object_mut().unwrap().remove("modifier_order");
+                v.as_object_mut().unwrap().remove("modifier_orders");
             }
         }
     }
-    assert_eq!(retired.len(), if case == 5 { 4 } else { 0 });
+    assert_eq!(retired.len(), if case == 5 { 6 } else { 0 });
     let mut ids = BTreeMap::new();
     correspond(
         &a,
         &mut b,
         &mut ids,
-        "only the two exact structural facets change",
+        "only membership and both exact order facets change",
     );
     let mut removed = 0;
     for row in sa["origins"].as_array_mut().unwrap() {
@@ -283,7 +294,14 @@ fn probes(package: &Path, out: &Path) -> usize {
         let d: Value = read(dest.join("draft.json"));
         let i = item(&d, source_item(&s, 572));
         assert_eq!(i["modifiers"]["completion"]["kind"], "pending", "{label}");
-        assert_eq!(i["modifier_order"]["kind"], "pending", "{label}");
+        assert_eq!(
+            i["modifier_orders"]["contributions"]["kind"], "pending",
+            "{label}"
+        );
+        assert_eq!(
+            i["modifier_orders"]["numeric_transforms"]["kind"], "pending",
+            "{label}"
+        );
         assert_eq!(i["parameters"]["completion"]["kind"], "pending");
         if *label == "second-member" {
             assert_eq!(i["modifiers"]["members"].as_array().unwrap().len(), 2);
@@ -322,7 +340,11 @@ fn probes(package: &Path, out: &Path) -> usize {
             amount
         );
         assert_eq!(
-            i["modifier_order"],
+            i["modifier_orders"]["contributions"],
+            json!({"kind":"known","value":[m["id"]]})
+        );
+        assert_eq!(
+            i["modifier_orders"]["numeric_transforms"],
             json!({"kind":"known","value":[m["id"]]})
         );
         assert_eq!(i["parameters"]["completion"]["kind"], "pending");

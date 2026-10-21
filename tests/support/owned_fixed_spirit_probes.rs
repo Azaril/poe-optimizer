@@ -101,7 +101,14 @@ pub fn run(package: &Path, out: &Path) -> usize {
             .collect();
         assert_eq!(spirit_line.len(), 1);
         assert_eq!(item["modifiers"]["completion"]["kind"], "pending", "{name}");
-        assert_eq!(item["modifier_order"]["kind"], "pending", "{name}");
+        assert_eq!(
+            item["modifier_orders"]["contributions"]["kind"], "pending",
+            "{name}"
+        );
+        assert_eq!(
+            item["modifier_orders"]["numeric_transforms"]["kind"], "pending",
+            "{name}"
+        );
         assert_eq!(
             item["parameters"]["completion"]["kind"], "pending",
             "{name}"

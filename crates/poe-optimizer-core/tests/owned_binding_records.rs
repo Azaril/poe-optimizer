@@ -261,7 +261,10 @@ impl Fixture {
                     parameters: vec![],
                     item_level: Some(20),
                     quality: None,
-                    modifier_order: vec![id(4)],
+                    modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                        contributions: vec![id(4)],
+                        numeric_transforms: vec![id(4)],
+                    },
                     modifiers: vec![RolledModifier {
                         id: id(4),
                         definition: def("modifier"),

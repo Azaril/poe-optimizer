@@ -303,7 +303,10 @@ pub fn fixture(template: u64) -> ReplayInput {
             amount: FiniteQuantity::new(20., def(2)).unwrap(),
         }),
         modifiers: vec![],
-        modifier_order: vec![],
+        modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+            contributions: vec![],
+            numeric_transforms: vec![],
+        },
     });
     i.build.allocator = allocator.state();
     let modifiers: Vec<_> = d["families"]
@@ -428,7 +431,8 @@ pub fn add_modifier_to_item(
     let id = a.allocate().unwrap();
     i.build.allocator = a.state();
     let item = i.build.items.iter_mut().find(|x| x.id == item_id).unwrap();
-    item.modifier_order.push(id);
+    item.modifier_orders.contributions.push(id);
+    item.modifier_orders.numeric_transforms.push(id);
     item.modifiers.push(RolledModifier {
         id,
         definition: def(modifier),

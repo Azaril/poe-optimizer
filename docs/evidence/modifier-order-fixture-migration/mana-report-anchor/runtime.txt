@@ -1,0 +1,19 @@
+   Compiling poe-optimizer-cli v0.1.0 (C:\code\poe-optimizer)
+    Finished `test` profile [optimized] target(s) in 17.64s
+     Running tests\owned_mana_configuration_sources.rs (target\debug\deps\owned_mana_configuration_sources-e705b26f9d37f01b.exe)
+
+running 11 tests
+test complete_catalogue_and_actual_invocations_are_required ... ok
+test constructor_chain_and_empty_custom_path_are_checked ... ok
+test current_reward_owner_mapping_and_selected_origin_are_independently_sealed ... ok
+test finite_quest_defaults_and_saved_native_occurrences_remain_separate ... ok
+test inactive_and_nested_zero_mana_records_cannot_pass_body_exclusion ... ok
+test quest_record_transport_keeps_tags_positions_order_and_multiplicity ... ok
+test retain_reviewed_configuration_bodies ... ignored, explicit offline retained-proof authoring; no PoB execution
+test retained_configuration_body_domains_reconstruct_without_pob ... ok
+test source_defaults_and_complete_callback_body_declarations_are_bound ... ok
+test source_dispatch_does_not_use_display_gates_or_numeric_truthiness ... ok
+test unknown_quest_strings_and_coherently_changed_matrix_are_not_authority ... ok
+
+test result: ok. 10 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 8.66s
+

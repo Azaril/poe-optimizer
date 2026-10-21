@@ -238,7 +238,7 @@
     {
       "bytes": 1559,
       "path": "data/owned/poe2/3887ae68/self-flat-action-factories/review.json",
-      "sha256": "594ef9db626b15dfa60d10a10c0892e944234d7e8ebff691c16aabc9e28ab21f"
+      "sha256": "024791c0e318bb03109165ea7f58c46e066de977fe32de54a017776bdb4f51eb"
     },
     {
       "bytes": 5424,
@@ -298,7 +298,7 @@
     {
       "bytes": 9880,
       "path": "data/owned/poe2/3887ae68/self-flat-flask-keystone/review.json",
-      "sha256": "1c3211e7e5770e02a4ff46be25407cdc11c61a18b914e10c93bf4b85005cc6c2"
+      "sha256": "21a3ee983e7b85f287dc62618407bbc41505e476fb150f3ff7a71b97463b9dc2"
     },
     {
       "bytes": 4202,
@@ -423,7 +423,7 @@
     {
       "bytes": 1369,
       "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/review.json",
-      "sha256": "b2126e93f6def75e8b2da3f29202cd31d0316d302d4d503959a15864860c2051"
+      "sha256": "e46225901d8fb60cb155c3fd2ca78e002af5649df8c682ae8578debcb6376e5b"
     },
     {
       "bytes": 7298,
@@ -443,7 +443,7 @@
     {
       "bytes": 2762,
       "path": "data/owned/poe2/3887ae68/self-flat-later-helpers/review.json",
-      "sha256": "49b80c2e13bd98538646326bf8bd14d83989d5ae55cfb3dafbe450237d33a382"
+      "sha256": "4c131eb2fe654f7eedc9c7ca2b690160377d2b52f8018cca25c278cd77e708af"
     },
     {
       "bytes": 4752,
@@ -463,7 +463,7 @@
     {
       "bytes": 5024,
       "path": "data/owned/poe2/3887ae68/self-flat-minion-store/review.json",
-      "sha256": "d35ca00990f80e801758de29c38d5d3e3cb289af73f886b2d93fd99a7fc12ca9"
+      "sha256": "eaa1bbd66e770a85f0a49ed4e834780279d52abf810872294cfa9b08e47c8266"
     },
     {
       "bytes": 768031,
@@ -526,24 +526,24 @@
       "sha256": "7b3d1971be77acfa1a9166659e7e06df26cf95e669d6b60305e7138940e51640"
     },
     {
-      "bytes": 1814005,
+      "bytes": 1820785,
       "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/bindings.json",
-      "sha256": "d4e773a5f44f88f2e36463754484613da541c09ec1239eab368766ea804a7b4f"
+      "sha256": "2b54e203a49e35da80e92a0a3dd09e990ff79574cb5629d9852634ca185727b4"
     },
     {
-      "bytes": 25287,
+      "bytes": 25527,
       "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/draft.json.gz",
-      "sha256": "7bff6c94b96095459e696138a3ad9afb5394d3b77ec74bbb9d28f0fa4b02a920"
+      "sha256": "2d03cf1ae6bd4ee4808c4d7d985205df07c66f7319d9e3e6c6a7f1c4962b2678"
     },
     {
-      "bytes": 964,
+      "bytes": 980,
       "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/import-report.json.gz",
-      "sha256": "c544ce5e3d5bb2f7cb1438f5f4b1c9bf0c2c0548532ccbb3b842dda88a6542aa"
+      "sha256": "a09d51a3472e106868eed8fc6ab58e6386ff20dd12715c89b3529b6a959a3ed7"
     },
     {
-      "bytes": 5495,
+      "bytes": 27421,
       "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/inputs.json",
-      "sha256": "224f026299025c262ec57a04c5f0c86feb6802f6b1a16e698266133595ca108f"
+      "sha256": "8c62c1236094763485c149583e0163a2e79f091ed1ba9ab7ac24f2a19b05d00d"
     },
     {
       "bytes": 801,
@@ -566,14 +566,14 @@
       "sha256": "f431b0fd608ed975fa81a5d5c075c6de50717bb084aeadf2d8da2fc7b6b9d7ea"
     },
     {
-      "bytes": 41112,
+      "bytes": 41200,
       "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/sidecar.json.gz",
-      "sha256": "bcf63064205b8e991b0d3b1845e58a5b2d4bc52b65998c2d7558e77587f20779"
+      "sha256": "7eb87222eb0a463e8bd1fdd9280d9cfe02b4c5136f8a3460aba6efd84f82b281"
     },
     {
       "bytes": 1861,
       "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/authority.json",
-      "sha256": "8ff24776e3338be02f13ab6d5f5c15e12707b487ada803a5987e266b2a0db5ca"
+      "sha256": "9bb0652de6b27a2b5714f03e38b7d7769d89ac35f125baf11fd53d61cd2e21f1"
     },
     {
       "bytes": 29244,
@@ -593,12 +593,12 @@
     {
       "bytes": 1856,
       "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/child-review.json",
-      "sha256": "ef1a1dbc2161d170e99a8ccb3811b605efcc32a0ff2c01f6be92d6913f114021"
+      "sha256": "88bef2e9b059f4a51244e06c63e336e53e3d10ba1ce6be77d7ea701a2096c47d"
     },
     {
       "bytes": 69320,
       "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/review.json",
-      "sha256": "fd4f6dd13f6766351bf9118063972e0202e7d8663c5323c4114c4b5c42075c3d"
+      "sha256": "05ca3cbfc372c5ae4911cfc0e38753a3cb08f43985b1c90c71c367281ca536b8"
     },
     {
       "bytes": 106378,
@@ -619,7 +619,7 @@
       "review": {
         "bytes": 69320,
         "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/review.json",
-        "sha256": "fd4f6dd13f6766351bf9118063972e0202e7d8663c5323c4114c4b5c42075c3d"
+        "sha256": "05ca3cbfc372c5ae4911cfc0e38753a3cb08f43985b1c90c71c367281ca536b8"
       }
     },
     {
@@ -635,7 +635,7 @@
       "review": {
         "bytes": 5024,
         "path": "data/owned/poe2/3887ae68/self-flat-minion-store/review.json",
-        "sha256": "d35ca00990f80e801758de29c38d5d3e3cb289af73f886b2d93fd99a7fc12ca9"
+        "sha256": "eaa1bbd66e770a85f0a49ed4e834780279d52abf810872294cfa9b08e47c8266"
       }
     },
     {
@@ -643,7 +643,7 @@
       "review": {
         "bytes": 9880,
         "path": "data/owned/poe2/3887ae68/self-flat-flask-keystone/review.json",
-        "sha256": "1c3211e7e5770e02a4ff46be25407cdc11c61a18b914e10c93bf4b85005cc6c2"
+        "sha256": "21a3ee983e7b85f287dc62618407bbc41505e476fb150f3ff7a71b97463b9dc2"
       }
     },
     {
@@ -651,7 +651,7 @@
       "review": {
         "bytes": 1369,
         "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/review.json",
-        "sha256": "b2126e93f6def75e8b2da3f29202cd31d0316d302d4d503959a15864860c2051"
+        "sha256": "e46225901d8fb60cb155c3fd2ca78e002af5649df8c682ae8578debcb6376e5b"
       }
     },
     {
@@ -659,7 +659,7 @@
       "review": {
         "bytes": 2762,
         "path": "data/owned/poe2/3887ae68/self-flat-later-helpers/review.json",
-        "sha256": "49b80c2e13bd98538646326bf8bd14d83989d5ae55cfb3dafbe450237d33a382"
+        "sha256": "4c131eb2fe654f7eedc9c7ca2b690160377d2b52f8018cca25c278cd77e708af"
       }
     },
     {
@@ -667,7 +667,7 @@
       "review": {
         "bytes": 1559,
         "path": "data/owned/poe2/3887ae68/self-flat-action-factories/review.json",
-        "sha256": "594ef9db626b15dfa60d10a10c0892e944234d7e8ebff691c16aabc9e28ab21f"
+        "sha256": "024791c0e318bb03109165ea7f58c46e066de977fe32de54a017776bdb4f51eb"
       }
     },
     {
@@ -681,9 +681,9 @@
     {
       "family": "self-flat-selected-bindings",
       "review": {
-        "bytes": 1814005,
+        "bytes": 1820785,
         "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/bindings.json",
-        "sha256": "d4e773a5f44f88f2e36463754484613da541c09ec1239eab368766ea804a7b4f"
+        "sha256": "2b54e203a49e35da80e92a0a3dd09e990ff79574cb5629d9852634ca185727b4"
       }
     },
     {

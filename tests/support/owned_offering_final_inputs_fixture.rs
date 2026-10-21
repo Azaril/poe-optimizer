@@ -770,7 +770,8 @@ fn install_items(
         let old = item.id;
         item.id = id(6000 + index as u64 * 10);
         item.modifiers[0].id = id(6001 + index as u64 * 10);
-        item.modifier_order = vec![item.modifiers[0].id];
+        item.modifier_orders.contributions = vec![item.modifiers[0].id];
+        item.modifier_orders.numeric_transforms = vec![item.modifiers[0].id];
         let equipment = items
             .native
             .build

@@ -107,7 +107,14 @@ fn exact_category_census_preserves_distinct_occurrences_and_only_closes_membersh
             line.modifiers[0]
         })
         .collect();
-    assert_eq!(item.modifier_order.to_resolved(), Some(order));
+    assert_eq!(
+        item.modifier_orders.contributions.to_resolved(),
+        Some(order.clone())
+    );
+    assert_eq!(
+        item.modifier_orders.numeric_transforms.to_resolved(),
+        Some(order)
+    );
     let SchemaLookup::Known(schema) = f
         .artifacts
         .schema

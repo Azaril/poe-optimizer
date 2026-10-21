@@ -16172,14 +16172,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "000000000000020d"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000020d"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000682"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -17850,14 +17861,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "0000000000000216"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000216"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000683"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -17914,14 +17936,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "000000000000021d"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000021d"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000684"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -19646,14 +19679,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "0000000000000225"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000225"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000685"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -20516,14 +20560,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "000000000000022c"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000022c"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000686"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -20598,14 +20653,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "0000000000000230"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000230"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000687"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -20662,14 +20728,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "0000000000000237"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000237"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000688"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -20726,14 +20803,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "000000000000023e"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000023e"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000689"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -21596,14 +21684,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "0000000000000245"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000245"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068a"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -21657,14 +21756,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "000000000000024a"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000024a"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068b"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -24143,14 +24253,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "0000000000000255"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000255"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068c"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -24204,14 +24325,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "000000000000025a"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000025a"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068d"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -26744,14 +26876,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "0000000000000264"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000264"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068e"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -28476,14 +28619,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "000000000000026c"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000026c"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068f"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -31824,14 +31978,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "0000000000000278"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000278"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000690"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -31885,14 +32050,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "000000000000027d"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000027d"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000691"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -31946,14 +32122,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "0000000000000282"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000282"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000692"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -32007,14 +32194,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "0000000000000287"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000287"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000693"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -33146,14 +33344,25 @@
               "kind": "complete"
             }
           },
-          "modifier_order": {
-            "kind": "known",
-            "value": [
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "0000000000000289"
-              }
-            ]
+          "modifier_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000289"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000289"
+                }
+              ]
+            }
           }
         },
         {
@@ -34285,14 +34494,25 @@
               "kind": "complete"
             }
           },
-          "modifier_order": {
-            "kind": "known",
-            "value": [
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "000000000000028b"
-              }
-            ]
+          "modifier_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028b"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028b"
+                }
+              ]
+            }
           }
         },
         {
@@ -35424,14 +35644,25 @@
               "kind": "complete"
             }
           },
-          "modifier_order": {
-            "kind": "known",
-            "value": [
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "000000000000028d"
-              }
-            ]
+          "modifier_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028d"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028d"
+                }
+              ]
+            }
           }
         },
         {
@@ -36563,14 +36794,25 @@
               "kind": "complete"
             }
           },
-          "modifier_order": {
-            "kind": "known",
-            "value": [
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "000000000000028f"
-              }
-            ]
+          "modifier_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028f"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028f"
+                }
+              ]
+            }
           }
         },
         {
@@ -38519,18 +38761,33 @@
               "kind": "complete"
             }
           },
-          "modifier_order": {
-            "kind": "known",
-            "value": [
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "0000000000000291"
-              },
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "0000000000000292"
-              }
-            ]
+          "modifier_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000291"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000292"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000291"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000292"
+                }
+              ]
+            }
           }
         },
         {
@@ -39490,14 +39747,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "000000000000029a"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000029a"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000694"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -39577,14 +39845,25 @@
               "code": "item-modifiers-not-converted"
             }
           },
-          "modifier_order": {
-            "kind": "pending",
-            "id": {
-              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-              "local": "000000000000029f"
+          "modifier_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000029f"
+              },
+              "kind": "pending"
             },
-            "code": "item-modifier-order-not-converted",
-            "candidates": []
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000695"
+              },
+              "kind": "pending"
+            }
           }
         },
         {
@@ -41533,18 +41812,33 @@
               "kind": "complete"
             }
           },
-          "modifier_order": {
-            "kind": "known",
-            "value": [
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "00000000000002a1"
-              },
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "00000000000002a2"
-              }
-            ]
+          "modifier_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a1"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a2"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a1"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a2"
+                }
+              ]
+            }
           }
         },
         {
@@ -44369,22 +44663,41 @@
               "kind": "complete"
             }
           },
-          "modifier_order": {
-            "kind": "known",
-            "value": [
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "00000000000002a4"
-              },
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "00000000000002a5"
-              },
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "00000000000002a6"
-              }
-            ]
+          "modifier_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a4"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a5"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a6"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a4"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a5"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a6"
+                }
+              ]
+            }
           }
         },
         {
@@ -45573,18 +45886,33 @@
               "kind": "complete"
             }
           },
-          "modifier_order": {
-            "kind": "known",
-            "value": [
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "00000000000002a8"
-              },
-              {
-                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
-                "local": "00000000000002a9"
-              }
-            ]
+          "modifier_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a8"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a9"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a8"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a9"
+                }
+              ]
+            }
           }
         }
       ],

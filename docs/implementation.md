@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-20 (EDT).
+Updated: 2026-10-21 (EDT).
 
 This is the active delivery plan. The [design](domain-architecture.md) defines
 the end state; the [execution overview](data-and-evaluation-overview.md) explains
@@ -9,28 +9,154 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Remote checkpoint preceding this update:** main `06c5690f` contains the first 31-case
-modifier-source controls and ordering proposal, following Charm delivery and
-validated scalar/source-cache controls in `4eb2a112`. A fresh push succeeded and
+**Validated checkpoint: independent modifier orders.** The user-approved
+two-order model is implemented from remote main `c7e53685` and the data baseline
+below. Core/Draft records, Import source proofs and both evaluation binders have
+migrated together.
+Each Item retains one occurrence set with independent `contributions` and
+`numeric_transforms` permutations. Draft orders have separate Pending/Known states;
+no storage-order fallback or compatibility reader remains. The passing checkpoint
+includes malformed/independent order controls, noncommutative arithmetic with distinct
+orders, all-five reimports and all 110 query rows. Raw/baked encoding remains an
+Import obligation; this structural change alone does not close producer coverage.
+See the [accepted decision](owned-modifier-ordering-proposal.md) and
+[final validation receipt](evidence/modifier-order-fixture-migration/validation.json).
+This structural migration is complete; producer-data and closest-build work continue.
+
+The migration's fresh all-five imports now pass twice independently per original,
+with exact draft/sidecar inverses, source-to-occurrence correspondence and all
+110 query rows preserved. Current selected counts are **123/137/127/144/5**:
+the additional **16/19/17/20/0** issues are exclusively separately owned,
+unproved numeric-transform orders. They do not remove or replace any previous
+obligation. Original05 remains the closest build, with five selected obligations;
+**0/5 builds are complete**. The current-format drafts and reports are in
+`runs/owned-modifier-orders-originals-01`, validated against the unchanged data
+package below. These supersede the old-format imported drafts, not its rules.
+Core passes 322 tests, and the selected Import suite passes 676 tests (one
+offline test ignored). Engine passes 136 tests, including independent-order
+arithmetic and 45 joined Sniper replay checks. Core/Import strict all-target
+Clippy passes. Retained fixtures are migrated with exact inverses and 40 checked
+dependency edges; the [archived proof](evidence/modifier-order-fixture-migration/README.md)
+records the one-off tools and hashes without installing a compatibility reader.
+An independent scan found no old `modifier_order` object keys in maintained
+JSON/gzip data; all nine protected incoming-critical files remain unchanged.
+CLI regression execution, publication replay and downstream strict lint pass.
+The 38-target CLI batch finished compilation in 61m02s. Six targets passed,
+then the existing end-to-end
+`local_recipe_data_publishes_evaluates_and_preserves_original_gaps` test failed
+after 686s with Windows `StorageFull` while writing a release input. This is
+an infrastructure failure, not passing evidence for that target. Four verified
+September Cargo cache directories were removed, preserving current `target/debug`
+and all investigation evidence; free space rose to about 41 GB. The deletion
+receipt is `runs/owned-modifier-orders-cache-cleanup-01.json`.
+The isolated rerun passed in 743.03s: two tests passed and one existing external
+publication gate remained ignored. It reused compiled binaries in 0.21s with
+no code or assertion changes. A live selected-actions-stage observation recorded
+3.86 GB of temporary files (a lower-bound observation, not measured peak).
+The resumed batch passed nine more targets, then eight Mana configuration
+checks rejected an independently sealed reward-publication anchor. The following
+21-target batch passed twenty targets; the self-skill construction target failed
+two retained-proof comparisons. All 38 targets have now run. The authenticated
+one-literal Mana repair passed all ten ordinary checks; its offline authoring gate
+remains ignored. Its [supplemental proof](evidence/modifier-order-fixture-migration/mana-report-anchor/README.md)
+retains whole fixture inverses and unchanged source/release anchors. The
+self-skill mismatch was derived proof digests still referring to the prior draft
+representation, also reused by four downstream review packets. The independently
+reviewed repair is applied: nine derived leaves and sixty dependent hash pins,
+with exact inverses and unchanged gameplay/source values and refusal checks.
+Its [archived postcheck](evidence/modifier-order-fixture-migration/derived-review-digests/postcheck.json)
+checks 45 artifacts and eight literal-pin files; SHA-256 is
+`e3d88ecd88440deced0602b6a61924dec7e54156d3cf05fcc861802112000385`.
+The 22-target affected runtime batch passed after 19m23s of compilation under
+the unchanged profile. It includes the repaired self-skill construction checks
+and all four final evasion targets. The authenticated resume proof in
+`runs/owned-modifier-orders-cli-resumed-proof-01.json` establishes passing
+terminal results for all 38 original targets (229 passed, 161 existing ignored)
+plus 13 additional targets (127 passed, ten existing ignored). No failed test
+was converted to an ignore; the original failures and repaired reruns remain
+in the proof chain. The serialized final validation script
+`runs/owned-modifier-orders-finish-validation-01.ps1` completed successfully:
+Charm publication passed in 23.06s, Engine strict lint in 9.56s and root strict
+lint in 43.17s. No Cargo process from this checkpoint remains active.
+The in-progress migration, repaired fixtures and archived proof sources are
+backed up remotely as `ca2dc3c3a7302d929533930f02d375043d242749` on
+`codex/backup-2026-10-20-modifier-orders`; `ls-remote` verified the exact hash.
+This 195-path snapshot advances the earlier `1e6946b7` backup using a temporary
+index and leaves main and its normal index unchanged. All nine protected files
+were independently rechecked byte-for-byte before the update. The six Rust
+files touched by the supplemental repairs pass scoped rustfmt.
+Its backup-only commit skips CI while local CLI validation runs; the subsequent
+validated main commit must run normal CI. After the initial runtime scope
+finished, the reviewed seven-file byte-preserving JSON successor was applied
+and archived. Its final 40-artifact postcheck is
+`76dcddad49332c1889fba0944096403b14ecb170f0f3e4941d0604de85658baa`;
+all forty dependency edges and the seven original Rust pin files were checked.
+No Rust or numerical program changed in that successor.
+Completed validation: the Mana repair passed in
+`runs/owned-modifier-orders-mana-repair-01.log`. The self-skill repair and its
+derived dependency closure are applied and their runtime checks pass in
+`runs/owned-modifier-orders-repair-evasion-01.log`.
+`runs/verify_modifier_order_cli_resume.cjs` accounts for all 38 original targets
+and the additional final-fixture checks. The existing Charm scalability
+publication was replayed from
+`runs/owned-charm-capacity-publication-01/package` into the fresh
+`runs/owned-charm-scalability-orders-publication-01` directory. Strict Engine
+lint passed over 78 tracked `owned_*` targets excluding protected allocation and
+incoming-critical work; root lint passed using the expanded 75-target list in
+`runs/owned-modifier-orders-root-lint-targets-final.txt`. This adds the eleven
+newly reached derived-proof consumers to the original 64-target scope. All checks
+used the same test profile and serialized Cargo. Final production review found
+no actionable issue: Engine and
+Import were independently reviewed; Core received a second review by its
+original migration author. All 45 final fixture hashes, eight literal-pin files,
+the separate Mana anchor and nine protected files were rechecked. The next
+implementation step is the reviewed Flask native/source controls and Charm
+ordered-consumer controls described below; their candidates remain unapplied.
+The last public CI check for existing main `c7e53685` at 03:47:52 UTC on
+October 21 showed eight jobs passed, ten running and no failures. This does not
+establish that the whole run is green; the new backup intentionally skips CI.
+Validation-cost follow-up: the measured Core/Import/Engine batches spent
+5m01s/11m37s/8m21s compiling versus 0.13s/35.60s/11.57s executing. The bounded
+audit in `runs/cli-validation-cost-audit-20261021` proposes a measured local
+CLI-only optimization-level trial and extraction of a pure shared test helper,
+not reduced checks. Neither has been implemented or demonstrated faster.
+Keep the current profile for this checkpoint; measure before changing CI or
+undertaking broader test-structure work.
+Logs: `runs/owned-modifier-orders-core-01.log`,
+`runs/owned-modifier-orders-import-01.log`,
+`runs/owned-modifier-orders-migration-01.log`,
+`runs/owned-modifier-orders-engine-01.log`,
+`runs/owned-modifier-orders-core-import-clippy-01.log`, and
+`runs/owned-modifier-orders-authoring-03.log`.
+The original CLI log is `runs/owned-modifier-orders-cli-01.log`; its resumed
+logs are `runs/owned-modifier-orders-cli-extension-02.log` and
+`runs/owned-modifier-orders-cli-remaining-01.log`; the subsequent tail is
+`runs/owned-modifier-orders-cli-tail-01.log`.
+
+**Remote checkpoint preceding this update:** main `c7e53685` contains the 56-case
+modifier-source controls, Charm scalability publication and strengthened admission
+controls, following the initial proposal in `06c5690f` and Charm delivery in
+`4eb2a112`. A fresh push succeeded and
 `ls-remote` verified its complete hash. The nine protected incoming-critical
 source/data files are now backed up byte-for-byte in `ac6df890` on
 `codex/backup-2026-10-20-incoming-critical`, without changing main, the checkout
 or the normal index. Ignored build outputs and investigation candidates remain
-local. The expanded source controls and metadata publication below are subsequent
-work.
+local. The approved two-order migration described above is subsequent work.
 
 **Current validated data baseline:**
-`runs/owned-charm-scalability-publication-01/package`, input
+`runs/owned-charm-scalability-orders-publication-01/package`, input
 `b8851ea50c9d5fd97e1695e536c89dba185f136d51d6e77da31bd22f8f4a67a9`.
 Release SHA-256 is
 `5041d56b85e593ea4350400396e82e47b65e26fce04403faa648af88fcde777a`;
 validation SHA-256 is
-`f5901c124d3ef7c5c6e3cd6dc49dfcf0a44a037b34596fa613db36ff6679e01f`.
+`f22190b4cb1419e1515cb259998914fa8b71d2340a0f8b1fd8ff5a73c40f55fe`.
 Only Modifier `3172`'s source-component scalability obligation retires, reducing
 its gaps from four to three. All numerical programs, native domains, import
 guards, queries and other owners remain unchanged. The all-five shared CLI
 publication passes, including exact import preservation, byte-identical package
-rebuild and selected counts 107/118/110/124/5. This is a metadata proof, not
+rebuild and current-format selected counts 123/137/127/144/5. It reproduces the
+same data package as the earlier publication, while checking both independent
+order obligations in fresh imports. This is a metadata proof, not
 complete modifier coverage or a complete build.
 
 **Remote checkpoints preceding Charm:** validated main `02efb394`
@@ -126,10 +252,110 @@ authenticated seal and run its existing pin checks in the ordinary packet test.
 The full raw/semantic inverse preserves every other pin, source and assertion.
 Runtime reruns now verify the repair without changing any behavioral assertion.
 
-**Resume in this order:** use the validated admission boundary checks to finish
-the canonical-admission argument for the existing checked grammar,
-resolve the reviewed semantic-order contract, then convert actual catalog magnitude
-suppliers and recipient facts through the existing graph. The Charm metadata proof
+**Resume in this order:** finish and validate the approved two-order migration,
+then audit the remaining obligations on the closest build's actual modifier owners
+before expanding absent producer families. Fine Belt has three exact siblings
+(`3172`, `318c`, `3100`) and no transform producer among them. That physical proof
+does not authorize a complete-empty native transform channel: the current plan
+uses global selected-owner coverage, and these owners remain Partial. Do not
+replace the channel with a literal identity or mark a partial owner complete to
+make an empty example execute. Review whether the consumer's
+`remaining-ordered-magnitude-transforms-unconverted` gap still describes missing
+consumer semantics, or whether its proven generic fold already fulfills that
+responsibility. External producer definitions and Import encoding/admission
+remain separate obligations. Flask owner `318c` still has actual missing local
+delivery; completing the closest build takes precedence over unrelated catalog expansion.
+
+The read-only Flask audit confirms a concrete next step using the existing
+contribution graph: route `318c`'s computed effective rate `31a6`, through the
+selected EquipmentUse and ordinary-item applicability `3306`, into a general
+Player flask-generation rate in existing unit `31a5`. Original05 has no equipped
+flasks; per-flask charge gain and analytical uptime are separate consumers, not
+prerequisites for this producer. Its five current gaps stay open until the
+corresponding evidence exists. No new public model is indicated by the source
+trace. The proposed data candidate remains unapplied to maintained data; audit and
+exact current records are in `runs/flask-charge-delivery-audit-20261021`.
+The subsequent CLI probe compiled and assembled that one-Stat/one-program
+candidate through the existing current release migration path. Its provisional
+input is `720d65ca89ec10a9ec57d26324abc52d963b6246cbfae618105c86e9e129eacf`;
+`runs/flask-charge-delivery-extension-probe-01/postcheck.json` proves exact
+registry/schema/rule inverses, all five retained gaps and all 110 query bytes.
+No maintained data changes or native/source numerical parity are claimed.
+Six focused native controls are prepared, not executed, under
+`runs/flask-charge-delivery-native-candidate-20261021` (manifest
+`4588485817813f0e747dcbb425e023e9843c7c153515fcc2381f8385c364c87f`).
+They extend the existing Fine Belt target, preserve its numeric tests, reuse
+the actual four programs and keep all five owner gaps. Independent review found
+that V28 admission alone is insufficient: the stage-less fixture plan cannot
+execute this dialect without checked readiness stages. Do not apply that initial
+candidate. The independently reviewed successor is
+`runs/flask-charge-delivery-native-candidate-20261021-02`, manifest
+`97d76b14b04a454f7c9f8bd0971f719126a87e127415f836afae493035f93e0d`.
+It uses the existing support/stage fixture path, explicit Execution requirements
+and a missing-readiness refusal control, and adds exact payload pins and the
+source-matching zero and 0.175-to-0.18 cases. Read-only verification and rustfmt
+pass; compilation and native execution have not run.
+No production API change or operation-version downgrade is needed. Authenticate
+the successor's before/after paths before applying after this structural
+checkpoint; no production coverage is closed by preparing these tests.
+The five-control source candidate is staged, unexecuted, in
+`runs/flask-charge-delivery-source-candidate-20261021-02` (manifest
+`ee934b8048f398c8564b2afee8f3c66c2022dbbe753d4fa400f77b3b652405ce`).
+Its initial candidate is retained separately. Review found that the source
+item-list accessor can rebuild cached lists; the successor requires its exact
+no-rebuild branch and checks list/state identities before and after observation.
+An unsupported loaded state must fail without observer repair.
+It extends the existing Fine Belt source target and full-build observer with
+original, formatted nonneutral, zero, removed-modifier and unequipped-source
+cases. Expected results remain predictions until independent fresh JIT-off/on
+replays pass. Independent review cleared the guarded successor; add its existing
+JSON/log output paths to the workflow's failure-evidence upload so diagnostics
+survive CI. This is test-only Lua; no new native Lua behavior or host is added.
+The baseline also round-trips byte-for-byte. The older `extend-owned-recipe`
+path instead failed with stale configuration-accounting dependencies after
+rebinding usage inputs; the [retirement register](legacy-retirement.md#successor-rebinding-duplication-2026-10-20)
+records the diagnosed duplicate path. Continue through the current release seam.
+The bounded publication plan in
+`runs/flask-charge-delivery-publication-readiness-20261021/README.md` reuses
+`compile_owned_release_migration` and the existing all-five publication helper.
+One ignored test in the Fine Belt target can validate the exact one-Stat/one-program
+delta, all five retained gaps, unchanged 110 query rows and full selected counts
+123/137/127/144/5 before and after. The helper's historical-facet argument remains
+107/118/110/124/5; check the full current totals separately in its validation
+report. Corrected native checks and all twenty fresh source observations must
+pass before this publication. Its reviewed one-file candidate is
+`runs/flask-charge-delivery-publication-candidate-20261021`, manifest
+`74dd0098767efffca186336f8f396749b020d565f83f025e302552113dd65608`.
+It preserves the existing target's exact prefix, reuses the shared helpers and
+pins the already compiled migration request. Rustfmt and static correspondence
+checks pass; compilation and publication have not run. No parallel publisher
+or compatibility path is needed.
+
+The follow-up consumer audit found no missing Add/Multiply fold operation in
+`3172`; current evidence proves its numerical lowering and generic producer
+graph separately. The next bounded proof must connect them through the existing
+real-program fixtures: a nonneutral catalyst seed, cancellation to unity, upper
+raw/corruption boundaries and typed non-finite refusal. Extend the existing
+source cases with fixed/ranged unity cancellation and recipient corruption with
+transforms; distinguish numeric behavior from PoB reparsing/cache behavior.
+Only then consider an exact-owner metadata retirement for this single gap,
+retaining both source/admission gaps, full domains and supplier refusals.
+Do not add new producer families or another harness merely to make this proof.
+Detailed audit: `runs/charm-ordered-consumer-audit-20261021/README.md`.
+A reviewed but unexecuted three-file candidate is staged under
+`runs/charm-ordered-consumer-controls-candidate-20261021` (manifest
+`d4bb0675288947401feb564f8ea97fbcd8a4ff06450383596ca04e881d5505f9`).
+Its three new source expectations are reading-based predictions, not observations;
+verify the existing source runner before using them as coverage evidence.
+The [retirement register](legacy-retirement.md#one-off-format-proof-retirement-2026-10-20)
+also records remaining ignored historical gates with brittle issue literals.
+
+Finish the canonical-admission argument for the existing checked grammar using
+the validated boundary checks. Where production producer conversion is needed,
+start with authenticated catalog families and the existing graph. The 47 source
+scalability templates include Implicit increased/reduced and doubled forms;
+they do not certify the synthetic Charm-tag producer spelling. Do not assign
+that spelling Unscaled strength from the catalog proof. The Charm metadata proof
 is now published above. Source encoding and owner/contributor coverage remain
 separate obligations. The item-reconstruction differences are isolated below. A fresh CLI
 normalization of unchanged Original05 against Water now produced
@@ -256,16 +482,17 @@ source text remains 4 where authored/ranged source input yields 6, confirming
 that source encoding must be accounted for before canonical raw inputs are
 emitted. This is source evidence, not native producer coverage.
 
-The current single `modifier_order` drives both transform folding and ordered
-contribution reductions. The [ordering proposal](owned-modifier-ordering-proposal.md)
-recommends two independently validated semantic orders over the same occurrences,
-with source encoding retained only in Import. User review is pending; no public
-model migration is applied yet. Exact catalog-spelling and nonneutral producer
-strength controls are the next evidence step. The legacy inactive-producer
+The earlier single `modifier_order` drove both transform folding and ordered
+contribution reductions. The accepted [ordering decision](owned-modifier-ordering-proposal.md)
+requires two independently validated semantic orders over the same occurrences,
+with source encoding retained only in Import. Core, Import and Engine migration
+is now in progress, including current fixture regeneration and exact all-five
+preservation checks. The catalog-spelling and nonneutral producer strength
+controls below are already validated. The legacy inactive-producer
 control yields 6 while versioned/grouped variants yield 4; retain this as an
 unresolved source discrepancy, not a native participation rule or an approved
 parity exception. CI now retains these source reports on failure. Independent
-Charm metadata/admission work can continue while the order contract is reviewed.
+Charm metadata/admission work remains independent of the structural migration.
 
 **Exact catalog strength controls also pass:** the same source suite now runs
 56 cases per fresh VM, preserving the original 31 and adding 25. Every VM joins

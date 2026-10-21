@@ -249,7 +249,14 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
         }
         assert_eq!(new_item["parameters"]["completion"]["kind"], "pending");
         assert_eq!(new_item["modifiers"]["completion"]["kind"], "pending");
-        assert_eq!(new_item["modifier_order"]["kind"], "pending");
+        assert_eq!(
+            new_item["modifier_orders"]["contributions"]["kind"],
+            "pending"
+        );
+        assert_eq!(
+            new_item["modifier_orders"]["numeric_transforms"]["kind"],
+            "pending"
+        );
         b["draft"]["items"]["members"][i]["modifiers"]["members"] = json!([]);
         let p = row(&sa, 590);
         let q = row(&sb, 590);
@@ -622,7 +629,14 @@ fn probes(package: &Path, out: &Path) -> usize {
             item["modifiers"]["completion"]["kind"], "pending",
             "{label}"
         );
-        assert_eq!(item["modifier_order"]["kind"], "pending", "{label}");
+        assert_eq!(
+            item["modifier_orders"]["contributions"]["kind"], "pending",
+            "{label}"
+        );
+        assert_eq!(
+            item["modifier_orders"]["numeric_transforms"]["kind"], "pending",
+            "{label}"
+        );
     }
     let b = family::bindings();
     let positive = [
@@ -684,7 +698,11 @@ fn probes(package: &Path, out: &Path) -> usize {
         assert_eq!(item["quality"], json!({"kind":"known","value":null}));
         assert_eq!(item["parameters"]["completion"]["kind"], "pending");
         assert_eq!(item["modifiers"]["completion"]["kind"], "pending");
-        assert_eq!(item["modifier_order"]["kind"], "pending");
+        assert_eq!(item["modifier_orders"]["contributions"]["kind"], "pending");
+        assert_eq!(
+            item["modifier_orders"]["numeric_transforms"]["kind"],
+            "pending"
+        );
     }
     let qualities = [
         ("quality-zero", "Quality: 0"),

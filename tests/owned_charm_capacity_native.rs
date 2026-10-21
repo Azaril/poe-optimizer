@@ -169,7 +169,11 @@ impl World {
             })
             .collect();
         f.build.items[0].modifiers.truncate(1);
-        f.build.items[0].modifier_order.truncate(1);
+        f.build.items[0].modifier_orders.contributions.truncate(1);
+        f.build.items[0]
+            .modifier_orders
+            .numeric_transforms
+            .truncate(1);
         f.build.equipment.truncate(1);
         f.build.items[0].modifiers[0].rolls = rolls;
         let mut query: ContributionQuery = rebound(&c.query);
@@ -261,7 +265,14 @@ fn duplicate_modifiers_sum_in_semantic_item_order_before_one_capacity_delivery()
         .unwrap()
         .value = quantity(3.0, "def.000000000000295a");
     w.f.build.items[0].modifiers.push(second);
-    w.f.build.items[0].modifier_order.push(occurrence(5));
+    w.f.build.items[0]
+        .modifier_orders
+        .contributions
+        .push(occurrence(5));
+    w.f.build.items[0]
+        .modifier_orders
+        .numeric_transforms
+        .push(occurrence(5));
     let r = w.report();
     assert_eq!(deliveries(&r).len(), 1);
     assert_eq!(deliveries(&r)[0].value, known(5.0));
@@ -434,7 +445,11 @@ fn query_requests_do_not_create_capacity_and_partial_owner_still_blocks_coverage
 fn wrong_source_membership_rejects_and_known_empty_local_list_keeps_only_base() {
     let mut w = World::new();
     w.f.build.items[0].modifiers.clear();
-    w.f.build.items[0].modifier_order.clear();
+    w.f.build.items[0].modifier_orders.contributions.clear();
+    w.f.build.items[0]
+        .modifier_orders
+        .numeric_transforms
+        .clear();
     assert_eq!(deliveries(&w.report())[0].value, known(0.0));
     let mut w = World::new();
     let ContributionProducer::ProgramEffect(p) = &mut w.query.groups[0].members.members[0].producer
@@ -458,7 +473,8 @@ fn alternative_equipment_uses_keep_local_capacity_and_player_delivery_isolated()
     let mut alternate_item = w.f.build.items[0].clone();
     alternate_item.id = occurrence(20);
     alternate_item.modifiers[0].id = occurrence(21);
-    alternate_item.modifier_order = vec![occurrence(21)];
+    alternate_item.modifier_orders.contributions = vec![occurrence(21)];
+    alternate_item.modifier_orders.numeric_transforms = vec![occurrence(21)];
     alternate_item.modifiers[0]
         .rolls
         .iter_mut()
@@ -622,7 +638,14 @@ fn add_charm_transform(
         definition: def(definition),
         rolls: vec![],
     });
-    w.f.build.items[0].modifier_order.push(occurrence(id));
+    w.f.build.items[0]
+        .modifier_orders
+        .contributions
+        .push(occurrence(id));
+    w.f.build.items[0]
+        .modifier_orders
+        .numeric_transforms
+        .push(occurrence(id));
 }
 fn charm_modifier_value(report: &OwnedEffectsReport, stat: &str) -> EffectValue {
     let wanted = PlanValueKey::Stat {
@@ -742,7 +765,8 @@ fn released_charm_delivery_observes_modifier_transform_order_and_ignores_storage
     assert_charm_scalar_chain(&w.report(), 1.5, 3.0, 9.0);
     // The actual semantic order changes the scalar and the final truncation:
     // magnitude ((1 * 2) + .5) -> trunc(3 * 2.5) -> delivered 7.
-    w.f.build.items[0].modifier_order = vec![occurrence(4), occurrence(91), occurrence(90)];
+    w.f.build.items[0].modifier_orders.numeric_transforms =
+        vec![occurrence(4), occurrence(91), occurrence(90)];
     assert_charm_scalar_chain(&w.report(), 1.5, 2.5, 7.0);
 }
 

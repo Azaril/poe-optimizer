@@ -192,7 +192,8 @@ fn assert_pending(result: &NormalizedImport) {
     assert!(!complete(result));
     assert!(
         result.draft().input().items.members[0]
-            .modifier_order
+            .modifier_orders
+            .contributions
             .to_resolved()
             .is_none()
     );
@@ -221,7 +222,14 @@ fn injected_imported_construction_closes_only_physical_gates_and_keeps_identity_
         assert_eq!(r.sidecar().schema_version, 15);
         let item = &r.draft().input().items.members[0];
         assert_eq!(item.parameters.members.len(), 4);
-        assert_eq!(item.modifier_order.to_resolved().unwrap().len(), 1);
+        assert_eq!(
+            item.modifier_orders
+                .contributions
+                .to_resolved()
+                .unwrap()
+                .len(),
+            1
+        );
         let evidence = r.sidecar().item_texts[0].parameter_inputs.as_ref().unwrap();
         assert_eq!(
             evidence

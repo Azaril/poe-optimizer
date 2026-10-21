@@ -917,7 +917,10 @@ impl Fixture {
                     },
                     |v| v[index % v.len()].assignments.clone(),
                 ),
-                modifier_order: modifiers.iter().map(|m| m.id).collect(),
+                modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                    contributions: modifiers.iter().map(|m| m.id).collect(),
+                    numeric_transforms: modifiers.iter().map(|m| m.id).collect(),
+                },
                 modifiers,
             }
         };

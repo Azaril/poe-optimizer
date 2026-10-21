@@ -42,13 +42,50 @@ pub struct Comparison<'a> {
     pub package: &'a Path,
     pub out: &'a Path,
     pub families: &'a [InventoryExpectation<'a>],
+    /// Historical diagnostic facets, before numeric-transform order became an
+    /// independent obligation. Only exact current Item Pending fields may be
+    /// excluded from these assertions; reports retain their full current totals.
     pub selected_before: [usize; 5],
+    /// Same historical-facet scope as `selected_before`, after this publication.
     pub selected_after: [usize; 5],
     /// Opt in only when the family's checked migration changes schema content.
     pub rebind_definitions: bool,
 }
 fn read<T: DeserializeOwned>(path: impl AsRef<Path>) -> T {
     serde_json::from_slice(&fs::read(path).unwrap()).unwrap()
+}
+
+fn assert_selected_baseline(issues: &Value, draft: &Value, expected: usize) {
+    let independent_orders = selected::numeric_transform_order_issue_count(issues);
+    let items = draft["draft"]["items"]["members"].as_array().unwrap();
+    for issue in issues
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|issue| issue["code"] == "item-modifier-numeric-transform-order-not-converted")
+    {
+        let matching: Vec<_> = items
+            .iter()
+            .enumerate()
+            .filter(|(_, item)| item["id"] == issue["owner"])
+            .collect();
+        assert_eq!(matching.len(), 1, "exact selected Item owner");
+        let (index, item) = matching[0];
+        let pending = &item["modifier_orders"]["numeric_transforms"];
+        assert_eq!(pending["kind"], "pending");
+        assert_eq!(pending["id"], issue["id"], "exact Pending field issue");
+        assert_eq!(pending["code"], issue["code"]);
+        assert_eq!(
+            issue["path"],
+            format!("items.members[{index}].modifier_orders.numeric_transforms"),
+            "exact Item field path, not merely the same suffix"
+        );
+    }
+    assert_eq!(
+        issues.as_array().unwrap().len() - independent_orders,
+        expected,
+        "selected historical facets; only authenticated independent numeric-order obligations are excluded"
+    );
 }
 pub struct Location {
     pub family: usize,
@@ -579,12 +616,17 @@ pub fn compare_original_with_item_parameter_completions(
     selected::canonical(&mut x);
     selected::canonical(&mut y);
     let count = x.as_array().unwrap().len();
-    assert_eq!(count, c.selected_before[case - 1]);
+    assert_selected_baseline(&x, &a, c.selected_before[case - 1]);
+    assert_selected_baseline(&y, &b, c.selected_after[case - 1]);
+    assert_eq!(
+        selected::numeric_transform_order_issue_count(&x),
+        selected::numeric_transform_order_issue_count(&y),
+        "these publications preserve independent numeric-order obligations"
+    );
     x.as_array_mut()
         .unwrap()
         .retain(|v| !retired.contains(v["id"]["local"].as_str().unwrap()));
     assert_eq!(x, y, "all other selected obligations survive");
-    assert_eq!(y.as_array().unwrap().len(), c.selected_after[case - 1]);
     let mut report = json!({"original":case,"physical_lists_completed":retired.len(),"selected_before":count,"selected_after":y.as_array().unwrap().len(),"exact_local_ids":true,"usage_pending":true});
     if !completions.is_empty() {
         report["retired_item_parameter_diagnostics"] = json!(retired_item_diagnostics);
@@ -738,4 +780,100 @@ pub fn header(name: &str, attrs: &[(String, String)], changes: &[(&str, Option<&
     }
     text.push('>');
     text
+}
+
+#[cfg(test)]
+mod selected_baseline_tests {
+    use super::*;
+
+    fn fixture() -> (Value, Value) {
+        let owner = json!({"lineage":"test-lineage","local":"0000000000000001"});
+        let issue = json!({"lineage":"test-lineage","local":"0000000000000002"});
+        let code = "item-modifier-numeric-transform-order-not-converted";
+        (
+            json!([
+                {"id":issue,"owner":owner,"code":code,
+                 "path":"items.members[0].modifier_orders.numeric_transforms"},
+                {"id":{"lineage":"test-lineage","local":"0000000000000003"},
+                 "owner":owner,"code":"item-parameters-not-converted",
+                 "path":"items.members[0].parameters.completion"}
+            ]),
+            json!({"draft":{"items":{"members":[{
+                "id":owner,"modifier_orders":{"numeric_transforms":{
+                    "kind":"pending","id":issue,"code":code,"candidates":[]
+                }}
+            }]}}}),
+        )
+    }
+
+    #[test]
+    fn historical_count_preserves_current_diagnostics_and_other_obligations() {
+        let (issues, draft) = fixture();
+        let retained = (issues.clone(), draft.clone());
+        assert_selected_baseline(&issues, &draft, 1);
+        assert_eq!((issues.clone(), draft.clone()), retained);
+        assert_eq!(issues.as_array().unwrap().len(), 2);
+        assert!(std::panic::catch_unwind(|| assert_selected_baseline(&issues, &draft, 0)).is_err());
+
+        let other = json!([issues[1].clone()]);
+        assert_selected_baseline(&other, &draft, 1);
+        let mut relabeled = issues.clone();
+        relabeled[0]["code"] = json!("another-unresolved-obligation");
+        assert!(
+            std::panic::catch_unwind(|| assert_selected_baseline(&relabeled, &draft, 1)).is_err()
+        );
+    }
+
+    #[test]
+    fn historical_exclusion_requires_exact_item_pending_field() {
+        let (issues, draft) = fixture();
+        for path in [
+            "items.members[1].modifier_orders.numeric_transforms",
+            "skills.members[0].modifier_orders.numeric_transforms",
+        ] {
+            let mut changed = issues.clone();
+            changed[0]["path"] = json!(path);
+            assert!(
+                std::panic::catch_unwind(|| assert_selected_baseline(&changed, &draft, 1)).is_err()
+            );
+        }
+        for pointer in ["/0/owner/local", "/0/id/local"] {
+            let mut changed = issues.clone();
+            *changed.pointer_mut(pointer).unwrap() = json!("0000000000000004");
+            assert!(
+                std::panic::catch_unwind(|| assert_selected_baseline(&changed, &draft, 1)).is_err()
+            );
+        }
+        for value in [
+            json!({"kind":"known","value":[]}),
+            json!({"kind":"pending","id":issues[0]["id"],
+                "code":"another-unresolved-obligation","candidates":[]}),
+        ] {
+            let mut changed = draft.clone();
+            changed["draft"]["items"]["members"][0]["modifier_orders"]["numeric_transforms"] =
+                value;
+            assert!(
+                std::panic::catch_unwind(|| assert_selected_baseline(&issues, &changed, 1))
+                    .is_err()
+            );
+        }
+    }
+
+    #[test]
+    fn historical_exclusion_rejects_duplicate_issue_or_item_authority() {
+        let (issues, draft) = fixture();
+        let duplicate = json!([issues[0], issues[0], issues[1]]);
+        assert!(
+            std::panic::catch_unwind(|| assert_selected_baseline(&duplicate, &draft, 1)).is_err()
+        );
+        let mut duplicate_item = draft.clone();
+        duplicate_item["draft"]["items"]["members"] = json!([
+            draft["draft"]["items"]["members"][0],
+            draft["draft"]["items"]["members"][0]
+        ]);
+        assert!(
+            std::panic::catch_unwind(|| assert_selected_baseline(&issues, &duplicate_item, 1))
+                .is_err()
+        );
+    }
 }

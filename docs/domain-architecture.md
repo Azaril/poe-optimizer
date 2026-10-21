@@ -681,10 +681,11 @@ grant completeness. The evaluator consumes the resulting owned facts and explici
 order without needing source syntax or source runtime state.
 
 Ordering domains must be justified independently: numeric modifier transforms
-and later contribution accumulation can have different precedence. The current
-single-order implementation is under review in the
-[modifier-ordering proposal](owned-modifier-ordering-proposal.md); its proposed
-two-order public format is not yet adopted. Source text that already includes
+and later contribution accumulation can have different precedence. The accepted
+[modifier-ordering decision](owned-modifier-ordering-proposal.md) gives each Item
+one occurrence set and two complete permutations: `contributions` and
+`numeric_transforms`. Drafts track each order independently. Storage order and
+opaque IDs never supply missing precedence. Source text that already includes
 scaling also requires checked conversion to canonical inputs. Formatting flags
 and ambiguous inverse arithmetic must not become native gameplay conditions.
 

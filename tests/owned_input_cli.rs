@@ -49,7 +49,10 @@ fn build_input() -> BuildInput {
             }],
             item_level: Some(17),
             quality: None,
-            modifier_order: vec![],
+            modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                contributions: vec![],
+                numeric_transforms: vec![],
+            },
             modifiers: vec![],
         }],
         gems: vec![],

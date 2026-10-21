@@ -604,7 +604,10 @@ fn actor_receiver_fixture() -> Fixture {
         parameters: f.build.items[0].parameters.clone(),
         item_level: Some(20),
         quality: None,
-        modifier_order: vec![],
+        modifier_orders: ItemModifierOrders {
+            contributions: vec![],
+            numeric_transforms: vec![],
+        },
         modifiers: vec![],
     });
     f.build

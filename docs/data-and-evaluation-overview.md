@@ -1422,10 +1422,12 @@ cap/override result, using their existing exact origins for provenance.
 
 Original-source magnitude controls now pass 31 cases across four fresh VMs.
 They distinguish producer discovery order from later item-record sorting and
-already-scaled source text from raw authored inputs. The existing native item
-order currently serves both transform folding and contribution accumulation;
-the [proposed separation](owned-modifier-ordering-proposal.md) keeps one set of
-occurrences with two explicit orders. This public contract is awaiting review.
+already-scaled source text from raw authored inputs. The
+[accepted separation](owned-modifier-ordering-proposal.md) is implemented in
+Core, Draft, Import and Engine: one occurrence set has independent contribution
+and numeric-transform orders. Both affect identity; record sorting affects neither.
+Core, Import, Engine and all-five preservation checks pass; downstream fixture
+and CLI validation is in progress. No compatibility reader is retained.
 Raw/baked source classification stays in Import; native rules must not read
 PoB crafting or display flags. Inactive legacy source variants also show a
 distinct producer-participation result, retained as an unresolved discrepancy.

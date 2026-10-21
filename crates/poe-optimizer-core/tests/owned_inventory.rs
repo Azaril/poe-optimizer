@@ -39,7 +39,10 @@ fn item(record: u64, first_modifier: u64) -> ItemRecord {
             parameter(owner.clone(), "z-property", 2),
             parameter(owner, "a-property", 1),
         ],
-        modifier_order: vec![id(first_modifier + 1), id(first_modifier)],
+        modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+            contributions: vec![id(first_modifier + 1), id(first_modifier)],
+            numeric_transforms: vec![id(first_modifier + 1), id(first_modifier)],
+        },
         modifiers: vec![
             RolledModifier {
                 id: id(first_modifier + 1),
@@ -341,11 +344,12 @@ fn conflicting_shared_content_is_rejected_before_any_selection() {
             3 => {
                 let old = shared.modifiers[0].id;
                 shared.modifiers[0].id = id(40);
-                *shared
-                    .modifier_order
-                    .iter_mut()
-                    .find(|value| **value == old)
-                    .unwrap() = id(40);
+                for order in [
+                    &mut shared.modifier_orders.contributions,
+                    &mut shared.modifier_orders.numeric_transforms,
+                ] {
+                    *order.iter_mut().find(|value| **value == old).unwrap() = id(40);
+                }
             }
             _ => unreachable!(),
         }

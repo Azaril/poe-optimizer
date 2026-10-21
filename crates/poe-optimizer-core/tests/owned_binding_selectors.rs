@@ -393,7 +393,10 @@ impl Fixture {
             parameters: vec![],
             item_level: Some(20),
             quality: None,
-            modifier_order: vec![],
+            modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                contributions: vec![],
+                numeric_transforms: vec![],
+            },
             modifiers: vec![],
         });
         self.build.equipment.push(EquipmentUse {
@@ -1833,7 +1836,14 @@ fn occurrence_resolver_keeps_containment_activity_and_modifier_record_ownership(
             .any(|i| i.code == BindingIssueCode::InactiveLoadout)
     );
     f.build.equipment[0].scope = LoadoutScope::Shared;
-    f.build.items[0].modifier_order.push(occurrence(7));
+    f.build.items[0]
+        .modifier_orders
+        .contributions
+        .push(occurrence(7));
+    f.build.items[0]
+        .modifier_orders
+        .numeric_transforms
+        .push(occurrence(7));
     f.build.items[0].modifiers.push(RolledModifier {
         id: occurrence(7),
         definition: def("modifier"),
@@ -1845,7 +1855,10 @@ fn occurrence_resolver_keeps_containment_activity_and_modifier_record_ownership(
         parameters: vec![],
         item_level: None,
         quality: None,
-        modifier_order: vec![],
+        modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+            contributions: vec![],
+            numeric_transforms: vec![],
+        },
         modifiers: vec![],
     });
     f.build.equipment.push(EquipmentUse {

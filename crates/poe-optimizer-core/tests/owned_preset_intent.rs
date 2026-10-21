@@ -608,7 +608,10 @@ fn unresolved_modifier_and_host_remain_obligations_even_when_excluded() {
             .into();
             raw.equipment.members[1].item = pending(901);
         } else {
-            raw.items.members[0].modifier_order = vec![id::<ModifierInstanceId>(13)].into();
+            raw.items.members[0].modifier_orders.contributions =
+                vec![id::<ModifierInstanceId>(13)].into();
+            raw.items.members[0].modifier_orders.numeric_transforms =
+                vec![id::<ModifierInstanceId>(13)].into();
             raw.items.members[0].modifiers.members.push(ModifierDraft {
                 id: id(13),
                 definition: pending(901),

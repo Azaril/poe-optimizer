@@ -313,11 +313,9 @@ fn rune_headers_and_full_item_membership_and_precedence_remain_pending() {
     let imported = source(&text);
     let normalized = support::normalize(&imported, &a);
     let item = &normalized.draft().input().items.members[0];
-    assert!(
-        serde_json::to_string(item)
-            .unwrap()
-            .contains("item-modifier-order-not-converted")
-    );
+    let encoded = serde_json::to_string(item).unwrap();
+    assert!(encoded.contains("item-modifier-contribution-order-not-converted"));
+    assert!(encoded.contains("item-modifier-numeric-transform-order-not-converted"));
     assert!(
         serde_json::to_string(item)
             .unwrap()

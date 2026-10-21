@@ -1,0 +1,1264 @@
+{
+  "status": "passed",
+  "date": "2026-10-21",
+  "scope": "Approved independent modifier orders migration; no complete-build parity or new producer coverage claimed",
+  "parent_main": "c7e5368582806297151426f52d1f78b556c4ca66",
+  "suites": [
+    {
+      "path": "runs/owned-modifier-orders-core-01.log",
+      "sha256": "60be9c78038c76b13729903d0ff974f10cf0a5bd315c9b87c660dbb6d7d3a3ab",
+      "passed": 322,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "path": "runs/owned-modifier-orders-import-01.log",
+      "sha256": "3265fc160392242c69e4f4cd0632c556e805565aa6cab9ea4688350a24c8eaf6",
+      "passed": 676,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "path": "runs/owned-modifier-orders-engine-01.log",
+      "sha256": "d6e4ca149c96c07b1435cb890b939b6ff09a04ff715418ceaf7281a9b34899e3",
+      "passed": 136,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "path": "runs/owned-modifier-orders-migration-01.log",
+      "sha256": "c77025902bac60068a58084add66ef55a46172b38054b5cbbde045f2e5f94cc4",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "path": "runs/owned-modifier-orders-authoring-03.log",
+      "sha256": "2ff9b8eabb3fdd1c3b71e9d854e95c28975975c9f4c73751454e9edd5cc71939",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "path": "runs/owned-modifier-orders-repair-evasion-01.log",
+      "sha256": "4f994a9000c8631486afc3baf13cec00e234e301d9f909eeb452fe12bf894d51",
+      "passed": 268,
+      "failed": 0,
+      "ignored": 120
+    },
+    {
+      "path": "runs/owned-modifier-orders-charm-publication-01.log",
+      "sha256": "b9f6c76b8386ffddce51a820ad5c2ce07bb5311aff1dabed684823f9755104ba",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "cli_resume": {
+    "path": "runs/owned-modifier-orders-cli-resumed-proof-01.json",
+    "sha256": "e1919c6de5383b42bd8bf00b3e4a8d8ddda03dab8e0f590f94cc1bf0d3c195c5",
+    "targets": [
+      {
+        "target": "owned_amulet_life_copy",
+        "status": "ok",
+        "passed": 12,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_armour_item_inputs_cli",
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_ashen_staff_item_inputs",
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_ashen_staff_native",
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_charm_capacity",
+        "status": "ok",
+        "passed": 8,
+        "failed": 0,
+        "ignored": 3,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_charm_capacity_native",
+        "status": "ok",
+        "passed": 12,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_extension_cli",
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_fine_belt_item_inputs",
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_fine_belt_modifiers",
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 2,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_fine_belt_native",
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 4,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_fire_damage_modifier",
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_fire_damage_native",
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 3,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_flat_life_native",
+        "status": "ok",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_generated_skill_inputs_native",
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 4,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_input_cli",
+        "status": "ok",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_item_modifier_membership_cli",
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_mana_configuration_sources",
+        "status": "ok",
+        "passed": 10,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_mana_supplier_sources",
+        "status": "ok",
+        "passed": 8,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_movement_speed_penalty_native",
+        "status": "ok",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_offering_speed_rate",
+        "status": "ok",
+        "passed": 18,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_outgoing_critical",
+        "status": "ok",
+        "passed": 14,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_passive_jewel_placement_native",
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 3,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_passive_structural_inventories",
+        "status": "ok",
+        "passed": 6,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_physical_hit_dps",
+        "status": "ok",
+        "passed": 24,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_player_evasion_final",
+        "status": "ok",
+        "passed": 13,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_player_evasion_override",
+        "status": "ok",
+        "passed": 29,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_ranged_spirit",
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_ruby_item_inputs",
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_ruby_item_inputs_native",
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 3,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_sand_item_preparation",
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 12,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_sapphire_item_inputs",
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_selected_physical_base",
+        "status": "ok",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_selected_physical_hit",
+        "status": "ok",
+        "passed": 11,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_self_flat_skill_construction",
+        "status": "ok",
+        "passed": 14,
+        "failed": 0,
+        "ignored": 2,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_sniper_item_attack",
+        "status": "ok",
+        "passed": 11,
+        "failed": 0,
+        "ignored": 103,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_solar_item_inputs",
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_spell_damage_native",
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 3,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_successor_cli",
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      }
+    ],
+    "totals": {
+      "passed": 229,
+      "failed": 0,
+      "ignored": 161,
+      "filtered": 0
+    },
+    "additional_targets": [
+      {
+        "target": "owned_configuration_critical_weakness_activation_native",
+        "status": "ok",
+        "passed": 13,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_enemy_physical_mitigation_native",
+        "status": "ok",
+        "passed": 15,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_inherited_minion_delivery",
+        "status": "ok",
+        "passed": 9,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_item_evasion_property",
+        "status": "ok",
+        "passed": 12,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_later_aura_delivery",
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_outgoing_critical_cli",
+        "status": "ok",
+        "passed": 6,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_outgoing_critical_native",
+        "status": "ok",
+        "passed": 9,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_physical_hit_dps_cli",
+        "status": "ok",
+        "passed": 6,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_player_evasion_equipment",
+        "status": "ok",
+        "passed": 25,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_self_flat_action_factories",
+        "status": "ok",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_self_flat_flask_keystone",
+        "status": "ok",
+        "passed": 9,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_self_flat_later_helpers",
+        "status": "ok",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      {
+        "target": "owned_self_flat_minion_store",
+        "status": "ok",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      }
+    ],
+    "logs": [
+      {
+        "path": "runs/owned-modifier-orders-cli-01.log",
+        "sha256": "ffdff6b7fee31c5ed136ce31ab8ed66f16565cd6f4cf9972d5f74a457ab3b9d1",
+        "results": [
+          {
+            "target": "owned_amulet_life_copy",
+            "status": "ok",
+            "passed": 12,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_armour_item_inputs_cli",
+            "status": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_ashen_staff_item_inputs",
+            "status": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_ashen_staff_native",
+            "status": "ok",
+            "passed": 0,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_charm_capacity",
+            "status": "ok",
+            "passed": 8,
+            "failed": 0,
+            "ignored": 3,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_charm_capacity_native",
+            "status": "ok",
+            "passed": 12,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_extension_cli",
+            "status": "FAILED",
+            "passed": 1,
+            "failed": 1,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          }
+        ]
+      },
+      {
+        "path": "runs/owned-modifier-orders-cli-extension-02.log",
+        "sha256": "836779e9e8519c60da9cfd6f212e9f1db924940e58903469bad5679e990ea9fb",
+        "results": [
+          {
+            "target": "owned_extension_cli",
+            "status": "ok",
+            "passed": 2,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          }
+        ]
+      },
+      {
+        "path": "runs/owned-modifier-orders-cli-remaining-01.log",
+        "sha256": "a47e12a14992968874cf1f4ac22e07dff0072576e3368b7501d2bdc785381304",
+        "results": [
+          {
+            "target": "owned_fine_belt_item_inputs",
+            "status": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_fine_belt_modifiers",
+            "status": "ok",
+            "passed": 2,
+            "failed": 0,
+            "ignored": 2,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_fine_belt_native",
+            "status": "ok",
+            "passed": 0,
+            "failed": 0,
+            "ignored": 4,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_fire_damage_modifier",
+            "status": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_fire_damage_native",
+            "status": "ok",
+            "passed": 0,
+            "failed": 0,
+            "ignored": 3,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_flat_life_native",
+            "status": "ok",
+            "passed": 5,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_generated_skill_inputs_native",
+            "status": "ok",
+            "passed": 0,
+            "failed": 0,
+            "ignored": 4,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_input_cli",
+            "status": "ok",
+            "passed": 7,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_item_modifier_membership_cli",
+            "status": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_mana_configuration_sources",
+            "status": "FAILED",
+            "passed": 2,
+            "failed": 8,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          }
+        ]
+      },
+      {
+        "path": "runs/owned-modifier-orders-cli-tail-01.log",
+        "sha256": "c17099f67983d815e91e429a8131db2927ae965b566c554a9c15358726cc5c3e",
+        "results": [
+          {
+            "target": "owned_mana_supplier_sources",
+            "status": "ok",
+            "passed": 8,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_movement_speed_penalty_native",
+            "status": "ok",
+            "passed": 5,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_offering_speed_rate",
+            "status": "ok",
+            "passed": 18,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_outgoing_critical",
+            "status": "ok",
+            "passed": 14,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_passive_jewel_placement_native",
+            "status": "ok",
+            "passed": 0,
+            "failed": 0,
+            "ignored": 3,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_passive_structural_inventories",
+            "status": "ok",
+            "passed": 6,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_physical_hit_dps",
+            "status": "ok",
+            "passed": 24,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_player_evasion_final",
+            "status": "ok",
+            "passed": 13,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_player_evasion_override",
+            "status": "ok",
+            "passed": 29,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_ranged_spirit",
+            "status": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_ruby_item_inputs",
+            "status": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_ruby_item_inputs_native",
+            "status": "ok",
+            "passed": 0,
+            "failed": 0,
+            "ignored": 3,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_sand_item_preparation",
+            "status": "ok",
+            "passed": 0,
+            "failed": 0,
+            "ignored": 12,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_sapphire_item_inputs",
+            "status": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_selected_physical_base",
+            "status": "ok",
+            "passed": 7,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_selected_physical_hit",
+            "status": "ok",
+            "passed": 11,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_self_flat_skill_construction",
+            "status": "FAILED",
+            "passed": 12,
+            "failed": 2,
+            "ignored": 2,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_sniper_item_attack",
+            "status": "ok",
+            "passed": 11,
+            "failed": 0,
+            "ignored": 103,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_solar_item_inputs",
+            "status": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_spell_damage_native",
+            "status": "ok",
+            "passed": 0,
+            "failed": 0,
+            "ignored": 3,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_successor_cli",
+            "status": "ok",
+            "passed": 2,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          }
+        ]
+      },
+      {
+        "path": "runs/owned-modifier-orders-repair-evasion-01.log",
+        "sha256": "4f994a9000c8631486afc3baf13cec00e234e301d9f909eeb452fe12bf894d51",
+        "results": [
+          {
+            "target": "owned_configuration_critical_weakness_activation_native",
+            "status": "ok",
+            "passed": 13,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_enemy_physical_mitigation_native",
+            "status": "ok",
+            "passed": 15,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_inherited_minion_delivery",
+            "status": "ok",
+            "passed": 9,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_item_evasion_property",
+            "status": "ok",
+            "passed": 12,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_later_aura_delivery",
+            "status": "ok",
+            "passed": 2,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_offering_speed_rate",
+            "status": "ok",
+            "passed": 18,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_outgoing_critical",
+            "status": "ok",
+            "passed": 14,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_outgoing_critical_cli",
+            "status": "ok",
+            "passed": 6,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_outgoing_critical_native",
+            "status": "ok",
+            "passed": 9,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_physical_hit_dps",
+            "status": "ok",
+            "passed": 24,
+            "failed": 0,
+            "ignored": 0,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_physical_hit_dps_cli",
+            "status": "ok",
+            "passed": 6,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_player_evasion_equipment",
+            "status": "ok",
+            "passed": 25,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_player_evasion_final",
+            "status": "ok",
+            "passed": 13,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_player_evasion_override",
+            "status": "ok",
+            "passed": 29,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_selected_physical_base",
+            "status": "ok",
+            "passed": 7,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_selected_physical_hit",
+            "status": "ok",
+            "passed": 11,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_self_flat_action_factories",
+            "status": "ok",
+            "passed": 7,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_self_flat_flask_keystone",
+            "status": "ok",
+            "passed": 9,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_self_flat_later_helpers",
+            "status": "ok",
+            "passed": 7,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_self_flat_minion_store",
+            "status": "ok",
+            "passed": 7,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_self_flat_skill_construction",
+            "status": "ok",
+            "passed": 14,
+            "failed": 0,
+            "ignored": 2,
+            "measured": 0,
+            "filtered": 0
+          },
+          {
+            "target": "owned_sniper_item_attack",
+            "status": "ok",
+            "passed": 11,
+            "failed": 0,
+            "ignored": 103,
+            "measured": 0,
+            "filtered": 0
+          }
+        ]
+      },
+      {
+        "path": "runs/owned-modifier-orders-mana-repair-01.log",
+        "sha256": "ed1da492fdd6d637742913fbf150d8c47169852c5e7b5ad399894f1fca0f7d33",
+        "results": [
+          {
+            "target": "owned_mana_configuration_sources",
+            "status": "ok",
+            "passed": 10,
+            "failed": 0,
+            "ignored": 1,
+            "measured": 0,
+            "filtered": 0
+          }
+        ]
+      }
+    ]
+  },
+  "strict_lint": [
+    {
+      "path": "runs/owned-modifier-orders-core-import-clippy-01.log",
+      "sha256": "8961450dc08b7ca7d828b377c63cb10371c531e6413fcf242e52822be9ffccd1"
+    },
+    {
+      "path": "runs/owned-modifier-orders-engine-clippy-01.log",
+      "sha256": "4d282a0e86fa7119f3282a4c67c4e070e5c9006171c3d9ee37a3e0bf9a92a5e3"
+    },
+    {
+      "path": "runs/owned-modifier-orders-root-clippy-01.log",
+      "sha256": "0f6881f12f2dd363ca9aec137efe38b294dd6540d5ce8c67bc2466bc40ae3fe8"
+    }
+  ],
+  "lint_scope": {
+    "core_import": "all targets",
+    "engine_tracked_test_targets": 78,
+    "cli_test_targets": 75
+  },
+  "publication": {
+    "path": "runs/owned-charm-scalability-orders-publication-01/validation.json",
+    "sha256": "f22190b4cb1419e1515cb259998914fa8b71d2340a0f8b1fd8ff5a73c40f55fe",
+    "result": {
+      "after": "b8851ea50c9d5fd97e1695e536c89dba185f136d51d6e77da31bd22f8f4a67a9",
+      "artifacts": 18,
+      "authoring_payloads_excluded": true,
+      "before": "e85a165738460fa2bc37f3eda92a0732c26771192e4faf999827d8f29864a9f6",
+      "closed_rule_owners": 0,
+      "complete_original_builds": 0,
+      "evaluation_bundle_added": false,
+      "expected_retired_item_text_diagnostics": 0,
+      "expected_retired_selected_input_issues": 0,
+      "final_charm_capacity": false,
+      "import_guard_changes": 0,
+      "new_definitions": 0,
+      "new_programs": 0,
+      "numerical_program_changes": 0,
+      "originals": [
+        {
+          "exact_local_ids": true,
+          "original": 1,
+          "physical_lists_completed": 0,
+          "selected_after": 123,
+          "selected_before": 123,
+          "usage_pending": true
+        },
+        {
+          "exact_local_ids": true,
+          "original": 2,
+          "physical_lists_completed": 0,
+          "selected_after": 137,
+          "selected_before": 137,
+          "usage_pending": true
+        },
+        {
+          "exact_local_ids": true,
+          "original": 3,
+          "physical_lists_completed": 0,
+          "selected_after": 127,
+          "selected_before": 127,
+          "usage_pending": true
+        },
+        {
+          "exact_local_ids": true,
+          "original": 4,
+          "physical_lists_completed": 0,
+          "selected_after": 144,
+          "selected_before": 144,
+          "usage_pending": true
+        },
+        {
+          "exact_local_ids": true,
+          "original": 5,
+          "physical_lists_completed": 0,
+          "selected_after": 5,
+          "selected_before": 5,
+          "usage_pending": true
+        }
+      ],
+      "passive_refinement": false,
+      "prior_unchanged": true,
+      "provenance_preserved": true,
+      "queries": 110,
+      "rebuild_byte_identical": true,
+      "retained_obligations": 3,
+      "retired_input_issues": 0,
+      "retired_obligations": 1,
+      "schema_identity_changed": false,
+      "whole_build_parity": false
+    }
+  },
+  "fixture_inventory": {
+    "path": "runs/owned-modifier-orders-self-flat-repair-applied-01.json",
+    "sha256": "e3d88ecd88440deced0602b6a61924dec7e54156d3cf05fcc861802112000385",
+    "artifacts": 45,
+    "literal_pin_files": 8,
+    "all_current_hashes_verified": true
+  },
+  "protected_unchanged": [
+    {
+      "path": "data/owned/poe2/3887ae68/incoming-critical-effect/README.md",
+      "git_blob": "b9c2264db11f589e38e813ba04bef1de725b98a3"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/incoming-critical-effect/extension.json",
+      "git_blob": "932a225f047491a48f28a0d2f9301013d4127af4"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/incoming-critical-effect/native-inputs.json",
+      "git_blob": "4510ccaa354ae1b4e3dfc84f562bd462392fc8ee"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/incoming-critical-effect/policy.json",
+      "git_blob": "3579c4794b387b06f331891a69b92d09fc029fb0"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/incoming-critical-effect/queries.json",
+      "git_blob": "6ffa1b270a731e6a7fd99fd44c46a9ea4656117f"
+    },
+    {
+      "path": "tests/owned_incoming_critical_cli.rs",
+      "git_blob": "5b72203ac2e2a6df6f60843fcced3fe150d08990"
+    },
+    {
+      "path": "tests/owned_incoming_critical_native.rs",
+      "git_blob": "f6d106a235ddffb3a7b9c1808ff6c20cf27aede0"
+    },
+    {
+      "path": "tests/support/owned_incoming_critical_native.rs",
+      "git_blob": "f7486e89299cfd560c7e85dcc7b59ba47c0a81f8"
+    },
+    {
+      "path": "tests/support/owned_incoming_critical_publication.rs",
+      "git_blob": "dfa5784a8ec1bae914f2f20d0d3fbed7b53682aa"
+    }
+  ],
+  "source_vm_replay": "existing 56-case source proof unchanged; not rerun for this structural migration",
+  "new_flask_and_charm_candidates": "not applied or executed at this checkpoint"
+}

@@ -1,17 +1,17 @@
 {
   "files": [
     {
-      "bytes": 1189563,
-      "compressed_sha256": "863b64312a8ecea46072bdd4020163949a00248913700d877e6ae7bd48358cfb",
+      "bytes": 1195621,
+      "compressed_sha256": "c4011c95fb1238c1d4bc5a6116d4309e9a8e8dfe5e1e931b562d5b9828267beb",
       "name": "draft.json",
-      "sha256": "b1a355f8c842dd32ecc95d15b485cc437fe8bd13a80416fcf7f56d95573ef651",
+      "sha256": "1636516f6e71d61f6ada6d758a4573382cc518d4affd687718bfae61a182f89e",
       "source": "runs/owned-configuration-accounting-publication-02/original-05/draft.json"
     },
     {
-      "bytes": 951696,
-      "compressed_sha256": "94718625bd955181813edc4f984a0b98935599f201acfe3ca8336cc361b01ea3",
+      "bytes": 953676,
+      "compressed_sha256": "197408976df030394466b1d565550b7b7ad01ef7b1f7e886ac74759055b9b9a6",
       "name": "sidecar.json",
-      "sha256": "faca2af07479e75e69a010999eddeb26464640a234a7ed75d1c93153a2fce0f5",
+      "sha256": "befac8a2b7c6fb36a93101006a4a6fc7766e98deb38034da8b626d7397b816fa",
       "source": "runs/owned-configuration-accounting-publication-02/original-05/sidecar.json"
     },
     {
@@ -22,10 +22,10 @@
       "source": "runs/owned-configuration-accounting-publication-02/selection-05.json"
     },
     {
-      "bytes": 2533,
-      "compressed_sha256": "b80f47b6874385de8404fec84ccd2ab9629170f96315318bf05bbd2b4c82e941",
+      "bytes": 2609,
+      "compressed_sha256": "c4c4239183070e18b41e8038953576c08f45f74fbe036ac00c98e520bf9ba133",
       "name": "import-report.json",
-      "sha256": "08b28e97e3f4969bb5c955f8a685545f720f2cf60ee094d7b3d88378220a9b66",
+      "sha256": "5b625cc802c87af91851d91bbc16ebe9c38430eaee3a722cf378915ac0bd0903",
       "source": "runs/owned-configuration-accounting-publication-02/original-05/report.json"
     },
     {
@@ -162,6 +162,724 @@
       "source": "vendor/path-of-building-poe2/src/Modules/CalcSetup.lua"
     }
   ],
+  "modifier_order_reauthoring": {
+    "authoring_sha256": "5000932aff836150448c949fd9990f923ae46f0bdd61c7f83e40b202900c231e",
+    "authoring_source": "runs/modifier_order_evidence_authoring.rs",
+    "current_archives": [
+      {
+        "bytes": 1195621,
+        "compressed_bytes": 25527,
+        "compressed_sha256": "c4011c95fb1238c1d4bc5a6116d4309e9a8e8dfe5e1e931b562d5b9828267beb",
+        "file": "draft.json.gz",
+        "sha256": "1636516f6e71d61f6ada6d758a4573382cc518d4affd687718bfae61a182f89e"
+      },
+      {
+        "bytes": 953676,
+        "compressed_bytes": 41222,
+        "compressed_sha256": "197408976df030394466b1d565550b7b7ad01ef7b1f7e886ac74759055b9b9a6",
+        "file": "sidecar.json.gz",
+        "sha256": "befac8a2b7c6fb36a93101006a4a6fc7766e98deb38034da8b626d7397b816fa"
+      },
+      {
+        "bytes": 2609,
+        "compressed_bytes": 982,
+        "compressed_sha256": "c4c4239183070e18b41e8038953576c08f45f74fbe036ac00c98e520bf9ba133",
+        "file": "import-report.json.gz",
+        "sha256": "5b625cc802c87af91851d91bbc16ebe9c38430eaee3a722cf378915ac0bd0903"
+      }
+    ],
+    "draft_schema_after": 5,
+    "draft_schema_before": 5,
+    "exact_item_origin_indices": [
+      468,
+      469,
+      478,
+      480,
+      487,
+      496,
+      502,
+      505,
+      508,
+      516,
+      517,
+      525,
+      534,
+      543,
+      550,
+      557,
+      562,
+      567,
+      583,
+      586
+    ],
+    "independent_known_order_proofs": [
+      {
+        "content_entry": 0,
+        "contribution_evidence": "complete-category-ordinal-emission-order",
+        "contributions": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "0000000000000289"
+          }
+        ],
+        "item": {
+          "lineage": "933793e7f857b22285aecc5b7ea80726",
+          "local": "0000000000000288"
+        },
+        "numeric_transform_evidence": "original-decoded-source-span-and-emission-order",
+        "numeric_transforms": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "0000000000000289"
+          }
+        ],
+        "rows": [
+          {
+            "category": "explicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 286,
+              "start": 267
+            },
+            "definition": {
+              "key": "def.0000000000003100",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 20,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "0000000000000289"
+            },
+            "raw": "+17 to maximum Life"
+          }
+        ],
+        "source": {
+          "ordinal": 572,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        }
+      },
+      {
+        "content_entry": 0,
+        "contribution_evidence": "complete-category-ordinal-emission-order",
+        "contributions": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "000000000000028b"
+          }
+        ],
+        "item": {
+          "lineage": "933793e7f857b22285aecc5b7ea80726",
+          "local": "000000000000028a"
+        },
+        "numeric_transform_evidence": "original-decoded-source-span-and-emission-order",
+        "numeric_transforms": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "000000000000028b"
+          }
+        ],
+        "rows": [
+          {
+            "category": "explicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 280,
+              "start": 261
+            },
+            "definition": {
+              "key": "def.0000000000003100",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 20,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "000000000000028b"
+            },
+            "raw": "+16 to maximum Life"
+          }
+        ],
+        "source": {
+          "ordinal": 574,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        }
+      },
+      {
+        "content_entry": 0,
+        "contribution_evidence": "complete-category-ordinal-emission-order",
+        "contributions": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "000000000000028d"
+          }
+        ],
+        "item": {
+          "lineage": "933793e7f857b22285aecc5b7ea80726",
+          "local": "000000000000028c"
+        },
+        "numeric_transform_evidence": "original-decoded-source-span-and-emission-order",
+        "numeric_transforms": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "000000000000028d"
+          }
+        ],
+        "rows": [
+          {
+            "category": "explicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 307,
+              "start": 275
+            },
+            "definition": {
+              "key": "def.00000000000030ca",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 20,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "000000000000028d"
+            },
+            "raw": "+1 to Level of all Minion Skills"
+          }
+        ],
+        "source": {
+          "ordinal": 576,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        }
+      },
+      {
+        "content_entry": 0,
+        "contribution_evidence": "complete-category-ordinal-emission-order",
+        "contributions": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "000000000000028f"
+          }
+        ],
+        "item": {
+          "lineage": "933793e7f857b22285aecc5b7ea80726",
+          "local": "000000000000028e"
+        },
+        "numeric_transform_evidence": "original-decoded-source-span-and-emission-order",
+        "numeric_transforms": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "000000000000028f"
+          }
+        ],
+        "rows": [
+          {
+            "category": "explicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 297,
+              "start": 269
+            },
+            "definition": {
+              "key": "def.00000000000030e6",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 20,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "000000000000028f"
+            },
+            "raw": "10% increased Movement Speed"
+          }
+        ],
+        "source": {
+          "ordinal": 578,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        }
+      },
+      {
+        "content_entry": 0,
+        "contribution_evidence": "complete-category-ordinal-emission-order",
+        "contributions": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "0000000000000291"
+          },
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "0000000000000292"
+          }
+        ],
+        "item": {
+          "lineage": "933793e7f857b22285aecc5b7ea80726",
+          "local": "0000000000000290"
+        },
+        "numeric_transform_evidence": "original-decoded-source-span-and-emission-order",
+        "numeric_transforms": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "0000000000000291"
+          },
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "0000000000000292"
+          }
+        ],
+        "rows": [
+          {
+            "category": "implicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 218,
+              "start": 189
+            },
+            "definition": {
+              "key": "def.000000000000314d",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 13,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "0000000000000291"
+            },
+            "raw": "{range:0.5}+(10-15) to Spirit"
+          },
+          {
+            "category": "explicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 251,
+              "start": 219
+            },
+            "definition": {
+              "key": "def.00000000000030ca",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 14,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "0000000000000292"
+            },
+            "raw": "+1 to Level of all Minion Skills"
+          }
+        ],
+        "source": {
+          "ordinal": 580,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        }
+      },
+      {
+        "content_entry": 0,
+        "contribution_evidence": "complete-category-ordinal-emission-order",
+        "contributions": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a1"
+          },
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a2"
+          }
+        ],
+        "item": {
+          "lineage": "933793e7f857b22285aecc5b7ea80726",
+          "local": "00000000000002a0"
+        },
+        "numeric_transform_evidence": "original-decoded-source-span-and-emission-order",
+        "numeric_transforms": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a1"
+          },
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a2"
+          }
+        ],
+        "rows": [
+          {
+            "category": "implicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 281,
+              "start": 173
+            },
+            "definition": {
+              "key": "def.0000000000002542",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 13,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "00000000000002a1"
+            },
+            "raw": "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}{range:0.5}+(20-30)% to Cold Resistance"
+          },
+          {
+            "category": "explicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 301,
+              "start": 282
+            },
+            "definition": {
+              "key": "def.0000000000003100",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 14,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "00000000000002a2"
+            },
+            "raw": "+10 to maximum Life"
+          }
+        ],
+        "source": {
+          "ordinal": 587,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        }
+      },
+      {
+        "content_entry": 0,
+        "contribution_evidence": "complete-category-ordinal-emission-order",
+        "contributions": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a4"
+          },
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a5"
+          },
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a6"
+          }
+        ],
+        "item": {
+          "lineage": "933793e7f857b22285aecc5b7ea80726",
+          "local": "00000000000002a3"
+        },
+        "numeric_transform_evidence": "original-decoded-source-span-and-emission-order",
+        "numeric_transforms": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a4"
+          },
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a5"
+          },
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a6"
+          }
+        ],
+        "rows": [
+          {
+            "category": "implicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 227,
+              "start": 184
+            },
+            "definition": {
+              "key": "def.0000000000003172",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 14,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "00000000000002a4"
+            },
+            "raw": "{tags:charm}{range:0.5}Has (1-3) Charm Slot"
+          },
+          {
+            "category": "implicit",
+            "category_ordinal": 2,
+            "decoded_span": {
+              "end": 263,
+              "start": 228
+            },
+            "definition": {
+              "key": "def.000000000000318c",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 15,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "00000000000002a5"
+            },
+            "raw": "Flasks gain 0.17 charges per Second"
+          },
+          {
+            "category": "explicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 283,
+              "start": 264
+            },
+            "definition": {
+              "key": "def.0000000000003100",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 16,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "00000000000002a6"
+            },
+            "raw": "+10 to maximum Life"
+          }
+        ],
+        "source": {
+          "ordinal": 590,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        }
+      },
+      {
+        "content_entry": 0,
+        "contribution_evidence": "complete-category-ordinal-emission-order",
+        "contributions": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a8"
+          },
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a9"
+          }
+        ],
+        "item": {
+          "lineage": "933793e7f857b22285aecc5b7ea80726",
+          "local": "00000000000002a7"
+        },
+        "numeric_transform_evidence": "original-decoded-source-span-and-emission-order",
+        "numeric_transforms": [
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a8"
+          },
+          {
+            "lineage": "933793e7f857b22285aecc5b7ea80726",
+            "local": "00000000000002a9"
+          }
+        ],
+        "rows": [
+          {
+            "category": "implicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 303,
+              "start": 257
+            },
+            "definition": {
+              "key": "def.00000000000031c6",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 19,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "00000000000002a8"
+            },
+            "raw": "{range:0.5}Grants Skill: Level (1-20) Firebolt"
+          },
+          {
+            "category": "explicit",
+            "category_ordinal": 1,
+            "decoded_span": {
+              "end": 331,
+              "start": 304
+            },
+            "definition": {
+              "key": "def.00000000000031ad",
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              }
+            },
+            "emission_position": 0,
+            "line": 20,
+            "modifier": {
+              "lineage": "933793e7f857b22285aecc5b7ea80726",
+              "local": "00000000000002a9"
+            },
+            "raw": "128% increased Spell Damage"
+          }
+        ],
+        "source": {
+          "ordinal": 594,
+          "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        }
+      }
+    ],
+    "kind": "strict-current-format-evidence",
+    "native_coverage_authorized": false,
+    "new_pending_numeric_transform_orders": [
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000682"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000683"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000684"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000685"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000686"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000687"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000688"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000689"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "000000000000068a"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "000000000000068b"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "000000000000068c"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "000000000000068d"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "000000000000068e"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "000000000000068f"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000690"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000691"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000692"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000693"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000694"
+      },
+      {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000695"
+      }
+    ],
+    "prior_archives": [
+      {
+        "bytes": 1189563,
+        "compressed_bytes": 25287,
+        "compressed_sha256": "863b64312a8ecea46072bdd4020163949a00248913700d877e6ae7bd48358cfb",
+        "file": "draft.json.gz",
+        "sha256": "b1a355f8c842dd32ecc95d15b485cc437fe8bd13a80416fcf7f56d95573ef651"
+      },
+      {
+        "bytes": 951696,
+        "compressed_bytes": 41137,
+        "compressed_sha256": "94718625bd955181813edc4f984a0b98935599f201acfe3ca8336cc361b01ea3",
+        "file": "sidecar.json.gz",
+        "sha256": "faca2af07479e75e69a010999eddeb26464640a234a7ed75d1c93153a2fce0f5"
+      },
+      {
+        "bytes": 2533,
+        "compressed_bytes": 960,
+        "compressed_sha256": "b80f47b6874385de8404fec84ccd2ab9629170f96315318bf05bbd2b4c82e941",
+        "file": "import-report.json.gz",
+        "sha256": "08b28e97e3f4969bb5c955f8a685545f720f2cf60ee094d7b3d88378220a9b66"
+      }
+    ],
+    "proof": "whole-draft-sidecar-report-exact-inverse",
+    "source_release_artifacts_reauthored": false,
+    "source_selections_changed": false
+  },
   "schema_version": 1,
   "typed_draft_reauthoring": {
     "authoring_sha256": "404f0a3abb51183d4e20a16e3f811a927fe223090683ed1d1387c5caa56952a4",

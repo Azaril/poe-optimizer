@@ -7,6 +7,34 @@ use poe_optimizer_import::{
 };
 use serde_json::{Value, json};
 use std::{collections::BTreeSet, fs, path::Path, process::Command};
+
+/// Count only the new, independently pending numeric-transform order facet.
+/// Historical scope totals may subtract this count, while their whole-issue
+/// comparisons still retain and verify every diagnostic.
+#[allow(dead_code)]
+pub fn numeric_transform_order_issue_count(issues: &Value) -> usize {
+    let mut ids = BTreeSet::new();
+    let mut owners = BTreeSet::new();
+    for issue in issues
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|issue| issue["code"] == "item-modifier-numeric-transform-order-not-converted")
+    {
+        assert!(
+            issue["path"]
+                .as_str()
+                .unwrap()
+                .ends_with(".modifier_orders.numeric_transforms")
+        );
+        assert!(!issue["id"].is_null());
+        assert!(!issue["owner"].is_null());
+        assert!(ids.insert(issue["id"].to_string()));
+        assert!(owners.insert(issue["owner"].to_string()));
+    }
+    ids.len()
+}
+
 fn read(path: impl AsRef<Path>) -> Value {
     serde_json::from_slice(&fs::read(path).unwrap()).unwrap()
 }

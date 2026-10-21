@@ -390,7 +390,10 @@ impl Fixture {
                 parameters: vec![],
                 item_level: None,
                 quality: None,
-                modifier_order: vec![rolled.id],
+                modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                    contributions: vec![rolled.id],
+                    numeric_transforms: vec![rolled.id],
+                },
                 modifiers: vec![rolled],
             }],
             equipment: vec![equipment],
@@ -518,7 +521,8 @@ impl Fixture {
             let mut item = self.build.items[0].clone();
             item.id = allocator.allocate().unwrap();
             item.modifiers[0].id = allocator.allocate().unwrap();
-            item.modifier_order = vec![item.modifiers[0].id];
+            item.modifier_orders.contributions = vec![item.modifiers[0].id];
+            item.modifier_orders.numeric_transforms = vec![item.modifiers[0].id];
             item.modifiers[0].rolls[0].value = integer(20);
             equipment.item = item.id;
             self.build.items.push(item);

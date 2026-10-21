@@ -83,7 +83,10 @@ fn item() -> ItemRecord {
         parameters: vec![parameter()],
         item_level: Some(72),
         quality: Some(quality()),
-        modifier_order: vec![id(2)],
+        modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+            contributions: vec![id(2)],
+            numeric_transforms: vec![id(2)],
+        },
         modifiers: vec![RolledModifier {
             id: id(2),
             definition: def("modifier"),

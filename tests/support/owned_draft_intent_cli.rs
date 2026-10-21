@@ -40,7 +40,10 @@ fn save_intent(directory: &Path, selected: bool, quality: f64) {
             item_level: Some(20),
             quality: None,
             modifiers: vec![],
-            modifier_order: vec![],
+            modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                contributions: vec![],
+                numeric_transforms: vec![],
+            },
         }
         .into(),
     );

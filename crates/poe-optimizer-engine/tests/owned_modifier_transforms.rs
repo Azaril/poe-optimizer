@@ -1,5 +1,7 @@
 //! Ordered native item-modifier transforms bind actual input occurrences.
 //! No imported source labels, precomputed RuleFacts, or PoB runtime participate.
+#[path = "support/owned_empty_support_contribution_fixture.rs"]
+mod empty_support;
 #[allow(dead_code)]
 #[path = "support/owned_plan_fixture.rs"]
 mod support;
@@ -7,6 +9,7 @@ use poe_optimizer_core::{
     build_identity::{BuildRevision, ModifierInstanceId},
     owned_build::*,
     owned_definitions::*,
+    owned_routing::*,
     owned_rules::*,
     owned_schema::*,
 };
@@ -306,10 +309,13 @@ fn fixture() -> Fixture {
     f.build.items[0]
         .modifiers
         .extend([rolled(8, "add", 0.2), rolled(9, "multiply", 2.0)]);
-    f.build.items[0].modifier_order.extend([
-        occurrence::<ModifierInstanceId>(8),
-        occurrence::<ModifierInstanceId>(9),
-    ]);
+    let orders = &mut f.build.items[0].modifier_orders;
+    for order in [&mut orders.contributions, &mut orders.numeric_transforms] {
+        order.extend([
+            occurrence::<ModifierInstanceId>(8),
+            occurrence::<ModifierInstanceId>(9),
+        ]);
+    }
     f
 }
 fn program<'a>(f: &'a mut Fixture, owner: &str, id: &str) -> &'a mut RuleProgram {
@@ -390,9 +396,9 @@ fn remove_producer(f: &mut Fixture, id: u64) {
     f.build.items[0]
         .modifiers
         .retain(|m| m.id != occurrence(id));
-    f.build.items[0]
-        .modifier_order
-        .retain(|m| *m != occurrence(id));
+    let orders = &mut f.build.items[0].modifier_orders;
+    orders.contributions.retain(|m| *m != occurrence(id));
+    orders.numeric_transforms.retain(|m| *m != occurrence(id));
 }
 fn assert_rules_rejected(f: &Fixture) {
     let schema =
@@ -428,12 +434,12 @@ fn assert_rules_rejected(f: &Fixture) {
 }
 
 #[test]
-fn actual_modifier_order_preserves_interleaved_addition_and_multiplication() {
+fn numeric_transform_order_preserves_interleaved_addition_and_multiplication() {
     let mut f = fixture();
     let forward = report(&f);
     assert!(forward.gaps.is_empty(), "{:?}", forward.gaps);
     assert_factors(&forward, 2.4, 3.4);
-    f.build.items[0].modifier_order =
+    f.build.items[0].modifier_orders.numeric_transforms =
         vec![occurrence(4), occurrence(5), occurrence(9), occurrence(8)];
     assert_factors(&report(&f), 2.2, 3.2);
 }
@@ -538,7 +544,10 @@ fn item_identity_prevents_transforms_from_leaking_to_another_equipped_item() {
     for (row, new_id) in second.modifiers.iter_mut().zip([41, 42, 43, 44]) {
         row.id = occurrence(new_id);
     }
-    second.modifier_order = [41, 42, 43, 44].into_iter().map(occurrence).collect();
+    second.modifier_orders = ItemModifierOrders {
+        contributions: [41, 42, 43, 44].into_iter().map(occurrence).collect(),
+        numeric_transforms: [41, 42, 43, 44].into_iter().map(occurrence).collect(),
+    };
     second.modifiers[2].rolls[0].value = qty(0.4, "factor");
     second.modifiers[3].rolls[0].value = qty(3.0, "factor");
     f.build.items.push(second);
@@ -627,7 +636,7 @@ fn duplicate_explicit_positions_and_dependency_cycles_are_rejected() {
 fn candidate_edits_and_parallel_worker_scratch_cannot_retain_old_sequences() {
     let mut f = fixture();
     let first = f.compile().unwrap();
-    f.build.items[0].modifier_order =
+    f.build.items[0].modifier_orders.numeric_transforms =
         vec![occurrence(4), occurrence(5), occurrence(9), occurrence(8)];
     f.build.revision = BuildRevision::from_u64(2);
     let second = f.compile().unwrap();
@@ -676,4 +685,241 @@ fn transform_dependency_expansion_respects_plan_limits() {
         }),
         Err(PlanError::Limit("effects"))
     ));
+}
+
+fn independent_orders_fixture() -> Fixture {
+    let mut f = fixture();
+    // One real item use exercises both binders. The finite checked support
+    // pipeline has no Skill recipient, so remove the shared fixture's unused
+    // Skill/output declarations rather than inventing preparation coverage.
+    f.build.equipment.truncate(1);
+    f.schema
+        .definitions
+        .retain(|d| !matches!(d, DefinitionDescriptor::Skill(_)));
+    f.schema
+        .slots
+        .retain(|d| !matches!(d, SlotDescriptor::ActionOutput(_)));
+    f.owners.retain(|o| {
+        !matches!(
+            o.owner,
+            SchemaSubject::Definition(DefinitionAddress::Skill(_)) | SchemaSubject::Slot(_)
+        )
+    });
+    f.schema.definitions.push(DefinitionDescriptor::Unit(known(
+        def("percent"),
+        UnitSchema {
+            dimension: UnitDimension::PercentagePoints,
+        },
+    )));
+    let mut third = f.build.items[0].modifiers[0].clone();
+    third.id = occurrence(31);
+    f.build.items[0].modifiers.push(third);
+    f.build.items[0].modifier_orders = ItemModifierOrders {
+        contributions: [4, 5, 31, 8, 9].into_iter().map(occurrence).collect(),
+        numeric_transforms: [9, 4, 8, 5, 31].into_iter().map(occurrence).collect(),
+    };
+    add_parameter(
+        &mut f,
+        "modifier",
+        "ordered-roll",
+        ValueSchema::Quantity(QuantityRange {
+            minimum: FiniteQuantity::new(-1e16, def("damage")).unwrap(),
+            maximum: FiniteQuantity::new(1e16, def("damage")).unwrap(),
+        }),
+    );
+    for (id, amount) in [(4, 1e16), (5, -1e16), (31, 1.0)] {
+        f.build.items[0]
+            .modifiers
+            .iter_mut()
+            .find(|m| m.id == occurrence(id))
+            .unwrap()
+            .rolls
+            .push(ParameterAssignment {
+                slot: slot("modifier", "ordered-roll"),
+                value: qty(amount, "damage"),
+            });
+    }
+    let quantity = ComputedValueType::Quantity {
+        unit: def("damage"),
+    };
+    for name in ["ordered-channel", "ordered-result"] {
+        f.schema.definitions.push(DefinitionDescriptor::Stat(known(
+            def(name),
+            StatSchema {
+                value: quantity.clone(),
+                targets: vec![RuleEntityKind::Actor],
+            },
+        )));
+    }
+    f.owner_mut(&modifier_owner())
+        .programs
+        .members
+        .push(RuleProgram {
+            id: key("ordered-contribution"),
+            context: RuleEntityKind::EquipmentUse,
+            reads: vec![typed_read(
+                "roll",
+                quantity.clone(),
+                RuleReadSource::Parameter {
+                    slot: slot("modifier", "ordered-roll"),
+                },
+            )],
+            nodes: vec![read_node("roll", "roll")],
+            effects: vec![effect(
+                "add",
+                RuleEffectKind::Contribute {
+                    entity: RuleEntity::Player,
+                    stat: def("ordered-channel"),
+                    contribution: ContributionKind::Add,
+                    value: key("roll"),
+                },
+            )],
+        });
+    f.receivers.members.push(StatReceiver {
+        id: key("ordered-result"),
+        stat: def("ordered-result"),
+        program: key("ordered-result"),
+        targets: vec![StatReceiverTarget::Player],
+    });
+    f.owners.push(DefinitionRules {
+        owner: subject(def::<StatDefinition>("ordered-result")),
+        programs: DeclaredSet::complete(vec![RuleProgram {
+            id: key("ordered-result"),
+            context: RuleEntityKind::Actor,
+            reads: vec![typed_read(
+                "total",
+                quantity,
+                RuleReadSource::ContributionQuery {
+                    entity: RuleEntity::Current,
+                    query: key("ordered-query"),
+                    group: key("main"),
+                },
+            )],
+            nodes: vec![read_node("total", "total")],
+            effects: vec![derive(
+                "value",
+                RuleEntity::Current,
+                "ordered-result",
+                "total",
+            )],
+        }]),
+    });
+    f
+}
+
+fn independent_orders_plan(f: &Fixture) -> OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage> {
+    let schema =
+        OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap();
+    let rules = RulePackageInput {
+        schema_version: OWNED_RULE_PACKAGE_VERSION,
+        namespace: ns(),
+        release: key("independent-orders"),
+        semantics_version: key("test-v1"),
+        operations_version: key(OWNED_RULE_OPERATIONS_V22),
+        definitions: schema.identity().clone(),
+        owners: f.owners.clone(),
+        tables: f.tables.clone(),
+        receivers: f.receivers.clone(),
+        support_discovery: Some(SupportDiscoveryInput {
+            providers: f
+                .owners
+                .iter()
+                .map(|o| SupportSourceDomainDeclaration {
+                    owner: o.owner.clone(),
+                    domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+                })
+                .collect(),
+        }),
+        existing_actor_rules: None,
+        effect_applications: Some(DeclaredSet::complete(vec![])),
+        contribution_queries: Some(DeclaredSet::complete(vec![ContributionQuery {
+            id: key("ordered-query"),
+            stat: def("ordered-channel"),
+            contribution: ContributionKind::Add,
+            groups: vec![ContributionGroup {
+                id: key("main"),
+                reduction: ContributionReduction::Sum,
+                ordering: ContributionOrdering::Ordered,
+                empty: Some(qty(0.0, "damage")),
+                members: DeclaredSet::complete(vec![ContributionMember {
+                    producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+                        owner: modifier_owner(),
+                        program: key("ordered-contribution"),
+                        effect: key("add"),
+                        origin: ContributionOrigin::ItemModifier {
+                            slots: vec![def("weapon")],
+                        },
+                    }),
+                    order: Some(ContributionOrder {
+                        source_rank: 0,
+                        program_rank: 0,
+                        effect_rank: 0,
+                        slot_ranks: vec![ContributionSlotRank {
+                            slot: def("weapon"),
+                            rank: 0,
+                        }],
+                    }),
+                }]),
+            }],
+        }])),
+    };
+    empty_support::checked_plan(
+        f,
+        rules,
+        ActionRoutingInput {
+            schema_version: OWNED_ACTION_ROUTING_VERSION,
+            namespace: ns(),
+            release: key("independent-orders"),
+            definitions: schema.identity().clone(),
+            outputs: vec![],
+        },
+        PlanLimits::default(),
+    )
+    .unwrap()
+}
+
+fn assert_independent_orders(f: &Fixture, sum: f64, first: f64, second: f64) {
+    let plan = independent_orders_plan(f);
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert!(report.gaps.is_empty(), "{:?}", report.gaps);
+    let SupportEffectsOutcome::Evaluated { effects } = report.outcome else {
+        panic!("complete finite execution expected");
+    };
+    known_quantity(&effects, 6, 4, "effective-factor", first, "factor");
+    known_quantity(&effects, 6, 5, "effective-factor", second, "factor");
+    known_quantity(&effects, 6, 31, "effective-factor", first, "factor");
+    let key = PlanValueKey::Stat {
+        entity: ConcreteEntity::Actor(ActorKey::Player),
+        stat: def("ordered-result"),
+    };
+    assert_eq!(
+        effects.values.iter().find(|v| v.key == key).unwrap().value,
+        EffectValue::Known {
+            value: qty(sum, "damage")
+        }
+    );
+}
+
+#[test]
+fn contribution_and_transform_orders_are_independent_of_each_other_and_storage() {
+    let mut f = independent_orders_fixture();
+    // The contribution cancellation follows 4,5,31. Transform producers follow
+    // 9,8: Multiply then Add. Neither is inferred from physical record storage.
+    assert_independent_orders(&f, 1.0, 2.2, 3.2);
+    f.build.items[0].modifiers.reverse();
+    f.owners.reverse();
+    assert_independent_orders(&f, 1.0, 2.2, 3.2);
+    let baseline = independent_orders_plan(&f).identity();
+    f.build.items[0].modifier_orders.contributions.swap(1, 2);
+    assert_independent_orders(&f, 0.0, 2.2, 3.2);
+    let contribution_edit = independent_orders_plan(&f).identity();
+    assert_ne!(baseline, contribution_edit);
+    f.build.items[0]
+        .modifier_orders
+        .numeric_transforms
+        .swap(0, 2);
+    assert_independent_orders(&f, 0.0, 2.4, 3.4);
+    assert_ne!(contribution_edit, independent_orders_plan(&f).identity());
+    f.build.items[0].modifiers.reverse();
+    assert_independent_orders(&f, 0.0, 2.4, 3.4);
 }

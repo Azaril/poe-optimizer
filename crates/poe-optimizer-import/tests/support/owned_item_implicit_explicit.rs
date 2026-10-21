@@ -114,7 +114,14 @@ fn paired_members_keep_distinct_occurrences_and_exact_category_order() {
             line.modifiers[0]
         })
         .collect();
-    assert_eq!(item.modifier_order.to_resolved(), Some(expected));
+    assert_eq!(
+        item.modifier_orders.contributions.to_resolved(),
+        Some(expected.clone())
+    );
+    assert_eq!(
+        item.modifier_orders.numeric_transforms.to_resolved(),
+        Some(expected)
+    );
     let inputs = text.parameter_inputs.as_ref().unwrap();
     assert_eq!(inputs.len(), 4);
     assert!(
@@ -197,6 +204,18 @@ fn wrong_member_categories_counts_or_lifecycle_never_complete_the_pair() {
         ]
     );
     assert!(!closed(&r) && !complete(&r));
+    let item = &r.draft().input().items.members[0];
+    assert!(matches!(
+        item.modifier_orders.contributions,
+        DraftField::Pending(_)
+    ));
+    assert!(matches!(
+        item.modifier_orders.numeric_transforms,
+        DraftField::Pending(_)
+    ));
+    // Category attribution does not authorize raw canonical inputs or prove
+    // this unsupported full-item construction. Neither order may borrow it.
+    assert_eq!(item.modifiers.members.len(), 2);
 }
 
 #[test]

@@ -277,7 +277,10 @@ impl World {
                 item_level: decode(known(&item["item_level"])),
                 quality: Some(quality),
                 modifiers: vec![],
-                modifier_order: vec![],
+                modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                    contributions: vec![],
+                    numeric_transforms: vec![],
+                },
             });
             f.build.equipment.push(EquipmentUse {
                 id: base::occurrence(6 + index as u64),
@@ -476,7 +479,8 @@ impl World {
         });
         for (index, item) in self.f.build.items.iter_mut().enumerate() {
             let occurrence = base::occurrence(20 + index as u64);
-            item.modifier_order.push(occurrence);
+            item.modifier_orders.contributions.push(occurrence);
+            item.modifier_orders.numeric_transforms.push(occurrence);
             item.modifiers.push(RolledModifier {
                 id: occurrence,
                 definition: modifier.clone(),

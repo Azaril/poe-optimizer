@@ -391,7 +391,8 @@ fn only_exact_active_body_occupancy_contributes_and_ambiguity_is_unavailable() {
     other.template = def("alternate-item");
     other.parameters.clear();
     other.modifiers.clear();
-    other.modifier_order.clear();
+    other.modifier_orders.contributions.clear();
+    other.modifier_orders.numeric_transforms.clear();
     w.f.build.items.push(other);
     let mut alternative = w.f.build.equipment[0].clone();
     alternative.id = occurrence(84);

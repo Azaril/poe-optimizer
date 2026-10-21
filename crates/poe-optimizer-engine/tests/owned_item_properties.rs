@@ -207,7 +207,10 @@ fn fixture() -> Fixture {
         ],
         item_level: Some(20),
         quality: None,
-        modifier_order: vec![occurrence(9)],
+        modifier_orders: ItemModifierOrders {
+            contributions: vec![occurrence(9)],
+            numeric_transforms: vec![occurrence(9)],
+        },
         modifiers: vec![RolledModifier {
             id: occurrence(9),
             definition: def("modifier"),

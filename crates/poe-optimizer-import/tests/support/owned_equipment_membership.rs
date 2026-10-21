@@ -295,7 +295,9 @@ fn socketless_proof_is_independent_of_unconverted_modifier_layout() {
         ItemLayoutStatus::Pending(_)
     ));
     assert!(matches!(
-        result.draft().input().items.members[0].modifier_order,
+        result.draft().input().items.members[0]
+            .modifier_orders
+            .contributions,
         DraftField::Pending(_)
     ));
 }

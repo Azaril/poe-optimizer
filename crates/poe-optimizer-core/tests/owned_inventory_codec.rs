@@ -16,7 +16,10 @@ fn input() -> InventoryInput {
             parameters: vec![],
             item_level: Some(4),
             quality: None,
-            modifier_order: vec![],
+            modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                contributions: vec![],
+                numeric_transforms: vec![],
+            },
             modifiers: vec![],
         }],
         copies: vec![3, 2]

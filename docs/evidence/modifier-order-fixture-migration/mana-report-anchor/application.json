@@ -1,0 +1,14 @@
+{
+  "Kind": "applied-mana-reward-anchor-repair",
+  "Target": "tests/support/owned_mana_configuration_sources.rs",
+  "ReportSHA256": "6db43a078f25e4a1fbf2e9c98be52b431f4884c5e8ad6518993b252b2314e344",
+  "Before": {
+    "sha256": "8dafeff17cea3fe3ebc4113455797667d0247600503ea9054f513652b4d498d2",
+    "bytes": 42528
+  },
+  "After": {
+    "sha256": "54e8c17412b2d35ea02dcd06701e732bf033fbdb78222fcc397d81c9ea3e8108",
+    "bytes": 42528
+  },
+  "RuntimeValidated": false
+}

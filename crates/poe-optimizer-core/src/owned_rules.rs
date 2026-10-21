@@ -420,7 +420,7 @@ pub struct ApplicationContributionDeclaration {
 /// Compare (source_rank, slot_rank, modifier_position, program_rank, effect_rank).
 /// Inapplicable slot/position components are zero. No instance ID or discovery
 /// index breaks a tie. Equipment ranks are shared by the group's origin lane;
-/// modifier_position comes only from the rolled item's semantic modifier_order.
+/// modifier_position comes only from the rolled item's contribution order.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ContributionOrder {
@@ -1109,8 +1109,8 @@ pub enum RuleEffectKind {
         value: OwnedDefinitionKey,
     },
     /// Project an ordered scalar operation to finite modifier definitions on
-    /// the same item and receiving equipment use. The item modifier order comes
-    /// first, then this explicit nonnegative step within a producer occurrence.
+    /// the same item and receiving equipment use. The item's numeric-transform
+    /// order comes first, then this nonnegative step within a producer occurrence.
     /// Eligibility is read on each exact recipient before demanding the value.
     ProjectModifierTransform {
         stat: StatDefId,

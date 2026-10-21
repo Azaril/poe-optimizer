@@ -45,7 +45,8 @@ fn repeated_templates_and_loadout_alternatives_rebind_exact_equipment_uses() {
     other.id = occurrence(83);
     other.item_level = Some(41);
     other.modifiers.clear();
-    other.modifier_order.clear();
+    other.modifier_orders.contributions.clear();
+    other.modifier_orders.numeric_transforms.clear();
     other.parameters[0].value = ParameterValue::Boolean(true);
     f.build.items.push(other);
     f.build.equipment[1].item = occurrence(83);

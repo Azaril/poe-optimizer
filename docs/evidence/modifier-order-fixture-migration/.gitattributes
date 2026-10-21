@@ -1,0 +1,4 @@
+# Preserve authenticated captures, including original CRLF line endings.
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# This exact Cargo log includes a trailing blank line in the recorded bytes.
+mana-report-anchor/runtime.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol

@@ -316,7 +316,10 @@ impl World {
                 item_level: None,
                 quality: None,
                 modifiers: vec![],
-                modifier_order: vec![],
+                modifier_orders: poe_optimizer_core::owned_build::ItemModifierOrders {
+                    contributions: vec![],
+                    numeric_transforms: vec![],
+                },
             });
         }
         world

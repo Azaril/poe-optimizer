@@ -219,7 +219,11 @@ fn assert_actual_staff(item: &Value, level: i64, damage: f64, quality: f64) {
         .unwrap();
     assert_eq!(amount["value"]["value"]["value"]["value"], damage);
     assert_eq!(
-        item["modifier_order"],
+        item["modifier_orders"]["contributions"],
+        json!({"kind":"known","value":mods.iter().map(|m|m["id"].clone()).collect::<Vec<_>>()})
+    );
+    assert_eq!(
+        item["modifier_orders"]["numeric_transforms"],
         json!({"kind":"known","value":mods.iter().map(|m|m["id"].clone()).collect::<Vec<_>>()})
     );
     let input = family::bindings().remove(0);
@@ -303,7 +307,14 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
             ("/quality", "quality-not-converted"),
             ("/parameters/completion", "item-parameters-not-converted"),
             ("/modifiers/completion", "item-modifiers-not-converted"),
-            ("/modifier_order", "item-modifier-order-not-converted"),
+            (
+                "/modifier_orders/contributions",
+                "item-modifier-contribution-order-not-converted",
+            ),
+            (
+                "/modifier_orders/numeric_transforms",
+                "item-modifier-numeric-transform-order-not-converted",
+            ),
         ] {
             let p = x.pointer(pointer).unwrap();
             assert_eq!(p["kind"], "pending");
@@ -323,7 +334,7 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
             "quality",
             "parameters",
             "modifiers",
-            "modifier_order",
+            "modifier_orders",
         ] {
             x.as_object_mut().unwrap().remove(field);
             y.as_object_mut().unwrap().remove(field);
@@ -418,13 +429,18 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
         count - actual.as_array().unwrap().len(),
         match case {
             4 => 1,
-            5 => 5,
+            5 => 6,
             _ => 0,
         }
     );
     if case == 5 {
-        assert_eq!(count, 29);
-        assert_eq!(actual.as_array().unwrap().len(), 24);
+        let prior_orders =
+            selected::numeric_transform_order_issue_count(&before["finalization"]["issues"]);
+        let next_orders =
+            selected::numeric_transform_order_issue_count(&after["finalization"]["issues"]);
+        assert_eq!(prior_orders - next_orders, 1);
+        assert_eq!(count - prior_orders, 29);
+        assert_eq!(actual.as_array().unwrap().len() - next_orders, 24);
     }
     let mut first = selected::selection(xml, old);
     let mut second = selected::selection(xml, new);

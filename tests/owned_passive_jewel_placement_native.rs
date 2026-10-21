@@ -369,7 +369,8 @@ impl Inputs {
         let item = &mut f.build.items[0];
         item.item_level = Some(55);
         item.modifiers.truncate(1);
-        item.modifier_order.truncate(1);
+        item.modifier_orders.contributions.truncate(1);
+        item.modifier_orders.numeric_transforms.truncate(1);
         item.modifiers[0].rolls = assignments(&self.item["modifiers"]["members"][0]["rolls"]);
         for (i, binding) in [&self.ruby, &self.other].into_iter().enumerate() {
             let allocation = occurrence(10 + i as u64);

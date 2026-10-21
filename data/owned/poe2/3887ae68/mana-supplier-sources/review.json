@@ -765,7 +765,7 @@
       "scope": "one-placeholder-only"
     },
     "descendant_delivery_certified": false,
-    "draft_digest": "19ad76b8d6555f317022d1f319e275933d07cd2b150a68d05aba928eb496e6e4",
+    "draft_digest": "e5a3ec39796d2402e1d6816e6715fe7b760a39cd2940abed05bb186508b59373",
     "memberships": {
       "authored_skills": [
         {
@@ -4427,18 +4427,33 @@
               "kind": "known",
               "value": null
             },
-            "modifier_order": {
-              "kind": "known",
-              "value": [
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "0000000000000291"
-                },
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "0000000000000292"
-                }
-              ]
+            "modifier_orders": {
+              "contributions": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "0000000000000291"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "0000000000000292"
+                  }
+                ]
+              },
+              "numeric_transforms": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "0000000000000291"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "0000000000000292"
+                  }
+                ]
+              }
             },
             "modifiers": {
               "completion": {
@@ -7237,14 +7252,25 @@
               "kind": "known",
               "value": null
             },
-            "modifier_order": {
-              "kind": "known",
-              "value": [
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "000000000000028b"
-                }
-              ]
+            "modifier_orders": {
+              "contributions": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "000000000000028b"
+                  }
+                ]
+              },
+              "numeric_transforms": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "000000000000028b"
+                  }
+                ]
+              }
             },
             "modifiers": {
               "completion": {
@@ -9233,14 +9259,25 @@
               "kind": "known",
               "value": null
             },
-            "modifier_order": {
-              "kind": "known",
-              "value": [
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "000000000000028f"
-                }
-              ]
+            "modifier_orders": {
+              "contributions": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "000000000000028f"
+                  }
+                ]
+              },
+              "numeric_transforms": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "000000000000028f"
+                  }
+                ]
+              }
             },
             "modifiers": {
               "completion": {
@@ -11951,18 +11988,33 @@
               "kind": "known",
               "value": null
             },
-            "modifier_order": {
-              "kind": "known",
-              "value": [
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "00000000000002a1"
-                },
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "00000000000002a2"
-                }
-              ]
+            "modifier_orders": {
+              "contributions": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a1"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a2"
+                  }
+                ]
+              },
+              "numeric_transforms": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a1"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a2"
+                  }
+                ]
+              }
             },
             "modifiers": {
               "completion": {
@@ -16232,22 +16284,41 @@
               "kind": "known",
               "value": null
             },
-            "modifier_order": {
-              "kind": "known",
-              "value": [
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "00000000000002a4"
-                },
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "00000000000002a5"
-                },
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "00000000000002a6"
-                }
-              ]
+            "modifier_orders": {
+              "contributions": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a4"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a5"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a6"
+                  }
+                ]
+              },
+              "numeric_transforms": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a4"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a5"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a6"
+                  }
+                ]
+              }
             },
             "modifiers": {
               "completion": {
@@ -20651,18 +20722,33 @@
               "kind": "known",
               "value": null
             },
-            "modifier_order": {
-              "kind": "known",
-              "value": [
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "00000000000002a1"
-                },
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "00000000000002a2"
-                }
-              ]
+            "modifier_orders": {
+              "contributions": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a1"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a2"
+                  }
+                ]
+              },
+              "numeric_transforms": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a1"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a2"
+                  }
+                ]
+              }
             },
             "modifiers": {
               "completion": {
@@ -23461,14 +23547,25 @@
               "kind": "known",
               "value": null
             },
-            "modifier_order": {
-              "kind": "known",
-              "value": [
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "0000000000000289"
-                }
-              ]
+            "modifier_orders": {
+              "contributions": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "0000000000000289"
+                  }
+                ]
+              },
+              "numeric_transforms": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "0000000000000289"
+                  }
+                ]
+              }
             },
             "modifiers": {
               "completion": {
@@ -25457,14 +25554,25 @@
               "kind": "known",
               "value": null
             },
-            "modifier_order": {
-              "kind": "known",
-              "value": [
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "000000000000028d"
-                }
-              ]
+            "modifier_orders": {
+              "contributions": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "000000000000028d"
+                  }
+                ]
+              },
+              "numeric_transforms": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "000000000000028d"
+                  }
+                ]
+              }
             },
             "modifiers": {
               "completion": {
@@ -27527,18 +27635,33 @@
               "kind": "known",
               "value": null
             },
-            "modifier_order": {
-              "kind": "known",
-              "value": [
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "00000000000002a8"
-                },
-                {
-                  "lineage": "933793e7f857b22285aecc5b7ea80726",
-                  "local": "00000000000002a9"
-                }
-              ]
+            "modifier_orders": {
+              "contributions": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a8"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a9"
+                  }
+                ]
+              },
+              "numeric_transforms": {
+                "kind": "known",
+                "value": [
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a8"
+                  },
+                  {
+                    "lineage": "933793e7f857b22285aecc5b7ea80726",
+                    "local": "00000000000002a9"
+                  }
+                ]
+              }
             },
             "modifiers": {
               "completion": {

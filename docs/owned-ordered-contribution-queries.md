@@ -21,7 +21,7 @@ Nonapplicable slot and modifier positions are zero. No instance ID, display name
 | `Character` | Class or Ascendancy | Its singleton character root; explicit source/program/effect ranks |
 | `Allocation` | PassiveNode | Its exact allocated definition; explicit source/program/effect ranks |
 | `EquipmentUse` | ItemTemplate | Exact declared equipment-slot rank |
-| `ItemModifier` | Modifier | Exact declared equipment-slot rank, then position in the rolled item's `modifier_order` |
+| `ItemModifier` | Modifier | Exact declared equipment-slot rank, then position in the rolled item's `modifier_orders.contributions` |
 | `ExistingActor` (V23) | Actor definition with the exact applicability declaration | Explicit source/program/effect ranks; currently the existing Player |
 | `Reward` (V23) | Selected Reward definition | Explicit source/program/effect ranks; distinct occurrences remain distinct |
 | `SuppliedActor` (V23) | Explicit Actor slot or its declared Actor provider definition | Exact checked supply relation and Actor recipient; explicit source/program/effect ranks |

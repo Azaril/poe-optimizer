@@ -84,11 +84,28 @@ fn values(item: &ItemDraft, artifacts: &Artifacts, name: &str) -> Vec<Vec<f64>> 
         .collect()
 }
 fn partial_collections(item: &ItemDraft) {
-    let DraftField::Pending(order) = &item.modifier_order else {
-        panic!("source line positions cannot establish semantic modifier order");
-    };
-    assert_eq!(order.code.as_str(), "item-modifier-order-not-converted");
-    assert!(order.candidates.is_empty());
+    let mut ids = Vec::new();
+    for (field, code) in [
+        (
+            &item.modifier_orders.contributions,
+            "item-modifier-contribution-order-not-converted",
+        ),
+        (
+            &item.modifier_orders.numeric_transforms,
+            "item-modifier-numeric-transform-order-not-converted",
+        ),
+    ] {
+        let DraftField::Pending(order) = field else {
+            panic!("source line positions cannot establish semantic modifier order");
+        };
+        assert_eq!(order.code.as_str(), code);
+        assert!(order.candidates.is_empty());
+        ids.push(order.id);
+    }
+    assert_ne!(
+        ids[0], ids[1],
+        "each order has its own unresolved obligation"
+    );
     assert!(matches!(
         item.parameters.completion,
         DraftListCompletion::Pending { .. }

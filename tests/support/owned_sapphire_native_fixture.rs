@@ -294,7 +294,12 @@ impl Inputs {
         f.build.items[0].modifiers.retain(|m| m.id != occurrence(5));
         let retained: BTreeSet<_> = f.build.items[0].modifiers.iter().map(|m| m.id).collect();
         f.build.items[0]
-            .modifier_order
+            .modifier_orders
+            .contributions
+            .retain(|m| retained.contains(m));
+        f.build.items[0]
+            .modifier_orders
+            .numeric_transforms
             .retain(|m| retained.contains(m));
         f.build.items[0].item_level = None;
         let cold = self.ring["modifiers"]["members"]
