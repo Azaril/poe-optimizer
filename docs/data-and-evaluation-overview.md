@@ -1399,6 +1399,18 @@ Life fixture requires published inventories without inserting members or
 changing closure. Socket destinations, physical stock, other declarations and
 numerical owners remain open.
 
+The new Charm-capacity component uses the same graph: each modifier contributes
+its effective count to its exact EquipmentUse; the item template reduces those
+ordered local contributions, adds its data-defined base, and contributes once
+to the Player. The core adds no item-name branch or special accumulator. Eleven
+packet/native tests, strict lint and the exact current-recipe rehearsal pass,
+including alternative-use isolation and fresh/reused/Rayon results. All-five
+release publication also passes, preserving unchanged drafts, checked sidecar
+inverses and independent rebuild/replay equality. The actual contributor inventory and item
+owner remain Partial; final capacity caps, overrides and legality are separate.
+The source-domain probe also keeps formatter arithmetic distinct from final item
+reconstruction, preserving nonneutral scaling while investigating its limits.
+
 Actual default parsing also rejects seven selected Puppet/Archon nodes. Two
 Djinn unlocking lines are unknown even though their child actions are supplied
 through parent profiles. Exact source graphs now distinguish accepted records,

@@ -1,0 +1,82 @@
+{
+  "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/belt.lua.gz",
+      "bytes": 1021,
+      "sha256": "4a012166b180ef55808c7df9b673e38af0a2a5463d7acd7179bc61447200c451",
+      "raw": {
+        "bytes": 6859,
+        "sha256": "74f5846300ea7cb88f5589e62cb73affe147d7870411efcd885090d9c1ea850e"
+      }
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/Item.lua.gz",
+      "bytes": 24796,
+      "sha256": "f1d4fc1a06d7162d426e9b1d1acd3519e387eeeb29cafc3fa17f221dc020d1ee",
+      "raw": {
+        "bytes": 112268,
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      }
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/CalcSetup.lua.gz",
+      "bytes": 21345,
+      "sha256": "9bd2988b89e91f51aae8cd09e3bae5f08030f67f1f652bb5eba73a8f6050c0d0",
+      "raw": {
+        "bytes": 100609,
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      }
+    }
+  ],
+  "sections": [
+    {
+      "artifact": 1,
+      "start_byte": 87730,
+      "end_byte": 88436,
+      "bytes": 706,
+      "sha256": "1e4a5301fcc0842d09af682e34eb44d89689cbacd3da17b025e7e5aa0dfd35fb"
+    },
+    {
+      "artifact": 1,
+      "start_byte": 68874,
+      "end_byte": 90077,
+      "bytes": 21203,
+      "sha256": "16ea256e5866d4a0287816a9f3ded5617976750afd4c1c4ddd54099f506822bf"
+    },
+    {
+      "artifact": 2,
+      "start_byte": 65416,
+      "end_byte": 65525,
+      "bytes": 109,
+      "sha256": "ddf17f798e1deba8f35765395e18f3f7859d626b6cbad074791e7b8a1d3dc63b"
+    }
+  ],
+  "admission": [
+    {
+      "path": "data/owned/poe2/3887ae68/fine-belt-item-inputs/authoring.json",
+      "bytes": 3215,
+      "sha256": "4ae22be19ca9dd624bb0a711f2f57be61c6f2bd7fb510698e6ec602e441552d3"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/fine-belt-item-inputs/membership.json",
+      "bytes": 461,
+      "sha256": "6dbb1d3055b44b456459cd959bff115841ba536737a3789e8bd71a0428ade281"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/fine-belt-modifiers/source-conditions.json",
+      "bytes": 953,
+      "sha256": "a1f4db526e898c6c024201e0e2453b85f6a9d21a4e2bce9f5c75aa1ee70d831f"
+    }
+  ],
+  "law": {
+    "base": 0,
+    "local": "Item.lua2458–2459 calcLocal CharmLimit BASE flags0; exact tags absent",
+    "delivery": "CalcSetup.lua1536–1537: one derived item.charmLimit Player BASE record",
+    "not_final_cap": "CalcPerform.lua1768 caps final aggregate at3; this packet does not",
+    "duplicate_order": "calcLocal source list order; native semantic modifier_order",
+    "late_copies": "local CharmLimit removed from active item list, so generic late slot copying does not copy this consumed record",
+    "admission_boundary": "Existing typed Fine Belt construction refuses duplicate/malformed observed Charm Slots headers; valid header values or absence do not replace the separately computed capacity. This native component does not relax source admission."
+  },
+  "existing_source_target": "crates/poe-optimizer-pob/tests/owned_fine_belt_source.rs"
+}

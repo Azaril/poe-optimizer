@@ -1,0 +1,417 @@
+{
+  "definitions": [
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033cd"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000295a"
+                }
+              }
+            },
+            "targets": [
+              "equipment_use"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033ce"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000295a"
+                }
+              }
+            },
+            "targets": [
+              "equipment_use"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033cf"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000295a"
+                }
+              }
+            },
+            "targets": [
+              "actor"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "modifier": {
+    "kind": "definition",
+    "value": {
+      "kind": "modifier",
+      "value": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003172"
+      }
+    }
+  },
+  "template": {
+    "kind": "definition",
+    "value": {
+      "kind": "item_template",
+      "value": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001e84"
+      }
+    }
+  },
+  "modifier_program": {
+    "id": "local-charm-capacity-contribution",
+    "context": "equipment_use",
+    "reads": [
+      {
+        "id": "effective",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            }
+          }
+        },
+        "source": {
+          "kind": "stat",
+          "value": {
+            "entity": "modifier",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295b"
+            }
+          }
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "id": "effective",
+        "expression": {
+          "kind": "read",
+          "input": "effective"
+        }
+      }
+    ],
+    "effects": [
+      {
+        "id": "local-charm-capacity",
+        "when": null,
+        "effect": {
+          "kind": "contribute",
+          "entity": "current",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033cd"
+          },
+          "contribution": "add",
+          "value": "effective"
+        }
+      }
+    ]
+  },
+  "template_program": {
+    "id": "item-charm-capacity-delivery",
+    "context": "equipment_use",
+    "reads": [
+      {
+        "id": "local",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            }
+          }
+        },
+        "source": {
+          "kind": "contribution_query",
+          "value": {
+            "entity": "current",
+            "query": "equipment-local-charm-capacity",
+            "group": "ordered-local"
+          }
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "id": "local",
+        "expression": {
+          "kind": "read",
+          "input": "local"
+        }
+      },
+      {
+        "id": "base",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "capacity",
+        "expression": {
+          "kind": "add",
+          "left": "base",
+          "right": "local"
+        }
+      }
+    ],
+    "effects": [
+      {
+        "id": "derived-capacity",
+        "when": null,
+        "effect": {
+          "kind": "derive",
+          "entity": "current",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033ce"
+          },
+          "value": "capacity"
+        }
+      },
+      {
+        "id": "player-capacity",
+        "when": null,
+        "effect": {
+          "kind": "contribute",
+          "entity": "player",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033cf"
+          },
+          "contribution": "add",
+          "value": "capacity"
+        }
+      }
+    ]
+  },
+  "query": {
+    "id": "equipment-local-charm-capacity",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033cd"
+    },
+    "contribution": "add",
+    "groups": [
+      {
+        "id": "ordered-local",
+        "reduction": "sum",
+        "ordering": "ordered",
+        "empty": {
+          "kind": "quantity",
+          "value": {
+            "value": 0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            }
+          }
+        },
+        "members": {
+          "members": [
+            {
+              "producer": {
+                "kind": "program_effect",
+                "owner": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "modifier",
+                    "value": {
+                      "kind": "modifier",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003172"
+                    }
+                  }
+                },
+                "program": "local-charm-capacity-contribution",
+                "effect": "local-charm-capacity",
+                "origin": {
+                  "kind": "item_modifier",
+                  "slots": [
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006e"
+                    }
+                  ]
+                }
+              },
+              "order": {
+                "source_rank": 0,
+                "program_rank": 0,
+                "effect_rank": 0,
+                "slot_ranks": [
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006e"
+                    },
+                    "rank": 0
+                  }
+                ]
+              }
+            }
+          ],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "stat",
+                      "value": {
+                        "kind": "stat",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000033cd"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "local-charm-capacity-producer-membership-unproved"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}

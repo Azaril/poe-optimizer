@@ -9,13 +9,23 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Remote backups preceding this checkpoint:** main `30e84063` and the separate
+**Remote checkpoints preceding current Charm work:** validated main `02efb394`
+includes the configuration inventory, Boolean/Import accounting, Water allocation
+binder and the passing checks below. It was pushed and its full remote hash
+verified. Earlier main `30e84063` and the separate
 36-file work-in-progress snapshot `86e4cfd4` on `codex/backup-2026-10-20` were
 pushed and their full remote hashes verified. The snapshot supersedes
 `03434e24` and includes the Import repairs and validated Water publication below;
 the scoped CLI checks were still running when this immediate backup was requested.
 Ignored build outputs, candidate evidence and the
 nine protected incoming-critical files remain local.
+
+**Immediate Charm backup checkpoint:** save the eleven current Charm, source-probe
+and documentation paths on `codex/backup-2026-10-20-charm`. This is a work-in-progress
+snapshot: the component and publication checks pass, but the repaired source probe
+still needs its runtime and strict-lint rerun. Main remains the validated checkpoint
+above. Ignored generated artifacts and the nine protected incoming-critical files
+are excluded, as in the earlier backups.
 
 **Work after that backup:** the Boolean failure was an overbroad test expectation:
 the fallback pass attaches all ConfigSet choice obligations to otherwise unknown
@@ -41,7 +51,7 @@ described below; cleanup restored the temporary authoring hook. The two reviewed
 default-publication helper changes now accept explicit checkpoint issue counts;
 Repeat and physical-reduction-mode data are still ungenerated.
 
-**Validated data baseline:**
+**Preceding validated data baseline:**
 `runs/owned-water-command-allocation-publication-01/package`, input
 `01a98fec169ab035f971f09f7290822436c2361e7a21abbf070fcbd3f9b39dec`.
 Release SHA-256 is
@@ -90,9 +100,55 @@ authenticated seal and run its existing pin checks in the ordinary packet test.
 The full raw/semantic inverse preserves every other pin, source and assertion.
 Runtime reruns now verify the repair without changing any behavioral assertion.
 
-**Resume in this order:** finish the fresh Original05 CLI fixture and current
-Charm candidate generation from validated Water, then apply and validate the
-prepared Charm capacity consumer. The Import regression batch
+**Resume in this order:** rerun the repaired Charm source-domain observation and
+strict source-target lint; inspect its evidence before changing coverage. A fresh CLI
+normalization of unchanged Original05 against Water now produced
+`runs/owned-charm-capacity-current-fixture-01`; reauthoring verifies all current
+dependencies and the whole item/source inverse. The seven-file candidate
+`runs/charm-capacity-current-candidate-01` (manifest `5dd3447c…`) is applied,
+allocating Stats `33cd..33cf` for local capacity, derived item capacity and Player
+contribution. A separate maintained-test delta adds exact alternative-use
+isolation and requires the missing-producer failure cause (nine native tests).
+The initial type-check caught a moved-value error in the test helper's inverse;
+binding the destination before moving its owner fixes it without cloning or
+changing the inverse. Retry type-check passes. All eleven packet/native tests,
+strict Clippy and the explicit recipe rehearsal now pass in attempt 03
+(`runs/owned-charm-capacity-{tests,clippy,recipe}-03.log`). Charm publication now
+passes as described below. The
+first runtime attempt passed both packet checks and eight of nine native tests;
+the Partial-query control exposed a real authored metadata error: its gap named
+the Modifier instead of the queried Stat required by the existing schema. The
+repair changes only that subject and transitive file seals, preserving the gap,
+Partial closure and every numerical program. Attempt 03 validates the repair
+through all component checks and the exact recipe rehearsal; failed evidence remains in
+`runs/owned-charm-capacity-tests-02.log` and the whole repair inverse is in
+`runs/charm-query-subject-repair-01/`.
+The corrected temporary publisher is
+`runs/owned-charm-capacity-release-harness-03` (manifest `064cdc35…`); it retains
+each earlier snapshot and independently checks the exact metadata/seal inverse.
+It emits the corrected seven maintained files, including the nine-test source.
+`runs/owned-charm-capacity-publication-01.ps1` completed successfully: the publisher
+type-check and publication test pass, and cleanup restored the Import hook exactly.
+The new validated package is `runs/owned-charm-capacity-publication-01/package`,
+input `e85a165738460fa2bc37f3eda92a0732c26771192e4faf999827d8f29864a9f6`,
+release SHA-256 `25689e77549d92394d19428e7084ec4d0a5c2fc6272b74458b8dd68306bca5f0`,
+validation SHA-256 `4a828df45d2e8edbec7c3b95d4ef4cafeee7627701a6c35f47d27976d774adbe`.
+All five unchanged drafts, checked sidecar inverses, all 110 queries and independent
+rebuild/fresh import replays pass. The publication does not execute native metrics
+or establish a complete build. Four modifier gaps and Partial coverage remain.
+The two-file source-domain observation probe type-checks, but its first runtime
+attempt failed in the test observer before producing a complete replay: the
+sandbox intentionally has no Lua `debug` table. The source-function identity
+assertions now use the Rust hosting API; no arithmetic mismatch or domain
+restriction follows from that failure. Retained log:
+`runs/owned-charm-domain-source-01.log`. The repair is applied, but its observation
+and strict source-target lint reruns remain pending. It
+compares 660 numeric samples and retains nine detached item-lifecycle cases,
+with four fixed fresh JIT-on/off replays. No neutral-only domain restriction is
+adopted; existing nonneutral scaling must remain supported. The probe cannot
+certify every finite value, transform supplier or complete Modifier owner.
+
+The Import regression batch
 passes **722 tests** (241 library, 396 normalizer, 35 direct disposition,
 43 usage inventory and seven root admission; two explicit offline ignores),
 including all five 600-control inventory regressions and the Boolean/Import
@@ -3286,6 +3342,14 @@ no failures yet. The older `c84e66f3` run has nine passes, five known failures
 and four running jobs; the newly finished Ubuntu CLI0/CLI1 shards pass.
 No new failure class was found. This confirms hosted validation started for the
 current backup, not that the current code is green.
+
+At 00:12 UTC October 21 (October 20 EDT), the current main `02efb394` run
+`39518282506` is pending with no jobs. Backup `86e4cfd4` has three passes and
+fifteen running jobs: both Windows and Ubuntu validation jobs, plus Ubuntu
+workspace checks, now pass. No new failure class appeared; the older run remains
+nine passes, five known failures and four running jobs. Evidence:
+`runs/ci-public-review-20261021T001141Z/`. This is partial hosted success,
+not completion of main's CI run.
 
 The subsequent local allocation reproduction authenticated 34 inputs and ran the
 existing offline exporter twice. Both runs produced identical rules and exactly
