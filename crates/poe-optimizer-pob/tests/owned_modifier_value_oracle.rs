@@ -1359,3 +1359,6 @@ fn direct_resistance_source_admission_depends_on_rendered_sign() {
         "cases":observations,
     })).unwrap());
 }
+
+#[path = "support/charm_domain_observation.rs"]
+mod charm_domain_observation;

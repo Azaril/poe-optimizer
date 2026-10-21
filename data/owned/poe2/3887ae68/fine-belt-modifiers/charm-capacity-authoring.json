@@ -1,0 +1,51 @@
+{
+  "status": "unapplied candidate; requires allocation reauthoring against validated current successor",
+  "before": "01a98fec169ab035f971f09f7290822436c2361e7a21abbf070fcbd3f9b39dec",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "registry_last_issued": 13260,
+  "provisional_allocations": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033cd"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033ce"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033cf"
+    }
+  ],
+  "retired": "local-charm-capacity-delivery-unconverted",
+  "scope": "equipment-local consumption and once-per-selected-use Player delivery; no final cap, legality or complete source/contributor claims",
+  "artifacts": [
+    {
+      "path": "charm-capacity.json",
+      "bytes": 10238,
+      "sha256": "6849782dcea5215557237f4f24bc93891596699d43bbe41927a516fb64699689"
+    },
+    {
+      "path": "charm-capacity-dependencies.json",
+      "bytes": 163953,
+      "sha256": "001eddf667e482c9f070a6ed290a7d84fc5f5c953d42eddee2d40d1fc753fe11"
+    },
+    {
+      "path": "charm-capacity-source.json",
+      "bytes": 3185,
+      "sha256": "c20ec863528942a188b45a6dfb0795c6dcf0581d32086c35707d3bb812ea61de"
+    }
+  ]
+}
