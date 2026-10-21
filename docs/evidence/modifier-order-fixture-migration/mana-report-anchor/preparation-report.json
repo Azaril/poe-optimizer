@@ -1,0 +1,90 @@
+{
+  "kind": "supplemental-modifier-order-report-anchor-repair",
+  "status": "prepared-not-rust-executed",
+  "script_sha256": "9fa322434323f8fd44795508c6c09e99dae84e7fc075201b842663075960c014",
+  "target": "tests/support/owned_mana_configuration_sources.rs",
+  "before": {
+    "sha256": "8dafeff17cea3fe3ebc4113455797667d0247600503ea9054f513652b4d498d2",
+    "bytes": 42528
+  },
+  "after": {
+    "sha256": "54e8c17412b2d35ea02dcd06701e732bf033fbdb78222fcc397d81c9ea3e8108",
+    "bytes": 42528
+  },
+  "old_raw_report_sha256": "42fe06d045eb06938b41991c4dde47aa435119dff3e3f95e0056f8fd0a3c515a",
+  "new_raw_report_sha256": "6f86a5bcbde72f45b528cf309602536b96ee6045049380721623ad5bce0e1958",
+  "report_fields_changed": [
+    "draft_digest",
+    "allocator_after",
+    "sidecar_sha256",
+    "sidecar_bytes",
+    "issue_count",
+    "issue_codes"
+  ],
+  "old_issue_count": 158,
+  "new_issue_count": 178,
+  "source_release_anchors_unchanged": true,
+  "full_draft_sidecar_report_inverse": true,
+  "exact_source_inverse": true,
+  "known_items": 8,
+  "pending_items": 20,
+  "numerical_or_coverage_changes": false,
+  "authority": [
+    {
+      "path": "runs/modifier-order-pin-baseline-01/manifest.json",
+      "bytes": 22672,
+      "sha256": "d768bb178029c028762ee9081b44608b5f75a108f5d73b4b8fc968cf8bc6250a"
+    },
+    {
+      "path": "docs/evidence/modifier-order-fixture-migration/authoring-report.json",
+      "bytes": 87091,
+      "sha256": "529e9b08c40cd7503b5f7ea219ec1252ff5a9f1e5dde44e8ccf0163db8b0d63c"
+    },
+    {
+      "path": "runs/modifier-order-fixture-pins-01/postcheck.json",
+      "bytes": 9824,
+      "sha256": "d090ed0f9cec7fb9fbff4347421f530bd6ad41cd0be7c1313af3442eb0644ea3"
+    },
+    {
+      "path": "runs/modifier-order-minimal-wire-successor-01/report.json",
+      "bytes": 64389,
+      "sha256": "75020aa66270cea8378efa47a7bf3e15ffe0b8ec0bc972dccef9b343766aba53"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-reward-authority.json",
+      "bytes": 28675,
+      "sha256": "2a91f6776c18bd36a4cef16081907994775da2731c7872f05fcb0672d77fd890"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-reward-draft.gz",
+      "bytes": 25587,
+      "sha256": "7eab9cecc72a84ad861c10419f4d2e82d7aa5b650b3301fe90bc9d5d69cb7493"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-reward-sidecar.gz",
+      "bytes": 41235,
+      "sha256": "a2faf1c6ffe090692f85a19ab9b29e5e9c1fa763fb9ea231f769b612bf261567"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-reward-report.gz",
+      "bytes": 986,
+      "sha256": "725f4ee8c02cc828607c6c10a4e4c06b7c562c278bb57641fa4c5ca319b32445"
+    }
+  ],
+  "minimal_successor_overlap": {
+    "changed_files": [],
+    "authenticated_literal_files": []
+  },
+  "callers": {
+    "maintained_target": "owned_mana_configuration_sources",
+    "ordinary_tests": 10,
+    "ignored_tests": [
+      "retain_reviewed_configuration_bodies"
+    ],
+    "other_includers": []
+  },
+  "required_validation": [
+    "cargo test -p poe-optimizer-cli --no-default-features --test owned_mana_configuration_sources",
+    "cargo clippy -p poe-optimizer-cli --no-default-features --test owned_mana_configuration_sources -- -D warnings"
+  ]
+}

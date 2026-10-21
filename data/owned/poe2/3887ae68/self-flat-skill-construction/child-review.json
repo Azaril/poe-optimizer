@@ -1,5 +1,5 @@
 {
-  "acquisition_sha256": "88bea790e333ba0f80a97a59d9207bdfa85e79eb24e9a997c2f76d8e59490921",
+  "acquisition_sha256": "c2aa97393f7ebdd6af5c521077e969cfde24251982c8be725357895c79f79c78",
   "bodies_sha256": "8fc5ce308afa368538212d66a4f489a955250c4bbeca10fbe3f3fb10f3b5be3b",
   "construction": {
     "child_level": 1,
@@ -13,7 +13,7 @@
     "profile": "RaisedSkeletonSniper",
     "recipe": "MinionMeleeBow",
     "recipe_sha256": "abc764c4728687f465ffea2ea8b16e597e2a91121ee7e2e37a5bbe7d2c90e213",
-    "selected_bindings_sha256": "14f549952927c9a08e57cb1a3255349db7dd1d2e9a963720fbaa4bcd51c83864",
+    "selected_bindings_sha256": "1abe8deb94f40ecea26f70005b7707bf1cad5c0f23bde589f5721614b69d5819",
     "support_effects": 0
   },
   "kind": "finite-sniper-child-extra-stat-lifecycle",

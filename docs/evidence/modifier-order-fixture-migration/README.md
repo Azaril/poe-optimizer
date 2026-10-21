@@ -24,3 +24,25 @@ Evidence is sequential: `authoring-report.json` records the first 18-file migrat
 | [postcheck.json](postcheck.json) | Final artifact hashes and verified edge counts | `d090ed0f9cec7fb9fbff4347421f530bd6ad41cd0be7c1313af3442eb0644ea3` |
 
 The original successful run is `runs/owned-modifier-orders-evidence-02/report.json`, with log `runs/owned-modifier-orders-authoring-03.log`; provenance repair is `runs/modifier-order-fixture-pins-01/report.json`. The temporary Rust test wrapper is removed after authoring. Ordinary runtime tests remain responsible for reconstructing and validating the maintained current-format fixtures; this evidence does not substitute for those tests or for complete-build parity.
+
+## Minimal-byte successor
+
+The separately archived [minimal-byte successor](minimal-wire-successor/README.md) replaces whole-document JSON reformatting in the two evasion dependency snapshots with exactly 32 order-field replacements against authenticated original bytes. The earlier evidence above is preserved unchanged. Its `postcheck.json` is the immediate predecessor inventory; [the successor postcheck](minimal-wire-successor/postcheck.json) is the final current 40-artifact inventory. Five downstream provenance files change and all seven Rust literal-pin files remain unchanged. The successor postcheck SHA-256 is `76dcddad49332c1889fba0944096403b14ecb170f0f3e4941d0604de85658baa`.
+
+## Original-input and joined-replay preservation
+
+The separate one-off input-preservation target passed both tests before removal from the compiled test suite. Its exact executed source and reports are retained below as review-only migration evidence. They prove the all-five original-input migration and the joined replay migration; they are not a maintained old-format reader or a replacement for ordinary current-format tests. Both temporary authoring targets are now removed.
+
+| Archived file | SHA-256 |
+| --- | --- |
+| [input-preservation.rs](input-preservation.rs) | `f5cfcc1c7da25de80d75b8f93da840bd08288a2cb10f4692e5ef8f9fcae42e33` |
+| [input-preservation-report.json](input-preservation-report.json) | `cee36d31c36c0e905aad1567cfe30c8afbd45bc901841c2c388143f1a07b1ce1` |
+| [joined-replay-report.json](joined-replay-report.json) | `7485818e627bbc95cb5235ca93ad622f801874efb62c9274a9928d8e759666b3` |
+
+## Supplemental Mana report anchor
+
+The additional [Mana report anchor repair](mana-report-anchor/README.md) binds a raw report hash omitted from the original seven-file census. Its exact fixture inverse and unchanged independent source/release anchors are preserved; all ten ordinary Mana configuration checks passed. Earlier evidence remains immutable.
+
+## Derived review digests
+
+The applied [derived-review repair](derived-review-digests/README.md) updates composed-fixture digests and their dependent pins after the order migration. Its [45-artifact postcheck](derived-review-digests/postcheck.json) supersedes the earlier 40-artifact inventory where changed; all earlier reports remain historical evidence of their respective steps. The repair preserves numerical/source values and refusal checks. Runtime validation was pending at archival and is tracked in the implementation plan.

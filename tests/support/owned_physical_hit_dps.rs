@@ -8,7 +8,7 @@ use std::{fs, path::PathBuf, sync::OnceLock};
 pub const PROGRAM: &str = "ordinary-physical-hit-dps";
 pub const OUTPUTS: [u64; 3] = [0x33b8, 0x33b9, 0x33ba];
 pub const UNIT: u64 = 0x33bb;
-const AUTHORING: &str = "7ebe566f83b1cd1a1d32369cbf80eca0091d109265befb022ce1728f5b3e27dc";
+const AUTHORING: &str = "368e0d0cfd426d0ff3a09a9c71f5aa9427d1092091c691987cd17c81011b7f19";
 pub fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }

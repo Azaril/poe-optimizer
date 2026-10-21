@@ -39,12 +39,84 @@ records the one-off tools and hashes without installing a compatibility reader.
 An independent scan found no old `modifier_order` object keys in maintained
 JSON/gzip data; all nine protected incoming-critical files remain unchanged.
 CLI execution and downstream strict lint remain in progress.
+The 38-target CLI batch finished compilation in 61m02s. Six targets passed,
+then the existing end-to-end
+`local_recipe_data_publishes_evaluates_and_preserves_original_gaps` test failed
+after 686s with Windows `StorageFull` while writing a release input. This is
+an infrastructure failure, not passing evidence for that target. Four verified
+September Cargo cache directories were removed, preserving current `target/debug`
+and all investigation evidence; free space rose to about 41 GB. The deletion
+receipt is `runs/owned-modifier-orders-cache-cleanup-01.json`.
+The isolated rerun passed in 743.03s: two tests passed and one existing external
+publication gate remained ignored. It reused compiled binaries in 0.21s with
+no code or assertion changes. A live selected-actions-stage observation recorded
+3.86 GB of temporary files (a lower-bound observation, not measured peak).
+The resumed batch passed nine more targets, then eight Mana configuration
+checks rejected an independently sealed reward-publication anchor. The following
+21-target batch passed twenty targets; the self-skill construction target failed
+two retained-proof comparisons. All 38 targets have now run. The authenticated
+one-literal Mana repair passed all ten ordinary checks; its offline authoring gate
+remains ignored. Its [supplemental proof](evidence/modifier-order-fixture-migration/mana-report-anchor/README.md)
+retains whole fixture inverses and unchanged source/release anchors. Now 37 of
+the 38 original targets pass before the final dependent-fixture rerun. The
+self-skill mismatch was derived proof digests still referring to the prior draft
+representation, also reused by four downstream review packets. The independently
+reviewed repair is applied: nine derived leaves and sixty dependent hash pins,
+with exact inverses and unchanged gameplay/source values and refusal checks.
+Its [archived postcheck](evidence/modifier-order-fixture-migration/derived-review-digests/postcheck.json)
+checks 45 artifacts and eight literal-pin files; SHA-256 is
+`e3d88ecd88440deced0602b6a61924dec7e54156d3cf05fcc861802112000385`.
+The 22-target affected runtime batch is now compiling/running under the unchanged
+profile in `runs/owned-modifier-orders-repair-evasion-01.ps1`; do not start a
+second Cargo process. Preserve the first
+six successes and the failed log; do not repeat compilation or treat the
+infrastructure failure as an ignored test. The remaining serialized validation
+commands are prepared, but not executed, in
+`runs/owned-modifier-orders-finish-validation-01.ps1`.
+The in-progress migration and archived proof sources are backed up remotely as
+`1e6946b7c825432cc7f1a1f50d8d3460bf9ceb5e` on
+`codex/backup-2026-10-20-modifier-orders`; `ls-remote` verified the exact hash.
+This 169-path snapshot used a temporary index and leaves main unchanged.
+Its backup-only commit skips CI while local CLI validation runs; the subsequent
+validated main commit must run normal CI. After the initial runtime scope
+finished, the reviewed seven-file byte-preserving JSON successor was applied
+and archived. Its final 40-artifact postcheck is
+`76dcddad49332c1889fba0944096403b14ecb170f0f3e4941d0604de85658baa`;
+all forty dependency edges and the seven original Rust pin files were checked.
+No Rust or numerical program changed in that successor.
+Validation resume: the Mana repair passed in
+`runs/owned-modifier-orders-mana-repair-01.log`. The self-skill repair and its
+derived dependency closure are applied. Wait for the active 22-target batch,
+which includes all four affected evasion checks against the final JSON bytes.
+Its log is `runs/owned-modifier-orders-repair-evasion-01.log`;
+`runs/verify_modifier_order_cli_resume.cjs` must account for all 38 original
+targets and the additional final-fixture checks. Then rerun the
+existing Charm scalability publication from
+`runs/owned-charm-capacity-publication-01/package` into the fresh
+`runs/owned-charm-scalability-orders-publication-01` directory. Finish strict
+Engine lint over tracked `owned_*` targets excluding protected allocation and
+incoming-critical work, and root lint using the expanded 75-target list in
+`runs/owned-modifier-orders-root-lint-targets-final.txt`. This adds the eleven
+newly reached derived-proof consumers to the original 64-target scope. Preserve the current test
+profile and serialize Cargo. No main-branch completion is claimed before these
+checks finish.
+Validation-cost follow-up: the measured Core/Import/Engine batches spent
+5m01s/11m37s/8m21s compiling versus 0.13s/35.60s/11.57s executing. The bounded
+audit in `runs/cli-validation-cost-audit-20261021` proposes a measured local
+CLI-only optimization-level trial and extraction of a pure shared test helper,
+not reduced checks. Neither has been implemented or demonstrated faster.
+Keep the current profile for this checkpoint; measure before changing CI or
+undertaking broader test-structure work.
 Logs: `runs/owned-modifier-orders-core-01.log`,
 `runs/owned-modifier-orders-import-01.log`,
 `runs/owned-modifier-orders-migration-01.log`,
 `runs/owned-modifier-orders-engine-01.log`,
 `runs/owned-modifier-orders-core-import-clippy-01.log`, and
 `runs/owned-modifier-orders-authoring-03.log`.
+The original CLI log is `runs/owned-modifier-orders-cli-01.log`; its resumed
+logs are `runs/owned-modifier-orders-cli-extension-02.log` and
+`runs/owned-modifier-orders-cli-remaining-01.log`; the subsequent tail is
+`runs/owned-modifier-orders-cli-tail-01.log`.
 
 **Remote checkpoint preceding this update:** main `c7e53685` contains the 56-case
 modifier-source controls, Charm scalability publication and strengthened admission
@@ -176,6 +248,47 @@ consumer semantics, or whether its proven generic fold already fulfills that
 responsibility. External producer definitions and Import encoding/admission
 remain separate obligations. Flask owner `318c` still has actual missing local
 delivery; completing the closest build takes precedence over unrelated catalog expansion.
+
+The read-only Flask audit confirms a concrete next step using the existing
+contribution graph: route `318c`'s computed effective rate `31a6`, through the
+selected EquipmentUse and ordinary-item applicability `3306`, into a general
+Player flask-generation rate in existing unit `31a5`. Original05 has no equipped
+flasks; per-flask charge gain and analytical uptime are separate consumers, not
+prerequisites for this producer. Its five current gaps stay open until the
+corresponding evidence exists. No new public model is indicated by the source
+trace. The proposed data candidate remains unapplied to maintained data; audit and
+exact current records are in `runs/flask-charge-delivery-audit-20261021`.
+The subsequent CLI probe compiled and assembled that one-Stat/one-program
+candidate through the existing current release migration path. Its provisional
+input is `720d65ca89ec10a9ec57d26324abc52d963b6246cbfae618105c86e9e129eacf`;
+`runs/flask-charge-delivery-extension-probe-01/postcheck.json` proves exact
+registry/schema/rule inverses, all five retained gaps and all 110 query bytes.
+No maintained data changes or native/source numerical parity are claimed.
+Six focused native controls are prepared, not executed, under
+`runs/flask-charge-delivery-native-candidate-20261021` (manifest
+`4588485817813f0e747dcbb425e023e9843c7c153515fcc2381f8385c364c87f`).
+They extend the existing Fine Belt target, preserve its numeric tests, reuse
+the actual four programs and keep all five owner gaps. The shared test fixture
+needs only explicit V28 admission. Authenticate all four before/after paths
+before applying after this structural checkpoint; no production coverage is
+closed by preparing these tests.
+The five-control source candidate is staged, unexecuted, in
+`runs/flask-charge-delivery-source-candidate-20261021-02` (manifest
+`ee934b8048f398c8564b2afee8f3c66c2022dbbe753d4fa400f77b3b652405ce`).
+Its initial candidate is retained separately. Review found that the source
+item-list accessor can rebuild cached lists; the successor requires its exact
+no-rebuild branch and checks list/state identities before and after observation.
+An unsupported loaded state must fail without observer repair.
+It extends the existing Fine Belt source target and full-build observer with
+original, formatted nonneutral, zero, removed-modifier and unequipped-source
+cases. Expected results remain predictions until independent fresh JIT-off/on
+replays pass. Independent review cleared the guarded successor; add its existing
+JSON/log output paths to the workflow's failure-evidence upload so diagnostics
+survive CI. This is test-only Lua; no new native Lua behavior or host is added.
+The baseline also round-trips byte-for-byte. The older `extend-owned-recipe`
+path instead failed with stale configuration-accounting dependencies after
+rebinding usage inputs; the [retirement register](legacy-retirement.md#successor-rebinding-duplication-2026-10-20)
+records the diagnosed duplicate path. Continue through the current release seam.
 
 The follow-up consumer audit found no missing Add/Multiply fold operation in
 `3172`; current evidence proves its numerical lowering and generic producer

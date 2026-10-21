@@ -1,0 +1,1978 @@
+{
+  "kind": "minimal-byte-modifier-order-wire-successor",
+  "mode": "prepared-not-applied",
+  "script_sha256": "70893dec0b783216b5723745446391f6cc36023a16bf36fea2f8e8a010f61a09",
+  "predecessor_postcheck_sha256": "d090ed0f9cec7fb9fbff4347421f530bd6ad41cd0be7c1313af3442eb0644ea3",
+  "baseline_manifest_sha256": "d768bb178029c028762ee9081b44608b5f75a108f5d73b4b8fc968cf8bc6250a",
+  "seeds": [
+    {
+      "path": "data/owned/poe2/3887ae68/item-evasion-property/dependencies.json",
+      "original_sha256": "8e0e97074a48dbf3a5866d8b8befa3d7696f7164e09c39afbb18b5c62e9398f6",
+      "current_sha256": "95b2abbb555337ab866a21a13a01c5abcab443fc17fe07aa8fb6a230ef846a67",
+      "successor_sha256": "8c4753d51f879c663e08eea72f02d07ce3cb062ebd5ceb226fb3680e869aff6b",
+      "original_bytes": 3930590,
+      "current_bytes": 3931734,
+      "successor_bytes": 3931734,
+      "field_replacements": [
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000288"
+          },
+          "old_path": [
+            "items",
+            0,
+            "modifier_order"
+          ],
+          "new_path": [
+            "items",
+            0,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "d277f8cbae9a6c9a22abfd08781be98a29cc07aa4b605e6d95f7331d1d42d660",
+          "successor_field_sha256": "4fe1577cac1440b83927c55127ab5854e394e68f10d877a0702c711b1f706978",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000289"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000289"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000289"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000028a"
+          },
+          "old_path": [
+            "items",
+            1,
+            "modifier_order"
+          ],
+          "new_path": [
+            "items",
+            1,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "92a89f4ce1255566009518b21019b41c01aef8daca78dbc3450b84efc942f200",
+          "successor_field_sha256": "642474aed9562b4ea7e08a1fa6475bfe79e2babdcd32b4297ea42477d38c1d92",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000028b"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028b"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028b"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000028c"
+          },
+          "old_path": [
+            "items",
+            2,
+            "modifier_order"
+          ],
+          "new_path": [
+            "items",
+            2,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "f1a8638ddca7281b8d90c86703d4509514fb613e7cffbf733f34a446d7ec95d2",
+          "successor_field_sha256": "8808fcb0f48ed76845108e1c1dce7e2d0db672198c7c5934ab9e931445e68450",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000028d"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028d"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028d"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000028e"
+          },
+          "old_path": [
+            "items",
+            3,
+            "modifier_order"
+          ],
+          "new_path": [
+            "items",
+            3,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "35a68c719ae4d564164221d5a13979066e118d5ecda68c36ab2a6458ae30b7a4",
+          "successor_field_sha256": "c5cd8535c9161366684f1f18c03f7f598693e1aa30968a2ca654079f5cccd7b7",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000028f"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028f"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028f"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "whole_current_semantic_equality": true,
+      "whole_original_byte_inverse": true,
+      "unrelated_bytes_preserved": true
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-evasion-final/dependencies.json",
+      "original_sha256": "713da3c1b614a13f840692d70b8366bb08c0faa13a2c0ded29b8b2bbf05db44f",
+      "current_sha256": "c2f7894031f4009f1716b3b43dae8873661e6d96a7af8c4c057f4b6609ffe542",
+      "successor_sha256": "4b6595afd8292587121096c1cc996c52868a5a4e4efcf8f3c5acf49285f9508d",
+      "original_bytes": 1617965,
+      "current_bytes": 1629605,
+      "successor_bytes": 1629605,
+      "field_replacements": [
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000209"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            0,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            0,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "5659f614669a950c7c62bee0aecd8a09a7ae553878900665b132ed5772ce7650",
+          "successor_field_sha256": "2a906672837997327b0be5696fc54011f0113384d5e0bc1a86d590d7ba7fa085",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "000000000000020d"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000020d"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000682"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000020e"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            1,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            1,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "a3b943f3a91cfbdb260884d4237d6c4f6cdea39262e53c3451884021dc6cb9bd",
+          "successor_field_sha256": "52e4177543e029941609a1ab91bb41e026249c4d653106388caaf0a998bafe06",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "0000000000000216"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000216"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000683"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000217"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            2,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            2,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "12f12209c7665ff173ded0fd047f9cc494470ebbfb7f7051aee359da512bb58b",
+          "successor_field_sha256": "95e2cf5ec10a9df319c4ac36f64338a2fbfa9b4ca6403a7ab92ff1163974a247",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "000000000000021d"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000021d"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000684"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000021e"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            3,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            3,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "779b8e7e3663b1117fd5584215d0541b2e1784730cf3c21d9e0df90edf902734",
+          "successor_field_sha256": "6c76112212468ad705aab7a1970d9c4bbe4f4418b1eb268281f55970715ad72d",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "0000000000000225"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000225"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000685"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000226"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            4,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            4,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "e77e3d572ce64d97c9772af180835ac323395901af3006afd48421e2cbd05d22",
+          "successor_field_sha256": "48131f81bed831a5e433a3770ea25ba4828ef7400964baabe00e28eb7a301c8a",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "000000000000022c"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000022c"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000686"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000022d"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            5,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            5,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "e69885f6996a4fb5c70f260e40e672fc61f386e3956c2febc8775ad46393e8e1",
+          "successor_field_sha256": "81b1e69097a1fbca6c1fff1f6672d9eb777864f9670f4118799e19cf62f5d51e",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "0000000000000230"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000230"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000687"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000231"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            6,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            6,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "b7b7e758adf4a1f9cb676343c91c9512db3f1c4618f19c037a3924f508815bef",
+          "successor_field_sha256": "dbc87eaddbc673332aa7eccc7ac83384f891e271bee6feef3e0955bca995a388",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "0000000000000237"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000237"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000688"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000238"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            7,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            7,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "e4debfdd5a6efc381c9cc95edb6cb1748fd8c54e7493d19b388bb7965b8e36e6",
+          "successor_field_sha256": "11c7e8ded4a19c6dd33dc9083998c641e667afc6a5e7181e8c721ecd79e741b9",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "000000000000023e"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000023e"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000689"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000023f"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            8,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            8,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "8ede4daf99d5a6fab56d09f5bd078dfdb947da94f2bff6c8954429e9daf76b21",
+          "successor_field_sha256": "8cf2885680fadac38a6fa78e4d10d68f8471ba896acf7d8a4ba32a59fbf8ef93",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "0000000000000245"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000245"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068a"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000246"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            9,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            9,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "dcdc224552b68228b898d7fa8bb023c43082245cc8cd7a73569f3c7dec443db7",
+          "successor_field_sha256": "28b07b44d0baae6dff1adf46fce2569fba55efbd12a3449cc24c7c8ae4207c14",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "000000000000024a"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000024a"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068b"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000024b"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            10,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            10,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "54ee241e4f37f0e4bbde77c73a61e5f1840aa95b3bbeb7ac41e5ea23aebbc095",
+          "successor_field_sha256": "ae88aa18a060b6543991f109f785707293d4ba119b54c26ae8a396cf09f72ef5",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "0000000000000255"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000255"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068c"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000256"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            11,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            11,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "5fc810cceb030c56f4e00f586669a95860da65451498d8421c613543d96c00a3",
+          "successor_field_sha256": "90f5c409919ccf030462f5a0abe9e63ab6aadaa5cd562a398112e2928ac296a2",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "000000000000025a"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000025a"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068d"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000025b"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            12,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            12,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "07fcac922e69dbb828290fd65d95d61d37968d7f961c45cd6646545ced073e16",
+          "successor_field_sha256": "76527687fffaf4009284522b7fb3b217853b7d01929baabe3bcfc0e86dcaf45a",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "0000000000000264"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000264"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068e"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000265"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            13,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            13,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "822b1e1d2eb0417491b3ba3ef7fedba47d1b1e60b6f4911d6b33e8774ae1c656",
+          "successor_field_sha256": "3664e8e36ea027a800d800416542d5b1fe6257fcc5fd39b1759546b4a4945a02",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "000000000000026c"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000026c"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000068f"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000026d"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            14,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            14,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "211d6e7043e9ca5ef3b3296a52fa5a092e024b5a2a476bd8d5a4859cb9017e5c",
+          "successor_field_sha256": "125b3ba324250e94d08c143c8fc65d7abf04cce858a4ac31396adcce7a753cf5",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "0000000000000278"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000278"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000690"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000279"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            15,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            15,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "b45e1488cbcb4973bf9ce2f9582db2a4ec5c413f3b6e6b6e2339134d4f19eb65",
+          "successor_field_sha256": "39e473ade21af7a17f867acbc1fb77847f3595497dda4ad1a9767fe96f2f1f7f",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "000000000000027d"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000027d"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000691"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000027e"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            16,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            16,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "c4a0edf75286d6e647ed520c5d4581e5631dbdc3c835e815ca61435422a5f846",
+          "successor_field_sha256": "3ba876dcd5d259742e31e0dec7123702b3ed78ec1b4bbb6bd6faf5d9d504aadd",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "0000000000000282"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000282"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000692"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000283"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            17,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            17,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "9569d746da51a583a624a23615efffa9cd9fa0457a89fd28c1f7bdaa39ec14ca",
+          "successor_field_sha256": "05fbce439f573dc30fb7c11fd3e38c1d52d8273f63d978e8c4d6ba161d8077f3",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "0000000000000287"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000287"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000693"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000288"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            18,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            18,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "5d228f656207db2d07db9785146024776d8eac7d246312c562c43dc4239ebc91",
+          "successor_field_sha256": "e84e62df139667a52e93ccec0b5a03e0b2951c0e6903e85d8b309a940f4adc49",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000289"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000289"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000289"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000028a"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            19,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            19,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "141d87629ca10bfbf824d0fcd6d44db620f69f53f391c0f41e60bb8034438163",
+          "successor_field_sha256": "54d66c76683b8733e56bb036d958673b226a74dd9feecbee6d4691762bf3caa9",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000028b"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028b"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028b"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000028c"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            20,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            20,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "0aeba44731b9687523e9d08005dcbbb6e280b82e41f0a77b50316f8ba8127e49",
+          "successor_field_sha256": "39ebe5d52195bacfcc7f63d0d01533d47fbff4ffdc9700db38731743cc152fca",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000028d"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028d"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028d"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000028e"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            21,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            21,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "5d0df00033be69eba34b5c0ca1a778a925a8b991434a7e20d4832cc828abe5bd",
+          "successor_field_sha256": "8a834afc0ffaa06905b586d17a402847f1ab58ec26ea54ad6a1072166b091fee",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000028f"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028f"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "000000000000028f"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000290"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            22,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            22,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "b2bed66c5bc5c8b94fcbce29849781163c4b36b22d4084a33086aae8cc9eac2c",
+          "successor_field_sha256": "ffc5a794ad01df1e668a6988f8571812bee22529cf40c768bbdbfc9e30945051",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000291"
+              },
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000292"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000291"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000292"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000291"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "0000000000000292"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "0000000000000293"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            23,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            23,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "5714b5a33052640cb166fa6dd32f693f5bda04ae9e18cc5eddff4ed5f85ee8a2",
+          "successor_field_sha256": "d2e3450e82e9ce952a7b82d92f4c33b1545758bd2d0c8c5d8dd0b9081694ea32",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "000000000000029a"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000029a"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000694"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "000000000000029b"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            24,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            24,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "627ed740229896843437282dd8978c27ef44196f61769dcc638ba7766f39e1f2",
+          "successor_field_sha256": "37c8135ba17bf8bcd9ad2680a6eca394da2b2a806743ce110313d5856f0c5adb",
+          "before_order": {
+            "kind": "pending",
+            "id": {
+              "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+              "local": "000000000000029f"
+            },
+            "code": "item-modifier-order-not-converted",
+            "candidates": []
+          },
+          "after_orders": {
+            "contributions": {
+              "candidates": [],
+              "code": "item-modifier-contribution-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "000000000000029f"
+              },
+              "kind": "pending"
+            },
+            "numeric_transforms": {
+              "candidates": [],
+              "code": "item-modifier-numeric-transform-order-not-converted",
+              "id": {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "0000000000000695"
+              },
+              "kind": "pending"
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "00000000000002a0"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            25,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            25,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "7c3bc3bf51b842b2673c4d882619c4da0c5338984e77f69f90952b792024bc78",
+          "successor_field_sha256": "94803d8642f8f6a33be6bb44b761c84fa48a8a53667907554a640004d8c8e909",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "00000000000002a1"
+              },
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "00000000000002a2"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a1"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a2"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a1"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "00000000000002a3"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            26,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            26,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "08c3c7cf59457158d498343f34dfcc757acfd0deabbc7b27b2721c17187c651e",
+          "successor_field_sha256": "957d68415ad78b0a5b5ff468d9fb637b6527dc64c5cb5f08a69a6f8c4fd620cd",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "00000000000002a4"
+              },
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "00000000000002a5"
+              },
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "00000000000002a6"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a4"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a5"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a6"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a4"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a5"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a6"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "item": {
+            "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+            "local": "00000000000002a7"
+          },
+          "old_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            27,
+            "modifier_order"
+          ],
+          "new_path": [
+            "selected_snapshot",
+            "items",
+            "members",
+            27,
+            "modifier_orders"
+          ],
+          "original_field_sha256": "9af9aad7450ac6e43f168a737b900643f93206a6b19bc7b64c6fc130ebb5d907",
+          "successor_field_sha256": "dcb7ac30301865b5691ec07bc0f27d2390d859a4ca9934eb4464dd2ed6d27844",
+          "before_order": {
+            "kind": "known",
+            "value": [
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "00000000000002a8"
+              },
+              {
+                "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                "local": "00000000000002a9"
+              }
+            ]
+          },
+          "after_orders": {
+            "contributions": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a8"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a9"
+                }
+              ]
+            },
+            "numeric_transforms": {
+              "kind": "known",
+              "value": [
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a8"
+                },
+                {
+                  "lineage": "94069f87dcc3175a4e3f7fdff2c0fe1e",
+                  "local": "00000000000002a9"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "whole_current_semantic_equality": true,
+      "whole_original_byte_inverse": true,
+      "unrelated_bytes_preserved": true
+    }
+  ],
+  "pin_edits": [
+    {
+      "path": "data/owned/poe2/3887ae68/item-evasion-property/authoring.json",
+      "edits": [
+        {
+          "key": [
+            "artifacts",
+            1,
+            "sha256"
+          ],
+          "before": "95b2abbb555337ab866a21a13a01c5abcab443fc17fe07aa8fb6a230ef846a67",
+          "after": "8c4753d51f879c663e08eea72f02d07ce3cb062ebd5ceb226fb3680e869aff6b",
+          "target": "data/owned/poe2/3887ae68/item-evasion-property/dependencies.json"
+        },
+        {
+          "key": [
+            "artifacts",
+            1,
+            "bytes"
+          ],
+          "before": 3931734,
+          "after": 3931734,
+          "target": "data/owned/poe2/3887ae68/item-evasion-property/dependencies.json"
+        }
+      ],
+      "whole_current_byte_inverse": true
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/authoring.json",
+      "edits": [
+        {
+          "key": [
+            "artifacts",
+            6,
+            "sha256"
+          ],
+          "before": "c291829f1d264d6984a4d7d0901222efe0c639cdb29fe76649fcab801ccaa7fb",
+          "after": "af1699bb69567766dc91700545a894e67b0ebffc54e118c1662d33cf3d15aa4c",
+          "target": "data/owned/poe2/3887ae68/item-evasion-property/authoring.json"
+        },
+        {
+          "key": [
+            "artifacts",
+            6,
+            "bytes"
+          ],
+          "before": 1452,
+          "after": 1452,
+          "target": "data/owned/poe2/3887ae68/item-evasion-property/authoring.json"
+        }
+      ],
+      "whole_current_byte_inverse": true
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-evasion-final/authoring.json",
+      "edits": [
+        {
+          "key": [
+            "artifacts",
+            3,
+            "sha256"
+          ],
+          "before": "c2f7894031f4009f1716b3b43dae8873661e6d96a7af8c4c057f4b6609ffe542",
+          "after": "4b6595afd8292587121096c1cc996c52868a5a4e4efcf8f3c5acf49285f9508d",
+          "target": "data/owned/poe2/3887ae68/player-evasion-final/dependencies.json"
+        },
+        {
+          "key": [
+            "artifacts",
+            3,
+            "bytes"
+          ],
+          "before": 1629605,
+          "after": 1629605,
+          "target": "data/owned/poe2/3887ae68/player-evasion-final/dependencies.json"
+        }
+      ],
+      "whole_current_byte_inverse": true
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-evasion-override/dependencies.json",
+      "edits": [
+        {
+          "key": [
+            "predecessor_authoring",
+            "sha256"
+          ],
+          "before": "1fd11cae65792ad53d21f1a7ce8f015fed24ab8f6776124e5c18df66fe9d5578",
+          "after": "e54cc668e7564b3a5be1ed46fc1aa4536105a813104575017e97073a155c11ff",
+          "target": "data/owned/poe2/3887ae68/player-evasion-equipment/authoring.json"
+        },
+        {
+          "key": [
+            "predecessor_authoring",
+            "bytes"
+          ],
+          "before": 1679,
+          "after": 1679,
+          "target": "data/owned/poe2/3887ae68/player-evasion-equipment/authoring.json"
+        }
+      ],
+      "whole_current_byte_inverse": true
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-evasion-override/authoring.json",
+      "edits": [
+        {
+          "key": [
+            "artifacts",
+            1,
+            "sha256"
+          ],
+          "before": "59b202d9ef05265d8a630d47575bf5fcf56556d7e0d595dbfd2ddccec1a30f9b",
+          "after": "adbbeb3d6a2bf0b8c65c53446ccda8febeaa95c8d6f49a93a8c343d61f13affd",
+          "target": "data/owned/poe2/3887ae68/player-evasion-override/dependencies.json"
+        },
+        {
+          "key": [
+            "artifacts",
+            1,
+            "bytes"
+          ],
+          "before": 13123,
+          "after": 13123,
+          "target": "data/owned/poe2/3887ae68/player-evasion-override/dependencies.json"
+        }
+      ],
+      "whole_current_byte_inverse": true
+    }
+  ],
+  "all_dependency_edges_checked": 40,
+  "literal_checks": [
+    {
+      "path": "tests/support/owned_physical_hit_dps.rs",
+      "sha256": "26020c798463d42aef4a4799fd792f50af00fff3570217ce06e98d519d3dfd7f",
+      "checks": [
+        {
+          "target": "data/owned/poe2/3887ae68/physical-hit-dps/authoring.json",
+          "sha256": "7ebe566f83b1cd1a1d32369cbf80eca0091d109265befb022ce1728f5b3e27dc",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "tests/support/owned_passive_structural_inventories_evidence.rs",
+      "sha256": "f5e57974d2f10cc2828d470ffe23a4633e3e83e4118ffbfb94ddfa51af372653",
+      "checks": [
+        {
+          "target": "data/owned/poe2/3887ae68/self-flat-selected-bindings/bindings.json",
+          "sha256": "2b54e203a49e35da80e92a0a3dd09e990ff79574cb5629d9852634ca185727b4",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "tests/support/owned_passive_structural_inventories.rs",
+      "sha256": "0968dcd846cb4e24829441537c1340a56a12c5a066d0642f717a41b636c5aeab",
+      "checks": [
+        {
+          "target": "data/owned/poe2/3887ae68/passive-structural-inventories/authoring.json",
+          "sha256": "7879f2a670d186294253c4e3707cb4b976e53a70d71fa307f463435ac4814799",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "tests/support/owned_outgoing_critical_domain.rs",
+      "sha256": "2f0adc1d5dee17a1ad186ef197cc31f365f0a871475025a0c673eb56778c4c29",
+      "checks": [
+        {
+          "target": "data/owned/poe2/3887ae68/outgoing-critical/ordinary-source-domain.json",
+          "sha256": "ada4bce844087810a90d25acf9d074e8a9e53a777ef88f7767dea43ce54f6417",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "tests/support/owned_player_evasion_override.rs",
+      "sha256": "2f6f9785b6f6cfa4a701ded334a81d658615ebbe2bff8b57a103393a80eda362",
+      "checks": [
+        {
+          "target": "data/owned/poe2/3887ae68/player-evasion-final/source-domain.json",
+          "sha256": "84164a2372abcc269c186f8b3bb6928657c2e21b8c5d53cd050374ae04eb0946",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "tests/support/owned_player_evasion_final.rs",
+      "sha256": "133b6e79f50d7c82740465315b1e2aa555c3b287cd4fc7fd23501516d94b9f88",
+      "checks": [
+        {
+          "target": "data/owned/poe2/3887ae68/player-evasion-final/source-domain.json",
+          "sha256": "84164a2372abcc269c186f8b3bb6928657c2e21b8c5d53cd050374ae04eb0946",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "tests/support/owned_self_flat_skill_construction.rs",
+      "sha256": "78530d056921e4aa77d3ab9aa925606f739893b0be7a53567b8dec1c62f92e8e",
+      "checks": [
+        {
+          "target": "data/owned/poe2/3887ae68/self-flat-skill-construction/authority.json",
+          "sha256": "9bb0652de6b27a2b5714f03e38b7d7769d89ac35f125baf11fd53d61cd2e21f1",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "literal_pin_edits": 0,
+  "source_bodies_changed": false,
+  "numerical_programs_changed": false,
+  "native_coverage_changed": false,
+  "files": [
+    {
+      "path": "data/owned/poe2/3887ae68/item-evasion-property/dependencies.json",
+      "current_sha256": "95b2abbb555337ab866a21a13a01c5abcab443fc17fe07aa8fb6a230ef846a67",
+      "successor_sha256": "8c4753d51f879c663e08eea72f02d07ce3cb062ebd5ceb226fb3680e869aff6b",
+      "current_bytes": 3931734,
+      "successor_bytes": 3931734
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-evasion-final/dependencies.json",
+      "current_sha256": "c2f7894031f4009f1716b3b43dae8873661e6d96a7af8c4c057f4b6609ffe542",
+      "successor_sha256": "4b6595afd8292587121096c1cc996c52868a5a4e4efcf8f3c5acf49285f9508d",
+      "current_bytes": 1629605,
+      "successor_bytes": 1629605
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/item-evasion-property/authoring.json",
+      "current_sha256": "c291829f1d264d6984a4d7d0901222efe0c639cdb29fe76649fcab801ccaa7fb",
+      "successor_sha256": "af1699bb69567766dc91700545a894e67b0ebffc54e118c1662d33cf3d15aa4c",
+      "current_bytes": 1452,
+      "successor_bytes": 1452
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-evasion-equipment/authoring.json",
+      "current_sha256": "1fd11cae65792ad53d21f1a7ce8f015fed24ab8f6776124e5c18df66fe9d5578",
+      "successor_sha256": "e54cc668e7564b3a5be1ed46fc1aa4536105a813104575017e97073a155c11ff",
+      "current_bytes": 1679,
+      "successor_bytes": 1679
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-evasion-final/authoring.json",
+      "current_sha256": "57cd94cdb4e9b128b5b2a04fb06dc5b674003541b62eaeef510c84b53cd47a9b",
+      "successor_sha256": "11d75d439a81ae50d393767920ddc94e0f6332cd3439c0058614d04793701777",
+      "current_bytes": 1575,
+      "successor_bytes": 1575
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-evasion-override/dependencies.json",
+      "current_sha256": "59b202d9ef05265d8a630d47575bf5fcf56556d7e0d595dbfd2ddccec1a30f9b",
+      "successor_sha256": "adbbeb3d6a2bf0b8c65c53446ccda8febeaa95c8d6f49a93a8c343d61f13affd",
+      "current_bytes": 13123,
+      "successor_bytes": 13123
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-evasion-override/authoring.json",
+      "current_sha256": "7ce4bafdc9160eb9f0e2eb0770aa309b346052614a3dbe41b4ec81f557797dda",
+      "successor_sha256": "9b24bd0e6cc5e400cf40dd2e3adeec1eb541a400a2c535c3084ac3c8d0fced2a",
+      "current_bytes": 1215,
+      "successor_bytes": 1215
+    }
+  ]
+}

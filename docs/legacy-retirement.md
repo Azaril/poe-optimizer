@@ -2758,3 +2758,75 @@ obsolete one-off migration. Archive and remove obsolete targets; reauthor needed
 ones against exact source/field ownership, preserving full diagnostics. Do not
 keep an old importer or shared issue allocator to satisfy historical literals.
 This cleanup must not distract from completing the closest unchanged build.
+
+## Successor rebinding duplication (2026-10-20)
+
+The Flask delivery probe exposed a real defect in the older
+`extend-owned-recipe` publication route. Its predecessor release loads and
+round-trips byte-for-byte, but the schema addition fails with
+`normalization artifact bindings disagree`. In `owned_successor.rs`, usage
+inputs are rebound before normalization validation; configuration accounting
+still commits their old digest at that validation point, and its rebinding is
+scheduled later. This is stale orchestration, not a missing Flask operation or
+an invalid source build.
+
+The existing `assemble-owned-release --migration` route uses the centralized
+`rebind_release_dependencies` function and successfully assembles the identical
+one-Stat/one-program candidate. The probe retains all five coverage gaps and
+checks whole-rule/schema/registry inverses and the unchanged 110 query bytes.
+Evidence and both command outcomes are under
+`runs/flask-charge-delivery-extension-probe-01`; the source diagnosis is
+`runs/flask-charge-delivery-audit-20261021/extension-probe-diagnosis.md`.
+Runtime and source parity remain unproved for this candidate.
+
+Use the current release seam for the build work. At the next authoring cleanup,
+move needed behavior from the older successor orchestration to
+the current centralized release path, and retire redundant routes and their
+obsolete fixtures. Do not add another copy of dependency rebinding or preserve
+the old route for compatibility. This retirement is planned, not completed.
+
+The bounded caller inventory is now recorded in
+`runs/successor-retirement-audit-20261021`. The smallest retirement is
+`PublishOwnedSuccessor`: its shared helper has two actual top-level consumers
+(`owned_successor_cli` and `owned_tree_cli`, four calls). Reauthor their seed as
+a checked full release, preserving all-five imports, allocation, reuse and
+idempotence assertions, then remove the old host/registration and envelope
+checks. Seven test targets include the helper and must still compile.
+`ExtendOwnedRecipe` has 23 textual callsites across 21 test files; its compiler
+and parity bodies still add value. The current migration input does not yet
+carry `support_source_domains`, which two maintained extension packets use.
+Preserve those domain validation/conflict checks before replacing that route.
+The Import successor module has thirteen production host consumers plus live
+neutral types/validators; whole-module deletion is a later step, not this first
+retirement. Counts describe source callsites, not passing test results.
+
+## Validation storage and compilation costs (2026-10-20)
+
+The modifier-order CLI migration compiled 38 targets in 61m02s. Its first six
+targets passed, then the large extension publication test exhausted the disk
+while writing a later full-release input. Preserve that failed log; do not skip
+the target or weaken its assertions. Four explicitly verified September Cargo
+cache directories were reclaimed while current binaries and all evidence were
+retained. The immediate recovery uses existing binaries and serial test
+execution. This is not evidence of a numerical or importer defect.
+
+The end-to-end test holds successive publication directories in one TempDir.
+After the current checkpoint, measure its peak disk use and shorten fixture
+lifetimes only after checking all later cross-stage reads and preservation
+assertions. Keep current publication atomicity and full inverse/parity checks.
+Separately measure the local optimization-profile and pure shared-helper trials
+in `runs/cli-validation-cost-audit-20261021`; neither improvement is implemented
+or proven faster. These are test infrastructure follow-ups, not a reason to
+expand the native model or postpone the closest build's missing mechanics.
+
+The same migration exposed a fixture-maintenance gap: direct file hashes are
+not the entire dependency graph. An independent raw-report anchor and digests
+of composed fixture inputs also need rebinding when the owned format changes.
+Their repairs preserve the independent authority/refusal checks, reproduce old
+digests before deriving replacements, and retain full inverses. The one-off
+authoring/review scripts are archived outside runtime and test discovery.
+Future reusable fixture authoring should share Rust's canonical serialization
+and declare direct and derived dependencies together; do not promote the
+archived token-preserving scripts into another maintained serialization system.
+Keep this follow-up with the existing test-support cleanup after the closest
+build's missing mechanics, rather than introducing a new evaluator layer.
