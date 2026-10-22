@@ -471,8 +471,9 @@ fn frontend_type_information_does_not_replace_engine_read_authority() {
 
 #[test]
 fn retained_life_guard_matches_exact_ir_shape_and_source_emission_vectors() {
-    // This is the real retained guard and its independent source vectors, not a
-    // complete Life calculation or an admission claim for the original builds.
+    // The packet is the authored source. The old JSON is a historical comparison
+    // fixture; source vectors independently constrain behavior. Neither grants
+    // complete Life coverage or admission for the original builds.
     let dependencies: serde_json::Value = serde_json::from_str(include_str!(
         "../../../data/owned/poe2/3887ae68/inherent-life-contribution/dependencies.json"
     ))
@@ -501,65 +502,89 @@ fn retained_life_guard_matches_exact_ir_shape_and_source_emission_vectors() {
         OwnedSchemaLimits::default(),
     )
     .unwrap();
-    let names: Vec<_> = original
-        .reads
-        .iter()
-        .map(|read| read.id.as_str().replace('-', "_"))
-        .collect();
-    let reads: Vec<_> = names
-        .iter()
-        .zip(&original.reads)
-        .map(|(name, read)| (name.as_str(), read.clone()))
-        .collect();
-    let bindings = ExpressionBindings::from_inputs(
+    let symbols = load_names(
+        include_str!("../../../data/owned/poe2/3887ae68/inherent-life-contribution/names.kdl"),
         &schema,
-        &[("life", unit.clone())],
-        &reads,
-        &[],
-        &[],
-        BindingLimits::default(),
+        NamesLimits::default(),
     )
     .unwrap();
-    let lowered = lower(
-        "not any(all_disabled, strength_disabled, life_disabled)",
-        &bindings,
-    );
-    let retained_guard = &original.nodes[1..];
-    let map: std::collections::BTreeMap<_, _> = retained_guard
+    let manifest = parse_packet(
+        include_str!("../../../data/owned/poe2/3887ae68/inherent-life-contribution/packet.kdl"),
+        &symbols,
+        ManifestLimits::default(),
+    )
+    .unwrap();
+    let packet = lower_packet(
+        &manifest,
+        &[RuleSource {
+            name: "inherent-life.rule",
+            text: include_str!(
+                "../../../data/owned/poe2/3887ae68/inherent-life-contribution/inherent-life.rule"
+            ),
+        }],
+        &schema,
+        &symbols,
+        &[],
+        PacketLimits::default(),
+    )
+    .unwrap();
+    assert_eq!(packet.programs().len(), 1);
+    let lowered = &packet.programs()[0].lowered;
+    let bindings: std::collections::BTreeMap<_, _> = lowered
+        .bindings
         .iter()
-        .zip(&lowered.nodes)
-        .map(|(old, new)| (old.id.clone(), new.id.clone()))
+        .map(|binding| (binding.name.as_str(), binding.value.clone()))
         .collect();
-    let expected: Vec<_> = retained_guard
+    assert_eq!(bindings.len(), lowered.bindings.len());
+    assert_eq!(bindings.len(), original.nodes.len());
+    let map: std::collections::BTreeMap<_, _> = original
+        .nodes
         .iter()
-        .map(|node| match &node.expression {
-            RuleExpression::Read { input } => RuleExpression::Read {
-                input: input.clone(),
-            },
-            RuleExpression::Any { values } => RuleExpression::Any {
-                values: values.iter().map(|id| map[id].clone()).collect(),
-            },
-            RuleExpression::Not { value } => RuleExpression::Not {
-                value: map[value].clone(),
-            },
-            other => panic!("retained guard acquired an unreviewed operation: {other:?}"),
+        .map(|node| {
+            let name = node.id.as_str().replace('-', "_");
+            (node.id.clone(), bindings[name.as_str()].clone())
         })
         .collect();
     assert_eq!(
-        lowered
-            .nodes
-            .iter()
-            .map(|node| node.expression.clone())
-            .collect::<Vec<_>>(),
-        expected
+        map.values()
+            .collect::<std::collections::BTreeSet<_>>()
+            .len(),
+        original.nodes.len(),
+        "the authored program preserves distinct historical nodes"
     );
-    let mut migrated = original.clone();
-    migrated.nodes = std::iter::once(original.nodes[0].clone())
-        .chain(lowered.nodes)
-        .collect();
-    migrated.effects[0].when = Some(lowered.root);
+    // Remap only node identities in the independent historical program. Exact
+    // equality retains every read, operand order, effect ID, target and guard.
+    let mut expected = original.clone();
+    for node in &mut expected.nodes {
+        node.id = map[&node.id].clone();
+        match &mut node.expression {
+            RuleExpression::Read { .. } => {}
+            RuleExpression::Any { values } => {
+                for value in values {
+                    *value = map[value].clone();
+                }
+            }
+            RuleExpression::Not { value } => *value = map[value].clone(),
+            other => panic!("retained bridge acquired an unreviewed operation: {other:?}"),
+        }
+    }
+    for effect in &mut expected.effects {
+        if let Some(guard) = &mut effect.when {
+            *guard = map[guard].clone();
+        }
+        let RuleEffectKind::Contribute { value, .. } = &mut effect.effect else {
+            panic!("retained bridge must remain a contribution")
+        };
+        *value = map[value].clone();
+    }
+    assert_eq!(lowered.program, expected);
+    let migrated = lowered.program.clone();
     let owner: SchemaSubject =
         serde_json::from_value(dependencies["owner_before"]["owner"].clone()).unwrap();
+    let closure: SchemaClosure =
+        serde_json::from_value(dependencies["owner_before"]["programs"]["closure"].clone())
+            .unwrap();
+    assert!(!matches!(closure, SchemaClosure::Complete));
     let mut input = fixture::fixture().rules;
     input.namespace = unit.namespace().clone();
     input.definitions = schema.identity().clone();
@@ -573,10 +598,20 @@ fn retained_life_guard_matches_exact_ir_shape_and_source_emission_vectors() {
         Some(serde_json::from_value(dependencies["existing_actor_rules"].clone()).unwrap());
     input.owners = vec![DefinitionRules {
         owner: owner.clone(),
-        programs: DeclaredSet::complete(vec![original.clone()]),
+        programs: DeclaredSet {
+            closure: closure.clone(),
+            members: vec![original.clone()],
+        },
     }];
     let reference = CompiledRulePackage::compile(&input, &schema, RuleLimits::default()).unwrap();
-    input.owners[0].programs.members = vec![migrated];
+    input.owners[0].programs.members.clear();
+    let before = input.clone();
+    packet.apply_to(&mut input).unwrap();
+    assert_eq!(input.owners[0].programs.closure, closure);
+    assert_eq!(input.owners[0].programs.members, [migrated]);
+    let mut inverse = input.clone();
+    inverse.owners[0].programs.members.clear();
+    assert_eq!(inverse, before, "only the declared membership was appended");
     let compiled = CompiledRulePackage::compile(&input, &schema, RuleLimits::default()).unwrap();
     for vector in vectors["emission_cases"].as_array().unwrap() {
         let mut facts = vec![RuleFact {

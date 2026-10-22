@@ -1,0 +1,9 @@
+names game="poe2" version="owned-mechanics-v1" {
+    actor "actor.player" key="def.000000000000332a";
+    unit "unit.life" key="def.0000000000003119";
+    stat "stat.inherent_life" key="def.000000000000331a";
+    stat "stat.life" key="def.000000000000311a";
+    stat "stat.no_attribute_bonuses" key="def.0000000000003315";
+    stat "stat.no_strength_attribute_bonuses" key="def.0000000000003316";
+    stat "stat.no_strength_life" key="def.0000000000003317";
+}

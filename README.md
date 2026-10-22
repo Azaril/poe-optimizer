@@ -21,9 +21,10 @@ The October 22 [architecture review](docs/architecture-review-2026-10-22.md) is
 adopted. Before adding further mechanic content, migrate to readable `.rule`
 formulas and KDL manifests, one checked IR, reproducible releases and an interned
 runtime package. Consolidate tests and remove redundant legacy paths. **Migration
-has started: the Rust expression parser exists; full DSL compilation, KDL and
-the binary runtime remain ahead.** The first complete unchanged build must run
-exclusively through the new format and native path; then native search and broader
+has started: complete program compilation, formatting, and name/membership KDL
+loading exist; release publication and the binary runtime remain ahead.** The first
+complete unchanged build must run exclusively through the new format and native
+path; then native search and broader
 build validation follow.
 
 Current default Data/Engine dependencies still enable the legacy source-compatibility
@@ -75,8 +76,9 @@ migration checks and are scheduled for removal with the old runtime.
 
 The `poe-optimizer-authoring` library parses and lowers complete `.rule` programs
 to the existing IR, resolves exact schema symbols and raises IR back to source.
-Its only normal dependency is Core; it is not a runtime dependency. The separate
-`poe-author` executable formats one program to stdout or checks formatting:
+Its normal dependencies are Core and an offline KDL parser; it is not a runtime
+dependency. The separate `poe-author` executable formats one program to stdout or
+checks formatting:
 
 ```text
 cargo run --locked -p poe-optimizer-authoring -- rule fmt path/to/mechanic.rule
@@ -86,8 +88,9 @@ cargo run --locked -p poe-optimizer-authoring -- rule fmt --check path/to/mechan
 Use `-` as the path to read stdin. Input files are unchanged. Check mode exits
 0 when formatted, 1 when formatting differs, and 2 on syntax, argument or I/O
 errors. Formatting preserves names, numeric spelling and comments; it does not
-validate rule types, ownership or complete coverage. KDL manifests, semantic
-checking/publication commands and release cutover remain ahead.
+validate rule types, ownership or complete coverage. Name/membership KDL loading
+and bounded packet assembly are library APIs; broader declaration manifests,
+semantic checking/publication commands and release cutover remain ahead.
 Run focused checks with `cargo test -p poe-optimizer-authoring --locked --all-targets`.
 
 ## Boundaries

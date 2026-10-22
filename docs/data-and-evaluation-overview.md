@@ -48,8 +48,8 @@ program "add-life" context actor {
 The source does not declare its owning definition or claim complete membership.
 Those belong to the manifest. Lowering produces an unchecked `RuleProgram`,
 which still needs the existing Engine's complete package checks before execution.
-Core is Authoring's only normal dependency; Data/Engine are used in tests. No
-runtime package depends on Authoring, and it does not evaluate formulas.
+Authoring uses Core and a standard streaming KDL parser; Data/Engine are used in
+tests. No runtime package depends on Authoring, and it does not evaluate formulas.
 
 The reverse compiler now emits readable source from existing IR, with an explicit
 node mapping for exact graph comparisons. It preserves sharing, unused nodes,
@@ -57,8 +57,13 @@ operand order and the effect ledger, and checks structural references and bounds
 The existing Engine still checks semantic authority and executes the result.
 Source formatting preserves exact tokens, authored names and comment bodies while
 normalizing structural whitespace. It is idempotent under the same resource limits;
-generated output must fit the input limit as well as the output limit. KDL
-manifests, stable binding publication and release construction remain pending.
+generated output must fit the input limit as well as the output limit. Name and
+program-membership KDL manifests now load through a bounded library API. Names
+resolve exact schema definitions/slots, and packets append explicitly declared
+programs to existing owners after a complete structural preflight. The containing
+package still requires Engine validation. Source labels are injected text labels,
+not paths that the library opens. Stable binding publication, broader declaration
+manifests and release construction remain pending.
 Component round-trips do not establish complete-build parity or migrate the release.
 
 `evaluate-owned` is the current native CLI path. The `evaluate` command is the

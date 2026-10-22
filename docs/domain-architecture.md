@@ -256,6 +256,29 @@ and the parser source budget so it remains admissible with the same settings.
 
 ### Declarative manifests and publication
 
+Name manifests declare their game/version namespace once. Each alias resolves
+directly to an existing typed definition or exact declared slot; a slot names
+its declaring definition explicitly. Definition and slot aliases have separate
+name spaces. This lookup is not an allocator or proof that a persisted binding
+is current: publication also validates the existing allocation registry and its
+successor transaction.
+
+Program membership uses explicit definition/slot owners and injected source
+labels. A source label is not an instruction to open a file. Program IDs are
+owner-local; reuse across distinct owners is allowed, but two aliases to one
+owner cannot hide a collision. Lower sources once and bound their expanded
+membership cost. Preflight all additions against the exact target schema
+identity and namespace before mutation. Preserve existing program order,
+partial coverage and gaps, receivers, application groups and query inventories.
+The resulting package still needs the Engine's authority checks. Never infer an
+owner, mark coverage complete, or silently replace an existing program.
+
+Use a standard KDL parser at this offline boundary with bounded source bytes,
+structure, entries and decoded text, including skipped content. Reject unknown
+metadata and duplicate properties. The first name/membership declarations accept
+string values only; this is a typed manifest schema, not a second KDL dialect or
+an embedded evaluator.
+
 KDL manifests declare definitions, rules, typed input projections, contribution
 queries, membership additions, routing, source references, fixtures and
 dependencies. Production `check-packet` and `publish-packet` commands own this

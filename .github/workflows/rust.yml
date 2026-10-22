@@ -94,7 +94,7 @@ jobs:
           $dependencies = cargo tree -p poe-optimizer-cli --edges normal --prefix none --locked
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $dependencies
-          if ($dependencies -match '^(poe-optimizer-authoring|poe-optimizer-pob|poe-optimizer-lua-utf8|mlua|mlua-sys|lua-src|luajit-src) ') {
+          if ($dependencies -match '^(poe-optimizer-authoring|just-kdl|poe-optimizer-pob|poe-optimizer-lua-utf8|mlua|mlua-sys|lua-src|luajit-src) ') {
             throw 'Default deployment includes an offline Authoring, PoB or Lua dependency'
           }
       - name: Install portable target
@@ -156,6 +156,14 @@ jobs:
         if: matrix.suite == 'workspace'
         shell: pwsh
         run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--all-features', '--exclude', 'poe-optimizer-pob', '--exclude', 'poe-optimizer-cli', '--exclude', 'poe-optimizer-import', '--exclude', 'poe-optimizer-engine', '--all-targets', '--locked', '--no-fail-fast')
+      - name: Test optimized authoring manifest decoding
+        if: matrix.suite == 'workspace'
+        env:
+          # Exercise release decoding too: the upstream KDL regression was hidden
+          # when debug assertions executed its accidentally embedded string write.
+          CARGO_PROFILE_TEST_DEBUG_ASSERTIONS: 'false'
+        shell: pwsh
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-authoring', '--lib', '--locked', 'manifest_')
       - name: Test PoB package
         if: matrix.suite == 'pob'
         shell: pwsh

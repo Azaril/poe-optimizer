@@ -1,6 +1,8 @@
 * text=auto
 *.rs text eol=lf
 *.toml text eol=lf
+*.rule text eol=lf
+*.kdl text eol=lf
 *.md text eol=lf
 *.yml text eol=lf
 *.lua text eol=lf

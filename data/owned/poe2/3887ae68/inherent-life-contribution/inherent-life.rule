@@ -1,0 +1,13 @@
+program "contribute-inherent-strength-life" context actor {
+    read "amount" as input_amount: quantity(unit.life) = stat(current, stat.inherent_life);
+    read "all-disabled" as input_all_disabled: boolean = stat(current, stat.no_attribute_bonuses);
+    read "strength-disabled" as input_strength_disabled: boolean = stat(current, stat.no_strength_attribute_bonuses);
+    read "life-disabled" as input_life_disabled: boolean = stat(current, stat.no_strength_life);
+    let amount = input_amount;
+    let all_disabled = input_all_disabled;
+    let strength_disabled = input_strength_disabled;
+    let life_disabled = input_life_disabled;
+    let disabled = any(all_disabled, strength_disabled, life_disabled);
+    let enabled = not disabled;
+    effect "inherent-life" when enabled = contribute(current, stat.life, add, amount);
+}

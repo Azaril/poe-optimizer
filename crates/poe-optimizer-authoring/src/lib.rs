@@ -13,6 +13,9 @@ mod diagnostic;
 mod format;
 mod lexer;
 mod lower;
+mod manifest;
+mod manifest_parse;
+mod packet;
 mod parser;
 mod program;
 mod raise;
@@ -30,6 +33,13 @@ pub use diagnostic::{Diagnostic, DiagnosticCode, LimitKind};
 pub use format::{FormatLimits, format_program};
 pub use lower::{
     LowerLimits, LoweredBinding, LoweredBlock, LoweredExpression, lower_block, lower_expression,
+};
+pub use manifest::{NamesLimits, load_names, parse_packet};
+pub use manifest_parse::{MAX_MANIFEST_DEPTH, ManifestError, ManifestErrorKind, ManifestLimits};
+pub use packet::{
+    LoweredPacket, LoweredPacketAppend, LoweredPacketProgram, PacketAppend, PacketError,
+    PacketErrorKind, PacketLimit, PacketLimits, PacketLocation, PacketManifest, PacketProgram,
+    RuleSource, lower_packet,
 };
 pub use parser::{
     BlockParseLimits, MAX_PARSE_DEPTH, ParseLimits, ProgramParseLimits, parse_block,
@@ -71,3 +81,12 @@ mod raise_tests;
 
 #[cfg(test)]
 mod format_tests;
+
+#[cfg(test)]
+mod manifest_tests;
+
+#[cfg(test)]
+mod manifest_parse_tests;
+
+#[cfg(test)]
+mod packet_tests;

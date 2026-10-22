@@ -1,0 +1,5 @@
+packet "inherent-life-contribution" {
+    append definition="actor.player" {
+        program "contribute-inherent-strength-life" source="inherent-life.rule";
+    }
+}

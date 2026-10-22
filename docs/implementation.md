@@ -16,15 +16,15 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/parser `0e5a9b7b`; expressions `e1841725`, blocks `15de8529`, programs `21db1486`, complete expression syntax `329808b8`, raising `86bbe9b9`; this checkpoint adds formatting and the offline developer executable |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/parser `0e5a9b7b`; expressions `e1841725`, blocks `15de8529`, programs `21db1486`, complete expression syntax `329808b8`, raising `86bbe9b9`, formatter/CLI `5ba6abdf`; this checkpoint adds name/membership KDL and bounded packet assembly |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
-| Authoring | Bounded Rust program/read/effect declarations, exact typed symbols and shared-SSA formula lowering to existing IR; Core is the only normal dependency. Catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
+| Authoring | Bounded Rust program/read/effect declarations, exact typed names/slots, KDL membership and transactional appends to existing IR. Core and the offline KDL parser are normal dependencies. Catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | Program syntax, exact symbols, every current expression family, bounded raising and idempotent source formatting implemented; `poe-author rule fmt` available. Stable binding publication, KDL and binary pack remain pending |
+| DSL / KDL / binary pack | Program syntax, exact symbols, all expression families, raising/formatting and name/membership KDL implemented; `poe-author rule fmt` available. Stable binding publication, broader declaration manifests and binary pack remain pending |
 | Current release | Latest validated artifacts are local under ignored `runs/`, have no complete evaluation bundle, and cannot yet be reproduced from a fresh clone with one supported command |
-| CI | Focused repairs for the two fixture families pass locally. At 20:09 UTC, main run `39845450610` for `329808b8` was pending; intervening pending runs were superseded/cancelled. No green hosted claim |
+| CI | Focused repairs for the two fixture families pass locally. Latest checked main run `39849460312` for `5ba6abdf` remains pending; intervening pending runs were superseded/cancelled. No green hosted claim |
 
 Last validated release: `runs/owned-reverse-primary-cutover-01/package`.
 Its endpoint is `runs/owned-reverse-primary-cutover-01/endpoint.json`,
@@ -231,6 +231,41 @@ four CLI), with none ignored; strict all-target Clippy and formatting pass.
 Independent review found no remaining issue. Local evidence is in
 `runs/r2-format-tests-20261022.log` and `runs/r2-format-clippy-20261022.log`.
 
+**R2 name/membership KDL and packet assembly:** `load_names` resolves the namespace
+once and constructs existing typed definition/slot addresses directly.
+`parse_packet` declares explicit existing owners and virtual source labels;
+`lower_packet` parses/lowers each injected source once, bounds expanded membership
+cost, and rejects unused/duplicate sources and owner-local ID collisions.
+`apply_to` checks the exact schema identity, namespace, base inventory and every
+destination before appending. Existing order, coverage/gaps and all unrelated
+package fields remain unchanged. The Engine still validates the complete package.
+
+The retained inherent-Life bridge now has `.rule`, `names.kdl` and `packet.kdl`
+sources. Its Authoring test compiles the entire program, verifies exact historical
+graph equivalence under a bijective node-ID remap, preserves the actual Partial
+owner closure, proves the whole append inverse and replays all thirteen observed
+emission cases. **This migrates its compiler fixture, not the historical release
+publisher.** Old JSON/builders and the later checked-range successor remain in
+their current consumers until those consumers move together; no complete-build
+coverage or input issue count changed.
+
+KDL uses the standard iterative `just-kdl` lexer/reader, pinned to upstream fix
+`78e1f72528982cb25f75b64b94af684598e81229` (0.3.1 source). Published 0.3.0 writes
+escaped inline characters only inside a debug assertion; the fixed revision
+moves that write outside it. No local fork or custom KDL lexer was added.
+Source bytes, all lexical child depth (including skipped content), retained
+nodes/entries and decoded text are bounded. Tests cover all 25 definition kinds,
+six slot kinds, exact owners, refusal/atomicity controls and constrained-stack
+parsing. All **142 tests pass** (138 library, four CLI); strict all-target Clippy
+and formatting pass. Twenty focused tests also pass with optimization enabled
+and debug assertions disabled; CI now runs that profile on both operating
+systems. The runtime dependency guard also rejects the KDL parser. Independent
+review found no remaining blocker. Logs: `runs/r2-kdl-packet-tests-20261022.log`,
+`runs/r2-kdl-packet-clippy-20261022.log`,
+`runs/r2-kdl-release-decoding-20261022.log`. Local compilation used Rust 1.98.1;
+Cargo selected Rust-1.93-compatible dependency versions, but direct MSRV compilation
+remains part of R0, not a result claimed at this checkpoint.
+
 Two hosted failures were isolated to fixtures: an unavailable skill catalog
 retained an inconsistent reverse-primary census, and the Mana equipment review
 compared an obsolete serialized-fixture seal after the Item wire shape changed.
@@ -370,8 +405,8 @@ for deletion at R4. No compatibility reader enters the normal CLI/library path.
 
 ### R2 — Formula DSL and declarative authoring
 
-**Started: complete program syntax, exact symbols, raising and formatting.**
-Next move retained real programs into KDL manifests and `.rule` source, preserving
+**Started: complete program syntax, exact symbols, raising/formatting and name/membership KDL.**
+Next move retained real programs and their publication consumers into KDL manifests and `.rule` source, preserving
 full graph alpha-equivalence and executable expectations. Complete the shared behavioral
 harness; do not create a second evaluation model. The current unchecked compiler
 output is not a supported release format or a substitute for full package validation.
@@ -566,15 +601,17 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. Prioritize **KDL manifests and stable symbol
-   publication**. Migrate the retained `inherent-life-contribution` program first:
-   its four reads, six nodes and guarded effect already have thirteen independent
-   emission vectors. Bind its seven existing addresses by name and preserve exact
-   Actor membership, partial closure, receiver and query memberships. Reuse the
-   existing schema, Engine and release checks; do not add a second schema/evaluator.
-   Replace its handwritten program builder and historical staging choreography
-   once the generic manifest path drives its consumers. A single migrated family
-   does not yet reproduce the full release.
+1. Read this plan and Git status. Prioritize **stable symbol publication and final
+   release composition**. Name/membership KDL and the retained
+   `inherent-life-contribution` whole-program compiler fixture now work; the old
+   release consumers have not cut over. Reuse the existing schema, Engine and
+   release checks, preserving exact Actor membership, partial closure, receivers
+   and queries. Replace its handwritten builder when the generic path drives its
+   consumers; do not retrofit new receipts through the historical staging chain.
+   Its old authoring digest is embedded downstream, and its minion source packet
+   pins the old program bytes. Keep historical evidence distinct from new source
+   identity. The later `life-base-domain` checked-range successor must survive
+   migration. A single compiler fixture does not reproduce the complete release.
    Schema-valid symbols are not proof of active allocation or stable persisted
    names. Move/reuse the existing registry allocation/successor logic in the
    offline publication transaction with stale-state checks. Current typed-ID serde
