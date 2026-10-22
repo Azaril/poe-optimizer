@@ -1,6 +1,10 @@
 //! Real support modifier components against complete authenticated PoB functions.
 //! Empty surroundings and explicit finite receivers do not prove whole-build parity.
 #![cfg(not(target_arch = "wasm32"))]
+#[allow(dead_code, unused_imports)]
+#[path = "../../poe-optimizer-engine/tests/support/owned_fixtures.rs"]
+mod engine_fixtures;
+
 #[allow(dead_code)]
 #[path = "support/owned_support_output_native.rs"]
 mod native;

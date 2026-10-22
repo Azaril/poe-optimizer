@@ -16,15 +16,15 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | `fa49fcea32f0413cde5f5983e179c34e6c7acbdf` on main; October 22 changes adopt the plan only |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 test/CI cleanup now in progress |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
 | Authoring | Hand-authored IR JSON, packet publication in test staging and source-file hash dependencies remain |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | DSL / KDL / binary pack | Adopted target; not implemented |
-| Current release | Latest validated artifacts are local under ignored `runs/`; a fresh clone cannot yet reproduce the current release with one supported command |
-| CI | No passing hosted result verified for fa49 in this checkpoint. Prior snapshot was pending; do not label CI green from local tests or a push |
+| Current release | Latest validated artifacts are local under ignored `runs/`, have no complete evaluation bundle, and cannot yet be reproduced from a fresh clone with one supported command |
+| CI | fa49 run `39566788083` failed two fixture families on both operating systems; focused local fixes pass. Architecture-only run `39815736980` has the same observed failures (18:17 UTC snapshot: six passed, three failed, nine running); it does not test these repairs. No green hosted claim |
 
 Last validated release: `runs/owned-reverse-primary-cutover-01/package`.
 Its endpoint is `runs/owned-reverse-primary-cutover-01/endpoint.json`,
@@ -46,11 +46,60 @@ at the normalization work limit. It is not a published/current release. Preserve
 useful malformed-token, exact-provider and complete-census cases in the shared
 harness; do not revive the old publication chain to advance content.
 
-**This documentation checkpoint:** adopted the review, consolidated the active
-documents and repaired local/historical links. Local links and `git diff --check`
-pass; the nine protected files match their baseline hashes. No runtime code or
-data semantics changed, so Cargo tests were not rerun for this checkpoint. R0
-implementation and hosted CI repair remain next work.
+**R0 checkpoint in progress:** Core, Data, Engine and Search now register nine
+integration binaries instead of 210. Core/Data/Search retain all 967 compiled test
+identities and pass. Engine retains every original root and test body, with 1,312
+tests passing and 15 existing optional oracle tests ignored. Its three process-wide
+allocator tests remain isolated. Native-only Data/Engine validation also passes
+(1,018 tests). The Import regression target passes 16 tests; the Mana target passes
+eight in each feature profile, with its explicit authoring utility ignored.
+Lint passes for the consolidated suites, both native-only and optional-PoB CLI
+profiles, and every external consumer affected by shared fixtures. Engine now
+shares 15 stateless fixture modules; its library tests and 11 external targets
+use the same graph. Lua oracle helpers remain separate. After that wiring repair,
+both Engine profiles, the affected condition/mixed parity cases, both external
+Import targets and all eight native CLI targets pass. The native CLI subset has
+45 passing tests and 19 explicitly ignored publication/reference utilities.
+Publication tests initially failed with OS error 5 inside the filesystem sandbox;
+the unchanged target and complete affected native CLI subset pass outside it.
+The optional-PoB CLI profile and affected PoB target remain under final validation.
+No production data or evaluation semantics changed. Shared stateless fixtures
+replace repeated inclusion where their external helper API can remain intact.
+
+Two hosted failures were isolated to fixtures: an unavailable skill catalog
+retained an inconsistent reverse-primary census, and the Mana equipment review
+compared an obsolete serialized-fixture seal after the Item wire shape changed.
+The fixes retain strict production checks and independently authenticated source
+values. CI now runs pushes on main and pull requests, avoiding backup-branch and
+duplicate feature-branch push runs; existing action versions are pinned to commits.
+
+R0 is not complete. The blocking baseline is a runnable retained behavioral suite,
+repairs for actual CI failures, and removal of source-text pins from code being
+migrated. Remaining target consolidation, dependency boundaries and MSRV work
+can proceed alongside R1/R2; all remain cutover requirements before R4 completes.
+Do not turn general cleanup into a prerequisite for the first usable DSL compiler.
+Preserve retained laws, not redundant copies of the same fixture or the historical
+number of tests. The manifest-driven harness is completed with R2, whose authoring
+declarations make generic fixture construction possible.
+
+The next consolidation can use three Import, three PoB and four CLI suites.
+Keep Import normalization isolated initially because its fixture API relies on
+crate-root bindings. CLI helpers require explicit parent-relative bindings before
+their roots become modules. Some shared helpers contain tests: move each unique
+law into one registered module instead of multiplying its executions. PoB needs
+extra care: 91 source-test roots spawn their own executable with test selectors.
+Qualify those selectors after nesting and assert the worker actually executed;
+a child that runs zero tests must not count as successful reference validation.
+
+Remove implementation fingerprints coherently across Data identity, Import item
+loading, CLI diagnostics and PoB adapter/extractor reports. Retain validated
+content identities, explicit semantic versions, upstream pins and executable
+comparisons. Tree extraction currently rejects changes to its own Rust source via
+`TreeSourceIdentity.extractor_sha256`; remove that field and gate together and
+rebuild the affected data instead of repinning source text. Report/evidence fields
+have transitive consumers, including calibration attachments and item catalogs.
+Archived acquisition integrity is distinct from a check requiring today's Rust
+file to match history; preserve that distinction during removal.
 
 ## Accepted review adjustments
 
@@ -75,17 +124,22 @@ implementation and hosted CI repair remain next work.
 ## Delivery plan and gates
 
 R0-R4 are one migration with intermediate checkpoints, not permanent parallel
-systems. No new game-mechanic packets on the old path. Use existing real mechanics
-as migration cases; do not expand content to work around a compiler limitation.
+systems. Their exit conditions are cumulative cutover obligations, not a demand
+to finish all cleanup in one phase before starting any work in the next. After
+the retained behavioral baseline is usable, prioritize the Authoring seam and DSL
+compiler; continue independent suite, boundary and parser cleanup alongside them.
+No new game-mechanic packets on the old path. Use existing real mechanics as
+migration cases; do not expand content to work around a compiler limitation.
 Independent crate/test/build work can run in parallel with explicit file ownership.
 
 ### R0 — Make verification usable and establish a reproducible baseline
 
-**Next executable phase.** Inventory test targets and live consumers; select the
+**In progress.** Inventory test targets and live consumers; select the
 minimum retained semantic fixture set from the current release and all five raw
 originals. Remove implementation-source pins and replace them with behavioral
-checks before mass mechanical edits. Consolidate support code and data-driven
-packet vectors into shared Rust test support. Convert integration targets to
+checks before mass mechanical edits. Consolidate support code and retained vectors
+into shared Rust test support; complete generic manifest-driven construction in
+R2. Convert integration targets to
 explicit test modules (`autotests = false`); target fewer than 30 integration
 binaries across the workspace while preserving meaningful laws, not test counts.
 Use nextest partitioning instead of duplicating compilation per packet.
@@ -113,8 +167,10 @@ bounded decoding, external-format normalization and owned project construction.
 PoB extraction/reference tooling is optional. Remove Import -> legacy Engine
 coupling by replacing required parsing with owned import recipes, not by moving a
 complete Lua emulator into a permanently required compat crate.
-Parse external XML once through a bounded checked boundary and pass the parsed
-document to projections. Type item fields and split parsing stages. Replace
+Alongside the DSL work, parse external XML once through a bounded checked boundary
+and pass the parsed document to projections. Type item fields and split parsing
+stages. This parser cleanup is required by R4, but does not block R2 unless a
+concrete compiler/import dependency requires it. Replace
 duplicated number parsing with the single necessary external contract. Add Rust
 property/fuzz cases for malformed XML, byte offsets and bounded decompression;
 document decoded syntax versus supported import semantics.
@@ -127,10 +183,21 @@ predecessor and no `tests/support::stage` API. Rename/remove the misleading
 `current/` baseline with its callers. Derive one active PoB pin from a manifest.
 
 Split bounded authoring and runtime resource policies; report bytes, entries,
-work and memory separately. Add an 80%-headroom warning/CI regression guard with
+work and memory separately. Add a warning/CI regression guard at 80% budget
+utilization (20% remaining headroom), with
 an explicit review process for budget changes, not an unbounded size bypass.
 Stop tracking concatenated duplicate packages; use canonical review artifacts
 and a content-addressed runtime release generated by CI or fetched by hash.
+
+The source inventory found 17 constituent artifacts and 227 historical provenance
+rows in the latest local package. Do not turn that history into the new manifest.
+Extract its final semantic composition: registry, schema/rules/routing, Import
+catalogs/policies and the still-missing evaluation bundle. Some final composition
+decisions live in test helpers (for example flat-Life membership/policy refinements
+and generated-Firebolt policy replacement). Move those decisions into declarative
+authoring; listing the existing JSON files alone cannot reproduce the release.
+Use the existing release assembly seam as the migration source, not a second
+publisher or a new succession chain.
 
 **Exit:** clean-clone release construction and validation are ordinary CI, with
 relocatable artifacts and no developer-local inputs. Unsupported old wire forms
@@ -319,10 +386,11 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. Start **R0: test target/live-consumer inventory,
-   behavior-focused harness and current CI diagnosis**, paired with the R1 tracked
-   source-input/release inventory. Serialize Cargo jobs in this shared checkout;
-   parallel agents own disjoint files.
+1. Read this plan and Git status. Continue **R0: remove implementation-source
+   identity dependencies, consolidate Import/CLI/PoB using the audited hazards
+   above, and reduce duplicate fixtures into the shared behavioral harness**.
+   Retain actual upstream/content authentication. Serialize Cargo jobs in this
+   shared checkout; parallel agents own disjoint files.
 2. Record the current phase, concrete blocker, changes, tests actually run and
    next command. During R0-R4 report migration gates, not invented build progress.
    Re-run all five when import/data semantics change; do not replay expensive

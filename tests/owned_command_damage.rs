@@ -1,4 +1,8 @@
 //! Source-gated publication and finite conditional Minion Damage component.
+#[allow(dead_code, unused_imports)]
+#[path = "../crates/poe-optimizer-engine/tests/support/owned_fixtures.rs"]
+mod engine_fixtures;
+
 #[path = "support/owned_command_damage.rs"]
 mod family;
 #[path = "support/owned_release_migration_preservation.rs"]

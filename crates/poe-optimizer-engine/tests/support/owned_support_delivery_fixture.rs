@@ -1,7 +1,6 @@
 //! Native retained support applications close the ordinary graph in one attempt.
 #[allow(dead_code)]
-#[path = "owned_computed_support_fixture.rs"]
-pub mod fixture;
+pub use crate::engine_fixtures::computed_support as fixture;
 pub use fixture::{Fixture, child_actor, def, effect, integer, key, occurrence, subject, target};
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,

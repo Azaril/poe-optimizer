@@ -1,9 +1,7 @@
 //! Semantic contribution ordering over candidate-owned occurrences, not opaque IDs.
-#[path = "support/owned_empty_support_contribution_fixture.rs"]
-mod empty_support;
+use crate::empty_support;
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod support;
+use crate::support;
 use empty_support::checked_plan;
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*,

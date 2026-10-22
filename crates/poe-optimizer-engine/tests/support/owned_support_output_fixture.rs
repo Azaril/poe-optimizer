@@ -1,7 +1,6 @@
 //! Explicit final-type channels over injected support preparation data.
 #[allow(dead_code)]
-#[path = "owned_support_delivery_fixture.rs"]
-pub mod delivery;
+pub use crate::engine_fixtures::delivery;
 pub use delivery::{Fixture, child_actor, def, fixture, key, subject, target};
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*, owned_stages::*,

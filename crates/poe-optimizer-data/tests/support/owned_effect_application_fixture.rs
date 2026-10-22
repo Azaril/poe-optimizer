@@ -1,7 +1,5 @@
 //! Direct-authored effect application data; no source game or build assumptions.
-#[allow(dead_code)]
-#[path = "owned_rule_receiver_fixture.rs"]
-mod receiver;
+use crate::rule_receiver_fixture as receiver;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::*;
 pub use receiver::{id, key, ns, slot};

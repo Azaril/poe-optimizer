@@ -1,8 +1,7 @@
 //! Common computed item properties, authored through exact template parameters.
 //! Synthetic domain data only: no source labels, importer or cross-owner reads.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod support;
+use crate::support;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;
 use support::*;

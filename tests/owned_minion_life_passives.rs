@@ -1,4 +1,8 @@
 //! Two actual default owners; finite producer checks are not a full Life pool.
+#[allow(dead_code, unused_imports)]
+#[path = "../crates/poe-optimizer-engine/tests/support/owned_fixtures.rs"]
+mod engine_fixtures;
+
 #[path = "support/owned_minion_life_passives.rs"]
 mod family;
 #[path = "support/owned_release_migration_preservation.rs"]
@@ -96,8 +100,7 @@ fn publish_two_life_owners_preserving_all_five_originals() {
     }
 }
 
-#[path = "../crates/poe-optimizer-engine/tests/support/plain_minion_damage_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::plain_minion as fixture;
 mod native {
     use super::{PathBuf, Value, family, fixture, release};
     use fixture::{Node, World, def, known};

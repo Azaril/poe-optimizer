@@ -1,7 +1,5 @@
 //! Storage-version compatibility, independent of evaluator numerical semantics.
-#[allow(dead_code)]
-#[path = "support/owned_rule_receiver_fixture.rs"]
-mod fixture;
+use crate::rule_receiver_fixture as fixture;
 
 use fixture::{id, input, key, schema_input};
 use poe_optimizer_core::{

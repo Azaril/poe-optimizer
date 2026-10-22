@@ -95,6 +95,35 @@ fn all_adjustment_names_refuse_zero_inactive_nested_and_bonded_suppliers() {
 }
 
 #[test]
+fn retained_review_checks_source_values_and_authority_independently_of_fixture_encoding() {
+    let expected =
+        proof::reconstruct(proof::fixture(), &proof::read("equipment-bodies.json")).unwrap();
+    let retained = proof::read("equipment-review.json");
+    proof::compare_review(&retained, &expected).unwrap();
+    let mut different_encoding = retained.clone();
+    different_encoding["authority"]["fixture_sha256"] = json!("different fixture encoding");
+    proof::compare_review(&different_encoding, &expected).unwrap();
+
+    for mutation in 0..7 {
+        let mut changed = retained.clone();
+        match mutation {
+            0 => changed["authority"]["historical_publication"] = json!("foreign publication"),
+            1 => changed["authority"]["recipe_value_sha256"] = json!("different recipe"),
+            2 => changed["authority"]["source_bodies_sha256"] = json!("different source"),
+            3 => changed["bindings"][0]["source_item_id"] = json!("unreviewed source"),
+            4 => changed["observed"]["per_source02_report"]["inventory"] = json!([]),
+            5 => changed["scope"]["native_coverage_authorized"] = json!(true),
+            6 => changed["bindings"].as_array_mut().unwrap().reverse(),
+            _ => unreachable!(),
+        }
+        assert!(
+            proof::compare_review(&changed, &expected).is_err(),
+            "retained report mutation {mutation}"
+        );
+    }
+}
+
+#[test]
 fn range_variant_rune_and_bonded_metadata_are_not_discarded() {
     for mutation in 0..12 {
         let mut v = item();

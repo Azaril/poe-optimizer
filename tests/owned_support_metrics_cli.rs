@@ -1,7 +1,10 @@
 //! CLI support evaluation uses the portable metric plan and injected owned artifacts.
+#[allow(dead_code, unused_imports)]
+#[path = "../crates/poe-optimizer-engine/tests/support/owned_fixtures.rs"]
+mod engine_fixtures;
+
 #[allow(dead_code)]
-#[path = "../crates/poe-optimizer-engine/tests/support/owned_support_delivery_fixture.rs"]
-mod support;
+use crate::engine_fixtures::delivery as support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_metrics::*, owned_rules::*, owned_schema::*,
 };

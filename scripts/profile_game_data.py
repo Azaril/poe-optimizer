@@ -202,7 +202,7 @@ def measure(output, repeats, loads):
         binaries[mode] = {'path': str(binary), 'sha256': sha(binary), 'loader_sha256': sha(worktree / SOURCE)}
         for check in CHECKS:
             print(f'Checking {mode}: {check}', flush=True)
-            command = ['cargo', 'test', '--release', '--locked', '-p', 'poe-optimizer-data', '--test', 'game_data', '--', '--exact', check, '--test-threads=1']
+            command = ['cargo', 'test', '--release', '--locked', '-p', 'poe-optimizer-data', '--test', 'legacy', '--', '--exact', f'game_data::{check}', '--test-threads=1']
             with (output / f'{mode}-check-{check}.log').open('xb') as log:
                 subprocess.run(command, cwd=worktree, env=env, stdout=log, stderr=subprocess.STDOUT, check=True)
             check_log = (output / f'{mode}-check-{check}.log').read_text(encoding='utf-8')

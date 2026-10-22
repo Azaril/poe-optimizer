@@ -1,8 +1,11 @@
 //! The CLI consumes explicit prepared-output artifacts through the native library.
+#[allow(dead_code, unused_imports)]
+#[path = "../crates/poe-optimizer-engine/tests/support/owned_fixtures.rs"]
+mod engine_fixtures;
+
 // This CLI target uses only a subset of the shared engine fixture's exports.
 #[allow(dead_code, unused_imports)]
-#[path = "../crates/poe-optimizer-engine/tests/support/owned_support_output_fixture.rs"]
-mod support;
+use crate::engine_fixtures::support_outputs as support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_metrics::*, owned_rules::*, owned_schema::*,
 };

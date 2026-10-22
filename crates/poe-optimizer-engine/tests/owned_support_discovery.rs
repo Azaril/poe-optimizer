@@ -1,7 +1,6 @@
 //! Composed request coverage, including empty/disabled authored assignments.
 #[allow(dead_code)]
-#[path = "support/owned_computed_support_fixture.rs"]
-mod support;
+use crate::engine_fixtures::computed_support as support;
 use poe_optimizer_core::{owned_build::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_data::{
     owned_routing::OwnedActionRouting, owned_rules::OwnedRulePackage,

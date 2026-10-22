@@ -1,8 +1,7 @@
 //! Actor templates supply distinct abilities through the ordinary owned plan.
 //! Every input is synthetic; no import token, source engine, or family dispatch is used.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod fixture;
+use crate::support as fixture;
 use fixture::*;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,

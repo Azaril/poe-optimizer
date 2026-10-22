@@ -1,10 +1,8 @@
 //! Optional numeric replacements retain exact sources and share one cached result.
 #[allow(dead_code)]
-#[path = "support/owned_empty_support_contribution_fixture.rs"]
-mod empty_support;
+use crate::empty_support;
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod support;
+use crate::support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,
     owned_stages::*,

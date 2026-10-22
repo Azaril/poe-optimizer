@@ -1,7 +1,6 @@
 //! The same injected raw slots serve independent authored and supplied occurrences.
 #[allow(dead_code)]
-#[path = "support/owned_preparation_readiness_fixture.rs"]
-mod support;
+use crate::engine_fixtures::readiness as support;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
 use poe_optimizer_engine::owned_plan::*;

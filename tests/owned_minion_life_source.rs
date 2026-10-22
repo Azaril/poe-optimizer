@@ -1,8 +1,11 @@
 //! Published intrinsic Life contributions, with finite input boundaries explicit.
+#[allow(dead_code, unused_imports)]
+#[path = "../crates/poe-optimizer-engine/tests/support/owned_fixtures.rs"]
+mod engine_fixtures;
+
 #[path = "support/owned_minion_life_source.rs"]
 mod family;
-#[path = "../crates/poe-optimizer-engine/tests/support/minion_attack_source_fixture.rs"]
-mod intrinsic;
+use crate::engine_fixtures::minion_attack as intrinsic;
 #[path = "support/owned_release_migration_preservation.rs"]
 mod migration_preservation;
 #[path = "support/owned_minion_life_source_native.rs"]

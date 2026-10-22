@@ -825,6 +825,9 @@ fn every_additional_skill_requires_an_exact_mapping_and_owned_identity() {
         for row in &mut roles.roles {
             row.construction = OwnedGemSourceConstruction::Unavailable;
         }
+        // The reverse census joins those construction observations. This
+        // authored-role control deliberately supplies neither observation.
+        roles.reverse_primary = OwnedReversePrimaryCensus::Unavailable {};
         roles
     };
     // Explicitly unavailable observations remain a valid authored-role domain.

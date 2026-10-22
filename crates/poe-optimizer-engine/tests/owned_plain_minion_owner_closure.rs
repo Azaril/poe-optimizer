@@ -1,8 +1,7 @@
 //! Published default-owner closure in the existing finite passive component.
 //! This retains the fixture's explicit final-level and topology boundaries;
 //! whole-tree legality and the complete original build are not evaluated here.
-#[path = "support/plain_minion_damage_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::plain_minion as fixture;
 use fixture::*;
 use poe_optimizer_core::{
     owned_build::ActorKey,

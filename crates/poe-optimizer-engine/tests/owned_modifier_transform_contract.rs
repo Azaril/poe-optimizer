@@ -1,7 +1,6 @@
 //! Storage and semantic compiler contracts; occurrence folding is tested separately.
 #[allow(dead_code)]
-#[path = "support/owned_rule_fixture.rs"]
-mod support;
+use crate::engine_fixtures::rules as support;
 use poe_optimizer_core::{
     owned_build::ParameterValue, owned_definitions::*, owned_rules::*, owned_schema::*,
 };

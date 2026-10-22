@@ -1,7 +1,6 @@
 //! Metric projection consumes the sealed support-aware execution, never reports.
 #[allow(dead_code)]
-#[path = "support/owned_support_metric_fixture.rs"]
-mod support;
+use crate::engine_fixtures::support_metrics as support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_metrics::*, owned_rules::*, owned_schema::*,
 };

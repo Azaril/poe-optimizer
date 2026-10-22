@@ -3,9 +3,8 @@
 //! component boundaries; no final Damage metric or original-build closure. The
 //! separately published population partition supplies checked V20 readiness;
 //! the fixture never removes or rewrites its execution requirement.
-#[path = "../../crates/poe-optimizer-engine/tests/support/plain_minion_damage_fixture.rs"]
-mod fixture;
 use super::{family, readiness_family, release};
+use crate::engine_fixtures::plain_minion as fixture;
 use fixture::{Node, World, def, intrinsic, known, value};
 use poe_optimizer_core::{
     owned_binding::*, owned_build::*, owned_definitions::*, owned_readiness::*, owned_routing::*,

@@ -1,7 +1,6 @@
 //! Exact Action reductions use the same native graph as other recipients.
 #[allow(dead_code)]
-#[path = "support/owned_preparation_readiness_fixture.rs"]
-mod support;
+use crate::engine_fixtures::readiness as support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_readiness::*, owned_rules::*, owned_schema::*,
     owned_source_properties::*,

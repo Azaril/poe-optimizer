@@ -1,7 +1,6 @@
 //! Shared Player rules use the ordinary evaluator, coverage and dependency graph.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod support;
+use crate::support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,
 };

@@ -1,6 +1,4 @@
-#[allow(dead_code)]
-#[path = "support/owned_effect_application_fixture.rs"]
-mod fixture;
+use crate::effect_application_fixture as fixture;
 
 use fixture::*;
 use poe_optimizer_core::{owned_build::ParameterValue, owned_rules::*, owned_schema::*};

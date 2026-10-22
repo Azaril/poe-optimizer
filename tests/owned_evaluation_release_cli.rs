@@ -1,4 +1,8 @@
 //! A verified release supplies the same owned evaluator inputs as explicit files.
+#[allow(dead_code, unused_imports)]
+#[path = "../crates/poe-optimizer-engine/tests/support/owned_fixtures.rs"]
+mod engine_fixtures;
+
 #[path = "support/owned_evaluation_release_fixture.rs"]
 mod fixture;
 use poe_optimizer_core::owned_build::{OwnedDocument, ParameterValue, encode_owned};

@@ -4,6 +4,16 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.93"
 publish = false
+autotests = false
+
+[[test]]
+name = "owned"
+path = "tests/owned.rs"
+
+[[test]]
+name = "legacy"
+path = "tests/legacy.rs"
+required-features = ["legacy"]
 
 [features]
 # Transitional callers retain the old source-shaped package explicitly.

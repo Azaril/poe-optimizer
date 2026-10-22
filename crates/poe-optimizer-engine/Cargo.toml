@@ -5,6 +5,32 @@ edition = "2024"
 rust-version = "1.93"
 description = "Owned native game-rule evaluation with optional legacy calculation adapters"
 publish = false
+autotests = false
+
+[[test]]
+name = "owned"
+path = "tests/owned.rs"
+
+[[test]]
+name = "legacy"
+path = "tests/legacy.rs"
+required-features = ["legacy"]
+
+# Keep process-wide allocation counters isolated in their original binaries.
+[[test]]
+name = "actor_contract"
+path = "tests/actor_contract.rs"
+required-features = ["legacy"]
+
+[[test]]
+name = "condition_producers_contract"
+path = "tests/condition_producers_contract.rs"
+required-features = ["legacy"]
+
+[[test]]
+name = "mixed_store_contract"
+path = "tests/mixed_store_contract.rs"
+required-features = ["legacy"]
 
 [features]
 # Existing consumers retain this feature until owned preparation replaces them.

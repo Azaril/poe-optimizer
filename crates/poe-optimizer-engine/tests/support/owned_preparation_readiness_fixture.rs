@@ -1,7 +1,6 @@
 //! Closed readiness witness. Synthetic owned definitions, real public support execution.
 #[allow(dead_code, unused_imports)]
-#[path = "owned_support_delivery_fixture.rs"]
-pub mod delivery;
+pub use crate::engine_fixtures::delivery;
 use delivery::fixture as base;
 pub use delivery::{Fixture, def, effect, key, occurrence, subject};
 use poe_optimizer_core::{

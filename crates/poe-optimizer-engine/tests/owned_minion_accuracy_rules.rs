@@ -1,8 +1,7 @@
 //! Ordinary CI coverage of current authored rule laws. Explicit RuleFacts are
 //! resolved component inputs, never proof of provider/query membership. The
 //! joined root target tests actual imports, membership, routing and staging.
-#[path = "support/minion_attack_source_fixture.rs"]
-mod intrinsic;
+use crate::engine_fixtures::minion_attack as intrinsic;
 
 use intrinsic::{def, key, quantity, repository_root};
 use poe_optimizer_core::{

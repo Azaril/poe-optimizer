@@ -2,8 +2,7 @@
 //! Final supported inputs and usage/scaling are explicitly supplied fixture
 //! boundaries, not implementations of the pending source-preference contracts.
 #![allow(dead_code)]
-#[path = "minion_attack_source_fixture.rs"]
-pub mod intrinsic;
+pub use crate::engine_fixtures::minion_attack as intrinsic;
 pub use intrinsic::{actor, actor_slot, def, key, known, ns, quantity, slot};
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*,

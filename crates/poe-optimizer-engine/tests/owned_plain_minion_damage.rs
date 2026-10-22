@@ -1,7 +1,6 @@
 //! Actual passive contributions and existing Player-to-Sniper receivers in an
 //! explicitly finite component. This is neither allocation legality nor DPS parity.
-#[path = "support/plain_minion_damage_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::plain_minion as fixture;
 use fixture::*;
 use poe_optimizer_core::{owned_binding::*, owned_build::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;

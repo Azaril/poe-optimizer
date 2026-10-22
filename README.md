@@ -20,9 +20,9 @@ PoB builds; it is not that optimizer.
 The October 22 [architecture review](docs/architecture-review-2026-10-22.md) is
 adopted. Before adding further mechanic content, migrate to readable `.rule`
 formulas and KDL manifests, one checked IR, reproducible releases and an interned
-runtime package. Consolidate tests and remove redundant legacy paths. **These are
-planned changes, not completed capabilities.** The first complete unchanged build
-must run exclusively through the new format and native path; then native search
+runtime package. Consolidate tests and remove redundant legacy paths. **Migration
+has started; the DSL and binary runtime are not implemented yet.** The first
+complete unchanged build must run exclusively through the new format and native path; then native search
 and broader build validation follow.
 
 Current default Data/Engine dependencies still enable the legacy source-compatibility
@@ -60,10 +60,16 @@ an explicit migration gate. Do not substitute the tracked historical `current/`
 baseline for the latest local release or assume a complete build will evaluate.
 Planned `rule`/manifest-publishing commands are not implemented yet.
 
-The existing suite is expensive and split into many targets. The next phase
-consolidates it into a shared behavioral harness and repairs/verifies CI before
-resuming content. Follow the current plan for scoped validation; a successful push
-or local check is not evidence of a passing hosted suite.
+The existing suite is expensive. The first consolidation reduces Core, Data,
+Engine and Search from 210 integration binaries to nine; Import, CLI and reference
+suites still need consolidation. The plan also removes source-text identity gates
+and duplicate fixtures before resuming content. Follow the current plan for scoped
+validation; a successful push or local check is not evidence of a passing hosted suite.
+
+Register new test modules in the explicit suite roots: `tests/integration.rs` for
+Core/Search and `tests/owned.rs` for native Data/Engine contracts. Adding a test file
+alone no longer registers it in those crates. The temporary `legacy` suites retain
+migration checks and are scheduled for removal with the old runtime.
 
 ## Boundaries
 

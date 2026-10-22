@@ -1,7 +1,6 @@
 //! Authentic mixed ModList/ModDB queries; captured contexts are not full-build admission.
 #![cfg(not(target_arch = "wasm32"))]
-#[path = "support/condition_producers_corpus.rs"]
-mod corpus;
+use crate::corpus;
 #[path = "support/mixed_store_native.rs"]
 mod native;
 #[path = "support/mixed_store_oracle.rs"]

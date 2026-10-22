@@ -1,7 +1,6 @@
 //! Complete synthetic requests exercise computed input authority, not PoB fixture names.
 #[allow(dead_code)]
-#[path = "support/owned_computed_support_fixture.rs"]
-mod support;
+use crate::engine_fixtures::computed_support as support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*, owned_stages::*,
 };

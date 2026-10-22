@@ -1,12 +1,10 @@
 //! FLAG/GetCondition parity against complete original ModStore/ModDB methods.
 #![cfg(not(target_arch = "wasm32"))]
 
-#[path = "support/condition_producers_corpus.rs"]
-mod corpus;
+use crate::corpus;
 #[path = "support/condition_producers_native.rs"]
 mod native;
-#[path = "support/condition_producers_oracle.rs"]
-mod oracle;
+use crate::oracle;
 
 use oracle::{Observed, Oracle};
 use serde_json::{Value, json};

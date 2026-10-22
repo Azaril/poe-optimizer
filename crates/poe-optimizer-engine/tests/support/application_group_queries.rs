@@ -1,8 +1,6 @@
 //! Synthetic channel laws exercise the same reduction path as ordinary effects.
-use super::fixture as support;
 use super::*;
-#[path = "owned_empty_support_contribution_fixture.rs"]
-mod empty_support;
+use crate::engine_fixtures::empty_support;
 use poe_optimizer_data::owned_rules::{OwnedRulePackage, RuleStorageLimits};
 
 fn rank(source_rank: u32) -> Option<ContributionOrder> {

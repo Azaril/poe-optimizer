@@ -1,8 +1,7 @@
 //! Generated skill readiness requires every computed RequiredOnce input, even
 //! for constant consumers. Projection values and activation are separate facts.
 #[allow(dead_code)] // The shared fixture also serves actor, routing and worker tests.
-#[path = "support/owned_plan_fixture.rs"]
-mod owned_plan_fixture;
+use crate::support as owned_plan_fixture;
 use owned_plan_fixture::*;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::ActionOutputRoutes, owned_rules::*,

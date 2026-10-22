@@ -1,4 +1,8 @@
 //! Release packaging commits evaluator data; it never certifies real-build parity.
+#[allow(dead_code, unused_imports)]
+#[path = "../../poe-optimizer-engine/tests/support/owned_fixtures.rs"]
+mod engine_fixtures;
+
 #[allow(dead_code)]
 #[path = "../../../tests/support/owned_evaluation_release_fixture.rs"]
 mod fixture;

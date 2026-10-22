@@ -1,7 +1,6 @@
 //! The authored reservation component, with explicitly supplied test inputs.
 //! This reuses the existing source table/producer; it is not whole-build parity.
-#[path = "support/minion_attack_source_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::minion_attack as fixture;
 
 use fixture::{def, key, quantity};
 use poe_optimizer_core::{

@@ -4,6 +4,11 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.93"
 publish = false
+autotests = false
+
+[[test]]
+name = "contracts"
+path = "tests/integration.rs"
 
 [dependencies]
 poe-optimizer-core = { path = "../poe-optimizer-core" }

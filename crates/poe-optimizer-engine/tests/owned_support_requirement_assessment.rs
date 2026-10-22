@@ -1,7 +1,6 @@
 //! Requirement assessment over retained support, including preparation failures.
 #[allow(dead_code, unused_imports)]
-#[path = "support/owned_support_metric_fixture.rs"]
-mod supported;
+use crate::engine_fixtures::support_metrics as supported;
 
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::ActionOutputRoutes, owned_rules::*,

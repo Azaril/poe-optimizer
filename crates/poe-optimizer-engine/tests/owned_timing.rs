@@ -1,8 +1,7 @@
 //! Owned timing is a typed atomic algorithm with independently classified outputs.
 //! Synthetic inputs prove composition/availability, not a complete game timing branch.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod owned_plan_fixture;
+use crate::support as owned_plan_fixture;
 use owned_plan_fixture::*;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_data::{

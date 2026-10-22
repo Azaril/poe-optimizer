@@ -1,6 +1,5 @@
 //! The same occurrence supplies preparation even when execution participation is false.
-#[path = "owned_skill_participation_fixture.rs"]
-pub(super) mod participation;
+pub(super) use crate::engine_fixtures::participation;
 use participation::{base, delivery, readiness, *};
 use poe_optimizer_core::{
     owned_build::*, owned_readiness::*, owned_rules::*, owned_schema::*, owned_stages::*,

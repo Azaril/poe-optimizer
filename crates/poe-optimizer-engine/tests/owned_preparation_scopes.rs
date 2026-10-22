@@ -1,7 +1,6 @@
 //! Static scope authority; concrete assignment/skill binding is tested in plans.
 #[allow(dead_code)]
-#[path = "support/owned_rule_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::rules as fixture;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::*;
 use poe_optimizer_engine::owned_rules::*;

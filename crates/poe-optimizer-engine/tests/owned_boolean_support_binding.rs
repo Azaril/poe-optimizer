@@ -1,7 +1,6 @@
 //! Nonempty native support suffixes must join the same checked flag census.
 #[allow(unused_imports)]
-#[path = "support/owned_skill_participation_fixture.rs"]
-mod support;
+use crate::engine_fixtures::participation as support;
 use poe_optimizer_core::{owned_build::*, owned_rules::*, owned_schema::*, owned_stages::*};
 use poe_optimizer_engine::owned_plan::*;
 use support::{base, def, key, known, subject};

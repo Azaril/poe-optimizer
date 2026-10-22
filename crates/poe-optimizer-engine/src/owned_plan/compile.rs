@@ -20,9 +20,7 @@ mod source_property_cycles;
 mod sources;
 mod support_discovery;
 #[cfg(test)]
-#[allow(dead_code)]
-#[path = "../../tests/support/owned_computed_support_fixture.rs"]
-mod support_fixture;
+use crate::engine_fixtures::computed_support as support_fixture;
 mod support_output_reads;
 mod support_suffix;
 mod support_templates;

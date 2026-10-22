@@ -1,7 +1,6 @@
 //! Occurrence-scoped native values, with no source/import or game-name dispatch.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod support;
+use crate::support;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;
 use support::*;

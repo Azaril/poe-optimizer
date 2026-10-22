@@ -1,7 +1,6 @@
 //! Checked Skill reductions reuse real generated supply, readiness and support execution.
 #[allow(dead_code)]
-#[path = "support/owned_preparation_readiness_fixture.rs"]
-mod support;
+use crate::engine_fixtures::readiness as support;
 use poe_optimizer_core::owned_stages::StageChannel;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_readiness::*, owned_rules::*, owned_schema::*,

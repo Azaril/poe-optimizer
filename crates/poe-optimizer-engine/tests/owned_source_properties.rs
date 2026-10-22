@@ -1,7 +1,6 @@
 //! Source aggregation executes through the public single-attempt support graph.
 #[allow(dead_code)]
-#[path = "support/owned_source_properties_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::source_properties as fixture;
 use fixture::*;
 use poe_optimizer_core::{
     owned_build::*, owned_readiness::*, owned_rules::*, owned_schema::*, owned_stages::*,

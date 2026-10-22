@@ -1,7 +1,6 @@
 //! Synthetic source relations reuse the existing complete readiness graph.
 #[allow(dead_code, unused_imports)]
-#[path = "owned_preparation_readiness_fixture.rs"]
-pub mod readiness;
+pub use crate::engine_fixtures::readiness;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_readiness::*, owned_routing::*, owned_rules::*,
     owned_schema::*, owned_source_properties::*, owned_stages::*, owned_support_receiving::*,

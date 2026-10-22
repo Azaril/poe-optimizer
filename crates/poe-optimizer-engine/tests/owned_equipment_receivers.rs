@@ -1,7 +1,6 @@
 //! Equipment receivers reuse the ordinary typed evaluator and concrete request graph.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod support;
+use crate::support;
 use poe_optimizer_core::{
     owned_build::*, owned_content::digest_owned, owned_definitions::*, owned_rules::*,
     owned_schema::*,

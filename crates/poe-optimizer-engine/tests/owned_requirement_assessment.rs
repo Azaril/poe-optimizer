@@ -1,8 +1,7 @@
 //! Requirement assessment accompanies measurements and does not certify game legality.
 //! Synthetic rules exercise exact ordinary occurrences.
 #[allow(dead_code)]
-#[path = "support/owned_metric_fixture.rs"]
-mod ordinary;
+use crate::engine_fixtures::metrics as ordinary;
 
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;

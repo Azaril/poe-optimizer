@@ -1,8 +1,7 @@
 //! Direct-owned numerical recipes: no imported labels, Lua, or source-field reads.
 //! The injected scale preserves ((100 + quality) / 100) before truncation.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod support;
+use crate::support;
 use poe_optimizer_core::{
     build_identity::BuildRevision, owned_build::*, owned_definitions::*, owned_rules::*,
     owned_schema::*,

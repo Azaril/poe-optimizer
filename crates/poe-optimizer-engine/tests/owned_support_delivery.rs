@@ -1,7 +1,6 @@
 //! Native retained support applications close the ordinary graph in one attempt.
 #[allow(dead_code)]
-#[path = "support/owned_support_delivery_fixture.rs"]
-mod delivery_fixture;
+use crate::engine_fixtures::delivery as delivery_fixture;
 #[path = "support/owned_skill_support_delivery.rs"]
 mod skill_receiving;
 use delivery_fixture::*;

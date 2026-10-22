@@ -1,8 +1,7 @@
 //! Finite synthetic usage/ancestry fixture over the public staged support engine.
 //! No game definitions or imported enabled-field semantics are asserted here.
 #![allow(dead_code)]
-#[path = "owned_source_properties_fixture.rs"]
-pub mod sources;
+pub use crate::engine_fixtures::source_properties as sources;
 pub use delivery::fixture as base;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_readiness::*, owned_rules::*, owned_schema::*,

@@ -1,7 +1,6 @@
 //! Synthetic equipment and existing Player Actor over the public staged engine.
 #![allow(dead_code)]
-#[path = "owned_preparation_readiness_fixture.rs"]
-pub mod readiness;
+pub use crate::engine_fixtures::readiness;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_readiness::*, owned_rules::*, owned_schema::*,
     owned_source_properties::*, owned_stages::*,

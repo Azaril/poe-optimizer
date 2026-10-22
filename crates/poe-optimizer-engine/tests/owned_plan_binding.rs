@@ -1,7 +1,6 @@
 //! Cold-plan binding evidence remains exact and does not change numerical authority.
 #[allow(dead_code)]
-#[path = "support/owned_metric_fixture.rs"]
-mod support;
+use crate::engine_fixtures::metrics as support;
 use poe_optimizer_core::{
     owned_binding::*, owned_build::*, owned_content::digest_owned, owned_definitions::*,
     owned_schema::*,

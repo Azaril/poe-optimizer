@@ -1,7 +1,6 @@
 //! Final membership is published once per exact, unambiguous preparation context.
 #[allow(dead_code)]
-#[path = "support/owned_support_output_fixture.rs"]
-mod support;
+use crate::engine_fixtures::support_outputs as support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*,
     owned_support_receiving::*,

@@ -1,8 +1,7 @@
 //! Registered, finite numerical release shared by host and Import tests.
 //! All source policies are empty test data; they claim no real-game conversion.
 #[allow(dead_code, unused_imports)]
-#[path = "../../crates/poe-optimizer-engine/tests/support/owned_support_output_fixture.rs"]
-mod support;
+use crate::engine_fixtures::support_outputs as support;
 use poe_optimizer_core::{
     owned_build::*, owned_content::digest_owned, owned_definitions::*, owned_metrics::*,
     owned_schema::*,

@@ -1,8 +1,7 @@
 //! Component proof: actual modifier occurrences -> integer Actor contributions.
 //! No source adapter, supplied RuleFact values, final attribute stages, or build parity.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod support;
+use crate::support;
 use poe_optimizer_core::{
     build_identity::{BuildRevision, ModifierInstanceId},
     owned_build::*,

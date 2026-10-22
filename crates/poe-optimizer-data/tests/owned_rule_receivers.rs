@@ -1,5 +1,4 @@
-#[path = "support/owned_rule_receiver_fixture.rs"]
-mod fixture;
+use crate::rule_receiver_fixture as fixture;
 use fixture::*;
 use poe_optimizer_core::{owned_rules::*, owned_schema::*};
 use poe_optimizer_data::{owned_rules::*, owned_schema::*};

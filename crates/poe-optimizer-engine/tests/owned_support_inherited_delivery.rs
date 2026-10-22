@@ -1,8 +1,7 @@
 //! Synthetic owned definitions prove inherited delivery boundaries end to end.
 //! These tests make no source-data or whole-game numerical parity claim.
 #[allow(dead_code)]
-#[path = "support/owned_support_delivery_fixture.rs"]
-mod delivery_fixture;
+use crate::engine_fixtures::delivery as delivery_fixture;
 use delivery_fixture::*;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,

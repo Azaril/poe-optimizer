@@ -1,7 +1,6 @@
 //! Support-aware quantity metrics over the same complete native delivery fixture.
 #[allow(dead_code)]
-#[path = "owned_support_delivery_fixture.rs"]
-pub mod delivery;
+pub use crate::engine_fixtures::delivery;
 pub use delivery::{Fixture, child_actor, def, fixture, integer, key, occurrence};
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_metrics::*, owned_rules::*, owned_schema::*,

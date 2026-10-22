@@ -1,6 +1,5 @@
 //! Native identity predicates bind the request's character, never injected RuleFacts.
-#[path = "support/owned_plan_fixture.rs"]
-mod fixture;
+use crate::support as fixture;
 use fixture::*;
 use poe_optimizer_core::{
     owned_build::*, owned_content::digest_owned, owned_definitions::*, owned_rules::*,

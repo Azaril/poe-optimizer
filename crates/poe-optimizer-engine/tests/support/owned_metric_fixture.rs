@@ -1,7 +1,6 @@
 //! Shared direct-authored metric fixture: changed build facts flow through rules.
-#[path = "owned_plan_fixture.rs"]
 #[allow(dead_code)]
-mod plan_fixture;
+use crate::engine_fixtures::plan as plan_fixture;
 pub use plan_fixture::*;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_metrics::*, owned_rules::*, owned_schema::*,

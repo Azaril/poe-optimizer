@@ -1,8 +1,7 @@
 //! Stat-owned final calculations over actual owned requests and metric queries.
 //! No source importer, UI, per-skill dispatch, or externally supplied final totals.
 #[allow(dead_code)]
-#[path = "support/owned_metric_fixture.rs"]
-mod support;
+use crate::engine_fixtures::metrics as support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_metrics::*, owned_rules::*, owned_schema::*,
 };

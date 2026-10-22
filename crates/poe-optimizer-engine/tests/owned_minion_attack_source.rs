@@ -1,6 +1,5 @@
 //! Intrinsic profile weapon data only, before action modifiers or final metrics.
-#[path = "support/minion_attack_source_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::minion_attack as fixture;
 #[path = "../../../tests/support/minion_attack_source_vectors.rs"]
 mod source_vectors;
 use fixture::*;

@@ -1,6 +1,5 @@
 //! Config-owned Enemy resistance BASE components, not final resistance or DPS.
-#[path = "support/configuration_resistance_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::configuration_resistance as fixture;
 
 use fixture::Fixture;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_schema::*};

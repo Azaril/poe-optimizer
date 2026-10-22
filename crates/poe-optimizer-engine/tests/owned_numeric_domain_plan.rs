@@ -1,7 +1,6 @@
 //! Numeric-domain availability through the current readiness/support/metric graph.
 #[allow(unused_imports)]
-#[path = "support/owned_skill_participation_fixture.rs"]
-mod support;
+use crate::engine_fixtures::participation as support;
 use poe_optimizer_core::{owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;
 use rayon::prelude::*;

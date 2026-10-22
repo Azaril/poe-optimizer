@@ -1,8 +1,7 @@
 //! Finite component world executing the authored incoming-hit programs unchanged.
 //! Closing this fixture's incoming membership does not close the real Encounter.
 #[allow(dead_code)]
-#[path = "owned_plan_fixture.rs"]
-mod base;
+use crate::engine_fixtures::plan as base;
 
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,

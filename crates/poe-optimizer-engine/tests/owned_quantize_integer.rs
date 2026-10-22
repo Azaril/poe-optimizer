@@ -1,5 +1,8 @@
 //! Synthetic arithmetic component coverage; facts do not establish incoming
 //! contribution completeness or full original-build attribute parity.
+#[allow(dead_code)]
+use crate::engine_fixtures::rules as owned_rule_fixture;
+use owned_rule_fixture::{Fixture, fixture};
 use poe_optimizer_core::{
     owned_build::ParameterValue, owned_content::digest_owned, owned_definitions::*, owned_rules::*,
     owned_schema::*,
@@ -9,10 +12,6 @@ use poe_optimizer_data::{
     owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits},
 };
 use poe_optimizer_engine::owned_rules::*;
-#[allow(dead_code)]
-#[path = "support/owned_rule_fixture.rs"]
-mod owned_rule_fixture;
-use owned_rule_fixture::{Fixture, fixture};
 
 fn key(s: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(s).unwrap()

@@ -1,8 +1,7 @@
 //! Native usage programs consume the ordinary composed request and exact targets.
 //! Synthetic Boolean effect activation proves the seam, not game/build coverage.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod fixture;
+use crate::support as fixture;
 #[path = "support/owned_reporting_inclusion_native.rs"]
 mod reporting_inclusion;
 #[path = "support/owned_scenario_usage_intent.rs"]

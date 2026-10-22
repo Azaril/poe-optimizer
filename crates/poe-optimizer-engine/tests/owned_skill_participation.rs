@@ -1,6 +1,5 @@
 //! Requested participation shares the existing occurrence and preparation graph.
-#[path = "support/owned_skill_participation_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::participation as fixture;
 use fixture::*;
 use poe_optimizer_core::{owned_build::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;

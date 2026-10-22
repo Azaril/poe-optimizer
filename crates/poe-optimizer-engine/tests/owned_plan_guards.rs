@@ -1,6 +1,5 @@
 //! Regression guards for bounded binding and potential/unsupported providers.
-#[path = "support/owned_plan_fixture.rs"]
-mod fixture;
+use crate::support as fixture;
 use fixture::*;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;

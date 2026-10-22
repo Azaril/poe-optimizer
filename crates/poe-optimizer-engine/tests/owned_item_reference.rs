@@ -1,13 +1,11 @@
 //! Optional original-source item component evidence. Run explicitly with:
-//! cargo test -p poe-optimizer-engine --test owned_item_reference -- --ignored --nocapture
+//! cargo test -p poe-optimizer-engine --test owned owned_item_reference:: -- --ignored --nocapture
 //! No Rust Spark/Mace/profile evaluator supplies expected values.
 #![cfg(not(target_arch = "wasm32"))]
+use crate::item_reference_support::*;
 use mlua::{Function, Table};
 use roxmltree::{Document, Node};
 use serde_json::json;
-#[path = "support/owned_item_reference.rs"]
-mod owned_item_reference;
-use owned_item_reference::*;
 #[path = "support/owned_item_rule_fixture.rs"]
 mod owned_item_rule_fixture;
 const ORIGINAL_02: &str =

@@ -1,7 +1,6 @@
 //! Native root ownership: injected class/ascendancy data, no source tree or UI.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod owned_plan_fixture;
+use crate::support as owned_plan_fixture;
 use owned_plan_fixture::*;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;

@@ -1,8 +1,7 @@
 //! Pinned data coefficients executed through physical owned Gem -> generated Skill.
 //! This is isolated effect evidence, not original-build DPS or support coverage.
 #[allow(dead_code)] // Shared constructor also supplies other owned-plan test targets.
-#[path = "support/owned_plan_fixture.rs"]
-mod owned_plan_fixture;
+use crate::support as owned_plan_fixture;
 use owned_plan_fixture::*;
 use poe_optimizer_core::{
     build_identity::*,

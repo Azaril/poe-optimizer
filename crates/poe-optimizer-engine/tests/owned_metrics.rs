@@ -1,6 +1,5 @@
 //! Native metric behavior from owned requests, without explicit result/fact injection.
-#[path = "support/owned_metric_fixture.rs"]
-mod support;
+use crate::engine_fixtures::metrics as support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::FiniteQuantity, owned_rules::*, owned_schema::*,
 };

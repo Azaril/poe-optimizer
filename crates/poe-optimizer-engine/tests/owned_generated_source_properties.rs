@@ -1,7 +1,6 @@
 //! Exact generated ownership runs through the same source census and graph.
 #[allow(dead_code)]
-#[path = "support/owned_source_properties_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::source_properties as fixture;
 #[allow(dead_code)]
 #[path = "support/owned_generated_source_properties_fixture.rs"]
 mod generated;

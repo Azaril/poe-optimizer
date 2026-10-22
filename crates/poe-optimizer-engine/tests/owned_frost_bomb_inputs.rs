@@ -2,8 +2,7 @@
 //! Usage records the requested global-effect setting, not source action presence.
 //! The conditional reader is synthetic; no action, exposure, damage or build parity.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod base;
+use crate::support as base;
 
 use base::{key, occurrence};
 use poe_optimizer_core::{

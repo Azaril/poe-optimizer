@@ -3,8 +3,7 @@
 #[path = "support/application_group_queries.rs"]
 mod checked_queries;
 #[allow(dead_code)]
-#[path = "support/owned_computed_support_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::computed_support as fixture;
 #[path = "support/effect_application_followups.rs"]
 mod followups;
 use fixture::*;

@@ -2,8 +2,7 @@
 //! The finite fixture excludes unconverted mechanics; it never supplies damage,
 //! final skill inputs, infusion state, or a source-selected MAIN/CALCS context.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod base;
+use crate::support as base;
 
 use base::{key, occurrence};
 use poe_optimizer_core::{

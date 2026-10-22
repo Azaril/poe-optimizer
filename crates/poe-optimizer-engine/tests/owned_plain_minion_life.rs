@@ -1,8 +1,7 @@
 //! Actual four-node Life producers in the existing finite passive component.
 //! The test-only reducer measures a closed contribution inventory, not received
 //! minion Life, a Life pool formula, tree legality or a complete original build.
-#[path = "support/plain_minion_damage_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::plain_minion as fixture;
 use fixture::*;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::StatDefinition, owned_rules::*, owned_schema::*,

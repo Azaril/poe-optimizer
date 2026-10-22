@@ -1,7 +1,10 @@
 //! The CLI shares the portable metric API; no PoB checkout or snapshot is read.
-#[path = "../crates/poe-optimizer-engine/tests/support/owned_metric_fixture.rs"]
+#[allow(dead_code, unused_imports)]
+#[path = "../crates/poe-optimizer-engine/tests/support/owned_fixtures.rs"]
+mod engine_fixtures;
+
 #[allow(dead_code)]
-mod support;
+use crate::engine_fixtures::metrics as support;
 use poe_optimizer_core::{
     owned_binding::*, owned_build::*, owned_routing::*, owned_rules::*, owned_schema::*,
 };

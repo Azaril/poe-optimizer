@@ -1,7 +1,6 @@
 //! End-to-end owned occurrence binding: build data -> rules -> resolved effects.
 //! This proves component resolution, not game metric coverage or build legality.
-#[path = "support/owned_plan_fixture.rs"]
-mod owned_plan_fixture;
+use crate::support as owned_plan_fixture;
 use owned_plan_fixture::*;
 use poe_optimizer_core::{build_identity::*, owned_build::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;

@@ -1,10 +1,8 @@
 //! Ordered native item-modifier transforms bind actual input occurrences.
 //! No imported source labels, precomputed RuleFacts, or PoB runtime participate.
-#[path = "support/owned_empty_support_contribution_fixture.rs"]
-mod empty_support;
+use crate::empty_support;
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod support;
+use crate::support;
 use poe_optimizer_core::{
     build_identity::{BuildRevision, ModifierInstanceId},
     owned_build::*,

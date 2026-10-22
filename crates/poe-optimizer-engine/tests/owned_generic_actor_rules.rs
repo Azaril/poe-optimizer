@@ -1,8 +1,7 @@
 //! One generic local mechanic on exact Player, supplied and ScenarioEnemy Actors.
 //! Synthetic contracts only; no game data or source-engine assumptions.
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod support;
+use crate::support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_readiness::*, owned_routing::*, owned_rules::*,
     owned_schema::*, owned_stages::*, owned_support_inputs::*, owned_support_receiving::*,

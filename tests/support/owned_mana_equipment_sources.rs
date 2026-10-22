@@ -689,10 +689,24 @@ pub fn reconstruct(f: &Value, bodies: &Value) -> Result<Value, String> {
 
 pub fn check() -> Result<(), String> {
     let expected = reconstruct(fixture(), &read("equipment-bodies.json"))?;
-    ensure(
-        read("equipment-review.json") == expected,
-        "retained equipment review mismatch",
-    )
+    compare_review(&read("equipment-review.json"), &expected)
+}
+
+pub fn compare_review(retained: &Value, expected: &Value) -> Result<(), String> {
+    let mut retained = retained.clone();
+    let mut expected = expected.clone();
+    // This seal hashes the helper's assembled fixture representation, including
+    // the owned Item wire shape. The source archives, selected draft, sidecar,
+    // recipe and memberships are authenticated by fixture()/reconstruct(). Keep
+    // their actual reviewed values and every other authority field exact rather
+    // than freezing that helper representation in this retained source report.
+    for report in [&mut retained, &mut expected] {
+        report["authority"]
+            .as_object_mut()
+            .ok_or("equipment review authority")?
+            .remove("fixture_sha256");
+    }
+    ensure(retained == expected, "retained equipment review mismatch")
 }
 pub fn retain() {
     let result = reconstruct(fixture(), &read("equipment-bodies.json")).unwrap();

@@ -1,7 +1,6 @@
 //! Computed support preparation keeps the complete generated target activation path.
 #[allow(dead_code)]
-#[path = "support/owned_computed_support_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::computed_support as fixture;
 use fixture::*;
 use poe_optimizer_core::{build_identity::SupportAssignmentId, owned_build::ParameterValue};
 use poe_optimizer_engine::{owned_plan::*, owned_supports::*};

@@ -1,3 +1,5 @@
+use crate::engine_fixtures::rules as owned_rule_fixture;
+use owned_rule_fixture::{Fixture, fixture};
 use poe_optimizer_core::{
     owned_build::{DeclaredSlot, ParameterValue},
     owned_definitions::*,
@@ -9,9 +11,6 @@ use poe_optimizer_data::{
     owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits},
 };
 use poe_optimizer_engine::owned_rules::*;
-#[path = "support/owned_rule_fixture.rs"]
-mod owned_rule_fixture;
-use owned_rule_fixture::{Fixture, fixture};
 
 #[path = "support/owned_numeric_domains.rs"]
 mod numeric_domains;

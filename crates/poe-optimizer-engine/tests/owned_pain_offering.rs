@@ -1,7 +1,6 @@
 //! Authored Pain Offering arithmetic within an explicitly finite component.
 //! This does not prove saved usage, support-final inputs, or full-build parity.
-#[path = "support/pain_offering_fixture.rs"]
-mod fixture;
+use crate::engine_fixtures::pain_offering as fixture;
 use fixture::*;
 use poe_optimizer_core::{owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;

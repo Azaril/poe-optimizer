@@ -1,6 +1,5 @@
 #[allow(dead_code)]
-#[path = "configuration_resistance_fixture.rs"]
-mod component;
+use crate::engine_fixtures::configuration_resistance as component;
 pub use component::Fixture;
 use poe_optimizer_core::owned_schema::DefinitionDescriptor;
 use serde_json::Value;

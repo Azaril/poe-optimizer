@@ -1,8 +1,7 @@
 //! Preset inputs join the ordinary generated-parameter graph without supplying
 //! topology, replacing a rule writer, or granting complete-build coverage.
 #[allow(dead_code)]
-#[path = "support/owned_preparation_readiness_fixture.rs"]
-mod support;
+use crate::engine_fixtures::readiness as support;
 
 use poe_optimizer_core::{
     build_identity::InstanceAllocator, owned_build::*, owned_definitions::*, owned_readiness::*,

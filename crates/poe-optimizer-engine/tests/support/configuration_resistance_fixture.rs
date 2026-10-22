@@ -1,8 +1,7 @@
 //! Finite component harness. Only fixture identities are rebased; authored
 //! configuration declarations and programs are loaded without modification.
 #[allow(dead_code)]
-#[path = "owned_plan_fixture.rs"]
-mod base;
+use crate::engine_fixtures::plan as base;
 
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,

@@ -1,8 +1,7 @@
 //! Test-only authoring of ordinary typed rules from observed source definitions.
 //! The occurrence topology is controlled; production has no skill-name dispatch.
 #[allow(dead_code)]
-#[path = "../../../poe-optimizer-engine/tests/support/owned_support_delivery_fixture.rs"]
-mod delivery;
+use crate::engine_fixtures::delivery;
 use delivery::{def, key, occurrence, subject};
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*, owned_stages::*,

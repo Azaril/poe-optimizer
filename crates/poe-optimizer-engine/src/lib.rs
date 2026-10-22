@@ -9,6 +9,11 @@
 #[cfg(test)]
 extern crate self as poe_optimizer_engine;
 
+#[cfg(test)]
+#[allow(dead_code, unused_imports)]
+#[path = "../tests/support/owned_fixtures.rs"]
+mod engine_fixtures;
+
 #[cfg(feature = "legacy")]
 pub mod action_speed;
 #[cfg(feature = "legacy")]

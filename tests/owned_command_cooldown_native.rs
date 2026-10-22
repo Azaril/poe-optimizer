@@ -2,8 +2,11 @@
 //! component. Parent final inputs and unrelated contributor inventories remain
 //! explicit fixture boundaries. This proves neither cooldown duration nor a
 //! complete original build, and creates no directly authored minion child.
-#[path = "../crates/poe-optimizer-engine/tests/support/plain_minion_damage_fixture.rs"]
-mod fixture;
+#[allow(dead_code, unused_imports)]
+#[path = "../crates/poe-optimizer-engine/tests/support/owned_fixtures.rs"]
+mod engine_fixtures;
+
+use crate::engine_fixtures::plain_minion as fixture;
 #[path = "support/owned_growing_swarm_native.rs"]
 mod growing_swarm;
 

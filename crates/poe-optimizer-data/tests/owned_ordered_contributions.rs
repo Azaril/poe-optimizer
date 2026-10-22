@@ -1,9 +1,7 @@
 //! Definition-side laws. Concrete candidates, ordering and refusal run in Engine tests.
 #[path = "support/owned_exact_integer_sum.rs"]
 mod exact_integer_sum;
-#[allow(dead_code)]
-#[path = "support/owned_rule_receiver_fixture.rs"]
-mod fixture;
+use crate::rule_receiver_fixture as fixture;
 use fixture::{id, key, value};
 use poe_optimizer_core::{
     owned_build::ParameterValue, owned_content::digest_owned, owned_definitions::*, owned_rules::*,

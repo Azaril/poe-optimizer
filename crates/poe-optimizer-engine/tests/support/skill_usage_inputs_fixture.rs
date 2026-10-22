@@ -2,8 +2,7 @@
 //! Final level/quality and scaling remain labelled test boundaries. The old
 //! fixture activation choice is removed; only the composed usage record supplies it.
 #![allow(dead_code)]
-#[path = "pain_offering_fixture.rs"]
-pub mod pain;
+pub use crate::engine_fixtures::pain_offering as pain;
 pub use pain::{Offering, actor, def, group, key, known, ns, offering_target};
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_project::*, owned_routing::*,

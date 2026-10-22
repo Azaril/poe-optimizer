@@ -1,8 +1,7 @@
 //! Finite contribution fixture. Passive graph legality and all other modifiers
 //! remain outside this boundary; production declarations are never closed here.
 #![allow(dead_code)]
-#[path = "minion_attack_source_fixture.rs"]
-pub mod intrinsic;
+pub use crate::engine_fixtures::minion_attack as intrinsic;
 
 use poe_optimizer_core::{
     build_identity::InstanceAllocator, owned_binding::*, owned_build::*, owned_definitions::*,

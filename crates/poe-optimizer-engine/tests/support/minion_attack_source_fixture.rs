@@ -2,8 +2,7 @@
 //! programs retain their IDs and arithmetic. The sole synthetic producer projects
 //! an explicitly supplied final summoning level; it is never a production default.
 #![allow(dead_code)]
-#[path = "owned_plan_fixture.rs"]
-mod base;
+use crate::engine_fixtures::plan as base;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,
 };

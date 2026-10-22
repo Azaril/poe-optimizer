@@ -3,12 +3,10 @@
 #![cfg(not(target_arch = "wasm32"))]
 // Reuse only the bootstrap from the broader component oracle helper.
 #[path = "support/owned_item_range_reference.rs"]
-mod owned_item_range_reference;
-#[allow(dead_code)]
-#[path = "support/owned_item_reference.rs"]
-mod owned_item_reference;
-use owned_item_range_reference::*;
+mod range_reference;
+use crate::item_reference_support as owned_item_reference;
 use owned_item_reference::{PINS, REVISION, sha256};
+use range_reference::*;
 use roxmltree::Document;
 use serde_json::json;
 const ORIGINAL_02: &str =

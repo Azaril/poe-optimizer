@@ -1,11 +1,9 @@
 //! Progression facts keep exact authority after Character/Choice composition.
 //! Metric assessments summarize exact requirements without claiming game legality.
 #[allow(dead_code)]
-#[path = "support/owned_empty_support_contribution_fixture.rs"]
-mod empty_support;
+use crate::empty_support;
 #[allow(dead_code)]
-#[path = "support/owned_plan_fixture.rs"]
-mod support;
+use crate::support;
 
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_metrics::*, owned_project::*, owned_routing::*,
