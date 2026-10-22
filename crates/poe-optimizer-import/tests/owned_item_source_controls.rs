@@ -1,8 +1,7 @@
 //! Stateful source controls cannot make later standalone facts authoritative.
-use poe_optimizer_import::{owned_item_lines::*, owned_item_source::*, owned_source::*};
 #[allow(dead_code)]
-#[path = "support/owned_item_normalization.rs"]
-mod support;
+use crate::item_normalization_fixture as support;
+use poe_optimizer_import::{owned_item_lines::*, owned_item_source::*, owned_source::*};
 use support::{Artifacts, artifacts, item_source, key, source};
 
 const GRANT: &str = "Grants Skill: Level (1-20) Firebolt";

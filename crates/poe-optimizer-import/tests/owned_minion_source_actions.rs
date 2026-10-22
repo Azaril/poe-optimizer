@@ -1,11 +1,6 @@
 #[allow(dead_code)]
-#[path = "support/source_actions_fixture.rs"]
-pub(crate) mod actions;
-#[path = "support/minion_actions_fixture.rs"]
-mod fixture;
-#[allow(dead_code)]
-#[path = "support/gem_dispositions_fixture.rs"]
-mod inventory;
+use crate::inventory;
+use crate::minions as fixture;
 use fixture::*;
 use poe_optimizer_core::build_identity::BuildLineage;
 use poe_optimizer_core::{owned_definitions::*, owned_draft::DraftListCompletion, owned_schema::*};

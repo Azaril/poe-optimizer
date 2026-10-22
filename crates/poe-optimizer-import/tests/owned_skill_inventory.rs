@@ -1,19 +1,10 @@
 //! Direct roots and generated representations share the same authored inventory.
 #[allow(dead_code)]
-#[path = "support/source_actions_fixture.rs"]
-mod actions;
+use crate::direct_dispositions_fixture as fixture;
 #[allow(dead_code)]
-#[path = "support/direct_minion_actions_fixture.rs"]
-mod direct_minions;
+use crate::inventory;
 #[allow(dead_code)]
-#[path = "support/direct_dispositions_fixture.rs"]
-mod fixture;
-#[allow(dead_code)]
-#[path = "support/gem_dispositions_fixture.rs"]
-mod inventory;
-#[allow(dead_code)]
-#[path = "support/minion_actions_fixture.rs"]
-mod minions;
+use crate::minions;
 use fixture::Fixture;
 use poe_optimizer_core::owned_draft::*;
 use poe_optimizer_import::{owned_normalize::*, owned_source_actions::*};

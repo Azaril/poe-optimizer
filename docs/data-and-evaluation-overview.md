@@ -2,8 +2,8 @@
 
 Updated 2026-10-22. The [architecture](domain-architecture.md) defines the accepted
 end state; [implementation](implementation.md) records what is delivered. This
-page explains the distinction. **The DSL migration is not implemented yet, and
-0/5 supplied original builds complete native evaluation.**
+page explains the distinction. **Migration has started, but full DSL compilation
+and runtime cutover remain ahead; 0/5 supplied originals complete natively.**
 
 ## What runs today
 
@@ -25,6 +25,12 @@ JSON describes rule IR and catalog bindings, while many test-support functions
 perform publication. The latest validated release is local under ignored `runs/`;
 the tracked directory called `current/` is a historical baseline. That is a
 reproducibility defect, not a supported distribution arrangement.
+
+The new dependency-free `poe-optimizer-authoring` crate parses bounded formula
+expressions with byte spans, ordered operators and explicit conditional branches.
+It currently provides syntax only: symbol/unit resolution, IR lowering, KDL
+manifests and release construction are still pending. No runtime package depends
+on it, and the existing native VM remains the evaluation engine.
 
 `evaluate-owned` is the current native CLI path. The `evaluate` command is the
 optional reference backend, available when Cargo builds with `--features pob`. Existing

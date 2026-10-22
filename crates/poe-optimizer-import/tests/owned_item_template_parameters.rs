@@ -1,4 +1,6 @@
 //! Contextual item headers use exact injected template bindings, never game aliases.
+#[allow(dead_code)]
+use crate::item_normalization_fixture as support;
 use poe_optimizer_core::{
     owned_build::*, owned_content::digest_owned, owned_definitions::*, owned_schema::*,
 };
@@ -6,9 +8,6 @@ use poe_optimizer_data::owned_schema::*;
 use poe_optimizer_import::{
     owned_item_lines::*, owned_item_source::*, owned_mapping::*, owned_source::*, owned_value::*,
 };
-#[allow(dead_code)]
-#[path = "support/owned_item_normalization.rs"]
-mod support;
 
 fn ns() -> GameVersionNamespace {
     GameVersionNamespace::new("context-test", "v1").unwrap()

@@ -1,7 +1,9 @@
 # Documentation
 
-Start here. The October 22 architecture review is adopted; **the migration is
-planned, not implemented**. No supplied build yet completes native evaluation.
+Start here. The October 22 architecture review is adopted; **migration is in
+progress, with test consolidation and an initial Rust expression parser**.
+Full DSL compilation and runtime cutover remain ahead. No supplied build yet
+completes native evaluation.
 
 | Document | Authority |
 | --- | --- |

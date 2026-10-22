@@ -1,6 +1,5 @@
 //! Explicit schema knowledge is separate from source admission and rule coverage.
-#[path = "support/owned_compact_fixture.rs"]
-mod fixture;
+use crate::compact_fixture as fixture;
 use poe_optimizer_core::{
     owned_build::DeclaredSlot, owned_content::digest_owned, owned_definitions::*, owned_schema::*,
 };

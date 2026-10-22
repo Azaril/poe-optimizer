@@ -1,7 +1,6 @@
 //! Independent checked headers for migration tests; no real-build defaults.
 #[allow(dead_code)]
-#[path = "../../../../tests/support/owned_evaluation_release_fixture.rs"]
-mod evaluation;
+use crate::evaluation_release_fixture as evaluation;
 use poe_optimizer_core::{
     owned_definitions::OwnedDefinitionKey, owned_rules::RuleOperationsVersion,
     owned_schema::DeclaredSet,

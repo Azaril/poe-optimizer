@@ -1,9 +1,8 @@
 //! Template-scoped observations preserve source evidence without creating owned inputs.
+#[allow(dead_code)]
+use crate::item_normalization_fixture as support;
 use poe_optimizer_core::{owned_content::digest_owned, owned_definitions::*};
 use poe_optimizer_import::{owned_item_lines::*, owned_item_source::*, owned_source::*};
-#[allow(dead_code)]
-#[path = "support/owned_item_normalization.rs"]
-mod support;
 use support::{Artifacts, artifacts, item_source, key, source};
 
 fn observations(

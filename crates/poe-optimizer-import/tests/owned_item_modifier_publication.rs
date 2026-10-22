@@ -1,6 +1,5 @@
 //! Input completeness authority stays bound across offline publication paths.
-#[path = "support/owned_compact_fixture.rs"]
-mod fixture;
+use crate::compact_fixture as fixture;
 
 use poe_optimizer_core::{
     owned_content::digest_owned, owned_definitions::OwnedDefinitionKey, owned_schema::*,

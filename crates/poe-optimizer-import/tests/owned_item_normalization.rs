@@ -16,8 +16,7 @@ use std::collections::BTreeSet;
 
 #[path = "support/owned_item_range_origins.rs"]
 mod range_origins;
-#[path = "support/owned_item_normalization.rs"]
-mod support;
+use crate::item_normalization_fixture as support;
 use support::{Artifacts, artifacts, item_source, normalize, source};
 
 const TWISTER: &str = include_str!("../../../tests/fixtures/builds/breadth-20260908/build-02.xml");

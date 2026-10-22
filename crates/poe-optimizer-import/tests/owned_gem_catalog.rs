@@ -1,7 +1,6 @@
 //! Generic finite source facts compile to owned Gem schemas without evaluator data.
 #[allow(dead_code)]
-#[path = "support/owned_compact_fixture.rs"]
-mod fixture;
+use crate::compact_fixture as fixture;
 use poe_optimizer_core::{owned_content::digest_owned, owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::skill_identities::SkillIdentityCatalog;
 use poe_optimizer_import::{

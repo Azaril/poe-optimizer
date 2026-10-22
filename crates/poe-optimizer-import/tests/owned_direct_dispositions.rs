@@ -1,19 +1,12 @@
 //! Complete intrinsic inputs still leave usage and mechanics unresolved.
 #[allow(dead_code)]
-#[path = "support/source_actions_fixture.rs"]
-mod actions;
+use crate::actions;
 #[allow(dead_code)]
-#[path = "support/direct_minion_actions_fixture.rs"]
-mod direct_minions;
+use crate::direct_dispositions_fixture as fixture;
 #[allow(dead_code)]
-#[path = "support/direct_dispositions_fixture.rs"]
-mod fixture;
+use crate::inventory;
 #[allow(dead_code)]
-#[path = "support/gem_dispositions_fixture.rs"]
-mod inventory;
-#[allow(dead_code)]
-#[path = "support/minion_actions_fixture.rs"]
-mod minions;
+use crate::minions;
 #[path = "support/owned_direct_support_targets.rs"]
 mod support_targets;
 use fixture::Fixture;

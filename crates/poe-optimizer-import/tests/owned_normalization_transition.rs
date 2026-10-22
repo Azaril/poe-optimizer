@@ -1,14 +1,9 @@
 //! Publication records the real prior normalization identity before replacement.
-#[path = "support/owned_character_reward_policy.rs"]
-mod character_reward_inventory;
-#[path = "support/owned_configuration_disposition_policy.rs"]
-mod configuration_dispositions;
-#[path = "support/owned_configuration_reward_policy.rs"]
-mod configuration_rewards;
-#[path = "support/owned_enemy_level_policy.rs"]
-mod enemy_level;
-#[path = "support/owned_compact_fixture.rs"]
-mod fixture;
+use crate::character_reward_policy as character_reward_inventory;
+use crate::compact_fixture as fixture;
+use crate::configuration_disposition_policy as configuration_dispositions;
+use crate::configuration_reward_policy as configuration_rewards;
+use crate::enemy_level_policy as enemy_level;
 use poe_optimizer_core::{owned_content::digest_owned, owned_definitions::OwnedDefinitionKey};
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_import::{

@@ -1,8 +1,7 @@
 //! Offline breadth regression: pinned identity data -> owned artifacts -> drafts.
 //! The fixed reference manifest supplies ordered query identities only. Its
 //! numerical results, source programs and UI selections are never evaluated.
-#[path = "support/production_owned_artifacts.rs"]
-mod production;
+use crate::production;
 
 use poe_optimizer_core::{
     build_identity::BuildLineage,
@@ -28,8 +27,7 @@ use serde::Deserialize;
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeSet, fs::File, io::Read, path::Path};
 
-#[path = "support/owned_reference_fixture.rs"]
-mod reference_fixture;
+use crate::reference_fixture;
 
 fn read_bounded(path: &Path, maximum: usize) -> Vec<u8> {
     let mut bytes = Vec::new();

@@ -1,10 +1,6 @@
 //! Physical assignment closure requires exhaustive source dispositions, not
 //! fabricated usage preferences or complete definition/calculation coverage.
-#[allow(dead_code)]
-#[path = "support/source_actions_fixture.rs"]
-mod actions;
-#[path = "support/gem_dispositions_fixture.rs"]
-mod fixture;
+use crate::inventory as fixture;
 use fixture::*;
 use poe_optimizer_core::{owned_draft::*, owned_schema::*};
 use poe_optimizer_import::{

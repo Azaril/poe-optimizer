@@ -1,4 +1,6 @@
 //! Finite catalog conversion and identity/lifecycle boundaries, entirely in Rust.
+#[allow(dead_code)]
+use crate::item_normalization_fixture as source_support;
 use poe_optimizer_core::{
     owned_build::ParameterValue, owned_definitions::*, owned_rules::*, owned_schema::*,
 };
@@ -10,9 +12,6 @@ use poe_optimizer_import::{
 use serde::de::DeserializeOwned;
 use sha2::{Digest, Sha256};
 use std::{fs, path::PathBuf};
-#[allow(dead_code)]
-#[path = "support/owned_item_normalization.rs"]
-mod source_support;
 
 fn key(v: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(v).unwrap()

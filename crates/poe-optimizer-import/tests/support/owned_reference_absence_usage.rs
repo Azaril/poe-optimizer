@@ -2,8 +2,7 @@
 //! selectors are facts about source interpretation, never native input defaults.
 use super::*;
 #[allow(dead_code)]
-#[path = "minion_actions_fixture.rs"]
-mod minion;
+use crate::minions as minion;
 
 fn add_field(f: &mut fixture::Fixture, name: &str, group: bool) {
     let field = if group {

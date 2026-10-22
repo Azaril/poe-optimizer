@@ -16,15 +16,15 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 test/CI cleanup now in progress |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; first R0 test/CI checkpoint pushed as `6c6d0add`; this checkpoint adds validated Import consolidation and the initial Authoring frontend |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
-| Authoring | Hand-authored IR JSON, packet publication in test staging and source-file hash dependencies remain |
+| Authoring | New dependency-free Rust expression parser; catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | Adopted target; not implemented |
+| DSL / KDL / binary pack | Bounded expression syntax implemented; symbol resolution, IR lowering, full programs, KDL and binary pack remain pending |
 | Current release | Latest validated artifacts are local under ignored `runs/`, have no complete evaluation bundle, and cannot yet be reproduced from a fresh clone with one supported command |
-| CI | fa49 run `39566788083` failed two fixture families on both operating systems; focused local fixes pass. Architecture-only run `39815736980` has the same observed failures (18:17 UTC snapshot: six passed, three failed, nine running); it does not test these repairs. No green hosted claim |
+| CI | Focused repairs for the two fixture families pass locally. At 18:36 UTC, new main run `39831084222` for `6c6d0add` was pending with no jobs, behind architecture-only run `39815736980` (six passed, three known failures, nine running). No green hosted claim |
 
 Last validated release: `runs/owned-reverse-primary-cutover-01/package`.
 Its endpoint is `runs/owned-reverse-primary-cutover-01/endpoint.json`,
@@ -62,9 +62,30 @@ Import targets and all eight native CLI targets pass. The native CLI subset has
 45 passing tests and 19 explicitly ignored publication/reference utilities.
 Publication tests initially failed with OS error 5 inside the filesystem sandbox;
 the unchanged target and complete affected native CLI subset pass outside it.
-The optional-PoB CLI profile and affected PoB target remain under final validation.
+The optional-PoB CLI profile also passes the same 45 tests, and all three affected
+PoB support-reference tests pass. Windows linking emits the existing LNK4098 CRT
+warning in optional-reference profiles; it is not an ignored test failure.
 No production data or evaluation semantics changed. Shared stateless fixtures
 replace repeated inclusion where their external helper API can remain intact.
+
+Import now registers three integration targets instead of 94. All 1,458 original
+test identities, flags and source paths are retained; normalization stays isolated,
+and test-free shared helpers are registered once. Strict all-target Clippy and
+formatting pass. All 1,701 library/integration tests pass, with the one existing
+fixture-generation utility explicitly ignored (244 library, 205 legacy/raw,
+850 owned and 402 normalization tests passed). Core/Data/Engine/Search/Import now
+register twelve integration binaries instead of 304. Build cost is still material:
+the fresh optimized Import test build took 12m37s locally; suite consolidation is
+not a claim that verification is now cheap.
+
+**Initial R2 frontend:** `poe-optimizer-authoring` parses expressions into a flat,
+postorder syntax arena with UTF-8 byte spans, exact numeric spelling, explicit unit
+suffixes, source-ordered arithmetic/Boolean operators and conditional branches.
+It neither resolves names/units nor evaluates or lowers formulas yet. All 19 tests
+pass through Cargo and unoptimized standalone Rust, including malformed syntax,
+exact resource boundaries, and maximum-depth/long-chain handling on a 1 MiB stack.
+Strict Clippy passes. It has no dependencies and is absent from the normal CLI
+dependency closure. No new game content or production evaluation semantics changed.
 
 Two hosted failures were isolated to fixtures: an unavailable skill catalog
 retained an inconsistent reverse-primary census, and the Mana equipment review
@@ -82,10 +103,9 @@ Preserve retained laws, not redundant copies of the same fixture or the historic
 number of tests. The manifest-driven harness is completed with R2, whose authoring
 declarations make generic fixture construction possible.
 
-The next consolidation can use three Import, three PoB and four CLI suites.
-Keep Import normalization isolated initially because its fixture API relies on
-crate-root bindings. CLI helpers require explicit parent-relative bindings before
-their roots become modules. Some shared helpers contain tests: move each unique
+Remaining consolidation can use three PoB and four CLI suites. CLI helpers
+require explicit parent-relative bindings before their roots become modules.
+Some shared helpers contain tests: move each unique
 law into one registered module instead of multiplying its executions. PoB needs
 extra care: 91 source-test roots spawn their own executable with test selectors.
 Qualify those selectors after nesting and assert the worker actually executed;
@@ -205,6 +225,11 @@ fail clearly; the temporary offline migration reader is isolated and scheduled
 for deletion at R4. No compatibility reader enters the normal CLI/library path.
 
 ### R2 — Formula DSL and declarative authoring
+
+**Started: expression syntax only.** Next bind symbols and types and lower real
+existing formulas through the checked IR compiler. Drive full program/read/effect
+syntax from those existing contracts, then complete manifests and the shared
+behavioral harness; do not create a second evaluation model.
 
 Implement Rust parsing, spans, symbol resolution, formatting and exact lowering
 of `.rule` files into the existing checked IR. Add KDL definition/packet manifests
@@ -386,11 +411,12 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. Continue **R0: remove implementation-source
-   identity dependencies, consolidate Import/CLI/PoB using the audited hazards
-   above, and reduce duplicate fixtures into the shared behavioral harness**.
-   Retain actual upstream/content authentication. Serialize Cargo jobs in this
-   shared checkout; parallel agents own disjoint files.
+1. Read this plan and Git status. Prioritize **Authoring symbol/type resolution and
+   exact IR lowering of retained formulas**, using the existing checked IR compiler
+   without an Import/PoB runtime dependency. Continue remaining R0 source-pin removal and CLI/PoB suite
+   consolidation alongside that work, using the audited hazards above. Retain
+   actual upstream/content authentication. Serialize Cargo jobs in this shared
+   checkout; parallel agents own disjoint files.
 2. Record the current phase, concrete blocker, changes, tests actually run and
    next command. During R0-R4 report migration gates, not invented build progress.
    Re-run all five when import/data semantics change; do not replay expensive

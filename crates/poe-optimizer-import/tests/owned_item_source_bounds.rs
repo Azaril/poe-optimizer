@@ -1,8 +1,7 @@
 //! Source membership proofs cannot borrow a numeric bound that the text violates.
-use poe_optimizer_import::{owned_item_lines::*, owned_item_source::*, owned_source::*};
 #[allow(dead_code)]
-#[path = "support/owned_item_normalization.rs"]
-mod support;
+use crate::item_normalization_fixture as support;
+use poe_optimizer_import::{owned_item_lines::*, owned_item_source::*, owned_source::*};
 use support::{Artifacts, artifacts, item_source, source};
 
 const GRANT: &str = "Grants Skill: Level (1-20) Firebolt";

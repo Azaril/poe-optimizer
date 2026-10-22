@@ -2,8 +2,7 @@
 //! Closure certification below belongs solely to this complete synthetic world;
 //! no original or source-derived actor coverage is closed by production code.
 #[allow(dead_code)]
-#[path = "../../poe-optimizer-engine/tests/support/owned_plan_fixture.rs"]
-mod support;
+use crate::engine_fixtures::plan as support;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,
 };

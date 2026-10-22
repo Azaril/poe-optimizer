@@ -1,11 +1,6 @@
 //! Release packaging commits evaluator data; it never certifies real-build parity.
-#[allow(dead_code, unused_imports)]
-#[path = "../../poe-optimizer-engine/tests/support/owned_fixtures.rs"]
-mod engine_fixtures;
-
 #[allow(dead_code)]
-#[path = "../../../tests/support/owned_evaluation_release_fixture.rs"]
-mod fixture;
+use crate::evaluation_release_fixture as fixture;
 use poe_optimizer_core::{
     owned_content::digest_owned, owned_definitions::OwnedDefinitionKey, owned_schema::SchemaState,
     owned_supports::SupportTypePredicate,

@@ -1,6 +1,5 @@
 //! Offline generic catalog contracts; no source checkout, originals or source VM.
-#[path = "support/owned_recipe_fixture.rs"]
-mod fixture;
+use crate::recipe_fixture as fixture;
 use poe_optimizer_core::{owned_definitions::*, owned_schema::*};
 use poe_optimizer_import::{
     owned_mapping::*, owned_recipe::*, owned_tree_catalog::*, owned_tree_policy::*,

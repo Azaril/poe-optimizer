@@ -1,4 +1,6 @@
 //! Compact authoring must expand to the same checked finite schema as V1 records.
+#[allow(dead_code)]
+use crate::compact_fixture as fixture;
 use poe_optimizer_core::{
     owned_content::digest_owned, owned_definitions::*, owned_rules::*, owned_schema::*,
 };
@@ -7,9 +9,6 @@ use poe_optimizer_import::{
     owned_mapping::*, owned_recipe::*, owned_recipe_extension::*, owned_recipe_membership_patch::*,
 };
 use std::path::Path;
-#[allow(dead_code)]
-#[path = "support/owned_compact_fixture.rs"]
-mod fixture;
 
 fn key(value: &str) -> OwnedDefinitionKey {
     value.parse().unwrap()

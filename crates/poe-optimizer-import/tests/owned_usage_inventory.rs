@@ -1,10 +1,8 @@
 //! Exhaustive saved-field accounting is independent of input/value projection.
 #[allow(dead_code)]
-#[path = "support/source_actions_fixture.rs"]
-mod actions;
+use crate::actions;
 #[allow(dead_code)]
-#[path = "support/gem_dispositions_fixture.rs"]
-mod fixture;
+use crate::inventory as fixture;
 #[path = "support/owned_usage_inventory.rs"]
 mod inventory;
 #[path = "support/owned_primary_usage_completion.rs"]

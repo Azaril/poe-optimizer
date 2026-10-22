@@ -1,4 +1,6 @@
 //! Data-only recipe additions preserve prior facts, identities and coverage.
+#[allow(dead_code)]
+use crate::compact_fixture as fixture;
 use poe_optimizer_core::{
     owned_build::{DeclaredSlot, ParameterValue},
     owned_definitions::*,
@@ -10,9 +12,6 @@ use poe_optimizer_data::{
 };
 use poe_optimizer_import::{owned_mapping::*, owned_recipe::*, owned_recipe_extension::*};
 use std::path::Path;
-#[allow(dead_code)]
-#[path = "support/owned_compact_fixture.rs"]
-mod fixture;
 
 fn key(v: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(v).unwrap()

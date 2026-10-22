@@ -1,18 +1,13 @@
 #[allow(dead_code)]
-#[path = "support/source_actions_fixture.rs"]
-pub(crate) mod actions;
+pub(crate) use crate::actions;
 #[allow(dead_code)]
-#[path = "support/direct_minion_actions_fixture.rs"]
-pub(crate) mod direct_minions;
+use crate::direct_dispositions_fixture as normalization;
 #[allow(dead_code)]
-#[path = "support/gem_dispositions_fixture.rs"]
-pub(crate) mod inventory;
+pub(crate) use crate::direct_minions;
 #[allow(dead_code)]
-#[path = "support/minion_actions_fixture.rs"]
-pub(crate) mod minions;
+pub(crate) use crate::inventory;
 #[allow(dead_code)]
-#[path = "support/direct_dispositions_fixture.rs"]
-mod normalization;
+pub(crate) use crate::minions;
 use direct_minions::Fixture;
 use poe_optimizer_core::{
     build_identity::BuildLineage, owned_build::*, owned_definitions::*, owned_draft::*,

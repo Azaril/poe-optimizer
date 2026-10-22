@@ -1,7 +1,6 @@
 //! Reference routing laws use exact original reports and separately authored
 //! synthetic malformed evidence. No evaluator, VM or copied parity result.
-#[path = "support/empty_owned_items.rs"]
-mod empty_owned_items;
+use crate::inventory::items as empty_owned_items;
 use empty_owned_items::{empty_item_source, empty_items};
 
 use poe_optimizer_core::{
@@ -16,8 +15,7 @@ use poe_optimizer_core::{
 use poe_optimizer_import::owned_reference_projection::*;
 use serde_json::{Value, json};
 
-#[path = "support/owned_reference_fixture.rs"]
-mod owned_reference_fixture;
+use crate::reference_fixture as owned_reference_fixture;
 
 fn limits() -> ProjectionLimits {
     ProjectionLimits::default()

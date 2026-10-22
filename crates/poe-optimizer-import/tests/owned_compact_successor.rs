@@ -1,5 +1,4 @@
-#[path = "support/owned_compact_fixture.rs"]
-mod fixture;
+use crate::compact_fixture as fixture;
 use poe_optimizer_core::owned_content::{ContentDigestError, digest_owned};
 use poe_optimizer_import::{owned_recipe::*, owned_successor::*};
 use std::{collections::BTreeMap, path::PathBuf};

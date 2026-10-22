@@ -1,9 +1,8 @@
 //! Source-only attribution with injected semantic recipes; no reference VM dependency.
+#[allow(dead_code)]
+use crate::item_normalization_fixture as support;
 use poe_optimizer_core::owned_build::ParameterValue;
 use poe_optimizer_import::{owned_item_lines::*, owned_item_source::*, owned_source::*};
-#[allow(dead_code)]
-#[path = "support/owned_item_normalization.rs"]
-mod support;
 use support::{Artifacts, artifacts, item_source, source};
 
 const GRANT: &str = "Grants Skill: Level (1-20) Firebolt";

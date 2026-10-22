@@ -1,12 +1,11 @@
 //! Source labels are adapter evidence; only declared Boolean modifier inputs escape.
+#[allow(dead_code)]
+use crate::item_normalization_fixture as support;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits};
 use poe_optimizer_import::{
     owned_item_lines::*, owned_item_source::*, owned_source::*, owned_value::DecimalSyntax,
 };
-#[allow(dead_code)]
-#[path = "support/owned_item_normalization.rs"]
-mod support;
 use support::{Artifacts, artifacts, item_source, key, source};
 
 fn fixture() -> Artifacts {

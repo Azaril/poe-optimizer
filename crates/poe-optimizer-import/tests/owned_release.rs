@@ -1,6 +1,5 @@
 //! Full releases validate one explicit endpoint; they do not reinterpret old releases.
-#[path = "support/owned_compact_fixture.rs"]
-mod fixture;
+use crate::compact_fixture as fixture;
 
 use poe_optimizer_core::{
     owned_content::{OwnedContentDigest, digest_owned},

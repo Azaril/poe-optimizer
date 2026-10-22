@@ -1,18 +1,11 @@
 //! A new release corrects data without changing monotonic migration semantics.
-#[path = "support/owned_character_reward_policy.rs"]
-mod character_reward_inventory;
-#[path = "support/owned_configuration_disposition_policy.rs"]
-mod configuration_dispositions;
-#[path = "support/owned_configuration_reward_policy.rs"]
-mod configuration_rewards;
-#[path = "support/owned_empty_character_rune_policy.rs"]
-mod empty_character_rune_policy;
-#[path = "support/owned_enemy_level_policy.rs"]
-mod enemy_level;
-#[path = "support/owned_compact_fixture.rs"]
-mod fixture;
-#[path = "support/owned_passive_socket_policy.rs"]
-mod passive_socket_policy;
+use crate::character_reward_policy as character_reward_inventory;
+use crate::compact_fixture as fixture;
+use crate::configuration_disposition_policy as configuration_dispositions;
+use crate::configuration_reward_policy as configuration_rewards;
+use crate::empty_character_rune_policy;
+use crate::enemy_level_policy as enemy_level;
+use crate::passive_socket_policy;
 use poe_optimizer_core::{
     owned_content::digest_owned, owned_definitions::OwnedDefinitionKey, owned_schema::*,
 };

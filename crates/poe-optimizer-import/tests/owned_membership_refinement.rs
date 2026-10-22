@@ -1,10 +1,7 @@
 //! Endpoint-bound additions to Partial sets; no closure, scalar or rule repair.
-#[path = "support/owned_character_reward_policy.rs"]
-mod character_reward_inventory;
-#[path = "support/owned_configuration_reward_policy.rs"]
-mod configuration_rewards;
-#[path = "support/owned_enemy_level_policy.rs"]
-mod enemy_level;
+use crate::character_reward_policy as character_reward_inventory;
+use crate::configuration_reward_policy as configuration_rewards;
+use crate::enemy_level_policy as enemy_level;
 use poe_optimizer_core::{
     owned_build::DeclaredSlot, owned_content::digest_owned, owned_definitions::*, owned_schema::*,
 };

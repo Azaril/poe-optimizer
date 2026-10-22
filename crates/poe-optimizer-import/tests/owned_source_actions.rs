@@ -1,6 +1,5 @@
 //! Saved reference selections are query correspondence, never gameplay inputs.
-#[path = "support/source_actions_fixture.rs"]
-mod fixture;
+use crate::actions as fixture;
 use fixture::*;
 use poe_optimizer_core::build_identity::BuildLineage;
 use poe_optimizer_import::{

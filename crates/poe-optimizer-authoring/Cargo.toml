@@ -1,0 +1,9 @@
+[package]
+name = "poe-optimizer-authoring"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.93"
+description = "Bounded offline formula authoring frontend for the checked native rule IR"
+publish = false
+
+[dependencies]

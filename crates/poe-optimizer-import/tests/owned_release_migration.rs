@@ -1,12 +1,7 @@
 //! Current contract migration preserves exact releases and ordered requests.
-#[allow(dead_code, unused_imports)]
-#[path = "../../poe-optimizer-engine/tests/support/owned_fixtures.rs"]
-mod engine_fixtures;
-
 #[path = "support/owned_release_migration_current.rs"]
 mod current;
-#[path = "support/owned_compact_fixture.rs"]
-mod fixture;
+use crate::compact_fixture as fixture;
 #[path = "support/owned_release_migration_fixture.rs"]
 mod migration_fixture;
 use poe_optimizer_core::{

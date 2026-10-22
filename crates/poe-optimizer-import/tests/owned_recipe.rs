@@ -1,5 +1,4 @@
-#[path = "support/owned_recipe_fixture.rs"]
-mod fixture;
+use crate::recipe_fixture as fixture;
 use poe_optimizer_core::{owned_content::digest_owned, owned_definitions::*, owned_rules::*};
 use poe_optimizer_data::{
     owned_routing::decode_action_routing, owned_rules::decode_rule_package,

@@ -4,6 +4,19 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.93"
 publish = false
+autotests = false
+
+[[test]]
+name = "owned_normalize"
+path = "tests/owned_normalize.rs"
+
+[[test]]
+name = "owned"
+path = "tests/owned.rs"
+
+[[test]]
+name = "legacy"
+path = "tests/legacy.rs"
 
 [dependencies]
 poe-optimizer-engine = { path = "../poe-optimizer-engine" }

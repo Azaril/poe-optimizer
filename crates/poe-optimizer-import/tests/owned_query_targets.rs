@@ -1,6 +1,5 @@
 //! Exact authored source correspondence, independent of action activation.
-#[path = "support/production_owned_artifacts.rs"]
-mod production;
+use crate::production;
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_draft::*, owned_schema::*,
 };

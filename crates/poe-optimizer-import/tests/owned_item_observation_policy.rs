@@ -1,12 +1,11 @@
 //! Compiler-side applicability uses injected finite facts and exact existing base identities.
+#[allow(dead_code)]
+use crate::item_normalization_fixture as support;
 use poe_optimizer_import::{
     owned_item_lines::*, owned_item_observation_policy::*, owned_item_observations::*,
     owned_item_source::*, owned_mapping::SourceFilePin,
 };
 use sha2::{Digest, Sha256};
-#[allow(dead_code)]
-#[path = "support/owned_item_normalization.rs"]
-mod support;
 use support::{Artifacts, artifacts, key};
 
 fn hash(bytes: &[u8]) -> String {
