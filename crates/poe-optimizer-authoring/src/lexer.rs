@@ -8,6 +8,7 @@ pub(crate) enum TokenKind {
     False,
     If,
     Else,
+    Let,
     Not,
     And,
     Or,
@@ -28,6 +29,8 @@ pub(crate) enum TokenKind {
     LeftBrace,
     RightBrace,
     Comma,
+    Assign,
+    Semicolon,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -96,6 +99,7 @@ pub(crate) fn lex(source: &str, limits: ParseLimits) -> Result<Vec<Token>, Diagn
                 "false" => TokenKind::False,
                 "if" => TokenKind::If,
                 "else" => TokenKind::Else,
+                "let" => TokenKind::Let,
                 "not" => TokenKind::Not,
                 "and" => TokenKind::And,
                 "or" => TokenKind::Or,
@@ -115,7 +119,9 @@ pub(crate) fn lex(source: &str, limits: ParseLimits) -> Result<Vec<Token>, Diagn
                 '{' => TokenKind::LeftBrace,
                 '}' => TokenKind::RightBrace,
                 ',' => TokenKind::Comma,
+                ';' => TokenKind::Semicolon,
                 '=' if lexer.eat(b'=') => TokenKind::Equal,
+                '=' => TokenKind::Assign,
                 '!' if lexer.eat(b'=') => TokenKind::NotEqual,
                 '<' if lexer.eat(b'=') => TokenKind::LessEqual,
                 '>' if lexer.eat(b'=') => TokenKind::GreaterEqual,

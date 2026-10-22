@@ -151,3 +151,44 @@ impl<'source> ParsedExpression<'source> {
         span.text(self.source)
     }
 }
+
+/// A sequential named expression. Its RHS may refer to earlier declarations,
+/// but parsing alone does not establish symbol visibility or type correctness.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct LetStatement {
+    pub name: Span,
+    pub value: ExprId,
+    pub span: Span,
+}
+
+/// A formula block shares one syntax arena and one set of source byte offsets.
+/// Each statement's expression occupies the next contiguous postorder range.
+/// Read scopes, owner membership and effects are not inferred from these names.
+#[derive(Debug, PartialEq, Eq)]
+pub struct ParsedBlock<'source> {
+    pub(crate) source: &'source str,
+    pub(crate) nodes: Vec<ExprNode>,
+    pub(crate) statements: Vec<LetStatement>,
+}
+
+impl<'source> ParsedBlock<'source> {
+    pub fn source(&self) -> &'source str {
+        self.source
+    }
+
+    pub fn nodes(&self) -> &[ExprNode] {
+        &self.nodes
+    }
+
+    pub fn statements(&self) -> &[LetStatement] {
+        &self.statements
+    }
+
+    pub fn node(&self, id: ExprId) -> Option<&ExprNode> {
+        self.nodes.get(id.0)
+    }
+
+    pub fn text(&self, span: Span) -> Option<&'source str> {
+        span.text(self.source)
+    }
+}

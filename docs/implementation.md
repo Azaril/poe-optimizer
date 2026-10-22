@@ -16,15 +16,15 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/initial parser `0e5a9b7b`; this checkpoint adds typed expression lowering |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/initial parser `0e5a9b7b`; typed expression lowering `e1841725`; this checkpoint adds shared named formula blocks |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
-| Authoring | Bounded Rust expression parser, explicit read/unit binding and lowering to existing IR; Core is the only normal dependency. Catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
+| Authoring | Bounded Rust expressions and ordered named blocks, explicit read/unit binding and shared-SSA lowering to existing IR; Core is the only normal dependency. Catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | Typed expression lowering implemented; full programs/named intermediates, remaining operations, raise/format, stable symbol registry, KDL and binary pack remain pending |
+| DSL / KDL / binary pack | Typed expressions and named intermediates implemented; full programs, remaining operations, raise/format, stable symbol registry, KDL and binary pack remain pending |
 | Current release | Latest validated artifacts are local under ignored `runs/`, have no complete evaluation bundle, and cannot yet be reproduced from a fresh clone with one supported command |
-| CI | Focused repairs for the two fixture families pass locally. At 19:17 UTC, main run `39836408947` for `0e5a9b7b` was pending with no jobs, behind architecture-only run `39815736980` (nine passed, three known failures, six running). No new failure class or green hosted claim |
+| CI | Focused repairs for the two fixture families pass locally. At 19:20 UTC, main run `39838914471` for `e1841725` was pending with no jobs, behind architecture-only run `39815736980` (nine passed, three known failures, six running). No new failure class or green hosted claim |
 
 Last validated release: `runs/owned-reverse-primary-cutover-01/package`.
 Its endpoint is `runs/owned-reverse-primary-cutover-01/endpoint.json`,
@@ -104,7 +104,7 @@ contribution guard lowers to the original graph up to node names and replays its
 not evidence that the whole Life calculation or a build is implemented. Full
 program raise/lower alpha-equivalence remains an R2 exit requirement.
 
-All **32 Authoring tests pass**, with no ignored cases. Formatting and strict
+Expression checkpoint `e1841725`: all **32 Authoring tests pass**, with no ignored cases. Formatting and strict
 all-target Clippy pass. Independent review found no remaining blocker. Final
 local logs: `runs/r2-expression-lowering-tests-final-20261022.log` and
 `runs/r2-expression-lowering-clippy-final-20261022.log`. The first test run exposed
@@ -112,6 +112,31 @@ a fixture using current operations with omitted query/application inventories;
 the fixture now declares its actually empty inventories, with production checks
 unchanged. The optimized rebuild took 28 seconds and tests completed in under a
 second; this measures the frontend subset, not release-wide build/evaluation cost.
+
+**R2 named blocks:** ordered `let name = expression;` declarations now use the
+same parser/lowerer as individual expressions. Earlier named values retain their
+exact node identity; an alias emits no additional node. Equal direct reads remain
+separate, and unused calculations remain in the graph. No declaration eagerly
+executes: existing effects still demand values through the native VM. Duplicate
+names, read shadowing and forward/self references fail. Whole-source byte/token/
+syntax/statement limits and whole-block emission limits are checked; per-statement
+scratch covers only that statement, avoiding repeated scans of earlier syntax.
+
+All **43 Authoring tests pass**, with no ignored cases. Formatting and strict
+all-target Clippy pass; independent review found no blocker. Tests include a
+1,000-alias block on a 1 MiB stack, lazy missing-input/failure branches, and an
+existing multi-effect program whose applicability result also guards a
+contribution. Exact graph remapping and independent eligible/ineligible results
+preserve inactive effects as distinct from applied values. Final local logs:
+`runs/r2-named-block-tests-final-20261022.log` and
+`runs/r2-named-block-clippy-final-20261022.log`.
+
+This remains an unchecked formula block over injected read declarations. It is
+not a complete RuleProgram compiler or a new output-only language with effects
+moved into KDL. The next slice must add explicit program ID/context, typed reads
+and guarded effects in `.rule`, resolving typed definitions/slots directly into
+existing Core variants. Preserve guards as `RuleEffect.when` (inactive remains
+distinct from an applied zero); keep owner membership/closure in the manifest.
 
 Two hosted failures were isolated to fixtures: an unavailable skill catalog
 retained an inconsistent reverse-primary census, and the Mana equipment review
@@ -252,9 +277,10 @@ for deletion at R4. No compatibility reader enters the normal CLI/library path.
 
 ### R2 — Formula DSL and declarative authoring
 
-**Started: typed expression lowering.** Next implement named intermediates and
-complete program/read/effect syntax, using existing contracts and exact SSA
-sharing. Add the remaining live operations (checked numeric domains, integer
+**Started: expressions and shared named intermediates.** Next implement complete
+program/read/effect syntax using existing contracts and exact SSA sharing.
+Resolve symbol kinds and exact slot declarations explicitly; execution context
+does not imply ownership. Add the remaining live operations (checked numeric domains, integer
 table lookup, ordinary timing and option literals) and raise/format support.
 Use retained real programs to prove full graph alpha-equivalence before moving
 their authoring sources. Then complete manifests and the shared behavioral

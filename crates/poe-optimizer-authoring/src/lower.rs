@@ -4,8 +4,8 @@
 //! authority. The surrounding compiler must remap local keys transactionally and
 //! submit the complete program to the existing `CompiledRulePackage` checker.
 use crate::{
-    BinaryOperator, Diagnostic, DiagnosticCode, ExprId, ExprKind, ExpressionBindings, LimitKind,
-    NumericLiteral, ParsedExpression, Span, UnaryOperator, UnitSuffix,
+    BinaryOperator, Diagnostic, DiagnosticCode, ExprId, ExprKind, ExprNode, ExpressionBindings,
+    LimitKind, NumericLiteral, ParsedBlock, ParsedExpression, Span, UnaryOperator, UnitSuffix,
 };
 use poe_optimizer_core::{
     owned_build::ParameterValue,
@@ -13,12 +13,14 @@ use poe_optimizer_core::{
     owned_rules::{RuleComparison, RuleExpression, RuleNode, RuleRounding},
     owned_schema::{ComputedValueType, UnitDimension},
 };
+use std::collections::BTreeMap;
 
-/// Independent budgets for inspected syntax and emitted rule nodes.
+/// Independent whole-input budgets for syntax, emitted nodes and declarations.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct LowerLimits {
     pub max_syntax_nodes: usize,
     pub max_nodes: usize,
+    pub max_statements: usize,
 }
 
 impl Default for LowerLimits {
@@ -26,6 +28,7 @@ impl Default for LowerLimits {
         Self {
             max_syntax_nodes: 16 * 1024,
             max_nodes: 16 * 1024,
+            max_statements: 4096,
         }
     }
 }
@@ -41,6 +44,49 @@ pub struct LoweredExpression {
     pub root: OwnedDefinitionKey,
     pub value_type: ComputedValueType,
     pub spans: Vec<Span>,
+}
+
+/// One authored declaration pointing to its shared value in an unchecked graph.
+/// An alias has its own declaration span, but does not create another rule node.
+#[derive(Clone, Debug, PartialEq)]
+pub struct LoweredBinding {
+    pub name: String,
+    pub value: OwnedDefinitionKey,
+    pub value_type: ComputedValueType,
+    pub span: Span,
+}
+
+/// An unchecked formula graph with declarations in authored order.
+///
+/// All declared calculations remain in `nodes`, including unused declarations.
+/// Reusing a declaration reuses its key; repeated direct reads remain distinct.
+/// The surrounding compiler must still supply and check read/effect authority.
+#[derive(Clone, Debug, PartialEq)]
+pub struct LoweredBlock {
+    pub nodes: Vec<RuleNode>,
+    pub spans: Vec<Span>,
+    pub bindings: Vec<LoweredBinding>,
+}
+
+/// Borrowed syntax shared by expression and block lowering. The parser owns the
+/// flat arena, so lowering does not copy it when advancing between statements.
+struct Syntax<'a> {
+    source: &'a str,
+    nodes: &'a [ExprNode],
+}
+
+impl Syntax<'_> {
+    fn nodes(&self) -> &[ExprNode] {
+        self.nodes
+    }
+
+    fn node(&self, id: ExprId) -> Option<&ExprNode> {
+        self.nodes.get(id.index())
+    }
+
+    fn text(&self, span: Span) -> Option<&str> {
+        span.text(self.source)
+    }
 }
 
 #[derive(Clone)]
@@ -93,6 +139,24 @@ fn arguments_error(span: Span, message: &'static str) -> Diagnostic {
     error(DiagnosticCode::InvalidArguments, span, message)
 }
 
+fn validate_limits(limits: LowerLimits, syntax_nodes: usize, span: Span) -> Result<(), Diagnostic> {
+    if limits.max_syntax_nodes == 0 || limits.max_nodes == 0 || limits.max_statements == 0 {
+        return Err(error(
+            DiagnosticCode::InvalidLimits,
+            span,
+            "lowering limits must be positive",
+        ));
+    }
+    if syntax_nodes > limits.max_syntax_nodes {
+        return Err(error(
+            DiagnosticCode::LimitExceeded(LimitKind::Nodes),
+            span,
+            "syntax node limit exceeded",
+        ));
+    }
+    Ok(())
+}
+
 /// Lower only computational syntax, preserving order and association exactly.
 /// The parser's postorder arena permits two linear passes without recursion.
 pub fn lower_expression(
@@ -103,39 +167,128 @@ pub fn lower_expression(
     let span = parsed
         .node(parsed.root())
         .map_or(Span { start: 0, end: 0 }, |node| node.span);
-    if limits.max_syntax_nodes == 0 || limits.max_nodes == 0 {
+    validate_limits(limits, parsed.nodes().len(), span)?;
+    let syntax = Syntax {
+        source: parsed.source(),
+        nodes: parsed.nodes(),
+    };
+    let mut emitter = Emitter::new(limits.max_nodes);
+    let root = append_expression(
+        &syntax,
+        bindings,
+        &BTreeMap::new(),
+        0,
+        parsed.root(),
+        &mut emitter,
+    )?;
+    Ok(LoweredExpression {
+        nodes: emitter.nodes,
+        root: root.id,
+        value_type: root.ty,
+        spans: emitter.spans,
+    })
+}
+
+/// Lower sequential declarations into a single shared, unchecked rule graph.
+///
+/// Only earlier declarations are visible. Each disjoint syntax range is scanned
+/// once in each direction; no previous expression or emitted graph is cloned.
+pub fn lower_block(
+    parsed: &ParsedBlock<'_>,
+    bindings: &ExpressionBindings,
+    limits: LowerLimits,
+) -> Result<LoweredBlock, Diagnostic> {
+    let span = Span {
+        start: 0,
+        end: parsed.source().len(),
+    };
+    validate_limits(limits, parsed.nodes().len(), span)?;
+    if parsed.statements().len() > limits.max_statements {
         return Err(error(
-            DiagnosticCode::InvalidLimits,
-            span,
-            "lowering limits must be positive",
+            DiagnosticCode::LimitExceeded(LimitKind::Statements),
+            parsed.statements()[limits.max_statements].span,
+            "lowering statement limit exceeded",
         ));
     }
-    if parsed.nodes().len() > limits.max_syntax_nodes {
-        return Err(error(
-            DiagnosticCode::LimitExceeded(LimitKind::Nodes),
-            span,
-            "syntax node limit exceeded",
-        ));
+    let syntax = Syntax {
+        source: parsed.source(),
+        nodes: parsed.nodes(),
+    };
+    let mut emitter = Emitter::new(limits.max_nodes);
+    let mut locals = BTreeMap::new();
+    let mut declarations = Vec::with_capacity(parsed.statements().len());
+    let mut start = 0;
+    for statement in parsed.statements() {
+        let name = parsed
+            .text(statement.name)
+            .ok_or_else(|| arguments_error(statement.name, "invalid declaration name span"))?;
+        if bindings.value(name).is_some() || locals.contains_key(name) {
+            return Err(error(
+                DiagnosticCode::DuplicateSymbol,
+                statement.name,
+                "declaration duplicates an existing value symbol",
+            ));
+        }
+        let value = append_expression(
+            &syntax,
+            bindings,
+            &locals,
+            start,
+            statement.value,
+            &mut emitter,
+        )?;
+        start = statement.value.index() + 1;
+        declarations.push(LoweredBinding {
+            name: name.to_owned(),
+            value: value.id.clone(),
+            value_type: value.ty.clone(),
+            span: statement.span,
+        });
+        locals.insert(name, value);
     }
-    if parsed.node(parsed.root()).is_none() {
+    if start != parsed.nodes().len() {
+        return Err(arguments_error(span, "block contains unassigned syntax"));
+    }
+    Ok(LoweredBlock {
+        nodes: emitter.nodes,
+        spans: emitter.spans,
+        bindings: declarations,
+    })
+}
+
+/// Append one statement's contiguous syntax range using the shared allocator.
+fn append_expression(
+    parsed: &Syntax<'_>,
+    bindings: &ExpressionBindings,
+    locals: &BTreeMap<&str, Value>,
+    start: usize,
+    root: ExprId,
+    emitter: &mut Emitter,
+) -> Result<Value, Diagnostic> {
+    let span = parsed
+        .node(root)
+        .map_or(Span { start: 0, end: 0 }, |node| node.span);
+    if start > root.index() || parsed.node(root).is_none() {
         return Err(arguments_error(span, "expression has no root"));
     }
-    let mut needed = vec![false; parsed.nodes().len()];
-    let mut calls = vec![None; parsed.nodes().len()];
-    needed[parsed.root().index()] = true;
-    for index in (0..=parsed.root().index()).rev() {
-        if !needed[index] {
+    let count = root.index() - start + 1;
+    let mut needed = vec![false; count];
+    let mut calls = vec![None; count];
+    needed[count - 1] = true;
+    for index in (start..=root.index()).rev() {
+        let offset = index - start;
+        if !needed[offset] {
             continue;
         }
         let node = &parsed.nodes()[index];
         let mut require = |child: ExprId| -> Result<(), Diagnostic> {
-            if child.index() >= index {
+            if child.index() < start || child.index() >= index {
                 return Err(arguments_error(
                     node.span,
-                    "expression edges must precede their parent",
+                    "expression edges must precede their parent within the statement",
                 ));
             }
-            needed[child.index()] = true;
+            needed[child.index() - start] = true;
             Ok(())
         };
         match &node.kind {
@@ -144,7 +297,7 @@ pub fn lower_expression(
                 for argument in arguments.iter().take(call.value_arguments(arguments.len())) {
                     require(*argument)?;
                 }
-                calls[index] = Some(call);
+                calls[offset] = Some(call);
             }
             ExprKind::Unary {
                 operator: UnaryOperator::Negate,
@@ -173,19 +326,16 @@ pub fn lower_expression(
         }
     }
 
-    let mut emitter = Emitter {
-        nodes: Vec::new(),
-        spans: Vec::new(),
-        max_nodes: limits.max_nodes,
-    };
-    let mut values: Vec<Option<Value>> = vec![None; parsed.nodes().len()];
-    for (index, node) in parsed.nodes().iter().enumerate() {
-        if !needed[index] {
+    let mut values: Vec<Option<Value>> = vec![None; count];
+    for (offset, node) in parsed.nodes()[start..=root.index()].iter().enumerate() {
+        let index = start + offset;
+        if !needed[offset] {
             continue;
         }
         let get = |id: ExprId| -> Result<&Value, Diagnostic> {
-            values
-                .get(id.index())
+            id.index()
+                .checked_sub(start)
+                .and_then(|offset| values.get(offset))
                 .and_then(Option::as_ref)
                 .ok_or_else(|| arguments_error(node.span, "expression dependency was not lowered"))
         };
@@ -199,20 +349,24 @@ pub fn lower_expression(
             }
             ExprKind::Path { .. } => {
                 let name = path_name(parsed, ExprId(index))?;
-                let binding = bindings.value(&name).ok_or_else(|| {
-                    error(
-                        DiagnosticCode::UnknownSymbol,
+                if let Some(value) = locals.get(name.as_str()) {
+                    value.clone()
+                } else {
+                    let binding = bindings.value(&name).ok_or_else(|| {
+                        error(
+                            DiagnosticCode::UnknownSymbol,
+                            node.span,
+                            "unknown value symbol",
+                        )
+                    })?;
+                    emitter.push(
+                        RuleExpression::Read {
+                            input: binding.read.clone(),
+                        },
+                        binding.value_type.clone(),
                         node.span,
-                        "unknown value symbol",
-                    )
-                })?;
-                emitter.push(
-                    RuleExpression::Read {
-                        input: binding.read.clone(),
-                    },
-                    binding.value_type.clone(),
-                    node.span,
-                )?
+                    )?
+                }
             }
             ExprKind::Group { inner } => get(*inner)?.clone(),
             ExprKind::Unary {
@@ -263,7 +417,7 @@ pub fn lower_expression(
                 left,
                 right,
             } => binary(
-                &mut emitter,
+                emitter,
                 bindings,
                 *operator,
                 get(*left)?,
@@ -292,7 +446,7 @@ pub fn lower_expression(
                 )?
             }
             ExprKind::Call { arguments, .. } => {
-                let call = calls[index]
+                let call = calls[offset]
                     .take()
                     .ok_or_else(|| arguments_error(node.span, "call was not prepared"))?;
                 let inputs: Vec<_> = arguments
@@ -300,20 +454,14 @@ pub fn lower_expression(
                     .take(call.value_arguments(arguments.len()))
                     .map(|id| get(*id))
                     .collect::<Result<_, _>>()?;
-                lower_call(&mut emitter, bindings, call, &inputs, node.span)?
+                lower_call(emitter, bindings, call, &inputs, node.span)?
             }
         };
-        values[index] = Some(value);
+        values[offset] = Some(value);
     }
-    let root = values[parsed.root().index()]
+    values[count - 1]
         .take()
-        .ok_or_else(|| arguments_error(span, "expression root was not lowered"))?;
-    Ok(LoweredExpression {
-        nodes: emitter.nodes,
-        root: root.id,
-        value_type: root.ty,
-        spans: emitter.spans,
-    })
+        .ok_or_else(|| arguments_error(span, "expression root was not lowered"))
 }
 
 struct Emitter {
@@ -323,6 +471,14 @@ struct Emitter {
 }
 
 impl Emitter {
+    fn new(max_nodes: usize) -> Self {
+        Self {
+            nodes: Vec::new(),
+            spans: Vec::new(),
+            max_nodes,
+        }
+    }
+
     fn push(
         &mut self,
         expression: RuleExpression,
@@ -359,7 +515,7 @@ impl Emitter {
     }
 }
 
-fn path_name(parsed: &ParsedExpression<'_>, id: ExprId) -> Result<String, Diagnostic> {
+fn path_name(parsed: &Syntax<'_>, id: ExprId) -> Result<String, Diagnostic> {
     let node = parsed
         .node(id)
         .ok_or_else(|| arguments_error(Span { start: 0, end: 0 }, "missing symbolic path"))?;
@@ -381,7 +537,7 @@ fn path_name(parsed: &ParsedExpression<'_>, id: ExprId) -> Result<String, Diagno
 }
 
 fn number_text(
-    parsed: &ParsedExpression<'_>,
+    parsed: &Syntax<'_>,
     number: NumericLiteral,
     negative: bool,
     span: Span,
@@ -397,7 +553,7 @@ fn number_text(
 }
 
 fn finite_number(
-    parsed: &ParsedExpression<'_>,
+    parsed: &Syntax<'_>,
     number: NumericLiteral,
     negative: bool,
     span: Span,
@@ -416,7 +572,7 @@ fn finite_number(
 }
 
 fn number_value(
-    parsed: &ParsedExpression<'_>,
+    parsed: &Syntax<'_>,
     bindings: &ExpressionBindings,
     number: NumericLiteral,
     negative: bool,
@@ -478,7 +634,7 @@ fn number_value(
 }
 
 fn symbolic_unit(
-    parsed: &ParsedExpression<'_>,
+    parsed: &Syntax<'_>,
     bindings: &ExpressionBindings,
     id: ExprId,
 ) -> Result<UnitDefId, Diagnostic> {
@@ -495,7 +651,7 @@ fn symbolic_unit(
         })
 }
 
-fn ungroup(parsed: &ParsedExpression<'_>, mut id: ExprId) -> Result<ExprId, Diagnostic> {
+fn ungroup(parsed: &Syntax<'_>, mut id: ExprId) -> Result<ExprId, Diagnostic> {
     loop {
         let node = parsed.node(id).ok_or_else(|| {
             arguments_error(Span { start: 0, end: 0 }, "missing literal argument")
@@ -512,7 +668,7 @@ fn ungroup(parsed: &ParsedExpression<'_>, mut id: ExprId) -> Result<ExprId, Diag
 }
 
 fn quantity_constructor(
-    parsed: &ParsedExpression<'_>,
+    parsed: &Syntax<'_>,
     bindings: &ExpressionBindings,
     arguments: &[ExprId],
     span: Span,
@@ -553,7 +709,7 @@ fn quantity_constructor(
 }
 
 fn static_quantum(
-    parsed: &ParsedExpression<'_>,
+    parsed: &Syntax<'_>,
     bindings: &ExpressionBindings,
     id: ExprId,
 ) -> Result<FiniteQuantity, Diagnostic> {
@@ -596,7 +752,7 @@ fn arity(arguments: &[ExprId], count: usize, span: Span) -> Result<(), Diagnosti
 }
 
 fn resolve_call(
-    parsed: &ParsedExpression<'_>,
+    parsed: &Syntax<'_>,
     bindings: &ExpressionBindings,
     callee: ExprId,
     arguments: &[ExprId],

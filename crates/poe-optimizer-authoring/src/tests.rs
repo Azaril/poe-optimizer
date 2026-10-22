@@ -374,7 +374,7 @@ fn malformed_expressions_have_specific_diagnostics() {
             "{source}"
         );
     }
-    for source in ["a b", "f()()", "(f)(x)", "a)"] {
+    for source in ["a b", "f()()", "(f)(x)", "a)", "a = b", "a; b"] {
         assert_eq!(
             parse_expression(source, ParseLimits::default())
                 .unwrap_err()
@@ -383,7 +383,7 @@ fn malformed_expressions_have_specific_diagnostics() {
             "{source}"
         );
     }
-    for source in ["a = b", "!true", "a && b", "a ^ b", "{\"raw\":true}"] {
+    for source in ["!true", "a && b", "a ^ b", "{\"raw\":true}"] {
         assert_eq!(
             parse_expression(source, ParseLimits::default())
                 .unwrap_err()

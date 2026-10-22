@@ -1,6 +1,6 @@
 use crate::{
-    BinaryOperator, Diagnostic, DiagnosticCode, ExprId, ExprKind, ExprNode, LimitKind,
-    NumericLiteral, ParsedExpression, Span, UnaryOperator, UnitSuffix,
+    BinaryOperator, Diagnostic, DiagnosticCode, ExprId, ExprKind, ExprNode, LetStatement,
+    LimitKind, NumericLiteral, ParsedBlock, ParsedExpression, Span, UnaryOperator, UnitSuffix,
     lexer::{Token, TokenKind, lex},
 };
 
@@ -30,6 +30,22 @@ impl Default for ParseLimits {
     }
 }
 
+/// All expression budgets apply to the whole source, not independently per let.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct BlockParseLimits {
+    pub expressions: ParseLimits,
+    pub max_statements: usize,
+}
+
+impl Default for BlockParseLimits {
+    fn default() -> Self {
+        Self {
+            expressions: ParseLimits::default(),
+            max_statements: 4096,
+        }
+    }
+}
+
 /// Parse one complete expression. This accepts unresolved ASCII symbolic paths
 /// and calls, decimal spellings, adjacent `%`/named unit suffixes, and `//` comments.
 /// Bare numbers leave units unresolved. No source constructs execute here.
@@ -43,21 +59,7 @@ pub fn parse_expression(
     source: &str,
     limits: ParseLimits,
 ) -> Result<ParsedExpression<'_>, Diagnostic> {
-    if limits.max_depth > MAX_PARSE_DEPTH {
-        return Err(Diagnostic::new(
-            DiagnosticCode::InvalidLimits,
-            Span { start: 0, end: 0 },
-            "parser depth limit exceeds its stack safety ceiling",
-        ));
-    }
-    let tokens = lex(source, limits)?;
-    let mut parser = Parser {
-        source,
-        tokens,
-        cursor: 0,
-        nodes: Vec::new(),
-        limits,
-    };
+    let mut parser = Parser::new(source, limits)?;
     let root = parser.expression(0, 1)?;
     if parser.peek().is_some() {
         return Err(parser.error(
@@ -72,6 +74,44 @@ pub fn parse_expression(
     })
 }
 
+/// Parse `let name = expression;` declarations in source order. An empty source
+/// is an empty block; it establishes no rule coverage or executable program.
+/// Semicolons are required, and line breaks/comments retain ordinary expression
+/// meaning. Name resolution and duplicate/shadowing checks happen during lowering.
+pub fn parse_block(source: &str, limits: BlockParseLimits) -> Result<ParsedBlock<'_>, Diagnostic> {
+    let mut parser = Parser::new(source, limits.expressions)?;
+    let mut statements = Vec::new();
+    while parser.peek().is_some() {
+        if statements.len() == limits.max_statements {
+            return Err(parser.error(
+                DiagnosticCode::LimitExceeded(LimitKind::Statements),
+                "formula block exceeds the statement limit",
+            ));
+        }
+        let start = parser
+            .expect(TokenKind::Let, "expected a let declaration")?
+            .span;
+        let name = parser
+            .expect(TokenKind::Identifier, "expected a local name")?
+            .span;
+        parser.expect(TokenKind::Assign, "expected '=' after local name")?;
+        let value = parser.expression(0, 1)?;
+        let end = parser
+            .expect(TokenKind::Semicolon, "expected ';' after expression")?
+            .span;
+        statements.push(LetStatement {
+            name,
+            value,
+            span: start.cover(end),
+        });
+    }
+    Ok(ParsedBlock {
+        source,
+        nodes: parser.nodes,
+        statements,
+    })
+}
+
 struct Parser<'source> {
     source: &'source str,
     tokens: Vec<Token>,
@@ -80,7 +120,24 @@ struct Parser<'source> {
     limits: ParseLimits,
 }
 
-impl Parser<'_> {
+impl<'source> Parser<'source> {
+    fn new(source: &'source str, limits: ParseLimits) -> Result<Self, Diagnostic> {
+        if limits.max_depth > MAX_PARSE_DEPTH {
+            return Err(Diagnostic::new(
+                DiagnosticCode::InvalidLimits,
+                Span { start: 0, end: 0 },
+                "parser depth limit exceeds its stack safety ceiling",
+            ));
+        }
+        Ok(Self {
+            source,
+            tokens: lex(source, limits)?,
+            cursor: 0,
+            nodes: Vec::new(),
+            limits,
+        })
+    }
+
     fn peek(&self) -> Option<Token> {
         self.tokens.get(self.cursor).copied()
     }

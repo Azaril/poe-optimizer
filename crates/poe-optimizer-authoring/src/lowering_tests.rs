@@ -16,7 +16,7 @@ use poe_optimizer_engine::owned_rules::{
 
 #[allow(dead_code)]
 #[path = "../../poe-optimizer-engine/tests/support/owned_rule_fixture.rs"]
-mod fixture;
+pub(super) mod fixture;
 
 fn key(value: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(value).unwrap()
@@ -31,7 +31,7 @@ fn local(f: &fixture::Fixture) -> &RuleProgram {
         .unwrap()
 }
 
-fn bindings(f: &fixture::Fixture) -> ExpressionBindings {
+pub(super) fn bindings(f: &fixture::Fixture) -> ExpressionBindings {
     let units = [
         ("damage", "unit.damage"),
         ("percent", "unit.percent"),
@@ -67,7 +67,7 @@ fn lower(source: &str, bindings: &ExpressionBindings) -> LoweredExpression {
     .unwrap()
 }
 
-fn install(f: &mut fixture::Fixture, lowered: LoweredExpression) {
+pub(super) fn install(f: &mut fixture::Fixture, lowered: LoweredExpression) {
     let program = f.rules.owners[0]
         .programs
         .members
@@ -81,7 +81,7 @@ fn install(f: &mut fixture::Fixture, lowered: LoweredExpression) {
     program.nodes = lowered.nodes;
 }
 
-fn execute(
+pub(super) fn execute(
     f: &fixture::Fixture,
     facts: &[(OwnedDefinitionKey, ParameterValue)],
 ) -> EffectDisposition {
@@ -106,7 +106,7 @@ fn execute(
     report.effects.into_iter().next().unwrap().disposition
 }
 
-fn damage(f: &fixture::Fixture, value: f64) -> EffectDisposition {
+pub(super) fn damage(f: &fixture::Fixture, value: f64) -> EffectDisposition {
     EffectDisposition::Applied {
         value: ParameterValue::Quantity(
             FiniteQuantity::new(

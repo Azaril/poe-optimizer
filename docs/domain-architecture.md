@@ -191,6 +191,22 @@ their result unit. No operator commutes operands to make a formula type-check.
 These are authoring rules; numerical construction and execution retain the
 existing Core/Engine behavior, including Core's normalization of signed zero.
 
+Ordered `let` declarations preserve SSA sharing: a later use references the
+earlier node rather than repeating its expression or declaring another read.
+Aliases emit no node. Retain separately authored equal expressions and unused
+nodes during exact migration; perform no implicit deduplication or dead-code
+elimination. Declarations do not eagerly execute calculations. Demand still
+comes from checked effect values and guards, with the existing lazy VM behavior.
+Reject shadowing, duplicate declarations and forward references. One syntax and
+emission budget covers the whole program, not a fresh allowance per declaration.
+
+Program-local IDs, execution context, exact reads, expressions and guarded
+effects belong in `.rule`. Owner-to-program membership and coverage belong in
+KDL with definitions, queries and routing. An Actor execution context is not
+an assertion of Actor ownership. The compiler resolves typed symbols directly
+into existing Core read/effect variants and submits the complete package to the
+existing checker; no second domain model or implicit Complete inventory is added.
+
 Diagnostic spans relate type/unit/ownership failures to named source expressions.
 `rule fmt`, `check`, `lower --emit-ir`, `raise` and `explain` are offline developer
 tools. Raising existing IR must preserve graph semantics; lowering the result must

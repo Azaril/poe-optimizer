@@ -202,7 +202,7 @@ fn valid_name(name: &str) -> bool {
             && bytes.all(|b| b.is_ascii_alphanumeric() || b == b'_')
             && !matches!(
                 part,
-                "true" | "false" | "if" | "else" | "not" | "and" | "or"
+                "true" | "false" | "if" | "else" | "not" | "and" | "or" | "let"
             )
     })
 }

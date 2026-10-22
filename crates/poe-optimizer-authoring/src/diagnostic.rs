@@ -8,6 +8,7 @@ pub enum LimitKind {
     Nesting,
     Nodes,
     LoweredNodes,
+    Statements,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -25,6 +26,7 @@ pub enum DiagnosticCode {
     UnknownFunction,
     InvalidArguments,
     TypeMismatch,
+    DuplicateSymbol,
 }
 
 /// One bounded diagnostic at the first error. Spans always select complete UTF-8

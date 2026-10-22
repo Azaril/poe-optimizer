@@ -26,7 +26,9 @@ perform publication. The latest validated release is local under ignored `runs/`
 the tracked directory called `current/` is a historical baseline. That is a
 reproducibility defect, not a supported distribution arrangement.
 
-The new `poe-optimizer-authoring` crate parses bounded formula expressions and
+The new `poe-optimizer-authoring` crate parses bounded expressions and ordered
+`let` blocks. Named intermediates share one rule-node graph without duplicating
+calculations or inventing reads. It
 binds names to explicitly declared reads and exact schema units. Its expression
 lowerer emits the existing IR for arithmetic, comparisons, Boolean operations,
 conditionals and explicit rounding/conversion functions. It does not evaluate
@@ -34,8 +36,8 @@ formulas. A fragment still needs the existing Engine's complete package checks
 before it can execute. Core is its only normal dependency; Data/Engine are used
 in tests. No runtime package depends on Authoring.
 
-This is still an expression frontend, not the complete `.rule` compiler. Named
-intermediates, full read/effect/program declarations, remaining IR operations,
+This is still a formula frontend, not the complete `.rule` compiler. Full
+read/effect/program declarations, remaining IR operations,
 raising/formatting, KDL manifests and release construction remain pending. The
 current tests insert lowered expressions into existing checked programs; they
 do not establish complete-build parity or migrate the release.
