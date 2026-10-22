@@ -141,6 +141,29 @@ fn help_argument_errors_and_missing_files_do_not_claim_semantic_validation() {
         vec!["rule", "fmt", "--unknown", "-"],
         vec!["rule", "fmt", "--check", "--check", "-"],
         vec!["rule", "fmt", "-", "extra.rule"],
+        vec!["release"],
+        vec!["release", "check"],
+        vec!["release", "build"],
+        vec!["release", "build", "input.kdl"],
+        vec!["release", "build", "input.kdl", "--output"],
+        vec![
+            "release",
+            "build",
+            "input.kdl",
+            "extra.kdl",
+            "--output",
+            "out",
+        ],
+        vec![
+            "release",
+            "build",
+            "input.kdl",
+            "--output",
+            "out",
+            "--output",
+            "twice",
+        ],
+        vec!["release", "build", "--unknown"],
     ] {
         let output = run(&text_args(&args), b"");
         assert_eq!(output.status.code(), Some(2), "{args:?}");

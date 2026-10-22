@@ -417,7 +417,7 @@ fn publication_never_clobbers_existing_files_or_directories() {
             .unwrap()
             .file_name()
             .to_string_lossy()
-            .starts_with(".owned-recipe-")
+            .starts_with(".poe-publish-")
     }));
 }
 
@@ -649,6 +649,6 @@ fn migration_failure_conflicting_flags_and_existing_output_never_publish_or_repl
             .unwrap()
             .file_name()
             .to_string_lossy()
-            .starts_with(".owned-recipe-")
+            .starts_with(".poe-publish-")
     }));
 }

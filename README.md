@@ -21,8 +21,9 @@ The October 22 [architecture review](docs/architecture-review-2026-10-22.md) is
 adopted. Before adding further mechanic content, migrate to readable `.rule`
 formulas and KDL manifests, one checked IR, reproducible releases and an interned
 runtime package. Consolidate tests and remove redundant legacy paths. **Migration
-has started: complete program compilation, formatting, and name/membership KDL
-loading exist; release publication and the binary runtime remain ahead.** The first
+has started: complete program compilation, formatting, name/membership KDL,
+stable named allocation and final-release construction exist; whole-release DSL
+conversion and the binary runtime remain ahead.** The first
 complete unchanged build must run exclusively through the new format and native
 path; then native search and broader
 build validation follow.
@@ -56,11 +57,11 @@ cargo run --locked --features pob --bin poe-optimizer -- --help
 ```
 
 `evaluate-owned` is the existing native component/evaluation entry point;
-`evaluate` under the `pob` feature runs the reference backend. There is not yet a
-clean-clone command that reproduces the latest full data release; fixing that is
-an explicit migration gate. Do not substitute the tracked historical `current/`
-baseline for the latest local release or assume a complete build will evaluate.
-The offline `rule fmt` command is available; manifest publishing remains planned.
+`evaluate` under the `pob` feature runs the reference backend. The offline release
+command below rebuilds the retained data release from tracked inputs. It still
+has incomplete coverage and no evaluation bundle; rebuilding it does not make a
+complete build executable. Do not substitute the historical `current/` baseline
+for this retained release.
 
 The existing suite is expensive. Consolidation reduces Core, Data, Engine,
 Search and Import from 304 integration binaries to twelve; CLI and reference
@@ -91,8 +92,21 @@ Use `-` as the path to read stdin. Input files are unchanged. Check mode exits
 0 when formatted, 1 when formatting differs, and 2 on syntax, argument or I/O
 errors. Formatting preserves names, numeric spelling and comments; it does not
 validate rule types, ownership or complete coverage. Name/membership KDL loading
-and bounded packet assembly, including stable named allocation, are library APIs; broader declaration manifests,
-semantic checking/publication commands and release cutover remain ahead.
+and bounded packet assembly, including stable named allocation, are library APIs;
+broader declaration manifests and named-allocation publication remain ahead.
+
+Build the retained release into a new directory with:
+
+```powershell
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release
+```
+
+The command validates every declared constituent through the existing typed
+assembler, checks the expected input identity and atomically publishes without
+replacing an existing output. Its tracked JSON/gzip inputs are a temporary
+migration bootstrap; all formulas still need to move into maintained `.rule`
+source. Compression preserves the source bytes and does not relax decoded limits.
+The immutable runtime loader and compact binary format remain migration gates.
 Run focused checks with `cargo test -p poe-optimizer-authoring --locked --all-targets`.
 
 ## Boundaries

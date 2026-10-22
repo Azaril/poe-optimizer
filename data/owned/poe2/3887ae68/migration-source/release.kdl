@@ -1,0 +1,21 @@
+// Temporary R1 source capture; existing JSON DTOs, standard gzip transport.
+// The release command derives both output manifests from these source inputs.
+release expected_input="a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905" {
+    registry "bootstrap/registry.json.gz" encoding="gzip"
+    schema "bootstrap/schema.json.gz" encoding="gzip"
+    rules "bootstrap/rules.json.gz" encoding="gzip"
+    routing "bootstrap/routing.json.gz" encoding="gzip"
+    mapping "bootstrap/mapping.json.gz" encoding="gzip"
+    roles "bootstrap/roles.json.gz" encoding="gzip"
+    normalization "bootstrap/normalization.json.gz" encoding="gzip"
+    rewards "bootstrap/rewards.json.gz" encoding="gzip"
+    items "bootstrap/items.json.gz" encoding="gzip"
+    item-source "bootstrap/item-source.json.gz" encoding="gzip"
+    tree-normalization "bootstrap/tree-normalization.json.gz" encoding="gzip"
+    queries "original-01" source="bootstrap/queries-original-01.json.gz" encoding="gzip"
+    queries "original-02" source="bootstrap/queries-original-02.json.gz" encoding="gzip"
+    queries "original-03" source="bootstrap/queries-original-03.json.gz" encoding="gzip"
+    queries "original-04" source="bootstrap/queries-original-04.json.gz" encoding="gzip"
+    queries "original-05" source="bootstrap/queries-original-05.json.gz" encoding="gzip"
+    provenance "bootstrap/provenance.json.gz" encoding="gzip"
+}

@@ -40,6 +40,7 @@ future users. The actual PoB oracle and independent regression fixtures remain.
 | Authoring | Rust DSL/KDL compiler, catalogs, identity allocation, release construction and checking; can use the native checker; never a runtime dependency |
 | Search | Configurable problem, candidates/operators, budgets, archives and scheduling over an evaluator interface; no PoB-specific metric or UI type |
 | PoB reference/acquisition | Optional mlua/LuaJIT host and offline extractors; validates its source pin, returns explicit reference observations through adapters |
+| Host | Shared filesystem destination handling and atomic no-clobber publication for both CLI hosts; no game, Import or Authoring dependency |
 | CLI / later GUI | Compose public libraries, present progress/diagnostics/results; no game formulas or hidden model repair |
 
 The reference host shares only the decoding boundary it needs, not the entire
@@ -53,8 +54,10 @@ also pulls Import's legacy features into the offline authoring tool; it is not
 the final dependency boundary. Import must not depend on Authoring. Completing
 R1 requires separating immutable registry and role data needed at runtime from
 offline allocation/compilation, and replacing the runtime release loader's
-current reassembly through the authoring pipeline. Moving allocation wrappers
-alone does not complete that extraction.
+current reassembly through the authoring pipeline. The production release builder
+also reuses that existing typed assembler through Import until this extraction is
+complete. Moving allocation wrappers or the filesystem publisher alone does not
+complete that extraction.
 
 ```mermaid
 flowchart LR
@@ -288,10 +291,12 @@ excluded from the projected `SymbolRegistry`. Projection still checks active
 targets against the actual schema; allocation grants neither schema membership
 nor read/effect authority. The Engine remains the complete package checker.
 
-This staged API does not yet provide filesystem compare-and-swap, a publisher or
-a KDL allocation command. Publication must eventually authenticate the stored
-predecessor and commit registry and names together. The existing raw-alias
-`load_names` path remains separate until that command is implemented.
+This staged API does not yet provide filesystem compare-and-swap or a KDL
+allocation command. The new release-directory builder is a separate operation;
+it does not commit a named-allocation transaction. Named publication must still
+authenticate the stored predecessor and commit registry and names together. The
+existing raw-alias `load_names` path remains separate until that command is
+implemented.
 
 Program membership uses explicit definition/slot owners and injected source
 labels. A source label is not an instruction to open a file. Program IDs are
@@ -327,6 +332,42 @@ order and atomic output. Full reproduce checks happen in authoring/CI. Retain
 semantic fixture expectations and artifact integrity; delete Rust-source hashes,
 layout counts, duplicated ID restatements and receipt types that merely encode
 the current implementation. Source provenance is a sidecar, not behavior identity.
+
+The current R1 production seam is `release.kdl`, which declares the final
+constituent composition directly. `poe-author release build <manifest> --output
+<new-directory>` decodes those explicitly named inputs into the existing typed
+`OwnedReleaseInput` and invokes the single release assembler. It does not replay
+test staging functions or predecessor histories, synthesize missing mechanics,
+repair stale bindings, or certify complete-build coverage. Existing JSON DTOs,
+plain or explicitly gzip-encoded, are temporary migration inputs. They are not a
+second authoring language or the final runtime format; replace them with the
+accepted DSL/declarations and compiled package during the planned cutover.
+
+The manifest schema is closed: registry, schema, rules, routing, mapping, roles,
+normalization, rewards, item rules and item-source policy are required. Tree
+normalization and provenance are optional. Metrics may stand alone; support
+stages, preparation, input bindings and receiving must appear together with
+metrics, with optional support outputs. Named query sets retain manifest order.
+Unknown fields, duplicate components/paths/query names and incomplete evaluation
+groups fail. Optional `expected_input` asserts the exact assembled release-input
+identity; it grants no completeness or reference-parity claim.
+
+The library receives injected source bytes. The CLI resolves bounded regular
+files within the manifest directory. Encoded and decoded aggregate byte budgets
+are independent, alongside source-count and typed assembly limits. Gzip is a
+single-member lossless transport: trailing bytes and concatenated members fail.
+Only after complete assembly succeeds does the shared Host crate publish a new
+directory without replacement. Both CLI hosts use that one publisher; Host has
+no game dependencies. Native execution still requires extraction of an immutable
+release loader so loading an existing release no longer reassembles authoring
+inputs.
+
+The tracked full source capture and reference receipt under
+[`migration-source`](../data/owned/poe2/3887ae68/migration-source/release.kdl) now
+reproduce through Rust tests and the production CLI. That capture has no
+evaluation bundle, adds no numerical coverage, and leaves 0/5 supplied originals
+complete. Validation status belongs in the implementation plan, not an inferred
+claim from the presence of compressed files.
 
 ### Runtime representation and storage
 

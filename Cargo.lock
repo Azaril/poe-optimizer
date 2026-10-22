@@ -543,13 +543,17 @@ checksum = "f6b464fbc74e149a392436b17d523f769e057cb6877f6a5c4618bc6f11800548"
 name = "poe-optimizer-authoring"
 version = "0.1.0"
 dependencies = [
+ "flate2",
  "kdl",
  "poe-optimizer-core",
  "poe-optimizer-data",
  "poe-optimizer-engine",
+ "poe-optimizer-host",
  "poe-optimizer-import",
  "serde",
  "serde_json",
+ "sha2",
+ "tempfile",
  "thiserror",
 ]
 
@@ -563,16 +567,15 @@ dependencies = [
  "poe-optimizer-core",
  "poe-optimizer-data",
  "poe-optimizer-engine",
+ "poe-optimizer-host",
  "poe-optimizer-import",
  "poe-optimizer-pob",
  "poe-optimizer-search",
  "rayon",
- "rustix",
  "serde",
  "serde_json",
  "sha2",
  "tempfile",
- "windows-sys",
 ]
 
 [[package]]
@@ -608,6 +611,15 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+]
+
+[[package]]
+name = "poe-optimizer-host"
+version = "0.1.0"
+dependencies = [
+ "rustix",
+ "tempfile",
+ "windows-sys",
 ]
 
 [[package]]

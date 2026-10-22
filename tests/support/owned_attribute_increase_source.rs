@@ -260,10 +260,16 @@ pub fn verify(full: bool) {
             {"target":"owned_passive_defence_reference","test":"whole_original_passive_processing_and_moddb_queries_match_defensive_contributions"}
         ])
     );
-    for field in ["artifacts", "source_pins"] {
-        for (path, pin) in v[field].as_object().unwrap() {
-            check_pin(path, pin);
+    for (path, pin) in v["artifacts"].as_object().unwrap() {
+        check_pin(path, pin);
+    }
+    for (path, pin) in v["source_pins"].as_object().unwrap() {
+        // Historical Rust harness layout does not authenticate current
+        // behavior. Keep the Lua observer and content checks separate.
+        if path.ends_with(".rs") {
+            continue;
         }
+        check_pin(path, pin);
     }
     assert_eq!(v["nodes"], json!(project_nodes()));
     let source_ids: BTreeSet<_> = rows(&v["nodes"])

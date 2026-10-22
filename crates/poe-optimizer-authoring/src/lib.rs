@@ -20,6 +20,7 @@ mod packet;
 mod parser;
 mod program;
 mod raise;
+mod release;
 mod symbols;
 
 pub use allocation::{
@@ -54,6 +55,10 @@ pub use program::{LoweredProgram, ProgramLowerLimits, ProgramSpans, lower_progra
 pub use raise::{
     RaiseError, RaiseErrorKind, RaiseLimit, RaiseLimits, RaiseLocation, RaisedNode, RaisedProgram,
     raise_program,
+};
+pub use release::{
+    BuiltRelease, ReleaseBuildError, ReleaseBuildLimits, ReleaseManifest, ReleaseSource,
+    ReleaseSourceSpec, SourceEncoding, build_release, parse_release_manifest,
 };
 pub use symbols::{SymbolError, SymbolErrorKind, SymbolLimits, SymbolRegistry};
 

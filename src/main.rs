@@ -56,6 +56,7 @@ use poe_optimizer_core::{
     metrics::{ActorScope, MetricQuery},
     options::EvaluationOptions,
 };
+use poe_optimizer_host::{destination, write_new};
 use poe_optimizer_import::{MAX_XML_BYTES, decode_build};
 use std::{
     fs::File,
@@ -611,17 +612,6 @@ fn read_input(path: &Path) -> io::Result<Vec<u8>> {
     Ok(bytes)
 }
 
-fn destination(path: &Path) -> io::Result<PathBuf> {
-    let name = path
-        .file_name()
-        .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "Output needs a file name"))?;
-    let parent = path
-        .parent()
-        .filter(|p| !p.as_os_str().is_empty())
-        .unwrap_or(Path::new("."));
-    Ok(parent.canonicalize()?.join(name))
-}
-
 #[cfg(feature = "pob")]
 fn destination_identity(path: &Path) -> io::Result<PathBuf> {
     let path = destination(path)?;
@@ -630,14 +620,6 @@ fn destination_identity(path: &Path) -> io::Result<PathBuf> {
     Ok(path)
 }
 
-fn write_new(path: &Path, bytes: &[u8]) -> io::Result<()> {
-    let path = destination(path)?;
-    let mut file = tempfile::NamedTempFile::new_in(path.parent().expect("absolute output parent"))?;
-    file.write_all(bytes)?;
-    file.as_file().sync_all()?;
-    file.persist_noclobber(path).map_err(|error| error.error)?;
-    Ok(())
-}
 #[cfg(feature = "pob")]
 fn worker(pob: &Path, scratch: &Path) -> Result<(), Box<dyn std::error::Error>> {
     send_json(&WorkerHello {

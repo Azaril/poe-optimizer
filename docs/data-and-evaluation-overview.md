@@ -21,10 +21,15 @@ The review found default dependencies still pull the legacy stack into binaries;
 absence of the `pob` feature alone does not prove the native distribution is clean.
 
 Current Import also contains much of the offline release toolchain. Hand-authored
-JSON describes rule IR and catalog bindings, while many test-support functions
-perform publication. The latest validated release is local under ignored `runs/`;
-the tracked directory called `current/` is a historical baseline. That is a
-reproducibility defect, not a supported distribution arrangement.
+JSON describes rule IR and catalog bindings, while many historical test-support
+functions perform publication. A production manifest builder now composes the
+final constituent files directly. The tracked
+[`migration-source/release.kdl`](../data/owned/poe2/3887ae68/migration-source/release.kdl)
+and compressed inputs capture the previously local endpoint. Rust tests and the
+production CLI reproduce all seventeen constituent artifacts and the reference
+receipt exactly, without local predecessor inputs or test staging helpers.
+The tracked directory called `current/` remains a historical baseline. Neither
+the capture nor its compression completes the DSL or runtime migration.
 
 The new `poe-optimizer-authoring` crate parses bounded program declarations,
 typed reads, ordered `let` calculations and guarded effects. A checked symbol
@@ -48,10 +53,11 @@ program "add-life" context actor {
 The source does not declare its owning definition or claim complete membership.
 Those belong to the manifest. Lowering produces an unchecked `RuleProgram`,
 which still needs the existing Engine's complete package checks before execution.
-Authoring's normal dependencies are Core, Import, `serde`, `thiserror` and the
-official `kdl-rs` 6.5.0 document parser; Data/Engine are used in tests. The Import
-dependency is temporary: the new naming-allocation API reuses its existing
-allocator, which also brings Import's legacy features into this offline tool.
+Authoring uses Core, the official `kdl-rs` 6.5.0 parser and ordinary Rust
+serialization/compression libraries. Its CLI uses the shared Host crate for
+filesystem publication. The Import dependency is temporary: naming reuses its
+existing allocator and release construction reuses its typed assembler, which
+also brings Import's legacy features into this offline tool.
 There is no reverse Import-to-Authoring dependency. No runtime package depends
 on Authoring, and it does not evaluate formulas.
 
@@ -66,8 +72,10 @@ program-membership KDL manifests now load through a bounded library API. Names
 resolve exact schema definitions/slots, and packets append explicitly declared
 programs to existing owners after a complete structural preflight. The containing
 package still requires Engine validation. Source labels are injected text labels,
-not paths that the library opens. Broader declaration manifests and release
-construction remain pending.
+not paths that the library opens. Broader definition declarations and release-wide
+DSL conversion remain pending. The new release manifest described below composes
+existing constituent DTOs; it does not yet integrate allocation and DSL packets
+into a single publication transaction.
 
 Stable naming now has an in-memory staged transaction API. `NamedIdRegistry`
 wraps the single existing Import allocator; `NamesInput` stores its exact registry
@@ -79,8 +87,9 @@ reserved in history and are omitted from executable symbols. Resolving active
 names still requires the actual schema, and the complete rule package still
 requires Engine validation.
 
-No filesystem compare-and-swap, registry publisher or KDL allocation command is
-implemented by that API. `load_names` still loads raw aliases to known schema
+No filesystem compare-and-swap or KDL allocation command is implemented by that
+API. The release builder does not publish named-allocation transactions.
+`load_names` still loads raw aliases to known schema
 addresses. Full R1 extraction must separate runtime registry/role data from the
 offline toolchain and replace the runtime release loader that currently
 reassembles authoring inputs. This library step does not publish a release or
@@ -102,8 +111,52 @@ optional reference backend, available when Cargo builds with `--features pob`. E
 `search-calibration` ranks a finite supplied set through PoB; it is not a native
 build optimizer. The separate offline `poe-author rule fmt [--check] <path|->`
 command is available; it writes formatted source to stdout or checks formatting
-without changing the file. It validates syntax only. Other DSL and publication
-commands below remain planned.
+without changing the file. It validates syntax only. Release construction now has
+the separate production command below; other DSL developer commands remain planned.
+
+## Production release composition during migration
+
+`poe-author release build <release.kdl> --output <new-directory>` reads a declared
+final composition and publishes a checked release. For the captured full source:
+
+```text
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release
+```
+
+The output directory must not exist and its parent must exist. The retained
+full-source rebuild and reference-receipt comparison pass. The command reuses
+the existing typed release assembler; it
+does not call test staging helpers, replay the old publication chain or provide a
+second semantic checker.
+
+The closed manifest requires registry, schema, rules, routing, mapping, roles,
+normalization, rewards, item rules and item-source policy. Tree normalization and
+provenance are optional. Metrics can be supplied alone. A support evaluation
+group requires metrics plus stages, preparation, input bindings and receiving;
+support outputs are optional only within that group. Named query sets retain the
+order authored in the manifest. Unknown fields, duplicate declarations or source
+paths, duplicate query names and incomplete groups are errors.
+
+Each constituent is a current typed JSON DTO, either plain JSON or explicitly
+declared `encoding="gzip"`. This is temporary migration input before readable
+DSL/declaration sources and the compact compiled package replace it. The library
+receives injected bytes; the CLI resolves source paths within the manifest
+directory and bounds file reads. Separate aggregate limits cover encoded and
+decoded bytes, with additional manifest, source-count and typed assembly limits.
+Gzip accepts exactly one complete member and rejects trailing bytes or additional
+members. Compression changes transport size, not mechanics or decoded limits.
+
+Optional `expected_input` asserts equality with the assembled release-input
+digest. It is an exact reproduction check, not a coverage certificate. Both CLI
+hosts call the same `poe-optimizer-host` publication implementation, which writes
+and syncs staged files before a no-clobber directory rename on Windows/Linux.
+Host contains no game, Import or Authoring dependencies. The native CLI still
+loads releases by reassembling authoring inputs; extracting its immutable loader
+remains required before runtime cutover.
+
+The captured full source has no evaluation bundle and does not add rule coverage.
+**No supplied original is complete natively (0/5).** Rebuilding its release is a
+reproducibility step toward the new-format first build, not that build's completion.
 
 ## What replaces it
 

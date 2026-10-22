@@ -16,25 +16,30 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/parser `0e5a9b7b`; expressions `e1841725`, blocks `15de8529`, programs `21db1486`, complete expression syntax `329808b8`, raising `86bbe9b9`, formatter/CLI `5ba6abdf`, name/membership KDL `86656b74`, official kdl-rs `de02c87a`; this checkpoint adds stable named allocation and removes one source-hash gate family |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; official kdl-rs `de02c87a`; stable named allocation `ae90ec82`; this checkpoint adds production final-release composition, shared Host publication and attribute source-pin cleanup |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
-| Authoring | Bounded Rust program/read/effect declarations, exact typed names/slots, KDL membership, transactional appends and stable named allocation. Temporary Authoring -> Import dependency reuses the sole existing allocator; no runtime -> Authoring dependency. Catalog/publication machinery remains in Import and test staging |
+| Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation and production release command. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Connected offline modules still need to move out of Import |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | Program syntax, all expression families, raising/formatting, name/membership KDL and immutable named-allocation transactions implemented; `poe-author rule fmt` available. Filesystem publication/CAS, broader declaration manifests and binary pack remain pending |
-| Current release | Latest validated artifacts are local under ignored `runs/`, have no complete evaluation bundle, and cannot yet be reproduced from a fresh clone with one supported command |
-| CI | Focused repairs for the two fixture families pass locally. At 21:15 UTC, run `39853858110` for `de02c87a` was pending with no jobs; older `39815736980` remained running with 11 successful, three failed and four running jobs. No green hosted claim |
+| DSL / KDL / binary pack | `poe-author rule fmt` and `release build` implemented. One shared Host publisher handles new release directories. Named-registry filesystem CAS, broader declarations, all-program DSL conversion and binary pack remain pending |
+| Current release | Tracked `migration-source/release.kdl` and compressed inputs reproduce all 17 constituent artifacts and the exact historical receipt through the production command. No local predecessor needed; evaluation bundle still absent |
+| CI | Baseline `ae90ec82` run `39857163789` has seven successful jobs (including both platform validation jobs), eleven still running and no failures at the latest inspection. This checkpoint needs its own hosted result; no green suite claim |
 
-Last validated release: `runs/owned-reverse-primary-cutover-01/package`.
-Its endpoint is `runs/owned-reverse-primary-cutover-01/endpoint.json`,
+Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
+Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release`
+with a fresh output directory. It reproduces the retained release from tracked
+inputs; the latest local validation output is `runs/owned-authoring-release-01`.
+Its historical endpoint was `runs/owned-reverse-primary-cutover-01/endpoint.json`,
 **66,145,838 bytes** against the old 67,108,864-byte bound (about **98.56%**).
 Endpoint SHA-256: `337266997cd5ead1949288f29aad62b9b9604b2acda2b96fb0aacf0cea505ad2`.
 Input identity: `a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905`.
 Validation: `runs/owned-reverse-primary-validation-01/validation.json`.
-These paths locate historical local evidence; **they are not acceptable required
-inputs to the replacement build or CI**. Capture the useful source fixtures and
-semantics in the new tracked manifest during R1/R2.
+These `runs/` paths locate local evidence and are not inputs to the command or CI.
+The tracked bootstrap captures the final constituents and provenance, using
+1,230,522 compressed bytes for 66,145,467 decoded bytes. It preserves the existing
+64 MiB decoded limit and triggers the 80% utilization warning. Replace the
+temporary JSON constituents during R1/R2; gzip is not the compact runtime format.
 
 The unfinished generated-singleton import slice is superseded and backed up on
 [branch codex/backup-2026-10-22-pre-dsl](https://github.com/Azaril/poe-optimizer/tree/codex/backup-2026-10-22-pre-dsl)
@@ -91,8 +96,10 @@ unit names the suffix grammar cannot express.
 The result is an **unchecked expression-local fragment**. Its local node keys
 must be remapped when composing a complete program, and that program must pass
 the existing Engine checker. Symbol binding does not grant read/provider/effect
-authority. There is no frontend evaluator. Core is the only normal dependency;
-Data/Engine and JSON fixtures are test dependencies. The default CLI dependency
+authority. There is no frontend evaluator. At that initial checkpoint Core was
+the only normal dependency, with Data/Engine and JSON fixtures confined to tests;
+the later naming/release checkpoints below add the temporary offline Import seam.
+The default CLI dependency
 guard now explicitly excludes Authoring as well as PoB/Lua. No new game content
 or production evaluation semantics changed.
 
@@ -306,7 +313,8 @@ The generated-Firebolt fixture no longer requires six Import and two reference
 Rust files to match their historical text hashes. Its source XML, upstream/data
 artifact integrity, exact destination accounting and replay assertions remain.
 Historical hash metadata stays sealed as acquisition evidence; it is not repinned.
-Mixed attribute-observer pins and implementation-fingerprint APIs remain R0 work.
+The next checkpoint below removes the mixed attribute-observer Rust pins;
+implementation-fingerprint APIs remain R0 work.
 
 Validation at this checkpoint: all **156 Authoring tests pass** (152 library,
 four CLI), none ignored; the focused generated-Firebolt destination regression
@@ -319,6 +327,54 @@ the final review is clear. Logs: `runs/r2-named-allocation-tests-20261022.log`,
 `runs/r2-named-allocation-clippy-20261022.log`,
 `runs/r0-firebolt-source-pin-cleanup-20261022.log`,
 `runs/r0-firebolt-source-pin-clippy-20261022.log`.
+
+**R1 final-release construction:** `poe-author release build` reads a closed KDL
+manifest, bounds encoded and decoded source bytes independently, decodes existing
+typed constituents and calls the sole release assembler. Optional expected input
+identity is checked before any staging. The library accepts injected bytes; the
+CLI restricts files to the manifest directory. Unknown or duplicate declarations,
+incomplete evaluation groups, missing/extra files, corrupt gzip and trailing
+members fail. Official kdl-rs remains the parser; no streaming parser was added.
+The shared Host crate now owns file and directory publication for both CLIs;
+the old implementation was removed. New directories publish atomically without
+replacement. Named-registry filesystem CAS remains unimplemented.
+
+Tracked bootstrap inputs reproduce all 17 constituent artifacts and the exact
+reference receipt in an ordinary Rust test and through the production CLI. No
+`runs/` predecessor, test-stage helper or PoB checkout is required by this build
+command. This is the retained final composition, not release-wide DSL conversion.
+Its evaluation bundle remains absent; all partial owners/routing and both
+owner-specific Life programs remain unchanged. No build coverage was added.
+
+Validation: **166 Authoring tests pass** (152 library, four formatter CLI, ten
+release), plus **six Host tests**; no ignored cases in either crate. Strict
+all-target Clippy passes for both. The first test compile needed an explicit
+`sum::<usize>()` annotation; no production check was weakened. Windows atomic
+rename tests require running outside this environment's filesystem sandbox;
+the unchanged Host suite passes there after OS error 5 inside it. Independent
+review is clear. Logs: `runs/r1-release-tests-final-20261022.log`,
+`runs/r1-host-tests-unrestricted-20261022.log`,
+`runs/r1-release-clippy-20261022.log`, `runs/r1-release-cli-20261022.log`.
+
+The mixed attribute source audits no longer compare seven historical `.rs` hash
+pins to current Rust files. Lua observer, report/XML, data artifact and upstream
+authentication remain intact, as do the semantic assertions. Historical receipt
+metadata was not rewritten. This does not finish the remaining R0 fingerprint
+and suite-consolidation work.
+
+The affected native CLI targets pass **32 tests**, including all ten release CLI
+regressions. Their 33 existing historical publication/reference cases remain
+explicitly ignored; no claim is made that those old stage chains were rerun.
+The optimized build took 15m57s while each target executed in under two seconds;
+removing duplicated fixture/staging compilation remains material R0 work.
+The focused log is `runs/r1-release-r0-cli-tests-20261022.log`.
+Strict Clippy also passes for the affected native CLI targets (including the
+Sniper item-attack fixture consumer) and the optional-PoB CLI binary. Formatting
+and the default runtime dependency guard pass: Authoring, KDL, PoB and Lua are
+absent from normal CLI dependencies. This does not remove the legacy Rust stack
+noted above. Logs: `runs/r1-release-cli-clippy-20261022.log`,
+`runs/r1-release-pob-cli-clippy-20261022.log`,
+`runs/r1-release-runtime-dependencies-20261022.log`.
 
 Two hosted failures were isolated to fixtures: an unavailable skill catalog
 retained an inconsistent reverse-primary census, and the Mana equipment review
@@ -442,15 +498,15 @@ an explicit review process for budget changes, not an unbounded size bypass.
 Stop tracking concatenated duplicate packages; use canonical review artifacts
 and a content-addressed runtime release generated by CI or fetched by hash.
 
-The source inventory found 17 constituent artifacts and 227 historical provenance
-rows in the latest local package. Do not turn that history into the new manifest.
-Extract its final semantic composition: registry, schema/rules/routing, Import
-catalogs/policies and the still-missing evaluation bundle. Some final composition
-decisions live in test helpers (for example flat-Life membership/policy refinements
-and generated-Firebolt policy replacement). Move those decisions into declarative
-authoring; listing the existing JSON files alone cannot reproduce the release.
-Use the existing release assembly seam as the migration source, not a second
-publisher or a new succession chain.
+The tracked `migration-source/release.kdl` now captures the final semantic
+composition: registry, schema/rules/routing, Import catalogs/policies, five query
+sets and 227 historical provenance rows. Those rows are metadata, not a plan to
+replay past stages. This bootstrap includes the later flat-Life membership/policy
+refinements and generated-Firebolt policy replacement that were absent from the
+older tracked constituents. Replace this temporary JSON/gzip capture with
+maintained declarations and the still-missing evaluation bundle. Keep the single
+existing release assembler and shared Host publisher; do not introduce another
+succession chain.
 
 The current-release census contains 8,212 program occurrences, 2,561 distinct
 serialized programs across 2,631 nonempty owners, and 18 integer tables with 975
@@ -458,9 +514,9 @@ rows. Every observed operation is represented by the DSL; a whole-release Rust
 raise/lower check is still required. The schema has 9,391 definitions and 3,873
 slots: use bounded per-source symbol groups rather than assuming one default-size
 names manifest fits. All eleven core/Import constituent files differ from the
-tracked `current/` baseline. The production `poe-author release build` path must
-capture this final composition as reviewed migration input, then replace it with
-declarations; it must not depend on local `runs/` or replay 227 historical stages.
+tracked `current/` baseline. The production `poe-author release build` path reads
+the final captured composition without local `runs/` or historical stage helpers.
+Next replace its temporary constituents with declarations.
 Preserve all 5,827 partial rule owners, five partial routing outputs and the
 missing evaluation bundle as explicit limitations during that conversion.
 
@@ -667,27 +723,30 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. Prioritize **production final-release composition
-   and filesystem publication**. Stable named allocation now reuses the existing
-   allocator with stale binding checks; the host CAS/publication is still pending.
-   Name/membership KDL and the retained
-   `inherent-life-contribution` whole-program compiler fixture now work; the old
-   release consumers have not cut over. Reuse the existing schema, Engine and
-   release checks, preserving exact Actor membership, partial closure, receivers
-   and queries. Replace its handwritten builder when the generic path drives its
-   consumers; do not retrofit new receipts through the historical staging chain.
-   Its old authoring digest is embedded downstream, and its minion source packet
-   pins the old program bytes. Keep historical evidence distinct from new source
-   identity. The later `life-base-domain` checked-range successor must survive
-   migration. A single compiler fixture does not reproduce the complete release.
-   Schema-valid symbols alone are not proof of active allocation or persisted
-   names. Wire the staged name transaction into publication and retain the
-   actual stored-predecessor CAS. Current typed-ID serde
-   repeats namespaces: resolve KDL names directly to typed IDs, then build the
-   deliberate compact codec; do not rewrite arbitrary JSON recursively.
-   Keep Authoring out of the runtime dependency closure. Then migrate complete
-   release composition into production publication.
-   The focused verification
+1. Read this plan and Git status. Prioritize **whole-release program migration**
+   through the new production release command. First use the tracked bootstrap
+   for one Rust corpus gate over every owner-qualified program: raise/lower,
+   compare keyed graphs up to node names, then compile through the existing
+   Engine. Reuse the current comparator and fixtures; do not create a family
+   publisher or evaluator. Measure required symbol and expanded-node budgets.
+   There are 2,561 distinct complete program bodies and 2,631 nonempty owners;
+   exact-body deduplication can retain all 8,212 memberships within current packet
+   source/append counts. Keep all 6,550 owner/coverage rows, including empty owners.
+   The 13,264 schema addresses exceed default name budgets: inject reviewed exact
+   aliases for used addresses or bounded families, never inferred mechanics.
+   Then compose program-free rule metadata with names, KDL packets and `.rule`
+   sources using the existing packet compiler and release assembler. Reject
+   embedded program members in that composition; keep one source of authority.
+   Preserve tables, receiver/query/application inventories and partial closure.
+   Preserve both owner-specific `contribute-inherent-strength-life` variants:
+   the Player's seven-node checked-range successor and supplied Actor's six-node
+   program. Never substitute by program ID alone. Node renaming changes artifact
+   identity; prove semantic equivalence before updating `expected_input`, without
+   replaying historical stages or rewriting reference evidence.
+   Named-registry filesystem CAS, full schema declarations, compact typed codec
+   and immutable runtime-loader extraction remain separate migration gates. Keep
+   Authoring out of the runtime dependency closure and reuse the shared Host
+   publisher. The focused verification
    command is `cargo test --locked -p poe-optimizer-authoring --all-targets`
    with the bounded optimized profile used by CI. Continue R0 source-pin removal and CLI/PoB suite
    consolidation alongside that work, using the audited hazards above. Retain

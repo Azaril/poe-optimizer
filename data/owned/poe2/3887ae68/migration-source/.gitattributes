@@ -1,0 +1,3 @@
+# Preserve captured artifact bytes across checkouts.
+*.json -text
+bootstrap/*.gz -text

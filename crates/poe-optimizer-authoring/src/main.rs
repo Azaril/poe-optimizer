@@ -1,6 +1,8 @@
 //! Offline developer commands. This executable is separate from the runtime CLI.
 #![forbid(unsafe_code)]
 
+mod release_cli;
+
 use poe_optimizer_authoring::{FormatLimits, format_program};
 use std::{
     env,
@@ -12,12 +14,14 @@ use std::{
 };
 
 const HELP: &str = "Usage: poe-author rule fmt [--check] [--] <path|->\n\
+       poe-author release build <release.kdl> --output <new-directory>\n\
 \n\
 Format one .rule program to stdout; '-' reads stdin.\n\
 --check emits no source and exits 1 if formatting differs.\n\
 Exit 0 means success; exit 2 means an argument, I/O or syntax error.\n\
 Formatting validates syntax only, not rule types, ownership or coverage.\n\
-Input files are never overwritten.\n";
+Release build checks all declared constituents before atomic publication.\n\
+Input files and existing output directories are never overwritten.\n";
 
 struct FormatCommand {
     input: OsString,
@@ -27,6 +31,7 @@ struct FormatCommand {
 enum Command {
     Help,
     Format(FormatCommand),
+    Release(release_cli::Command),
 }
 
 fn arguments(mut args: impl Iterator<Item = OsString>) -> Result<Command, &'static str> {
@@ -40,8 +45,11 @@ fn arguments(mut args: impl Iterator<Item = OsString>) -> Result<Command, &'stat
             Err("unexpected arguments after --help")
         };
     }
+    if first == "release" {
+        return release_cli::arguments(args).map(Command::Release);
+    }
     if first != "rule" || args.next().as_deref() != Some(OsStr::new("fmt")) {
-        return Err("expected 'rule fmt'; use --help");
+        return Err("expected 'rule fmt' or 'release build'; use --help");
     }
     let mut check = false;
     let mut positional_only = false;
@@ -96,6 +104,7 @@ fn run(command: Command) -> Result<ExitCode, String> {
             return Ok(ExitCode::SUCCESS);
         }
         Command::Format(command) => command,
+        Command::Release(command) => return release_cli::run(command),
     };
     let limits = FormatLimits::default();
     let source = if command.input == "-" {
