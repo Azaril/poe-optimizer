@@ -51,10 +51,13 @@ which still needs the existing Engine's complete package checks before execution
 Core is Authoring's only normal dependency; Data/Engine are used in tests. No
 runtime package depends on Authoring, and it does not evaluate formulas.
 
-Raising/formatting, KDL manifests, stable binding publication and release
-construction remain pending. Existing component
-programs exercise the compiler; this does not establish complete-build parity
-or migrate the release.
+The reverse compiler now emits readable source from existing IR, with an explicit
+node mapping for exact graph comparisons. It preserves sharing, unused nodes,
+operand order and the effect ledger, and checks structural references and bounds.
+The existing Engine still checks semantic authority and executes the result.
+Source formatting, KDL manifests, stable binding publication and release
+construction remain pending. Component round-trips do not establish complete-build
+parity or migrate the release.
 
 `evaluate-owned` is the current native CLI path. The `evaluate` command is the
 optional reference backend, available when Cargo builds with `--features pob`. Existing

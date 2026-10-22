@@ -16,15 +16,15 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/parser `0e5a9b7b`; typed expressions `e1841725`; named blocks `15de8529`; explicit programs/symbols `21db1486`; this checkpoint completes expression-family coverage |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/parser `0e5a9b7b`; expressions `e1841725`, blocks `15de8529`, programs `21db1486`, complete expression syntax `329808b8`; this checkpoint adds bounded IR-to-source conversion |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
 | Authoring | Bounded Rust program/read/effect declarations, exact typed symbols and shared-SSA formula lowering to existing IR; Core is the only normal dependency. Catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | Program syntax, exact symbols and every current IR expression family implemented; raise/format, stable binding publication, KDL and binary pack remain pending |
+| DSL / KDL / binary pack | Program syntax, exact symbols, every current expression family and bounded IR-to-source conversion implemented; source formatting, stable binding publication, KDL and binary pack remain pending |
 | Current release | Latest validated artifacts are local under ignored `runs/`, have no complete evaluation bundle, and cannot yet be reproduced from a fresh clone with one supported command |
-| CI | Focused repairs for the two fixture families pass locally. At 19:44 UTC, main run `39841825579` for `15de8529` was pending behind architecture-only run `39815736980`, still in progress. The intervening pending runs were superseded/cancelled. No green hosted claim |
+| CI | Focused repairs for the two fixture families pass locally. At 20:09 UTC, main run `39845450610` for `329808b8` was pending; intervening pending runs were superseded/cancelled. No green hosted claim |
 
 Last validated release: `runs/owned-reverse-primary-cutover-01/package`.
 Its endpoint is `runs/owned-reverse-primary-cutover-01/endpoint.json`,
@@ -184,6 +184,31 @@ fail the existing Engine checker. Independent review found no remaining issue.
 Logs: `runs/r2-operations-tests-20261022.log` and
 `runs/r2-operations-clippy-20261022.log`. No Core/Engine semantics, imported
 original or production mechanic data changed; the five-build status is unchanged.
+
+**R2 reverse conversion:** `raise_program` emits one source declaration per
+original IR node and returns an explicit original-node/name map. Stable topological
+ordering accepts forward references; read and node storage permutations do not
+change output. Operand lists, repeated edges, unused nodes and effect order remain
+intact. Every read/effect/expression variant uses the existing DSL and exact symbol
+addresses. Quantities round-trip by float bits, including extreme/subnormal values;
+Core's signed-zero normalization remains unchanged.
+
+The iterative graph check rejects duplicate IDs, missing references and unused
+cycles. Separate limits cover lists, references, symbol aliases and bytes checked
+while writing. Missing symbols and the invalid Modifier execution context fail
+explicitly. This is structural conversion, not another semantic checker: complete
+Engine compilation remains mandatory. Raising is deterministic for a given keyed
+graph; it is **not** an idempotent source formatter across arbitrary node renaming.
+
+All **94 Authoring tests pass**, with no ignored cases; strict all-target Clippy
+and formatting pass. Independent review found no remaining issue. Tests compare complete
+graphs through explicit node remapping, then execute existing fixture programs and
+independent arithmetic/guard/table/domain/timing expectations through the same
+Engine. Invalid-authority cases still fail; a reversed 2,048-node graph raises,
+lowers, compares and drops on a 1 MiB stack. Shared fixtures/read matrices are
+reused rather than copied. Logs: `runs/r2-raise-tests-20261022.log` and
+`runs/r2-raise-clippy-20261022.log`. This is a library API; CLI commands,
+whole-release migration, KDL/publication and runtime cutover remain ahead.
 
 Two hosted failures were isolated to fixtures: an unavailable skill catalog
 retained an inconsistent reverse-primary census, and the Mana equipment review
@@ -521,10 +546,13 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. Prioritize **bounded deterministic raising and
-   exact round-trips of retained complete programs**, using the existing checked IR
-   compiler without an Import/PoB runtime dependency. Then add formatting,
-   KDL and production publication. The focused verification
+1. Read this plan and Git status. Prioritize **source formatting, KDL manifests and
+   stable symbol publication**, using the completed raise/lower boundary to move
+   retained mechanics into readable source and the existing checked IR compiler.
+   Source formatting must preserve names/comments and be idempotent; do not use
+   raise-after-lower as a formatter. Keep Authoring out of the runtime dependency
+   closure. Then migrate complete release composition into production publication.
+   The focused verification
    command is `cargo test --locked -p poe-optimizer-authoring --all-targets`
    with the bounded optimized profile used by CI. Continue R0 source-pin removal and CLI/PoB suite
    consolidation alongside that work, using the audited hazards above. Retain

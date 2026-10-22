@@ -14,6 +14,7 @@ mod lexer;
 mod lower;
 mod parser;
 mod program;
+mod raise;
 mod symbols;
 
 pub use ast::{
@@ -33,6 +34,10 @@ pub use parser::{
     parse_expression, parse_program,
 };
 pub use program::{LoweredProgram, ProgramLowerLimits, ProgramSpans, lower_program};
+pub use raise::{
+    RaiseError, RaiseErrorKind, RaiseLimit, RaiseLimits, RaiseLocation, RaisedNode, RaisedProgram,
+    raise_program,
+};
 pub use symbols::{SymbolError, SymbolErrorKind, SymbolLimits, SymbolRegistry};
 
 #[cfg(test)]
@@ -58,3 +63,6 @@ mod program_tests;
 
 #[cfg(test)]
 mod operation_tests;
+
+#[cfg(test)]
+mod raise_tests;

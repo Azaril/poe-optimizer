@@ -242,6 +242,13 @@ effect ledger order and every ordered operand list. Compare graphs through an
 explicit node-ID mapping; raw vector equality or the old content digest is not
 alpha-equivalence. Retain one declaration per original node, including unused
 nodes and repeated reads, and enforce output byte bounds while writing source.
+Validate duplicate IDs, dangling references and cycles even in unused graph
+regions. Bound input lists, reference occurrences, symbols and output separately;
+raise without recursive graph traversal. Missing definition/slot symbols are
+errors, not a reason to invent identifiers. Numeric spelling must round-trip
+finite quantities and bounded integers exactly. Raising is an offline migration
+tool, not a semantic validator or source formatter: formatting must preserve
+authored names and comments and be idempotent, independently of IR node naming.
 
 ### Declarative manifests and publication
 

@@ -39,7 +39,7 @@ fn known<I, T>(id: I, schema: T) -> DefinitionEntry<I, T> {
     }
 }
 
-fn symbols(f: &native::fixture::Fixture) -> SymbolRegistry {
+pub(super) fn symbols(f: &native::fixture::Fixture) -> SymbolRegistry {
     let definitions: Vec<_> = f
         .schema
         .input()
@@ -256,7 +256,7 @@ fn effect_guards_and_shared_selects_preserve_missing_and_numerical_failures() {
     ));
 }
 
-fn enriched_fixture() -> native::fixture::Fixture {
+pub(super) fn enriched_fixture() -> native::fixture::Fixture {
     let mut f = native::fixture::fixture();
     let mut input = f.schema.input().clone();
     let blank = match f
@@ -417,9 +417,12 @@ fn enriched_fixture() -> native::fixture::Fixture {
     f
 }
 
-#[test]
-fn every_read_constructor_preserves_the_exact_existing_core_variant() {
-    let f = enriched_fixture();
+pub(super) fn read_constructor_cases() -> Vec<(
+    &'static str,
+    &'static str,
+    ComputedValueType,
+    RuleReadSource,
+)> {
     let parameter = DeclaredSlot {
         declaration: SlotOwnerDefId::ItemTemplate(id("item.template")),
         slot: id("parameter.owner"),
@@ -434,7 +437,7 @@ fn every_read_constructor_preserves_the_exact_existing_core_variant() {
     };
     // These are syntax/identity transport cases. One context cannot authorize all
     // these sources; the independent Engine refusal below retains that boundary.
-    let cases = vec![
+    vec![
         (
             "integer",
             "effect_source_parameter(parameter.skill)",
@@ -670,7 +673,13 @@ fn every_read_constructor_preserves_the_exact_existing_core_variant() {
                 projection: ContributionSelectionProjection::Value,
             },
         ),
-    ];
+    ]
+}
+
+#[test]
+fn every_read_constructor_preserves_the_exact_existing_core_variant() {
+    let f = enriched_fixture();
+    let cases = read_constructor_cases();
     assert_eq!(cases.len(), 28); // 25 variants + two equipment forms + second selection.
     for (ty, constructor, value_type, source) in cases {
         let text = format!(

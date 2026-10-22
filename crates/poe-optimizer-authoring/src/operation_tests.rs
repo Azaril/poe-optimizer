@@ -40,7 +40,7 @@ fn known<I, T>(id: I, schema: T) -> DefinitionEntry<I, T> {
     }
 }
 
-fn fixture(result_type: ComputedValueType) -> native::fixture::Fixture {
+pub(super) fn fixture(result_type: ComputedValueType) -> native::fixture::Fixture {
     let mut f = native::fixture::fixture();
     let mut schema = f.schema.input().clone();
     for (name, dimension) in [
@@ -91,7 +91,7 @@ fn fixture(result_type: ComputedValueType) -> native::fixture::Fixture {
     f
 }
 
-fn symbols(f: &native::fixture::Fixture) -> SymbolRegistry {
+pub(super) fn symbols(f: &native::fixture::Fixture) -> SymbolRegistry {
     let owned: Vec<_> = f
         .schema
         .input()
@@ -292,7 +292,7 @@ fn quantity_domain_checks_adjacent_floats_and_remains_lazy() {
     }
 }
 
-fn table(value_type: ComputedValueType, rows: Vec<ParameterValue>) -> IntegerRuleTable {
+pub(super) fn table(value_type: ComputedValueType, rows: Vec<ParameterValue>) -> IntegerRuleTable {
     IntegerRuleTable {
         id: key("signed-table"),
         minimum: BoundedInteger::new(-2).unwrap(),
@@ -553,7 +553,7 @@ fn timing_expression(precision: u32, channel: &str) -> String {
     )
 }
 
-fn timing_facts() -> Vec<(OwnedDefinitionKey, ParameterValue)> {
+pub(super) fn timing_facts() -> Vec<(OwnedDefinitionKey, ParameterValue)> {
     vec![
         (key("base"), quantity(0.5, "unit.time")),
         (key("increased"), quantity(0.0, "unit.percent")),
@@ -574,7 +574,7 @@ fn set(facts: &mut [(OwnedDefinitionKey, ParameterValue)], name: &str, value: Pa
         .1 = value;
 }
 
-fn timing_fixture(
+pub(super) fn timing_fixture(
     channel: &str,
     unit: &str,
     precision: u32,
