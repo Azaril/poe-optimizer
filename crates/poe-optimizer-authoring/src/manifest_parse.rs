@@ -1,30 +1,30 @@
-//! Bounded KDL v2 decoding for offline manifests.
+//! KDL v2 decoding for maintained offline authoring manifests.
 //!
-//! The upstream lexer and event reader implement the grammar. We retain a flat
-//! tree of string entries, with no includes, IO, implicit property replacement,
-//! or recursive DOM construction. A lexer preflight also bounds child blocks
-//! that the reader would skip because they were slash-dashed.
+//! The official parser implements the grammar. The source byte cap is checked
+//! before parsing; all other limits constrain the retained semantic document
+//! after parsing. They do not bound upstream parser recursion or allocations,
+//! or the nesting of skipped comments and slash-dashed content. This is not an
+//! untrusted upload parser. Imported builds and runtime packs use other formats.
+//!
+//! We retain a flat tree of string entries, with no includes, IO or implicit
+//! property replacement. Conversion and successful DOM cleanup are iterative.
 use crate::SymbolError;
-use just_kdl::{
-    dom::{Event, Value},
-    lexer::{Lexer, Token},
-    reader::Reader,
-};
+use kdl::{KdlDocument, KdlNode, KdlValue};
 use std::{collections::BTreeMap, fmt};
 
 pub const MAX_MANIFEST_DEPTH: usize = 64;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct ManifestLimits {
-    /// Checked before constructing either upstream parser. This also bounds
-    /// temporary storage for an individual decoded token or multiline string.
+    /// Checked before calling the upstream parser. This is an input-size bound,
+    /// not a guarantee about that parser's recursion or temporary allocations.
     pub max_source_bytes: usize,
-    /// Retained nodes; slash-dashed content is still covered by source/depth caps.
+    /// Retained nodes after parsing; excludes slash-dashed content.
     pub max_nodes: usize,
     /// Combined retained positional arguments and properties across all nodes.
     pub max_entries: usize,
-    /// Retained node nesting, counting roots as one. The same bound applies to
-    /// all lexical child blocks, including slash-dashed blocks.
+    /// Retained node nesting after parsing, counting roots as one. Does not
+    /// constrain parser recursion, comments or slash-dashed child blocks.
     pub max_depth: usize,
     /// Combined decoded node names, property names and string values.
     pub max_text_bytes: usize,
@@ -128,49 +128,6 @@ fn check_limits(source: &str, limits: ManifestLimits) -> Result<(), ManifestErro
     Ok(())
 }
 
-fn check_lexical_depth(source: &str, maximum: usize) -> Result<(), ManifestError> {
-    let mut lexer = Lexer::new(source.as_bytes());
-    let mut depth = 0_usize;
-    loop {
-        // The upstream lexer still validates skipped strings and numbers. No
-        // raw-character scan can confuse braces in comments, escapes or strings.
-        let (token, _) = lexer.next_token(true);
-        match token.map_err(|_| error(ManifestErrorKind::Syntax, None, "invalid KDL syntax"))? {
-            Token::OpenCurly => {
-                if depth == maximum {
-                    return Err(error(
-                        ManifestErrorKind::Depth,
-                        None,
-                        "manifest lexical child-block depth limit exceeded",
-                    ));
-                }
-                depth += 1;
-            }
-            Token::CloseCurly => {
-                depth = depth.checked_sub(1).ok_or_else(|| {
-                    error(
-                        ManifestErrorKind::Syntax,
-                        None,
-                        "unmatched KDL child-block close",
-                    )
-                })?;
-            }
-            Token::Eof => {
-                return if depth == 0 {
-                    Ok(())
-                } else {
-                    Err(error(
-                        ManifestErrorKind::Syntax,
-                        None,
-                        "unclosed KDL child block",
-                    ))
-                };
-            }
-            _ => {}
-        }
-    }
-}
-
 fn charge_text(
     used: &mut usize,
     count: usize,
@@ -191,159 +148,143 @@ fn charge_text(
     Ok(())
 }
 
-struct Frame {
-    node: usize,
-    children: bool,
-}
-
-/// Decode a complete document. All downstream semantics operate on this flat
-/// representation; dropping a rejected deeply nested input cannot recurse.
+/// Decode a complete maintained manifest with the standard parser, then enforce
+/// the semantic limits. These limits are not upstream parsing resource guards.
 pub(crate) fn parse_document(
     source: &str,
     limits: ManifestLimits,
 ) -> Result<Document, ManifestError> {
     check_limits(source, limits)?;
-    check_lexical_depth(source, limits.max_depth)?;
+    let parsed = KdlDocument::parse_v2(source)
+        .map_err(|_| error(ManifestErrorKind::Syntax, None, "invalid KDL v2 syntax"))?;
+    let result = flatten_document(&parsed, limits);
+    drop_document(parsed);
+    result
+}
+
+struct Frame<'a> {
+    nodes: std::slice::Iter<'a, KdlNode>,
+    parent: Option<usize>,
+}
+
+fn flatten_document(
+    parsed: &KdlDocument,
+    limits: ManifestLimits,
+) -> Result<Document, ManifestError> {
     let mut document = Document {
         nodes: Vec::new(),
         roots: Vec::new(),
     };
-    let mut stack: Vec<Frame> = Vec::new();
+    let mut stack = vec![Frame {
+        nodes: parsed.nodes().iter(),
+        parent: None,
+    }];
     let mut entries = 0_usize;
     let mut text_bytes = 0_usize;
-    for event in Reader::new(source.as_bytes()) {
-        let (event, _) = event.map_err(|_| {
-            error(
-                ManifestErrorKind::Syntax,
-                stack.last().map(|frame| frame.node),
-                "invalid KDL syntax",
-            )
-        })?;
-        match event {
-            Event::Node { r#type, name } => {
-                let id = document.nodes.len();
-                if r#type.is_some() {
+    while let Some(frame) = stack.last_mut() {
+        let Some(input) = frame.nodes.next() else {
+            stack.pop();
+            continue;
+        };
+        let parent = frame.parent;
+        let id = document.nodes.len();
+        if id == limits.max_nodes {
+            return Err(error(
+                ManifestErrorKind::Nodes,
+                Some(id),
+                "manifest node limit exceeded",
+            ));
+        }
+        if stack.len() > limits.max_depth {
+            return Err(error(
+                ManifestErrorKind::Depth,
+                Some(id),
+                "manifest node depth limit exceeded",
+            ));
+        }
+        if input.ty().is_some() {
+            return Err(error(
+                ManifestErrorKind::Shape,
+                Some(id),
+                "manifest node types are unsupported",
+            ));
+        }
+        let name = input.name().value();
+        charge_text(&mut text_bytes, name.len(), limits.max_text_bytes, id)?;
+        let mut node = Node {
+            name: name.to_owned(),
+            arguments: Vec::new(),
+            properties: BTreeMap::new(),
+            children: Vec::new(),
+        };
+        for entry in input.entries() {
+            if entries == limits.max_entries {
+                return Err(error(
+                    ManifestErrorKind::Entries,
+                    Some(id),
+                    "manifest entry limit exceeded",
+                ));
+            }
+            entries += 1;
+            if entry.ty().is_some() {
+                return Err(error(
+                    ManifestErrorKind::Shape,
+                    Some(id),
+                    "manifest entry types are unsupported",
+                ));
+            }
+            let KdlValue::String(value) = entry.value() else {
+                return Err(error(
+                    ManifestErrorKind::Shape,
+                    Some(id),
+                    "manifest entries must be strings",
+                ));
+            };
+            if let Some(name) = entry.name() {
+                let name = name.value();
+                if node.properties.contains_key(name) {
                     return Err(error(
-                        ManifestErrorKind::Shape,
+                        ManifestErrorKind::DuplicateProperty,
                         Some(id),
-                        "manifest node types are unsupported",
-                    ));
-                }
-                if id == limits.max_nodes {
-                    return Err(error(
-                        ManifestErrorKind::Nodes,
-                        Some(id),
-                        "manifest node limit exceeded",
-                    ));
-                }
-                if stack.len() == limits.max_depth {
-                    return Err(error(
-                        ManifestErrorKind::Depth,
-                        Some(id),
-                        "manifest node depth limit exceeded",
-                    ));
-                }
-                if stack.last().is_some_and(|frame| !frame.children) {
-                    return Err(error(
-                        ManifestErrorKind::Syntax,
-                        Some(id),
-                        "node outside a child block",
+                        "duplicate manifest property",
                     ));
                 }
                 charge_text(&mut text_bytes, name.len(), limits.max_text_bytes, id)?;
-                document.nodes.push(Node {
-                    name: name.to_string(),
-                    arguments: Vec::new(),
-                    properties: BTreeMap::new(),
-                    children: Vec::new(),
-                });
-                if let Some(parent) = stack.last() {
-                    document.nodes[parent.node].children.push(id);
-                } else {
-                    document.roots.push(id);
-                }
-                stack.push(Frame {
-                    node: id,
-                    children: false,
-                });
-            }
-            Event::Entry(entry) => {
-                let frame = stack
-                    .last()
-                    .filter(|frame| !frame.children)
-                    .ok_or_else(|| {
-                        error(
-                            ManifestErrorKind::Syntax,
-                            None,
-                            "entry outside a node's entries",
-                        )
-                    })?;
-                let id = frame.node;
-                if entries == limits.max_entries {
-                    return Err(error(
-                        ManifestErrorKind::Entries,
-                        Some(id),
-                        "manifest entry limit exceeded",
-                    ));
-                }
-                entries += 1;
-                if entry.r#type.is_some() {
-                    return Err(error(
-                        ManifestErrorKind::Shape,
-                        Some(id),
-                        "manifest entry types are unsupported",
-                    ));
-                }
-                let Value::String(value) = entry.value else {
-                    return Err(error(
-                        ManifestErrorKind::Shape,
-                        Some(id),
-                        "manifest entries must be strings",
-                    ));
-                };
-                let node = &mut document.nodes[id];
-                if let Some(name) = entry.name {
-                    if node.properties.contains_key(name.as_str()) {
-                        return Err(error(
-                            ManifestErrorKind::DuplicateProperty,
-                            Some(id),
-                            "duplicate manifest property",
-                        ));
-                    }
-                    charge_text(&mut text_bytes, name.len(), limits.max_text_bytes, id)?;
-                    charge_text(&mut text_bytes, value.len(), limits.max_text_bytes, id)?;
-                    node.properties.insert(name.to_string(), value.to_string());
-                } else {
-                    charge_text(&mut text_bytes, value.len(), limits.max_text_bytes, id)?;
-                    node.arguments.push(value.to_string());
-                }
-            }
-            Event::Children => {
-                let frame = stack
-                    .last_mut()
-                    .filter(|frame| !frame.children)
-                    .ok_or_else(|| {
-                        error(
-                            ManifestErrorKind::Syntax,
-                            None,
-                            "child block outside a node",
-                        )
-                    })?;
-                frame.children = true;
-            }
-            Event::End => {
-                stack.pop().ok_or_else(|| {
-                    error(ManifestErrorKind::Syntax, None, "unmatched KDL node end")
-                })?;
+                charge_text(&mut text_bytes, value.len(), limits.max_text_bytes, id)?;
+                node.properties.insert(name.to_owned(), value.clone());
+            } else {
+                charge_text(&mut text_bytes, value.len(), limits.max_text_bytes, id)?;
+                node.arguments.push(value.clone());
             }
         }
-    }
-    if !stack.is_empty() {
-        return Err(error(
-            ManifestErrorKind::Syntax,
-            stack.last().map(|frame| frame.node),
-            "unfinished KDL node",
-        ));
+        document.nodes.push(node);
+        if let Some(parent) = parent {
+            document.nodes[parent].children.push(id);
+        } else {
+            document.roots.push(id);
+        }
+        if let Some(children) = input.children() {
+            stack.push(Frame {
+                nodes: children.nodes().iter(),
+                parent: Some(id),
+            });
+        }
     }
     Ok(document)
+}
+
+// Detach child documents before dropping their nodes, including when semantic
+// validation failed. This avoids adding recursive cleanup after a successful
+// upstream parse; it does not alter or guard the upstream parser itself.
+fn drop_document(document: KdlDocument) {
+    let mut stack = vec![document.into_iter()];
+    while let Some(nodes) = stack.last_mut() {
+        if let Some(mut node) = nodes.next() {
+            if let Some(children) = node.children_mut().take() {
+                stack.push(children.into_iter());
+            }
+        } else {
+            stack.pop();
+        }
+    }
 }

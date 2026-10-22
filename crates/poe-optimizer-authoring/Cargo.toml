@@ -17,9 +17,8 @@ path = "tests/cli.rs"
 
 [dependencies]
 poe-optimizer-core = { path = "../poe-optimizer-core" }
-# Published 0.3.0 loses inline escaped characters in optimized builds; upstream fix:
-# https://github.com/1e1001/rsutil/commit/78e1f72528982cb25f75b64b94af684598e81229
-just-kdl = { git = "https://github.com/1e1001/rsutil", rev = "78e1f72528982cb25f75b64b94af684598e81229" }
+# Official KDL v2 parser; 6.6+ requires Rust 1.95, beyond this crate's MSRV.
+kdl = { version = "=6.5.0", default-features = false }
 
 [dev-dependencies]
 poe-optimizer-data = { path = "../poe-optimizer-data", default-features = false }

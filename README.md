@@ -76,7 +76,7 @@ migration checks and are scheduled for removal with the old runtime.
 
 The `poe-optimizer-authoring` library parses and lowers complete `.rule` programs
 to the existing IR, resolves exact schema symbols and raises IR back to source.
-Its normal dependencies are Core and an offline KDL parser; it is not a runtime
+Its normal dependencies are Core and the official `kdl-rs` parser; it is not a runtime
 dependency. The separate `poe-author` executable formats one program to stdout or
 checks formatting:
 

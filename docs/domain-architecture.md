@@ -273,11 +273,17 @@ partial coverage and gaps, receivers, application groups and query inventories.
 The resulting package still needs the Engine's authority checks. Never infer an
 owner, mark coverage complete, or silently replace an existing program.
 
-Use a standard KDL parser at this offline boundary with bounded source bytes,
-structure, entries and decoded text, including skipped content. Reject unknown
-metadata and duplicate properties. The first name/membership declarations accept
-string values only; this is a typed manifest schema, not a second KDL dialect or
-an embedded evaluator.
+Use the official `kdl-rs` document parser for maintained offline authoring files.
+Check source bytes before parsing, then validate retained structure, entries,
+depth and decoded text before constructing owned declarations. Reject unknown
+metadata and duplicate properties explicitly; the parser's last-property-wins
+convenience lookup must not replace those checks. Commented-out content is not
+part of the retained model. These validation limits do not bound the upstream
+parser's recursion or allocation work: this is not a public-upload ingestion
+boundary. Imported user builds and runtime packages use their separate loaders.
+No streaming parser, second lexer, parser fork or subprocess is required here.
+The first name/membership declarations accept string values only; this is a typed
+manifest schema, not a second KDL dialect or an embedded evaluator.
 
 KDL manifests declare definitions, rules, typed input projections, contribution
 queries, membership additions, routing, source references, fixtures and

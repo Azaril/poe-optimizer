@@ -48,7 +48,7 @@ program "add-life" context actor {
 The source does not declare its owning definition or claim complete membership.
 Those belong to the manifest. Lowering produces an unchecked `RuleProgram`,
 which still needs the existing Engine's complete package checks before execution.
-Authoring uses Core and a standard streaming KDL parser; Data/Engine are used in
+Authoring uses Core and the official `kdl-rs` document parser; Data/Engine are used in
 tests. No runtime package depends on Authoring, and it does not evaluate formulas.
 
 The reverse compiler now emits readable source from existing IR, with an explicit
@@ -64,6 +64,15 @@ programs to existing owners after a complete structural preflight. The containin
 package still requires Engine validation. Source labels are injected text labels,
 not paths that the library opens. Stable binding publication, broader declaration
 manifests and release construction remain pending.
+KDL is maintained offline source: file bytes are limited before parsing and
+retained structure is checked afterward. These checks are not a guarantee of
+bounded parser recursion for hostile input. KDL is not parsed during native
+evaluation or used to ingest uploaded builds.
+One upstream syntax limitation is known: `root { /- omitted "value"; kept; }`
+is valid KDL but rejected by `kdl-rs` 6.5.0; the same parser path remains in
+6.7.1. Newline-terminate commented-out nodes instead. Our adapter does not rewrite
+the source or retry it through another parser. This affects authoring syntax,
+not rule calculations or imported builds.
 Component round-trips do not establish complete-build parity or migrate the release.
 
 `evaluate-owned` is the current native CLI path. The `evaluate` command is the

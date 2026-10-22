@@ -16,7 +16,7 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/parser `0e5a9b7b`; expressions `e1841725`, blocks `15de8529`, programs `21db1486`, complete expression syntax `329808b8`, raising `86bbe9b9`, formatter/CLI `5ba6abdf`; this checkpoint adds name/membership KDL and bounded packet assembly |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/parser `0e5a9b7b`; expressions `e1841725`, blocks `15de8529`, programs `21db1486`, complete expression syntax `329808b8`, raising `86bbe9b9`, formatter/CLI `5ba6abdf`, name/membership KDL `86656b74`; this checkpoint replaces the streaming decoder with official kdl-rs |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -24,7 +24,7 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | DSL / KDL / binary pack | Program syntax, exact symbols, all expression families, raising/formatting and name/membership KDL implemented; `poe-author rule fmt` available. Stable binding publication, broader declaration manifests and binary pack remain pending |
 | Current release | Latest validated artifacts are local under ignored `runs/`, have no complete evaluation bundle, and cannot yet be reproduced from a fresh clone with one supported command |
-| CI | Focused repairs for the two fixture families pass locally. Latest checked main run `39849460312` for `5ba6abdf` remains pending; intervening pending runs were superseded/cancelled. No green hosted claim |
+| CI | Focused repairs for the two fixture families pass locally. Latest checked main run `39852219507` for `86656b74` was pending; intervening pending runs were superseded/cancelled. No green hosted claim |
 
 Last validated release: `runs/owned-reverse-primary-cutover-01/package`.
 Its endpoint is `runs/owned-reverse-primary-cutover-01/endpoint.json`,
@@ -249,22 +249,36 @@ publisher.** Old JSON/builders and the later checked-range successor remain in
 their current consumers until those consumers move together; no complete-build
 coverage or input issue count changed.
 
-KDL uses the standard iterative `just-kdl` lexer/reader, pinned to upstream fix
-`78e1f72528982cb25f75b64b94af684598e81229` (0.3.1 source). Published 0.3.0 writes
-escaped inline characters only inside a debug assertion; the fixed revision
-moves that write outside it. No local fork or custom KDL lexer was added.
-Source bytes, all lexical child depth (including skipped content), retained
-nodes/entries and decoded text are bounded. Tests cover all 25 definition kinds,
-six slot kinds, exact owners, refusal/atomicity controls and constrained-stack
-parsing. All **142 tests pass** (138 library, four CLI); strict all-target Clippy
-and formatting pass. Twenty focused tests also pass with optimization enabled
-and debug assertions disabled; CI now runs that profile on both operating
-systems. The runtime dependency guard also rejects the KDL parser. Independent
-review found no remaining blocker. Logs: `runs/r2-kdl-packet-tests-20261022.log`,
-`runs/r2-kdl-packet-clippy-20261022.log`,
-`runs/r2-kdl-release-decoding-20261022.log`. Local compilation used Rust 1.98.1;
-Cargo selected Rust-1.93-compatible dependency versions, but direct MSRV compilation
-remains part of R0, not a result claimed at this checkpoint.
+At the user's request, KDL now uses official `kdl-rs` through the published
+`kdl = "=6.5.0"` crate, with default features disabled and explicit `parse_v2`.
+This preserves the declared Rust 1.93 minimum; the newer 6.7.1 release requires
+Rust 1.95. The Git-pinned streaming parser and separate lexical preflight are
+removed. No alternate decoder, parser fork or process remains.
+
+These are maintained offline source files, not public uploads. Input bytes are
+limited before the standard parser runs; retained node/entry/depth/text limits
+and strict duplicate/type/field checks follow its parse. Commented-out blocks
+are not retained declarations. The upstream parser exposes no recursion/work
+budget, and these checks do not claim adversarial parse-time protection. User
+build ingestion and native runtime package loading remain separate. The old
+streaming-parser stack-stress test is removed with that unsupported guarantee;
+normal syntax, exact limits, all 25 definition/six slot domains, packet atomicity
+and the thirteen Life vectors remain. CI retains build-profile decoding checks
+and excludes `kdl` from normal runtime dependencies.
+The syntax fixture uses newline-terminated `/-` nodes: the standard parser
+incorrectly rejects a semicolon after such a node (also present in the 6.7.1
+source). This is an explicit upstream limitation, not malformed KDL, and not a
+reason to add a source rewrite or alternate decoder. The overview records its
+minimal reproducer. No production mechanic or retained emission vector changed.
+
+Validation: **141 tests pass** (137 library, four CLI), none ignored; nineteen
+focused manifest tests also pass with optimization enabled and debug assertions
+disabled. Formatting, strict all-target Clippy and the normal runtime dependency
+guard pass. Independent review found no remaining adapter issue. Logs:
+`runs/r2-official-kdl-tests-final-20261022.log`,
+`runs/r2-official-kdl-clippy-20261022.log`,
+`runs/r2-official-kdl-release-decoding-20261022.log`. Validation used Rust 1.98.1;
+direct MSRV compilation remains an R0 requirement, not a result claimed here.
 
 Two hosted failures were isolated to fixtures: an unavailable skill catalog
 retained an inconsistent reverse-primary census, and the Mana equipment review
