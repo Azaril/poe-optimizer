@@ -4,6 +4,7 @@ use std::fmt;
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum LimitKind {
     SourceBytes,
+    OutputBytes,
     Tokens,
     Nesting,
     Nodes,

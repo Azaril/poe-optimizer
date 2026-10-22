@@ -59,7 +59,7 @@ cargo run --locked --features pob --bin poe-optimizer -- --help
 clean-clone command that reproduces the latest full data release; fixing that is
 an explicit migration gate. Do not substitute the tracked historical `current/`
 baseline for the latest local release or assume a complete build will evaluate.
-Planned `rule`/manifest-publishing commands are not implemented yet.
+The offline `rule fmt` command is available; manifest publishing remains planned.
 
 The existing suite is expensive. Consolidation reduces Core, Data, Engine,
 Search and Import from 304 integration binaries to twelve; CLI and reference
@@ -73,10 +73,22 @@ Import keeps its large normalization suite isolated. Adding a test file
 alone no longer registers it in those crates. The temporary `legacy` suites retain
 migration checks and are scheduled for removal with the old runtime.
 
-The dependency-free `poe-optimizer-authoring` library currently provides bounded
-expression syntax and diagnostics. It has no runtime consumer or CLI commands;
-symbol resolution and lowering into the existing checked IR are the next step.
-Run its focused checks with `cargo test -p poe-optimizer-authoring --locked`.
+The `poe-optimizer-authoring` library parses and lowers complete `.rule` programs
+to the existing IR, resolves exact schema symbols and raises IR back to source.
+Its only normal dependency is Core; it is not a runtime dependency. The separate
+`poe-author` executable formats one program to stdout or checks formatting:
+
+```text
+cargo run --locked -p poe-optimizer-authoring -- rule fmt path/to/mechanic.rule
+cargo run --locked -p poe-optimizer-authoring -- rule fmt --check path/to/mechanic.rule
+```
+
+Use `-` as the path to read stdin. Input files are unchanged. Check mode exits
+0 when formatted, 1 when formatting differs, and 2 on syntax, argument or I/O
+errors. Formatting preserves names, numeric spelling and comments; it does not
+validate rule types, ownership or complete coverage. KDL manifests, semantic
+checking/publication commands and release cutover remain ahead.
+Run focused checks with `cargo test -p poe-optimizer-authoring --locked --all-targets`.
 
 ## Boundaries
 

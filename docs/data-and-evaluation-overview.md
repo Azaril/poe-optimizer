@@ -55,14 +55,19 @@ The reverse compiler now emits readable source from existing IR, with an explici
 node mapping for exact graph comparisons. It preserves sharing, unused nodes,
 operand order and the effect ledger, and checks structural references and bounds.
 The existing Engine still checks semantic authority and executes the result.
-Source formatting, KDL manifests, stable binding publication and release
-construction remain pending. Component round-trips do not establish complete-build
-parity or migrate the release.
+Source formatting preserves exact tokens, authored names and comment bodies while
+normalizing structural whitespace. It is idempotent under the same resource limits;
+generated output must fit the input limit as well as the output limit. KDL
+manifests, stable binding publication and release construction remain pending.
+Component round-trips do not establish complete-build parity or migrate the release.
 
 `evaluate-owned` is the current native CLI path. The `evaluate` command is the
 optional reference backend, available when Cargo builds with `--features pob`. Existing
 `search-calibration` ranks a finite supplied set through PoB; it is not a native
-build optimizer. New DSL commands below are planned, not available commands.
+build optimizer. The separate offline `poe-author rule fmt [--check] <path|->`
+command is available; it writes formatted source to stdout or checks formatting
+without changing the file. It validates syntax only. Other DSL and publication
+commands below remain planned.
 
 ## What replaces it
 

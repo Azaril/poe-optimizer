@@ -249,6 +249,10 @@ errors, not a reason to invent identifiers. Numeric spelling must round-trip
 finite quantities and bounded integers exactly. Raising is an offline migration
 tool, not a semantic validator or source formatter: formatting must preserve
 authored names and comments and be idempotent, independently of IR node naming.
+Formatting preserves token spellings and grouping; it only changes structural
+whitespace. Preserve comment bodies under the lexer's LF termination rule,
+including literal CR or trailing spaces. Output must fit both the output budget
+and the parser source budget so it remains admissible with the same settings.
 
 ### Declarative manifests and publication
 

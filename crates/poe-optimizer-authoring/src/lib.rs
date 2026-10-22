@@ -10,6 +10,7 @@
 mod ast;
 mod bindings;
 mod diagnostic;
+mod format;
 mod lexer;
 mod lower;
 mod parser;
@@ -26,6 +27,7 @@ pub use bindings::{
     ValueBinding,
 };
 pub use diagnostic::{Diagnostic, DiagnosticCode, LimitKind};
+pub use format::{FormatLimits, format_program};
 pub use lower::{
     LowerLimits, LoweredBinding, LoweredBlock, LoweredExpression, lower_block, lower_expression,
 };
@@ -66,3 +68,6 @@ mod operation_tests;
 
 #[cfg(test)]
 mod raise_tests;
+
+#[cfg(test)]
+mod format_tests;

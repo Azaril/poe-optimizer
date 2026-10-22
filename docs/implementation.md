@@ -16,13 +16,13 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/parser `0e5a9b7b`; expressions `e1841725`, blocks `15de8529`, programs `21db1486`, complete expression syntax `329808b8`; this checkpoint adds bounded IR-to-source conversion |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/parser `0e5a9b7b`; expressions `e1841725`, blocks `15de8529`, programs `21db1486`, complete expression syntax `329808b8`, raising `86bbe9b9`; this checkpoint adds formatting and the offline developer executable |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
 | Authoring | Bounded Rust program/read/effect declarations, exact typed symbols and shared-SSA formula lowering to existing IR; Core is the only normal dependency. Catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | Program syntax, exact symbols, every current expression family and bounded IR-to-source conversion implemented; source formatting, stable binding publication, KDL and binary pack remain pending |
+| DSL / KDL / binary pack | Program syntax, exact symbols, every current expression family, bounded raising and idempotent source formatting implemented; `poe-author rule fmt` available. Stable binding publication, KDL and binary pack remain pending |
 | Current release | Latest validated artifacts are local under ignored `runs/`, have no complete evaluation bundle, and cannot yet be reproduced from a fresh clone with one supported command |
 | CI | Focused repairs for the two fixture families pass locally. At 20:09 UTC, main run `39845450610` for `329808b8` was pending; intervening pending runs were superseded/cancelled. No green hosted claim |
 
@@ -175,7 +175,7 @@ implementation for source metadata and formulas; the duplicate Option path is
 removed. This finishes syntax for every current expression variant, not migration
 of all retained programs or completion of a build.
 
-All **82 Authoring tests pass**, with no ignored cases, plus strict all-target
+Expression-coverage checkpoint `329808b8`: all **82 Authoring tests pass**, with no ignored cases, plus strict all-target
 Clippy and formatting. Independent expected results cover inclusive/adjacent
 range boundaries, exact signed table keys and all scalar result types, choice
 identity, ordinary timing precision/caps and every missing timing dependency.
@@ -200,15 +200,36 @@ explicitly. This is structural conversion, not another semantic checker: complet
 Engine compilation remains mandatory. Raising is deterministic for a given keyed
 graph; it is **not** an idempotent source formatter across arbitrary node renaming.
 
-All **94 Authoring tests pass**, with no ignored cases; strict all-target Clippy
+Raising checkpoint `86bbe9b9`: all **94 Authoring tests pass**, with no ignored cases; strict all-target Clippy
 and formatting pass. Independent review found no remaining issue. Tests compare complete
 graphs through explicit node remapping, then execute existing fixture programs and
 independent arithmetic/guard/table/domain/timing expectations through the same
 Engine. Invalid-authority cases still fail; a reversed 2,048-node graph raises,
 lowers, compares and drops on a 1 MiB stack. Shared fixtures/read matrices are
 reused rather than copied. Logs: `runs/r2-raise-tests-20261022.log` and
-`runs/r2-raise-clippy-20261022.log`. This is a library API; CLI commands,
-whole-release migration, KDL/publication and runtime cutover remain ahead.
+`runs/r2-raise-clippy-20261022.log`. Raising/lowering remain library APIs; their
+CLI commands, whole-release migration, KDL/publication and runtime cutover remain ahead.
+
+**R2 source formatting and developer command:** a bounded token/trivia formatter
+preserves authored names, numeric spellings, grouping, unit adjacency and exact
+comment bodies/attachment. It parses first and never resolves, lowers or raises a
+program. Structural whitespace uses four-space indentation and LF. Literal CR
+and trailing whitespace inside `//` comments remain intact under the lexer
+contract. Successful output fits both source and output limits for repeatability.
+
+The separate `poe-author rule fmt [--check] [--] <path|->` executable formats to
+stdout or reports formatting differences, with bounded file/stdin decoding and
+no file mutation. Statuses are 0 success, 1 check mismatch, 2 error. Authoring stays
+out of the runtime CLI dependency graph and gains no normal dependencies.
+Validation covers exact token/AST/comment preservation, idempotence, every viable
+comment insertion boundary, precise budget failures, a 1,500-statement 1 MiB-stack
+case, unchanged lowered IR and independent Engine results. CLI tests cover paths,
+stdin, malformed/oversized input, check statuses and unchanged file bytes.
+Independent review found and fixed output growth past the source limit; both
+library and CLI controls now exercise it. All **109 tests pass** (105 library,
+four CLI), with none ignored; strict all-target Clippy and formatting pass.
+Independent review found no remaining issue. Local evidence is in
+`runs/r2-format-tests-20261022.log` and `runs/r2-format-clippy-20261022.log`.
 
 Two hosted failures were isolated to fixtures: an unavailable skill catalog
 retained an inconsistent reverse-primary census, and the Mana equipment review
@@ -349,10 +370,9 @@ for deletion at R4. No compatibility reader enters the normal CLI/library path.
 
 ### R2 — Formula DSL and declarative authoring
 
-**Started: explicit programs, exact symbols and all expression families.**
-Next add bounded deterministic raising/formatting of complete retained programs.
-Use retained real programs to prove full graph alpha-equivalence before moving
-their authoring sources. Then complete manifests and the shared behavioral
+**Started: complete program syntax, exact symbols, raising and formatting.**
+Next move retained real programs into KDL manifests and `.rule` source, preserving
+full graph alpha-equivalence and executable expectations. Complete the shared behavioral
 harness; do not create a second evaluation model. The current unchecked compiler
 output is not a supported release format or a substitute for full package validation.
 
@@ -546,12 +566,22 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. Prioritize **source formatting, KDL manifests and
-   stable symbol publication**, using the completed raise/lower boundary to move
-   retained mechanics into readable source and the existing checked IR compiler.
-   Source formatting must preserve names/comments and be idempotent; do not use
-   raise-after-lower as a formatter. Keep Authoring out of the runtime dependency
-   closure. Then migrate complete release composition into production publication.
+1. Read this plan and Git status. Prioritize **KDL manifests and stable symbol
+   publication**. Migrate the retained `inherent-life-contribution` program first:
+   its four reads, six nodes and guarded effect already have thirteen independent
+   emission vectors. Bind its seven existing addresses by name and preserve exact
+   Actor membership, partial closure, receiver and query memberships. Reuse the
+   existing schema, Engine and release checks; do not add a second schema/evaluator.
+   Replace its handwritten program builder and historical staging choreography
+   once the generic manifest path drives its consumers. A single migrated family
+   does not yet reproduce the full release.
+   Schema-valid symbols are not proof of active allocation or stable persisted
+   names. Move/reuse the existing registry allocation/successor logic in the
+   offline publication transaction with stale-state checks. Current typed-ID serde
+   repeats namespaces: resolve KDL names directly to typed IDs, then build the
+   deliberate compact codec; do not rewrite arbitrary JSON recursively.
+   Keep Authoring out of the runtime dependency closure. Then migrate complete
+   release composition into production publication.
    The focused verification
    command is `cargo test --locked -p poe-optimizer-authoring --all-targets`
    with the bounded optimized profile used by CI. Continue R0 source-pin removal and CLI/PoB suite

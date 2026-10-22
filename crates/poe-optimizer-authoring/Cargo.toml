@@ -5,6 +5,15 @@ edition = "2024"
 rust-version = "1.93"
 description = "Bounded offline formula authoring frontend for the checked native rule IR"
 publish = false
+autotests = false
+
+[[bin]]
+name = "poe-author"
+path = "src/main.rs"
+
+[[test]]
+name = "cli"
+path = "tests/cli.rs"
 
 [dependencies]
 poe-optimizer-core = { path = "../poe-optimizer-core" }
