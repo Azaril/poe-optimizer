@@ -9,9 +9,14 @@ use crate::{
 };
 use poe_optimizer_core::{
     owned_build::ParameterValue,
-    owned_definitions::{BoundedInteger, FiniteQuantity, OwnedDefinitionKey, UnitDefId},
-    owned_rules::{RuleComparison, RuleExpression, RuleNode, RuleRounding},
-    owned_schema::{ComputedValueType, UnitDimension},
+    owned_definitions::{
+        BoundedInteger, FiniteQuantity, OptionDefId, OwnedDefinitionKey, UnitDefId,
+    },
+    owned_rules::{
+        NumericDomain, OrdinaryTimingChannel, OrdinaryTimingRecipe, ReciprocalTimingUnits,
+        RuleComparison, RuleExpression, RuleNode, RuleRounding,
+    },
+    owned_schema::{ComputedValueType, IntegerRange, QuantityRange, UnitDimension},
 };
 use std::collections::BTreeMap;
 
@@ -107,6 +112,17 @@ enum Call {
     Round(FiniteQuantity, RuleRounding),
     QuantizeInteger(FiniteQuantity, RuleRounding),
     Quantity(FiniteQuantity),
+    Option(OptionDefId),
+    CheckDomain(Box<NumericDomain>),
+    Lookup {
+        table: OwnedDefinitionKey,
+        value_type: ComputedValueType,
+    },
+    OrdinaryTiming {
+        precision: u32,
+        units: Box<ReciprocalTimingUnits>,
+        output: OrdinaryTimingChannel,
+    },
     All,
     Any,
 }
@@ -120,8 +136,13 @@ impl Call {
             | Self::ScaleInteger
             | Self::DivideFactor
             | Self::Ratio(_) => 2,
-            Self::Percent(_) | Self::Round(_, _) | Self::QuantizeInteger(_, _) => 1,
-            Self::Quantity(_) => 0,
+            Self::Percent(_)
+            | Self::Round(_, _)
+            | Self::QuantizeInteger(_, _)
+            | Self::CheckDomain(_)
+            | Self::Lookup { .. } => 1,
+            Self::Quantity(_) | Self::Option(_) => 0,
+            Self::OrdinaryTiming { .. } => 8,
             Self::All | Self::Any => total,
         }
     }
@@ -748,6 +769,123 @@ fn quantity_constructor(
     })
 }
 
+fn option_constructor(
+    parsed: &Syntax<'_>,
+    bindings: &ExpressionBindings,
+    arguments: &[ExprId],
+    span: Span,
+) -> Result<OptionDefId, Diagnostic> {
+    arity(arguments, 1, span)?;
+    let name = path_name(parsed, arguments[0])?;
+    bindings.option(&name).cloned().ok_or_else(|| {
+        error(
+            DiagnosticCode::UnknownSymbol,
+            parsed.nodes()[arguments[0].index()].span,
+            "unknown option symbol",
+        )
+    })
+}
+
+fn numeric_domain(
+    parsed: &Syntax<'_>,
+    bindings: &ExpressionBindings,
+    minimum: ExprId,
+    maximum: ExprId,
+    span: Span,
+) -> Result<NumericDomain, Diagnostic> {
+    match (
+        static_literal(parsed, bindings, minimum)?,
+        static_literal(parsed, bindings, maximum)?,
+    ) {
+        (ParameterValue::Integer(minimum), ParameterValue::Integer(maximum)) => {
+            if minimum > maximum {
+                return Err(arguments_error(span, "numeric domain bounds are reversed"));
+            }
+            Ok(NumericDomain::Integer(IntegerRange { minimum, maximum }))
+        }
+        (ParameterValue::Quantity(minimum), ParameterValue::Quantity(maximum)) => {
+            if minimum.unit() != maximum.unit() {
+                return Err(type_error(
+                    span,
+                    "numeric domain bounds require identical units",
+                ));
+            }
+            if minimum.value() > maximum.value() {
+                return Err(arguments_error(span, "numeric domain bounds are reversed"));
+            }
+            Ok(NumericDomain::Quantity(QuantityRange { minimum, maximum }))
+        }
+        _ => Err(type_error(
+            span,
+            "numeric domain bounds require identical numeric types and units",
+        )),
+    }
+}
+
+fn table_key(parsed: &Syntax<'_>, id: ExprId) -> Result<OwnedDefinitionKey, Diagnostic> {
+    let node = &parsed.nodes()[id.index()];
+    let ExprKind::Key(contents) = node.kind else {
+        return Err(arguments_error(node.span, "expected a quoted table key"));
+    };
+    let contents = parsed
+        .text(contents)
+        .ok_or_else(|| arguments_error(node.span, "invalid table key span"))?;
+    OwnedDefinitionKey::new(contents)
+        .map_err(|_| error(DiagnosticCode::InvalidKey, node.span, "invalid table key"))
+}
+
+fn timing_call(
+    parsed: &Syntax<'_>,
+    bindings: &ExpressionBindings,
+    arguments: &[ExprId],
+    span: Span,
+) -> Result<Call, Diagnostic> {
+    arity(arguments, 12, span)?;
+    let precision_span = parsed.nodes()[arguments[8].index()].span;
+    let ParameterValue::Integer(precision) = static_literal(parsed, bindings, arguments[8])? else {
+        return Err(type_error(
+            precision_span,
+            "timing precision requires an Integer literal",
+        ));
+    };
+    let precision = u32::try_from(precision.get())
+        .ok()
+        .filter(|value| *value <= 12)
+        .ok_or_else(|| {
+            arguments_error(precision_span, "timing precision must be between 0 and 12")
+        })?;
+    let time = symbolic_unit(parsed, bindings, arguments[9])?;
+    let rate = symbolic_unit(parsed, bindings, arguments[10])?;
+    for (unit, expected, argument) in [
+        (&time, UnitDimension::Time, arguments[9]),
+        (&rate, UnitDimension::Rate, arguments[10]),
+    ] {
+        dimension(
+            bindings,
+            &ComputedValueType::Quantity { unit: unit.clone() },
+            expected,
+            parsed.nodes()[argument.index()].span,
+        )?;
+    }
+    let output = match path_name(parsed, arguments[11])?.as_str() {
+        "speed_multiplier" => OrdinaryTimingChannel::SpeedMultiplier,
+        "pre_cap_rate" => OrdinaryTimingChannel::PreCapRate,
+        "action_rate" => OrdinaryTimingChannel::ActionRate,
+        "action_time" => OrdinaryTimingChannel::ActionTime,
+        _ => {
+            return Err(arguments_error(
+                parsed.nodes()[arguments[11].index()].span,
+                "unknown ordinary timing channel",
+            ));
+        }
+    };
+    Ok(Call::OrdinaryTiming {
+        precision,
+        units: Box::new(ReciprocalTimingUnits { time, rate }),
+        output,
+    })
+}
+
 fn static_quantum(
     parsed: &Syntax<'_>,
     bindings: &ExpressionBindings,
@@ -784,7 +922,7 @@ fn static_quantum(
 }
 
 /// A literal constructor used in read metadata. It never emits or evaluates
-/// a formula; arithmetic, named values and calls other than quantity fail.
+/// a formula; arithmetic, named values and calls other than quantity/option fail.
 pub(crate) fn static_literal(
     parsed: &Syntax<'_>,
     bindings: &ExpressionBindings,
@@ -813,6 +951,9 @@ pub(crate) fn static_literal(
             quantity_constructor(parsed, bindings, arguments, node.span)
                 .map(ParameterValue::Quantity)
         }
+        ExprKind::Call { callee, arguments } if path_name(parsed, *callee)? == "option" => {
+            option_constructor(parsed, bindings, arguments, node.span).map(ParameterValue::Option)
+        }
         _ => Err(arguments_error(node.span, "expected a static literal")),
     }
 }
@@ -837,6 +978,30 @@ fn resolve_call(
         "all" => Call::All,
         "any" => Call::Any,
         "quantity" => Call::Quantity(quantity_constructor(parsed, bindings, arguments, span)?),
+        "option" => Call::Option(option_constructor(parsed, bindings, arguments, span)?),
+        "check_domain" => {
+            arity(arguments, 3, span)?;
+            Call::CheckDomain(Box::new(numeric_domain(
+                parsed,
+                bindings,
+                arguments[1],
+                arguments[2],
+                span,
+            )?))
+        }
+        "lookup" => {
+            arity(arguments, 2, span)?;
+            let table = table_key(parsed, arguments[1])?;
+            let value_type = bindings.table(&table).cloned().ok_or_else(|| {
+                error(
+                    DiagnosticCode::UnknownSymbol,
+                    parsed.nodes()[arguments[1].index()].span,
+                    "unknown table key",
+                )
+            })?;
+            Call::Lookup { table, value_type }
+        }
+        "ordinary_timing" => timing_call(parsed, bindings, arguments, span)?,
         "min" | "max" | "scale" | "scale_integer" | "divide_factor" => {
             arity(arguments, 2, span)?;
             match name.as_str() {
@@ -1065,6 +1230,91 @@ fn lower_call(
     let (expression, ty) = match call {
         Call::Quantity(quantity) => {
             return emitter.literal(ParameterValue::Quantity(quantity), span);
+        }
+        Call::Option(option) => {
+            return emitter.literal(ParameterValue::Option(option), span);
+        }
+        Call::CheckDomain(domain) => {
+            let expected = match domain.as_ref() {
+                NumericDomain::Integer(_) => ComputedValueType::Integer,
+                NumericDomain::Quantity(range) => ComputedValueType::Quantity {
+                    unit: range.minimum.unit().clone(),
+                },
+            };
+            same(&inputs[0].ty, &expected, span)?;
+            (
+                RuleExpression::CheckNumericDomain {
+                    value: inputs[0].id.clone(),
+                    domain: *domain,
+                },
+                expected,
+            )
+        }
+        Call::Lookup { table, value_type } => {
+            same(&inputs[0].ty, &ComputedValueType::Integer, span)?;
+            (
+                RuleExpression::LookupIntegerTable {
+                    table,
+                    key: inputs[0].id.clone(),
+                },
+                value_type,
+            )
+        }
+        Call::OrdinaryTiming {
+            precision,
+            units,
+            output,
+        } => {
+            let [base, increased, more, attack, cast, action, repeats, tick] = inputs else {
+                return Err(arguments_error(
+                    span,
+                    "ordinary timing requires eight value inputs",
+                ));
+            };
+            let time = ComputedValueType::Quantity {
+                unit: units.time.clone(),
+            };
+            let rate = ComputedValueType::Quantity {
+                unit: units.rate.clone(),
+            };
+            for input in [base, attack, cast] {
+                same(&input.ty, &time, span)?;
+            }
+            same(&tick.ty, &rate, span)?;
+            dimension(
+                bindings,
+                &increased.ty,
+                UnitDimension::PercentagePoints,
+                span,
+            )?;
+            dimension(bindings, &more.ty, UnitDimension::DimensionlessFactor, span)?;
+            same(&action.ty, &more.ty, span)?;
+            same(&repeats.ty, &ComputedValueType::Integer, span)?;
+            let value_type = match output {
+                OrdinaryTimingChannel::SpeedMultiplier => more.ty.clone(),
+                OrdinaryTimingChannel::PreCapRate | OrdinaryTimingChannel::ActionRate => rate,
+                OrdinaryTimingChannel::ActionTime => time,
+            };
+            // Preserve the one existing atomic operation and all eight ordered
+            // dependencies, including those not apparent in the chosen channel.
+            (
+                RuleExpression::OrdinaryTiming {
+                    recipe: Box::new(OrdinaryTimingRecipe {
+                        base_time: base.id.clone(),
+                        increased_percent: increased.id.clone(),
+                        more_multiplier: more.id.clone(),
+                        additional_attack_time: attack.id.clone(),
+                        additional_cast_time: cast.id.clone(),
+                        action_speed_multiplier: action.id.clone(),
+                        repeats: repeats.id.clone(),
+                        server_tick_rate: tick.id.clone(),
+                        speed_multiplier_rounding_precision: precision,
+                        units: *units,
+                        output,
+                    }),
+                },
+                value_type,
+            )
         }
         Call::Minimum | Call::Maximum => {
             same(&inputs[0].ty, &inputs[1].ty, span)?;

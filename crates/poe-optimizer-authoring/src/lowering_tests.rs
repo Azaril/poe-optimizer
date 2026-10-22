@@ -55,7 +55,15 @@ pub(super) fn bindings(f: &fixture::Fixture) -> ExpressionBindings {
         .zip(&local(f).reads)
         .map(|(name, read)| (name.as_str(), read.clone()))
         .collect();
-    ExpressionBindings::from_reads(&f.schema, &units, &reads, BindingLimits::default()).unwrap()
+    ExpressionBindings::from_inputs(
+        &f.schema,
+        &units,
+        &reads,
+        &[],
+        &[],
+        BindingLimits::default(),
+    )
+    .unwrap()
 }
 
 fn lower(source: &str, bindings: &ExpressionBindings) -> LoweredExpression {
@@ -503,10 +511,12 @@ fn retained_life_guard_matches_exact_ir_shape_and_source_emission_vectors() {
         .zip(&original.reads)
         .map(|(name, read)| (name.as_str(), read.clone()))
         .collect();
-    let bindings = ExpressionBindings::from_reads(
+    let bindings = ExpressionBindings::from_inputs(
         &schema,
         &[("life", unit.clone())],
         &reads,
+        &[],
+        &[],
         BindingLimits::default(),
     )
     .unwrap();

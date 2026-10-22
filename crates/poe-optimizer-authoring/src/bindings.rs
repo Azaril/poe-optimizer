@@ -1,10 +1,11 @@
-//! Names resolve to explicit IR reads and exact schema units. These bindings do
-//! not establish read authority: the complete program still needs the Engine's
-//! existing semantic compiler. No spelling creates a default or conversion.
+//! Names resolve to explicit IR reads, exact schema units/Options and declared
+//! table signatures. These bindings do not establish read or table authority:
+//! the complete package still needs the Engine's existing semantic compiler.
+//! No spelling creates a default, table row, interpolation or conversion.
 
 use poe_optimizer_core::{
-    owned_definitions::{OwnedDefinitionKey, UnitDefId},
-    owned_rules::RuleRead,
+    owned_definitions::{OptionDefId, OwnedDefinitionKey, UnitDefId},
+    owned_rules::{IntegerRuleTable, RuleRead},
     owned_schema::{ComputedValueType, DefinitionSchemaIndex, SchemaLookup, UnitDimension},
 };
 use std::{collections::BTreeMap, fmt};
@@ -46,14 +47,24 @@ pub enum BindingErrorKind {
     ConflictingRead,
     UnknownUnit,
     InvalidPercentUnit,
+    UnknownOption,
+    DuplicateTable,
 }
 
-/// An index addresses the supplied units or reads slice, without copying
-/// potentially unbounded source names into an error. `None` is a global limit.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum BindingKind {
+    Unit,
+    Read,
+    Option,
+    Table,
+}
+
+/// `index` addresses the supplied slice selected by `binding`, without copying
+/// source names into an error. Both are `None` for global limits.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct BindingError {
     pub kind: BindingErrorKind,
-    pub unit: bool,
+    pub binding: Option<BindingKind>,
     pub index: Option<usize>,
 }
 
@@ -61,10 +72,8 @@ impl fmt::Display for BindingError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "{:?} in {} binding {:?}",
-            self.kind,
-            if self.unit { "unit" } else { "read" },
-            self.index
+            "{:?} in {:?} binding {:?}",
+            self.kind, self.binding, self.index
         )
     }
 }
@@ -76,30 +85,38 @@ impl std::error::Error for BindingError {}
 pub struct ExpressionBindings {
     values: BTreeMap<String, ValueBinding>,
     units: BTreeMap<String, UnitBinding>,
+    options: BTreeMap<String, OptionDefId>,
+    tables: BTreeMap<OwnedDefinitionKey, ComputedValueType>,
     dimensions: BTreeMap<UnitDefId, UnitDimension>,
 }
 
 impl ExpressionBindings {
-    /// Unit and value names have separate namespaces, as do function names.
+    /// Unit, value, Option and table names have separate namespaces, as do
+    /// function names. Tables use package-owned keys, not symbolic path aliases.
     /// Aliases to one read are allowed only for identical read declarations.
     /// The `%` suffix must be explicitly bound to a percentage-points unit.
-    pub fn from_reads<I: DefinitionSchemaIndex>(
+    /// Table signatures are unchecked declarations: row/domain/type consistency
+    /// and package membership must still pass the existing Engine checker.
+    /// Only table keys and return types are copied; rows are never copied here.
+    pub fn from_inputs<I: DefinitionSchemaIndex>(
         index: &I,
         units: &[(&str, UnitDefId)],
         reads: &[(&str, RuleRead)],
+        options: &[(&str, OptionDefId)],
+        tables: &[IntegerRuleTable],
         limits: BindingLimits,
     ) -> Result<Self, BindingError> {
         let global = |kind| BindingError {
             kind,
-            unit: false,
+            binding: None,
             index: None,
         };
         if limits.max_bindings == 0 || limits.max_name_bytes == 0 {
             return Err(global(BindingErrorKind::InvalidLimits));
         }
-        if units
-            .len()
-            .checked_add(reads.len())
+        if [units.len(), reads.len(), options.len(), tables.len()]
+            .into_iter()
+            .try_fold(0usize, usize::checked_add)
             .is_none_or(|n| n > limits.max_bindings)
         {
             return Err(global(BindingErrorKind::LimitExceeded));
@@ -107,12 +124,14 @@ impl ExpressionBindings {
         let mut output = Self {
             values: BTreeMap::new(),
             units: BTreeMap::new(),
+            options: BTreeMap::new(),
+            tables: BTreeMap::new(),
             dimensions: BTreeMap::new(),
         };
         for (position, (name, unit)) in units.iter().enumerate() {
             let error = |kind| BindingError {
                 kind,
-                unit: true,
+                binding: Some(BindingKind::Unit),
                 index: Some(position),
             };
             if name.len() > limits.max_name_bytes {
@@ -142,7 +161,7 @@ impl ExpressionBindings {
         for (position, (name, read)) in reads.iter().enumerate() {
             let error = |kind| BindingError {
                 kind,
-                unit: false,
+                binding: Some(BindingKind::Read),
                 index: Some(position),
             };
             if name.len() > limits.max_name_bytes {
@@ -172,6 +191,44 @@ impl ExpressionBindings {
                 },
             );
         }
+        for (position, (name, option)) in options.iter().enumerate() {
+            let error = |kind| BindingError {
+                kind,
+                binding: Some(BindingKind::Option),
+                index: Some(position),
+            };
+            if name.len() > limits.max_name_bytes {
+                return Err(error(BindingErrorKind::LimitExceeded));
+            }
+            if !valid_name(name) {
+                return Err(error(BindingErrorKind::InvalidName));
+            }
+            if output.options.contains_key(*name) {
+                return Err(error(BindingErrorKind::DuplicateName));
+            }
+            if !matches!(index.definition(option), SchemaLookup::Known(_)) {
+                return Err(error(BindingErrorKind::UnknownOption));
+            }
+            output.options.insert((*name).to_owned(), option.clone());
+        }
+        for (position, table) in tables.iter().enumerate() {
+            let error = |kind| BindingError {
+                kind,
+                binding: Some(BindingKind::Table),
+                index: Some(position),
+            };
+            if output.tables.contains_key(&table.id) {
+                return Err(error(BindingErrorKind::DuplicateTable));
+            }
+            if let ComputedValueType::Quantity { unit } = &table.value_type {
+                let dimension = known_dimension(index, unit)
+                    .ok_or_else(|| error(BindingErrorKind::UnknownUnit))?;
+                output.dimensions.insert(unit.clone(), dimension);
+            }
+            output
+                .tables
+                .insert(table.id.clone(), table.value_type.clone());
+        }
         Ok(output)
     }
 
@@ -180,6 +237,12 @@ impl ExpressionBindings {
     }
     pub fn unit(&self, name: &str) -> Option<&UnitBinding> {
         self.units.get(name)
+    }
+    pub fn option(&self, name: &str) -> Option<&OptionDefId> {
+        self.options.get(name)
+    }
+    pub fn table(&self, id: &OwnedDefinitionKey) -> Option<&ComputedValueType> {
+        self.tables.get(id)
     }
     pub fn dimension(&self, unit: &UnitDefId) -> Option<UnitDimension> {
         self.dimensions.get(unit).copied()

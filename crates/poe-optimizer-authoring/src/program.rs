@@ -62,6 +62,7 @@ pub fn lower_program<I: DefinitionSchemaIndex>(
     parsed: &ParsedProgram<'_>,
     index: &I,
     symbols: &SymbolRegistry,
+    tables: &[IntegerRuleTable],
     limits: ProgramLowerLimits,
 ) -> Result<LoweredProgram, Diagnostic> {
     let span = Span {
@@ -97,10 +98,11 @@ pub fn lower_program<I: DefinitionSchemaIndex>(
             "binding limits must be positive",
         ));
     }
-    let unit_budget = limits
+    let symbol_budget = limits
         .bindings
         .max_bindings
         .checked_sub(parsed.reads().len())
+        .and_then(|budget| budget.checked_sub(tables.len()))
         .ok_or_else(|| {
             error(
                 DiagnosticCode::LimitExceeded(LimitKind::Bindings),
@@ -109,16 +111,26 @@ pub fn lower_program<I: DefinitionSchemaIndex>(
             )
         })?;
     let mut units = Vec::new();
+    let mut options = Vec::new();
     for (name, address) in symbols.definitions() {
-        if let DefinitionAddress::Unit(unit) = address {
-            if units.len() == unit_budget || name.len() > limits.bindings.max_name_bytes {
+        if matches!(
+            address,
+            DefinitionAddress::Unit(_) | DefinitionAddress::Option(_)
+        ) {
+            if units.len() + options.len() == symbol_budget
+                || name.len() > limits.bindings.max_name_bytes
+            {
                 return Err(error(
                     DiagnosticCode::LimitExceeded(LimitKind::Bindings),
                     span,
-                    "program unit binding limit exceeded",
+                    "program symbol binding limit exceeded",
                 ));
             }
-            units.push((name, unit.clone()));
+            match address {
+                DefinitionAddress::Unit(unit) => units.push((name, unit.clone())),
+                DefinitionAddress::Option(option) => options.push((name, option.clone())),
+                _ => unreachable!("only unit and option definitions bind here"),
+            }
         }
     }
     for read in parsed.reads() {
@@ -161,14 +173,15 @@ pub fn lower_program<I: DefinitionSchemaIndex>(
             ));
         }
     };
-    let unit_bindings = ExpressionBindings::from_reads(index, &units, &[], limits.bindings)
-        .map_err(|_| {
-            error(
-                DiagnosticCode::InvalidArguments,
-                span,
-                "unit bindings do not match the supplied schema or binding limits",
-            )
-        })?;
+    let unit_bindings =
+        ExpressionBindings::from_inputs(index, &units, &[], &options, tables, limits.bindings)
+            .map_err(|_| {
+                error(
+                    DiagnosticCode::InvalidArguments,
+                    span,
+                    "unit bindings do not match the supplied schema or binding limits",
+                )
+            })?;
     let mut reads = Vec::with_capacity(parsed.reads().len());
     let mut read_ids = BTreeSet::new();
     let mut names = BTreeSet::new();
@@ -205,7 +218,8 @@ pub fn lower_program<I: DefinitionSchemaIndex>(
         ));
     }
     let bindings =
-        ExpressionBindings::from_reads(index, &units, &reads, limits.bindings).map_err(|_| {
+        ExpressionBindings::from_inputs(index, &units, &reads, &options, tables, limits.bindings)
+            .map_err(|_| {
             error(
                 DiagnosticCode::InvalidArguments,
                 span,
@@ -310,7 +324,6 @@ impl Resolve<'_> {
         stat_set: ActionStatSet => ActionStatSetDefId,
         quality: Quality => QualityDefId,
         modifier: Modifier => ModifierDefId,
-        option: Option => OptionDefId,
     }
     slot_resolvers! {
         parameter: Parameter => ParameterSlotDefId,
@@ -457,20 +470,6 @@ impl Resolve<'_> {
         })
     }
 
-    fn literal(
-        &self,
-        id: ExprId,
-        bindings: &ExpressionBindings,
-    ) -> Result<ParameterValue, Diagnostic> {
-        if let ExprKind::Call { callee, arguments } = &self.syntax.nodes[id.index()].kind
-            && path_name(self.syntax, *callee)? == "option"
-        {
-            self.arity(id, arguments, 1)?;
-            return Ok(ParameterValue::Option(self.option(arguments[0])?));
-        }
-        static_literal(self.syntax, bindings, id)
-    }
-
     fn equipment_read(&self, id: ExprId) -> Result<PlayerEquipmentSlotRead, Diagnostic> {
         let (name, args) = self.call(id)?;
         match name.as_str() {
@@ -605,7 +604,7 @@ impl Resolve<'_> {
                 stat: self.stat(args[1])?,
                 contribution: self.contribution(args[2])?,
                 reduction: self.reduction(args[3])?,
-                empty: self.literal(args[4], bindings)?,
+                empty: static_literal(self.syntax, bindings, args[4])?,
             },
             "contribution_query" => RuleReadSource::ContributionQuery {
                 entity: self.entity(args[0])?,
@@ -747,7 +746,9 @@ impl Resolve<'_> {
                 code: self.key(args[1])?,
             },
             "project_modifier_transform" => {
-                let ParameterValue::Integer(order) = self.literal(args[2], bindings)? else {
+                let ParameterValue::Integer(order) =
+                    static_literal(self.syntax, bindings, args[2])?
+                else {
                     return Err(error(
                         DiagnosticCode::TypeMismatch,
                         self.span(args[2]),

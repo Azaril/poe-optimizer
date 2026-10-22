@@ -390,13 +390,15 @@ fn shared_multi_effect_block_preserves_reference_ir_and_effect_dispositions() {
     let original = f.rules.owners[2].programs.members[0].clone();
     let reference =
         CompiledRulePackage::compile(&f.rules, &f.schema, RuleLimits::default()).unwrap();
-    let bindings = ExpressionBindings::from_reads(
+    let bindings = ExpressionBindings::from_inputs(
         &f.schema,
         &[(
             "factor",
             UnitDefId::parse(f.rules.namespace.clone(), "unit.factor").unwrap(),
         )],
         &[("capability", original.reads[0].clone())],
+        &[],
+        &[],
         BindingLimits::default(),
     )
     .unwrap();

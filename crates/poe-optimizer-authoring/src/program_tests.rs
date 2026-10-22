@@ -76,6 +76,7 @@ fn lower(source: &str, f: &native::fixture::Fixture) -> LoweredProgram {
         &parse_program(source, ProgramParseLimits::default()).unwrap(),
         &f.schema,
         &symbols(f),
+        &f.rules.tables,
         ProgramLowerLimits::default(),
     )
     .unwrap()
@@ -87,6 +88,7 @@ fn reject(source: &str, f: &native::fixture::Fixture) -> Diagnostic {
             &parsed,
             &f.schema,
             &symbols(f),
+            &f.rules.tables,
             ProgramLowerLimits::default(),
         )
         .unwrap_err(),
@@ -1000,7 +1002,7 @@ fn program_source_maps_and_all_lowering_budgets_cover_metadata_and_formulas() {
         max_reads: 1,
         max_effects: 2,
     };
-    let actual = lower_program(&parsed, &f.schema, &registry, exact).unwrap();
+    let actual = lower_program(&parsed, &f.schema, &registry, &f.rules.tables, exact).unwrap();
     assert_eq!(actual.spans.id.text(SUPPORT), Some("support-applicability"));
     assert_eq!(actual.spans.context.text(SUPPORT), Some("action"));
     assert_eq!(actual.spans.reads.len(), actual.program.reads.len());
@@ -1049,7 +1051,8 @@ fn program_source_maps_and_all_lowering_budgets_cover_metadata_and_formulas() {
             ..exact
         },
     ] {
-        let error = lower_program(&parsed, &f.schema, &registry, limits).unwrap_err();
+        let error =
+            lower_program(&parsed, &f.schema, &registry, &f.rules.tables, limits).unwrap_err();
         assert!(
             matches!(error.code, DiagnosticCode::LimitExceeded(_)),
             "{error}"
@@ -1065,7 +1068,16 @@ fn program_source_maps_and_all_lowering_budgets_cover_metadata_and_formulas() {
     };
     // The fixture has three Unit aliases plus one read; neither set is dropped
     // to make a bounded registry fit.
-    assert!(lower_program(&parsed, &f.schema, &registry, too_few_bindings).is_err());
+    assert!(
+        lower_program(
+            &parsed,
+            &f.schema,
+            &registry,
+            &f.rules.tables,
+            too_few_bindings
+        )
+        .is_err()
+    );
     let empty = parse_program(
         "program \"empty\" context actor {}",
         ProgramParseLimits::default(),
@@ -1075,6 +1087,7 @@ fn program_source_maps_and_all_lowering_budgets_cover_metadata_and_formulas() {
         &empty,
         &f.schema,
         &registry,
+        &f.rules.tables,
         ProgramLowerLimits {
             max_reads: 0,
             max_effects: 0,
@@ -1099,9 +1112,15 @@ fn program_source_maps_and_all_lowering_budgets_cover_metadata_and_formulas() {
         ..ProgramLowerLimits::default()
     };
     assert!(matches!(
-        lower_program(&metadata, &f.schema, &registry, metadata_limit)
-            .unwrap_err()
-            .code,
+        lower_program(
+            &metadata,
+            &f.schema,
+            &registry,
+            &f.rules.tables,
+            metadata_limit
+        )
+        .unwrap_err()
+        .code,
         DiagnosticCode::LimitExceeded(LimitKind::Nodes)
     ));
 }
@@ -1150,6 +1169,7 @@ fn a_registry_cannot_carry_definition_or_slot_authority_into_a_different_index()
             &parsed,
             &absent_stat,
             &registry,
+            &f.rules.tables,
             ProgramLowerLimits::default()
         )
         .unwrap_err()
@@ -1171,6 +1191,7 @@ fn a_registry_cannot_carry_definition_or_slot_authority_into_a_different_index()
             &parsed,
             &absent_slot,
             &registry,
+            &f.rules.tables,
             ProgramLowerLimits::default()
         )
         .unwrap_err()

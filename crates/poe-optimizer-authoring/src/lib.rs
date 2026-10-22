@@ -21,7 +21,8 @@ pub use ast::{
     ParsedBlock, ParsedExpression, ParsedProgram, ReadDeclaration, Span, UnaryOperator, UnitSuffix,
 };
 pub use bindings::{
-    BindingError, BindingErrorKind, BindingLimits, ExpressionBindings, UnitBinding, ValueBinding,
+    BindingError, BindingErrorKind, BindingKind, BindingLimits, ExpressionBindings, UnitBinding,
+    ValueBinding,
 };
 pub use diagnostic::{Diagnostic, DiagnosticCode, LimitKind};
 pub use lower::{
@@ -54,3 +55,6 @@ mod program_parse_tests;
 
 #[cfg(test)]
 mod program_tests;
+
+#[cfg(test)]
+mod operation_tests;

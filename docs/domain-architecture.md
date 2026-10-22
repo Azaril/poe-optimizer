@@ -191,6 +191,17 @@ their result unit. No operator commutes operands to make a formula type-check.
 These are authoring rules; numerical construction and execution retain the
 existing Core/Engine behavior, including Core's normalization of signed zero.
 
+`check_domain(value, minimum, maximum)` carries static inclusive bounds with the
+value's exact numeric type/unit; it preserves an unsupported result outside the
+domain rather than clamping. `lookup(integer_key, "table-id")` refers to an
+explicit package table without interpolation, endpoint fallback or inferred rows.
+`option(symbol)` names an exact choice identity, not absence or a Boolean flag.
+Ordinary timing lowers to the existing atomic recipe: its eight ordered dynamic
+inputs remain dependencies for every output channel, with explicit static
+precision, reciprocal time/rate units and channel. A frontend table signature
+supplies type information only; the complete package checker validates rows,
+domain and membership before any evaluation.
+
 Ordered `let` declarations preserve SSA sharing: a later use references the
 earlier node rather than repeating its expression or declaring another read.
 Aliases emit no node. Retain separately authored equal expressions and unused
@@ -224,6 +235,13 @@ tools. Raising existing IR must preserve graph semantics; lowering the result mu
 be alpha-equivalent, including reads, guards, effects and operator order, with
 independent executable vectors. Syntax examples in the review are illustrative,
 not authority to change a formula or introduce Player-specific special handling.
+
+Raising uses a deterministic topological order, since existing IR permits
+forward references and treats read/node declaration order as nonsemantic. Preserve
+effect ledger order and every ordered operand list. Compare graphs through an
+explicit node-ID mapping; raw vector equality or the old content digest is not
+alpha-equivalence. Retain one declaration per original node, including unused
+nodes and repeated reads, and enforce output byte bounds while writing source.
 
 ### Declarative manifests and publication
 

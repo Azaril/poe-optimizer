@@ -30,8 +30,10 @@ The new `poe-optimizer-authoring` crate parses bounded program declarations,
 typed reads, ordered `let` calculations and guarded effects. A checked symbol
 registry resolves readable names to existing exact definition/slot addresses.
 Named intermediates share one rule-node graph without duplicating calculations
-or inventing reads. Arithmetic, comparisons, Boolean operations, conditionals and
-explicit rounding/conversion functions lower into the existing IR.
+or inventing reads. Every current IR expression family has source syntax,
+including checked ranges, exact integer-table lookups, choice identities and the
+atomic ordinary-timing calculation. The compiler preserves existing native
+operations; it does not implement a second calculation engine.
 
 For example, this is a complete source program given the named definitions:
 
@@ -49,8 +51,8 @@ which still needs the existing Engine's complete package checks before execution
 Core is Authoring's only normal dependency; Data/Engine are used in tests. No
 runtime package depends on Authoring, and it does not evaluate formulas.
 
-Remaining expression operations, raising/formatting, KDL manifests, stable
-binding publication and release construction remain pending. Existing component
+Raising/formatting, KDL manifests, stable binding publication and release
+construction remain pending. Existing component
 programs exercise the compiler; this does not establish complete-build parity
 or migrate the release.
 
