@@ -2,7 +2,7 @@
 
 Updated 2026-10-22. The [architecture](domain-architecture.md) defines the accepted
 end state; [implementation](implementation.md) records what is delivered. This
-page explains the distinction. **Migration has started, but full DSL compilation
+page explains the distinction. **Migration has started, but release-wide DSL migration
 and runtime cutover remain ahead; 0/5 supplied originals complete natively.**
 
 ## What runs today
@@ -48,8 +48,12 @@ program "add-life" context actor {
 The source does not declare its owning definition or claim complete membership.
 Those belong to the manifest. Lowering produces an unchecked `RuleProgram`,
 which still needs the existing Engine's complete package checks before execution.
-Authoring uses Core and the official `kdl-rs` document parser; Data/Engine are used in
-tests. No runtime package depends on Authoring, and it does not evaluate formulas.
+Authoring's normal dependencies are Core, Import, `serde`, `thiserror` and the
+official `kdl-rs` 6.5.0 document parser; Data/Engine are used in tests. The Import
+dependency is temporary: the new naming-allocation API reuses its existing
+allocator, which also brings Import's legacy features into this offline tool.
+There is no reverse Import-to-Authoring dependency. No runtime package depends
+on Authoring, and it does not evaluate formulas.
 
 The reverse compiler now emits readable source from existing IR, with an explicit
 node mapping for exact graph comparisons. It preserves sharing, unused nodes,
@@ -62,8 +66,26 @@ program-membership KDL manifests now load through a bounded library API. Names
 resolve exact schema definitions/slots, and packets append explicitly declared
 programs to existing owners after a complete structural preflight. The containing
 package still requires Engine validation. Source labels are injected text labels,
-not paths that the library opens. Stable binding publication, broader declaration
-manifests and release construction remain pending.
+not paths that the library opens. Broader declaration manifests and release
+construction remain pending.
+
+Stable naming now has an in-memory staged transaction API. `NamedIdRegistry`
+wraps the single existing Import allocator; `NamesInput` stores its exact registry
+digest plus sorted typed bindings. Transactions leave their base unchanged and
+allocate in definition-name order followed by slot-name order. Exact kind/owner
+replays reuse identities; aliases must target identities already active in the
+base. The predecessor digest covers alias-only changes too. Retired bindings stay
+reserved in history and are omitted from executable symbols. Resolving active
+names still requires the actual schema, and the complete rule package still
+requires Engine validation.
+
+No filesystem compare-and-swap, registry publisher or KDL allocation command is
+implemented by that API. `load_names` still loads raw aliases to known schema
+addresses. Full R1 extraction must separate runtime registry/role data from the
+offline toolchain and replace the runtime release loader that currently
+reassembles authoring inputs. This library step does not publish a release or
+migrate every existing program.
+
 KDL is maintained offline source: file bytes are limited before parsing and
 retained structure is checked afterward. These checks are not a guarantee of
 bounded parser recursion for hostile input. KDL is not parsed during native

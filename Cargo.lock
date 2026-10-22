@@ -547,7 +547,10 @@ dependencies = [
  "poe-optimizer-core",
  "poe-optimizer-data",
  "poe-optimizer-engine",
+ "poe-optimizer-import",
+ "serde",
  "serde_json",
+ "thiserror",
 ]
 
 [[package]]

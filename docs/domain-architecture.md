@@ -47,6 +47,15 @@ authoring toolchain. If that boundary needs a small library extraction, keep its
 purpose explicit. Native Engine must not depend on a relocated compat interpreter.
 Dependency closure, linked features and shipped contents are CI assertions.
 
+The current naming-allocation library temporarily depends from Authoring to
+Import so it can reuse the single existing `OwnedIdRegistry` allocator. This
+also pulls Import's legacy features into the offline authoring tool; it is not
+the final dependency boundary. Import must not depend on Authoring. Completing
+R1 requires separating immutable registry and role data needed at runtime from
+offline allocation/compilation, and replacing the runtime release loader's
+current reassembly through the authoring pipeline. Moving allocation wrappers
+alone does not complete that extraction.
+
 ```mermaid
 flowchart LR
   P[Optional pinned PoB source] --> A[Rust offline acquisition]
@@ -256,12 +265,33 @@ and the parser source budget so it remains admissible with the same settings.
 
 ### Declarative manifests and publication
 
-Name manifests declare their game/version namespace once. Each alias resolves
-directly to an existing typed definition or exact declared slot; a slot names
-its declaring definition explicitly. Definition and slot aliases have separate
-name spaces. This lookup is not an allocator or proof that a persisted binding
-is current: publication also validates the existing allocation registry and its
-successor transaction.
+Name manifests declare their game/version namespace once. Current `load_names`
+resolves raw known-address aliases directly to existing typed definitions or
+exact declared slots; a slot names its declaring definition explicitly.
+Definition and slot aliases have separate name spaces. This lookup does not
+allocate identities or prove that a persisted binding is current.
+
+The separate `NamedIdRegistry` library stages immutable transactions over the
+existing Import allocator. `NamesInput` carries that allocator registry's exact
+digest and sorted typed name bindings. Its own identity covers both, so a stale
+predecessor check detects alias-only changes as well as allocations and
+retirements. An allocation request returns a successor without mutating the
+base, including when a late limit check fails.
+
+Allocation order is canonical: definition names first, then slot names, each in
+name order. Request permutations therefore produce the same result. Replaying an
+active name is idempotent only for its exact kind and, for a slot, exact declaring
+owner. An alias must target an active identity already present in the immutable
+base; it cannot predict an identity allocated by the same transaction. Retired
+bindings remain reserved tombstones in history and count toward limits, but are
+excluded from the projected `SymbolRegistry`. Projection still checks active
+targets against the actual schema; allocation grants neither schema membership
+nor read/effect authority. The Engine remains the complete package checker.
+
+This staged API does not yet provide filesystem compare-and-swap, a publisher or
+a KDL allocation command. Publication must eventually authenticate the stored
+predecessor and commit registry and names together. The existing raw-alias
+`load_names` path remains separate until that command is implemented.
 
 Program membership uses explicit definition/slot owners and injected source
 labels. A source label is not an instruction to open a file. Program IDs are

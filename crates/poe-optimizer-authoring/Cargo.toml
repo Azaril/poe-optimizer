@@ -17,6 +17,10 @@ path = "tests/cli.rs"
 
 [dependencies]
 poe-optimizer-core = { path = "../poe-optimizer-core" }
+# Temporary R1 seam: reuse the sole allocator until offline Import modules move here.
+poe-optimizer-import = { path = "../poe-optimizer-import" }
+serde = { version = "1", features = ["derive"] }
+thiserror = "2"
 # Official KDL v2 parser; 6.6+ requires Rust 1.95, beyond this crate's MSRV.
 kdl = { version = "=6.5.0", default-features = false }
 

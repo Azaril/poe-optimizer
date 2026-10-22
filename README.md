@@ -76,8 +76,10 @@ migration checks and are scheduled for removal with the old runtime.
 
 The `poe-optimizer-authoring` library parses and lowers complete `.rule` programs
 to the existing IR, resolves exact schema symbols and raises IR back to source.
-Its normal dependencies are Core and the official `kdl-rs` parser; it is not a runtime
-dependency. The separate `poe-author` executable formats one program to stdout or
+It uses official `kdl-rs` and reuses Import's existing ID allocator for staged
+stable-name transactions. The Import dependency is temporary until offline
+tooling moves into Authoring; Authoring is not a runtime dependency.
+The separate `poe-author` executable formats one program to stdout or
 checks formatting:
 
 ```text
@@ -89,7 +91,7 @@ Use `-` as the path to read stdin. Input files are unchanged. Check mode exits
 0 when formatted, 1 when formatting differs, and 2 on syntax, argument or I/O
 errors. Formatting preserves names, numeric spelling and comments; it does not
 validate rule types, ownership or complete coverage. Name/membership KDL loading
-and bounded packet assembly are library APIs; broader declaration manifests,
+and bounded packet assembly, including stable named allocation, are library APIs; broader declaration manifests,
 semantic checking/publication commands and release cutover remain ahead.
 Run focused checks with `cargo test -p poe-optimizer-authoring --locked --all-targets`.
 

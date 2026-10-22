@@ -231,7 +231,7 @@ fn is_slot(kind: &str) -> bool {
     )
 }
 
-fn slot_owner(address: &DefinitionAddress) -> Option<SlotOwnerDefId> {
+pub(crate) fn slot_owner(address: &DefinitionAddress) -> Option<SlotOwnerDefId> {
     macro_rules! owners {
         ($($kind:ident),+ $(,)?) => {
             match address {

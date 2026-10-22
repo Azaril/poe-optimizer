@@ -16,15 +16,15 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/parser `0e5a9b7b`; expressions `e1841725`, blocks `15de8529`, programs `21db1486`, complete expression syntax `329808b8`, raising `86bbe9b9`, formatter/CLI `5ba6abdf`, name/membership KDL `86656b74`; this checkpoint replaces the streaming decoder with official kdl-rs |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/parser `0e5a9b7b`; expressions `e1841725`, blocks `15de8529`, programs `21db1486`, complete expression syntax `329808b8`, raising `86bbe9b9`, formatter/CLI `5ba6abdf`, name/membership KDL `86656b74`, official kdl-rs `de02c87a`; this checkpoint adds stable named allocation and removes one source-hash gate family |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
-| Authoring | Bounded Rust program/read/effect declarations, exact typed names/slots, KDL membership and transactional appends to existing IR. Core and the offline KDL parser are normal dependencies. Catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
+| Authoring | Bounded Rust program/read/effect declarations, exact typed names/slots, KDL membership, transactional appends and stable named allocation. Temporary Authoring -> Import dependency reuses the sole existing allocator; no runtime -> Authoring dependency. Catalog/publication machinery remains in Import and test staging |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | Program syntax, exact symbols, all expression families, raising/formatting and name/membership KDL implemented; `poe-author rule fmt` available. Stable binding publication, broader declaration manifests and binary pack remain pending |
+| DSL / KDL / binary pack | Program syntax, all expression families, raising/formatting, name/membership KDL and immutable named-allocation transactions implemented; `poe-author rule fmt` available. Filesystem publication/CAS, broader declaration manifests and binary pack remain pending |
 | Current release | Latest validated artifacts are local under ignored `runs/`, have no complete evaluation bundle, and cannot yet be reproduced from a fresh clone with one supported command |
-| CI | Focused repairs for the two fixture families pass locally. Latest checked main run `39852219507` for `86656b74` was pending; intervening pending runs were superseded/cancelled. No green hosted claim |
+| CI | Focused repairs for the two fixture families pass locally. At 21:15 UTC, run `39853858110` for `de02c87a` was pending with no jobs; older `39815736980` remained running with 11 successful, three failed and four running jobs. No green hosted claim |
 
 Last validated release: `runs/owned-reverse-primary-cutover-01/package`.
 Its endpoint is `runs/owned-reverse-primary-cutover-01/endpoint.json`,
@@ -280,6 +280,46 @@ guard pass. Independent review found no remaining adapter issue. Logs:
 `runs/r2-official-kdl-release-decoding-20261022.log`. Validation used Rust 1.98.1;
 direct MSRV compilation remains an R0 requirement, not a result claimed here.
 
+**R2 stable named allocation:** `NamedIdRegistry` stages allocations through the
+existing `OwnedIdRegistry`; it does not implement a second allocator. The names
+snapshot binds the exact allocation-registry digest and retains sorted typed
+name bindings. Definition names allocate first, then slot names, independently
+of request order. Repeating the same kind/owner reuses the existing ID. Aliases
+must target the immutable base, preventing guessed same-batch IDs. Stale checks
+include alias-only changes, and loaded successor checks preserve old bindings.
+Retired names remain reserved but cannot become executable symbols. Final schema
+validation still rejects missing/unmapped descriptors; Engine permissions remain
+separate. All failures leave the base unchanged. This is a library transaction,
+not filesystem publication: the future host must atomically publish both files
+and compare the actual stored predecessor identity.
+
+Authoring temporarily depends on Import to reuse that allocator. This also brings
+Import's legacy Data/Engine features into the offline build; it does not introduce
+an Import/Engine -> Authoring edge. Remove the dependency in R1 by moving the
+connected offline cluster, after separating immutable registry/role data and the
+runtime published-release loader. Runtime metrics/source-action loading currently
+calls release reassembly; moving those authoring modules without first cutting
+that call would violate the intended boundary. No borrowed facade or duplicate
+allocator was added to conceal this remaining work.
+
+The generated-Firebolt fixture no longer requires six Import and two reference
+Rust files to match their historical text hashes. Its source XML, upstream/data
+artifact integrity, exact destination accounting and replay assertions remain.
+Historical hash metadata stays sealed as acquisition evidence; it is not repinned.
+Mixed attribute-observer pins and implementation-fingerprint APIs remain R0 work.
+
+Validation at this checkpoint: all **156 Authoring tests pass** (152 library,
+four CLI), none ignored; the focused generated-Firebolt destination regression
+also passes (one executed, fifteen unrelated cases filtered). Its fresh CLI
+build took 8m40s and execution 0.01s, so broader suite/dependency cleanup remains
+material. Strict all-target Authoring and affected CLI Clippy, formatting and the
+normal runtime dependency guard pass. Independent
+review found and fixed a symbol-projection budget check that ran after cloning;
+the final review is clear. Logs: `runs/r2-named-allocation-tests-20261022.log`,
+`runs/r2-named-allocation-clippy-20261022.log`,
+`runs/r0-firebolt-source-pin-cleanup-20261022.log`,
+`runs/r0-firebolt-source-pin-clippy-20261022.log`.
+
 Two hosted failures were isolated to fixtures: an unavailable skill catalog
 retained an inconsistent reverse-primary census, and the Mana equipment review
 compared an obsolete serialized-fixture seal after the Item wire shape changed.
@@ -411,6 +451,18 @@ and generated-Firebolt policy replacement). Move those decisions into declarativ
 authoring; listing the existing JSON files alone cannot reproduce the release.
 Use the existing release assembly seam as the migration source, not a second
 publisher or a new succession chain.
+
+The current-release census contains 8,212 program occurrences, 2,561 distinct
+serialized programs across 2,631 nonempty owners, and 18 integer tables with 975
+rows. Every observed operation is represented by the DSL; a whole-release Rust
+raise/lower check is still required. The schema has 9,391 definitions and 3,873
+slots: use bounded per-source symbol groups rather than assuming one default-size
+names manifest fits. All eleven core/Import constituent files differ from the
+tracked `current/` baseline. The production `poe-author release build` path must
+capture this final composition as reviewed migration input, then replace it with
+declarations; it must not depend on local `runs/` or replay 227 historical stages.
+Preserve all 5,827 partial rule owners, five partial routing outputs and the
+missing evaluation bundle as explicit limitations during that conversion.
 
 **Exit:** clean-clone release construction and validation are ordinary CI, with
 relocatable artifacts and no developer-local inputs. Unsupported old wire forms
@@ -615,8 +667,10 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. Prioritize **stable symbol publication and final
-   release composition**. Name/membership KDL and the retained
+1. Read this plan and Git status. Prioritize **production final-release composition
+   and filesystem publication**. Stable named allocation now reuses the existing
+   allocator with stale binding checks; the host CAS/publication is still pending.
+   Name/membership KDL and the retained
    `inherent-life-contribution` whole-program compiler fixture now work; the old
    release consumers have not cut over. Reuse the existing schema, Engine and
    release checks, preserving exact Actor membership, partial closure, receivers
@@ -626,9 +680,9 @@ These are retained obligations, not extra competing phases.
    pins the old program bytes. Keep historical evidence distinct from new source
    identity. The later `life-base-domain` checked-range successor must survive
    migration. A single compiler fixture does not reproduce the complete release.
-   Schema-valid symbols are not proof of active allocation or stable persisted
-   names. Move/reuse the existing registry allocation/successor logic in the
-   offline publication transaction with stale-state checks. Current typed-ID serde
+   Schema-valid symbols alone are not proof of active allocation or persisted
+   names. Wire the staged name transaction into publication and retain the
+   actual stored-predecessor CAS. Current typed-ID serde
    repeats namespaces: resolve KDL names directly to typed IDs, then build the
    deliberate compact codec; do not rewrite arbitrary JSON recursively.
    Keep Authoring out of the runtime dependency closure. Then migrate complete

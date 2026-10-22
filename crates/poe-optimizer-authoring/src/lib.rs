@@ -7,6 +7,7 @@
 //! Source spans are diagnostics, not semantic identity.
 #![forbid(unsafe_code)]
 
+mod allocation;
 mod ast;
 mod bindings;
 mod diagnostic;
@@ -21,6 +22,10 @@ mod program;
 mod raise;
 mod symbols;
 
+pub use allocation::{
+    AllocationError, AllocationErrorKind, AllocationLimits, NAME_BINDINGS_VERSION, NameBinding,
+    NameRequest, NamedIdRegistry, NamesInput,
+};
 pub use ast::{
     BinaryOperator, EffectDeclaration, ExprId, ExprKind, ExprNode, LetStatement, NumericLiteral,
     ParsedBlock, ParsedExpression, ParsedProgram, ReadDeclaration, Span, UnaryOperator, UnitSuffix,
@@ -90,3 +95,6 @@ mod manifest_parse_tests;
 
 #[cfg(test)]
 mod packet_tests;
+
+#[cfg(test)]
+mod allocation_tests;
