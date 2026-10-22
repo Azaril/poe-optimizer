@@ -7,3 +7,9 @@ description = "Bounded offline formula authoring frontend for the checked native
 publish = false
 
 [dependencies]
+poe-optimizer-core = { path = "../poe-optimizer-core" }
+
+[dev-dependencies]
+poe-optimizer-data = { path = "../poe-optimizer-data", default-features = false }
+poe-optimizer-engine = { path = "../poe-optimizer-engine", default-features = false }
+serde_json = { workspace = true }

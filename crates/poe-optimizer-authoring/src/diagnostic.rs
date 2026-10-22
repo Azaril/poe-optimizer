@@ -7,6 +7,7 @@ pub enum LimitKind {
     Tokens,
     Nesting,
     Nodes,
+    LoweredNodes,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -19,6 +20,11 @@ pub enum DiagnosticCode {
     ExpectedToken,
     ChainedComparison,
     TrailingInput,
+    UnknownSymbol,
+    UnknownUnit,
+    UnknownFunction,
+    InvalidArguments,
+    TypeMismatch,
 }
 
 /// One bounded diagnostic at the first error. Spans always select complete UTF-8

@@ -26,11 +26,19 @@ perform publication. The latest validated release is local under ignored `runs/`
 the tracked directory called `current/` is a historical baseline. That is a
 reproducibility defect, not a supported distribution arrangement.
 
-The new dependency-free `poe-optimizer-authoring` crate parses bounded formula
-expressions with byte spans, ordered operators and explicit conditional branches.
-It currently provides syntax only: symbol/unit resolution, IR lowering, KDL
-manifests and release construction are still pending. No runtime package depends
-on it, and the existing native VM remains the evaluation engine.
+The new `poe-optimizer-authoring` crate parses bounded formula expressions and
+binds names to explicitly declared reads and exact schema units. Its expression
+lowerer emits the existing IR for arithmetic, comparisons, Boolean operations,
+conditionals and explicit rounding/conversion functions. It does not evaluate
+formulas. A fragment still needs the existing Engine's complete package checks
+before it can execute. Core is its only normal dependency; Data/Engine are used
+in tests. No runtime package depends on Authoring.
+
+This is still an expression frontend, not the complete `.rule` compiler. Named
+intermediates, full read/effect/program declarations, remaining IR operations,
+raising/formatting, KDL manifests and release construction remain pending. The
+current tests insert lowered expressions into existing checked programs; they
+do not establish complete-build parity or migrate the release.
 
 `evaluate-owned` is the current native CLI path. The `evaluate` command is the
 optional reference backend, available when Cargo builds with `--features pob`. Existing

@@ -16,15 +16,15 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; first R0 test/CI checkpoint pushed as `6c6d0add`; this checkpoint adds validated Import consolidation and the initial Authoring frontend |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/initial parser `0e5a9b7b`; this checkpoint adds typed expression lowering |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
-| Authoring | New dependency-free Rust expression parser; catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
+| Authoring | Bounded Rust expression parser, explicit read/unit binding and lowering to existing IR; Core is the only normal dependency. Catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | Bounded expression syntax implemented; symbol resolution, IR lowering, full programs, KDL and binary pack remain pending |
+| DSL / KDL / binary pack | Typed expression lowering implemented; full programs/named intermediates, remaining operations, raise/format, stable symbol registry, KDL and binary pack remain pending |
 | Current release | Latest validated artifacts are local under ignored `runs/`, have no complete evaluation bundle, and cannot yet be reproduced from a fresh clone with one supported command |
-| CI | Focused repairs for the two fixture families pass locally. At 18:36 UTC, new main run `39831084222` for `6c6d0add` was pending with no jobs, behind architecture-only run `39815736980` (six passed, three known failures, nine running). No green hosted claim |
+| CI | Focused repairs for the two fixture families pass locally. At 19:17 UTC, main run `39836408947` for `0e5a9b7b` was pending with no jobs, behind architecture-only run `39815736980` (nine passed, three known failures, six running). No new failure class or green hosted claim |
 
 Last validated release: `runs/owned-reverse-primary-cutover-01/package`.
 Its endpoint is `runs/owned-reverse-primary-cutover-01/endpoint.json`,
@@ -78,14 +78,40 @@ register twelve integration binaries instead of 304. Build cost is still materia
 the fresh optimized Import test build took 12m37s locally; suite consolidation is
 not a claim that verification is now cheap.
 
-**Initial R2 frontend:** `poe-optimizer-authoring` parses expressions into a flat,
-postorder syntax arena with UTF-8 byte spans, exact numeric spelling, explicit unit
-suffixes, source-ordered arithmetic/Boolean operators and conditional branches.
-It neither resolves names/units nor evaluates or lowers formulas yet. All 19 tests
-pass through Cargo and unoptimized standalone Rust, including malformed syntax,
-exact resource boundaries, and maximum-depth/long-chain handling on a 1 MiB stack.
-Strict Clippy passes. It has no dependencies and is absent from the normal CLI
-dependency closure. No new game content or production evaluation semantics changed.
+**R2 expression frontend:** `poe-optimizer-authoring` parses into a flat postorder
+arena with UTF-8 byte spans, then resolves explicitly injected read names and known
+schema units. Iterative lowering emits the existing typed IR with separate syntax
+and output-node limits. Arithmetic order, variadic Boolean operands, lazy branches,
+static rounding quanta and explicit conversion units are preserved. No folding,
+operand commutation, Boolean flattening or implicit conversion is performed.
+Bare integers are parsed exactly; quantities use the existing finite Core type,
+including its signed-zero normalization. `quantity(literal, unit.symbol)` covers
+unit names the suffix grammar cannot express.
+
+The result is an **unchecked expression-local fragment**. Its local node keys
+must be remapped when composing a complete program, and that program must pass
+the existing Engine checker. Symbol binding does not grant read/provider/effect
+authority. There is no frontend evaluator. Core is the only normal dependency;
+Data/Engine and JSON fixtures are test dependencies. The default CLI dependency
+guard now explicitly excludes Authoring as well as PoB/Lua. No new game content
+or production evaluation semantics changed.
+
+Validation uses the existing Engine, independent expected arithmetic/rounding
+values, missing-input and numerical-failure branches, exact unit/type refusals,
+compiler authority rejection and 1 MiB-stack long expressions. A retained Life
+contribution guard lowers to the original graph up to node names and replays its
+13 source emission cases. Its observed amount is an input to that guard test,
+not evidence that the whole Life calculation or a build is implemented. Full
+program raise/lower alpha-equivalence remains an R2 exit requirement.
+
+All **32 Authoring tests pass**, with no ignored cases. Formatting and strict
+all-target Clippy pass. Independent review found no remaining blocker. Final
+local logs: `runs/r2-expression-lowering-tests-final-20261022.log` and
+`runs/r2-expression-lowering-clippy-final-20261022.log`. The first test run exposed
+a fixture using current operations with omitted query/application inventories;
+the fixture now declares its actually empty inventories, with production checks
+unchanged. The optimized rebuild took 28 seconds and tests completed in under a
+second; this measures the frontend subset, not release-wide build/evaluation cost.
 
 Two hosted failures were isolated to fixtures: an unavailable skill catalog
 retained an inconsistent reverse-primary census, and the Mana equipment review
@@ -226,10 +252,14 @@ for deletion at R4. No compatibility reader enters the normal CLI/library path.
 
 ### R2 — Formula DSL and declarative authoring
 
-**Started: expression syntax only.** Next bind symbols and types and lower real
-existing formulas through the checked IR compiler. Drive full program/read/effect
-syntax from those existing contracts, then complete manifests and the shared
-behavioral harness; do not create a second evaluation model.
+**Started: typed expression lowering.** Next implement named intermediates and
+complete program/read/effect syntax, using existing contracts and exact SSA
+sharing. Add the remaining live operations (checked numeric domains, integer
+table lookup, ordinary timing and option literals) and raise/format support.
+Use retained real programs to prove full graph alpha-equivalence before moving
+their authoring sources. Then complete manifests and the shared behavioral
+harness; do not create a second evaluation model. The current expression fragment
+is not a supported release format or a substitute for full program validation.
 
 Implement Rust parsing, spans, symbol resolution, formatting and exact lowering
 of `.rule` files into the existing checked IR. Add KDL definition/packet manifests

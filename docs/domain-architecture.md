@@ -180,6 +180,17 @@ are errors. Operators such as Boolean All/Any retain their current typed failure
 behavior until a separately reviewed semantic change. Frontend inference and
 name resolution feed the existing checker; they do not replace it.
 
+Value names resolve only to declared reads or named intermediate nodes. They
+never synthesize a scope, default or provider permission. Unit symbols resolve
+to exact schema identities; equal dimensions do not authorize conversion.
+Literal suffixes are shorthand, with `quantity(literal, unit.symbol)` for units
+that cannot be spelled as a suffix. Bare integer literals use exact bounded
+integer parsing; fractional quantities require an explicit unit. Rounding uses
+a positive static quantum and explicit mode. Ratio and percent conversion name
+their result unit. No operator commutes operands to make a formula type-check.
+These are authoring rules; numerical construction and execution retain the
+existing Core/Engine behavior, including Core's normalization of signed zero.
+
 Diagnostic spans relate type/unit/ownership failures to named source expressions.
 `rule fmt`, `check`, `lower --emit-ir`, `raise` and `explain` are offline developer
 tools. Raising existing IR must preserve graph semantics; lowering the result must

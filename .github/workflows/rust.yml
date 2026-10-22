@@ -94,8 +94,8 @@ jobs:
           $dependencies = cargo tree -p poe-optimizer-cli --edges normal --prefix none --locked
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $dependencies
-          if ($dependencies -match '^(poe-optimizer-pob|poe-optimizer-lua-utf8|mlua|mlua-sys|lua-src|luajit-src) ') {
-            throw 'Default deployment includes a PoB or Lua runtime dependency'
+          if ($dependencies -match '^(poe-optimizer-authoring|poe-optimizer-pob|poe-optimizer-lua-utf8|mlua|mlua-sys|lua-src|luajit-src) ') {
+            throw 'Default deployment includes an offline Authoring, PoB or Lua dependency'
           }
       - name: Install portable target
         run: rustup target add wasm32-unknown-unknown
