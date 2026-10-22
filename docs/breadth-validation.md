@@ -6,9 +6,9 @@ The accepted [generality checkpoint](build-generality-review.md) adds contrastin
 contract cases, independent holdouts and explicit CI integration gates alongside
 the five-build MVP. Its read-only review is complete; those validation gates are
 not yet satisfied. The five originals remain development cases, not holdouts.
-The [design](design.md#data-driven-builds-and-breadth-of-validation) requires caller-provided
+The [design](design.md#results-and-validation) requires caller-provided
 builds and injected game definitions throughout the production path.
-The [architecture migration](architecture-migration.md#phases-and-exit-gates)
+The [architecture migration](implementation.md#delivery-plan-and-gates)
 defines the current integration order: closest complete original first, then
 owned optimizer integration alongside the remaining builds. All-five model
 coverage, contrasting player/minion paths, interactions and independent holdouts

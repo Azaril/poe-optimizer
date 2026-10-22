@@ -2,7 +2,7 @@
 
 Source investigation recorded on 2026-09-07. No Lua runtime or calculation was executed during this investigation. All upstream references below are pinned to submodule commit `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. These dated observations inform the [target design](design.md); runtime findings, current validation status, and follow-up work belong in the [living implementation document](implementation.md).
 
-The source already provides a useful headless entry point and a comparison calculator. Preserve upstream calculations and establish an independently reloaded build as the correctness baseline before enabling incremental evaluation. The subsequent user-confirmed [hosting decision](design.md#evaluator-boundary) prefers a Rust worker embedding LuaJIT through `mlua`, with a small Lua compatibility shim; direct LuaJIT execution is a diagnostic fallback.
+The source already provides a useful headless entry point and a comparison calculator. Preserve upstream calculations and establish an independently reloaded build as the correctness baseline before enabling incremental evaluation. The subsequent user-confirmed [hosting decision](domain-architecture.md#evaluation-search-and-presentation) prefers a Rust worker embedding LuaJIT through `mlua`, with a small Lua compatibility shim; direct LuaJIT execution is a diagnostic fallback.
 
 ## Runtime checkpoint: embedded host
 
@@ -63,7 +63,7 @@ Follow-up source/binary inspection on 2026-09-07 for the mlua hosting decision f
   initialization; test diagnostics, paths, clock and prompt handling in that sequence.
 
 These are inspection findings only. Runtime/module loading and calculation checks remain
-in the [implementation checklist](implementation.md#m1-checklist-native-calculation-and-optional-reference-parity).
+in the [implementation checklist](implementation.md#delivery-plan-and-gates).
 
 ### Load, mutate, calculate, and export
 

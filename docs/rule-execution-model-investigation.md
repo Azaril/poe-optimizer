@@ -1,5 +1,12 @@
 # Rule execution model investigation
 
+> Decision update, 2026-10-22: the owner adopted a formula DSL and KDL manifests
+> lowering to the existing checked IR, with an interned native runtime package.
+> See the [controlling architecture](domain-architecture.md) and
+> [implementation plan](implementation.md). The alternatives and A1-A4 schedule
+> below are historical investigation, not open architecture decisions or a second
+> workstream. Remaining measurements inform implementation within that decision.
+
 Status: **architecture boundary decided on 2026-09-14; implementation comparisons remain open.**
 The owner selected offline conversion to project-owned game data/rules and independent
 build/evaluation/search/UI models. See [domain architecture](domain-architecture.md) and
@@ -233,7 +240,7 @@ must serve. Record their required inputs, outputs, state transitions, failures a
 Legacy parser caches, closure identities and VM accounting remain baseline evidence;
 any effect on a valid domain result needs a semantic requirement and evidence, not a
 replacement copy of the source mechanism. Apply the
-[Lua behavior classification](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+[Lua behavior classification](legacy-retirement.md#lua-type-and-behavior-audit)
 to distinguish game laws, external-format requirements, upstream defects and incidental
 language behavior. Keep unresolved intent explicit. Include conversion, reconciliation and
 reference-harness costs without carrying their internal APIs into the runtime contract.

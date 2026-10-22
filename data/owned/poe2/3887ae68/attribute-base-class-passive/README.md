@@ -56,5 +56,5 @@ All 38 joined checks pass across baseline, regression and corrected choice-contr
 runs, including fresh/reused/Rayon results and actual Partial refusals. The
 initial choice test used the wrong XML parent; its corrected traversal preserves
 the exact hash/inverse/import assertions. Complete original builds remain 0/5.
-See the [checkpoint](../../../../../docs/implementation.md#native-checkpoint-bounded-classpassive-base-membership)
+See the [checkpoint](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/implementation.md#native-checkpoint-bounded-classpassive-base-membership)
 for commands, evidence and scope.

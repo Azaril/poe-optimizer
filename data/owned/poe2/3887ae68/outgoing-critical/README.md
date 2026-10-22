@@ -161,5 +161,5 @@ constructor is false; that proves only the configured source's state, not the
 absence of skill-applied Weakness. Keep the untranslated Sand Djinn and Diamond
 responsibilities blocking until independently accounted for. Then use the same
 graph for normal and critical Enemy-armour calculations.
-The [implementation plan](../../../../../docs/implementation.md#next-damage-checkpoint-outgoing-critical-calculation-and-enemy-mitigation)
+The [implementation plan](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/implementation.md)
 records the next controls and the unresolved Sand Djinn responsibility.

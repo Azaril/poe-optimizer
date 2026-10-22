@@ -33,7 +33,7 @@ branches, checked overrides and fresh/reused/Rayon equality. Checked all-five
 publication preserves every prior coverage declaration and all 110 queries.
 Six numeric dependency producers and four Partial supplier query memberships
 remain unfinished; this component is not complete critical-effect support or
-a complete unchanged build. The [current checkpoint](implementation.md#current-checkpoint-player-incoming-critical-receivers)
+a complete unchanged build. The [current checkpoint](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/implementation.md)
 records exact identities and validation.
 
 The owner approved this revised ownership direction on October 14. The completed

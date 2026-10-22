@@ -60,7 +60,7 @@ The recommendation keeps native query selection from enabling an occurrence.
 Before importing group/Gem activation, add a source control for a disabled
 selected group, a disabled Gem and unavailable equipment, recording exact
 result identity and any fallback. Classify the preview behavior under the
-[Lua/source cleanup gate](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05);
+[Lua/source cleanup gate](legacy-retirement.md#lua-type-and-behavior-audit);
 do not silently copy it into native execution or declare it another Frost
 exception. Any requested native preview override needs a separate explicit
 contract and discussion.

@@ -97,7 +97,7 @@ Manual target authority requires the `source` attribute to be absent. An explici
 empty value follows PoB's unmatched generated-group cleanup and cannot certify
 that target. The older raw-input adapter may retain the saved row with Pending
 membership; the new target proof does not promote it. See the
-[source distinction audit](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05).
+[source distinction audit](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05).
 
 The policy resolves only target correspondence. Raw input values, enabled state,
 loadout scope, usage, support-origin completeness, receiving and numerical owners

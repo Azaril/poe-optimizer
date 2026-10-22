@@ -112,7 +112,7 @@ This accounting change adds no runtime numerical coverage: native originals rema
 
 See the [finite publication packet](../data/owned/poe2/3887ae68/generated-preset-inputs-v1/README.md)
 for current admission evidence and limits, and the
-[retirement register](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05)
+[retirement register](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05)
 for the broader source-format follow-up. Raw transport establishes neither legal
 optimizer edits nor final quality, usage, descendant propagation or complete-build
 numerical readiness.

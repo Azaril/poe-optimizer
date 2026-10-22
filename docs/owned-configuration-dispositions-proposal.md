@@ -44,7 +44,7 @@ accepted and implemented. They do not complete the remaining global-switch,
 reporting or default-input inventories. Authored support issue `01de` is retired;
 the current usage issue is `0505`. The dated evidence below preserves earlier
 issue IDs, source-link counts and sidecar formats as historical observations.
-Use the [current delivery gates](implementation.md#complete-build-delivery-gates)
+Use the [current delivery gates](implementation.md#delivery-plan-and-gates)
 for implementation order and the current package.
 
 ## Evidence and current boundary
@@ -583,7 +583,7 @@ marker, has no local or global modifier mapping. Independent `baseMods` supply
 `debuff=true` and `dotIsCorruptingBlood`. Preserve the unmapped input and its
 uncertainty; this observation proves neither stack count nor on-block mechanics,
 and does not classify the marker as game-inert or an upstream defect. The
-[Lua cleanup register](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+[Lua cleanup register](legacy-retirement.md#lua-type-and-behavior-audit)
 records the corresponding native-conversion requirements.
 
 Source-07 **passes** in `runs/owned-generated-extra-skill-stats-07.log` (44.34
@@ -1016,7 +1016,7 @@ multiple ConfigSets, ambiguity, source updates and bounded-work failures.
 Such a proof would account for one source leaf only. The five selected input
 obligations at this investigation's checkpoint would remain; the current four
 obligations likewise cannot be closed by this leaf proof. Follow the
-[current delivery gates](implementation.md#complete-build-delivery-gates) for
+[current delivery gates](implementation.md#delivery-plan-and-gates) for
 the next numerical and input-admission work. This investigation does not
 authorize full configuration closure.
 

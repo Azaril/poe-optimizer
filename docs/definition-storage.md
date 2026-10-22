@@ -189,7 +189,7 @@ provenance retained to reproduce it.
 
 ## Historical comparison criteria (outside the active plan)
 
-The [implementation record](implementation.md#definition-storage-and-ui-search) tracks the
+The [implementation record](implementation.md#follow-up-register) tracks the
 completed assessment and future UI work. The following criteria preserve the
 original investigation for reference. The owner's 2026-10-02 decision removed
 database/ORM adoption from the active plan; these are not outstanding milestones.

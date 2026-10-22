@@ -100,5 +100,5 @@ Publication preserves all five imports and rebuilds 18 artifacts identically.
 Only the copy-consumer obligation is retired. Partial equipment reduction and
 the five remaining flat-Life owner gaps still block complete resource coverage;
 complete native builds remain **0/5**. The
-[implementation plan](implementation.md#latest-data-checkpoint-native-amulet-life-copying)
+[implementation plan](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/implementation.md)
 records the current package and next dependency.

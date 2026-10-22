@@ -43,4 +43,4 @@ The native command requires a new destination and preserves the predecessor.
 `bindings.json` records the reviewed template set and reused identities;
 `extension.json` is the typed data consumed by publication. The registry remains
 at 11,228 entries. Reproduction and malformed-input checks are Rust tests; existing
-Python tooling and tests remain unchanged under [T1](../../../../../docs/architecture-migration.md#t1-rust-tooling-and-test-consolidation).
+Python tooling and tests remain unchanged under [T1](../../../../../docs/implementation.md#delivery-plan-and-gates).

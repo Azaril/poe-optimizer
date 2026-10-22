@@ -2,7 +2,7 @@
 
 Status: J1 source and corpus audit on 2026-09-10; no seeded native evaluator or search is
 implemented. This supports the [design opportunity](seeded-jewel-search.md) and its
-[J1-J5 delivery gates](implementation.md#seeded-jewel-opportunity-j1-j5-follow-up).
+[J1-J5 delivery gates](implementation.md#follow-up-register).
 The broader real-build model remains the implementation priority.
 
 ## What the reference can establish

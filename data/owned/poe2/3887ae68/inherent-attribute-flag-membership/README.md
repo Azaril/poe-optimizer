@@ -39,5 +39,5 @@ input `2ad4c943b6b6d79e4421746e5318212c69245f885deb1ec2a46e293a87d1d887`.
 The native Sniper join passes all 44 checks across its baseline and regression
 runs, using actual final Strength and the current six receiver bodies. Packet
 and joined ordinary checks, strict workspace Clippy and changed formatting pass.
-See the [checkpoint](../../../../../docs/implementation.md#latest-native-checkpoint-real-strength-and-checked-flags-reach-inherent-life)
+See the [checkpoint](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/implementation.md)
 for evidence and remaining coverage gates. Complete original builds remain 0/5.

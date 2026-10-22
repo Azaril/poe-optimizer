@@ -15,7 +15,7 @@ Final Mana can use existing checked contribution groups, typed adjustment inputs
 and coherent override selection. The remaining formula uses ordinary arithmetic,
 rounding and a minimum of one. Native nearest-ties-positive rounding followed by
 that minimum agrees with the original PoB expression for every finite binary64
-operand at most 2^52. The [rounding audit](legacy-retirement.md#player-life-rounding-bound-2026-10-08)
+operand at most 2^52. The [rounding audit](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/legacy-retirement.md#player-life-rounding-bound-2026-10-08)
 records the analytical proof and original-helper counterexample at 2^52 + 1.
 This is an evaluator parity bound, not a game rule or evidence that such values
 are obtainable. The current computed Quantity and Integer types admit values

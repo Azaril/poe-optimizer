@@ -1,7 +1,7 @@
 # Djinn Command source and execution gaps
 
 Investigated October 20, 2026. This records evidence and remaining work, not an
-approved new public model. The [implementation plan](implementation.md#current-checkpoint-configuration-admission)
+approved new public model. The [implementation plan](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/implementation.md#current-checkpoint-configuration-admission)
 controls delivery; [resource obligations](owned-resource-obligations-proposal.md)
 already define the accepted direction for sustained costs.
 

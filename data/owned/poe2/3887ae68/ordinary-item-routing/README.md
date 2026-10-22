@@ -118,7 +118,7 @@ integration baseline and remaining build gates.
 
 The subsequent source checkpoint proves the bounded Focus property path and
 records a presentation-name collision on a deliberately renamed rare Amulet.
-The owner's [reference-defect disposition](../../../../../docs/legacy-retirement.md#name-based-item-routing-source-discrepancy-2026-10-06)
+The owner's [reference-defect disposition](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/legacy-retirement.md#name-based-item-routing-source-discrepancy-2026-10-06)
 is limited to those synthetic title controls; it does not describe a corrupted
 unique, change native item identity, or exclude an unchanged original build.
 Neither observation upgrades this packet's Partial owners or incomplete placement

@@ -1,5 +1,12 @@
 # Owned data release assembly
 
+> Baseline implementation reference, 2026-10-22: the commands and successor
+> formats below describe the pre-DSL toolchain. The accepted
+> [architecture](domain-architecture.md) replaces this choreography with one
+> production manifest-driven builder and one current format. Follow
+> [R1/R2/R4](implementation.md); old preservation/version rules are not target
+> compatibility obligations.
+
 `assemble-owned-release` builds one complete, immutable data package in Rust. It is an
 offline authoring operation: no character build, PoB checkout, Lua runtime or numerical
 evaluation is required. Native evaluation keeps consuming the existing owned runtime
@@ -120,7 +127,7 @@ collections of the early Twister/Skeletal Sniper data. It preserves all known me
 grants and missing-reference gaps. This restores accurate Partial knowledge; it does not
 supply those remaining inputs, activate a support, or complete a build evaluation. See the
 [implementation resume](implementation.md) for actual publication and validation evidence,
-and the [migration plan](architecture-migration.md#full-data-release-assembly-before-further-active-gem-integration)
+and the [migration plan](implementation.md#delivery-plan-and-gates)
 for active-Gem and paired-action follow-through.
 
 ## Explicit contract migrations

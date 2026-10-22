@@ -21,7 +21,7 @@ integer inventory has a finite exact sum, while any actual contributor outside
 that inventory must fail candidate binding. This does not extend that proof to
 item, socket, copied or dynamic donors, nor close Partial rule owners. Original05
 has only Base/Tree records in all twelve captured attribute stages, with no
-Amulet-copy zeros. See the [current checkpoint](implementation.md#native-checkpoint-bounded-classpassive-base-membership)
+Amulet-copy zeros. See the [current checkpoint](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/implementation.md#native-checkpoint-bounded-classpassive-base-membership)
 for implementation and validation status; this audit's broader counterexamples
 and outstanding design obligations remain applicable.
 

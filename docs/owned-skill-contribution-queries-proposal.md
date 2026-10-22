@@ -198,7 +198,7 @@ occurrence, preserve independent recipients and demonstrate non-stacking across
 duplicate Offerings. The source's separate Damage MORE30 is not BuffEffect MORE.
 Its description requires an additional consumed skeleton, which these source
 delivery controls do not prove or authorize in native activation. See the
-[implementation checkpoint](implementation.md#source-checkpoint-offering-grouping-and-exact-support-delivery)
+[implementation checkpoint](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/implementation.md#source-checkpoint-offering-grouping-and-exact-support-delivery)
 for validation, the narrow observer-position correction and remaining gates.
 
 ## Alternatives and first delivery

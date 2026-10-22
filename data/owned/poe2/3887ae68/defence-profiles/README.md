@@ -64,4 +64,4 @@ original-build evaluation remain open.
 
 Tests and tooling added for this component are Rust. Existing Python remains unchanged
 until the coherent utility-and-test migration under
-[T1](../../../../../docs/architecture-migration.md#t1-rust-tooling-and-test-consolidation).
+[T1](../../../../../docs/implementation.md#delivery-plan-and-gates).

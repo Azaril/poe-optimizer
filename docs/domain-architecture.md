@@ -1,1505 +1,357 @@
-# ADR: project-owned game semantics and independent evaluation
+# Project-owned game semantics and native evaluation
 
-**Status:** architectural boundary accepted by the owner on 2026-09-14. The contracts
-below describe the target. Companion contract documents and the implementation log identify
-delivered Rust/wire APIs and remaining gates. This decision supersedes conflicting source-shaped runtime and parity
-requirements in earlier designs. See [migration](architecture-migration.md) for delivery
-and [implementation](implementation.md) for actual capability and the resume point.
-
-## Context when this decision was accepted
-
-The product optimizes characters, skills and equipment. It does not need to implement
-Path of Building's application. The previous Rust interpreter avoided a Lua runtime but
-imported PoB callback bodies, capture graphs, class protocols and loader/control
-lifecycles into the native design. This transferred compatibility work into production
-without establishing a general build evaluator: none of the five supplied originals
-currently completes natively. The separate Spark/Mace profile dispatch has since
-been removed. The [execution overview](data-and-evaluation-overview.md) describes
-the delivered owned rule runtime and the remaining migration work.
-
-Keep what we have learned about game mechanics, identities, interactions and numerical
-parity. Change the representation and integration boundary now, before further extending
-PoB object construction or UI synchronization in native code.
+Status: accepted architecture, updated 2026-10-22 following the
+[owner-provided review](architecture-review-2026-10-22.md). This document defines
+**the target**, not a claim that the migration is complete. The
+[implementation plan](implementation.md) is the only delivery schedule; the
+[execution overview](data-and-evaluation-overview.md) states what runs today.
+Product scope belongs in [design](design.md). Earlier detailed contracts preserve
+game semantics, but do not mandate old wire formats or publication machinery.
 
 ## Decision
 
-Own the build schema, game-definition schema, rule semantics, evaluation plans and search
-contracts. Import PoB definitions offline into that model. Keep PoB's evaluator as an
-optional reference implementation behind an adapter. UI, import formats, source acquisition,
-calculation, optimization and presentation have separate dependencies and lifecycles.
+Own the build model, definition/rule schemas, evaluation and optimization APIs.
+Convert upstream data offline into readable domain declarations and a checked
+native package. Author mechanics in a small Rust-implemented formula DSL and
+KDL manifests, lower into **one checked SSA IR**, and pack for native execution.
+Keep the existing typed checker, explicit-stack VM and occurrence/effect graph
+where they satisfy these contracts. This is not a second runtime interpreter.
 
-The default native application and its data package contain no PoB Lua source, PoB class
-or control graph, source AST/bytecode, Lua VM, or PoB subprocess requirement. Source provenance
-is metadata, not executable authority. A game update within implemented semantics can ship
-as a new data package without rebuilding the engine. A genuinely new mechanic can require a
-new versioned native operation; calling arbitrary PoB code is not a runtime fallback.
+PoB is optional offline acquisition and a separately hosted reference evaluator.
+Its XML/share-code interchange remains supported at Import. Its UI construction,
+Lua object model and incidental language behavior are not native domain models.
+No SQL/ORM, runtime Lua, per-skill Rust dispatch or fixture-specific build path is
+part of the target. Data is injected; changing balanced values or content does not
+require editing native evaluator code.
 
-Distribution builds may run the offline converter and ship its generated owned artifact
-with a provenance manifest. Loading that artifact must not require a PoB checkout, XML,
-or source evaluator. Importing a user's saved PoB build is a separate boundary operation:
-it produces owned records and optional source diagnostics before evaluation/search begins.
-Neither definition conversion nor saved-build parsing runs for each search candidate.
-A source-format compatibility policy belongs to that importer, not to domain rule execution.
-
-Retained source evidence is immutable once a publication authenticates its bytes.
-An expanded review gets a distinct scoped artifact; it must not replace evidence
-still referenced by an earlier publication. Validate each report against its
-exact inputs and keep the current review discoverable. Preserving evidence does
-not require an old evaluator or importer behavior. Do not accept alternate
-hashes or weaken a receipt check to make changed evidence appear unchanged.
-
-Scaling semantics, artifact encoding and execution layout are separate concerns.
-The [table/curve investigation](owned-scaling-data-investigation.md) evaluates
-lossless range segments and genuine formulas without changing current exact
-table semantics. Compact discrete data may compile once to shared arrays;
-curve fitting never supplies missing domain, rounding or extrapolation authority.
-Public representation and numerical-law changes require a reviewed decision.
-
-Accepted preset-owned generated inputs retain provider-level authority. The
-[accepted field-accounting pass](owned-generated-skill-dispositions-proposal.md)
-independently proves remaining source fields against actual imported outputs
-and existing usage obligations. Keep one current importer behavior and rebuild
-affected data; old development behavior needs no compatibility branch. Source
-accounting itself does not implement native participation.
-
-The [Lua compatibility cleanup gate](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
-audits behaviors as well as types. Exact PoB parity is evidence for supported
-game semantics, not a requirement to recreate incidental Lua coercion, aliasing
-or initialization bugs. Every retained compatibility law needs a valid-domain
-purpose and evidence; source-format conversion remains at its adapter. Record
-upstream defects as narrow reference exceptions, never native fixture branches.
-Review uncertain numerical differences before changing semantics or goldens.
-
-Offline conversion must account for effect-specific mappings before a global
-fallback and establish units from the actual operation. An unmapped source input
-remains unresolved; absence of an oracle handler does not prove game inactivity.
-Keep category-specific contributions distinct from a final aggregate. A support's
-cast-speed increase belongs to an Action cast-speed channel; Spell membership
-alone does not establish the timing branch that consumes it. Likewise ordinary
-resource-cost and reservation multipliers have different consumers. Missing
-coefficients do not authorize fabricated identity contributions. An exact
-source-store parent chain may authenticate reference evidence, but is not a
-native ownership or inheritance model. Native routing follows owned occurrences,
-declared recipients and proven applicability.
-Applicability can be reused across modifier families only for the exact routing
-law it proves. A predicate excluding ordinary Amulet delivery is not complete
-item routing, nor does suppressing Player receipt implement delivery to a minion.
-Keep copy paths independent and distinguish inactive contributions from missing
-eligibility. Add further laws through injected data and the existing occurrence
-graph, retaining unresolved coverage until the full selected path is accounted for.
-Contribution production and reduction have separate numerical contracts. Proving
-individual factors does not establish aggregate rounding, final resource cost or
-reservation. An oracle's shared numeric-precision table must be classified by
-valid game behavior before becoming an owned rule. Keep exact raw contributor
-checks and unrounded native reduction checks explicit while that decision is
-unresolved; do not round test results merely to hide a difference.
-Where numeric order matters, use [declared contribution groups](owned-ordered-contribution-queries.md)
-bound to actual candidate occurrences. Definitions declare membership and semantic
-ranks; item modifier order and selected equipment supply occurrence order. Opaque
-IDs and source-cache layout are not numerical authority. Compile those bindings
-to immutable reduction inputs before worker execution. Explicit stages and typed
-intermediate values express attribute dependencies; a flat subtotal does not
-stand in for a resolved attribute or authorize a dependent resource result.
-
-Boolean flags use the same contribution graph with typed Boolean effects and a
-checked unordered `Any` query. Complete membership and recipient authority remain
-mandatory; numeric ranks and tie rules have no meaning for this reduction.
-Repeated true sources are idempotent, inactive/false sources cannot cancel them,
-and an unresolved active source remains unresolved even beside true. Empty=false
-is valid only for a proved complete empty domain. Direct channel reads cannot
-bypass that membership proof. Membership is declared by `ContributionMember.origin`;
-optional numeric order belongs to an explicitly Ordered group. Unordered groups
-forbid rank metadata. The compiler and loader share this contract; source
-interpretation and source-language truthiness stay outside evaluation. See the
-[Boolean contract](owned-boolean-contributions-proposal.md).
-
-Attribute inputs use distinct pass-specific Count channels, while final
-attributes remain bounded Integers. Preserve each contributor occurrence through
-that boundary, including numeric conversion failures. Retire superseded live
-contribution wiring in a checked transition; frozen offline artifact contracts
-do not justify a second runtime calculation path. Publication of input channels
-alone supplies no final reducer or contributor completeness.
-Keep the scalar consumer separate from an unresolved reduction law. The six
-ordinary attribute receivers use actual BASE/INC queries and explicit typed
-effective-MORE inputs. Their formula can be implemented while the factor
-producer and query memberships remain unresolved. An absent producer is not a
-neutral factor. A finite fixture may prove a closed empty domain, but that proof
-must not become a general production default or import source-cache entities.
-Likewise, a non-damaging player action and the buffs it applies to other actors
-are distinct graph entities. Duration contributions attach to the declared
-action; final duration and any effect-application lifetime transfer need their
-own complete contributors and explicit rule ownership. A minion recipient does
-not turn its source action into a minion action.
-Reference comparison may disregard incidental ordering only with a finite,
-checked proof that distinct records are independent, retained raw diagnostics
-and explicit refusal of ambiguous records. Numerical determinism stays mandatory.
-
-The owner confirmed on 2026-10-02 that this layering does not need SQLite or an
-ORM. Ship generated owned data artifacts, load immutable Rust definitions/indexes,
-and derive UI discovery indexes from that same model. No database adoption is
-planned. Retained legacy code needs a named useful consumer; unused experiments
-and duplicate feature paths should be deleted with their exclusive scaffolding.
-
-The chosen direction is **typed domain rules plus reusable native Rust algorithms**.
-The owner accepted a [build generality checkpoint](build-generality-review.md)
-on 2026-10-04. Shared contracts must be exercised by contrasting real mechanic
-shapes, with data-only extension inside implemented semantics and independent
-whole-build validation. Current bounded support is not proof of generality.
-This supplements the five-build MVP; it does not authorize named-build dispatch,
-fixture-supplied runtime defaults or relaxed completeness gates.
-Delivery prioritizes the closest complete original, currently Original05. Once
-that unchanged build passes complete native/reference validation, begin owned
-optimizer integration and verified mutations while completing the remaining
-originals. Retain contrasting player/minion contract tests and all-five regression;
-those safeguards do not require two complete builds before search work starts.
-
-Unresolved imported fields belong to their actual preset or scenario obligation.
-A known source field on an archived skill preset must not remain coupled to a
-selected build's global configuration blocker when its complete field grammar
-and existing scoped responsibilities are proven. This is Import accounting,
-not permission to invent providers, drop unknown fields or complete a native
-inventory. Exact provider binding and executable support/usage coverage remain
-independent requirements.
-
-Saved external placeholders need per-reader interpretation. A value replaced by
-the source's encounter calculation is not an authored native input. Import may
-account for it as source-only after proving the exact scenario and the actual
-typed input projection; the native evaluator derives defaults from injected game
-data. Other placeholders can be consumed fallbacks. Keep their precedence and
-source-format zero handling in Import, preserving distinct raw/effective meanings
-when different consumers need them. Structural XML validity alone never proves
-semantic coverage or a complete scenario.
-
-Whether authors edit a small textual DSL or structured documents is a tooling choice.
-Both compile to the same project-owned typed rule representation. Optional Lua authoring
-bindings may emit this representation in offline tools; Lua callbacks cannot escape into
-it. Do not build another general language interpreter in order to translate all Lua syntax.
-
-Offline conversion and runtime semantics have different formats and release cadences.
-During development, backward compatibility is not a requirement. Prefer one
-current contract and rebuilt/reimported data over parallel legacy implementations.
-Semantic identities and caches must be invalidated when behavior changes; retain
-historical source evidence without preserving obsolete execution paths.
-A source text pattern may emit zero, one or several owned declarations; the runtime never
-receives that pattern as a rule to execute. Preserve import uncertainty and origin metadata
-outside evaluation inputs. Likewise, computed parameters of a provider-granted skill belong
-to that skill and provider occurrence, not to a fabricated authored gem or a UI group.
-Intrinsic facts absent from an imported item must remain unspecified rather than receiving
-sample-build defaults. Domain resolution determines which facts each requested result needs.
-
-Physical records and their supplied capabilities are distinct. For example, a gem use
-can supply a skill through a declared slot; that skill can supply a summoned actor with
-its own action outputs. Each transition has an explicit activation rule and retains its
-provider identity. Neither a possible-definition list nor a UI's current selection creates
-an occurrence. Import adapters translate source selections to these addresses once; the
-native evaluator and future UI consume the same owned graph.
-
-Imported catalogue associations are not supplied capabilities. In particular,
-the primary effect used to identify a support gem remains Import metadata; its
-modifier behavior belongs to the support assignment. Offline conversion must
-classify each associated effect separately, since both active and support gems
-can have additional effects of either kind. Potential non-support capabilities
-remain incomplete until their occurrence, activation and numerical ownership
-are proved. A source sidebar/display flag is not a native capability rule.
-Correct conversion at the producer and migrate published data through checked
-release transitions; do not retain a second source-shaped evaluator mode.
-
-Exact target identity and execution readiness are separate proofs. A support
-assignment can identify an authored root whose raw values, participation or
-numerical rules remain unresolved. Import must prove that correspondence from
-the full admitted source frame; the native graph still enforces the target's
-actual input, activation, ancestry and contributor requirements before evaluation.
-
-Conditional applicability uses explicit domain inputs with declared producers.
-For example, an action's Area eligibility can depend on its selected part and
-support effects; its catalogue types alone are insufficient authority. Offline
-conversion must account for the relevant mutations before publishing that input.
-An unavailable eligibility input stays unresolved. Source diagnostic helpers may
-omit neutral modifiers, but that presentation behavior does not authorize dropping
-their conditions or inventing an unconditional native default.
-
-Channels describe distinct game quantities, even when their units and current
-values coincide. In particular, a support's ordinary resource-cost multiplier
-and its reservation multiplier have different producers and consumers. They
-must not share a reduction merely because both are dimensionless. A missing
-contribution is not an authored neutral contribution; complete membership must
-justify the consumer's identity value.
-
-The owner accepted [Skill-owned resource obligations](owned-resource-obligations-proposal.md)
-on October 15. Sustained reservation belongs to an exact participating Skill,
-with explicit payer Actor, resource and obligation kind. Metric selection must
-not create or remove that obligation. Exact Action dependencies are declared
-only where selected part, mode or stat set is mechanically relevant; per-use
-costs remain Action-owned. Checked Skill support recipients now use the existing
-receiving graph, with exact source paths and separate preparation/execution
-authority. The typed obligation effect, payer binding, exact Action dependencies
-and reservation migration remain to be implemented on that same graph. The
-current Action-owned reservation component must be replaced explicitly, without
-a parallel compatibility path.
-
-Rules may inspect the bound Action's existing part, mode and stat-set identities
-through typed Boolean equality predicates. These are read-only request facts:
-they do not add a choice store, expose source ordinals, select a reference UI tab
-or activate an unavailable occurrence. They require Action context and known
-typed definitions; a different known selection yields false. The implementation
-opts in through operations V20 while existing operation versions retain their
-semantics and identities. Exact routing remains useful for transporting values;
-it need not introduce artificial carrier stats merely to inspect a selection.
-
-Keep classification channels specific to their consumers. In particular, Area
-modifier eligibility is distinct from a skill catalogue type or a later computed
-radius. An observed change in a reference display flag does not establish a new
-gameplay law or justify silently changing an earlier modifier query.
-
-Generated raw inputs use the accepted [preset-owned exact bindings](owned-generated-skill-inputs-proposal.md),
-with explicit producer authority; provider-produced levels retain their writer.
-Usage preferences remain separate. How a saved enabled preference gates whole-Skill
-execution follows the accepted [participation contract](owned-skill-participation-proposal.md):
-separate mechanical supply from requested participation on the existing graph.
-Its native implementation uses the existing `SkillReadiness` row's optional
-Boolean Skill-stat requirement. An ordinary early usage rule produces that
-stat; a shared execution gate applies it to the exact occurrence and its actual
-Skill/Actor/Action ancestry. Preparation keeps mechanical supply. Unknown stays
-unresolved, and false cannot hide incomplete contributor or owner inventories.
-The declaration is part of the current stages V4 / operations V21 contract;
-there is no second graph, input store or compatibility alias.
-Import can preserve independent occurrence and containing-group values, with
-no fallback for a strict group input. Authenticated, data-defined combination
-and publication for the real builds remain separate work.
-Source global-effect switches and UI-selected previews do not implicitly acquire
-that native meaning. Incomplete coverage stays unresolved regardless of a toggle.
-
-Shared equipment-derived Actor conditions also need explicit ownership. The
-[Class coverage audit](owned-class-coverage-audit.md) distinguishes intrinsic
-class facts, shared initialization, equipment state and per-Action source
-selection. Existing equipment-to-Player delivery is reusable, but general hand
-state uses the accepted [Player slot relation](owned-equipment-slot-state-proposal.md):
-read validated occupancy and the exact equipped occurrence's computed values,
-without crossing raw parameter ownership. Core/Data/Engine implement this in
-current V21 through one bounded cold resolver shared with Action selection.
-Only actual existing-Player applications have this authority; their computed
-reads join the normal dependency and stage checks. Game-state data publication
-remains open. Do not derive shared state
-from which metric or Action a user queries, or close Class coverage merely by
-moving its unfinished responsibility into a generic Actor marker.
-
-Computed intermediate values also need domain identities. The
-[modifier occurrence contract](owned-modifier-values.md) distinguishes a modifier's own
-values from its supplying item's shared properties. This extends the existing native
-dependency graph; it does not expose PoB Item instances or parser state to the evaluator.
-
-The [effect-application contract](owned-effect-applications-proposal.md), accepted
-on 2026-10-02, represents buffs and debuffs as exact source-to-recipient
-applications. Injected rules own activation, recipient scaling and stacking
-families. The native planner binds occurrences and compiles their reductions into
-the shared dependency graph; evaluation uses worker-owned scratch. Per-modifier
-maximum is the first supported stacking policy. Discovery, activation and
-completeness remain distinct, and the optional PoB adapter supplies reference
-evidence rather than runtime behavior.
-
-The next consumer boundary is tracked in the
-[application-group query proposal](owned-application-group-contribution-queries-proposal.md),
-accepted by the owner on 2026-10-08. It adds a typed producer address
-inside the existing checked contribution model, distinguishing ordinary program
-effects from results after application stacking. Exact recipient binding and
-complete membership must survive that distinction; individual candidates cannot
-be counted again after their group has emitted a contribution. Core/Data/Engine
-operations V25 now implement this contract in the current member format. The
-mixed damage-consumer publication now adopts it through ordinary typed Stat
-receivers, reading the existing inherited stat and the checked application group.
-No complete damage-domain or whole-build coverage follows merely from this
-capability or its initial data adoption.
-
-The same packet derives an unconditional MORE factor from prepared population
-quality and checked supplied-Actor contributions. Precision and grouping are
-authored semantic arithmetic, not generic Lua modifier-store behavior. The
-currently reviewed quality/Gigantic group retains its observed two-decimal
-rounding boundary; broader modifier groups need independent evidence. Actor
-factors alone do not account for action-local conditions. The accepted
-[exact Action query extension](owned-action-contribution-queries-proposal.md)
-now implements that authority in Core/Data/Engine operations V26. Skill-definition
-and Skill-declared output owners bind to exact Action selections, with separate
-permission for Direct uses and explicit generated supplies. Gem-backed skills
-retain their generated child addresses. Potential writers are checked before
-selection/value filtering; ordinary worker reductions preserve unknown coverage.
-The [Action damage packet](../data/owned/poe2/3887ae68/action-minion-damage/README.md)
-now joins the shared Actor increase with exact Action Command contributions.
-Basic and all three Gas Arrow stat sets use the same injected programs/query;
-their containing mechanics coverage remains Partial. A checked partition of Gas
-supply separates structural activation from numerical input projection through
-the existing readiness phases, without introducing another occurrence model.
-
-Intrinsic attack modifiers use this same graph. Profile data alone does not
-establish eligibility: a reviewed creating-skill/Actor relation produces the
-intrinsic amount, and an exact Action route carries it to the eligible output.
-The [added attack damage packet](../data/owned/poe2/3887ae68/intrinsic-added-attack-damage/README.md)
-retains its raw percentage and emits an individual dimensionless Multiply
-contribution. Missing source authority stays unavailable even when generic
-profile data exists. Neither this individual factor nor an observed zero flat
-addition establishes complete incoming membership or final damage. Later
-aggregation must account for the admitted modifier groups, numerical order and
-rounding boundaries explicitly. Source names, Lua truthiness and modifier-store
-objects remain offline evidence, not runtime dispatch.
-
-Supplier proofs must account for every admitted input path, including serialized
-external modifiers that bypass ordinary item or skill catalogs. A closed native
-query does not establish support for unconverted source payloads. Keep their
-selected import obligations live until an explicit adapter accounts for them;
-finite parity fixtures must state and enforce any narrower input assumptions
-before completing their test-only inventories. In particular, PoB's saved party
-buffs can supply arbitrary numeric modifier names, so catalog absence alone
-cannot prove an empty contribution domain.
-
-Damage assembly consumes the selected source's coherent damage endpoints,
-self-added damage, Enemy-derived added damage, the complete added-damage factor
-and the ability coefficient. Source-specific additions belong in that source's
-endpoint construction before routing; PoB's shared weapon/spell table does not
-define universal native bonus ports. For the proved intrinsic attack source,
-the existing routed range is already complete. An Actor profile's intrinsic
-scale is not a second multiplier on its already-scaled endpoints. The final
-ability coefficient can depend on skill preparation as well as level data;
-absence from one source table does not prove the complete input domain neutral.
-When the full admitted supplier domain proves a coefficient constant, author
-that value in the ability's injected rule. Do not retain an unused runtime input
-or a neutral producer solely to resemble PoB's intermediate storage. Other
-abilities retain their own declared or computed coefficient rules.
-
-Apply the same test to apparently unused calculation channels: a PoB read alone
-does not establish a game mechanic or require a native port. If every admitted
-supplier and external-input path is accounted for and no writer exists, remove
-the unused dependency from the owned rule. Retain its reviewed source scope and
-verify the numerical simplification, including signed zero and operation order.
-Do not create an empty native aggregation subsystem solely to mirror that read.
-A real newly admitted supplier must reopen the data/ownership contract rather
-than inherit the earlier absence proof.
-
-Enemy ownership alone does not establish modifier applicability. A quantity on
-the scenario Enemy is shared; a modifier filtered by the attacking Action must
-retain that Action's identity and typed conditions. Native Enemy query results
-currently have no consuming-Action dimension. Widening their numeric read
-allowlist would not implement action-dependent eligibility. Before adopting a
-real such source, prove action independence or review its explicit delivery to
-exact Actions through the shared graph. Keep raw PoB query configuration offline;
-neither a second modifier interpreter nor an unchecked global sum is authorized.
-
-The same distinction applies to modifiers carried by the acting Actor. Storage
-under a PoB parent modifier list does not by itself require a new native delivery
-contract. An explicitly reviewed source family whose value and eligibility are
-independent of the consuming Action can use a checked exact-Actor subtotal and
-an ordinary Action read, as existing damage rules already do. A receiving-Actor
-condition may fit that model; a skill-specific override of that condition, attack
-selection, hand, part, mode or stat set does not. Prove the admitted family and
-its source coverage before aggregating away individual eligibility. Keep local
-and inherited numeric groups separate where their reduction order matters.
-
-A restricted family can also keep its applicability in the meaning of its
-channel. For example, flat damage granted to minion Attacks can be collected
-once for the receiving minion, then routed only to explicitly proved Attack
-outputs and selections. That channel is not the Actor's universal flat damage.
-The source amount must remain independent within the admitted family; arbitrary
-skill conditions cannot be erased into an Attack subtotal. This uses the existing
-typed channel, checked membership and Action-route contracts. Partial source or
-route coverage must still prevent a claim that the subtotal is the complete
-input for final damage.
-
-Source-conditional controls do not automatically establish obtainable item or
-support mechanics. Keep their provenance, external-input obligations and actual
-recipient binding explicit. The accepted Action self-contribution contract does
-not authorize relabeling inherited or support producers as self-sources. Adopt
-an additional source-to-Action binding only when a required concrete family
-demonstrates that the existing Actor path is insufficient, and review that
-ownership change before implementation.
-
-Minion resource modifiers use the same source/recipient graph. A passive writes
-one contribution at its exact allocation; an admitted Actor relation reads the
-frozen incoming channel and emits one contribution for each exact recipient.
-The number of skill occurrences must not multiply the supplying passive census.
-An explicitly complete empty channel may yield zero, while missing or Partial
-source authority remains unavailable. Composing these resource components does
-not establish final-pool coverage: intrinsic, attribute-derived, extra, total,
-conversion and override producers all need an explicit inventory, even when a
-selected producer happens to emit zero. Numerical domain and rounding guarantees
-are separate from that source-coverage proof.
-
-An existing Stat/program receiver has one identity with explicit recipient
-targets. When the same Actor-relative rule applies to Player and an admitted
-supplied Actor, extend that receiver's target list instead of duplicating its
-row or numerical body. Every invocation still binds its exact Actor. The
-minion inherent-Life packet adopts this structure; checked empty attribute
-inputs follow the existing lazy rule, while unsupported inputs remain
-unavailable. Reusing a calculation does not prove a new recipient's full
-modifier domain or justify inheriting Player contributions.
-
-Source evidence must also identify the evaluation stage. The original minion
-Life census includes a Strength contribution of zero at all three calls, then
-generated ExtraLife and LifeTotal zero records only at the final call. A filtered
-source query can omit these records without proving their suppliers absent.
-Owned rules retain source identity and stage dependencies; they do not reproduce
-that Lua collection behavior. Admitting a generated result requires accounting
-for its inputs, including incoming resource transfers, even when this build's
-observed result is neutral.
-
-Preexisting resource additions and generated transformation outputs have distinct
-producer ownership and stage dependencies. A collector for the former must not
-read its own later generated output. Source acquisition must retain both the
-pre-transform inventory and the actual emitted records; a source that appends a
-new record must not be mistaken for replacing the earlier record. This preserves
-the evidence needed to decide positive transfer semantics without importing a
-mutable source store into the native model. An empty adjustment collector alone
-does not implement a generated transformation producer.
-
-The approved [checked optional numeric selection](owned-numeric-selection-proposal.md)
-now runs in Core/Data/Engine operations V27. Its require-agreement result
-distinguishes absent, present (including zero), and unavailable. Presence/value
-projections share one cached graph node per exact recipient/channel/query/group;
-conflicting or unknown candidates cannot choose an arbitrary winner. Numeric
-units are exact and signed zero is normalized to positive zero. Selection has
-no numeric empty identity. Staged evaluation binds the shared result to the
-channel's explicit freeze and rejects late writers or premature consumers.
-Retained support queries use the same graph and frozen-prefix checks. The first
-real adoption is the data-defined Mana override from an allocated passive.
-Its exact source joins a checked query without adding a resource-specific
-engine branch or importing Lua database-order precedence. Admission of that
-effect does not close the owner's other mechanics or item-granted origins.
-
-Repeated source occurrences need no numeric ordering when a query declares a
-proven exact domain. The generic `ExactIntegerSum` extension to current V27 is
-implemented and validated: a checked Add query over Integer Stats, with unordered members,
-zero identity and no ranks. It accumulates in a bounded wider integer and checks
-the final `BoundedInteger` range; unknown contributors and incomplete membership
-still block. Ordinary ordered Sum/Product retain their existing behavior.
-The [obligation aggregation proposal](owned-resource-obligation-aggregation-proposal.md)
-separately awaits review of resource/kind/quantum identity and payer channels.
-The reducer alone adds no resource ownership or reservation coverage.
-
-The [passive topology contract](owned-passive-topology.md) separates implicit roots,
-physical allocations, attached choices, scope eligibility and injected legality budgets.
-It prevents source node lists or UI point totals from becoming native game semantics.
+The first complete build must run on this architecture. Break and regenerate
+unshipped formats; delete superseded code, formats and commands at cutover. Do
+not retain compatibility readers or a parallel native evaluator for hypothetical
+future users. The actual PoB oracle and independent regression fixtures remain.
 
 ## Components and dependency direction
 
+| Component | Responsibility and allowed dependency |
+| --- | --- |
+| Core | Owned project/build/scenario/definition identities, typed IR and public reports; no filesystem, UI, PoB or acquisition dependency |
+| Data | Validate/load the current runtime package, immutable indexed definitions and metadata; depends on Core |
+| Engine | Check/compile IR, compose occurrences, prepare and evaluate; depends on Core/Data, no Import/Authoring/PoB |
+| Import | Bounded external build decoding and normalization through injected conversion recipes into the owned model; no legacy source interpreter |
+| Authoring | Rust DSL/KDL compiler, catalogs, identity allocation, release construction and checking; can use the native checker; never a runtime dependency |
+| Search | Configurable problem, candidates/operators, budgets, archives and scheduling over an evaluator interface; no PoB-specific metric or UI type |
+| PoB reference/acquisition | Optional mlua/LuaJIT host and offline extractors; validates its source pin, returns explicit reference observations through adapters |
+| CLI / later GUI | Compose public libraries, present progress/diagnostics/results; no game formulas or hidden model repair |
+
+The reference host shares only the decoding boundary it needs, not the entire
+authoring toolchain. If that boundary needs a small library extraction, keep its
+purpose explicit. Native Engine must not depend on a relocated compat interpreter.
+Dependency closure, linked features and shipped contents are CI assertions.
+
 ```mermaid
 flowchart LR
-    PoBData[Pinned PoB source and definitions] --> Compiler[Offline data and rule compiler]
-    Authored[Project-owned definitions and mappings] --> Compiler
-    Compiler --> Package[Versioned semantic game package]
-    Package --> Loader[Portable validator and compiler]
-    Loader --> Rules[Immutable compiled game rules]
-    XML[PoB XML and share codes] --> Import[Import and export adapters]
-    Import --> Project[Owned project and build model]
-    CLI[CLI] --> App[Application services]
-    GUI[Future GUI or web host] --> App
-    App --> Project
-    App --> Search[Search and objective engine]
-    Project --> Resolve[Domain resolution and legality]
-    Search --> Resolve
-    Rules --> Resolve
-    Resolve --> Plan[Resolved evaluation plan]
-    Plan --> Native[Native evaluator]
-    Rules --> Native
-    Native --> Results[Typed measurements and explanations]
-    Results --> Search
-    Results --> App
-    Project --> OracleAdapter[Optional parity adapter]
-    OracleAdapter --> PoB[PoB application and evaluator]
-    PoB --> Compare[Differential comparison]
-    Results --> Compare
+  P[Optional pinned PoB source] --> A[Rust offline acquisition]
+  A --> S[Named definitions and .rule / KDL]
+  S --> C[Authoring compiler and checked SSA IR]
+  C --> R[Interned runtime package]
+  C --> I[Separate import recipes]
+  B[User build XML / share code] --> N[Import]
+  I --> N
+  N --> M[Owned project and selected build]
+  M --> E[Native Evaluator library]
+  R --> E
+  O[Objectives, locks and scenarios] --> Q[Search library]
+  Q --> E
+  E --> V[Typed results and explanations]
+  V --> U[CLI / future GUI]
+  P --> X[Optional PoB reference]
+  X --> D[Differential validation]
+  E --> D
 ```
-
-These are responsibilities before they are crate names. Retain existing useful crate
-boundaries rather than adding a crate for every box. Core owns portable value contracts;
-data owns portable packages; engine owns rule compilation and numerical operations;
-native composes resolution/evaluation; search owns proposals, objectives and scheduling.
-Import owns external codecs and origin sidecars. Offline acquisition/compiler tooling and
-the optional PoB oracle depend inward on these contracts. They are not dependencies of
-production data/model/evaluation code. CLI/Tauri/web adapters depend on application APIs;
-none owns independent rules, legality or optimization behavior.
-
-No XML decoding, UI control notification, source-method replay, process protocol or
-filesystem access occurs inside a candidate calculation. Package generation is an explicit
-build/release tooling step, not an unconditional Cargo build.rs task that starts PoB,
-fetches a submodule or requires Lua for native consumers.
-
-## Enforced ownership and release boundary
-
-Design from the optimizer's operations: author a character, resolve its legal choices,
-evaluate a scenario, propose a candidate and compare results. PoB is one external source
-and one reference backend. Its table layout, callback graph and selected UI controls do
-not define those operations. The following rules apply even during incremental delivery:
-
-| Layer | Owns | Must not require |
-| --- | --- | --- |
-| Definition conversion/build tooling | Pinned source readers, reviewed mappings, source syntax/defaults, conversion diagnostics and provenance | A source-shaped representation in the emitted runtime package |
-| Game package/model | Stable domain IDs, definitions, topology, typed effects/tables, instances, scenarios and queries | PoB IDs as semantic identity, XML, source AST, closures, controls or filesystem access |
-| Resolution/evaluation | Legality, provider/action relationships, dependency plans, native kernels, coverage and measurements | UI selection, source parsing, callback replay, named-build profiles or subprocesses |
-| Search/optimization | Domain edits, exact locks, objective/constraint policy, budgets, candidate scheduling and cancellation | XML rewrites, UI widgets, or separate calculation formulas |
-| Application/UI | Loading/saving through adapters, commands, progress/events, presentation and user choices | Independent game rules, legality, candidate scoring or evaluator state hidden in controls |
-| Optional oracle | Translation of admitted semantic requests to the pinned reference, observations and comparison | Authority to silently fill missing native results or change objective inputs |
-
-Release tooling publishes two distinct artifact sets. The **runtime package** has owned
-schemas, effects, tables, routes and metric bindings. The **import/tooling bundle** adds
-source mappings, syntax policies and diagnostics for users who import external builds.
-They may share a release directory for development, but the native distribution includes
-only its declared runtime set. Changing a PoB field spelling changes the adapter; changing
-a game coefficient changes data; changing a mathematical operation may require a new
-engine operation version. These are separate review and invalidation events.
-
-The current typed domain executor is not permission to reintroduce a generic Lua
-interpreter under a different name. New rule features need a game-domain consumer and
-bounded execution semantics. Compile and validate once per package/plan; worker scratch
-and candidate inputs remain private. Compare compact execution, generated native kernels
-and authoring DSLs on actual interacting builds before making speed claims. Optional Lua
-bindings can emit owned declarations offline, never callable runtime escape hatches.
-
-Dependency checks must eventually inspect compiled modules and distributed artifacts as
-well as Cargo edges: a crate can exclude mlua while still compiling a source interpreter.
-The acceptance test loads an owned build and runtime package in a directory with no PoB
-checkout, import sidecar or legacy snapshot, evaluates changed candidates in serial and
-Rayon, and preserves the same metrics/coverage. This is a migration exit gate, not a claim
-about today's native-only build. Refer to the retirement inventory for live consumers.
 
 ## Project, build and scenario models
 
-Separate stored user work from a concrete evaluation input:
-
 | Model | Meaning |
 | --- | --- |
-| BuildProject | Saved alternatives, inventories, names, editor preferences, imported originals, scenarios and optimization requests. UI state is optional presentation metadata. |
-| BuildSpec | One explicit character choice: progression/rewards, class/ascendancy, allocations by point pool and weapon state, concrete equipped item instances, authored skills/support assignments and user-selected mechanic choices. It can be created without any import. |
-| ScenarioSpec | Enemy, environment and actor assumptions, uptime/encounter policy and externally chosen conditions. Candidate-derived state is computed, not frozen here. |
-| MetricQuery | Requested actor/action/part and measurement semantics, units, aggregation and scenario. A selection is not a runtime array index or an implied sum over every skill. |
-| OptimizationProblem | Seed BuildSpec, inventories/catalog bounds, allowed dimensions, exact instance requirements/locks, objective expressions, constraints, scenarios and budgets. |
-| ResolvedBuild / EvaluationPlan | Private, validated interpretation bound to semantic build revision, scenario/query and rules/evaluator identity: actors, actions, grants, supports, resource/dependency graph and required operations. No source document or UI receiver is needed. |
-
-Occurrence-specific usage intent belongs to a skill preset. Authored targets
-retain that preset's supplying ownership. The accepted
-[generated-usage extension](owned-generated-skill-usage-proposal.md) allows exact
-item/tree providers from other selected axes with explicit applicability:
-proven nonselection can leave intent dormant, but stale or ambiguous sources
-remain obligations. This never grants or activates the target, and never
-retargets a preference to another source of the same skill. Validate the stored
-policy/parameters even when dormant or overridden. Shared checked composition
-retains selected preferences on the Build and explicit overrides on the Scenario.
-Definition-aware preparation resolves these layers at exact `(policy, target)`
-keys. Physical Gem properties remain shared separately.
-Typed policy definitions and native programs supply the meanings; neither import
-nor UI code invents counts, activation, actor populations or numerical defaults.
-See the accepted [usage composition contract](owned-skill-usage-proposal.md).
-
-**Accepted October 19:** independent Scenario settings may retain
-[typed usage intent](owned-scenario-usage-intent-proposal.md) that resolves to all
-eligible exact occurrences during definition-aware composition. Complete discovery
-with no eligible source leaves intent dormant; incomplete discovery remains
-unavailable. Preset preferences, resolved Scenario intent and exact Scenario
-overrides apply in that order, replacing whole policy records. This neither
-creates occurrences nor enables disabled sources. Applicable policies, selected
-sources and resolved provenance participate in plan/cache identity. The current
-implementation has required Build preference and Scenario intent fields,
-and one required nullable applicability declaration on each UsagePolicy. Supplied
-recipients must match exact declared Grant-to-SkillGrant relations, not just a
-Skill definition. A known typed policy may retain intent while its supplied Skill
-or applicability remains incomplete. Positive source relationships do not grant
-activation or execution authority, and incomplete discovery cannot establish
-dormancy. Core/Data, Engine, configuration projection and actual raw-stage
-publication checks pass; complete imported inventories and mechanics remain pending.
-
-Imported progression alternatives use existing build Choice rewards with typed
-parameters, as accepted in the [progression decision](owned-progression-input-proposal.md)
-on October 19. This preserves independent Character and configuration axes.
-Character/Choice composition must reject duplicate authority for one progression
-fact rather than sum counters; missing imported counts have no invented default.
-The numeric import adapter and actual campaign rules are implemented. Native
-requirements assess exact authority after composition; final candidate admission
-must consume that evidence alongside metric and coverage gates. The report alone
-does not certify complete gameplay legality.
-
-The owner accepted [preset-specific generated raw inputs](owned-generated-skill-inputs-proposal.md)
-on 2026-10-05. Exact provider-backed Skill targets reuse the shared typed slots,
-with explicit supplying-declaration permission for preset-authored inputs.
-Composition selects one preset's bindings before preparation; existing provider
-projections remain unique writers. Applicability proof is shared with usage,
-while raw input production remains distinct from usage execution. Alternative
-presets may retain different values without duplicating providers or physical
-gems. This does not authorize scenario raw overrides, a new occurrence graph or
-unproved game legality. Core now implements the versioned preset/draft/request
-contract and full-content schema proofs; Data declares exact supply permissions
-under schema V6, and Engine consumes selected inputs under operations V19.
-Focused contract tests pass. A source-authenticated Import policy and V6/V19
-publication now join the reviewed generated families to actual selected providers.
-Unreviewed families, archived cross-axis correspondence, gameplay usage and final
-quality retain separate gates in the implementation plan. These bounded adapter
-rules do not narrow the native input model to particular skills or item names.
-
-The accepted [socket configuration separation](owned-socket-configurations.md)
-keeps rolled item descriptors, desired ordered socket contents and physical
-inventory copies distinct. An equipment use selects a configuration; its child
-providers and local effects bind to that exact host use. Unused items can retain
-their setup without inventing an equipped use or a physical copy. Stock,
-modification feasibility/cost and numerical effects are independently checked.
-The concrete codec, projection, receiving and migration work is still pending.
-
-Use project-owned definition IDs with game/version namespaces and stable instance IDs.
-External PoB IDs, XML occurrences, labels and raw text belong in adapter mappings and
-optional provenance. Dense compiled indices belong to their owning package/plan and are
-not serialized user selectors. Reject foreign or stale plan handles even when their dense
-indices happen to match; a changed scenario/query requires compatible resolution or a new
-plan. Names and array order never merge distinct item uses,
-manual versus granted skills, or player versus minion actions.
-
-Keep physical inventory identity separate from slot use. Preserve provider ownership:
-removing an item or passive removes its granted actions and effects and invalidates their
-selectors. Keep ordinary, ascendancy and other allocation pools distinct. Explicit saved
-view selection resolves to one BuildSpec before evaluation; PoB loadout labels/dropdown
-fallbacks are import concerns. The evaluator never replays tab construction to find the
-selected character.
-
-Allocation identity, topology and legality are separate. Class/ascendancy definitions
-supply implicit roots; a build need not pretend the player spent points to acquire them.
-A choice attached to an allocation is not automatically another paid allocation. Injected
-legality metadata defines point costs, earned capacity, pool relations and conditional
-access; a node's location in a source tree or UI list establishes none of these. Import
-classifies source tokens into these domain roles or preserves an unresolved obligation.
-Changing class or provider invalidates the affected roots/access without replaying a UI.
-
-Import returns owned semantic input plus diagnostics and a source sidecar for faithful
-export/inspection. Unknown fields may remain in that sidecar, but an unknown field that
-can affect requested semantics blocks coverage. An adapter cannot invent a default from
-a known fixture. Effective imported choices must be explained when source defaults or
-selection rules resolve ambiguity. A legacy format's history-dependent meaning must be
-normalized to explicit domain state or reported unresolved. Undo stacks, UI buffers and
-Lua object identities are not public model requirements.
-
-Item completeness has independent facets: physical modifier membership and order,
-item parameters, definition input schemas, and evaluated effect/contributor coverage.
-An importer may prove the first facet while the others remain unresolved. A base's
-inherent effects and quality-derived effects are not additional authored modifier
-instances. Conversely, knowing every authored modifier does not establish rarity,
-corruption, catalyst state or requirements. Import proofs must bind the exact
-injected definitions and conversion policies and join source members to retained
-canonical occurrences; a public diagnostic status or recognized header alone cannot
-grant completeness. The evaluator consumes the resulting owned facts and explicit
-order without needing source syntax or source runtime state.
-
-Ordering domains must be justified independently: numeric modifier transforms
-and later contribution accumulation can have different precedence. The accepted
-[modifier-ordering decision](owned-modifier-ordering-proposal.md) gives each Item
-one occurrence set and two complete permutations: `contributions` and
-`numeric_transforms`. Drafts track each order independently. Storage order and
-opaque IDs never supply missing precedence. Source text that already includes
-scaling also requires checked conversion to canonical inputs. Formatting flags
-and ambiguous inverse arithmetic must not become native gameplay conditions.
-
-Ordered aggregation must account for every admitted provider destination,
-including character slots, passive sockets and item sockets. Physical source
-records, prepared contributions and grouped/scaled bonus copies are different
-stages of the same occurrence graph; closing the first does not close the
-others. The [BASE audit](owned-base-contribution-audit.md) exposes current gaps
-in socket-origin ranking and post-passive bonus projection. Their public model
-remains to be reviewed; source UI traversal is not an owned ordering law.
-
-A package may admit a smaller contribution domain through exact membership and
-fail-closed candidate binding. Every concrete contributor must still be checked,
-including inactive effects and effects discovered after support preparation.
-Excluding a contributor means rejecting a candidate that contains it, not dropping
-its value. A finite, occurrence-bounded inventory of small integer literals can
-justify deterministic native ranks through exact-sum bounds; that proof does not
-extend to signed, scaled, fractional or later-added producers. Bind the proof to
-the actual programs and membership identities. Complete membership in this
-domain neither closes Partial owners nor certifies a complete build.
-
-Source ownership and numerical consumption are separate proofs. A saved item
-range belongs to its exact item and, when conversion proves the target, to the
-actual emitted modifier occurrences. A range attached to a fixed literal does
-not prove that the fraction affected a value. An unresolved target retains the
-item's actual modifier-inventory obligation, rather than an unrelated global
-configuration obligation. This correspondence closes no inventory and supplies
-no game rule; malformed or ambiguous source lifecycles remain unresolved.
-
-The [physical item input contract](owned-item-inputs.md) separates authored item
-facts, injected base facts and derived equipment results. Source absence is
-normalized explicitly in Import; native programs never infer source defaults
-from missing parameters. Known catalyst inputs do not close unconverted rarity,
-corruption, requirement or other physical-input obligations.
-
-Numeric source normalization is an explicit, versioned Import contract. An injected
-item-line recipe may capture or interpolate a quantity, negate it, apply a declared decimal
-transport, and project a signed quantity, magnitude or qualifier direction. Validate units,
-finite intermediates and bounded work before emitting owned values. Negative zero may
-inform a qualifier during conversion; its lexical spelling and temporary sign state never
-enter Core. Existing policies retain their own numerical and identity semantics. See the
-[item-line contract](owned-normalization.md#injected-item-line-conversion).
-
-An authored nonphysical skill stores intrinsic typed inputs on its exact `SkillUse`.
-Repeated uses of one definition can have independent raw levels and qualities.
-Injected Skill slots explicitly permit authored values, provider projections, or
-either producer at the appropriate occurrence. Generated descendants retain their
-own declared projections; they do not inherit raw values through an arbitrary
-ancestor lookup. Raw and effective inputs have distinct identities. Input authority
-does not create a self-parameter writer or establish supported-property aggregation.
-See the [accepted occurrence-input contract](owned-skill-occurrence-input-proposal.md).
-Skill-preset usage preferences and scenario overrides remain separate from these
-intrinsic values.
-
-Source correspondence is one reusable Import proof, separate from each value
-consumer. Raw inputs and usage must not have competing provider matchers or make
-target identity depend on successful decoding of an unrelated value. The current
-shared resolver serves exact generated raw inputs and occurrence usage; typed
-recipes independently decode each consumer's parameters. A usage importer cannot
-acquire physical inventory authority merely by sharing that decoder.
-
-A selector/topology proof may be reused across physical and generated source
-accounting only when every saved identity and the primary Skill match exactly.
-Conflicting or simultaneous proof origins are errors, even if their values
-agree. Borrowing that proof for generated accounting does not reclassify the
-Gem, create a physical assignment, manufacture a provider, or complete raw-input,
-usage or support inventories. Archived source records must retain their actual unresolved
-owners in the same preset; a Complete-empty inventory is not a substitute for a
-missing ownership proof. Keep these external source checks inside Import.
-
-Requested count, reporting inclusion, skill activation and actor population are
-different semantic responsibilities. A count parameter does not grant all four.
-Reporting inclusion can be immutable typed intent on an exact preset Skill,
-with the usual explicit scenario override. A declared Complete-empty gameplay
-program inventory may retain that intent without creating a mechanical effect;
-it does not close reporting execution or the preset's usage inventory. Import
-owns source spellings and missing-value accounting. The native model receives
-only the Boolean and its exact source applicability. Adding this preference
-must not activate a Skill, change its population or alter requested metrics.
-The [damage-reporting investigation](owned-full-dps-aggregation-proposal.md)
-proposes exact contributors and explicit aggregate metrics without changing
-selected-action DPS. The [configuration-disposition proposal](owned-configuration-dispositions-proposal.md)
-accounts for saved controls, source defaults and independent owned destinations
-without replicating a UI. Both retain their separate implementation and coverage
-gates; neither introduces a new native source-language contract.
-
-Complete preset-usage admission is a separate Import proof over the entire saved
-preset, including support rows, archived sources and previously converted rows.
-It must bind reviewed field destinations to the exact outputs of successful
-adapters in the same normalization attempt. A field with several consumers
-requires every destination; a transported value or an allowed source spelling
-alone is insufficient. Check present fields, declared absence behavior, group
-fields and reference descendants. Unknown fields, ambiguous correspondence and
-deferred responsibilities keep the inventory Pending. Validate and budget the
-whole retirement plan before removing any obligation links, preserving all
-unrelated obligations and known preferences. This reuses the existing preset
-inventory and native usage model; no source-field interpreter enters evaluation.
-
-Source override semantics and completeness are independent. A valid group-count
-override may intentionally suppress a malformed occurrence count during value
-projection. The inventory proof must still account for the losing source lane
-and any other consumer; it cannot infer completeness from the winning value.
-Likewise, reference action selectors do not imply gameplay activation or a
-rotation, and cold or unqueried modifier metadata cannot prove that a global
-effect switch has no possible consumer.
-
-Support and generated-input conversions feed that same preset inventory through
-private, attempt-local proofs. A Complete parameter list alone is insufficient.
-Support proofs must still match the actual Gem, assignment, authored target and
-preset membership. Generated proofs must still match the exact input/usage
-bindings and the supplying allocation or equipment/item records and source
-links. Archived syntax supplies no live-output proof. Only fields whose meaning
-was proved by the producing adapter may be accounted for; a syntactically valid
-switch or reference selector cannot inherit intrinsic-input authority. These
-checks belong to saved-build import, never to each search-candidate evaluation.
-
-Configuration accounting belongs to Import. Existing reward, encounter,
-enemy-level and scalar-input adapters produce private checked receipts; one
-accounting owner verifies exact source scope, destination and emitted output.
-An injected disposition policy binds those adapter identities and the reviewed
-catalogue/constructor evidence. Every applicable destination must be proved;
-an unresolved responsibility preserves the obligation. Authored values, explicit
-None, saved placeholders, constructor defaults and absence remain distinguishable
-at this boundary, without becoming native evaluator types.
-
-The first implementation permits partial leaf accounting only. A proven
-branch-inapplicable observation can lose its configuration issue link while the
-containing inventory stays Pending. Complete inventory authority additionally
-requires the whole control/default catalogue and every live outside-Config
-origin to be accounted for. No leaf receipt, successful adapter subset or
-deferred destination supplies that authority.
-
-Known raw inputs do not prove either complete input membership or final numeric authority.
-A modifier with Partial parameter declarations may retain validated known rolls, including
-all known required slots, while its imported roll collection remains Pending. Missing or
-invalid required values still block that declaration. Likewise, admitting an unrounded
-component does not establish corrupted-base or magnitude factors, source cache behavior,
-or a final contribution. Resolve those obligations through owned inputs and declared
-numeric semantics; retain unresolved encoding/history in Import diagnostics rather than
-replaying source state inside evaluation.
-
-## Semantic data package and rules
-
-The package contains versioned definitions for skills, supports, item bases/affixes/uniques,
-passive topology and effects, class/ascendancy rules, resources, encounters, stat/metric
-semantics, and any declared mechanic programs. Content is injected; Rust does not dispatch
-on a particular build, skill name, item name or source hash.
-
-Rules describe game operations: applicability predicates; actor/action/provider scope;
-flat, increased, more, conversion and replacement contributions; typed derived values;
-resource/reservation costs; grants; triggers; allocation transforms; and explicit
-interactions. Preserve noncommuting stages such as local item arithmetic, conversion,
-rounding and caps as declared semantics, not arbitrary callback order. Reusable algorithm
-families implement the operations; game coefficients, selectors, thresholds and effect
-composition remain data.
-
-Intrinsic owner coverage is separate from instance preparation and external
-effects. For example, a stat-free implicit root can have complete default
-declarations while its class, ascendancy, neighboring nodes and external
-transformations remain independently incomplete. Acquisition must inspect the
-constructed definition and selected occurrence; empty source text alone is
-insufficient. Source object sharing or copying is evidence about acquisition,
-not a native ownership rule.
-
-Resource transformations preserve donor stage, exact source/recipient and the
-distinction between outgoing conversion and additional gain. They must not read
-a fully scaled Actor resource when a mechanic uses earlier item/global bases.
-The [current source investigation](owned-resource-transformation-evidence.md)
-records two reproduced PoB transformation discrepancies without adopting its
-mutable table order as a game law. A bounded neutral domain may be admitted
-through authenticated source/declaration coverage; observed zeros and empty
-inventories of only already-converted writers are insufficient. Broader transfer
-semantics and donor-property stages remain explicit adoption work.
-
-Computed numeric limits must remain distinct from game legality, mechanic
-inactivity and missing inputs. The implemented
-[checked numeric-domain contract](owned-numeric-domain-proposal.md) expresses
-an admitted calculation range in the same typed DAG and makes values outside it
-explicitly unavailable, without clipping or importing incidental source rounding.
-`CheckNumericDomain` reuses inclusive Integer/Quantity ranges; compilation checks
-numeric type, exact units and endpoint ordering. A supported value passes through
-unchanged. A demanded failure carries its node, rejected value and authored range
-through the existing unsupported-domain pipeline, including metrics and game
-Requirements. Lazy branches retain their existing meaning. This is one native
-operation in the current V27 contract, with compiled-program identity domain v4;
-there is no compatibility evaluator. Final-resource data adoption must establish
-the actual computed domain and independent supplier coverage before claiming
-numerical parity.
-
-Common final-stat formulas need semantic ownership independent of a character class,
-encounter or user usage choice. The [stat-owned actor/equipment receivers](owned-stat-receivers.md)
-reuse typed rule programs with explicit Player, owned-actor-slot or equipment-template
-applicability. Receivers bind actual actor/equipment occurrences, preserve provider
-activation and required inputs, and participate in ordinary dependency, producer-collision
-and closure checks. Item-quality access stays in exact template-owned adapters. This is
-an implemented component boundary; it does not adopt partial-build evaluation.
-
-Shared actor mechanics use an Actor definition and an injected
-[`existing_actor_rules` applicability inventory](owned-existing-actor-rule-ownership-proposal.md).
-The current contract binds each declared owner once to each explicitly eligible
-Player, scenario Enemy or supplied Actor occurrence; it allocates no actor or
-build-local ID and creates no supply path. The owner runs
-ordinary Actor-context contribution or derivation programs in the same dependency
-graph as provider rules and final-stat receivers. Stat receivers retain their
-Derive-only contract. Applicability requires explicit role authority and
-Complete-empty declarations; shared rules cannot acquire a supplying path or
-recipient permission merely by using the same local calculation.
-
-**Accepted structural migration, October 15:** common properties and mechanics remain
-generic across Player, scenario opponents and supplied units wherever their
-game semantics agree. Roles determine applicable data, relationships and
-permitted reads; they must not require copies of an otherwise identical local
-condition or formula. Role-specific baselines and mechanics remain explicit.
-The [generic Actor decision](owned-existing-enemy-rule-ownership-proposal.md)
-adds the actual `ActorKey::ScenarioEnemy` singleton and one mechanical Actor
-context. Shared local rules bind explicit Player, scenario Enemy and discovered
-supplied Actor slots. Role-specific external-input eligibility and selected
-Encounter ownership remain explicit; absolute Enemy reads retain their meaning.
-Contexts without an Actor represent absence, and no Enemy context borrows Player
-identity. The migration replaces the old format in place, with no aliases or
-compatibility evaluator. Existing Player final receivers stay Player-only;
-unsupported Enemy Actions, support reception and usage fail explicitly. These
-requirements are implemented by the current Actor cutover; the implementation
-plan tracks individual mechanic adoption and remaining coverage.
-
-This is one current-format contract, with no compatibility execution branch.
-An omitted inventory represents a deliberately empty applicability domain;
-it does not prove that a game's shared mechanics are covered. Explicit Partial
-applicability and Partial owner inventories remain mandatory whole-plan gaps.
-Duplicate applications, final producers, cycles and unsupported ordered origins
-are rejected through the checked compiler and planner. Binding resolves the
-immutable invocation once, and native workers reuse the plan with separate
-scratch, without Lua or subprocess evaluation. Core/Data/Engine contract tests
-pass. The [published Player ownership packet](../data/owned/poe2/3887ae68/player-rule-ownership/README.md)
-removes intrinsic Life from all eight Class owners and runs it once through
-Actor `332a`. Class base attributes, unarmed facts and Partial coverage remain
-unchanged; unfinished shared initialization remains Partial on the Actor. Four
-native migration tests cover all five selected Character inputs, all eight
-classes, source level controls, coverage refusal, scratch reuse and Rayon
-execution. This establishes shared intrinsic ownership, not final Life or
-complete-build coverage; the active receipt is in the implementation plan.
-
-Local equipment calculations retain distinct raw profiles, modifier contribution
-groups, intermediate item values and final actor values. A hybrid bonus can
-contribute to several defences, but each projection has an explicit unit and
-recipient. Preserve the declared addition and multiplication order within each
-formula instead of combining unlike groups into a single subtotal. A value
-calculated before overrides or per-level additions must identify that boundary;
-it cannot be substituted for the item's final value or an actor's defence.
-Quality comes from explicit owned inputs and reviewed producers. Item-editor
-normalization and mutable construction history are source concerns, not implicit
-quality defaults in the evaluator. Missing quality preparation or contributor
-coverage leaves the dependent value unavailable.
-
-Represent global versus item-local modifiers through owned recipient and
-contribution semantics. For example, a global maximum Energy Shield increase
-contributes percentage points to the Player's resource channel; local Energy
-Shield modifies the item's defence calculation. Similar display text does not
-make them interchangeable. Source parser tags are acquisition evidence, not
-runtime tags or automatic catalyst properties. The
-[global Energy Shield packet](../data/owned/poe2/3887ae68/global-energy-shield-inputs/README.md)
-uses this existing boundary; complete contributor collection and final resource
-calculation remain separate obligations.
-
-Resource aggregation preserves distinct base, increased, MORE, converted,
-extra/total and override inputs wherever the game requires them. A checked
-subtotal does not authorize the final resource result. Override presence is
-independent of its numeric value: a present zero can differ from an absent
-override followed by the ordinary minimum clamp. Acquisition should retain
-the original calculation's read set and boundary controls as evidence; runtime
-rules use owned typed values and explicit arithmetic. A neutral value observed
-in example builds establishes no universal empty source domain, and a bounded
-integer fold establishes no general floating-point ordering or rounding law.
-
-Applicability facts must name the precise delivery law they establish. Passing
-one exclusion does not authorize every other routing or scaling branch. For
-example, an item unaffected by Amulet diversion may still require grouped Focus
-scaling before numeric delivery. A rule for ordinary unscaled own-item records
-therefore needs explicit positive applicability; a missing producer remains
-unresolved. Extend reviewed applicability through injected definitions, while
-keeping copied records, grouped scaling, placement and activation as their own
-obligations. Do not substitute an unconditional contribution guarded only by a
-related but weaker predicate.
-
-The rule compiler checks types/units, valid scopes and references, declared operations,
-resource bounds, dependency ordering and declared mechanic coverage, with provenance when
-available. Runtime uses compact validated
-instructions/tables and shared native kernels. Bounded domain iteration may be needed over
-actors, effects or links; arbitrary tables, closures, metatables and unbounded loops are not
-part of the contract. A new operation requires semantics, validation and contrasting tests.
-Unsupported rule content is recorded with its affected mechanic, not silently omitted.
-
-For example, an item effect that grants a skill compiles to a GrantAction rule referencing
-a definition and its item-use provider. Support applicability uses action tags and rules.
-A condition based on effective attributes depends on the computed attribute node. None of
-these requires the item editor, a PoB callback identifier or a named build-specific handler.
-
-Keep dependency cycles explicit. Reject unsupported cycles during plan construction.
-Where the game requires feedback, define its semantics (for example capped stacks or a
-specific steady-state solver), convergence/iteration limits and failure behavior. Do not
-use global repeated evaluation until numbers happen to settle. Timing/trigger rates,
-resource sustainability and uptime approximations have named policies and diagnostics.
-
-Tooltip/modifier text parsing is an input concern. The shipped package carries canonical
-effects where extraction resolves them. User-supplied item text may require a portable
-project-owned grammar/parser to produce those same effects; unknown text remains visible
-and prevents unsupported evaluation. Retain useful lexical/numerical kernels, but do not
-make the data schema expose ModParser tables or require its cache/history representation.
-
-Source compatibility must distinguish raw semantic recognition from proof of physical input
-boundaries. If a source can reformat a value and combine following lines, the importer must
-validate explicit lexical and contextual prerequisites before assigning source member indices.
-Unknown context withholds attribution; a finite typed value alone does not prove that the
-source parsed one independent member. These prerequisite contracts are injected import data
-and terminate at normalized owned records. They do not introduce source parser/formatting
-execution into the evaluator. Final numerical eligibility and item-generation legality remain
-separate from both raw conversion and source attribution.
-The implemented import vocabulary is documented in [source membership conditions](owned-source-conditions.md).
-
-## Offline acquisition and updates
-
-The toolchain reads a pinned PoB revision, applies explicit mappings/lowering into our
-schema, validates it and writes a deterministic package with content/semantics identity.
-It may execute Lua to read upstream data or use PoB to resolve a reference case. Source
-extraction is not automatic proof of semantic equivalence. Complex unmapped source produces
-an actionable conversion diagnostic or a reviewed domain-rule implementation.
-
-A manifest records source revision, compiler/mapping versions, content hashes, supported
-operations and unresolved coverage. Put full source spans/diagnostics in an optional debug
-sidecar. Runtime compatibility depends on the package schema and required semantic features,
-not exact source file layouts. The update workflow compares converted data and affected
-rules, runs component and real-build parity, then publishes the package and evidence.
-Do not ship original XML/Lua just to deserialize it again at startup. Runtime storage can
-be compact pre-generated bytes; keep a readable authoring/review representation. Database
-or autocomplete indexing remains optional tooling over this model, outside evaluation.
-
-Keep upstream application revision, tree generation, game/client patch and raw
-content snapshot identity separate. A PoB version, tree directory or retrieval
-date does not establish the game version of its exports. Record unknown source
-version coordinates explicitly. Supplemental client data needs its own raw
-hashes, acquisition/version evidence and reconciliation against retained facts;
-do not label it the original source snapshot merely because node names agree.
-Missing exported buff payloads or Command definitions remain coverage gaps until
-their mechanics and ownership are established.
-
-Source-selection rules require an authenticated potential-supplier domain as
-well as observed reference results. Use an existing fixed choice when the owned
-declarations and reviewed source prove only one candidate is possible. An orphan
-source branch is not a reason to introduce a new runtime condition. Keep source
-language aliases, metatables and callback identities in acquisition evidence;
-native routing names typed sources and consumes one shared decision per exact
-Action. Selection completeness does not imply numerical or whole-build coverage.
-
-## Evaluation, search and presentation
-
-Proposed API shape (not delivered Rust):
-
-```rust
-resolve(rules, build_spec, scenario_spec, query) -> ResolutionOutcome;
-evaluate(plan, worker_scratch, cancellation) -> EvaluationOutcome;
-optimize(problem, evaluator, execution_policy, event_sink) -> SearchResult;
-```
-
-Resolution reports legality, identity ambiguity, mechanic coverage and metric availability
-separately. Evaluation returns typed measurements, explanations/contribution origins and
-coverage; it never reports a partial number as a complete result. Generic scoring consumes
-these values, including configurable hard constraints and multi-scenario policies. Missing
-metrics or unsupported mechanics cannot win by becoming zero. Feasibility and agreement
-with PoB are distinct. Invalid-but-computable builds retain their measurements and separate
-infeasibility diagnostics; for example, a negative unreserved resource is not clamped or
-turned into an unavailable result solely because it violates a constraint.
-
-Every applicable selected `Requirement` effect participates in that feasibility
-result, independently of which metric is requested. A known false result marks
-the candidate infeasible while preserving independently computable measurements;
-an unavailable requirement or incomplete requirement inventory prevents a claim
-of complete feasibility. Retain exact source/recipient diagnostics. Generic effect
-execution reporting a Boolean is an intermediate result, not this final admission
-decision. This applies equally to progression authority, equipment legality and
-other injected rules; no mechanic-specific validator may bypass it. Assessment
-accompanies measurements from the same execution attempt, using the same graph
-and worker scratch. Coverage and individual outcomes are separate so known
-violations survive incomplete validation. The future owned search adapter must
-consume this assessment alongside the other admission gates; a diagnostic effect
-report or a successful metric calculation alone is insufficient.
-
-Candidate edits operate on semantic BuildSpec values. Reuse immutable compiled rules and
-structural plans where valid; give each Rayon worker its own scratch/state. Incremental
-invalidation follows declared dependencies. Cache keys include semantic build/scenario/query,
-rule package and evaluator versions; names, UI state and source formatting are excluded.
-Verify reused results against fresh resolution and evaluation, including A→B→A changes.
-No candidate requires XML serialization or a subprocess. Browser hosts provide their own
-scheduling/cancellation; portable kernels contain no Rayon/OS/GUI dependency.
-
-Applications receive the same progress, cancellation, diagnostics, comparisons and result
-contracts. CLI, later Tauri and web frontends format those outputs and issue semantic edits.
-They can search an index derived from the loaded catalog; they do not interpret game rules.
-PoB export is an adapter action on a chosen result, not an evaluator return requirement.
-Owned-format roundtrips and supported PoB import/export roundtrips preserve semantic meaning
-and explicit instance/provider correspondence. Unresolved and non-exportable features produce
-diagnostics; neither roundtrip requires reproducing original XML bytes or UI identities.
-
-## Distribution and retirement boundary
-
-The final production feature/crate closure must exclude the legacy source parser/interpreter,
-UI/loadout replay, profile preparation and bundled source-shaped snapshot as well as the
-PoB/Lua crates. Enforce this structurally, rather than relying on callers to avoid legacy APIs.
-Data and Engine now expose an owned-only library closure through `default-features = false`.
-Their transitional `legacy` feature retains existing consumers; it is not part of a new
-application's native calculation contract. Shared timing/resistance primitives are always
-available, while their source-package adapters compile only with `legacy`.
-
-`check-owned-boundaries.py` inspects the resolved normal/build feature graph and rustc's
-actual dependency files. Only owned modules and explicit pure numerical leaves may enter
-that isolated closure; source programs, bundled snapshots and profile modules fail the check.
-CI runs it separately because workspace feature unification can re-enable legacy through
-Import and retained legacy consumers. Default CLI builds now exclude PoB/Lua, but still include those live legacy
-native consumers. Neither an isolated library build nor the absence of Lua establishes that
-the complete CLI distribution has reached the end state. The final shipped-artifact test
-must exercise the real application with only an owned package and caller-authored input.
-
-Use an explicit offline release/data-build step to acquire/convert PoB definitions and
-validate the owned package. This is the requested build-time PoB import: source data,
-source parsing and any authoring-language bindings terminate at the generated artifact.
-A frontend or search worker loads the same owned package regardless of which source or
-authoring tool produced it. Source syntax changes require converter work; they must not
-force changes to native operation semantics or UI records when game meaning is unchanged.
-
-Ordinary Cargo compilation and candidate evaluation must not acquire the
-source or regenerate data. Test the shipped native distribution from a fresh directory
-with only its owned package and caller-owned project. Keep optional reference tooling
-behind a separate feature or executable and verify the dependency/package contents in CI.
-Do not turn an unavailable PoB oracle into a native runtime requirement.
-
-Retire the smallest coherent consumer closure after preserving its meaningful observable
-laws. For numerical preparation, migrate both fresh calculation and independent candidate
-realization validation; feeding a cached result back as its own verifier is insufficient.
-Remove obsolete entry points, schemas and support code with their last consumer. Keep
-source-only acquisition tools only when a named offline or reference workflow still needs
-them. New semantic work must not extend the frozen legacy interpreter frontier.
-
-## Tooling and test language
-
-The end state is Rust for project-maintained tooling and tests as well as the evaluator.
-New tooling, tests and ad-hoc evidence or data generators use Rust, sharing the owned
-types and validators where appropriate. This also applies to generators kept under
-ignored `runs/`: temporary placement does not justify another implementation language.
-Shell commands may orchestrate builds, Git and CI or inspect files; they should not become
-a parallel data-model implementation. Existing Python exporters, corpus/expectation checks and boundary checks are
-transitional utilities; their Python tests protect those utilities, not a separate game
-calculation implementation. Maintain that coverage until each utility is replaced.
-
-Migrate a utility and its tests together, preserving independent fixtures and observable
-contracts. Moving only the test harness to Rust while retaining a required Python program
-does not complete migration. The supported build, data-generation and validation workflows
-should ultimately require no Python interpreter. Optional upstream PoB/Lua remains a
-separate reference oracle; this policy does not require rewriting upstream tests.
-See the [T1 migration milestone](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
-
-JavaScript or TypeScript is an option for a later UI, not for new evaluator or data
-tooling. Evaluate the UI after one unchanged build passes complete native evaluation
-and the CLI can exercise optimization. Compare a Tauri desktop host with browser delivery
-and a shared UI framework such as Yew or Dioxus before choosing a stack. The application
-boundary must support the same owned Rust model and evaluation/search APIs on native and
-Wasm targets, with explicit host capabilities for workers, cancellation, progress and
-file access. Browser execution must not assume native thread or filesystem availability.
-No UI framework is selected by this direction.
-
-The later comparison must distinguish host from view framework:
-[Tauri hosts a Rust core and WebView](https://v2.tauri.app/concept/process-model/),
-while [Yew provides a Rust/Wasm UI](https://yew.rs/docs/getting-started/introduction).
-[Dioxus desktop executes Rust natively](https://dioxuslabs.com/learn/0.7/guides/platforms/desktop/)
-and also provides a browser target; graphics and browser-API portability need a
-prototype. Rust-authored application code may still require generated JavaScript
-loaders and HTML/CSS. Assess that separately from introducing handwritten JavaScript
-tooling. Recheck [browser Rayon requirements](https://docs.rs/wasm-bindgen-rayon/latest/wasm_bindgen_rayon/)
-at the prototype rather than imposing its toolchain or hosting requirements on
-the current native project. Keep evaluation off the UI thread and retain a
-responsive single-worker mode when shared-memory parallelism is unavailable.
+| BuildProject | User-owned presets/alternatives, inventory, original imports, scenarios, names and optimization requests; presentation metadata is optional |
+| BuildSpec | Selected progression, class/ascendancy, allocations, equipment configurations, exact skill occurrences, supports and mechanic choices |
+| ScenarioSpec | External enemy/environment/uptime assumptions and typed usage intent/overrides; never frozen candidate-derived effects |
+| MetricQuery | Exact actor/action/part/stat-set and measurement/aggregation semantics with units; no implicit sum of every skill |
+| OptimizationProblem | Seed build, candidate pools, allowed dimensions, exact locks/requirements, objectives/constraints, scenarios and budgets |
+| Prepared plan | Private validated structural interpretation, with indexed parameter slots and per-worker execution scratch |
+
+Stable domain definition IDs and occurrence IDs cross the public boundary.
+Package-local dense indices do not. Identical definition names do not merge two
+items, skill copies, grants, actors or actions. Reject stale/foreign plan handles.
+Cosmetic titles cannot select mechanics.
+
+One generic Actor model covers the player, supplied units and scenario enemy,
+with explicit roles, relations and permissions. Encounter rules remain owned by
+the encounter; shared actor baselines bind to actual actors and run once. Do not
+reintroduce an Enemy execution kind or Player fallback. Slot reads distinguish
+empty, unresolved and occupied slots and read the exact equipment use.
+
+Rolled item descriptors, reusable socket configurations and physical inventory
+copies remain separate. Equipped uses select configurations and bind child
+providers/local effects to an exact host. Stock, modification cost, numerical
+behavior and legality are different checks. Passive topology uses injected roots,
+ordinary/ascendancy/other point pools, capacities and exceptional access; visual
+disconnection does not imply an invalid ascendancy tree.
+
+Typed raw skill slots have explicit authored/provider authority. Skill-preset
+bindings target exact generated occurrences; providers can project levels while
+presets preserve permitted quality inputs. Source-property preparation reuses
+those occurrences, with exact source membership and collection permissions, not
+another raw-input model. One authorized writer per slot is required.
+
+Usage preferences belong to skill presets; generated preferences use exact-source
+applicability. Proven nonselection may make a preference dormant; missing or
+ambiguous authority stays unresolved. Scenario intent resolves against the
+composed build, followed by exact Scenario overrides. Validate dormant and
+superseded records too. Preferences do not create a skill or enable a disabled
+source. Preparation availability and execution participation are separate.
+
+Progression uses existing Choice rewards with typed values. Duplicate authority
+is an assessed violation; absence is not zero. Import assigns settings to their
+actual build, usage, scenario or presentation owner. Explicit per-consumer
+projections can preserve different meaningful uses of one saved setting without
+transporting Lua truthiness into native execution.
 
 ## Preparation and execution readiness
 
-Preparation and execution use the same canonical occurrence topology and native
-effect graph. Versioned data declares each phase's required inputs and each
-program's readiness requirement. Preparing supports may precede final input
-assembly; executing actions and metrics requires all final inputs. Concrete reads,
-activation dependencies and output consumers must respect that ordering, with
-ordinary cycle and coverage checks intact. This accepted direction is detailed in
-the [readiness contract](owned-preparation-readiness-proposal.md). Legacy operation
-versions retain their full required-input gates. V16 requires checked phase
-metadata; omission cannot opt a program into early execution. Descendants retain
-their supplying ancestors' phase requirements as well as their own.
+Use one occurrence/effect graph with explicit requirements for preparation and
+stricter execution readiness. Supports may affect final level/quality, so support
+preparation cannot require those final values first. Discover all eligible
+support sources from the composed build; presets hold authored assignments/order.
+An equipment/tree change triggers fresh applicability and completeness checks.
 
-Item and modifier intermediates belong on this same graph. Explicit early local
-derivation authority preserves their original typed inputs and exact equipment
-or modifier occurrence; it does not copy computed values between evaluators.
-The [local item preparation note](owned-preparation-item-facts.md) specifies a
-stages V4 opt-in for existing local `Derive` effects. Other effects, complete
-ownership, exact output declarations and later-dependency checks retain their
-existing rules. Historical stage versions keep their original permissions.
+Effects have exact source, recipient, activation and stacking declarations.
+Collect source properties once at the permitted source and apply them to eligible
+recipients. Post-stacking application groups are explicit producers in the same
+contribution graph. Checked queries cover exact Actors, rewards, Skills, Actions,
+Encounters and application groups only where permission is declared. Preserve
+duplicate occurrences and numerical ordering where meaningful; Boolean Any uses
+its typed membership contract. Unknown coverage is never false or an empty sum.
 
-Shared source properties use an explicit relation over existing Skill occurrences,
-not a second source-input entity. Definitions declare exact member effects, input
-ownership and actor/query context. Ordinary per-effect support admission feeds a
-source-specific contributor census; supported properties aggregate once per exact
-source and are then applied to every eligible effect before final validation.
-Actor/query property contributors remain required even when no support is admitted.
-Repeated uses, backing-Gem aliases and retained support positions require explicit
-correspondence; a shared definition or an arbitrary first effect cannot supply it.
-The census preserves retained-position multiplicity even when two positions refer
-to one support instance. Source aggregation runs once, with every admitted position
-represented in both its count and property contributions.
+Optional numeric selection distinguishes absent, present (including zero), and
+unavailable. Multiple agreeing writers may agree; conflicting/unknown writers do
+not gain a winner from source insertion order. Resource obligations belong to
+Skills with explicit payer/resource identity and Action dependencies only when
+the mechanic requires them. Reservation cannot depend on the requested metrics.
 
-Source-target writes and reads need versioned permissions in the same graph.
-Producer context remains distinct from destination: support and modifier programs
-retain their checked raw reads and transformations while explicit relation
-authority binds their numeric outputs to the exact source Skill. Discover these
-relations from the selected build topology, including sources with no support
-assignments and no explicitly requested Action.
-Incomplete membership or incoming contributors remain unresolved. Generated final
-inputs use declared-child projections; Direct effective inputs use existing Skill
-channels. Worker order does not select a first-reader context, and cache reuse must
-preserve exact source and dependency identity. This accepted end-state contract is
-specified in [source-property preparation](owned-source-property-preparation-proposal.md);
-its implementation and supporting source evidence remain separate delivery gates.
+Keep requested reporting multiplicity, actor population, participation, resource
+obligations and selected-action damage distinct. These contracts apply equally to
+all content; no Offering, Djinn, Spark, Mace or item-name branch belongs in generic
+assembly/evaluation. See [build composition](owned-build-contract.md),
+[effect applications](owned-effect-applications-proposal.md),
+[usage](owned-skill-usage-proposal.md) and
+[resource obligations](owned-resource-obligations-proposal.md) for domain detail.
 
-The bounded first contract uses receiving V3 relations, operations V18 and stages
-V3. Its `PropertyOwner` scope authorizes only declared numeric inputs/channels in
-a sealed relation; it does not change a producer's ordinary `Current` scope.
-Relation membership, external programs, support programs and assembly inventories
-must be Complete. The native census distinguishes active-empty, inactive and
-unknown states. Compile-time validation includes every potential source producer
-and its dependency closure, even when runtime support selection would omit it.
-The initial ownership grammar admits authored Gem/Direct inputs with exact
-self/generated endpoints and a stable Player/scenario frame. Shared backing-Gem
-aliases and other source/context grammars require explicit future semantics.
+## Semantic data package and rules
 
-The [generated-source ownership contract](owned-generated-source-properties-proposal.md)
-was accepted and implemented on 2026-10-07. It extends this same relation to exact
-item/tree-generated Skill owners and separates their property ownership from
-final-parameter write authority. The recommendation keeps projections on the
-exact declaring provider, retaining Actor or EquipmentUse context. Generated
-and authored occurrences of one definition need explicit applicability; a
-definition-wide shortcut must not bind both. The current contract is updated
-in place and uses the same evaluator. Input-owner programs can derive shared
-prepared Skill stats for manual and generated occurrences; exact-provider
-projection bridges to final parameters where consumers require them. Raw slots
-cannot stand in for missing preparation rules, domain checks or final consumers.
+There are four representations of one semantic program, not four evaluators:
 
-A data release may store Partial rule fragments under the explicit operations
-version that understands them. That is distinct from publishing executable
-receiving/stages metadata: those contracts still require complete owner programs
-and contributor inventories. Ordinary item Gem properties belong before support
-admission; source-supported properties belong after the sealed census. A neutral
-reduction value is usable only after the exact incoming inventory is Complete.
+| Layer | Contract |
+| --- | --- |
+| Named source | `.rule` formulas and KDL declarations; symbolic kind-checked references, stable bindings, human labels and source spans |
+| Checked IR | Existing typed SSA RuleProgram, reads/effects/ownership and operation semantics; the authoritative compilation boundary |
+| Canonical artifact | Deterministic compact JSON with namespace hoisted once, kind-checked short IDs and one program per file; review/reproduction output, not hand-authored mechanics |
+| Runtime package | Bounded validated binary representation with interned IDs and compact indexed values; native/Wasm execution input |
 
-Owner closure certifies that definition's full declared behavior and ports. A
-reviewed default passive can be complete while a separately supplied radius
-transformation or recipient family remains unsupported; the selected transform
-or receiver must retain its own coverage gate. Conversely, implementing one
-line of a multi-line passive cannot close its owner. Publish such refinements
-against exact predecessor rows, preserving program bodies and unrelated owners,
-rather than inferring completeness from a program's presence.
+`names.kdl` provides human-readable symbols mapped to stable typed identities.
+Names are authoring references; labels/docs are presentation. The resolved binding
+is semantic and participates in compiled content identity. Allocate new bindings
+transactionally during publication, validate collisions/stale edits and never
+require authors to predict registry positions or renumber references manually.
 
-Class and Ascendancy metadata have their own intrinsic inventories. An
-Ascendancy with a complete class/root relation and no direct declarations or
-effects can close that intrinsic owner while its passive nodes and the shared
-Player remain incomplete. Authenticate the full source descriptor and its
-constructed fields before making that assertion; absence of a modifier in one
-evaluated build is insufficient. Offline declaration refinement preserves the
-exact class membership, implicit roots, existing slot members and all unrelated
-descriptors. It does not complete numerical rules or inherited providers as a
-side effect. Such refinements use the existing checked publication boundary;
-native evaluation consumes only the resulting owned definitions.
+### Formula DSL
 
-Copied modifiers retain the original occurrence and a distinct copy effect. Apply
-rounding to the individual record where the mechanic requires it; rounding an
-aggregate can change the result. A copy that reads bonuses before copying must
-consume a separately defined snapshot channel. Its own outputs cannot feed that
-snapshot. The snapshot inventory includes any eligible earlier copies as well as
-direct contributors; a direct-only inventory is insufficient unless the declared
-domain proves the earlier paths absent. These are typed data dependencies and
-ordinary rule effects, not source execution order or a second evaluator.
+The DSL supports typed inputs/reads, named intermediate values, arithmetic,
+conditional branches, existing bounded collection/lookup operations, derivations,
+contributions and capabilities. Cover all live IR operations with explicit
+constructs; no raw-JSON escape hatch or second evaluator. General runtime scripts,
+unbounded loops, filesystem access and arbitrary Rust/Lua callbacks are excluded.
+Reusable source blocks expand into checked IR with explicit bindings.
 
-Shared aggregation laws belong to stat-owned programs with explicit receiver
-targets, not incidental class or skill owners. Contribution streams and scalar
-results are distinct channels. Freezing a channel rejects later potential writers;
-it does not select a historical subset of a stream. A mechanic with pre-copy and
-post-copy quantities must declare those semantic inputs separately and preserve
-complete incoming coverage for each reduction.
+Lowering is exact: preserve expression association and evaluation dependencies.
+`a + b + c` is left-associated; no floating-point reassociation. `if` lowers to
+lazy Select so an unchosen failure remains unobserved. Percent conversion is an
+explicit typed operation; clamp has a documented min/max order. Ambiguous units
+are errors. Operators such as Boolean All/Any retain their current typed failure
+behavior until a separately reviewed semantic change. Frontend inference and
+name resolution feed the existing checker; they do not replace it.
 
-Equipment-template facts can stand for a positive placement match only when
-complete legal destination declarations establish that equivalence. Both
-character-slot and socket destinations matter. A separately proved incompatible
-item type can establish a negative match without closing its placement inventory.
-Partial placement by itself, an unsupported template or a missing snapshot stays
-unresolved; none supplies a false eligibility or zero bonus default.
+Diagnostic spans relate type/unit/ownership failures to named source expressions.
+`rule fmt`, `check`, `lower --emit-ir`, `raise` and `explain` are offline developer
+tools. Raising existing IR must preserve graph semantics; lowering the result must
+be alpha-equivalent, including reads, guards, effects and operator order, with
+independent executable vectors. Syntax examples in the review are illustrative,
+not authority to change a formula or introduce Player-specific special handling.
+
+### Declarative manifests and publication
+
+KDL manifests declare definitions, rules, typed input projections, contribution
+queries, membership additions, routing, source references, fixtures and
+dependencies. Production `check-packet` and `publish-packet` commands own this
+workflow. Tests invoke them through shared APIs; tests are not the publisher.
+Maintain an authoring index from external fields/reference outputs to their owned
+meaning to diagnose duplicate/conflicting models early.
+
+Build a release from a tracked manifest and pinned inputs with a deterministic
+order and atomic output. Full reproduce checks happen in authoring/CI. Retain
+semantic fixture expectations and artifact integrity; delete Rust-source hashes,
+layout counts, duplicated ID restatements and receipt types that merely encode
+the current implementation. Source provenance is a sidecar, not behavior identity.
+
+### Runtime representation and storage
+
+Separate runtime, Import, authoring and reference roles. The evaluator loads only
+schema/rules/routing/metric data needed for execution. Import may separately load
+conversion recipes; acquisition data and UI/reference ledgers do not ship in the
+native calculation package. No database/ORM is needed; autocomplete queries the
+loaded definition/index model later.
+
+Validate bounded bytes, collection counts, indices, types and operation contracts
+once at load. Intern IDs to package-local handles; arithmetic values contain a
+number/typed tag and compact unit handle, not heap Strings. Immutable data is
+shared; scratch is worker-private. Binary codec selection is an implementation
+benchmark between serialization/validation approaches, not a zero-copy promise.
+
+Track canonical review output and a named content manifest. Large runtime bundles
+are reproducible build/release artifacts addressed by digest. Never require a
+local `runs/` predecessor. Keep runtime and authoring limits separate and explicit;
+measure headroom and memory, not just serialized size. Optional lossless table
+segments must preserve exact domain values and rounding; fitted curves do not
+authorize interpolation or extrapolation.
+
+## Offline acquisition and updates
+
+PoB Lua may execute under **mlua with LuaJIT** in offline acquisition/reference
+hosting. That is distinct from the project-owned native SSA evaluator. Offline
+extraction resolves source tables/functions into owned declarations; export source
+identities and findings in sidecars, not executable Lua values/callbacks in rules.
+Other data sources can populate the same model with appropriate provenance.
+
+One manifest pins the reference source and extraction inputs. An explicit Rust
+data-build command produces packages; ordinary Cargo builds and candidate
+execution do not fetch PoB or regenerate definitions. Pin updates use a runbook:
+acquire/verify, extract, compare semantic differences, run component and unchanged
+build differential tests, review discrepancies, publish a new current package.
+Use stable, uniquely checked semantic source anchors where probes need them.
+
+Import decodes user XML/share codes with bounded inflate and one checked parsing
+boundary. Preserve source sidecars for inspection/export; normalize only supported
+meanings into typed inputs. Necessary external syntax is local to Import. It is
+not a requirement to reimplement PoB's public Lua parser, cache or UI lifecycle.
+Account for unknown relevant fields with precise diagnostics; do not silently
+repair or default an unsupported original. Repeated normalization against an
+immutable prepared policy must preserve results, independent of cache state.
+
+## Evaluation, search and presentation
+
+The public native Evaluator accepts an injected immutable dataset, owned selected
+build, scenario and metric request. It prepares a validated structural plan,
+binds a candidate parameter vector, executes with caller/worker scratch and
+returns typed metrics, coverage diagnostics and requirement assessment from the
+same attempt. CLI, search and UI use this API; CLI code contains no formulas.
+
+Separate structural inputs from execution parameters using declared dependencies.
+Values affecting grants, supports, eligibility, readiness, topology or coverage
+invalidate corresponding structure. Do not classify all numeric changes as safe
+parameter edits. Cache keys include dataset/operation semantics, structural inputs
+and scenario/query scope. Package/plan handles are identity-bound. Bounded caches
+are explicit and optional; results must be independent of cache state. Rebuild
+and re-evaluate finalists independently of search caches.
+
+Use direct native Rayon evaluation with shared immutable packages/plans and private
+scratch. Bound CPU, memory and in-flight work; integrate search results by proposal
+sequence for deterministic count-budget runs. Wall-clock stopping has explicitly
+weaker reproducibility and records completed work. No subprocess is needed in the
+native candidate loop. PoB process isolation belongs only to optional reference
+validation. A warm oracle pool requires demonstrated reset/isolation equivalence
+before adoption, not a throughput assumption.
+
+Measure import/load/preparation/compile/execute/report costs separately and end to
+end. Interning and plan reuse must improve measured behavior without weakening
+coverage. Objectives bind directly to owned metric identities with units, exact
+recipients and aggregation, not a PoB output-name map. Missing, non-finite or
+unresolved measurements cannot silently satisfy a constraint.
+
+Presentation consumes typed progress/results and explanations with source/rule
+provenance. Keep output/rendering separate from calculations. Cancellation, files,
+threads and progress are host capabilities; browser/Wasm can run a responsive
+single-worker mode if native threading facilities are unavailable.
 
 ## Parity boundary
 
-PoB is a differential oracle for **observable game/evaluation behavior**. Compare resolved
-input meaning, selected actor/action/part, requested metrics and availability, semantic
-intermediate quantities, and controlled build mutations under matched scenarios. Keep
-fixed expectation manifests and tolerances; the existing five originals remain in the
-denominator. Add mapping cases and holdouts. Do not change selections or discard active
-effects to make comparisons pass.
+Validate actual game behavior against pinned PoB and independent laws, not against
+an old Rust reimplementation of PoB. Compare matching actor/action, scenario,
+aggregation, numeric values **and availability**. A complete-build result also
+needs complete required coverage and requirement/legality assessment. Partial
+component parity is useful evidence, never whole-build success.
 
-Do not require equality of PoB UI graphs, callbacks, constructor events, private table
-aliases, parser caches, allocation layout or loader execution order. Those observations
-can diagnose adapter mistakes, but they are not release gates for the native evaluator.
-Where source ordering/history changes a game-visible result, model the relevant domain
-state or an explicit import compatibility rule and test its observable effect. A PoB bug
-or nondeterministic reference result gets a recorded discrepancy and deliberate policy;
-never silently copy it into the domain model or relax parity to hide it.
+Native results must be deterministic for a given semantic input. Fresh reference
+replays under a fixed protocol must agree. Do not retry until a favorable result,
+encode source cache state, or silently accept drift. The demonstrated Frost
+initialization bug has a narrow explicit exclusion for the affected comparison;
+other metrics/builds still need stable references. The synthetic rare-Amulet
+rename exposing Kalandra's Touch title routing is likewise a narrow upstream
+exception, not an obtainable item or a pass for actual unique mechanics.
 
-The oracle adapter may still use PoB's headless UI/application machinery internally.
-Its subprocesses, Lua and internal diagnostics remain optional tooling. It must explicitly
-report inputs it cannot represent. Finalist verification can run a fresh native evaluation
-and an optional matched PoB comparison; native correctness and deployment do not require
-a reference process for every search candidate.
+Migration preserves numeric semantics first. Changes to integer aggregation,
+failure precedence, equality, rounding or finite ranges require targeted tests
+and explicit decisions where observable behavior changes. Checked unsupported
+domains remain explicit rather than importing accidental source-language behavior.
 
-## Accepted contribution and support composition boundaries
+## Distribution and retirement boundary
 
-The owner approved these extensions on 2026-10-08; their implementation is
-tracked separately in the [implementation plan](implementation.md).
-Operations V23 implements Actor/reward sources; V24 implements exact Current
-Skill queries and Skill-owned self-contribution membership. One member can admit
-both direct authored uses and explicitly declared generated supplies of its
-definition, preserving each occurrence. Offering source scaling now adopts V24
-through three data-defined writers and four checked empty-domain queries. Its
-actual Skill owner and global query registry remain Partial. Empty membership
-is an admitted domain, not evidence that all game contributors are absent.
-The finite activation/application join now passes. Inherited/support delivery,
-checked consumption of application-group results, composed support discovery
-and the final Life consumer remain separate delivery work; these contracts are
-not complete-build claims.
-The published Life query data now adopts exact Actor/reward membership. Numeric
-groups may establish an explicit zero/one-contributor domain through semantic
-tie rejection. That does not establish a multiple-contributor order law, permit
-deduplication or close unrelated owners and global coverage.
+The supported native distribution includes the owned runtime package and caller
+project inputs, not PoB, a Lua emulator, authoring tools or the embedded legacy
+snapshot. Validate this from a fresh directory and in dependency/package checks.
+Keep only one current format/reader and native evaluator after cutover. Remove
+old CLI routes, profiles, source-program machinery, unused artifacts, version
+branches and exclusive tests with their last necessary consumer.
 
-The existing checked contribution graph admits reviewed shared-Actor,
-supplied-Actor and selected reward sources, and exact Skill query recipients and
-members. Each contribution retains its exact occurrence, provider relation and
-recipient. Numeric reductions require explicit semantic order/grouping;
-Boolean Any is unordered. Missing coverage stays unresolved, including inactive
-or identity-valued potential members. Neither an Actor ancestor nor a shared
-definition implicitly authorizes delivery. Cold planning validates membership
-and produces immutable indices for native workers; these changes create no
-second aggregator or runtime source interpreter. See the
-[Actor/reward](owned-actor-reward-contribution-queries-proposal.md) and
-[Skill](owned-skill-contribution-queries-proposal.md) contracts for scope and
-acceptance requirements.
+A temporary offline converter is migration work with a deletion gate, not a
+supported backend. Retain actual PoB optional reference tools and meaningful
+behavioral fixtures. No complete five-build gate is required to remove dead code;
+the first complete new-format build requires the obsolete production paths gone.
+See the [migration map](architecture-migration.md) and
+[retirement register](legacy-retirement.md).
 
-Skill presets own authored support assignments and their declared order.
-Complete effective support origins are derived from the composed request and
-injected capability data during cold planning. Changing equipment, tree,
-loadouts or provider inputs invalidates dependent discovery. Direct requests
-and staged evaluation enforce the same coverage gate. Unsupported extra/linked
-origins remain blocking; absence must be proved. Move the current mixed-scope
-Import obligation only after authored input accounting and the mandatory native
-gate exist. Rebuild current artifacts without a compatibility branch. See
-[support composition](owned-support-origin-composition-proposal.md).
+## Tooling and test language
 
-The persisted contract is `authored_support_order` on `SkillPreset`, its Draft
-form and the composed Build. Each `AuthoredSupportOrder` binds an exact
-`SkillTarget` to an ordered list of physical `SupportAssignmentId` values.
-Core checks exact membership, targets, duplicates and bounds. Preset order cannot
-contain runtime `SupportOrigin` values; Engine derives those identities for
-preparation and retained delivery. Missing authored order remains unknown.
-Neither an authored Complete inventory nor an empty assignment list certifies
-composed support-source coverage. Earlier development field/payload shapes are
-rejected and affected build documents are reimported, without aliases.
+Project-maintained compilers, data tooling and new tests use Rust, including
+ad-hoc generators. Shell orchestrates tools/CI/Git; it does not implement another
+data model. Replace or delete existing Python utilities with their live consumers
+during cutover; do not merely rewrite tests around an obsolete Python workflow.
+Upstream Lua/reference probes remain optional source-specific tooling.
 
-Import may certify authored completion only after a whole-source census proves
-physical membership, exact targets/order and every saved support relationship.
-Reuse exact generated-provider correspondence independently of raw scalar
-readiness. Unrepresented manual slot sharing, archived syntax and ambiguous
-providers remain input obligations. Retiring an input issue preserves spent IDs
-and all other source responsibilities. This certificate never describes the
-capabilities of future equipment/tree compositions; native discovery still runs.
-
-Capability authoring must distinguish a resolved catalog's absence of additional
-support effects from a declared effect reference that has no definition. Never
-infer a non-support classification from the missing definition. Independently
-authenticated export metadata may establish that classification while the
-missing construction, inputs and mechanics remain explicit gaps. This is a
-fact-specific evidence boundary, not a parity waiver or permission to alias
-Player Commands to minion actions. Source-language missing-table behavior is
-not a native game rule. Primary and all additional
-effects need exact identity and classification evidence, independently of display
-order, current activation and numerical outcomes.
-
-Potential ability membership also differs from execution authority. A Player
-Command and a minion's resulting Action retain distinct occurrences, actors,
-costs and timing even when the source UI exposes only the resulting ability.
-The [Djinn investigation](djinn-command-investigation.md) documents a deterministic
-source limitation and the remaining design question. Any future dispatch contract
-must resolve exact recipients and participation independently of requested
-metrics, and reconcile event/rate dependencies with the accepted resource
-obligations. Existing payload links and contribution queries do not implicitly
-provide that authority. A new public execution relationship requires a reviewed
-proposal; the investigation does not introduce one.
-
-Preserve typed reference categories during offline proof: additional stat-set
-metadata is not an additional Skill or support origin. Reuse the existing typed
-catalog and reconcile every observed field; neither blanket effect lookup nor
-silently dropping unrecognized fields establishes completeness. Correct a bad
-development packet by rebuilding the current endpoint, not by introducing a
-format compatibility branch or weakening checked extension ownership.
-
-The first native source domain is explicitly `AuthoredAssignmentsOnly` in
-`RulePackageInput.support_discovery`, keyed by an owned definition or slot.
-It certifies the reviewed absence of other support origins throughout that
-owner's admitted input domain; it does not authorize a recipient. Missing rows
-and Unmapped declarations remain unknown. The cold planner binds declarations
-to exact composed occurrences before support preparation or delivery, including
-disabled providers through structural inspection without execution. Dormant
-off-loadout equipment is reconsidered when its loadout is selected. Program-list
-completeness is not support-source completeness. This changes the common plan
-identity for every operation subset, without a compatibility bypass.
-
-Reviewed source-domain declarations enter through the existing offline recipe
-extension (`support_source_domains`), then ordinary rule validation, compilation
-and release publication. Extensions may add exact definition/slot declarations
-or repeat identical ones; they cannot overwrite prior authority, including
-Unmapped gaps. A correction requires explicitly authoring and validating a new
-complete endpoint. Empty authoring input preserves missing coverage. Neither
-publication nor a receipt establishes the truth of a game-domain absence claim;
-that still requires reviewed evidence over its admitted inputs. Publication
-budgets include both provider rows and their gap payloads.
-
-Support admission can depend on the exact supplying occurrence even when two
-occurrences share one Skill definition. Provider-specific exclusions must not
-disable a manually authored occurrence or suppress independent external
-level/quality properties. Source metadata such as PoB's `gemData` and `fromTree`
-cannot establish native ownership. Likewise, a source slot-sharing control proves
-reference behavior, not legal game capability; translate only reviewed relations
-into owned data and keep unsupported positive families explicit.
+One data-driven semantic harness replaces per-packet publication programs and
+source-text tests. Share ordinary support modules; consolidate integration targets
+and run explicit current integration coverage in CI. Test meaningful invariants,
+bounded malformed inputs, deterministic execution, units/ownership, real mechanic
+vectors and full-build parity. Preserve independent fixtures when deleting their
+old scaffolding. No new receipt type is justified solely by a refactor.
 
 ## Options and consequences
 
-| Approach | Benefit | Cost / decision |
-| --- | --- | --- |
-| Translate PoB Lua and UI lifecycles into the native interpreter | Reuses source behavior closely | Reproduces application/language compatibility in production; not the target architecture. Freeze expansion and retire consumers. |
-| Runtime Lua with project-owned bindings | Fast authoring and familiar tooling | Mutable runtime state, sandboxing and parallel/WASM concerns; optional offline tooling, not the default evaluation ABI. |
-| Only hand-written Rust content handlers | Direct execution | Couples balance and individual content to code and encourages profiles; reject as the content model. |
-| Domain rules compiled to typed IR plus native operations | Independent model, injected content, portable parallel execution, useful explanations | Requires explicit translation, semantic decisions and coverage tests; selected direction. |
+The chosen DSL retains a verified execution substrate while making formulas and
+ownership readable. It adds a frontend and release compiler but deletes manual
+IR authoring and test-based publishing. Compile/pack costs are paid offline;
+preparation and native execution remain measurable, reusable and parallel.
 
-This correction delays the next narrow parity increment and requires migrating existing
-adapters/tests. It removes the requirement to implement all PoB internals before a useful
-build evaluator exists. Numerical kernels and reference fixtures remain valuable. Runtime
-code without a consumer in the target model must be migrated, quarantined as reference-only,
-or deleted; leaving two permanent calculation paths is not completion.
-
-## Action items
-
-Follow [architecture migration](architecture-migration.md). Freeze further PoB UI/class-
-protocol expansion in native production. Audit active dependencies before removing legacy
-profiles; delete their commands/adapters with the implementation that supersedes them or
-with an explicit documented removal of an experimental feature. Keep independent numerical
-and full-build validation evidence. Update this ADR only when a concrete counterexample
-requires changing the domain contract; the implementation log records progress instead.
-
-One concrete counterexample is awaiting review in the
-[support-generated Skill proposal](owned-support-generated-skills-proposal.md):
-potential source-owned children are representable, but support preparation does
-not authorize their grants or ordinary child execution. The proposal separates
-exact physical-source identity, Actor binding, preparation and execution
-dependencies without inferring gameplay authority from PoB construction or the
-first receiving application. It remains proposed; current execution permissions
-are unchanged.
+Runtime Lua/general scripting would retain source/runtime coupling. Handwritten
+per-content Rust handlers would hard-code game data and hinder breadth. A database
+would add deployment/query machinery without solving rule ownership or execution.
+All are outside this design. Optional native operation families remain appropriate
+for genuinely general algorithms, with typed contracts and data-defined inputs.
 
 ## Import breadth obligations
 
-Import evidence is separate from semantic membership. The first all-five normalizer exposes
-independent passive-socket equipment contributions, now represented by typed allocation
-preset membership composed with the item preset. Known-unavailable oracle projections must retain comparison rows
-without fabricating concrete actor targets. These belong in project composition and the
-parity adapter respectively, never PoB UI replay inside native evaluation. See the
-[owned normalization contract](owned-normalization.md) for the delivered conservative seam
-and remaining integration gates.
-
-Supported external builds must follow the ordinary import, evaluation and optimization
-path unchanged, without requiring users to repair exports or simplify their builds.
-The [breadth corpus contract](breadth-validation.md#external-corpus-expansion) adds
-curated PoB exports from sources such as poe.ninja, with immutable raw bytes, source
-references, retrieval/export metadata, game/patch/league identity and content hashes.
-Acquisition and decoding remain Import/tooling responsibilities, separate from native
-evaluation. The proposed site's export mechanism is not yet verified; this is a corpus
-requirement, not an implemented integration or bulk-collection commitment.
-
-Keep decoded and normalized artifacts separate from their raw originals. Account for
-all relevant source fields, including inactive alternatives, and retain unresolved
-meaning with precise diagnostics and provenance. Unknown or unsupported input must not
-be discarded, replaced with fixture defaults or repaired silently. A corpus failure
-becomes a reproducible regression/backlog item; it does not authorize case-specific
-production branches or a reduced build presented as the original.
-
-Validation distinguishes decode, import fidelity, semantic admission, deterministic
-evaluation, stable numerical parity, legal configurable optimization and supported
-export/reimport. Passing one gate does not imply the others. Optimization must retain
-user locks and constraints and independently validate finalists; incomplete game-legality
-coverage cannot become a claim of legal optimization. Roundtrips preserve owned meaning,
-not incidental PoB UI state. The linked breadth document defines the stage evidence.
-
-Independent holdouts must cover mechanic intersections and ordinary, non-meta and
-progression builds as well as popular endgame builds. The existing five originals
-remain development cases. Expanding that evidence preserves closest-build-first
-delivery and the first complete build's optimizer integration point.
-
-Source categories are not domain types. Offline conversion may emit zero, one or several
-owned declarations from one upstream definition. Physical gems, provider-granted actions
-and their capabilities are explicit owned semantics; a PoB Gem/UI row is insufficient to
-create any of them. Identity-only import placeholders cannot become executable definitions
-without semantic conversion. The final package and native evaluator must express these
-relationships using owned types, with no source-format flags or source interpreter required.
+All supported originals and later corpus builds use the same ordinary import,
+evaluation and optimization path without manual repair. Validate decode, fidelity,
+semantic admission, deterministic calculation, numerical parity, legal search and
+export/reimport separately. Use development cases plus independent holdouts across
+mechanic intersections; no build-specific branch may close a gap. Source categories
+are not domain types: conversion can emit zero, one or many owned declarations.
+PoE1 is a future separate dataset/profile, not permission to mix versions.

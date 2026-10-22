@@ -375,7 +375,7 @@ Fresh and cached setup can differ numerically because of local MORE rounding in
 the synthetic source cases. The finite-stage architecture is accepted; ordered
 attribute grouping and its numerical migration remain unfinished. First establish
 whether the difference is reachable through legal game inputs under the
-[Lua behavior audit](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05),
+[Lua behavior audit](legacy-retirement.md#lua-type-and-behavior-audit),
 then review any unresolved numerical policy. No cache-dependent native mode is
 approved, and the separate Frost reference exception does not cover this case.
 [Mixed defence passive inputs](../data/owned/poe2/3887ae68/passive-defence-inputs/README.md)

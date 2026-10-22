@@ -1,401 +1,83 @@
 # poe-optimizer
 
-An experimental Rust project for constraint-driven Path of Exile 2 build optimization,
-with potential Path of Exile 1 support later. The intended workflow is to import a
-build, choose which build decisions may change, set encounter assumptions, and configure goals,
-then search for good legal alternatives using a native Rust evaluator, with Path of Building
-available as an optional parity reference.
+Experimental Rust tooling for configurable Path of Exile 2 build optimization,
+with potential PoE1 support later. Import a build, choose allowed changes and
+locks, configure objectives/constraints and scenarios, then search for verified
+best-found alternatives using a native parallel evaluator.
 
-Goals are user-configurable. Damage, resistance, EHP, and skill-selection examples are
-illustrative; users choose objectives, constraints, and preferences from an extensible
-metric catalog. The first usable optimizer must jointly search classes, ascendancies,
-passives, equipment, support gems, and supporting active skills. Users can require 1..N
-skills and retain 1..N exact equipped item instances, with independent locks on other
-choices. Finite candidate pools bound each run without removing these search dimensions.
-Candidate-derived skill effects are recalculated while external encounter assumptions stay fixed.
+The first usable optimizer targets joint class/ascendancy, passive, equipment,
+support-gem and supporting-skill search, including 1..N required skills and exact
+item locks. Goals are user-defined; damage, resistance and EHP are examples.
+Configurable 5–30 minute runs target both bossing and mapping scenarios.
 
-The initial quality target is configurable 5–30 minute runs, benchmarked in both bossing
-and mapping contexts. Search must handle coordinated changes that escape local optima;
-it returns verified best-found alternatives without promising a global optimum.
+## Current status
 
-The planned engine uses reusable Rust core libraries and direct Rayon evaluation under
-shared CPU/memory limits. Optional isolated Rust workers host the PoB reference through
-`mlua` with the LuaJIT backend. The CLI comes first, with
-structured run data and offline HTML reports; a later GUI can use the same APIs,
-with Tauri as a candidate.
+**No supplied original build yet completes native evaluation (0/5).** The closest
+is Original05 Sniper. Typed native rule/effect components exist, but a native build
+optimizer is not wired up. The current `search-calibration` command ranks supplied
+PoB builds; it is not that optimizer.
 
-**Architecture correction (2026-09-14):** the target is a project-owned semantic build model
-and domain-rule package compiled offline from PoB, with independent UI, import, evaluation
-and search layers. PoB remains an optional parity oracle. Existing Spark/Mace profiles and
-source-shaped native loaders are legacy paths being retired; none of the
-five supplied real builds yet completes natively. See the [controlling design](docs/domain-architecture.md),
-[reviewed owned-input contract](docs/owned-build-contract.md),
-and [migration plan](docs/architecture-migration.md). The capabilities below describe the
-current experimental implementation, not the target architecture.
+The October 22 [architecture review](docs/architecture-review-2026-10-22.md) is
+adopted. Before adding further mechanic content, migrate to readable `.rule`
+formulas and KDL manifests, one checked IR, reproducible releases and an interned
+runtime package. Consolidate tests and remove redundant legacy paths. **These are
+planned changes, not completed capabilities.** The first complete unchanged build
+must run exclusively through the new format and native path; then native search
+and broader build validation follow.
 
-The current Sniper integration joins actual item preparation, selected passive
-damage, accuracy, recipient buff scaling and Boolean Gigantic/Life components.
-It still has incomplete coverage and input obligations; no complete native build
-is claimed. Current evidence and the next completion blocker are recorded in the
-[implementation checkpoint](docs/implementation.md#latest-native-checkpoint-boolean-gigantic-and-intrinsic-life-in-the-sniper-graph).
+Current default Data/Engine dependencies still enable the legacy source-compatibility
+stack and embed its snapshot. Omitting `pob` does not yet remove that Rust legacy
+code. Actual LuaJIT hosting is optional through `mlua`; PoB will remain an optional
+offline extraction/parity reference, outside the native candidate loop.
 
-For current development, use the **owned model and evaluator**. Generated data
-artifacts feed immutable Rust indexes; SQLite and an ORM are outside the plan.
+Start with the [documentation index](docs/README.md),
+[target architecture](docs/domain-architecture.md),
+[implementation plan and resume point](docs/implementation.md), or the short
+[data/execution overview](docs/data-and-evaluation-overview.md).
 
-| Subsystem | Current purpose |
-| --- | --- |
-| Owned Core/Data/Engine | Active build model, injected game rules and native evaluation |
-| Owned Import and offline conversion | Translate external builds/data into the owned model before evaluation |
-| Optional PoB backend | Reference calculations and acquisition for parity testing |
-| Legacy Import/Engine source compatibility | Remaining inspection, acquisition and numerical-reference consumers; NativeBackend and its profile-template coordinator are removed |
+## Development
 
-The [execution overview](docs/data-and-evaluation-overview.md) maps the commands
-to these paths. Each [implementation checkpoint](docs/implementation.md) records
-which subsystem changed and whether an unchanged original build now evaluates.
-
-**Status:** experimental owned native evaluation and optional PoB reference tools.
-`evaluate-owned` consumes the owned model; `evaluate` is available with `--features pob`
-and runs the reference on a PoB document. The
-`check-owned-input INPUT --canonical-output OUTPUT` command checks directly authored owned
-build/inventory/scenario/query/request structure through portable core APIs, without XML or
-a data package. `check-owned-schema INPUT --canonical-output OUTPUT` validates a supplied
-owned definition schema package and reports its canonical content identity. Both commands
-work in a native-only build; neither claims build binding, legality or numerical coverage.
-`check-owned-rules INPUT --definitions SCHEMA [--probe FACTS]` checks the new
-owned rule format, compiles its typed effects, and optionally evaluates explicit component
-facts without PoB. `compile-owned-effective-gem-inputs POLICY --definitions SCHEMA --output NEW`
-lowers injected level/quality policies to ordinary scoped programs for active inputs before
-supports and effective support inputs; see [effective gem inputs](docs/owned-effective-gem-inputs.md).
-It does not install a release or produce final active-skill inputs.
-`resolve-owned-effects --input REQUEST --schema SCHEMA --rules RULES
---routing ROUTES [--output REPORT]` binds a complete owned request and resolves component
-effects from those supplied artifacts. It uses no source document, Lua or caller-supplied
-calculated facts. It reports typed effects/values and gaps; it does not yet calculate build
-metrics or complete any original build. `evaluate-owned` adds `--metrics MAPPING` to the
-same owned request/schema/rules/routing inputs and returns ordered requested native metrics
-through shared final-stat and activation checks. Add all four `--stages STAGES`,
-`--support-preparation PREPARATION`, `--support-inputs INPUTS` and
-`--support-receiving RECEIVING` options to execute retained supports through that same
-native metric path. `--release DIRECTORY` selects a validated evaluation release instead of
-manual artifact paths. Optional `--support-outputs OUTPUTS` supplies explicit final prepared
-Skill type channels for downstream rules. It retains whole-plan coverage gates and
-does not complete the five originals. Owned build optimization remains unfinished. See
-[owned metrics](docs/owned-metrics.md) and [owned rule components](docs/owned-rules.md).
-`compile-owned-weapon-profiles` adds all finite raw weapon channels through injected
-catalog/policy/definition files and compact checked publication. Optional source acquisition
-is a separate Rust command behind the `pob` feature; see [weapon profiles](data/owned/poe2/3887ae68/weapon-profiles/README.md).
-`extend-owned-recipe PRIOR --extension DATA --output NEW` publishes directly authored
-owned schema/rule additions through the same checked boundary. Shared equipment receivers
-consume the [local weapon recipes](data/owned/poe2/3887ae68/local-weapon-inputs/README.md);
-these intermediate channels preserve incomplete item/build coverage.
-Optional `--membership-patch PATCH` expands explicitly listed template memberships offline
-through the same checks, avoiding repeated full descriptors in authored files. Runtime
-schemas retain finite materialized sets; see [compact membership authoring](docs/owned-recipe-membership.md).
-Supplying paired `--items` and `--item-source` flags validates exact successor-bound
-policies. The [header inputs](data/owned/poe2/3887ae68/item-header-inputs/README.md)
-use this path to retain explicit quality and item-level values. Optional Rust commands
-`export-owned-actor-baselines` and `export-owned-augments` acquire finite catalogs
-without build calculations. Native `compile-owned-actor-baselines` emits owned actor
-rules/tables through explicit slot/stat policies. `reconstruct-owned-augments` prepares
-occurrence-preserving grouped text from explicit socket selections; activation and
-scaling remain unapplied. The [ordinary modifier recipes](data/owned/poe2/3887ae68/local-modifier-inputs/README.md)
-derive nominal roll values separately from still-unconverted effective item magnitudes.
-The [shared catalyst inputs](data/owned/poe2/3887ae68/weapon-catalyst-inputs/README.md)
-map two header grammars to 338 exact template bindings. The [local scaling programs](data/owned/poe2/3887ae68/local-scaling-inputs/README.md)
-connect canonical effective values to existing weapon receivers when all required facts
-are supplied; imported eligibility, magnitude membership and build coverage remain open.
-`check-owned-draft INPUT --selection SELECTION --owned-output OUTPUT` validates partial
-owned authoring state and finalizes explicit independent presets through the same Core
-APIs. Pending selections retain all query rows and cannot write a complete request;
-see [owned drafts](docs/owned-drafts.md). This command also works without PoB and does
-not calculate, bind definitions or certify legality.
-Owned input and draft persistence use version 4. Each item records explicit modifier
-precedence separately from its canonical modifier table; unresolved imported precedence
-remains pending. Item level requires a number or explicit null. Allocation presets can
-contribute socket equipment and choice presets can contribute rewards independently.
-Older envelopes reject explicitly; migration cannot invent missing semantic facts.
-`normalize-owned` converts caller-supplied XML/share codes through injected owned schema,
-mapping, role, reward, item-line, item-source and normalization policy artifacts into partial owned drafts. It preserves independent
-alternatives and unresolved semantics; it does not yet produce a complete original build
-request or calculate. Item-line conversion is separate from native rules and retains unknown
-semantics; generated-skill parameter projection does not create an authored gem. See
-[owned normalization](docs/owned-normalization.md).
-The offline tree converter now publishes class/ascendancy roots, physical nodes, adjacency
-and parent choices into the [current owned package](data/owned/poe2/3887ae68/current/README.md).
-`resolve-owned-action BUILD --release PACKAGE --correspondence ADAPTER --request REQUEST`
-resolves an exact physical source occurrence's saved MAIN/CALCS setting into the
-existing query target. Its bounded, data-driven Import adapter performs no
-calculation and preserves incomplete inventories. See the
-[source-action contract](docs/owned-source-actions.md).
-
-`normalize-owned --tree-policy TREE_POLICY` maps saved trees through that injected artifact;
-it preserves pending access and unconverted effects. See the
-[passive topology contract](docs/owned-passive-topology.md). This structural path does not
-execute the legacy source interpreter and does not yet establish build legality or parity.
-`compile-owned-attributes` now converts ordinary attribute choices into native rule data
-through supplied catalog, policy and stat definitions. Its checked successor preserves
-physical nodes and import policies; see [attribute data build](data/owned/poe2/3887ae68/attributes/README.md).
-`compile-owned-passive-views` handles reviewed class-dependent replacements, and
-`compile-owned-class-bases` adds base attributes for all eight classes from pinned source
-JSON. Both publish owned data through the same checked successor boundary; see
-[class base data](data/owned/poe2/3887ae68/class-bases/README.md).
-The [intrinsic attack baseline converter](data/owned/poe2/3887ae68/intrinsic-attack/README.md)
-adds class attack facts through an optional offline exporter and a native Rust compiler.
-Source selection, activation and complete contributor coverage remain separate. These are
-components, not complete attribute totals or original-build parity; see the
-[staged attribute design](docs/owned-attributes.md).
-The [item-base converter](data/owned/poe2/3887ae68/item-bases/README.md) extends the same
-ledger with all 1,756 base identities and an EquipmentUse capability for explicit base
-attack-profile presence. Exact header import keeps unique/variant effects unresolved;
-base-profile presence remains separate from action compatibility and activation. All new
-exporter/converter tooling and tests are Rust; existing Python tests remain intact.
-The optional reference CLI accepts PoB share codes/XML, explicit skill/action and encounter options,
-and returns typed metrics with units, availability and structured coverage. Configurable scalar
-objectives can be assessed during evaluation or against saved results without recalculation.
-Each PoB request
-uses a fresh `mlua` worker process with a deadline. Independent Spark mapping/bossing
-references plus a four-case attack/weapon/support matrix validate host and metric extraction.
-The owned Rust engine executes injected rules and shares useful numerical kernels
-with retained reference comparisons. The obsolete Spark/Mace CLI routes
-`prepare-build`, `search-build`, `benchmark-native` and `evaluate --backend native`
-have been removed, together with the old NativeBackend crate and its exclusive
-integration tests. Independent Engine arithmetic references and original-PoB
-observations remain. See the
-[retirement inventory](docs/legacy-retirement.md).
-The generic search library retains bounded parallel evaluation, feasible/infeasible
-beams, deduplication and fresh finalist checks. Integration with the owned evaluator
-is still required before a usable build optimizer can be offered.
-Caller-driven [`inspect-build`](docs/build-source-containers.md) preserves authored build
-containers and reports available definitions and explicit preparation gaps; inspection is
-not a complete evaluation.
-The developer `search-calibration` command compares complete builds from a required
-[caller-supplied catalog](docs/pob-candidates.md); it has no embedded build corpus.
-Its fresh finalist checks establish numerical consistency while generic realization and
-game legality remain unverified. `extract-tree` exports pinned topology and source/override metadata for broader
-mutation work, with live passive coverage and authenticated bounded graph projections. A portable data
-crate supplies native class/root/entrance records and numeric game configuration without loading PoB.
-Optional [`extract-game-data`](docs/game-data-extraction.md) regenerates the legacy
-acquisition package from pinned source with a separate extraction-evidence companion.
-Unrestricted joint mutation, full native mechanic coverage, HTML reports and browser
-bindings remain unimplemented. See [search contracts](docs/search-kernel.md).
-The [living implementation document](docs/implementation.md) is the progress and resume record;
-update it at feature/experiment checkpoints and handoffs.
-Start with [the end-state design](docs/design.md), especially its
-[confirmed decisions](docs/design.md#confirmed-design-decisions), then the
-[current implementation checkpoint](docs/implementation.md). See
-[PoB integration notes](docs/pob-integration.md) for source-verified seams and open runtime questions.
-The [execution and interface design](docs/execution-and-interfaces.md) covers multicore
-scheduling, library boundaries, structured results, visualization, and the GUI path.
-The [WoW prior-art and product review](docs/prior-art-and-product-review.md) records useful
-reference workflows, confirmed product decisions, and fixture-validation status.
-The supplied exports are preserved as a [decoded PoE2 minion fixture](tests/fixtures/builds/README.md)
-with provenance hashes and structural checks. Its level-96 Sorceress / Disciple of Varashta
-build now produces fresh diagnostic outputs. Three skill entries remain unresolved, Full
-DPS has no included groups, and upstream startup diagnostics are retained in the result.
-The output is not a certified build recommendation; cached values are never the evaluator.
-
-## Getting started
-
-Install Git and Rust through rustup, with a working native linker
-(on Windows, Visual Studio Build Tools with the C++ toolchain).
-Use the repository-pinned Rust toolchain so local formatting and lint checks match CI.
-
-The default executable excludes PoB/Lua and the legacy NativeBackend crate.
-Owned evaluation consumes explicitly supplied artifacts:
+Use the pinned Rust toolchain in `rust-toolchain.toml` and Cargo's locked dependency
+set. Windows builds require the appropriate native compiler toolchain. New core,
+data tooling and tests use Rust; shell scripts may orchestrate commands.
 
 ```powershell
-cargo build -p poe-optimizer-cli --release --no-default-features --locked
-cargo run -p poe-optimizer-cli --no-default-features --locked -- evaluate-owned --help
-cargo run -p poe-optimizer-cli --no-default-features --locked -- normalize-owned --help
+cargo run --locked --bin poe-optimizer -- --help
+cargo run --locked --bin poe-optimizer -- evaluate-owned --help
 ```
 
-For reference commands, enable `--features pob` explicitly. `evaluate` and `metrics`
-then use only PoB; the removed `--backend` selector is rejected.
-For the full development workspace, including optional PoB references and parity tests:
+For optional PoB tools, initialize the pinned submodule and build with `pob`:
 
 ```powershell
 git submodule update --init --recursive
-cargo run --locked -- --help
-cargo run --locked -- --version
-cargo fmt --all -- --check
-cargo clippy --workspace --all-features --all-targets --locked -- -D warnings
-cargo test --workspace --all-features --all-targets --locked
+cargo run --locked --features pob --bin poe-optimizer -- --help
 ```
 
-Data and Engine can also be consumed with `default-features = false`. That library
-closure excludes legacy source programs, profiles and snapshots; `python scripts/check-owned-boundaries.py`
-verifies the actual compiler inputs. The CLI still includes legacy inspection/conversion
-modules through Import; it is not yet an owned-only distribution. See the
-[distribution boundary](docs/domain-architecture.md#distribution-and-retirement-boundary).
+`evaluate-owned` is the existing native component/evaluation entry point;
+`evaluate` under the `pob` feature runs the reference backend. There is not yet a
+clean-clone command that reproduces the latest full data release; fixing that is
+an explicit migration gate. Do not substitute the tracked historical `current/`
+baseline for the latest local release or assume a complete build will evaluate.
+Planned `rule`/manifest-publishing commands are not implemented yet.
 
-The project selects stable Rust and declares Rust 1.93 as its minimum version. Cargo
-builds a pinned LuaJIT runtime and the native UTF-8 module when the PoB feature is enabled; no Lua
-executable or upstream Windows DLL is required. The native C compiler is needed in
-addition to the Rust linker. CI checks the full workspace on Windows and Linux.
+The existing suite is expensive and split into many targets. The next phase
+consolidates it into a shared behavioral harness and repairs/verifies CI before
+resuming content. Follow the current plan for scoped validation; a successful push
+or local check is not evidence of a passing hosted suite.
 
-Import and evaluate the preserved original single-build fixture:
+## Boundaries
 
-```powershell
-cargo run --locked -- import tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt
-New-Item -ItemType Directory -Force runs | Out-Null
-cargo run --features pob --locked -- evaluate tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --timeout-seconds 30 --output runs/example.json --export runs/example.xml
-```
+- Game data and build inputs are injected; no production fixture/name-specific
+  paths. One generic Actor/occurrence model supports players, enemies and minions.
+- Direct native Rayon evaluation, shared immutable data and private worker scratch;
+  no subprocess per native candidate. CLI first, shared web/desktop UI later.
+- No SQLite/DuckDB/ORM. UI search can use loaded definitions/indexes.
+- PoB XML/share codes remain interchange at Import; PoB Lua/UI behavior does not
+  define the native model. Keep useful parity cases while deleting obsolete code.
+- No backward compatibility is required for these unshipped formats. Rebuild data
+  and reimport through the one current path.
 
-The current `example.import.txt` contains five builds, one per line; use the
-[corpus intake runner](docs/breadth-validation.md#reproduce-corpus-intake) for that file. Add
-`--inspect-build --with-definitions` to retain source skill occurrences, ordered raw item/range
-instructions, saved equipment sets, passive-spec jewel references and injected skill/configuration
-identity evidence and explicit native item-loading stops alongside independent evaluation results. The runner writes corpus schema 5. `--inspect-configuration`
-retains a separate configuration source report. Individual XML/share
-inputs can also be inspected with `inspect-configuration INPUT --with-definitions` to look
-up settings in the complete injected catalog; `--data PACKAGE` selects custom definitions.
-Definition recognition does not evaluate effects. Omitting both options gives source-only
-`inspect-configuration INPUT`; it works without PoB and
-reports source data separately from unimplemented mechanics.
-Single-build commands accept one build document or share string.
-
-`inspect-build INPUT` report schema 3 preserves authored skill sets, groups, gems and selectors,
-plus an independent item projection. Item evidence separates exact text/comment/CDATA fragments
-from ordered strings and child instructions consumed by the PoB XML reader. It preserves
-ModRange order, inactive equipment sets and jewel assignments under their original passive specs.
-Source-only inspection does not execute item loading. Equipment resolution and
-passive-allocation checks remain separate. See
-[item source and loading](docs/item-source-and-loading.md).
-
-Add [`--with-instances`](docs/build-instances.md) to retain an owned source-to-instance map
-with a fresh build lineage, distinct saved sets/entries/item uses and explicit projection
-failures. This is source identity, before active-set resolution or native evaluation.
-
-Add `--with-definitions` or `--data PACKAGE` for source-bound skill/configuration identity
-lookup and ordered native item-loading diagnostics against the complete injected base catalog.
-Native formatting, ordinary modifier parsing, defence-header state and base buff loading
-use the selected data. Pending callback, conversion or assembly dependencies stop loading explicitly, preserving the state reached and later
-unexecuted instructions. A loading report does not certify complete
-item calculations or build support. Ambiguous identities and unprocessed names remain explicit. [Skill inspection](docs/skill-source-and-identities.md) works with the native-only CLI
-and does not claim numerical support for recognized skills. Local projection errors remain
-separate after the document passes the shared XML/lexical gate; a global failure prevents the
-inspection report.
-
-Output files must be new paths; existing files are never overwritten. Without `--output`,
-evaluation JSON goes to stdout. `--pob` selects a source directory matching the committed
-source manifest. The evaluator validates its source directly and does not run Git at runtime.
-
-List the metric catalog or select an explicit calibration context:
-
-```powershell
-cargo run --features pob --locked -- metrics
-cargo run --features pob --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml --options examples/evaluation-options.json --metric player.selected_hit_dps --metric player.life
-```
-
-`--metric` is repeatable; use `player.<id>` or `minion.<id>`. With no filter, all declared
-actor/metric combinations are returned, including unavailable measurements. Percent values
-use percentage points (`75` means 75%). Finite, positive/negative infinity, NaN and unavailable
-are distinct. Combined DPS and Full DPS rollups are not registered objective metrics.
-
-The options file accepts one-based socket-group/action indexes and an optional selected
-minion action. Encounter overrides set a name, enemy level, boss kind and/or all five incoming
-hit components. Omitted fields retain imported assumptions; naming a scenario does not reset
-buffs, conditions or enemy settings. The result records requested options and observed
-configuration/conditions, which are not yet a complete resolved scenario model. See
-[skill coverage](docs/skill-coverage.md) for action provenance and unresolved entries.
-
-Reference evaluation-report JSON uses schema 3; the PoB worker protocol uses schema 2.
-The old native search and benchmark formats are retired. Reference results identify backend,
-rules/source/adapter fingerprints, observed selection, metric schema/units and coverage.
-`--raw` adds the complete PoB diagnostic snapshot as an opaque JSON attachment. Objective code
-must use typed measurements rather than inspect raw PoB fields. Unknown fields in options,
-unsupported metrics and replaced explicit selections fail instead of silently falling back.
-
-PoB evaluation exports normalized serialization. `import` preserves original XML bytes.
-Evaluation requires explicit supported build/tree metadata. Current outputs remain diagnostic:
-the [independent calibration](docs/calibration-reference.md) covers controlled Spark and attack cases,
-not general mechanic support, build legality or search recommendations. Non-damaging actions
-and average-damage modes do not yield an invented sustainable DPS objective.
-
-Configure an objective or reassess a saved evaluation:
-
-```powershell
-cargo run --features pob --locked -- evaluate tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
-cargo run --locked -- assess runs/assessed.json --objective examples/evaluation-objective.json
-```
-
-The example maximizes EHP with three resistance constraints; the supplied build misses the
-lightning threshold by four percentage points. Every objective and threshold is configurable.
-See [objective assessment](docs/objective-assessment.md) for strict comparisons, units,
-unavailability and saved-result behavior. Passing these constraints is not a legality verdict.
-
-Compare complete caller-supplied builds with the optional PoB reference backend:
-
-```powershell
-New-Item -ItemType Directory -Force runs | Out-Null
-cargo run --features pob --locked -- search-calibration --catalog examples/calibration-catalog.json --objective examples/calibration-objective.json --jobs 2 --max-evaluations 5 --output runs/calibration-search.json --export runs/calibration-best.xml
-```
-
-The required catalog uses schema 1 with `builds: [{ "id": "...", "path": "..." }]`;
-relative paths resolve from the catalog file and accept PoB XML or share codes. The example
-manifest explicitly selects the four original regression fixtures. Supply another manifest
-to compare other complete documents. Report schema 2 separates exact requested XML hashes
-from observed PoB summaries, selected actions/configuration, coverage and normalized-export
-hashes. Export saves the exact requested XML after fresh numeric verification; it does not
-certify that PoB preserved every requested mechanic or that the build is legal. See the
-[catalog contract and bounds](docs/pob-candidates.md#supplied-catalog-cli).
-
-The [calculation boundary decision](docs/calculation-boundary.md) explains replacing the PoB
-backend without changing callers. See the [native engine design](docs/native-engine.md) for
-translation/parity gates and browser requirements. To check portable libraries:
-
-```powershell
-rustup target add wasm32-unknown-unknown
-cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data -p poe-optimizer-import --lib --target wasm32-unknown-unknown --locked
-```
-## Repository
-
-- `src/`: thin CLI and hidden worker protocol entry point.
-- `crates/poe-optimizer-core/`: backend-neutral evaluation contracts, options, metrics and coverage.
-- `crates/poe-optimizer-engine/`: portable native calculation kernels and differential tests.
-- `crates/poe-optimizer-data/`: authenticated portable tree models, projections and native passive/equipment data. Native evaluation now accepts [injectable data packages](docs/native-data.md); broader source/tree update compatibility remains in progress.
-- `crates/poe-optimizer-import/`: portable bounded decoding, preflight and controlled materialization.
-- `crates/poe-optimizer-pob/`: optional reference host, source extraction, verification and supervision.
-- `crates/poe-optimizer-lua-utf8/`: static Unicode module, native sources and provenance.
-- `docs/design.md`: end-state scope, architecture, objectives, search, and acceptance criteria.
-- `docs/implementation.md`: living delivery plan, current status, checks, and session resume point.
-- `docs/pob-integration.md`: findings from the pinned upstream source.
-- `docs/execution-and-interfaces.md`: parallel runtime, core APIs, artifacts, and frontend plan.
-- `docs/prior-art-and-product-review.md`: cited references, prioritized gaps, and decision status.
-- `examples/evaluation-objective.json`: runnable scalar objective and hard constraints.
-- `examples/evaluation-options.json`: runnable diagnostic selection and encounter overrides.
-- `examples/calibration-catalog.json`: explicit four-fixture input manifest for the developer comparison command.
-- `examples/objective.toml`: illustrative future configuration, not a supported CLI input.
-- `vendor/path-of-building-poe2/`: unmodified Git submodule.
-- `local/`, `runs/`: ignored locations for private build inputs and generated results.
-
-## Upstream dependency
-
-[PathOfBuildingCommunity/PathOfBuilding-PoE2](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2)
-is pinned by the Git submodule entry. The initial inspected revision is
-`3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`, downloaded from the default `dev` branch.
-This revision boots and calculates the supplied fixture through the embedded host.
-Mechanic coverage and independent numerical parity remain under validation.
-
-```powershell
-git submodule status
-git -C vendor/path-of-building-poe2 rev-parse HEAD
-```
-
-The initial clone is shallow to keep setup small. Fetch more upstream history when
-needed with `git -C vendor/path-of-building-poe2 fetch --unshallow`.
-Ordinary setup must use the recorded revision, not `git submodule update --remote`.
-An upstream upgrade should explicitly select a revision, run evaluator parity
-checks and review translated native stages, then commit the changed submodule pointer.
-
-Upstream licensing and third-party notices remain in
-[its LICENSE.md](vendor/path-of-building-poe2/LICENSE.md). This scaffold does not
-choose a distribution license for the new project; select one before a public release.
-
-Selected saved alternatives can be inspected with `inspect-build <single-build-input> --with-view`.
-This reports independent set choices, instance/definition bindings and outstanding preparation
-stages. See [selected views](docs/selected-views.md); it does not calculate a complete build.
-
-For owned input readiness, use `normalize-owned` and `check-owned-draft` with explicit
-artifacts and selections. Pending semantic inputs remain visible; source inspection
-alone does not make a build evaluable.
+Source/data notices and a distribution license must be resolved before a public
+binary/data release. See [product design](docs/design.md) for requirements,
+validation criteria and deferred decisions. Existing reference material and
+historical commands remain available in Git, not as an alternative active design.

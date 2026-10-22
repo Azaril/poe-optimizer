@@ -1,5 +1,11 @@
 # Parallel execution, interfaces, and visualization
 
+> Supporting contract, updated authority 2026-10-22: the
+> [domain architecture](domain-architecture.md) controls package boundaries,
+> parameterized plans, cache-state independence and deterministic queue integration.
+> Older proposed interfaces below are not compatibility requirements. Use the
+> [implementation plan](implementation.md) for delivery and current capabilities.
+
 This document describes the target execution architecture and application contracts,
 extending [the main design](design.md). Current capabilities, delivery sequence,
 validation results, and the next resume point belong in the
@@ -80,7 +86,7 @@ instance using the LuaJIT backend, with one active calculation on its owning thr
 Rust/Lua interaction stays inside that worker; the coordinator uses the versioned process
 protocol. Adding threads around one locked VM would not parallelize the oracle. Keep Lua
 handles out of Rayon work and preserve process isolation for hard timeouts, native failures,
-and fresh verification. The [hosting contract](design.md#evaluator-boundary) covers native
+and fresh verification. The [hosting contract](domain-architecture.md#evaluation-search-and-presentation) covers native
 module compatibility and the independent upstream-runtime reference harness.
 
 ### CPU, memory, and admission control

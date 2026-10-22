@@ -229,7 +229,7 @@ Earlier options were fresh reference evaluation, cached calculation or explicit
 compatibility modes. No second native mode or source-cache graph is approved.
 First characterize whether this grouping difference is reachable with legal
 game inputs and which numerical law it represents, under the
-[Lua behavior audit](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05).
+[Lua behavior audit](legacy-retirement.md#lua-type-and-behavior-audit).
 Then discuss any remaining change to native numerical semantics. Synthetic
 source evidence alone does not establish game intent. Cache history must not
 silently change a native result, and the later Frost exception does not classify

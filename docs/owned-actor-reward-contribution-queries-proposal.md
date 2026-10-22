@@ -104,7 +104,7 @@ package adopts V23; its equipment, global and owner gaps remain. Validation cove
 identity, multiple minions
 and providers, independent rewards, duplicates, partial/unavailable sources,
 inactive/late effects, ordering ties, cache identity and fresh/reused/Rayon
-equivalence. The [runtime checkpoint](implementation.md#latest-runtime-checkpoint-checked-actor-and-reward-contributions)
+equivalence. The [runtime checkpoint](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/implementation.md)
 records focused regressions and the actual joined Life reduction probes. Those
 probes preserve canonical `311a` and the real shared Player owner, but do not
 publish a final-Life receiver or certify complete game membership.
@@ -119,7 +119,7 @@ and independent source evidence; do not paste the observed subtotal/final pool
 into a producer. Origin admission does not prove the final-Life formula or the
 absence of other conversion, override or conditional families. Full owner,
 receiving, input and metric coverage remain required before declaring the build
-complete. The [Player consumer witness](implementation.md#player-life-reference-checkpoint)
+complete. The [Player consumer witness](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/implementation.md#player-life-reference-checkpoint)
 now passes eleven controls through 66 fresh loads. It captures original consumer
 locals in fixed JIT-off acquisitions and requires exact uninstrumented reference
 agreement across both JIT modes. Original05 has base 1257, Increase 5 and final
@@ -128,7 +128,7 @@ override/Chaos Inoculation are absent. That is finite source evidence, not proof
 of globally empty supplier families. Positive Extra/Total/conversion/override
 suppliers remain unexercised. The actual rounding operand is now observed and
 replayed through production native Round and Maximum for 1,584 invocations.
-The [rounding audit](legacy-retirement.md#player-life-rounding-bound-2026-10-08)
+The [rounding audit](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/legacy-retirement.md#player-life-rounding-bound-2026-10-08)
 proves combined-operation equivalence for finite operands at or below 2^52;
 it does not prove that the actual contributor/input domain stays within that
 bound, or validate the preceding arithmetic. The raw conversion Sum remains

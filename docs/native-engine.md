@@ -1,5 +1,9 @@
 # Native calculation engine and browser target
 
+> The [October 22 architecture](domain-architecture.md) is the single target.
+> This document preserves numerical/history evidence, not another native backend
+> or a requirement to retain old profiles. Follow [R0-R6](implementation.md).
+
 This document records retained numerical kernels, restricted legacy profiles and their
 validation history. The NativeBackend crate and its public CLI/search were removed on
 2026-10-02; descriptions of that adapter and its integration tests below are historical.

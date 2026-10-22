@@ -221,7 +221,7 @@ is a new explicit source selection, not an inferred association with a tree or
 equipment preset of the same name. Original01 binds two raw inputs and Original05
 three. The other generated families, Original04's unresolved item provider,
 finite Item-name frames and normalized-only level correspondence remain tracked
-in the [existing debt register](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05).
+in the [existing debt register](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05).
 
 ### Acceptance gates
 

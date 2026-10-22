@@ -169,7 +169,7 @@ conditions: the selected Ashen Staff occupies Weapon 1 while its capability is
 false. This audit does not silently expand the Partial marker to certify those
 branches or close Class coverage merely because attribute subtotals now match.
 
-The new [prepared-hand checkpoint](implementation.md#source-checkpoint-prepared-hands-and-original-condition-writes)
+The new [prepared-hand checkpoint](https://github.com/Azaril/poe-optimizer/blob/fa49fcea32f0413cde5f5983e179c34e6c7acbdf/docs/implementation.md#source-checkpoint-prepared-hands-and-original-condition-writes)
 observes the actual assignment and condition-write branches across eight cold-load
 controls, independent replay/unobserved runs and both JIT modes. It proves that
 the occupied caster main hand can select PoB's intrinsic `None` profile while

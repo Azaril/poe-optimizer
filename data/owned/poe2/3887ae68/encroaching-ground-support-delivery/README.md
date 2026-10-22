@@ -31,7 +31,7 @@ native test-only Product subtotal is the exact binary result of `1.3 * 1.1`
 (`1.4300000000000002`). The source diagnostic is `1.43`: original ModList/ModDB
 More applies four-place truncation configured in Data. This checkpoint does not
 publish that reducer, claim final payable-cost parity, or implicitly change the
-generic Product operation. The [Lua cleanup register](../../../../../docs/legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+generic Product operation. The [Lua cleanup register](../../../../../docs/legacy-retirement.md#lua-type-and-behavior-audit)
 records the required valid-domain rounding investigation.
 
 ## Evidence and reproduction
