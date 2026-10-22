@@ -1,0 +1,20 @@
+packet "retained-058" {
+    append definition="passive_node.attribute.attributes32" {
+        program "attribute-choice" source="rules/attribute-choice/50926359e10bbb42.rule"
+    }
+    append definition="passive_node.attribute.intelligence16" {
+        program "attribute-choice" source="rules/attribute-choice/a505cce5f6fe365c.rule"
+    }
+    append definition="passive_node.dexterity.attributes106" {
+        program "passive-view" source="rules/passive-view/b5daae91c24596b6.rule"
+    }
+    append definition="passive_node.attribute.dexterity9" {
+        program "attribute-choice" source="rules/attribute-choice/916fb10ef1bf046b.rule"
+    }
+    append definition="passive_node.attribute.dexterity69" {
+        program "attribute-choice" source="rules/attribute-choice/13f085560fb8e11b.rule"
+    }
+    append definition="passive_node.attribute.strength45" {
+        program "attribute-choice" source="rules/attribute-choice/d8bfe28f2da756c3.rule"
+    }
+}

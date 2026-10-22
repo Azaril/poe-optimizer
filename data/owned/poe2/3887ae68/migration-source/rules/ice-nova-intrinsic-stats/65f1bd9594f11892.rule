@@ -1,0 +1,18 @@
+program "ice-nova-intrinsic-stats" context action {
+    read "final-level" as r_0: integer = parameter(parameter_slot.icenovaplayer.ice_nova_intrinsics.final_level);
+    let n_0 = quantity(32, unit.distance);
+    let n_1 = quantity(16, unit.distance);
+    let n_2 = n_0 + n_1;
+    let n_3 = r_0;
+    let n_4 = lookup(n_3, "ice-nova.cold-infused-cold-max");
+    let n_5 = lookup(n_3, "ice-nova.cold-infused-cold-min");
+    let n_6 = lookup(n_3, "ice-nova.ordinary-cold-max");
+    let n_7 = lookup(n_3, "ice-nova.ordinary-cold-min");
+    let n_8 = quantity(32, unit.distance);
+    effect "ordinary-cold-min" = derive(current, stat.ice_nova_intrinsics.stat_sets.icenovaplayer.primary.ice_nova_statset_0.internal.cold_min, n_7);
+    effect "ordinary-cold-max" = derive(current, stat.ice_nova_intrinsics.stat_sets.icenovaplayer.primary.ice_nova_statset_0.internal.cold_max, n_6);
+    effect "ordinary-radius" = derive(current, stat.ice_nova_intrinsics.stat_sets.icenovaplayer.primary.ice_nova_statset_0.internal.radius, n_8);
+    effect "cold-infused-cold-min" = derive(current, stat.ice_nova_intrinsics.stat_sets.icenovaplayer.primary.ice_nova_statset_1.internal.cold_min, n_5);
+    effect "cold-infused-cold-max" = derive(current, stat.ice_nova_intrinsics.stat_sets.icenovaplayer.primary.ice_nova_statset_1.internal.cold_max, n_4);
+    effect "cold-infused-radius" = derive(current, stat.ice_nova_intrinsics.stat_sets.icenovaplayer.primary.ice_nova_statset_1.internal.radius, n_2);
+}

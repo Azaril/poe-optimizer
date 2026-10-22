@@ -1,0 +1,5 @@
+program "strength-first-empty-more" context actor {
+    read "incoming" as r_0: quantity(unit.factor) = contribution_query(current, "strength-first-empty-more-domain", "empty");
+    let n_0 = r_0;
+    effect "factor" = derive(current, stat.attribute_empty_more.stages.strength_first.effective_more, n_0);
+}

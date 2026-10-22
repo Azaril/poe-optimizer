@@ -1,0 +1,9 @@
+program "gas-arrow-supply" context actor {
+    read "actor-level" as r_0: integer = stat(current, stat.sniper_actor_level);
+    let n_0 = 1;
+    let n_1 = quantity(0, unit.percentage_points);
+    let n_2 = r_0;
+    effect "project-ability-level" = project_skill_parameter(skill_grant_slot.command_damage.actor.actor_ability_supply.abilities.sniper_gas_arrow_skill.supply, parameter_slot.sniper_gas_arrow_skill.actor_ability_supply.abilities.sniper_gas_arrow_skill.level, n_0);
+    effect "project-ability-quality" = project_skill_parameter(skill_grant_slot.command_damage.actor.actor_ability_supply.abilities.sniper_gas_arrow_skill.supply, parameter_slot.sniper_gas_arrow_skill.actor_ability_supply.abilities.sniper_gas_arrow_skill.quality, n_1);
+    effect "project-actor-level" = project_skill_parameter(skill_grant_slot.command_damage.actor.actor_ability_supply.abilities.sniper_gas_arrow_skill.supply, parameter_slot.sniper_gas_arrow_skill.actor_ability_supply.abilities.sniper_gas_arrow_skill.actor_level, n_2);
+}

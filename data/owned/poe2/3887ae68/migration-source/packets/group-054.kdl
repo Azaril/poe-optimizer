@@ -1,0 +1,30 @@
+packet "retained-054" {
+    append definition="passive_node.attribute.dexterity29" {
+        program "attribute-choice" source="rules/attribute-choice/cdebcdb17fa6a59e.rule"
+    }
+    append definition="passive_node.minion_damage_and_life.minion_reservation11" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/58c467b9b9a337e9.rule"
+        program "ordinary-minion-life" source="rules/ordinary-minion-life/3c7f20e53e7e948c.rule"
+    }
+    append definition="passive_node.strength.strength105" {
+        program "passive-view" source="rules/passive-view/f61c4224345a9cf4.rule"
+    }
+    append definition="passive_node.attribute.intelligence53" {
+        program "attribute-choice" source="rules/attribute-choice/bf821ffc06d42826.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana_regeneration1" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.attribute.strength15" {
+        program "attribute-choice" source="rules/attribute-choice/10a96626ef200b8f.rule"
+    }
+    append definition="passive_node.attribute.strength80" {
+        program "attribute-choice" source="rules/attribute-choice/76348e7f070fb0a2.rule"
+    }
+    append definition="passive_node.sentinels.sentinels3" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.attribute.dexterity54" {
+        program "attribute-choice" source="rules/attribute-choice/c4e02758f18e9d5c.rule"
+    }
+}

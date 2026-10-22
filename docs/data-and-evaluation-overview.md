@@ -2,8 +2,9 @@
 
 Updated 2026-10-22. The [architecture](domain-architecture.md) defines the accepted
 end state; [implementation](implementation.md) records what is delivered. This
-page explains the distinction. **Migration has started, but release-wide DSL migration
-and runtime cutover remain ahead; 0/5 supplied originals complete natively.**
+page explains the distinction. **The tracked DSL program cutover is validated;
+broader declaration and runtime migration remain ahead. 0/5 supplied
+originals complete natively.**
 
 ## What runs today
 
@@ -20,16 +21,18 @@ Both exist today. Neither should be confused with the owned typed-rule VM.
 The review found default dependencies still pull the legacy stack into binaries;
 absence of the `pob` feature alone does not prove the native distribution is clean.
 
-Current Import also contains much of the offline release toolchain. Hand-authored
-JSON describes rule IR and catalog bindings, while many historical test-support
-functions perform publication. A production manifest builder now composes the
-final constituent files directly. The tracked
+Current Import also contains much of the offline release toolchain, and many
+historical test-support functions still construct and publish IR directly. The
+normal production builder now requires program-free rule metadata and takes
+program bodies from tracked semantic KDL names, membership packets and `.rule`
+programs. It rejects embedded
+program members even when no packets are declared. The tracked
 [`migration-source/release.kdl`](../data/owned/poe2/3887ae68/migration-source/release.kdl)
-and compressed inputs capture the previously local endpoint. Rust tests and the
-production CLI reproduce all seventeen constituent artifacts and the reference
-receipt exactly, without local predecessor inputs or test staging helpers.
-The tracked directory called `current/` remains a historical baseline. Neither
-the capture nor its compression completes the DSL or runtime migration.
+uses that source contract and passes complete graph/placement preservation checks.
+Schema, tables, coverage and other metadata remain JSON during R1-R4. The tracked
+directory called `current/` remains a historical baseline. Neither the program
+source cutover nor compression completes declaration migration, removal of the
+old Rust publication paths, or the runtime/authoring boundary cleanup.
 
 The new `poe-optimizer-authoring` crate parses bounded program declarations,
 typed reads, ordered `let` calculations and guarded effects. A checked symbol
@@ -71,11 +74,11 @@ generated output must fit the input limit as well as the output limit. Name and
 program-membership KDL manifests now load through a bounded library API. Names
 resolve exact schema definitions/slots, and packets append explicitly declared
 programs to existing owners after a complete structural preflight. The containing
-package still requires Engine validation. Source labels are injected text labels,
-not paths that the library opens. Broader definition declarations and release-wide
-DSL conversion remain pending. The new release manifest described below composes
-existing constituent DTOs; it does not yet integrate allocation and DSL packets
-into a single publication transaction.
+package still requires Engine validation. Packet APIs receive injected source
+labels and text; the release CLI resolves the declared files. The release builder
+composes all declared packets before its single checked publication transaction.
+Broader definition declarations and integration of named-allocation transactions
+remain pending.
 
 Stable naming now has an in-memory staged transaction API. `NamedIdRegistry`
 wraps the single existing Import allocator; `NamesInput` stores its exact registry
@@ -117,15 +120,16 @@ the separate production command below; other DSL developer commands remain plann
 ## Production release composition during migration
 
 `poe-author release build <release.kdl> --output <new-directory>` reads a declared
-final composition and publishes a checked release. For the captured full source:
+final composition and publishes a checked release. The tracked source command is:
 
 ```text
 cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release
 ```
 
-The output directory must not exist and its parent must exist. The retained
-full-source rebuild and reference-receipt comparison pass. The command reuses
-the existing typed release assembler; it
+The output directory must not exist and its parent must exist. The converted
+tracked source passes the complete corpus and historical artifact gates. The
+command reuses the existing
+typed release assembler; it
 does not call test staging helpers, replay the old publication chain or provide a
 second semantic checker.
 
@@ -137,12 +141,21 @@ support outputs are optional only within that group. Named query sets retain the
 order authored in the manifest. Unknown fields, duplicate declarations or source
 paths, duplicate query names and incomplete groups are errors.
 
-Each constituent is a current typed JSON DTO, either plain JSON or explicitly
-declared `encoding="gzip"`. This is temporary migration input before readable
-DSL/declaration sources and the compact compiled package replace it. The library
-receives injected bytes; the CLI resolves source paths within the manifest
-directory and bounds file reads. Separate aggregate limits cover encoded and
-decoded bytes, with additional manifest, source-count and typed assembly limits.
+Program sources are declared with `rule-source "rules/example.rule"`; their
+membership packets use `rule-packet "family/packet.kdl" names="family/names.kdl"`.
+Every declared rule source must be used, and packet references must name declared
+rule sources. Semantic names resolve exact schema addresses and grant no new
+authority. A source file may serve multiple owners; each occurrence remains
+separately checked and charged against expanded-work limits.
+
+The `rules` constituent is always program-free JSON metadata. Schema, tables,
+coverage and other constituents still use typed JSON DTOs, with `plain` transport
+by default or explicit `encoding="gzip"`. Names, packets and rule source are
+plain UTF-8. Broader declarations and the compact compiled package remain planned.
+The library receives injected bytes; the CLI resolves source paths within the
+manifest directory and bounds file reads. Separate aggregate limits cover encoded
+and decoded bytes, source/component/packet counts, expanded rule work and typed
+assembly limits. Source failures never fall back to embedded IR.
 Gzip accepts exactly one complete member and rejects trailing bytes or additional
 members. Compression changes transport size, not mechanics or decoded limits.
 
@@ -154,7 +167,16 @@ Host contains no game, Import or Authoring dependencies. The native CLI still
 loads releases by reassembling authoring inputs; extracting its immutable loader
 remains required before runtime cutover.
 
-The captured full source has no evaluation bundle and does not add rule coverage.
+The immutable pre-migration IR corpus lives only in Authoring's
+[`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz),
+outside the production source inventory.
+The historical receipt authenticates that reference. Corpus tests compare actual
+tracked source graphs and exact owner/program placement with the archive; release
+tests restore only archived program members into a copy of the new input and use
+the existing assembler to check unchanged metadata, provenance and other artifacts.
+These migration gates pass without introducing an alternate release reader.
+
+The retained source release has no evaluation bundle and does not add rule coverage.
 **No supplied original is complete natively (0/5).** Rebuilding its release is a
 reproducibility step toward the new-format first build, not that build's completion.
 

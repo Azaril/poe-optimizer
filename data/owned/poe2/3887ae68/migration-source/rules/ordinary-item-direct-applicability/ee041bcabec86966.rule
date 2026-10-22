@@ -1,0 +1,7 @@
+program "ordinary-item-direct-applicability" context equipment_use {
+    read "player-retention" as r_0: quantity(unit.factor) = stat(player, stat.ordinary_item_routing.channels.player_retention_factor);
+    let n_0 = quantity(1, unit.factor);
+    let n_1 = r_0;
+    let n_2 = n_1 == n_0;
+    effect "direct-applicability" = derive(current, stat.ordinary_item_routing.channels.direct_applicability, n_2);
+}

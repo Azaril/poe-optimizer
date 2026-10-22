@@ -1,0 +1,5 @@
+program "ordinary-amulet-retention-factor" context actor {
+    read "incoming" as r_0: quantity(unit.factor) = contributions(current, stat.ordinary_item_routing.channels.player_retention_factor, multiply, product, quantity(1, unit.factor));
+    let n_0 = r_0;
+    effect "retention" = derive(current, stat.ordinary_item_routing.channels.player_retention_factor, n_0);
+}

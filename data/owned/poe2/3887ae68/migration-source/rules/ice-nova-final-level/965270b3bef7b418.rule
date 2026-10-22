@@ -1,0 +1,17 @@
+program "ice-nova-final-level" context actor {
+    read "pre-support-level" as r_0: quantity(unit.count) = stat(property_owner, stat.pre_support_skill_level);
+    read "supported-level" as r_1: quantity(unit.count) = contributions(property_owner, stat.supported_skill_level_addition, add, sum, quantity(0, unit.count));
+    let n_0 = quantity(40, unit.count);
+    let n_1 = quantity(1, unit.count);
+    let n_2 = 20;
+    let n_3 = r_0;
+    let n_4 = r_1;
+    let n_5 = n_3 + n_4;
+    let n_6 = max(n_5, n_1);
+    let n_7 = min(n_6, n_0);
+    let n_8 = quantize_integer(n_7, quantity(1, unit.count), truncate);
+    let n_9 = scale_integer(n_1, n_8);
+    let n_10 = n_7 == n_9;
+    let n_11 = if n_10 { n_8 } else { n_2 };
+    effect "final-level" = project_skill_parameter(skill_grant_slot.icenova.ice_nova_intrinsics.primary_supply, parameter_slot.icenovaplayer.ice_nova_intrinsics.final_level, n_11);
+}

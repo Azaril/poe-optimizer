@@ -1,0 +1,34 @@
+program "intrinsic-minion-attack-source" context actor {
+    read "curve" as r_0: quantity(unit.damage) = stat(current, stat.actor_baselines.stats.allied_level_damage);
+    read "ignore-time" as r_1: boolean = stat(current, stat.actor_baselines.stats.base_damage_ignores_attack_speed);
+    read "scale" as r_2: quantity(unit.factor) = stat(current, stat.actor_baselines.stats.damage_scale);
+    read "spread" as r_3: quantity(unit.factor) = stat(current, stat.actor_baselines.stats.damage_spread);
+    read "time" as r_4: quantity(unit.seconds) = stat(current, stat.actor_baselines.stats.attack_time);
+    let n_0 = quantity(100, unit.percentage_points);
+    let n_1 = r_0;
+    let n_2 = round(n_1, quantity(1, unit.damage), floor);
+    let n_3 = r_1;
+    let n_4 = quantity(1, unit.factor);
+    let n_5 = quantity(1, unit.action_rate);
+    let n_6 = quantity(1, unit.seconds);
+    let n_7 = r_2;
+    let n_8 = scale(n_2, n_7);
+    let n_9 = r_3;
+    let n_10 = n_4 - n_9;
+    let n_11 = r_4;
+    let n_12 = ratio(n_6, n_11, unit.factor);
+    let n_13 = scale(n_5, n_12);
+    let n_14 = ratio(n_11, n_6, unit.factor);
+    let n_15 = n_4 + n_9;
+    let n_16 = scale(n_8, n_14);
+    let n_17 = if n_3 { n_8 } else { n_16 };
+    let n_18 = scale(n_17, n_10);
+    let n_19 = round(n_18, quantity(1, unit.damage), floor);
+    let n_20 = scale(n_17, n_15);
+    let n_21 = round(n_20, quantity(1, unit.damage), floor);
+    effect "physical-min" = derive(current, stat.intrinsic_minion_physical_minimum, n_19);
+    effect "physical-max" = derive(current, stat.intrinsic_minion_physical_maximum, n_21);
+    effect "attack-rate" = derive(current, stat.intrinsic_minion_attack_rate, n_13);
+    effect "critical-chance-cap" = contribute(current, stat.outgoing_critical_chance_cap, add, n_0);
+    effect "critical-damage-bonus" = contribute(current, stat.outgoing_critical_damage_bonus, add, n_0);
+}

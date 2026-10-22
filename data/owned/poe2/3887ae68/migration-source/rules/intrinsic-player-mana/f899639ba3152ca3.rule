@@ -1,0 +1,9 @@
+program "intrinsic-player-mana" context actor {
+    read "level" as r_0: integer = character_level();
+    let n_0 = r_0;
+    let n_1 = quantity(30, unit.mana_points);
+    let n_2 = quantity(4, unit.mana_points);
+    let n_3 = scale_integer(n_2, n_0);
+    let n_4 = n_3 + n_1;
+    effect "intrinsic-mana" = contribute(current, stat.permanent_reward_effects.channels.mana, add, n_4);
+}

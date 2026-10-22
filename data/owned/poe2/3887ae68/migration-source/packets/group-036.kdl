@@ -1,0 +1,24 @@
+packet "retained-036" {
+    append definition="passive_node.minion_damage_and_life.minion_reservation13" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/58c467b9b9a337e9.rule"
+        program "ordinary-minion-life" source="rules/ordinary-minion-life/3c7f20e53e7e948c.rule"
+    }
+    append definition="passive_node.ingenuity.intelligence101" {
+        program "passive-view" source="rules/passive-view/88adeb99193580c1.rule"
+    }
+    append definition="passive_node.attribute.attributes54" {
+        program "attribute-choice" source="rules/attribute-choice/b4a7bfd64b149010.rule"
+    }
+    append definition="passive_node.attribute.intelligence14" {
+        program "attribute-choice" source="rules/attribute-choice/2ef2e1fe4e8feaf6.rule"
+    }
+    append definition="passive_node.necromantic_talisman.passive_keystone_necromantic_talisman" {
+        program "talisman-ordinary-amulet-retention" source="rules/talisman-ordinary-amulet-retention/a1850ceedc5b3770.rule"
+    }
+    append definition="passive_node.deflection.deflect49" {
+        program "passive-view" source="rules/passive-view/68efec71f000927f.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana11" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+}

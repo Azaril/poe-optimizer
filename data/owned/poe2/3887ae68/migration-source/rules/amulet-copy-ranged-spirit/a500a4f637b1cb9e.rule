@@ -1,0 +1,38 @@
+program "amulet-copy-ranged-spirit" context equipment_use {
+    read "effective" as r_0: quantity(unit.count) = stat(modifier, stat.modifier_effective_count);
+    read "eligible" as r_1: boolean = stat(current, stat.amulet_level_copy.channels.eligibility);
+    read "pre-amulet-percent" as r_2: quantity(unit.percentage_points) = stat(player, stat.amulet_level_copy.channels.pre_amulet_percent);
+    read "unscalable" as r_3: boolean = parameter(parameter_slot.fixed_spirit.modifier.ranged_spirit.properties.unscalable);
+    let n_0 = r_1;
+    let n_1 = quantity(100, unit.factor);
+    let n_2 = quantity(10, unit.factor);
+    let n_3 = quantity(0.5, unit.count);
+    let n_4 = quantity(1, unit.factor);
+    let n_5 = quantity(1, unit.count);
+    let n_6 = quantity(100, unit.percentage_points);
+    let n_7 = quantity(1, unit.spirit_points);
+    let n_8 = r_2;
+    let n_9 = ratio(n_8, n_6, unit.factor);
+    let n_10 = n_9 == n_4;
+    let n_11 = r_0;
+    let n_12 = check_domain(n_11, quantity(-137438953472, unit.count), quantity(137438953472, unit.count));
+    let n_13 = round(n_12, quantity(1, unit.count), floor);
+    let n_14 = n_12 == n_13;
+    let n_15 = scale(n_12, n_9);
+    let n_16 = scale(n_15, n_1);
+    let n_17 = n_16 + n_3;
+    let n_18 = round(n_17, quantity(1, unit.count), floor);
+    let n_19 = divide_factor(n_18, n_1);
+    let n_20 = round(n_19, quantity(1, unit.count), truncate);
+    let n_21 = scale(n_15, n_2);
+    let n_22 = round(n_21, quantity(1, unit.count), floor);
+    let n_23 = divide_factor(n_22, n_2);
+    let n_24 = if n_14 { n_20 } else { n_23 };
+    let n_25 = r_3;
+    let n_26 = any(n_10, n_25);
+    let n_27 = if n_26 { n_12 } else { n_24 };
+    let n_28 = ratio(n_27, n_5, unit.factor);
+    let n_29 = scale(n_7, n_28);
+    let n_30 = check_domain(n_29, quantity(-137438953472, unit.spirit_points), quantity(137438953472, unit.spirit_points));
+    effect "copied-ranged-spirit" when n_0 = contribute(player, stat.player_spirit_pool.final, add, n_30);
+}

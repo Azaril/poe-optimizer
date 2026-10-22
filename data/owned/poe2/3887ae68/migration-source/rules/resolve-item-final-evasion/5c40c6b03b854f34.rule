@@ -1,0 +1,12 @@
+program "resolve-item-final-evasion" context equipment_use {
+    read "local" as r_0: quantity(unit.defence_rating) = stat(current, stat.item_local_evasion);
+    read "per-level" as r_1: quantity(unit.defence_rating) = contribution_query(current, "item-evasion-per-level", "sources");
+    read "replacement-present" as r_2: boolean = contribution_selection(current, "item-evasion-replacement", "sources", present);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = check_domain(n_1, quantity(0, unit.defence_rating), quantity(0, unit.defence_rating));
+    let n_3 = n_0 + n_2;
+    let n_4 = r_2;
+    let n_5 = not n_4;
+    effect "final-evasion" when n_5 = derive(current, stat.player_evasion_equipment.property, n_3);
+}

@@ -1,0 +1,20 @@
+program "rounded-cold-minimum" context equipment_use {
+    read "elemental-increase" as r_0: quantity(unit.percentage_points) = contributions(current, stat.elemental_weapon_inputs.shared_local_elemental.stat, add, sum, quantity(0, unit.percentage_points));
+    read "flat" as r_1: quantity(unit.damage) = contributions(current, stat.elemental_weapon_inputs.channels.cold.minimum.stat, add, sum, quantity(0, unit.damage));
+    read "raw" as r_2: quantity(unit.damage) = stat(current, stat.weapon_profiles.fields.coldmin.stat);
+    read "type-increase" as r_3: quantity(unit.percentage_points) = contributions(current, stat.elemental_weapon_inputs.channels.cold.minimum.stat, increase, sum, quantity(0, unit.percentage_points));
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = quantity(0.5, unit.damage);
+    let n_3 = quantity(1, unit.factor);
+    let n_4 = r_2;
+    let n_5 = r_3;
+    let n_6 = n_5 + n_0;
+    let n_7 = pct(n_6, unit.factor);
+    let n_8 = n_3 + n_7;
+    let n_9 = n_4 + n_1;
+    let n_10 = scale(n_9, n_8);
+    let n_11 = n_10 + n_2;
+    let n_12 = round(n_11, quantity(1, unit.damage), floor);
+    effect "derive" = derive(current, stat.elemental_weapon_inputs.channels.cold.minimum.stat, n_12);
+}

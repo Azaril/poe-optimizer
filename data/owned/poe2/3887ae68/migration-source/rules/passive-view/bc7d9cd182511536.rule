@@ -1,0 +1,21 @@
+program "passive-view" context actor {
+    read "match-0" as r_0: boolean = character_class_is(class.witch);
+    let n_0 = any();
+    let n_1 = quantity(20, unit.percentage_points);
+    let n_2 = quantity(10, unit.count);
+    let n_3 = false;
+    let n_4 = r_0;
+    let n_5 = any(n_4);
+    let n_6 = not n_0;
+    let n_7 = if n_5 { n_3 } else { n_6 };
+    let n_8 = quantity(16, unit.percentage_points);
+    let n_9 = quantity(16, unit.percentage_points);
+    let n_10 = quantity(10, unit.count);
+    effect "default-effect-0" when n_7 = contribute(player, stat.spell_damage_increase, increase, n_1);
+    effect "default-effect-1" when n_7 = contribute(player, stat.attribute_empty_more.stages.intelligence_first.input, add, n_2);
+    effect "default-effect-1-pass-two" when n_7 = contribute(player, stat.attribute_empty_more.stages.intelligence_second.input, add, n_2);
+    effect "view-0-effect-0" when n_4 = contribute(player, stat.spell_damage_increase, increase, n_8);
+    effect "view-0-effect-1" when n_4 = contribute(player, stat.player_granted_minion_damage_increase, increase, n_9);
+    effect "view-0-effect-2" when n_4 = contribute(player, stat.attribute_empty_more.stages.intelligence_first.input, add, n_10);
+    effect "view-0-effect-2-pass-two" when n_4 = contribute(player, stat.attribute_empty_more.stages.intelligence_second.input, add, n_10);
+}

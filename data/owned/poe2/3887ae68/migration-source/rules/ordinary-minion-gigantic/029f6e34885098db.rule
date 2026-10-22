@@ -1,0 +1,4 @@
+program "ordinary-minion-gigantic" context actor {
+    let n_0 = true;
+    effect "grant" = contribute(player, stat.gigantic_following.channels.grants, flag, n_0);
+}

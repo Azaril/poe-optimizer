@@ -1,0 +1,14 @@
+program "area-modifier-eligibility" context action {
+    read "selected-mode" as r_0: boolean = action_mode_is(action_mode.ordinary_mode);
+    read "selected-part" as r_1: boolean = action_part_is(action_part.ordinary_part);
+    read "selected-set-0" as r_2: boolean = action_stat_set_is(action_stat_set.explosiveteleportsanddjinn.kelari_s_deception);
+    read "selected-set-1" as r_3: boolean = action_stat_set_is(action_stat_set.explosiveteleportsanddjinn.hidden);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = r_2;
+    let n_3 = r_3;
+    let n_4 = any(n_2, n_3);
+    let n_5 = any(n_2, n_3);
+    let n_6 = all(n_1, n_0, n_5);
+    effect "area" when n_6 = derive(current, stat.action_area_eligibility.channel, n_4);
+}

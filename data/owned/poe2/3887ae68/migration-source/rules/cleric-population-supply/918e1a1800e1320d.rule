@@ -1,0 +1,4 @@
+program "cleric-population-supply" context actor {
+    let n_0 = true;
+    effect "activate" = activate_grant(grant_slot.summonskeletalclericsplayer.cleric_ability_supply.population_grant, n_0);
+}

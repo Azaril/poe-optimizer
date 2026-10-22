@@ -1,0 +1,14 @@
+program "contribute-inherent-strength-life" context actor {
+    read "all-disabled" as r_0: boolean = stat(current, stat.no_attribute_bonuses);
+    read "amount" as r_1: quantity(unit.life) = stat(current, stat.inherent_life);
+    read "life-disabled" as r_2: boolean = stat(current, stat.no_strength_life);
+    read "strength-disabled" as r_3: boolean = stat(current, stat.no_strength_attribute_bonuses);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = check_domain(n_1, quantity(-137438953472, unit.life), quantity(137438953472, unit.life));
+    let n_3 = r_2;
+    let n_4 = r_3;
+    let n_5 = any(n_0, n_4, n_3);
+    let n_6 = not n_5;
+    effect "inherent-life" when n_6 = contribute(current, stat.life, add, n_2);
+}

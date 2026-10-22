@@ -1,0 +1,402 @@
+packet "retained-076" {
+    append definition="item_template.elegant_slippers" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/c1b5b36029a63990.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.elegant_wraps" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/13bcc28c8eb8a8a8.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.elementalist_robe" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/4d8159c66fc6c1d7.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.elite_greathelm" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/0c59a7c3ae378fe9.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.embellished_gloves" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/53c7408958ec1377.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.ember_greataxe" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/f6aca6d707c82699.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/e6bfe188af2dc5c2.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.emblem_crest_shield" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/b178abccd6ea2b43.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/860f09acc1419235.rule"
+    }
+    append definition="item_template.embossed_boots" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/fd8277217c186e75.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.embroidered_boots" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/90c41bf065a8f635.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.embroidered_gloves" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/a945173ecb64242f.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.emerald" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.emerald_ring" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.empyreal_crest_shield" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/1ad33dfd0382c02e.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/860f09acc1419235.rule"
+    }
+    append definition="item_template.energy_blade_one_handed" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/ee2b2b2c18f06495.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/b0302313eac2cd7f.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.energy_blade_two_handed" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/44c353eb43bf0c7d.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/ad67781af878804c.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.engraved_bracers" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/b341398d257a427b.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.engraved_crest_shield" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/97d1f9b3cec5bf1f.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/860f09acc1419235.rule"
+    }
+    append definition="item_template.engraved_crossbow" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/0ee6cafa6b097bc4.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/733182b7e0f79fcf.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.engraved_focus" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/5b1fdb315f13a67e.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/f5227475afee6948.rule"
+    }
+    append definition="item_template.engraved_helm" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/3d060c72ba9eec41.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.engraved_knife" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/77e39ba5cc5bd4cc.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/087a7dd554709ff5.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.enlightened_robe" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/0178137205c2b37c.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.esoteric_crossbow" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/6ae068e4f8c55c91.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/fe608dc1213304e1.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.ethereal_blade" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/a47fee91ab1fccd9.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/bad17bbffe9fdabb.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.evangelist_garb" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/b693ffc56b0a91ed.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.evasive_leg" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.execratus_hammer" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/eff1fbc7d71b2038.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/5c9e31cfe0f3a528.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.executioner_greataxe" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/e4fcfed6efb69b63.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/64bea1faea11525c.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.explorer_armour" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/aeb5edb6c898b5fd.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.exquisite_vest" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/0edc1c67e2e9934c.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.extended_cleaver" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/08ab09365dbace3a.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/e3cd96a66535db7d.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.face_mask" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/7517b5a4efc21b25.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.faithful_leggings" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/ccd2392598473113.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.falchion" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/058ae2f9bed87b93.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/09b67b05890b5d1f.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.falconer_s_jacket" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/c0e29fff92c7516b.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.familial_talisman" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/fc94cceb59202e67.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/49aafde8b453651b.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.fanatic_bow" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/382d4e46f9ecc58e.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/6278a90f8f9032dd.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.fanatic_greathammer" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/ec42c3549b70c450.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/de8c67d7b56fd61d.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.fang_talisman" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/a4e898f40eb6798a.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/03929277ea3310ae.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.faridun_mask" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/cd165da812d4964c.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.feathered_mitts" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/2ad639b910c319e8.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.feathered_raiment" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/5cd6ab5f9bf46be2.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.feathered_robe" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/cd5d37a84dc4c9d6.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.feathered_sandals" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/368bc352e6653c33.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.feathered_targe" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/2d7ad2f20e9450d6.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/860f09acc1419235.rule"
+    }
+    append definition="item_template.feathered_tiara" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/c387e51dd00ba6d9.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.felled_greatclub" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/b0cc016ee6fe1817.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/9c56c1041efffa4a.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.felt_cap" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/703c89b2be77392c.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.fierce_greathelm" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/6b1bda0d81061d1c.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.fine_belt" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/26474a4ea1951461.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+        program "ordinary-item-direct-applicability" source="rules/ordinary-item-direct-applicability/88990d6941788681.rule"
+        program "amulet-copy-eligibility" source="rules/amulet-copy-eligibility/dcfbfb8d4d8c450e.rule"
+        program "item-charm-capacity-delivery" source="rules/item-charm-capacity-delivery/a4b58dda14e59b42.rule"
+    }
+    append definition="item_template.fine_bracers" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/60a7dc8748c1e130.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.fire_quiver" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.firm_bracers" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/95b9db1213cd6d59.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.fishing_rod" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/77afafd0241e7f67.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/ad3b4a93b95dd924.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.fists_of_stone" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/cc557556c9f3b66d.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.flanged_greatblade" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/5151cd744a092f94.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/93cd7ed127cc6da1.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.flanged_mace" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/29b9e167fc45253a.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/45fee8ad590cb519.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.flared_boots" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/905c3915da64d16a.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.flared_mace" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/ac97f6282c01f799.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/ed8d017c79a4961b.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.flax_sandals" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/8ef336db2f47afb5.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.flexed_crossbow" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/c084f8b9301d0577.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/b444673c56c068ee.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.flexile_sabatons" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/e454fffe95c3ee97.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.flowing_raiment" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/5cd6ab5f9bf46be2.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.flying_spear" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/8b55fd9bbb978511.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/62588ebe3e06a1b3.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+}

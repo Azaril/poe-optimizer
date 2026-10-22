@@ -1,0 +1,5 @@
+program "local-charm-capacity-contribution" context equipment_use {
+    read "effective" as r_0: quantity(unit.count) = stat(modifier, stat.modifier_effective_count);
+    let n_0 = r_0;
+    effect "local-charm-capacity" = contribute(current, stat.item_local_charm_capacity, add, n_0);
+}

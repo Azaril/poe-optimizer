@@ -1,0 +1,37 @@
+program "ordinary-physical-hit-dps" context action {
+    read "critical" as r_0: quantity(unit.damage) = stat(current, stat.physical_hit_dps.inputs.critical.stat);
+    read "critical-percent" as r_1: quantity(unit.percentage_points) = stat(current, stat.outgoing_critical.definitions.chance);
+    read "hit-percent" as r_2: quantity(unit.percentage_points) = stat(current, stat.physical_hit_dps.inputs.hit_percent.stat);
+    read "normal" as r_3: quantity(unit.damage) = stat(current, stat.physical_hit_dps.inputs.normal.stat);
+    read "rate" as r_4: quantity(unit.action_rate) = stat(current, stat.physical_hit_dps.inputs.rate.stat);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = pct(n_1, unit.factor);
+    let n_3 = r_2;
+    let n_4 = quantity(100, unit.factor);
+    let n_5 = r_3;
+    let n_6 = quantity(1, unit.damage);
+    let n_7 = quantity(1, unit.damage_per_time);
+    let n_8 = quantity(1, unit.factor);
+    let n_9 = n_8 - n_2;
+    let n_10 = quantity(1, unit.percentage_points);
+    let n_11 = ratio(n_1, n_10, unit.factor);
+    let n_12 = scale(n_0, n_11);
+    let n_13 = ratio(n_3, n_10, unit.factor);
+    let n_14 = quantity(1, unit.action_rate);
+    let n_15 = r_4;
+    let n_16 = ratio(n_15, n_14, unit.factor);
+    let n_17 = divide_factor(n_12, n_4);
+    let n_18 = scale(n_5, n_9);
+    let n_19 = n_18 + n_17;
+    let n_20 = scale(n_19, n_13);
+    let n_21 = divide_factor(n_20, n_4);
+    let n_22 = ratio(n_21, n_6, unit.factor);
+    let n_23 = scale(n_7, n_22);
+    let n_24 = scale(n_23, n_16);
+    let n_25 = scale(n_24, n_8);
+    let n_26 = scale(n_25, n_8);
+    effect "weighted-physical-hit" = derive(current, stat.weighted_physical_hit, n_19);
+    effect "post-block-physical-hit" = derive(current, stat.post_block_physical_hit, n_21);
+    effect "ordinary-physical-hit-dps" = derive(current, stat.ordinary_physical_hit_dps, n_26);
+}

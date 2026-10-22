@@ -1,0 +1,387 @@
+packet "retained-093" {
+    append definition="item_template.runemastered_primal_markings" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/46c00d59e928f495.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_quilted_vest" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/44c5473b61caef0d.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_raider_plate" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/be0d54f224d7be2b.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_rampart_tower_shield" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/e862d23bf9c2dff6.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/860f09acc1419235.rule"
+    }
+    append definition="item_template.runemastered_revered_vestments" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/7e681d973fced892.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_rhoahide_coat" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/162bb56fbc3a22c8.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_ridged_buckler" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/f7e3152f09bcd240.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/860f09acc1419235.rule"
+    }
+    append definition="item_template.runemastered_ringmail_gauntlets" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/24df19894f3b12a0.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_riveted_mitts" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/2cdc1b832e1bca50.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_rogue_armour" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/969eb413ff38e253.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_rope_cuffs" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/12d506f9bd49e7a5.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_rough_greaves" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/7e6ca7612163a768.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_runic_fork" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_rusted_cuirass" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/5c1d49412d7e76f5.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_rusted_greathelm" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/665b92d75d77354d.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_sacrificial_mantle" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/c20c47211cc2dc33.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_sacrificial_regalia" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/2a285509b616b2da.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_scale_mail" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/188a27c5334cea26.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_scalper_s_jacket" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/8752c05ce2346b6e.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_scout_s_vest" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/d18af1410aa37d3a.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_sectioned_bracers" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/084efd6e8cd35c2f.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_secured_leggings" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/b3425e278a805989.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_serpentscale_coat" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/6ff7a7f73368624e.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_shabby_hood" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/069858243ec44baa.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_shaman_mantle" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/fadc83453cd6869c.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_shielded_helm" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/abce4b3555683762.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_shrouded_vest" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/5633555a26d9dfcc.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_sigil_crest_shield" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/69f8d3122fff8917.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/860f09acc1419235.rule"
+    }
+    append definition="item_template.runemastered_silk_robe" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/7c012234af4025f2.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_silk_slippers" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/c38d6ca9f8547f91.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_smuggler_coat" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/69392cdbe30cd448.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_soldier_greathelm" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/1f595640269dcf7d.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_solid_mask" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/9e3b2d1d0c453e61.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_sombre_gloves" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/0ff8e54ba8da629a.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_spiked_buckler" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/99e4cf5d5a31c8e8.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/860f09acc1419235.rule"
+    }
+    append definition="item_template.runemastered_spined_bracers" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/30ccf18b69e4714d.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_spiral_wraps" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/d90fe5f92fbe3bb5.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_spired_greathelm" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/3c2c41230d2f1393.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_spiritbone_crown" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/a5d755f4591ffa69.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_splintered_tower_shield" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/abcfc3d2efb40bfd.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/860f09acc1419235.rule"
+    }
+    append definition="item_template.runemastered_stacked_sabatons" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/cf80304cd5c622db.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_steel_plate" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/967bcd1dea434fa1.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_steeltoe_boots" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/88d15d284f8087a6.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_stitched_gloves" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/5175fa87a6de63bb.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_stocky_mitts" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/0c5726753ef950db.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_stone_greaves" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/6339d00b295a27d5.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_straw_sandals" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/29c04eb20f278576.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_strider_vest" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/a7af98d457ababa0.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_studded_greatclub" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/04cf20ca762dd20c.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/4d723b51c48d6f1c.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_studded_vest" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/f5f68bc707c2b9ed.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_suede_bracers" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/9a3b4abca5f352c9.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_tattered_robe" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/7e227f3000fe3ba8.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_tempered_mitts" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/14edb641cd2713fd.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_tenebrous_crown" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/ae1a413d5e921908.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_tense_crossbow" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/d3a989ca3c2e7070.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/b6b4e410a1662e5d.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_threaded_shoes" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/6e52bb42615e3737.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_tideseer_mantle" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/16f69452ca3721d1.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_titan_mitts" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/49b78051875b34a6.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_tonal_focus" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/1db5629e93d26a93.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/f5227475afee6948.rule"
+    }
+    append definition="item_template.runemastered_torment_club" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/06cc822530c85e4c.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/52af0859dffbfc43.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_torn_gloves" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/e15a8fceda0a0e50.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_tribal_mask" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/b67d54696887bd69.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_trimmed_greaves" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/cc82d0dbeeeedb84.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.runemastered_twig_circlet" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/1bf529053c6ee50f.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+}

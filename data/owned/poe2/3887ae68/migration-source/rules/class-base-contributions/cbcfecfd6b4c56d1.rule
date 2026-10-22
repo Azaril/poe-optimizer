@@ -1,0 +1,11 @@
+program "class-base-contributions" context actor {
+    let n_0 = quantity(11, unit.count);
+    let n_1 = quantity(7, unit.count);
+    let n_2 = quantity(11, unit.count);
+    effect "contribution-0" = contribute(player, stat.attribute_empty_more.stages.dexterity_first.input, add, n_0);
+    effect "contribution-0-pass-two" = contribute(player, stat.attribute_empty_more.stages.dexterity_second.input, add, n_0);
+    effect "contribution-1" = contribute(player, stat.attribute_empty_more.stages.intelligence_first.input, add, n_1);
+    effect "contribution-1-pass-two" = contribute(player, stat.attribute_empty_more.stages.intelligence_second.input, add, n_1);
+    effect "contribution-2" = contribute(player, stat.attribute_empty_more.stages.strength_first.input, add, n_2);
+    effect "contribution-2-pass-two" = contribute(player, stat.attribute_empty_more.stages.strength_second.input, add, n_2);
+}

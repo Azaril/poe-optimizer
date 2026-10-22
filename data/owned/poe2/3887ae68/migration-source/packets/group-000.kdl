@@ -1,0 +1,143 @@
+packet "retained-000" {
+    append definition="gem.twister_gem" {
+        program "primary-supply" source="rules/primary-supply/045e3b3074acab93.rule"
+        program "effective-input-preparation" source="rules/effective-input-preparation/8104d13ffc5b7a5d.rule"
+    }
+    append definition="gem.sniper_gem" {
+        program "primary-supply" source="rules/primary-supply/12d505f223bb8673.rule"
+        program "effective-input-preparation" source="rules/effective-input-preparation/cf3f87376381df89.rule"
+        program "sniper-final-inputs" source="rules/sniper-final-inputs/75339cd2f781cda6.rule"
+    }
+    append definition="skill.twister_skill" {
+        program "intrinsic-action-coefficients" source="rules/intrinsic-action-coefficients/34f375ec0ad21256.rule"
+    }
+    append definition="skill.sniper_skill" {
+        program "ordinary-population-inputs" source="rules/ordinary-population-inputs/86e9f459ef684d3b.rule"
+        program "ordinary-population-activation" source="rules/ordinary-population-activation/d1480142d271160f.rule"
+        program "ordinary-population-requirements" source="rules/ordinary-population-requirements/aa9ba9ba671d9adc.rule"
+        program "intrinsic-reservation-coefficients" source="rules/intrinsic-reservation-coefficients/159aa9d7aef179f1.rule"
+        program "sniper-ordinary-flat-reservation" source="rules/sniper-ordinary-flat-reservation/3e5e0596d0c69e3c.rule"
+    }
+    append definition="skill.sniper_basic_attack_skill" {
+        program "ordinary-minion-attack-hit-chance" source="rules/ordinary-minion-attack-hit-chance/215945be88512f47.rule"
+    }
+    append slot="action_output.sniper_basic_attack_output" {
+        program "actor-level-input" source="rules/actor-level-input/46aa7109eb68ef29.rule"
+        program "commandable-action-fact" source="rules/commandable-action-fact/fd8fd1b7f5360daa.rule"
+        program "conditional-command-cooldown" source="rules/conditional-command-cooldown/5bb20e2da7395b25.rule"
+        program "unconditional-minion-cooldown" source="rules/unconditional-minion-cooldown/ce85f29e73b4a292.rule"
+        program "conditional-command-damage" source="rules/conditional-command-damage/c08cc51582abfbd6.rule"
+        program "owned-minion-action-increase" source="rules/owned-minion-action-increase/8a27e0b402d92c78.rule"
+        program "owned-minion-action-increase-factor" source="rules/owned-minion-action-increase-factor/438f36b7e757328a.rule"
+        program "intrinsic-added-attack-factor" source="rules/intrinsic-added-attack-factor/ae13dbe3cce95ce0.rule"
+        program "combined-added-attack-factor" source="rules/combined-added-attack-factor/8b817ca5b9da42bc.rule"
+        program "selected-physical-base" source="rules/selected-physical-base/65e2d099a0f5228f.rule"
+        program "selected-physical-hit" source="rules/selected-physical-hit/ede8310e81a60239.rule"
+        program "selected-basic-ordinary-attack-rate" source="rules/selected-basic-ordinary-attack-rate/b9e2be49bbce8679.rule"
+        program "ordinary-outgoing-critical" source="rules/ordinary-outgoing-critical/ea1bd314acb9ed23.rule"
+        program "ordinary-armour-adjusted-physical-averages" source="rules/ordinary-armour-adjusted-physical-averages/4b28e11ca6755e94.rule"
+        program "ordinary-physical-hit-dps" source="rules/ordinary-physical-hit-dps/f9f9b227372e5711.rule"
+    }
+    append slot="action_output.sniper_gas_arrow_output" {
+        program "actor-level-input" source="rules/actor-level-input/54d31f551cfc6ed6.rule"
+        program "commandable-action-fact" source="rules/commandable-action-fact/206ff690ff18c8ad.rule"
+        program "conditional-command-cooldown" source="rules/conditional-command-cooldown/5bb20e2da7395b25.rule"
+        program "unconditional-minion-cooldown" source="rules/unconditional-minion-cooldown/ce85f29e73b4a292.rule"
+        program "conditional-command-damage" source="rules/conditional-command-damage/c08cc51582abfbd6.rule"
+        program "owned-minion-action-increase" source="rules/owned-minion-action-increase/8a27e0b402d92c78.rule"
+        program "owned-minion-action-increase-factor" source="rules/owned-minion-action-increase-factor/438f36b7e757328a.rule"
+    }
+    append slot="actor_slot.sniper_population" {
+        program "finite-actor-baseline" source="rules/finite-actor-baseline/d450e0616b4d0d40.rule"
+        program "intrinsic-minion-attack-source" source="rules/intrinsic-minion-attack-source/f40116a31d12deb2.rule"
+        program "intrinsic-minion-cannot-be-evaded" source="rules/intrinsic-minion-cannot-be-evaded/cdfe10c13bf58638.rule"
+        program "gigantic-life-and-damage" source="rules/gigantic-life-and-damage/b74e20ca72ee83fa.rule"
+        program "intrinsic-allied-minion-life" source="rules/intrinsic-allied-minion-life/612d0a5c31ca2a11.rule"
+        program "received-minion-life-increase" source="rules/received-minion-life-increase/5b96a109388a43d6.rule"
+        program "recipient-empty-buff-effect-increase" source="rules/recipient-empty-buff-effect-increase/e04c47acaf0c60ef.rule"
+        program "recipient-empty-buff-effect-more" source="rules/recipient-empty-buff-effect-more/d22e50f8f84318d1.rule"
+        program "intrinsic-added-attack-percentage" source="rules/intrinsic-added-attack-percentage/f9238a5f0358cbcc.rule"
+        program "contribute-inherent-strength-life" source="rules/contribute-inherent-strength-life/90db2a535d1701cf.rule"
+    }
+    append definition="modifier.cold_resistance.flat" {
+        program "resistance-contribution" source="rules/resistance-contribution/11732fd346416568.rule"
+    }
+    append definition="modifier.elemental_resistance.flat" {
+        program "resistance-contribution" source="rules/resistance-contribution/1296cabf3fec3357.rule"
+    }
+    append definition="item_template.sapphire_ring_template" {
+        program "catalyst-inputs" source="rules/catalyst-inputs/daded6f736a3c498.rule"
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "ordinary-unscaled-numeric-item-delivery-applicability" source="rules/ordinary-unscaled-numeric-item-delivery-applicability/313e40d43dd2521d.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+        program "ordinary-item-direct-applicability" source="rules/ordinary-item-direct-applicability/88990d6941788681.rule"
+        program "amulet-copy-eligibility" source="rules/amulet-copy-eligibility/dcfbfb8d4d8c450e.rule"
+    }
+    append definition="modifier.nominal_cold_modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/6bc106013a576226.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+    }
+    append definition="modifier.nominal_elemental_modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/513cf6d6a0aa9a1e.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+    }
+    append definition="reward.questact_1clearfellbeira" {
+        program "resistance-contribution" source="rules/resistance-contribution/51e12b8e714b45d3.rule"
+    }
+    append definition="reward.questact_4halls_of_the_deadtasalio_s_test" {
+        program "resistance-contribution" source="rules/resistance-contribution/9ccff91ee797d6ca.rule"
+    }
+    append definition="reward.qimah_seven_pillars.elemental_resistance" {
+        program "resistance-contribution" source="rules/resistance-contribution/5d3833109672ca7f.rule"
+    }
+    append definition="reward.qimah_seven_pillars.experience_gain_tradeoff" {
+        program "resistance-contribution" source="rules/resistance-contribution/e909c6ccc6d49fa2.rule"
+    }
+    append definition="class.witch" {
+        program "class-base-contributions" source="rules/class-base-contributions/6d62ae6ce46d7f0e.rule"
+        program "intrinsic-attack-baseline" source="rules/intrinsic-attack-baseline/71be60fe874a5b3f.rule"
+    }
+    append definition="class.monk" {
+        program "class-base-contributions" source="rules/class-base-contributions/940896c190471eef.rule"
+        program "intrinsic-attack-baseline" source="rules/intrinsic-attack-baseline/71be60fe874a5b3f.rule"
+    }
+    append definition="class.druid" {
+        program "class-base-contributions" source="rules/class-base-contributions/f64af623f590f068.rule"
+        program "intrinsic-attack-baseline" source="rules/intrinsic-attack-baseline/c57ddd4b4f383cff.rule"
+    }
+    append definition="class.ranger" {
+        program "class-base-contributions" source="rules/class-base-contributions/35c0763b2fb46257.rule"
+        program "intrinsic-attack-baseline" source="rules/intrinsic-attack-baseline/71be60fe874a5b3f.rule"
+    }
+    append definition="class.warrior" {
+        program "class-base-contributions" source="rules/class-base-contributions/bc5d7f31492535ec.rule"
+        program "intrinsic-attack-baseline" source="rules/intrinsic-attack-baseline/fbadbe2325b414e7.rule"
+    }
+    append definition="class.sorceress" {
+        program "class-base-contributions" source="rules/class-base-contributions/6d62ae6ce46d7f0e.rule"
+        program "intrinsic-attack-baseline" source="rules/intrinsic-attack-baseline/71be60fe874a5b3f.rule"
+    }
+    append definition="class.huntress" {
+        program "class-base-contributions" source="rules/class-base-contributions/35c0763b2fb46257.rule"
+        program "intrinsic-attack-baseline" source="rules/intrinsic-attack-baseline/71be60fe874a5b3f.rule"
+    }
+    append definition="class.mercenary" {
+        program "class-base-contributions" source="rules/class-base-contributions/cbcfecfd6b4c56d1.rule"
+        program "intrinsic-attack-baseline" source="rules/intrinsic-attack-baseline/c57ddd4b4f383cff.rule"
+    }
+    append definition="passive_node.mana_regeneration.energy_shield_recovery9" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.attribute.attributes50" {
+        program "attribute-choice" source="rules/attribute-choice/3af29667aea44b6b.rule"
+    }
+    append definition="passive_node.attribute.intelligence60" {
+        program "attribute-choice" source="rules/attribute-choice/b0c923a8b8e446f5.rule"
+    }
+    append definition="passive_node.attribute.intelligence29" {
+        program "attribute-choice" source="rules/attribute-choice/876daa765f1ef4fd.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana29" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+}

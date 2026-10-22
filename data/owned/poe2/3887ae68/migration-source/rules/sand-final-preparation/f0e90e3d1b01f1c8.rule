@@ -1,0 +1,22 @@
+program "sand-final-preparation" context skill {
+    read "ordinary-level" as r_0: quantity(unit.count) = stat(property_owner, stat.pre_support_skill_level);
+    read "ordinary-quality" as r_1: quantity(unit.percentage_points) = stat(property_owner, stat.pre_support_skill_quality);
+    read "supported-level" as r_2: quantity(unit.count) = contributions(property_owner, stat.supported_skill_level_addition, add, sum, quantity(0, unit.count));
+    read "supported-quality" as r_3: quantity(unit.percentage_points) = contributions(property_owner, stat.supported_skill_quality, add, sum, quantity(0, unit.percentage_points));
+    let n_0 = quantity(40, unit.count);
+    let n_1 = quantity(1, unit.count);
+    let n_2 = r_0;
+    let n_3 = r_1;
+    let n_4 = r_2;
+    let n_5 = r_3;
+    let n_6 = n_3 + n_5;
+    let n_7 = n_2 + n_4;
+    let n_8 = max(n_7, n_1);
+    let n_9 = min(n_8, n_0);
+    let n_10 = quantize_integer(n_9, quantity(1, unit.count), truncate);
+    let n_11 = quantize_integer(n_7, quantity(1, unit.count), truncate);
+    let n_12 = scale_integer(n_1, n_11);
+    let n_13 = n_7 == n_12;
+    effect "level" when n_13 = derive(current, stat.prepared_skill_level, n_10);
+    effect "quality" = derive(current, stat.prepared_skill_quality, n_6);
+}

@@ -1,0 +1,6 @@
+program "magnified-area-and-cost" context action {
+    let n_0 = quantity(45, unit.percentage_points);
+    let n_1 = quantity(1.3, unit.factor);
+    effect "area" = contribute(current, stat.magnified_area_support_delivery.channels.area, increase, n_0);
+    effect "cost-factor" = contribute(current, stat.magnified_area_support_delivery.channels.cost_factor, multiply, n_1);
+}

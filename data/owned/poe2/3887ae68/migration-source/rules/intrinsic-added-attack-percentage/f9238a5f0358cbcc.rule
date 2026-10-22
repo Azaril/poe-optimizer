@@ -1,0 +1,9 @@
+program "intrinsic-added-attack-percentage" context actor {
+    read "scale" as r_0: quantity(unit.factor) = stat(current, stat.actor_baselines.stats.damage_scale);
+    let n_0 = quantity(100, unit.percentage_points);
+    let n_1 = quantity(1, unit.factor);
+    let n_2 = r_0;
+    let n_3 = n_2 - n_1;
+    let n_4 = scale(n_0, n_3);
+    effect "percentage" = derive(current, stat.combined_added_attack_damage.actor_percentage, n_4);
+}

@@ -1,0 +1,4 @@
+program "rapid-casting-cast-speed" context action {
+    let n_0 = quantity(20, unit.percentage_points);
+    effect "cast-speed" = contribute(current, stat.rapid_casting_support_delivery.channels.cast_speed, increase, n_0);
+}

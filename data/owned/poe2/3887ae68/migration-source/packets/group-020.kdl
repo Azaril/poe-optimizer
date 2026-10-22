@@ -1,0 +1,35 @@
+packet "retained-020" {
+    append definition="passive_node.armour.armour19" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.deflection_and_energy_shield_delay.evasion_and_energy_shield34" {
+        program "passive-view" source="rules/passive-view/9d926eadac60b65e.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour51" {
+        program "passive-view" source="rules/passive-view/d6a788c2bddf9971.rule"
+    }
+    append definition="passive_node.attribute.dexterity40" {
+        program "attribute-choice" source="rules/attribute-choice/c2174b8bb9be64a7.rule"
+    }
+    append definition="passive_node.deflection.deflect30" {
+        program "passive-view" source="rules/passive-view/e2a2f49846c00f0b.rule"
+    }
+    append definition="passive_node.attribute.dexterity66" {
+        program "attribute-choice" source="rules/attribute-choice/e3ec30e49ebda7d5.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana6" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.attribute.strength69" {
+        program "attribute-choice" source="rules/attribute-choice/795b87e925c55d84.rule"
+    }
+    append definition="passive_node.attribute.strength64" {
+        program "attribute-choice" source="rules/attribute-choice/d5b45fe4acf8325c.rule"
+    }
+    append definition="passive_node.attribute.strength19" {
+        program "attribute-choice" source="rules/attribute-choice/7d7de31fd9e174d6.rule"
+    }
+    append definition="passive_node.strength.ascendancywarrior1small6" {
+        program "passive-view" source="rules/passive-view/531a97d13cb5b57d.rule"
+    }
+}

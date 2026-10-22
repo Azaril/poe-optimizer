@@ -1,0 +1,19 @@
+program "sand-ordinary-preparation" context skill {
+    read "ordinary-level" as r_0: quantity(unit.count) = contributions(player, stat.global_minion_gem_level_addition, add, sum, quantity(0, unit.count));
+    read "raw-level" as r_1: quantity(unit.count) = parameter(parameter_slot.summonsanddjinnplayer.djinn_actions.raw_level);
+    read "raw-quality" as r_2: quantity(unit.percentage_points) = parameter(parameter_slot.summonsanddjinnplayer.djinn_actions.raw_quality);
+    let n_0 = quantity(40, unit.count);
+    let n_1 = quantity(1, unit.count);
+    let n_2 = r_0;
+    let n_3 = r_1;
+    let n_4 = n_3 + n_2;
+    let n_5 = quantize_integer(n_3, quantity(1, unit.count), truncate);
+    let n_6 = n_3 >= n_1;
+    let n_7 = r_2;
+    let n_8 = scale_integer(n_1, n_5);
+    let n_9 = n_3 == n_8;
+    let n_10 = n_3 <= n_0;
+    let n_11 = all(n_9, n_6, n_10);
+    effect "level" when n_11 = derive(current, stat.pre_support_skill_level, n_4);
+    effect "quality" = derive(current, stat.pre_support_skill_quality, n_7);
+}

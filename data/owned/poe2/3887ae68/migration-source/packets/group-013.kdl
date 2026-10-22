@@ -1,0 +1,20 @@
+packet "retained-013" {
+    append definition="passive_node.attributes.ascendancymonk1small7" {
+        program "passive-view" source="rules/passive-view/d8c292ee13a74d19.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana_regeneration13" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.deflection.armour_and_evasion36" {
+        program "passive-view" source="rules/passive-view/68efec71f000927f.rule"
+    }
+    append definition="passive_node.strength.ascendancywarrior3small2" {
+        program "passive-view" source="rules/passive-view/6caaf7c14fe28e6d.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour20" {
+        program "passive-view" source="rules/passive-view/167aaf37cfa117c3.rule"
+    }
+    append definition="passive_node.all_attributes.all_attributes3" {
+        program "passive-view" source="rules/passive-view/2058f701fe304220.rule"
+    }
+}

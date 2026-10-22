@@ -1,0 +1,4 @@
+program "rapid-casting-applicability" context action {
+    let n_0 = true;
+    effect "applicability" = support_applicability(n_0);
+}

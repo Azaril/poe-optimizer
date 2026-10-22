@@ -1,0 +1,9 @@
+program "conditional-command-damage" context action {
+    read "commandable" as r_0: boolean = stat(current, stat.command_damage.channels.commandable);
+    read "received" as r_1: quantity(unit.percentage_points) = stat(actor, stat.command_damage.channels.actor);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = quantity(0, unit.percentage_points);
+    let n_3 = if n_0 { n_1 } else { n_2 };
+    effect "grant" = contribute(current, stat.command_damage.channels.action, increase, n_3);
+}

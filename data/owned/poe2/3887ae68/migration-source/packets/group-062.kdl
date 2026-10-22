@@ -1,0 +1,29 @@
+packet "retained-062" {
+    append definition="passive_node.evasion.ascendancyhuntress1small8" {
+        program "passive-view" source="rules/passive-view/e68bd2cd4aa3096f.rule"
+    }
+    append definition="passive_node.attribute.intelligence10" {
+        program "attribute-choice" source="rules/attribute-choice/d8c13c5dd3be283d.rule"
+    }
+    append definition="passive_node.attribute.dexterity22" {
+        program "attribute-choice" source="rules/attribute-choice/2d15ef603df29608.rule"
+    }
+    append definition="passive_node.attribute.intelligence69" {
+        program "attribute-choice" source="rules/attribute-choice/a103335c0751aab1.rule"
+    }
+    append definition="passive_node.strength.strength101" {
+        program "passive-view" source="rules/passive-view/9949d805bbb9d6f3.rule"
+    }
+    append definition="passive_node.attribute.strength33" {
+        program "attribute-choice" source="rules/attribute-choice/b223c8ddc5cea320.rule"
+    }
+    append definition="passive_node.strength.strength107" {
+        program "passive-view" source="rules/passive-view/f61c4224345a9cf4.rule"
+    }
+    append definition="passive_node.attribute.strength75" {
+        program "attribute-choice" source="rules/attribute-choice/3833eaacc50a46a3.rule"
+    }
+    append definition="passive_node.armour_applies_to_elemental_damage_and_deflection.armour_and_evasion46" {
+        program "passive-view" source="rules/passive-view/28fa616b6859bd55.rule"
+    }
+}

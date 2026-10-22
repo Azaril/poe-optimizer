@@ -1,0 +1,5 @@
+program "local-minimum-add" context equipment_use {
+    read "effective" as r_0: quantity(unit.damage) = stat(modifier, stat.modifier_value_inputs.stats.effective_damage_minimum);
+    let n_0 = r_0;
+    effect "contribute" = contribute(current, stat.local_weapon_inputs.stats.rounded_physical_minimum, add, n_0);
+}

@@ -1,0 +1,5 @@
+program "received-minion-life-increase" context actor {
+    read "increase" as r_0: quantity(unit.percentage_points) = contributions(player, stat.minion_life_increase.carrier, increase, sum, quantity(0, unit.percentage_points));
+    let n_0 = r_0;
+    effect "life-increase" = contribute(current, stat.life, increase, n_0);
+}

@@ -1,0 +1,14 @@
+program "effective-input-preparation" context skill {
+    read "corruption" as r_0: quantity(unit.count) = parameter(parameter.twister.corruption_level_delta);
+    read "raw-level" as r_1: integer = gem_level();
+    read "raw-quality" as r_2: quantity(unit.percentage_points) = gem_quality_amount(quality.standard_quality);
+    let n_0 = r_0;
+    let n_1 = quantity(1, unit.count);
+    let n_2 = r_1;
+    let n_3 = scale_integer(n_1, n_2);
+    let n_4 = n_3 + n_0;
+    let n_5 = max(n_4, n_1);
+    let n_6 = r_2;
+    effect "level" = derive(current, stat.pre_support_skill_level, n_5);
+    effect "quality" = derive(current, stat.pre_support_skill_quality, n_6);
+}

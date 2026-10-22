@@ -1,0 +1,28 @@
+program "rounded-physical-maximum" context equipment_use {
+    read "alternate-quality" as r_0: quantity(unit.factor) = contributions(current, stat.local_weapon_inputs.stats.alternate_physical_quality, add, sum, quantity(0, unit.factor));
+    read "flat" as r_1: quantity(unit.damage) = contributions(current, stat.local_weapon_inputs.stats.rounded_physical_maximum, add, sum, quantity(0, unit.damage));
+    read "increase" as r_2: quantity(unit.percentage_points) = contributions(current, stat.local_weapon_inputs.stats.rounded_physical_maximum, increase, sum, quantity(0, unit.percentage_points));
+    read "quality" as r_3: quantity(unit.percentage_points) = stat(current, stat.item_quality_inputs.quality_stat);
+    read "raw" as r_4: quantity(unit.damage) = stat(current, stat.weapon_profiles.fields.physicalmax.stat);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = r_2;
+    let n_3 = pct(n_2, unit.factor);
+    let n_4 = quantity(1, unit.factor);
+    let n_5 = n_4 + n_3;
+    let n_6 = r_3;
+    let n_7 = r_4;
+    let n_8 = quantity(0.5, unit.damage);
+    let n_9 = n_7 + n_1;
+    let n_10 = scale(n_9, n_5);
+    let n_11 = quantity(0, unit.factor);
+    let n_12 = n_0 > n_11;
+    let n_13 = quantity(0, unit.percentage_points);
+    let n_14 = if n_12 { n_13 } else { n_6 };
+    let n_15 = pct(n_14, unit.factor);
+    let n_16 = n_4 + n_15;
+    let n_17 = scale(n_10, n_16);
+    let n_18 = n_17 + n_8;
+    let n_19 = round(n_18, quantity(1, unit.damage), floor);
+    effect "derive" = derive(current, stat.local_weapon_inputs.stats.rounded_physical_maximum, n_19);
+}

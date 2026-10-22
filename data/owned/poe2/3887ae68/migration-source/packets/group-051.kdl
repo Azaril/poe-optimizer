@@ -1,0 +1,23 @@
+packet "retained-051" {
+    append definition="passive_node.evasion_and_energy_shield_delay.unarmed9" {
+        program "passive-view" source="rules/passive-view/a56e6316b98327e0.rule"
+    }
+    append definition="passive_node.attribute.strength42" {
+        program "attribute-choice" source="rules/attribute-choice/c1392816c137e3af.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana33" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.attribute.dexterity79" {
+        program "attribute-choice" source="rules/attribute-choice/841e0f659c0948fd.rule"
+    }
+    append definition="passive_node.evasion_and_energy_shield.ascendancymonk1small3" {
+        program "passive-view" source="rules/passive-view/63dff5efaae78cc8.rule"
+    }
+    append definition="passive_node.attribute.strength61" {
+        program "attribute-choice" source="rules/attribute-choice/4794c21efa93d085.rule"
+    }
+    append definition="passive_node.attribute.strength5" {
+        program "attribute-choice" source="rules/attribute-choice/2bdbb34243731766.rule"
+    }
+}

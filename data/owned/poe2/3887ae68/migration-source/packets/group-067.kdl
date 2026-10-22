@@ -1,0 +1,29 @@
+packet "retained-067" {
+    append definition="passive_node.armour.armour5" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.armour_applies_to_elemental_damage_and_deflection.armour_and_evasion50" {
+        program "passive-view" source="rules/passive-view/28fa616b6859bd55.rule"
+    }
+    append definition="passive_node.sentinels.sentinels2" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.energy_shield_delay.energy_shield_recovery4" {
+        program "passive-view" source="rules/passive-view/e862b5e979cfcad5.rule"
+    }
+    append definition="passive_node.armour_applies_to_elemental_damage_and_energy_shield_delay.energy_shield_and_armour41" {
+        program "passive-view" source="rules/passive-view/d6a788c2bddf9971.rule"
+    }
+    append definition="passive_node.armour_applies_to_elemental_damage_and_deflection.armour_and_evasion55" {
+        program "passive-view" source="rules/passive-view/75731ca6f80963d4.rule"
+    }
+    append definition="passive_node.energy_shield_and_mana_regeneration.energy_shield13" {
+        program "passive-view" source="rules/passive-view/37fc18b638a0f17a.rule"
+    }
+    append definition="passive_node.attribute.intelligence32" {
+        program "attribute-choice" source="rules/attribute-choice/c9e471426b5eec6e.rule"
+    }
+    append definition="passive_node.attribute.dexterity18" {
+        program "attribute-choice" source="rules/attribute-choice/d65f8c0896423351.rule"
+    }
+}

@@ -1,0 +1,6 @@
+program "sand-tree-raw-supply" context actor {
+    let n_0 = true;
+    let n_1 = quantity(1, unit.count);
+    effect "raw-grant-level" = project_skill_parameter(skill_grant_slot.barya_of_kelari.ascendancysorceress3notable8.djinn_tree_grants.summonsanddjinnplayer.supply, parameter_slot.summonsanddjinnplayer.djinn_actions.raw_level, n_1);
+    effect "tree-grant" = activate_grant(grant_slot.barya_of_kelari.ascendancysorceress3notable8.djinn_tree_grants.summonsanddjinnplayer.grant, n_0);
+}

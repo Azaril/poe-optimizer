@@ -1,0 +1,9 @@
+program "intrinsic-allied-minion-life" context actor {
+    read "level" as r_0: integer = stat(current, stat.sniper_actor_level);
+    let n_0 = r_0;
+    let n_1 = lookup(n_0, "actor.allied-life-by-level");
+    let n_2 = quantity(0.55, unit.factor);
+    let n_3 = scale(n_1, n_2);
+    let n_4 = round(n_3, quantity(1, unit.life), floor);
+    effect "intrinsic-life" = contribute(current, stat.life, add, n_4);
+}

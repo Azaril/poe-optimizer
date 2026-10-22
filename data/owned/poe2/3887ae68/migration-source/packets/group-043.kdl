@@ -1,0 +1,23 @@
+packet "retained-043" {
+    append definition="passive_node.attribute.attributes51" {
+        program "attribute-choice" source="rules/attribute-choice/b18e56549e0afd12.rule"
+    }
+    append definition="passive_node.all_attributes.all_attributes2" {
+        program "passive-view" source="rules/passive-view/2058f701fe304220.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana_regeneration10" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.mana_regeneration.monkchakra1" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.evasion_and_energy_shield_delay.evasion_and_energy_shield6" {
+        program "passive-view" source="rules/passive-view/a56e6316b98327e0.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour50" {
+        program "passive-view" source="rules/passive-view/d6a788c2bddf9971.rule"
+    }
+    append definition="passive_node.armour_applies_to_elemental_damage_and_deflection.armour_and_evasion47" {
+        program "passive-view" source="rules/passive-view/02f9c34144ef26c4.rule"
+    }
+}

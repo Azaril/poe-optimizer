@@ -1,0 +1,32 @@
+packet "retained-004" {
+    append definition="passive_node.evasion_and_energy_shield.evasion_and_energy_shield10" {
+        program "passive-view" source="rules/passive-view/957163ed415cefba.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour3" {
+        program "passive-view" source="rules/passive-view/167aaf37cfa117c3.rule"
+    }
+    append definition="passive_node.attribute.dexterity57" {
+        program "attribute-choice" source="rules/attribute-choice/929ad722ff1c65f1.rule"
+    }
+    append definition="passive_node.mana_regeneration.energy_shield_recovery11" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.strength.strength109" {
+        program "passive-view" source="rules/passive-view/9949d805bbb9d6f3.rule"
+    }
+    append definition="passive_node.attribute.strength41" {
+        program "attribute-choice" source="rules/attribute-choice/0757b2e0bc5111d8.rule"
+    }
+    append definition="passive_node.attribute.strength78" {
+        program "attribute-choice" source="rules/attribute-choice/502099ebac4fcb22.rule"
+    }
+    append definition="passive_node.barya_of_kelari.ascendancysorceress3notable8" {
+        program "sand-tree-raw-supply" source="rules/sand-tree-raw-supply/76017525025a7d70.rule"
+    }
+    append definition="passive_node.attribute.strength3" {
+        program "attribute-choice" source="rules/attribute-choice/c8e17763b39a31e2.rule"
+    }
+    append definition="passive_node.attribute.dexterity3" {
+        program "attribute-choice" source="rules/attribute-choice/1eda0eea2b5c13f3.rule"
+    }
+}

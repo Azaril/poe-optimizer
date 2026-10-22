@@ -1,0 +1,8 @@
+program "permanent-reward-contributions" context actor {
+    let n_0 = quantity(15, unit.percentage_points);
+    let n_1 = quantity(15, unit.percentage_points);
+    let n_2 = quantity(15, unit.percentage_points);
+    effect "grant-0" = contribute(player, stat.permanent_reward_effects.channels.armour, increase, n_0);
+    effect "grant-1" = contribute(player, stat.player_evasion_final.contribution_stat, increase, n_1);
+    effect "grant-2" = contribute(player, stat.global_energy_shield_inputs.contribution, increase, n_2);
+}

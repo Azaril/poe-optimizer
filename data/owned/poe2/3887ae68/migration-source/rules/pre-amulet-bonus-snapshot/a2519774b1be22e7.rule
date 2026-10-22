@@ -1,0 +1,5 @@
+program "pre-amulet-bonus-snapshot" context actor {
+    read "incoming" as r_0: quantity(unit.percentage_points) = contributions(current, stat.amulet_level_copy.channels.pre_amulet_percent, add, sum, quantity(0, unit.percentage_points));
+    let n_0 = r_0;
+    effect "snapshot" = derive(current, stat.amulet_level_copy.channels.pre_amulet_percent, n_0);
+}

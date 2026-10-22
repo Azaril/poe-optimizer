@@ -1,0 +1,47 @@
+packet "retained-048" {
+    append definition="passive_node.energy_shield_delay.energy_shield_recovery30" {
+        program "passive-view" source="rules/passive-view/e862b5e979cfcad5.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour6" {
+        program "passive-view" source="rules/passive-view/167aaf37cfa117c3.rule"
+    }
+    append definition="passive_node.strength.attributes103" {
+        program "passive-view" source="rules/passive-view/f61c4224345a9cf4.rule"
+    }
+    append definition="passive_node.attribute.intelligence33" {
+        program "attribute-choice" source="rules/attribute-choice/dddedddfe47aec6b.rule"
+    }
+    append definition="passive_node.energy_shield.energy_shield23" {
+        program "passive-view" source="rules/passive-view/f1919ea11eb639ae.rule"
+    }
+    append definition="passive_node.dexterity.azmerianimals47" {
+        program "passive-view" source="rules/passive-view/b5daae91c24596b6.rule"
+    }
+    append definition="passive_node.attribute.intelligence46" {
+        program "attribute-choice" source="rules/attribute-choice/c521bc863a3638f8.rule"
+    }
+    append definition="passive_node.sentinels.sentinels4" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.attribute.dexterity30" {
+        program "attribute-choice" source="rules/attribute-choice/6e989caa13800430.rule"
+    }
+    append definition="passive_node.all_attributes.all_attributes13" {
+        program "passive-view" source="rules/passive-view/2058f701fe304220.rule"
+    }
+    append definition="passive_node.attribute.attributes55" {
+        program "attribute-choice" source="rules/attribute-choice/d079f9a1473cad97.rule"
+    }
+    append definition="passive_node.attribute.strength13" {
+        program "attribute-choice" source="rules/attribute-choice/70ded960aab7ba9e.rule"
+    }
+    append definition="passive_node.deflection.deflect23" {
+        program "passive-view" source="rules/passive-view/68efec71f000927f.rule"
+    }
+    append definition="passive_node.attribute.attributes35" {
+        program "attribute-choice" source="rules/attribute-choice/962bc62883864a3e.rule"
+    }
+    append definition="passive_node.attribute.intelligence51" {
+        program "attribute-choice" source="rules/attribute-choice/0d9e4ea940f2cf1d.rule"
+    }
+}

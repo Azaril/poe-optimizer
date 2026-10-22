@@ -1,0 +1,16 @@
+program "raw-base-defence-profile" context equipment_use {
+    let n_0 = false;
+    let n_1 = true;
+    let n_2 = quantity(115, unit.defence_rating);
+    let n_3 = quantity(0, unit.energy_shield_points);
+    let n_4 = quantity(0, unit.defence_rating);
+    let n_5 = quantity(0.05, unit.factor);
+    let n_6 = quantity(43, unit.ward_points);
+    effect "raw-0" = derive(current, stat.defence_profiles.fields.armour.stat, n_2);
+    effect "field-present-1" = capability(current, capability.defence_profiles.fields.blockchance.presence, n_0);
+    effect "raw-2" = derive(current, stat.defence_profiles.fields.energyshield.stat, n_3);
+    effect "raw-3" = derive(current, stat.defence_profiles.fields.evasion.stat, n_4);
+    effect "raw-4" = derive(current, stat.defence_profiles.fields.movementpenalty.stat, n_5);
+    effect "field-present-4" = capability(current, capability.defence_profiles.fields.movementpenalty.presence, n_1);
+    effect "raw-5" = derive(current, stat.defence_profiles.fields.ward.stat, n_6);
+}

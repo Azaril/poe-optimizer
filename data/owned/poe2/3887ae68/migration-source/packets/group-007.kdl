@@ -1,0 +1,29 @@
+packet "retained-007" {
+    append definition="passive_node.attribute.attributes45" {
+        program "attribute-choice" source="rules/attribute-choice/c01c0f9c9faef366.rule"
+    }
+    append definition="passive_node.deflection_and_energy_shield_delay.evasion_and_energy_shield33" {
+        program "passive-view" source="rules/passive-view/9d926eadac60b65e.rule"
+    }
+    append definition="passive_node.energy_shield.energy_shield27" {
+        program "passive-view" source="rules/passive-view/f1919ea11eb639ae.rule"
+    }
+    append definition="passive_node.attribute.dexterity24" {
+        program "attribute-choice" source="rules/attribute-choice/f416c195bc252e51.rule"
+    }
+    append definition="passive_node.evasion.azmerianimals38" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.attribute.dexterity47" {
+        program "attribute-choice" source="rules/attribute-choice/617e213a001d5c2f.rule"
+    }
+    append definition="passive_node.attribute.attributes53" {
+        program "attribute-choice" source="rules/attribute-choice/e6e9a814fac2d235.rule"
+    }
+    append definition="passive_node.attribute.intelligence47" {
+        program "attribute-choice" source="rules/attribute-choice/9fc4c3816dfa38c6.rule"
+    }
+    append definition="passive_node.evasion_and_energy_shield.evasion_and_energy_shield27" {
+        program "passive-view" source="rules/passive-view/957163ed415cefba.rule"
+    }
+}

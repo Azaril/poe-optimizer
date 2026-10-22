@@ -1,0 +1,32 @@
+packet "retained-017" {
+    append definition="passive_node.dexterity.dexterity106" {
+        program "passive-view" source="rules/passive-view/b5daae91c24596b6.rule"
+    }
+    append definition="passive_node.attribute.dexterity58" {
+        program "attribute-choice" source="rules/attribute-choice/bdd16b478dcf5571.rule"
+    }
+    append definition="passive_node.attribute.attributes56" {
+        program "attribute-choice" source="rules/attribute-choice/d18949ede7d34130.rule"
+    }
+    append definition="passive_node.armour_and_evasion.deflect33" {
+        program "passive-view" source="rules/passive-view/5efb2877d139c899.rule"
+    }
+    append definition="passive_node.attribute.dexterity82" {
+        program "attribute-choice" source="rules/attribute-choice/14aefb492e5c3997.rule"
+    }
+    append definition="passive_node.all_attributes.all_attributes15" {
+        program "passive-view" source="rules/passive-view/2058f701fe304220.rule"
+    }
+    append definition="passive_node.strength.strength103" {
+        program "passive-view" source="rules/passive-view/9949d805bbb9d6f3.rule"
+    }
+    append definition="passive_node.attribute.dexterity5" {
+        program "attribute-choice" source="rules/attribute-choice/d72549a4bd0d001a.rule"
+    }
+    append definition="passive_node.evasion.evasion36" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.attribute.dexterity81" {
+        program "attribute-choice" source="rules/attribute-choice/f4f109db443a1012.rule"
+    }
+}

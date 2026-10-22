@@ -1,0 +1,4 @@
+program "amulet-copy-eligibility" context equipment_use {
+    let n_0 = false;
+    effect "eligibility" = derive(current, stat.amulet_level_copy.channels.eligibility, n_0);
+}

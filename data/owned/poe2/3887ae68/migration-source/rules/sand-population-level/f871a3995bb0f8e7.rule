@@ -1,0 +1,10 @@
+program "sand-population-level" context skill {
+    read "level" as r_0: integer = stat(current, stat.prepared_skill_level);
+    let n_0 = r_0;
+    let n_1 = lookup(n_0, "sniper.actor-level");
+    let n_2 = 100;
+    let n_3 = 1;
+    let n_4 = max(n_1, n_3);
+    let n_5 = min(n_4, n_2);
+    effect "population-level" = project_actor_stat(actor_slot.summonsanddjinnplayer.djinn_actions.minion.population, stat.sniper_actor_level, n_5);
+}

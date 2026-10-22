@@ -1,0 +1,31 @@
+program "resolve-player-evasion" context actor {
+    read "base" as r_0: quantity(unit.defence_rating) = contribution_query(current, "player-evasion-base", "sources");
+    read "equipment-subtotal" as r_1: quantity(unit.defence_rating) = stat(current, stat.player_evasion_equipment.subtotal);
+    read "increase" as r_2: quantity(unit.percentage_points) = contribution_query(current, "player-evasion-increase", "sources");
+    read "more" as r_3: quantity(unit.factor) = contribution_query(current, "player-evasion-more", "sources");
+    read "override-present" as r_4: boolean = contribution_selection(current, "player-evasion-global-base-override", "sources", present);
+    read "override-value" as r_5: quantity(unit.defence_rating) = contribution_selection(current, "player-evasion-global-base-override", "sources", value);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = quantity(0.5, unit.defence_rating);
+    let n_3 = r_2;
+    let n_4 = pct(n_3, unit.factor);
+    let n_5 = r_3;
+    let n_6 = quantity(1, unit.factor);
+    let n_7 = n_6 + n_4;
+    let n_8 = r_4;
+    let n_9 = r_5;
+    let n_10 = if n_8 { n_9 } else { n_0 };
+    let n_11 = scale(n_10, n_7);
+    let n_12 = scale(n_11, n_5);
+    let n_13 = n_1 + n_12;
+    let n_14 = quantity(0, unit.defence_rating);
+    let n_15 = n_13 + n_14;
+    let n_16 = n_15 < n_2;
+    let n_17 = check_domain(n_15, quantity(0.5, unit.defence_rating), quantity(4503599627370496, unit.defence_rating));
+    let n_18 = check_domain(n_15, quantity(-179769313486231570000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000, unit.defence_rating), quantity(0.4999999999999999, unit.defence_rating));
+    let n_19 = if n_16 { n_18 } else { n_17 };
+    let n_20 = round(n_19, quantity(1, unit.defence_rating), nearest_ties_positive);
+    let n_21 = max(n_20, n_14);
+    effect "final-evasion" = derive(current, stat.player_evasion_equipment.final, n_21);
+}

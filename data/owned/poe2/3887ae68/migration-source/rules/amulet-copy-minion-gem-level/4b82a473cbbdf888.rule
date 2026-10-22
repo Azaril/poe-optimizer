@@ -1,0 +1,19 @@
+program "amulet-copy-minion-gem-level" context equipment_use {
+    read "effective" as r_0: quantity(unit.count) = stat(modifier, stat.modifier_effective_count);
+    read "eligible" as r_1: boolean = stat(current, stat.amulet_level_copy.channels.eligibility);
+    read "pre-amulet-percent" as r_2: quantity(unit.percentage_points) = stat(player, stat.amulet_level_copy.channels.pre_amulet_percent);
+    read "unscalable" as r_3: boolean = parameter(parameter_slot.category_inputs.modifier.amulet_level_copy.unscalable);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = quantity(1, unit.factor);
+    let n_3 = quantity(100, unit.percentage_points);
+    let n_4 = r_2;
+    let n_5 = ratio(n_4, n_3, unit.factor);
+    let n_6 = n_5 == n_2;
+    let n_7 = scale(n_0, n_5);
+    let n_8 = round(n_7, quantity(1, unit.count), floor);
+    let n_9 = r_3;
+    let n_10 = any(n_6, n_9);
+    let n_11 = if n_10 { n_0 } else { n_8 };
+    effect "copied-minion-level" when n_1 = contribute(player, stat.global_minion_gem_level_addition, add, n_11);
+}

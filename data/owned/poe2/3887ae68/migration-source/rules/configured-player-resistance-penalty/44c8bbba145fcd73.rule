@@ -1,0 +1,7 @@
+program "configured-player-resistance-penalty" context actor {
+    read "penalty" as r_0: quantity(unit.percentage_points) = external(current, external_input.configuration_resistance_penalty.external_input);
+    let n_0 = r_0;
+    effect "fire" = contribute(current, stat.configuration_resistance_penalty.channels.fire, add, n_0);
+    effect "cold" = contribute(current, stat.cold_resistance_base_contributions, add, n_0);
+    effect "lightning" = contribute(current, stat.configuration_resistance_penalty.channels.lightning, add, n_0);
+}

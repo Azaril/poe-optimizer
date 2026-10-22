@@ -1,0 +1,4 @@
+program "template-supplies-base-attack-profile" context equipment_use {
+    let n_0 = false;
+    effect "base-attack-profile-source" = capability(current, capability.item_bases.capability, n_0);
+}

@@ -1,0 +1,7 @@
+program "item-firebolt-raw-supply" context equipment_use {
+    read "raw-level" as r_0: integer = parameter(parameter_slot.firebolt_item_grant.modifier.level);
+    let n_0 = true;
+    let n_1 = r_0;
+    effect "raw-grant-level" = project_skill_parameter(skill_grant_slot.firebolt_item_grant.modifier.supply, parameter_slot.fireboltplayer.firebolt_item_grant.raw_level, n_1);
+    effect "item-grant" = activate_grant(grant_slot.firebolt_item_grant.modifier.grant, n_0);
+}

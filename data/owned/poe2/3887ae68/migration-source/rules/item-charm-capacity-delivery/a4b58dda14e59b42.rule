@@ -1,0 +1,8 @@
+program "item-charm-capacity-delivery" context equipment_use {
+    read "local" as r_0: quantity(unit.count) = contribution_query(current, "equipment-local-charm-capacity", "ordered-local");
+    let n_0 = quantity(0, unit.count);
+    let n_1 = r_0;
+    let n_2 = n_0 + n_1;
+    effect "derived-capacity" = derive(current, stat.item_charm_capacity, n_2);
+    effect "player-capacity" = contribute(player, stat.player_charm_capacity, add, n_2);
+}

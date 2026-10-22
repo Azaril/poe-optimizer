@@ -1,0 +1,4 @@
+program "primary-supply" context actor {
+    let n_0 = true;
+    effect "activate" = activate_grant(grant_slot.skeletalcleric.cleric_ability_supply.primary_grant, n_0);
+}

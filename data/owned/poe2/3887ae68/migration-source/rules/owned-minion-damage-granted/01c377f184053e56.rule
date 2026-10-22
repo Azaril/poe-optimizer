@@ -1,0 +1,5 @@
+program "owned-minion-damage-granted" context actor {
+    read "incoming" as r_0: quantity(unit.percentage_points) = contributions(current, stat.player_granted_minion_damage_increase, increase, sum, quantity(0, unit.percentage_points));
+    let n_0 = r_0;
+    effect "final" = derive(current, stat.player_granted_minion_damage_increase, n_0);
+}

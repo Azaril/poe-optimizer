@@ -16,31 +16,39 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; production release composition `970cdf29`; CLI standard `710ce536`; full retained corpus gate and clap convergence `265b2afb`; current work connects declared DSL sources to release composition |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; release source composition `b9ad595d`; clap convergence `265b2afb`; current checkpoint replaces all retained production program inputs with tracked DSL |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
 | Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation and production release command. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Connected offline modules still need to move out of Import |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | `poe-author rule fmt` and `release build` implemented. Every retained program passes KDL/DSL reconstruction and complete Engine checking. Release composition accepts explicit names/packets/rule sources through that same compiler; integration and CLI tests pass. Tracked `.rule` source cutover, named-registry filesystem CAS, broader declarations and binary pack remain pending |
-| Current release | Tracked `migration-source/release.kdl` and compressed inputs reproduce all 17 constituent artifacts and the exact historical receipt through the production command. No local predecessor needed; evaluation bundle still absent |
+| DSL / KDL / binary pack | Every retained program now comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Exact graph/placement and historical non-program preservation gates pass; named-registry filesystem CAS, broader declarations and binary pack remain pending |
+| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Node renaming changes rule/input identity; other emitted constituents remain byte-exact. No local predecessor needed; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 22:55 UTC, baseline `ae90ec82` run `39857163789` had eight successful jobs and ten running, with no failures. `265b2afb` run `39866525789` was pending; the earlier `710ce536` and `970cdf29` runs were cancelled by main-queue coalescing. This checkpoint needs its own hosted result; no green suite claim |
+| CI | At 23:35 UTC, baseline `ae90ec82` run `39857163789` had nine successful jobs and nine running, with no failures. `b9ad595d` run `39869615765` was last observed pending; the earlier clap/source-builder runs were cancelled by main-queue coalescing. This checkpoint needs its own hosted result; no green suite claim |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release`
-with a fresh output directory. It reproduces the retained release from tracked
-inputs; the latest local validation output is `runs/owned-authoring-release-01`.
-Its historical endpoint was `runs/owned-reverse-primary-cutover-01/endpoint.json`,
-**66,145,838 bytes** against the old 67,108,864-byte bound (about **98.56%**).
-Endpoint SHA-256: `337266997cd5ead1949288f29aad62b9b9604b2acda2b96fb0aacf0cea505ad2`.
-Input identity: `a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905`.
-Validation: `runs/owned-reverse-primary-validation-01/validation.json`.
-These `runs/` paths locate local evidence and are not inputs to the command or CI.
-The tracked bootstrap captures the final constituents and provenance, using
-1,230,522 compressed bytes for 66,145,467 decoded bytes. It preserves the existing
-64 MiB decoded limit and triggers the 80% utilization warning. Replace the
-temporary JSON constituents during R1/R2; gzip is not the compact runtime format.
+with a fresh output directory. Current input identity:
+`d5f7086228a1fe2bfbc7fcdde033fd62741e719aa3af188fc5f3686b33b02406`.
+The 2,784 declared source files use 5,772,456 encoded and 58,564,599 decoded
+bytes, within the existing 64 MiB bounds. The 183,380-byte root manifest and
+4,572,462 expanded rule bytes also fit current limits without increases.
+Metadata JSON remains temporary; gzip is not the compact runtime format.
+The CLI still reports the 80% decoded-size warning; compact-format work remains
+required before expanding content. The production command rebuilt the tracked
+source into `runs/owned-authoring-dsl-release-01` with the expected input identity,
+17 constituent artifacts and all 227 provenance rows.
+
+Historical input
+`a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905`
+and its receipt remain independent regression evidence. Original rule IR lives
+only in Authoring's `tests/fixtures/retained-rules.json.gz`, outside production
+inputs. Actual-source graph checks plus restoration of just historical program
+members prove all non-program metadata/provenance and unrelated artifact bytes
+are unchanged. `runs/dsl-conversion-02/conversion-report.json` records local
+conversion evidence; no `runs/` file or one-off conversion tool is needed by a
+normal source build or CI.
 
 The unfinished generated-singleton import slice is superseded and backed up on
 [branch codex/backup-2026-10-22-pre-dsl](https://github.com/Azaril/poe-optimizer/tree/codex/backup-2026-10-22-pre-dsl)
@@ -358,40 +366,53 @@ review is clear. Logs: `runs/r1-release-tests-final-20261022.log`,
 `runs/r1-host-tests-unrestricted-20261022.log`,
 `runs/r1-release-clippy-20261022.log`, `runs/r1-release-cli-20261022.log`.
 
-**R2 release source composition:** the same production command now accepts
+**R2 release source composition and tracked cutover:** the same production command accepts
 explicit `rule-packet`/`rule-source` declarations, shared exact names and plain
-UTF-8 DSL sources. Packets require program-free rule metadata. Every source has
+UTF-8 DSL sources. All releases require program-free rule metadata, including
+those without packets. Embedded-program admission has been deleted. Every source has
 one role, unused rule files fail, and reused memberships charge expanded work
 individually. Lowering uses the existing packet frontend; the sole assembler
 still checks types, ownership, complete stages and all dependent identities.
-The builder does not repair stale headers. The zero-packet bootstrap reader is
-temporary and must be deleted with tracked source conversion, by R4.
+The builder does not repair stale headers or fall back after DSL errors.
 
 Distinct source capacity is now 4,096, with separate bounds of 128 constituents
 (including query sets), 128 packets and 16 MiB expanded rule text. The corpus
-gate measured 103 packets, 2,561 distinct bodies and about 3.2 MB expanded text;
-these bounds admit that migration without raising the existing 64 MiB encoded
-or decoded limits. Shared files are decoded and charged once; aggregate expanded
+now has 103 packets, 2,561 distinct complete sources and 8,212 exact memberships.
+Its 5,011 semantic aliases include exact declaration owners; bounded local name
+sets avoid a global symbol limit increase. Final expanded text is 4,572,462 bytes.
+The conversion preserves all 6,550 owner/coverage rows, including empty owners,
+and both different owner-qualified inherent-Life programs. Shared files are
+decoded and charged once; aggregate expanded
 program/read/node/effect limits additionally reuse the Engine's release bounds.
 Data is now a normal Authoring dependency for its existing checked schema index;
 the native runtime still has no Authoring dependency.
 
-Validation: **178 Authoring tests pass** (153 library, seven CLI and eighteen
+Validation: **179 Authoring tests pass** (154 library, seven CLI and eighteen
 release), none ignored. Strict all-target Clippy, per-package formatting and the
 normal runtime dependency guard pass. Integration covers independent metric
 observations, complete artifact equality, shared sources and distinct same-ID
 bodies, exact aggregate bounds, invalid symbols/types/authority, cross-packet
 duplicates, source-header mismatches and stale evaluation bindings. The CLI
 publishes DSL-derived artifacts and leaves no output/staging after invalid DSL.
-The tracked bootstrap still reproduces every reference artifact byte-for-byte.
-Two new-fixture assertions needed repair: added marker programs must appear in
-the complete stage inventory, and unordered stage rows compare after canonical
-assembly. Neither repair changes production checks or expected metric values.
-Logs: `runs/r2-release-dsl-tests-20261022.log` (library/CLI pass, initial release
-fixture failure), `runs/r2-release-dsl-tests-final2-20261022.log` (all release
-tests pass), `runs/r2-release-dsl-clippy-20261022.log` and
-`runs/r2-release-dsl-runtime-dependencies-20261022.log`. Hosted results remain
-pending. No original build, game law or production source capture changed.
+The actual tracked-source gate compares every graph and exact owner/program
+position independently of production assembly, then compiles the complete
+package. The archived fixture is authenticated by the historical receipt;
+restoring only its program members reproduces that receipt exactly. The actual
+DSL release changes only rules, derived recipe manifest and release receipt.
+
+Name review excluded unpublished families that reused current IDs for different
+meanings. Shared percent/count, skill-level/quality and damage channels use their
+current roles, rather than a first-introducing family label. Units retain exact
+identities: Count vs Life and action Rate vs flask-charge Rate are not merged.
+Source aliases do not infer mechanics from build names or arbitrary array offsets.
+One-off Rust conversion tooling remains ignored local evidence and is removed
+from Cargo targets; tracked DSL is now the maintained program input.
+
+Logs: `runs/r2-tracked-dsl-tests-final-20261022.log`,
+`runs/r2-tracked-dsl-clippy-20261022.log` and
+`runs/r2-tracked-dsl-runtime-dependencies-20261022.log`; actual CLI build:
+`runs/r2-tracked-dsl-cli-20261022.log`. Hosted results remain
+pending. No original build input, game law, coverage gap or metric changed.
 
 The mixed attribute source audits no longer compare seven historical `.rs` hash
 pins to current Rust files. Lua observer, report/XML, data artifact and upstream
@@ -670,11 +691,14 @@ for deletion at R4. No compatibility reader enters the normal CLI/library path.
 
 ### R2 — Formula DSL and declarative authoring
 
-**Started: complete program syntax, exact symbols, raising/formatting, name/membership KDL, whole-corpus conversion gate and the release source seam.**
-Next move retained real programs and their publication consumers into KDL manifests and `.rule` source, preserving
-full graph alpha-equivalence and executable expectations. Complete the shared behavioral
-harness; do not create a second evaluation model. The current unchecked compiler
-output is not a supported release format or a substitute for full package validation.
+**Retained program source cutover implemented:** complete program syntax, exact
+symbols, raising/formatting, name/membership KDL, whole-corpus conversion gates
+and production release composition. All retained program occurrences now come
+from tracked DSL; normal release construction rejects embedded program members.
+Broader declarations and historical publication-consumer retirement remain.
+Complete the shared behavioral harness; do not create a second evaluation model.
+Unchecked compiler output is not a supported release format or a substitute for
+full package validation.
 
 Implement Rust parsing, spans, symbol resolution, formatting and exact lowering
 of `.rule` files into the existing checked IR. Add KDL definition/packet manifests
@@ -866,47 +890,31 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. Prioritize **whole-release program migration**
-   through the new production release command. First use the tracked bootstrap
-   for one Rust corpus gate over every owner-qualified program: raise/lower,
-   compare keyed graphs up to node names, then compile through the existing
-   Engine. Reuse the current comparator and fixtures; do not create a family
-   publisher or evaluator. Measure required symbol and expanded-node budgets.
-   There are 2,561 distinct complete program bodies and 2,631 nonempty owners;
-   exact-body deduplication can retain all 8,212 memberships within current packet
-   source/append counts. Keep all 6,550 owner/coverage rows, including empty owners.
-   The full schema has 13,264 addresses. The read-only name audit found 5,011
-   needed by the retained owner/program corpus, including declaration owners;
-   4,952 have primary binding/policy/mapping evidence, and the remaining 59 have
-   exact supplemental records. This is address availability, not approval to turn
-   arbitrary JSON array paths into semantic names. Use typed reference collection,
-   explicit semantic adapters and reviewed aliases for the remaining entries.
-   Both inventories exceed the default per-file symbol bound; keep bounded local
-   name sets (the corpus gate's measured maximum is 921), not a global limit bump.
-   Local audit evidence: `runs/dsl-name-coverage-audit.json` and
-   `runs/dsl-name-gap-evidence.json`. Future generation must use tracked inputs.
-   The release source seam now composes program-free rule metadata with names,
-   KDL packets and `.rule` sources using the existing packet compiler and release
-   assembler, with integration and CLI validation passing. Use it for tracked
-   source conversion next. Remove packet-free embedded-program admission with that conversion,
-   by R4; no production DSL error may fall back to it.
-   Preserve tables, receiver/query/application inventories and partial closure.
-   Preserve both owner-specific `contribute-inherent-strength-life` variants:
-   the Player's seven-node checked-range successor and supplied Actor's six-node
-   program. Never substitute by program ID alone. Node renaming changes artifact
-   identity; prove semantic equivalence before updating `expected_input`, without
-   replaying historical stages or rewriting reference evidence.
-   Named-registry filesystem CAS, full schema declarations, compact typed codec
-   and immutable runtime-loader extraction remain separate migration gates. Keep
-   Authoring out of the runtime dependency closure and reuse the shared Host
-   publisher. The focused verification
-   command is `cargo test --locked -p poe-optimizer-authoring --all-targets`
-   with the bounded optimized profile used by CI. Follow the `clap` standard for
-   every new CLI change; convergence is implemented and locally tested, with
-   hosted confirmation pending. Continue R0 source-pin removal and CLI/PoB suite
-   consolidation alongside that work, using the audited hazards above. Retain
-   actual upstream/content authentication. Serialize Cargo jobs in this shared
-   checkout; parallel agents own disjoint files.
+1. Read this plan and Git status. Next extract the **checked published-release
+   loader** before moving the offline assembler out of Import. Today
+   `src/owned_release_cli.rs::load_release` reconstructs `OwnedReleaseInput` and
+   invokes offline assembly; metric and source-action commands consume that
+   result, and metric evaluation compiles rules again. Moving the assembler into
+   Authoring first would pull Authoring into these runtime callers.
+   Separate immutable registry validation from allocation in
+   `owned_mapping/registry.rs`, and role loading from catalog compilation in
+   `owned_skill_catalog.rs`, preserving the validators used by normalization.
+   Replace runtime loading with one checked immutable artifact snapshot using
+   existing types and validators; update callers directly, with no compatibility
+   loader or alternate evaluator. Then relocate the sole offline assembler and
+   allocator into Authoring. The bounded checkpoint exit is release consumption
+   without source reconstruction, artifact regeneration or offline assembly,
+   preserving metric observations and malformed-artifact failures.
+   Keep Authoring out of runtime dependencies. This does not by itself remove
+   Import's legacy Data/Engine default features; their deletion remains R1/R4.
+   Named-registry filesystem CAS, full schema/table declarations and the compact
+   typed runtime codec remain separate gates. Preserve the completed whole-corpus
+   DSL checks, exact owner membership and partial coverage during those changes.
+   The focused source verification command is
+   `cargo test --locked -p poe-optimizer-authoring --all-targets` with CI's bounded
+   optimized profile. Follow the `clap` standard for every new CLI change.
+   Continue R0 source-pin removal and CLI/PoB suite consolidation in disjoint
+   files; retain actual upstream/content authentication. Serialize Cargo jobs.
 2. Record the current phase, concrete blocker, changes, tests actually run and
    next command. During R0-R4 report migration gates, not invented build progress.
    Re-run all five when import/data semantics change; do not replay expensive

@@ -1,0 +1,5 @@
+program "received-minion-gigantic" context actor {
+    read "grants" as r_0: boolean = contribution_query(player, "minion-gigantic-grants", "sources");
+    let n_0 = r_0;
+    effect "active" = derive(current, stat.gigantic_following.receiver.stat, n_0);
+}

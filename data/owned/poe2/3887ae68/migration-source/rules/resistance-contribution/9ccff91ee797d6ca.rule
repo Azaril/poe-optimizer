@@ -1,0 +1,4 @@
+program "resistance-contribution" context actor {
+    let n_0 = quantity(5, unit.percentage_points);
+    effect "amount-0" = contribute(player, stat.cold_resistance_base_contributions, add, n_0);
+}

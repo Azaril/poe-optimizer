@@ -1,0 +1,5 @@
+program "resolve-intelligence-mana-disabled" context actor {
+    read "sources" as r_0: boolean = contribution_query(current, "inherent-flag-intelligence-mana-disabled", "sources");
+    let n_0 = r_0;
+    effect "resolved" = derive(current, stat.intelligence_mana_bonus_disabled, n_0);
+}

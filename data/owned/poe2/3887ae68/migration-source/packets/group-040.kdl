@@ -1,0 +1,24 @@
+packet "retained-040" {
+    append definition="passive_node.mana_regeneration.mana_regeneration31" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.attribute.attributes73" {
+        program "attribute-choice" source="rules/attribute-choice/1628b0f659e2379f.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour47" {
+        program "passive-view" source="rules/passive-view/d6a788c2bddf9971.rule"
+    }
+    append definition="passive_node.attribute.intelligence64" {
+        program "attribute-choice" source="rules/attribute-choice/4b10309f965dca40.rule"
+    }
+    append definition="passive_node.deflection.armour_and_evasion35" {
+        program "passive-view" source="rules/passive-view/68efec71f000927f.rule"
+    }
+    append definition="passive_node.minion_damage_and_command_speed.archon19" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/58c467b9b9a337e9.rule"
+        program "ordinary-command-cooldown" source="rules/ordinary-command-cooldown/ff3e800b24b4dc9e.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana_regeneration15" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+}

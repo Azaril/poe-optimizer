@@ -1,0 +1,42 @@
+packet "retained-102" {
+    append definition="stat.intelligence_inherent_bonuses_disabled" {
+        program "resolve-intelligence-inherent-disabled" source="rules/resolve-intelligence-inherent-disabled/a026d9b264cc4c47.rule"
+    }
+    append definition="stat.intelligence_mana_bonus_disabled" {
+        program "resolve-intelligence-mana-disabled" source="rules/resolve-intelligence-mana-disabled/6d0053e195e5923b.rule"
+    }
+    append definition="modifier.skeletal_warrior.item_provider" {
+        program "item-warrior-raw-supply" source="rules/item-warrior-raw-supply/2dd7e6a75a0461e6.rule"
+    }
+    append definition="stat.permanent_reward_effects.channels.mana" {
+        program "resolve-player-mana" source="rules/resolve-player-mana/adf8f36155267457.rule"
+    }
+    append definition="stat.player_incoming_critical_chance" {
+        program "resolve-player-incoming-critical-chance" source="rules/resolve-player-incoming-critical-chance/4d3d1a139be4d92f.rule"
+    }
+    append definition="stat.player_incoming_extra_critical_damage" {
+        program "resolve-player-incoming-critical-bonus" source="rules/resolve-player-incoming-critical-bonus/7ad8298ee4282c3f.rule"
+    }
+    append definition="stat.player_incoming_critical_damage_factor" {
+        program "resolve-player-incoming-critical-factor" source="rules/resolve-player-incoming-critical-factor/dfb63e5e1d59a241.rule"
+    }
+    append definition="stat.life" {
+        program "resolve-player-life" source="rules/resolve-player-life/40957b60a73cbd07.rule"
+    }
+    append definition="stat.player_spirit_pool.final" {
+        program "resolve-player-spirit" source="rules/resolve-player-spirit/746eb706cee35958.rule"
+    }
+    append definition="stat.player_evasion_equipment.final" {
+        program "resolve-player-evasion" source="rules/resolve-player-evasion/aeba730ebeb85fba.rule"
+    }
+    append definition="stat.item_local_evasion" {
+        program "resolve-item-local-evasion" source="rules/resolve-item-local-evasion/fa0008b685b99cd8.rule"
+    }
+    append definition="stat.player_evasion_equipment.property" {
+        program "resolve-item-final-evasion" source="rules/resolve-item-final-evasion/5c40c6b03b854f34.rule"
+    }
+    append definition="reward.configbossfacebroken" {
+        program "campaign-progression-fact" source="rules/campaign-progression-fact/24be8a68d16c2bc8.rule"
+        program "campaign-progression-authority" source="rules/campaign-progression-authority/d5e036eb6af67a1f.rule"
+    }
+}

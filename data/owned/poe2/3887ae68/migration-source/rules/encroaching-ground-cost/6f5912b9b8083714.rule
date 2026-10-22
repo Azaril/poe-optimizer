@@ -1,0 +1,4 @@
+program "encroaching-ground-cost" context action {
+    let n_0 = quantity(1.1, unit.factor);
+    effect "cost-factor" = contribute(current, stat.magnified_area_support_delivery.channels.cost_factor, multiply, n_0);
+}

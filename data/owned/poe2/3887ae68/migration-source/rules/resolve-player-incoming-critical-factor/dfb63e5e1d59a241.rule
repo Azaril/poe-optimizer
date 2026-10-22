@@ -1,0 +1,22 @@
+program "resolve-player-incoming-critical-factor" context actor {
+    read "category" as r_0: option = external(enemy, external_input.incoming_damage_inputs.category_input);
+    read "extra-damage-reduction" as r_1: quantity(unit.percentage_points) = stat(current, stat.player_extra_critical_damage_reduction);
+    read "final-bonus" as r_2: quantity(unit.percentage_points) = stat(current, stat.player_incoming_extra_critical_damage);
+    read "final-chance" as r_3: quantity(unit.percentage_points) = stat(current, stat.player_incoming_critical_chance);
+    let n_0 = r_0;
+    let n_1 = option(option.player_critical_receivers.damage_over_time);
+    let n_2 = r_1;
+    let n_3 = pct(n_2, unit.factor);
+    let n_4 = r_2;
+    let n_5 = pct(n_4, unit.factor);
+    let n_6 = r_3;
+    let n_7 = pct(n_6, unit.factor);
+    let n_8 = scale(n_7, n_5);
+    let n_9 = n_0 == n_1;
+    let n_10 = not n_9;
+    let n_11 = quantity(1, unit.factor);
+    let n_12 = n_11 - n_3;
+    let n_13 = scale(n_8, n_12);
+    let n_14 = n_11 + n_13;
+    effect "critical-effect" when n_10 = derive(current, stat.player_incoming_critical_damage_factor, n_14);
+}

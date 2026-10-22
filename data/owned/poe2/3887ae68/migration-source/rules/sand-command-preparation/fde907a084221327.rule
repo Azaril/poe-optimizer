@@ -1,0 +1,8 @@
+program "sand-command-preparation" context skill {
+    read "level" as r_0: integer = stat(current, stat.prepared_skill_level);
+    read "quality" as r_1: quantity(unit.percentage_points) = stat(current, stat.prepared_skill_quality);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    effect "command-level" = project_skill_parameter(skill_grant_slot.summonsanddjinnplayer.djinn_actions.command.supply, parameter.sand_command.level, n_0);
+    effect "command-quality" = project_skill_parameter(skill_grant_slot.summonsanddjinnplayer.djinn_actions.command.supply, parameter.sand_command.quality, n_1);
+}

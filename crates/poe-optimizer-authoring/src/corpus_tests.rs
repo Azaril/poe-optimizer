@@ -1,5 +1,5 @@
-//! Migration gate over every retained owner/program, not a build-parity claim.
-//! Synthetic aliases are test inputs only; production names require semantic review.
+//! Migration gates over every retained owner/program, not a build-parity claim.
+//! Synthetic round trips and actual tracked aliases are checked independently.
 use crate::*;
 use flate2::read::GzDecoder;
 use poe_optimizer_core::{
@@ -13,7 +13,7 @@ use poe_optimizer_engine::owned_rules::CompiledRulePackage;
 use std::{
     collections::{BTreeMap, BTreeSet},
     fmt::Write as _,
-    fs::File,
+    fs::{self, File},
     io::Read as _,
     path::Path,
 };
@@ -240,6 +240,14 @@ fn bootstrap<T: serde::de::DeserializeOwned>(name: &str) -> T {
     let path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../../data/owned/poe2/3887ae68/migration-source/bootstrap")
         .join(name);
+    gzip_json(&path)
+}
+
+fn retained_rules() -> RulePackageInput {
+    gzip_json(&Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"))
+}
+
+fn gzip_json<T: serde::de::DeserializeOwned>(path: &Path) -> T {
     let maximum = 64 * 1024 * 1024;
     let mut bytes = Vec::new();
     GzDecoder::new(File::open(path).unwrap())
@@ -254,7 +262,7 @@ fn bootstrap<T: serde::de::DeserializeOwned>(name: &str) -> T {
 fn entire_retained_corpus_roundtrips_through_kdl_packets_and_the_existing_engine() {
     let schema =
         OwnedDefinitionSchemaPackage::new(bootstrap("schema.json.gz"), Default::default()).unwrap();
-    let original: RulePackageInput = bootstrap("rules.json.gz");
+    let original = retained_rules();
     // Establish the retained reference is accepted before changing its representation.
     drop(CompiledRulePackage::compile(&original, &schema, Default::default()).unwrap());
     let mut after = original.clone();
@@ -405,5 +413,197 @@ fn entire_retained_corpus_roundtrips_through_kdl_packets_and_the_existing_engine
         max symbols {max_symbols}, names bytes {max_names_bytes}, program bytes {max_program_bytes}, \
         packet manifest bytes {max_packet_bytes}, expanded DSL bytes {expanded_bytes}",
         distinct.len()
+    );
+}
+
+#[test]
+fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../data/owned/poe2/3887ae68/migration-source");
+    let text = fs::read_to_string(root.join("release.kdl")).unwrap();
+    let limits = ReleaseBuildLimits::default();
+    let manifest = parse_release_manifest(&text, limits).unwrap();
+    let owned: BTreeMap<_, _> = manifest
+        .sources()
+        .iter()
+        .map(|spec| {
+            (
+                spec.path().to_owned(),
+                fs::read(root.join(spec.path())).unwrap(),
+            )
+        })
+        .collect();
+    let sources: Vec<_> = owned
+        .iter()
+        .map(|(path, bytes)| ReleaseSource { path, bytes })
+        .collect();
+    let release = build_release(&manifest, &sources, limits).unwrap();
+    let schema = release.release().assembled().schema();
+    let actual = &release.release().input().recipe.rules;
+    let original = retained_rules();
+    drop(CompiledRulePackage::compile(&original, schema, Default::default()).unwrap());
+
+    // The public release parser validates the manifest. Its existing flat KDL
+    // decoder also exposes the actual packet/name pairing to this test without
+    // adding a production accessor or a separate manifest reader.
+    let document = crate::manifest_parse::parse_document(&text, limits.manifest).unwrap();
+    let declarations = &document.nodes[document.roots[0]].children;
+    let mut packets = BTreeMap::new();
+    let mut declared_sources = BTreeSet::new();
+    for &index in declarations {
+        let node = &document.nodes[index];
+        match node.name.as_str() {
+            "rule-packet" => {
+                assert!(
+                    packets
+                        .insert(node.arguments[0].clone(), node.properties["names"].clone())
+                        .is_none()
+                );
+            }
+            "rule-source" => {
+                assert!(declared_sources.insert(node.arguments[0].clone()));
+            }
+            _ => {}
+        }
+    }
+    let packet_count = packets.len();
+    let mut used_sources = BTreeSet::new();
+    let mut after = original.clone();
+    for owner in &mut after.owners {
+        owner.programs.members.clear();
+    }
+    let mut expected = after.clone();
+    let mut occurrences = 0;
+    for (group, owners) in original.owners.chunks(64).enumerate() {
+        let owners: Vec<_> = owners
+            .iter()
+            .enumerate()
+            .filter(|(_, owner)| !owner.programs.members.is_empty())
+            .collect();
+        if owners.is_empty() {
+            continue;
+        }
+        let path = format!("packets/group-{group:03}.kdl");
+        let names = packets
+            .remove(&path)
+            .unwrap_or_else(|| panic!("missing corpus packet {path}"));
+        let symbols = load_names(
+            std::str::from_utf8(&owned[&names]).unwrap(),
+            schema,
+            NamesLimits::default(),
+        )
+        .unwrap();
+        let packet = parse_packet(
+            std::str::from_utf8(&owned[&path]).unwrap(),
+            &symbols,
+            ManifestLimits::default(),
+        )
+        .unwrap();
+        assert_eq!(
+            packet.appends.len(),
+            owners.len(),
+            "{path}: exact owner membership"
+        );
+        let referenced: BTreeSet<_> = packet
+            .appends
+            .iter()
+            .flat_map(|append| &append.programs)
+            .map(|program| program.source.as_str())
+            .collect();
+        let sources: Vec<_> = referenced
+            .iter()
+            .map(|&name| {
+                assert!(
+                    declared_sources.contains(name),
+                    "undeclared rule source {name}"
+                );
+                used_sources.insert(name.to_owned());
+                RuleSource {
+                    name,
+                    text: std::str::from_utf8(&owned[name]).unwrap(),
+                }
+            })
+            .collect();
+        let lowered = lower_packet(
+            &packet,
+            &sources,
+            schema,
+            &symbols,
+            &original.tables,
+            PacketLimits::default(),
+        )
+        .unwrap_or_else(|error| panic!("{path}: {error}"));
+        let by_source: BTreeMap<_, _> = lowered
+            .programs()
+            .iter()
+            .map(|source| (source.source.as_str(), &source.lowered))
+            .collect();
+        assert_eq!(by_source.len(), referenced.len());
+        for ((owner_index, owner), append) in owners.iter().zip(&packet.appends) {
+            assert_eq!(
+                append.owner, owner.owner,
+                "{path}: exact original owner position"
+            );
+            assert_eq!(append.programs.len(), owner.programs.members.len());
+            for (program, member) in owner.programs.members.iter().zip(&append.programs) {
+                assert_eq!(
+                    member.id, program.id,
+                    "{path}: exact original program position"
+                );
+                let lowered = by_source[member.source.as_str()];
+                let raised = raise_program(program, &symbols, RaiseLimits::default())
+                    .unwrap_or_else(|error| {
+                        panic!("{path} {:?}/{}: {error}", owner.owner, program.id)
+                    });
+                assert!(
+                    std::panic::catch_unwind(|| crate::raise_tests::compare_graph(
+                        program, &raised, lowered
+                    ))
+                    .is_ok(),
+                    "tracked alpha-equivalence {path} {:?}/{} source {}",
+                    owner.owner,
+                    program.id,
+                    member.source
+                );
+                // Placement is keyed by the archived inventory, independently of
+                // the packet application and the production release composer.
+                expected.owners[group * 64 + *owner_index]
+                    .programs
+                    .members
+                    .push(lowered.program.clone());
+                occurrences += 1;
+            }
+        }
+        drop(by_source);
+        lowered.apply_to(&mut after).unwrap();
+    }
+    assert!(
+        packets.is_empty(),
+        "every tracked packet must match an original owner group"
+    );
+    assert_eq!(
+        used_sources, declared_sources,
+        "every declared source must be checked"
+    );
+    assert_eq!(
+        occurrences,
+        original
+            .owners
+            .iter()
+            .map(|owner| owner.programs.members.len())
+            .sum::<usize>()
+    );
+    assert_eq!(
+        after, expected,
+        "exact independently assembled owner/program placement"
+    );
+    assert_eq!(
+        actual, &expected,
+        "production composition preserves every graph and metadata field"
+    );
+    drop(CompiledRulePackage::compile(actual, schema, Default::default()).unwrap());
+    eprintln!(
+        "tracked corpus: {occurrences} occurrences, {} distinct sources, {packet_count} packets",
+        used_sources.len()
     );
 }

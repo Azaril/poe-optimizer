@@ -1,0 +1,4 @@
+program "reaver-actor-supply" context skill {
+    let n_0 = true;
+    effect "activate" = activate_grant(grant_slot.summonskeletalreaversplayer.skeletal_inputs.reaver.minion.entering_grant, n_0);
+}

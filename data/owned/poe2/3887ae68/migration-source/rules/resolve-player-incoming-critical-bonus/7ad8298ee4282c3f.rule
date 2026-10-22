@@ -1,0 +1,21 @@
+program "resolve-player-incoming-critical-bonus" context actor {
+    read "category" as r_0: option = external(enemy, external_input.incoming_damage_inputs.category_input);
+    read "configured-damage" as r_1: quantity(unit.percentage_points) = external(enemy, external_input.enemy_critical_strike_damage);
+    read "enemy-bonus-base" as r_2: quantity(unit.percentage_points) = stat(enemy, stat.enemy_critical_damage_bonus_base);
+    read "enemy-bonus-increase" as r_3: quantity(unit.percentage_points) = stat(enemy, stat.enemy_hit_critical_damage_bonus_increase);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = option(option.player_critical_receivers.damage_over_time);
+    let n_3 = r_2;
+    let n_4 = n_1 + n_3;
+    let n_5 = r_3;
+    let n_6 = pct(n_5, unit.factor);
+    let n_7 = n_0 == n_2;
+    let n_8 = not n_7;
+    let n_9 = quantity(1, unit.factor);
+    let n_10 = n_9 + n_6;
+    let n_11 = scale(n_4, n_10);
+    let n_12 = quantity(0, unit.percentage_points);
+    let n_13 = max(n_11, n_12);
+    effect "damage-bonus" when n_8 = derive(current, stat.player_incoming_extra_critical_damage, n_13);
+}

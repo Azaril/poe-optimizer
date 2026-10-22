@@ -1,0 +1,21 @@
+program "sniper-final-inputs" context actor {
+    read "pre-support-level" as r_0: quantity(unit.count) = stat(property_owner, stat.pre_support_skill_level);
+    read "pre-support-quality" as r_1: quantity(unit.percentage_points) = stat(property_owner, stat.pre_support_skill_quality);
+    let n_0 = quantity(40, unit.count);
+    let n_1 = quantity(1, unit.count);
+    let n_2 = r_0;
+    let n_3 = quantize_integer(n_2, quantity(1, unit.count), truncate);
+    let n_4 = n_2 >= n_1;
+    let n_5 = n_2 <= n_0;
+    let n_6 = scale_integer(n_1, n_3);
+    let n_7 = n_2 == n_6;
+    let n_8 = all(n_7, n_4, n_5);
+    let n_9 = r_1;
+    let n_10 = quantity(0, unit.percentage_points);
+    let n_11 = n_9 >= n_10;
+    let n_12 = quantity(1000000, unit.percentage_points);
+    let n_13 = n_9 <= n_12;
+    let n_14 = all(n_11, n_13);
+    effect "project-final-level" when n_8 = project_skill_parameter(skill_grant_slot.sniper_primary_skill, parameter_slot.sniper_level, n_3);
+    effect "project-final-quality" when n_14 = project_skill_parameter(skill_grant_slot.sniper_primary_skill, parameter_slot.sniper_quality, n_9);
+}

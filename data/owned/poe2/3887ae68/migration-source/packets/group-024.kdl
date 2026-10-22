@@ -1,0 +1,41 @@
+packet "retained-024" {
+    append definition="passive_node.evasion_rating.stun_threshold18" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.attribute.intelligence43" {
+        program "attribute-choice" source="rules/attribute-choice/c2fa079056230507.rule"
+    }
+    append definition="passive_node.energy_shield.ascendancysorceress3small1" {
+        program "passive-view" source="rules/passive-view/638836132cef5ebd.rule"
+    }
+    append definition="passive_node.energy_shield.energy_shield14" {
+        program "passive-view" source="rules/passive-view/96faccce5a9a7f26.rule"
+    }
+    append definition="passive_node.attribute.attributes2" {
+        program "attribute-choice" source="rules/attribute-choice/bbc5c05029c68e53.rule"
+    }
+    append definition="passive_node.armour.armour1" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.attribute.attributes40" {
+        program "attribute-choice" source="rules/attribute-choice/898c77d1b9f536b5.rule"
+    }
+    append definition="passive_node.energy_shield_delay.energy_shield_recovery5" {
+        program "passive-view" source="rules/passive-view/e862b5e979cfcad5.rule"
+    }
+    append definition="passive_node.attribute.attributes9" {
+        program "attribute-choice" source="rules/attribute-choice/c1775f855632e675.rule"
+    }
+    append definition="passive_node.deflection.deflect57" {
+        program "passive-view" source="rules/passive-view/68efec71f000927f.rule"
+    }
+    append definition="passive_node.attribute.attributes11" {
+        program "attribute-choice" source="rules/attribute-choice/de47b9ea4a47c47b.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana4" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.attribute.intelligence38" {
+        program "attribute-choice" source="rules/attribute-choice/f98e3d98c33a94ce.rule"
+    }
+}

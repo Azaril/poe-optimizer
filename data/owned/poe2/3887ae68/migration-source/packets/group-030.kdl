@@ -1,0 +1,17 @@
+packet "retained-030" {
+    append definition="passive_node.all_attributes.attributes108" {
+        program "passive-view" source="rules/passive-view/2058f701fe304220.rule"
+    }
+    append definition="passive_node.attribute.attributes33" {
+        program "attribute-choice" source="rules/attribute-choice/383044065486e5a8.rule"
+    }
+    append definition="passive_node.attribute.strength79" {
+        program "attribute-choice" source="rules/attribute-choice/9c41d2236192028e.rule"
+    }
+    append definition="passive_node.attribute.strength89" {
+        program "attribute-choice" source="rules/attribute-choice/01ce3d8467729fec.rule"
+    }
+    append definition="passive_node.armour_applies_to_elemental_damage_and_deflection.armour_and_evasion56" {
+        program "passive-view" source="rules/passive-view/02f9c34144ef26c4.rule"
+    }
+}

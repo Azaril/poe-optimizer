@@ -1,0 +1,21 @@
+program "contribute-inherent-intelligence-mana" context actor {
+    read "all-disabled" as r_0: boolean = stat(current, stat.no_attribute_bonuses);
+    read "doubled" as r_1: boolean = stat(current, stat.inherent_attribute_bonuses_doubled);
+    read "intelligence" as r_2: integer = stat(current, stat.attributes.lanes.intnodes.stat);
+    read "intelligence-disabled" as r_3: boolean = stat(current, stat.intelligence_inherent_bonuses_disabled);
+    read "mana-disabled" as r_4: boolean = stat(current, stat.intelligence_mana_bonus_disabled);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = r_2;
+    let n_3 = r_3;
+    let n_4 = r_4;
+    let n_5 = any(n_0, n_3, n_4);
+    let n_6 = not n_5;
+    let n_7 = quantity(2, unit.mana_points);
+    let n_8 = scale_integer(n_7, n_2);
+    let n_9 = 1;
+    let n_10 = 2;
+    let n_11 = if n_1 { n_10 } else { n_9 };
+    let n_12 = scale_integer(n_8, n_11);
+    effect "inherent-mana" when n_6 = contribute(current, stat.permanent_reward_effects.channels.mana, add, n_12);
+}

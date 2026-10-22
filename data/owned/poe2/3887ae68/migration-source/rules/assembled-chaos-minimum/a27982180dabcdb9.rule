@@ -1,0 +1,8 @@
+program "assembled-chaos-minimum" context equipment_use {
+    read "flat" as r_0: quantity(unit.damage) = contributions(current, stat.elemental_weapon_inputs.channels.chaos.minimum.stat, add, sum, quantity(0, unit.damage));
+    read "raw" as r_1: quantity(unit.damage) = stat(current, stat.weapon_profiles.fields.chaosmin.stat);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = n_1 + n_0;
+    effect "derive" = derive(current, stat.elemental_weapon_inputs.channels.chaos.minimum.stat, n_2);
+}

@@ -1,0 +1,223 @@
+packet "retained-101" {
+    append definition="gem.encroachinggroundsupport" {
+        program "encroaching-ground-prepared-inputs" source="rules/encroaching-ground-prepared-inputs/cce44f5ab6e5a30e.rule"
+        program "encroaching-ground-applicability" source="rules/encroaching-ground-applicability/0b2588ef0b09f09d.rule"
+        program "encroaching-ground-cost" source="rules/encroaching-ground-cost/6f5912b9b8083714.rule"
+    }
+    append definition="gem.magnifiedareasupporttwo" {
+        program "magnified-area-ii-prepared-inputs" source="rules/magnified-area-ii-prepared-inputs/017b923738efdb2d.rule"
+        program "magnified-area-applicability" source="rules/magnified-area-applicability/9a78a9b0466eb629.rule"
+        program "magnified-area-and-cost" source="rules/magnified-area-and-cost/a26e985e50f4ade1.rule"
+        program "magnified-area-damage" source="rules/magnified-area-damage/7247002276bf0cc5.rule"
+    }
+    append definition="gem.rapidcastingsupport" {
+        program "rapid-casting-i-prepared-inputs" source="rules/rapid-casting-i-prepared-inputs/0fe6e0014293ab27.rule"
+        program "rapid-casting-applicability" source="rules/rapid-casting-applicability/96150410346b5947.rule"
+        program "rapid-casting-cast-speed" source="rules/rapid-casting-cast-speed/ac775518de38c975.rule"
+    }
+    append definition="gem.rapidcastingsupporttwo" {
+        program "rapid-casting-ii-prepared-inputs" source="rules/rapid-casting-ii-prepared-inputs/0f9477e0d2088226.rule"
+        program "rapid-casting-applicability" source="rules/rapid-casting-applicability/96150410346b5947.rule"
+        program "rapid-casting-cast-speed" source="rules/rapid-casting-cast-speed/5a1fa7c29e4fb378.rule"
+    }
+    append definition="gem.astralprojectionsupport" {
+        program "astral-projection-prepared-inputs" source="rules/astral-projection-prepared-inputs/d8eece3551595dca.rule"
+    }
+    append definition="gem.uhtredexodussupport" {
+        program "exodus-prepared-inputs" source="rules/exodus-prepared-inputs/689649e88996ad18.rule"
+        program "exodus-source-level" source="rules/exodus-source-level/6f861df277a0d9ce.rule"
+    }
+    append definition="reward.questact_1freythornking_in_the_mists" {
+        program "flat-resource-contribution" source="rules/flat-resource-contribution/91affe792354e76c.rule"
+    }
+    append definition="reward.questact_1ogham_manorcandlemass" {
+        program "flat-resource-contribution" source="rules/flat-resource-contribution/ac84f268aa79bd65.rule"
+    }
+    append definition="reward.questact_3azak_bogignagduk" {
+        program "flat-resource-contribution" source="rules/flat-resource-contribution/91affe792354e76c.rule"
+    }
+    append definition="reward.questinterlude_3kriar_villagelythara" {
+        program "flat-resource-contribution" source="rules/flat-resource-contribution/cc1fa2b4f37723d0.rule"
+    }
+    append definition="reward.questact_2spires_of_desharsisters_of_garukhan_shrine" {
+        program "permanent-reward-contributions" source="rules/permanent-reward-contributions/61f833056e9e1787.rule"
+    }
+    append definition="reward.questact_3jiquani_s_machinariumblackjaw" {
+        program "permanent-reward-contributions" source="rules/permanent-reward-contributions/b60cf793d24d9dfe.rule"
+    }
+    append definition="reward.questact_4eye_of_hinekorasilent_hall" {
+        program "permanent-reward-contributions" source="rules/permanent-reward-contributions/e188a3c4baa66e15.rule"
+    }
+    append definition="reward.questact_4eye_of_hinekoratribal_medicine" {
+        program "permanent-reward-contributions" source="rules/permanent-reward-contributions/afbf5062ef6def32.rule"
+    }
+    append definition="reward.questact_4halls_of_the_deadngamahu_s_test" {
+        program "permanent-reward-contributions" source="rules/permanent-reward-contributions/6f50cdd7e73547dc.rule"
+    }
+    append definition="reward.questact_4halls_of_the_deadtawhoa_s_test" {
+        program "permanent-reward-contributions" source="rules/permanent-reward-contributions/68375c7838e3a237.rule"
+    }
+    append definition="reward.questinterlude_2khari_crossingmolten_shrine" {
+        program "permanent-reward-contributions" source="rules/permanent-reward-contributions/b10f4344a9cfd390.rule"
+    }
+    append definition="reward.qimah_seven_pillars.global_defences" {
+        program "permanent-reward-contributions" source="rules/permanent-reward-contributions/d782f66a73863de1.rule"
+    }
+    append definition="stat.command_cooldown.channels.player" {
+        program "player-owned-command-cooldown" source="rules/player-owned-command-cooldown/95ca4ec5a893a484.rule"
+    }
+    append definition="stat.command_cooldown.channels.actor" {
+        program "sniper-received-command-cooldown" source="rules/sniper-received-command-cooldown/9cd3a1d4437924f3.rule"
+    }
+    append definition="reward.questact_2valley_of_the_titansmedallion" {
+        program "reward-recovery-contributions" source="rules/reward-recovery-contributions/0f38c92033f22792.rule"
+    }
+    append definition="reward.questact_3venom_cryptsvenom_draught" {
+        program "reward-recovery-contributions" source="rules/reward-recovery-contributions/fcce9612a62038b5.rule"
+    }
+    append definition="reward.questact_4abandoned_prisongoddess_of_justice" {
+        program "reward-recovery-contributions" source="rules/reward-recovery-contributions/a81fb60248738079.rule"
+    }
+    append definition="stat.growing_swarm.channels.cooldown_player" {
+        program "player-owned-minion-cooldown" source="rules/player-owned-minion-cooldown/57c99a532ab3004e.rule"
+    }
+    append definition="stat.growing_swarm.channels.cooldown_actor" {
+        program "sniper-received-unconditional-cooldown" source="rules/sniper-received-unconditional-cooldown/b95bb5375cb7c195.rule"
+    }
+    append definition="stat.growing_swarm.channels.area_player" {
+        program "player-owned-minion-area" source="rules/player-owned-minion-area/c647946e69034511.rule"
+    }
+    append definition="stat.growing_swarm.channels.area_actor" {
+        program "sniper-received-minion-area" source="rules/sniper-received-minion-area/4f7b9a828b14f11e.rule"
+    }
+    append definition="gem.biddingsupportthree" {
+        program "minion-command-applicability" source="rules/minion-command-applicability/0ee2ae55bc0efcc9.rule"
+        program "minion-command-delivery" source="rules/minion-command-delivery/89ffae3c6a44b6b1.rule"
+    }
+    append definition="gem.biddingsupporttwo" {
+        program "minion-command-applicability" source="rules/minion-command-applicability/0ee2ae55bc0efcc9.rule"
+        program "minion-command-delivery" source="rules/minion-command-delivery/88306860db585677.rule"
+    }
+    append definition="gem.magnifiedareasupport" {
+        program "magnified-area-applicability" source="rules/magnified-area-applicability/9a78a9b0466eb629.rule"
+        program "magnified-area-and-cost" source="rules/magnified-area-and-cost/b8311e4466d5b759.rule"
+    }
+    append slot="action_output.icenovaplayer.primary" {
+        program "area-modifier-eligibility" source="rules/area-modifier-eligibility/f9496c515097668d.rule"
+    }
+    append definition="gem.prolongeddurationsupport" {
+        program "prolonged-duration-1-prepared-inputs" source="rules/prolonged-duration-1-prepared-inputs/4668163c16266071.rule"
+        program "prolonged-duration-applicability" source="rules/prolonged-duration-applicability/4071efa2d50bafdd.rule"
+        program "prolonged-duration-factors" source="rules/prolonged-duration-factors/ac8aba9391779431.rule"
+    }
+    append definition="gem.prolongeddurationsupporttwo" {
+        program "prolonged-duration-2-prepared-inputs" source="rules/prolonged-duration-2-prepared-inputs/47cda0c06bd4dd00.rule"
+        program "prolonged-duration-applicability" source="rules/prolonged-duration-applicability/4071efa2d50bafdd.rule"
+        program "prolonged-duration-factors" source="rules/prolonged-duration-factors/6d84d704ede5ccfa.rule"
+    }
+    append definition="stat.amulet_level_copy.channels.pre_amulet_percent" {
+        program "pre-amulet-bonus-snapshot" source="rules/pre-amulet-bonus-snapshot/a2519774b1be22e7.rule"
+    }
+    append definition="stat.command_damage.channels.player" {
+        program "player-owned-command-damage" source="rules/player-owned-command-damage/b735430984014332.rule"
+    }
+    append definition="stat.command_damage.channels.actor" {
+        program "sniper-received-command-damage" source="rules/sniper-received-command-damage/a8bbcd159e87edcc.rule"
+    }
+    append definition="stat.ordinary_item_routing.channels.player_retention_factor" {
+        program "ordinary-amulet-retention-factor" source="rules/ordinary-amulet-retention-factor/a53b7159f07a55dc.rule"
+    }
+    append definition="stat.gigantic_following.receiver.stat" {
+        program "received-minion-gigantic" source="rules/received-minion-gigantic/cf3a07b3fdfdbb85.rule"
+    }
+    append definition="stat.local_defence_composition.channels.pre_override_armour" {
+        program "pre-override-local-armour" source="rules/pre-override-local-armour/a1a0253b9040806b.rule"
+    }
+    append definition="stat.local_defence_composition.channels.pre_override_energy_shield" {
+        program "pre-override-local-energy-shield" source="rules/pre-override-local-energy-shield/72a1288e224f84a3.rule"
+    }
+    append definition="stat.inherent_life" {
+        program "inherent-strength-life" source="rules/inherent-strength-life/1de231e7c635f497.rule"
+    }
+    append definition="stat.attribute_empty_more.stages.strength_first.output" {
+        program "strength-first-step" source="rules/strength-first-step/65debfb671d5f487.rule"
+    }
+    append definition="stat.attribute_empty_more.stages.strength_first.effective_more" {
+        program "strength-first-empty-more" source="rules/strength-first-empty-more/6b29de9f28c54f58.rule"
+    }
+    append definition="stat.attribute_empty_more.stages.dexterity_first.output" {
+        program "dexterity-first-step" source="rules/dexterity-first-step/043884ceaa507e1f.rule"
+    }
+    append definition="stat.attribute_empty_more.stages.dexterity_first.effective_more" {
+        program "dexterity-first-empty-more" source="rules/dexterity-first-empty-more/3a1e9e55256c9383.rule"
+    }
+    append definition="stat.attribute_empty_more.stages.intelligence_first.output" {
+        program "intelligence-first-step" source="rules/intelligence-first-step/b77affa86f8f8efc.rule"
+    }
+    append definition="stat.attribute_empty_more.stages.intelligence_first.effective_more" {
+        program "intelligence-first-empty-more" source="rules/intelligence-first-empty-more/f942c439463ed2d6.rule"
+    }
+    append definition="stat.strength_life.strength" {
+        program "strength-second-step" source="rules/strength-second-step/3bb7e811ea1d0da5.rule"
+    }
+    append definition="stat.attribute_empty_more.stages.strength_second.effective_more" {
+        program "strength-second-empty-more" source="rules/strength-second-empty-more/faf344d9704472b9.rule"
+    }
+    append definition="stat.attributes.lanes.dexnodes.stat" {
+        program "dexterity-second-step" source="rules/dexterity-second-step/7f8194f94ec70a9f.rule"
+    }
+    append definition="stat.attribute_empty_more.stages.dexterity_second.effective_more" {
+        program "dexterity-second-empty-more" source="rules/dexterity-second-empty-more/ec74dd3bda7fa00f.rule"
+    }
+    append definition="stat.attributes.lanes.intnodes.stat" {
+        program "intelligence-second-step" source="rules/intelligence-second-step/320a7faf8c0277ec.rule"
+    }
+    append definition="stat.attribute_empty_more.stages.intelligence_second.effective_more" {
+        program "intelligence-second-empty-more" source="rules/intelligence-second-empty-more/b22ead5cf9e821a7.rule"
+    }
+    append definition="actor.player" {
+        program "intrinsic-player-life" source="rules/intrinsic-player-life/a1d1dc54cadb5f98.rule"
+        program "selected-player-offhand-facts" source="rules/selected-player-offhand-facts/726b0b026b512e2f.rule"
+        program "configured-player-resistance-penalty" source="rules/configured-player-resistance-penalty/44c8bbba145fcd73.rule"
+        program "contribute-inherent-strength-life" source="rules/contribute-inherent-strength-life/8a1032793646248a.rule"
+        program "intrinsic-player-mana" source="rules/intrinsic-player-mana/f899639ba3152ca3.rule"
+        program "contribute-inherent-intelligence-mana" source="rules/contribute-inherent-intelligence-mana/02a75d7e3c2049d9.rule"
+        program "intrinsic-player-evasion" source="rules/intrinsic-player-evasion/92f56d6c19ad7da5.rule"
+        program "player-equipment-evasion" source="rules/player-equipment-evasion/e6a39b5ba337e2d1.rule"
+        program "selected-body-movement-penalty" source="rules/selected-body-movement-penalty/7a1f8f03e13bb104.rule"
+    }
+    append definition="usage_policy.skill_participation.policy" {
+        program "requested-skill-participation" source="rules/requested-skill-participation/d854fb2984ed3d83.rule"
+    }
+    append definition="modifier.global_energy_shield_inputs.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/53a13edef792eabe.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/803e6aef0449529c.rule"
+        program "contribute-player-global-energy-shield" source="rules/contribute-player-global-energy-shield/1ce3c68cfb87d2fa.rule"
+        program "effective-amount" source="rules/effective-amount/4cefdc26b6dbb5c3.rule"
+    }
+    append definition="stat.no_attribute_bonuses" {
+        program "resolve-all-inherent-disabled" source="rules/resolve-all-inherent-disabled/698d0746985a592c.rule"
+    }
+    append definition="stat.no_strength_attribute_bonuses" {
+        program "resolve-strength-inherent-disabled" source="rules/resolve-strength-inherent-disabled/0f67d83f524801e8.rule"
+    }
+    append definition="stat.no_strength_life" {
+        program "resolve-strength-life-disabled" source="rules/resolve-strength-life-disabled/22c25b47f4974db6.rule"
+    }
+    append definition="stat.inherent_attribute_bonuses_doubled" {
+        program "resolve-inherent-doubled" source="rules/resolve-inherent-doubled/2009ecb1d3bfc46f.rule"
+    }
+    append definition="stat.strength_life.inputs.strength_life_halved" {
+        program "resolve-strength-life-halved" source="rules/resolve-strength-life-halved/127137944f7c2058.rule"
+    }
+    append definition="stat.minion_unconditional_damage_increase" {
+        program "owned-minion-unconditional-damage-increase" source="rules/owned-minion-unconditional-damage-increase/0151c2c7f68a7912.rule"
+    }
+    append definition="stat.minion_unconditional_damage_increase_factor" {
+        program "owned-minion-unconditional-increase-factor" source="rules/owned-minion-unconditional-increase-factor/a0e00792125f30c8.rule"
+    }
+    append definition="stat.gigantic_benefits.channels.damage_more" {
+        program "owned-minion-unconditional-more-factor" source="rules/owned-minion-unconditional-more-factor/75266962da6bda98.rule"
+    }
+}

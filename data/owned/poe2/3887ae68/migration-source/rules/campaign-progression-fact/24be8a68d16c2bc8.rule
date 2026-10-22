@@ -1,0 +1,7 @@
+program "campaign-progression-fact" context actor {
+    read "raw-count" as r_0: integer = parameter(parameter.campaign_progression.bosses_defeated);
+    let n_0 = 1;
+    let n_1 = r_0;
+    effect "campaign-bosses-defeated" = contribute(current, stat.campaign_bosses_defeated, override, n_1);
+    effect "campaign-progression-authority" = contribute(current, stat.campaign_progression_authority_count, add, n_0);
+}

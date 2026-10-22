@@ -1,0 +1,14 @@
+program "owned-minion-unconditional-more-factor" context actor {
+    read "contributions" as r_0: quantity(unit.factor) = contribution_query(current, "owned-minion-unconditional-more-contributions", "sources");
+    read "quality" as r_1: quantity(unit.factor) = stat(current, stat.sniper_quality_damage_factor);
+    let n_0 = r_0;
+    let n_1 = quantity(0.5, unit.factor);
+    let n_2 = quantity(100, unit.factor);
+    let n_3 = r_1;
+    let n_4 = scale(n_3, n_0);
+    let n_5 = scale(n_4, n_2);
+    let n_6 = n_5 + n_1;
+    let n_7 = round(n_6, quantity(1, unit.factor), floor);
+    let n_8 = divide_factor(n_7, n_2);
+    effect "factor" = derive(current, stat.gigantic_benefits.channels.damage_more, n_8);
+}

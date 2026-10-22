@@ -1,0 +1,5 @@
+program "sniper-received-command-cooldown" context actor {
+    read "incoming" as r_0: quantity(unit.percentage_points) = stat(player, stat.command_cooldown.channels.player);
+    let n_0 = r_0;
+    effect "final" = derive(current, stat.command_cooldown.channels.actor, n_0);
+}

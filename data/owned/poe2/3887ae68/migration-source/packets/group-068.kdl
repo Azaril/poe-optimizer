@@ -1,0 +1,38 @@
+packet "retained-068" {
+    append definition="passive_node.mystic_attunement.ascendancyhuntress3notable1" {
+        program "mystic-attunement-amulet-percent" source="rules/mystic-attunement-amulet-percent/35c83b8ddc527842.rule"
+    }
+    append definition="passive_node.strength.attributes109" {
+        program "passive-view" source="rules/passive-view/f61c4224345a9cf4.rule"
+    }
+    append definition="passive_node.attribute.dexterity46" {
+        program "attribute-choice" source="rules/attribute-choice/79744cd561e4e824.rule"
+    }
+    append definition="passive_node.mana_regeneration.ascendancysorceress1small2" {
+        program "passive-view" source="rules/passive-view/e8c26fad640589c5.rule"
+    }
+    append definition="passive_node.energy_shield.energy_shield29" {
+        program "passive-view" source="rules/passive-view/f1919ea11eb639ae.rule"
+    }
+    append definition="passive_node.minion_damage_and_duration.minion_reservation7" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/58c467b9b9a337e9.rule"
+    }
+    append definition="passive_node.attribute.dexterity63" {
+        program "attribute-choice" source="rules/attribute-choice/710af781a4ccf766.rule"
+    }
+    append definition="passive_node.energy_shield_delay_and_armour_applies_to_elemental_damage.energy_shield_and_armour22" {
+        program "passive-view" source="rules/passive-view/2705ab0e2773f30c.rule"
+    }
+    append definition="passive_node.minion_damage.ascendancymercenary1small9" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/4f246a99d36cf983.rule"
+    }
+    append definition="passive_node.attribute.strength38" {
+        program "attribute-choice" source="rules/attribute-choice/0ab2d8e991bf9249.rule"
+    }
+    append definition="passive_node.armour.armour47" {
+        program "passive-view" source="rules/passive-view/16738bf4b8045fec.rule"
+    }
+    append definition="passive_node.attribute.dexterity26" {
+        program "attribute-choice" source="rules/attribute-choice/b5633ce331d3ccb6.rule"
+    }
+}

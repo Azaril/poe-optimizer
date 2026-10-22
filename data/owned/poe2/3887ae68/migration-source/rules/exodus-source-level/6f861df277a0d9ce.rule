@@ -1,0 +1,8 @@
+program "exodus-source-level" context support_origin {
+    read "source-count" as r_0: integer = stat(property_owner, stat.non_hidden_skill_source_count);
+    let n_0 = quantity(3, unit.count);
+    let n_1 = 1;
+    let n_2 = r_0;
+    let n_3 = n_2 == n_1;
+    effect "source-level" when n_3 = contribute(property_owner, stat.supported_skill_level_addition, add, n_0);
+}

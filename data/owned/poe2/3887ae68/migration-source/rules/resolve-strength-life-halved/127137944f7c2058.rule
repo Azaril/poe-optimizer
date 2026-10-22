@@ -1,0 +1,5 @@
+program "resolve-strength-life-halved" context actor {
+    read "sources" as r_0: boolean = contribution_query(current, "inherent-flag-strength-life-halved", "sources");
+    let n_0 = r_0;
+    effect "resolved" = derive(current, stat.strength_life.inputs.strength_life_halved, n_0);
+}

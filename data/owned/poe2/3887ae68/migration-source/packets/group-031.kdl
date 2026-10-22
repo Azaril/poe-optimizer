@@ -1,0 +1,29 @@
+packet "retained-031" {
+    append definition="passive_node.command_skill_cooldown.minion_offence49" {
+        program "ordinary-command-cooldown" source="rules/ordinary-command-cooldown/be8d35f10a04685f.rule"
+    }
+    append definition="passive_node.attribute.dexterity59" {
+        program "attribute-choice" source="rules/attribute-choice/5b7547d59fe410df.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana7" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.attribute.intelligence36" {
+        program "attribute-choice" source="rules/attribute-choice/b1eef1e62f255662.rule"
+    }
+    append definition="passive_node.attribute.dexterity34" {
+        program "attribute-choice" source="rules/attribute-choice/de828abc347ba317.rule"
+    }
+    append definition="passive_node.energy_shield_delay.energy_shield_recovery26" {
+        program "passive-view" source="rules/passive-view/e862b5e979cfcad5.rule"
+    }
+    append definition="passive_node.spell_and_minion_damage.spells53" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.deflection_and_energy_shield_delay.energy_shield_recovery7" {
+        program "passive-view" source="rules/passive-view/9d926eadac60b65e.rule"
+    }
+    append definition="passive_node.evasion_and_energy_shield_delay.evasion_and_energy_shield21" {
+        program "passive-view" source="rules/passive-view/a56e6316b98327e0.rule"
+    }
+}

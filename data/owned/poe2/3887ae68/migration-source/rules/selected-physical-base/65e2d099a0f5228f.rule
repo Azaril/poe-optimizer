@@ -1,0 +1,21 @@
+program "selected-physical-base" context action {
+    read "added-multiplier" as r_0: quantity(unit.factor) = stat(current, stat.selected_physical_base.combined_factor);
+    read "self-flat-max" as r_1: quantity(unit.damage) = contribution_query(current, "selected-physical-self-flat-maximum", "sources");
+    read "self-flat-min" as r_2: quantity(unit.damage) = contribution_query(current, "selected-physical-self-flat-minimum", "sources");
+    read "source-max" as r_3: quantity(unit.damage) = stat(current, stat.minion_attack_selection.selected_routes.intrinsic_minion_physical_max.target_stat);
+    read "source-min" as r_4: quantity(unit.damage) = stat(current, stat.minion_attack_selection.selected_routes.intrinsic_minion_physical_min.target_stat);
+    let n_0 = r_0;
+    let n_1 = quantity(1, unit.factor);
+    let n_2 = r_1;
+    let n_3 = scale(n_2, n_0);
+    let n_4 = r_2;
+    let n_5 = scale(n_4, n_0);
+    let n_6 = r_3;
+    let n_7 = r_4;
+    let n_8 = n_6 + n_3;
+    let n_9 = scale(n_8, n_1);
+    let n_10 = n_7 + n_5;
+    let n_11 = scale(n_10, n_1);
+    effect "base-min" = derive(current, stat.selected_physical_base_minimum, n_11);
+    effect "base-max" = derive(current, stat.selected_physical_base_maximum, n_9);
+}

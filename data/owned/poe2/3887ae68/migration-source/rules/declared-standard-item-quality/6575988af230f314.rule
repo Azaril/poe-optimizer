@@ -1,0 +1,5 @@
+program "declared-standard-item-quality" context equipment_use {
+    read "quality" as r_0: quantity(unit.percentage_points) = item_quality_amount(quality.standard_quality);
+    let n_0 = r_0;
+    effect "publish-quality" = derive(current, stat.item_quality_inputs.quality_stat, n_0);
+}

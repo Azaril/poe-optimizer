@@ -1,0 +1,4 @@
+program "flat-resource-contribution" context actor {
+    let n_0 = quantity(30, unit.spirit_points);
+    effect "grant" = contribute(player, stat.player_spirit_pool.final, add, n_0);
+}

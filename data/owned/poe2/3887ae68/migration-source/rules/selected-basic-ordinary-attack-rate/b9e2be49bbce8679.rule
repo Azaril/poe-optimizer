@@ -1,0 +1,20 @@
+program "selected-basic-ordinary-attack-rate" context action {
+    read "intrinsic-rate" as r_0: quantity(unit.action_rate) = stat(current, stat.offering_speed_rate.intrinsic_attack_rate);
+    read "speed-increase" as r_1: quantity(unit.percentage_points) = contribution_query(actor, "pain-offering-speed-contributions", "pain-offering-speed");
+    let n_0 = r_0;
+    let n_1 = quantity(1, unit.factor);
+    let n_2 = quantity(1, unit.action_rate);
+    let n_3 = ratio(n_2, n_0, unit.factor);
+    let n_4 = quantity(1, unit.seconds);
+    let n_5 = scale(n_4, n_3);
+    let n_6 = 1;
+    let n_7 = r_1;
+    let n_8 = quantity(0.033, unit.seconds);
+    let n_9 = ratio(n_4, n_8, unit.factor);
+    let n_10 = scale(n_2, n_9);
+    let n_11 = quantity(0, unit.seconds);
+    let n_12 = n_5 + n_11;
+    let n_13 = scale(n_12, n_1);
+    let n_14 = ordinary_timing(n_13, n_7, n_1, n_11, n_11, n_1, n_6, n_10, 2, unit.seconds, unit.action_rate, action_rate);
+    effect "attack-rate" = derive(current, stat.physical_hit_dps.inputs.rate.stat, n_14);
+}

@@ -1,0 +1,41 @@
+packet "retained-039" {
+    append definition="passive_node.essence_infusion.energy_shield_recovery16" {
+        program "passive-view" source="rules/passive-view/a3da58d74fbad80a.rule"
+    }
+    append definition="passive_node.attribute.attributes74" {
+        program "attribute-choice" source="rules/attribute-choice/78c8a85a6a4bd75f.rule"
+    }
+    append definition="passive_node.deflection.armour_and_evasion43" {
+        program "passive-view" source="rules/passive-view/68efec71f000927f.rule"
+    }
+    append definition="passive_node.intelligence.azmerianimals59" {
+        program "passive-view" source="rules/passive-view/01eada0298883e6d.rule"
+    }
+    append definition="passive_node.attribute.dexterity65" {
+        program "attribute-choice" source="rules/attribute-choice/64265e19b99afa04.rule"
+    }
+    append definition="passive_node.all_attributes.all_attributes14" {
+        program "passive-view" source="rules/passive-view/2058f701fe304220.rule"
+    }
+    append definition="passive_node.attribute.strength34" {
+        program "attribute-choice" source="rules/attribute-choice/90de0995bf62b64c.rule"
+    }
+    append definition="passive_node.attribute.attributes25" {
+        program "attribute-choice" source="rules/attribute-choice/c231dfdbc4f4a549.rule"
+    }
+    append definition="passive_node.attribute.dexterity27" {
+        program "attribute-choice" source="rules/attribute-choice/7d28c49135d874db.rule"
+    }
+    append definition="passive_node.attribute.dexterity86" {
+        program "attribute-choice" source="rules/attribute-choice/022fd6627faccdb6.rule"
+    }
+    append definition="passive_node.attribute.attributes39" {
+        program "attribute-choice" source="rules/attribute-choice/271e8a903c8f0827.rule"
+    }
+    append definition="passive_node.evasion_and_energy_shield.evasion_and_energy_shield8" {
+        program "passive-view" source="rules/passive-view/957163ed415cefba.rule"
+    }
+    append definition="passive_node.energy_shield_delay.energy_shield_recovery32" {
+        program "passive-view" source="rules/passive-view/e862b5e979cfcad5.rule"
+    }
+}

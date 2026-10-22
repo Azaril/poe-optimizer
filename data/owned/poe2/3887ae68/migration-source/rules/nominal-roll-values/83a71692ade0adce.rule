@@ -1,0 +1,10 @@
+program "nominal-roll-values" context equipment_use {
+    read "amount" as r_0: quantity(unit.percentage_points) = parameter(parameter_slot.modifier_value_inputs.attack_speed_increase.predecessor.slot_migration.canonical_unrounded_amount.predecessor);
+    read "reduced" as r_1: boolean = parameter(parameter_slot.modifier_value_inputs.attack_speed_increase.predecessor.slot_migration.reduced.predecessor);
+    let n_0 = r_0;
+    let n_1 = quantity(-1, unit.factor);
+    let n_2 = scale(n_0, n_1);
+    let n_3 = r_1;
+    let n_4 = if n_3 { n_2 } else { n_0 };
+    effect "nominal-amount" = derive(modifier, stat.local_modifier_inputs.stats.nominal_percent, n_4);
+}

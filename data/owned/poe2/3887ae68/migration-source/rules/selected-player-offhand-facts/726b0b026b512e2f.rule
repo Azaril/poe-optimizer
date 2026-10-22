@@ -1,0 +1,15 @@
+program "selected-player-offhand-facts" context actor {
+    read "focus" as r_0: boolean = player_equipment_slot(equipment_slot.weapon_2, capability(capability.player_offhand_facts.capabilities.focus));
+    read "occupied" as r_1: boolean = player_equipment_slot(equipment_slot.weapon_2, occupied());
+    read "shield" as r_2: boolean = player_equipment_slot(equipment_slot.weapon_2, capability(capability.player_offhand_facts.capabilities.shield));
+    let n_0 = false;
+    let n_1 = r_0;
+    let n_2 = r_1;
+    let n_3 = not n_2;
+    let n_4 = if n_2 { n_1 } else { n_0 };
+    let n_5 = r_2;
+    let n_6 = if n_2 { n_5 } else { n_0 };
+    effect "selected-offhand-empty" = derive(current, stat.player_offhand_facts.stats.empty, n_3);
+    effect "selected-offhand-shield" = derive(current, stat.player_offhand_facts.stats.shield, n_6);
+    effect "selected-offhand-focus" = derive(current, stat.player_offhand_facts.stats.focus, n_4);
+}

@@ -1,0 +1,7 @@
+program "campaign-progression-authority" context actor {
+    read "authority-count" as r_0: integer = contribution_query(current, "campaign-progression-authority", "sources");
+    let n_0 = r_0;
+    let n_1 = 1;
+    let n_2 = n_0 == n_1;
+    effect "unique-progression-authority" = requirement(n_2, "exactly-one-campaign-progression-authority");
+}

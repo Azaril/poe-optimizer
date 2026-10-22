@@ -1,0 +1,4 @@
+program "pain-offering-primary-supply" context skill {
+    let n_0 = true;
+    effect "activate-primary" = activate_grant(grant_slot.painoffering.pain_offering.primary_grant, n_0);
+}

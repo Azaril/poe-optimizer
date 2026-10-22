@@ -1,0 +1,356 @@
+packet "retained-099" {
+    append definition="item_template.zealot_crown" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/4fc96f58362404cf.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.zealot_gauntlets" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/53938fa513c00c16.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.zealot_greathammer" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/36ba598650c77129.rule"
+        program "raw-base-attack-profile" source="rules/raw-base-attack-profile/0824245382e24d17.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "catalyst-inputs" source="rules/catalyst-inputs/3ba7b225ef3c5436.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="item_template.zenith_vestments" {
+        program "template-supplies-base-attack-profile" source="rules/template-supplies-base-attack-profile/501fdd04cec88a0b.rule"
+        program "raw-base-defence-profile" source="rules/raw-base-defence-profile/1c9939e83f86248d.rule"
+        program "declared-standard-item-quality" source="rules/declared-standard-item-quality/6575988af230f314.rule"
+        program "selected-item-offhand-classification" source="rules/selected-item-offhand-classification/347de0fd7f8a794d.rule"
+    }
+    append definition="stat.local_weapon_inputs.stats.pre_override_attack_rate" {
+        program "pre-override-attack-rate" source="rules/pre-override-attack-rate/6865616ec94bb87e.rule"
+    }
+    append definition="stat.local_weapon_inputs.stats.pre_override_critical_chance" {
+        program "pre-override-critical-chance" source="rules/pre-override-critical-chance/29cfcfe914af502b.rule"
+    }
+    append definition="stat.local_weapon_inputs.stats.rounded_physical_minimum" {
+        program "rounded-physical-minimum" source="rules/rounded-physical-minimum/b2ca22a6bf8fa0ce.rule"
+    }
+    append definition="stat.local_weapon_inputs.stats.rounded_physical_maximum" {
+        program "rounded-physical-maximum" source="rules/rounded-physical-maximum/b56a127b7ebd0add.rule"
+    }
+    append definition="modifier.modifier_value_inputs.physical_increase.predecessor" {
+        program "nominal-roll-values" source="rules/nominal-roll-values/fa1596f1235eeb95.rule"
+    }
+    append definition="modifier.modifier_value_inputs.attack_speed_increase.predecessor" {
+        program "nominal-roll-values" source="rules/nominal-roll-values/83a71692ade0adce.rule"
+    }
+    append definition="modifier.modifier_value_inputs.critical_increase.predecessor" {
+        program "nominal-roll-values" source="rules/nominal-roll-values/ff9a9c1dd750e9dc.rule"
+    }
+    append definition="modifier.modifier_value_inputs.critical_flat.predecessor" {
+        program "nominal-roll-values" source="rules/nominal-roll-values/d5e0a274f371715e.rule"
+    }
+    append definition="modifier.modifier_value_inputs.physical_flat.predecessor" {
+        program "nominal-roll-values" source="rules/nominal-roll-values/c6bce6f9d56034e2.rule"
+    }
+    append definition="modifier.modifier_value_inputs.cold_flat.predecessor" {
+        program "nominal-roll-values" source="rules/nominal-roll-values/3dfabdc23ea4883d.rule"
+    }
+    append definition="modifier.modifier_value_inputs.fire_flat.predecessor" {
+        program "nominal-roll-values" source="rules/nominal-roll-values/b8fafd578f313d61.rule"
+    }
+    append definition="modifier.modifier_value_inputs.lightning_flat.predecessor" {
+        program "nominal-roll-values" source="rules/nominal-roll-values/74b75c89e16563bd.rule"
+    }
+    append definition="modifier.modifier_value_inputs.chaos_flat.predecessor" {
+        program "nominal-roll-values" source="rules/nominal-roll-values/21e3045fe061cb9b.rule"
+    }
+    append definition="modifier.cold_item_delivery.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/e84ce1aeba226d5e.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/6095ec151e0b295b.rule"
+        program "effective-amount" source="rules/effective-amount/69a39449088ce1ca.rule"
+        program "contribute-player-cold-resistance" source="rules/contribute-player-cold-resistance/e1efbb0ff42e616e.rule"
+    }
+    append definition="modifier.modifier_value_inputs.elemental_resistance.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/c2c51e385519cb98.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/fbe7fd213f8dc98d.rule"
+        program "effective-amount" source="rules/effective-amount/c16eea7b10a3041f.rule"
+    }
+    append definition="modifier.local_scaling_inputs.physical_increase.modifier" {
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/21912687a06c7740.rule"
+        program "effective-amount" source="rules/effective-amount/fcb602fcaf61c901.rule"
+        program "catalyst-scalar" source="rules/catalyst-scalar/dd8629f2b42d2443.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "local-minimum-increase" source="rules/local-minimum-increase/5a4a417b268b421c.rule"
+        program "local-maximum-increase" source="rules/local-maximum-increase/f83b020e3ec399a4.rule"
+    }
+    append definition="modifier.local_scaling_inputs.attack_speed_increase.modifier" {
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/fb0e7cbc08115976.rule"
+        program "effective-amount" source="rules/effective-amount/8558101f18204756.rule"
+        program "catalyst-scalar" source="rules/catalyst-scalar/b920986078f3497f.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "local-attack-rate-increase" source="rules/local-attack-rate-increase/455d1046efb81085.rule"
+    }
+    append definition="modifier.local_scaling_inputs.critical_increase.modifier" {
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/1d40413623074a70.rule"
+        program "effective-amount" source="rules/effective-amount/b8cac4ff4f3ca94e.rule"
+        program "catalyst-scalar" source="rules/catalyst-scalar/b1f9b6712594d44c.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "local-critical-chance-increase" source="rules/local-critical-chance-increase/4ad0a0b07997c7a8.rule"
+    }
+    append definition="modifier.local_scaling_inputs.critical_flat.modifier" {
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/fb6ca6184a18263d.rule"
+        program "effective-amount" source="rules/effective-amount/93cfce84d1080996.rule"
+        program "catalyst-scalar" source="rules/catalyst-scalar/ada8c00b2a2a735b.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "local-critical-chance-add" source="rules/local-critical-chance-add/b41d7893f3532f2e.rule"
+    }
+    append definition="modifier.local_scaling_inputs.physical_flat.modifier" {
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/ba36d27c24546e71.rule"
+        program "effective-maximum" source="rules/effective-maximum/86e754c5731e685c.rule"
+        program "effective-minimum" source="rules/effective-minimum/6de076f88c988cce.rule"
+        program "catalyst-scalar" source="rules/catalyst-scalar/ac693136687898db.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "local-minimum-add" source="rules/local-minimum-add/8239ca52f8b573ae.rule"
+        program "local-maximum-add" source="rules/local-maximum-add/fded4af941cf0822.rule"
+    }
+    append definition="modifier.local_scaling_inputs.cold_flat.modifier" {
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/1e97254f56adfd52.rule"
+        program "effective-maximum" source="rules/effective-maximum/65b20be4ff2db8f8.rule"
+        program "effective-minimum" source="rules/effective-minimum/dc5e09bae80a407c.rule"
+        program "catalyst-scalar" source="rules/catalyst-scalar/be7f3d594569d421.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "local-minimum-add" source="rules/local-minimum-add/3437523027b03918.rule"
+        program "local-maximum-add" source="rules/local-maximum-add/f47ff8e1a5fef941.rule"
+    }
+    append definition="modifier.local_scaling_inputs.fire_flat.modifier" {
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/48c5057daaba9982.rule"
+        program "effective-maximum" source="rules/effective-maximum/454cd2257791011e.rule"
+        program "effective-minimum" source="rules/effective-minimum/0d0d022fffd32df2.rule"
+        program "catalyst-scalar" source="rules/catalyst-scalar/885e59535a7f4a04.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "local-minimum-add" source="rules/local-minimum-add/70e42b46b954a33f.rule"
+        program "local-maximum-add" source="rules/local-maximum-add/1abe34db20ed9d4a.rule"
+    }
+    append definition="modifier.local_scaling_inputs.lightning_flat.modifier" {
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/ceec1d34ba851217.rule"
+        program "effective-maximum" source="rules/effective-maximum/ca1276133d00b9e4.rule"
+        program "effective-minimum" source="rules/effective-minimum/18cd1a383e6231e7.rule"
+        program "catalyst-scalar" source="rules/catalyst-scalar/2ec42bc06ae36c43.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "local-minimum-add" source="rules/local-minimum-add/be85fc72ab7f64dc.rule"
+        program "local-maximum-add" source="rules/local-maximum-add/2807eab5d0d75481.rule"
+    }
+    append definition="modifier.local_scaling_inputs.chaos_flat.modifier" {
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/79c2e8e581511c48.rule"
+        program "effective-maximum" source="rules/effective-maximum/23bdce4c9b7154d4.rule"
+        program "effective-minimum" source="rules/effective-minimum/11af91bf819cae84.rule"
+        program "catalyst-scalar" source="rules/catalyst-scalar/294f13e2248cbc44.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "local-minimum-add" source="rules/local-minimum-add/8550138126e8fbce.rule"
+        program "local-maximum-add" source="rules/local-maximum-add/36cac64ee5ec36a5.rule"
+    }
+    append definition="stat.elemental_weapon_inputs.channels.cold.minimum.stat" {
+        program "rounded-cold-minimum" source="rules/rounded-cold-minimum/ef4c4e411e35a08a.rule"
+    }
+    append definition="stat.elemental_weapon_inputs.channels.cold.maximum.stat" {
+        program "rounded-cold-maximum" source="rules/rounded-cold-maximum/8173a4731becaaa6.rule"
+    }
+    append definition="stat.elemental_weapon_inputs.channels.fire.minimum.stat" {
+        program "rounded-fire-minimum" source="rules/rounded-fire-minimum/709c52938b34ff23.rule"
+    }
+    append definition="stat.elemental_weapon_inputs.channels.fire.maximum.stat" {
+        program "rounded-fire-maximum" source="rules/rounded-fire-maximum/7540821aa5b7edd3.rule"
+    }
+    append definition="stat.elemental_weapon_inputs.channels.lightning.minimum.stat" {
+        program "rounded-lightning-minimum" source="rules/rounded-lightning-minimum/1284bcdebc62c106.rule"
+    }
+    append definition="stat.elemental_weapon_inputs.channels.lightning.maximum.stat" {
+        program "rounded-lightning-maximum" source="rules/rounded-lightning-maximum/b35a44253f563a19.rule"
+    }
+    append definition="stat.elemental_weapon_inputs.channels.chaos.minimum.stat" {
+        program "assembled-chaos-minimum" source="rules/assembled-chaos-minimum/a27982180dabcdb9.rule"
+    }
+    append definition="stat.elemental_weapon_inputs.channels.chaos.maximum.stat" {
+        program "assembled-chaos-maximum" source="rules/assembled-chaos-maximum/5062278a9c1ebdbe.rule"
+    }
+    append definition="modifier.elemental_resistance_inputs.fire_resistance.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/583cfcd24e991ddb.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/3f1c303ea2acc3f3.rule"
+        program "effective-amount" source="rules/effective-amount/3e1224b46b4a93da.rule"
+    }
+    append definition="modifier.elemental_resistance_inputs.lightning_resistance.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/1acb7fe1a85639b5.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/4744f2146549890a.rule"
+        program "effective-amount" source="rules/effective-amount/ee215ceae10b79c8.rule"
+    }
+    append definition="modifier.actor_attribute_inputs.strength.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/35f1a64e3d3008fb.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/d5376da68fa6287e.rule"
+        program "effective-amount" source="rules/effective-amount/14073abe24d24d5b.rule"
+        program "contribute-player-attributes" source="rules/contribute-player-attributes/4c5cf8f2e8d0dd5c.rule"
+    }
+    append definition="modifier.actor_attribute_inputs.dexterity.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/97f55d0b2cc807c3.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/7e785240bfbdbc71.rule"
+        program "effective-amount" source="rules/effective-amount/6325bb18fcf51a4c.rule"
+        program "contribute-player-attributes" source="rules/contribute-player-attributes/9064f659017840aa.rule"
+    }
+    append definition="modifier.actor_attribute_inputs.intelligence.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/b56100b822fa58de.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/33fa6b0b0901d5c6.rule"
+        program "effective-amount" source="rules/effective-amount/b9a45db8b029bac3.rule"
+        program "contribute-player-attributes" source="rules/contribute-player-attributes/c176f516505979df.rule"
+    }
+    append definition="modifier.actor_attribute_inputs.all_attributes.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/39c2b54c0e47e6e9.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/0661b954ebd95d26.rule"
+        program "effective-amount" source="rules/effective-amount/0547e99c379bc60a.rule"
+        program "contribute-player-attributes" source="rules/contribute-player-attributes/a2b456931b33751d.rule"
+    }
+    append definition="modifier.item_rarity_chaos_inputs.item_rarity.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/cef9d7c0b2938447.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/661eba9acc362474.rule"
+        program "effective-amount" source="rules/effective-amount/6accdbc7be27158a.rule"
+    }
+    append definition="modifier.item_rarity_chaos_inputs.chaos_resistance.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/272ee8830b90fefa.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/1f54791aa704f18d.rule"
+        program "effective-amount" source="rules/effective-amount/f46e3bb25e470027.rule"
+    }
+    append definition="modifier.item_defence_inputs.armour_base.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/87d2994b05f1c045.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/e503da22fea5c329.rule"
+        program "effective-amount" source="rules/effective-amount/cec6e20b4e1f8e12.rule"
+    }
+    append definition="modifier.item_defence_inputs.evasion_base.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/cfca82b637e6d46b.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/10e3bfbf796338ba.rule"
+        program "effective-amount" source="rules/effective-amount/5dd3f4be79b014f2.rule"
+        program "deliver-local-evasion-single-base" source="rules/deliver-local-evasion-single-base/68c34e115932e4d3.rule"
+    }
+    append definition="modifier.item_defence_inputs.energy_shield_base.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/616b152891efc571.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/b3f923f960efeefc.rule"
+        program "effective-amount" source="rules/effective-amount/f5c8490c6962de8e.rule"
+    }
+    append definition="modifier.item_defence_inputs.ward_base.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/59846e9a04b87bce.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/2f5e46c9b24f22d6.rule"
+        program "effective-amount" source="rules/effective-amount/a095eea7207f9366.rule"
+    }
+    append definition="modifier.item_defence_inputs.armour_evasion_base.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/2c7f760516e03985.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/c77ab5a82b02ffd6.rule"
+        program "effective-amount" source="rules/effective-amount/3a98df5fe9020351.rule"
+        program "deliver-local-evasion-paired-armour-base" source="rules/deliver-local-evasion-paired-armour-base/9f03046336bb2e03.rule"
+    }
+    append definition="modifier.item_defence_inputs.armour_energy_shield_base.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/816b32f593ff083a.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/0526c988776ff2d5.rule"
+        program "effective-amount" source="rules/effective-amount/bf524fb745daf4b3.rule"
+    }
+    append definition="modifier.item_defence_inputs.evasion_energy_shield_base.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/0f2f59a8a9b59f9f.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/f2f5fce4e7b30cac.rule"
+        program "effective-amount" source="rules/effective-amount/def0e72aa692b737.rule"
+        program "deliver-local-evasion-paired-shield-base" source="rules/deliver-local-evasion-paired-shield-base/240ac826deef185e.rule"
+    }
+    append definition="modifier.item_defence_inputs.triple_defence_base.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/64acd492d5486631.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/04413bbdc3971a2c.rule"
+        program "effective-amount" source="rules/effective-amount/d8403f600d0d3e55.rule"
+    }
+    append definition="modifier.item_defence_inputs.block_chance_base.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/53cd3789cec0abc1.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/2f3b1e83e26cd831.rule"
+        program "effective-amount" source="rules/effective-amount/b4f4bd40fe2aca01.rule"
+    }
+    append definition="modifier.item_defence_inputs.armour_increase.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/401bbaf81fa7dada.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/86b2b59a3de47afb.rule"
+        program "effective-amount" source="rules/effective-amount/4a1b5b1046a8b8b8.rule"
+    }
+    append definition="modifier.item_defence_inputs.evasion_increase.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/d220259c4629f59f.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/5d2c65d5c29453be.rule"
+        program "effective-amount" source="rules/effective-amount/732253eb7cab6913.rule"
+        program "deliver-local-evasion-single-increase" source="rules/deliver-local-evasion-single-increase/e994d43b7690607f.rule"
+    }
+    append definition="modifier.item_defence_inputs.energy_shield_increase.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/93c65106409b2834.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/d9b9538d2daee9a1.rule"
+        program "effective-amount" source="rules/effective-amount/8e093dac728802b4.rule"
+    }
+    append definition="modifier.item_defence_inputs.ward_increase.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/39ea63164b427539.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/e965021aea75f935.rule"
+        program "effective-amount" source="rules/effective-amount/838bf5f8ca56e168.rule"
+    }
+    append definition="modifier.item_defence_inputs.armour_evasion_increase.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/630eb76f1e6a5f74.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/db3e687151b78c0a.rule"
+        program "effective-amount" source="rules/effective-amount/5520c7085170a09d.rule"
+        program "deliver-local-evasion-paired-armour-increase" source="rules/deliver-local-evasion-paired-armour-increase/367c0af133a3253f.rule"
+    }
+    append definition="modifier.item_defence_inputs.armour_energy_shield_increase.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/d75f7d79a9db3c23.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/f51c8c1a90007fe1.rule"
+        program "effective-amount" source="rules/effective-amount/7fd5a5da9e0c0e21.rule"
+    }
+    append definition="modifier.item_defence_inputs.evasion_energy_shield_increase.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/acd29d26bdeb4519.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/9ab1e3fa5702f8b7.rule"
+        program "effective-amount" source="rules/effective-amount/49740a415015bc3b.rule"
+        program "deliver-local-evasion-paired-shield-increase" source="rules/deliver-local-evasion-paired-shield-increase/d4d10e80ac6d2980.rule"
+    }
+    append definition="modifier.item_defence_inputs.triple_defence_increase.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/28ae548b184747a9.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/5c5663c0b0e46fe9.rule"
+        program "effective-amount" source="rules/effective-amount/b928693af084ffba.rule"
+    }
+    append definition="modifier.item_defence_inputs.defences_increase.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/4595f9c45cbec14a.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/751e5b9c4fe9821b.rule"
+        program "effective-amount" source="rules/effective-amount/2baa7346ea4a7aa6.rule"
+        program "deliver-local-evasion-defences-increase" source="rules/deliver-local-evasion-defences-increase/5e3149240b4d8890.rule"
+    }
+    append definition="modifier.item_defence_inputs.block_chance_increase.canonical" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/a69a19540cfb3b3f.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/eb39d3ea252995da.rule"
+        program "effective-amount" source="rules/effective-amount/56d4b3471e43059f.rule"
+    }
+    append definition="actor.command_damage.actor" {
+        program "basic-attack-supply" source="rules/basic-attack-supply/c4c2d72291bc7eaf.rule"
+        program "basic-attack-activation" source="rules/basic-attack-activation/7441b52a06583861.rule"
+        program "gas-arrow-supply" source="rules/gas-arrow-supply/7db0a7b4a428603e.rule"
+        program "gas-arrow-activation" source="rules/gas-arrow-activation/de4995eae4a41962.rule"
+    }
+}

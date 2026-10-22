@@ -1,0 +1,29 @@
+packet "retained-063" {
+    append definition="passive_node.minion_damage.minion_offence12" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/c428eb1cf2feb5e6.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana_regeneration34" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.attribute.attributes43" {
+        program "attribute-choice" source="rules/attribute-choice/205c669ce0074b90.rule"
+    }
+    append definition="passive_node.prism_guard.maximum_resistances21" {
+        program "passive-view" source="rules/passive-view/bcabc68e7fcd911d.rule"
+    }
+    append definition="passive_node.patient_barrier.energy_shield33" {
+        program "passive-view" source="rules/passive-view/8799371808b3cd01.rule"
+    }
+    append definition="passive_node.energy_shield.energy_shield16" {
+        program "passive-view" source="rules/passive-view/f1919ea11eb639ae.rule"
+    }
+    append definition="passive_node.evasion.evasion17" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.attribute.attributes6" {
+        program "attribute-choice" source="rules/attribute-choice/9c557fee4c291fed.rule"
+    }
+    append definition="passive_node.intelligence.attributes110" {
+        program "passive-view" source="rules/passive-view/bf52704df1fcc564.rule"
+    }
+}

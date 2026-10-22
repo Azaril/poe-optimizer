@@ -1,0 +1,38 @@
+packet "retained-038" {
+    append definition="passive_node.spell_and_minion_damage.spells57" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.armour.armour18" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.energy_shield_and_mana_regeneration.energy_shield7" {
+        program "passive-view" source="rules/passive-view/37fc18b638a0f17a.rule"
+    }
+    append definition="passive_node.armour_applies_to_elemental_damage_and_energy_shield_delay.energy_shield_and_armour42" {
+        program "passive-view" source="rules/passive-view/d6a788c2bddf9971.rule"
+    }
+    append definition="passive_node.attribute.attributes3" {
+        program "attribute-choice" source="rules/attribute-choice/1a8a7edae7ea1970.rule"
+    }
+    append definition="passive_node.command_skill_damage.minion_offence43" {
+        program "ordinary-command-damage" source="rules/ordinary-command-damage/5166e745c2eff333.rule"
+    }
+    append definition="passive_node.attribute.strength39" {
+        program "attribute-choice" source="rules/attribute-choice/1e710589b0305345.rule"
+    }
+    append definition="passive_node.armour.armour20" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.attribute.strength47" {
+        program "attribute-choice" source="rules/attribute-choice/8276493c880b0eb4.rule"
+    }
+    append definition="passive_node.attribute.dexterity43" {
+        program "attribute-choice" source="rules/attribute-choice/f68512a07f25b041.rule"
+    }
+    append definition="passive_node.spell_damage.spell_criticals1" {
+        program "passive-view" source="rules/passive-view/3defc7369a7aa20e.rule"
+    }
+    append definition="passive_node.attribute.intelligence81" {
+        program "attribute-choice" source="rules/attribute-choice/bc09a5899c6f264f.rule"
+    }
+}

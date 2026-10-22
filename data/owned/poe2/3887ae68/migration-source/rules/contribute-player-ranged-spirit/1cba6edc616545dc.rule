@@ -1,0 +1,9 @@
+program "contribute-player-ranged-spirit" context equipment_use {
+    read "effective" as r_0: quantity(unit.count) = stat(modifier, stat.modifier_effective_count);
+    let n_0 = r_0;
+    let n_1 = quantity(1, unit.count);
+    let n_2 = ratio(n_0, n_1, unit.factor);
+    let n_3 = quantity(1, unit.spirit_points);
+    let n_4 = scale(n_3, n_2);
+    effect "direct-ranged-spirit" = contribute(player, stat.player_spirit_pool.final, add, n_4);
+}

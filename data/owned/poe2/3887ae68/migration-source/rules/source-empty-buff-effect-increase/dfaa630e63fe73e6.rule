@@ -1,0 +1,5 @@
+program "source-empty-buff-effect-increase" context skill {
+    read "incoming" as r_0: quantity(unit.percentage_points) = contribution_query(current, "source-empty-buff-effect-increase-domain", "empty");
+    let n_0 = r_0;
+    effect "resolved" = derive(current, stat.pain_offering.source_effect_increased, n_0);
+}

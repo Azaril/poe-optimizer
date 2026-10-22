@@ -1,0 +1,11 @@
+program "intrinsic-added-attack-factor" context action {
+    read "percentage" as r_0: quantity(unit.percentage_points) = stat(current, stat.combined_added_attack_damage.action_percentage);
+    let n_0 = quantity(1, unit.factor);
+    let n_1 = r_0;
+    let n_2 = pct(n_1, unit.factor);
+    let n_3 = n_0 + n_2;
+    let n_4 = quantity(0, unit.percentage_points);
+    let n_5 = n_1 == n_4;
+    let n_6 = not n_5;
+    effect "factor" when n_6 = contribute(current, stat.intrinsic_added_attack_damage.action_factor, multiply, n_3);
+}

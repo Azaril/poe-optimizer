@@ -1,0 +1,44 @@
+packet "retained-037" {
+    append definition="passive_node.mana_regeneration.energy_shield_recovery10" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.minion_damage.minion_offence11" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/c428eb1cf2feb5e6.rule"
+    }
+    append definition="passive_node.armour_applies_to_elemental_damage_and_energy_shield_delay.energy_shield_and_armour21" {
+        program "passive-view" source="rules/passive-view/d6a788c2bddf9971.rule"
+    }
+    append definition="passive_node.dexterity.azmerianimals16" {
+        program "passive-view" source="rules/passive-view/b5daae91c24596b6.rule"
+    }
+    append definition="passive_node.attribute.attributes23" {
+        program "attribute-choice" source="rules/attribute-choice/cbffc772143ad864.rule"
+    }
+    append definition="passive_node.energy_shield.energy_shield43" {
+        program "passive-view" source="rules/passive-view/f1919ea11eb639ae.rule"
+    }
+    append definition="passive_node.deflection.deflect24" {
+        program "passive-view" source="rules/passive-view/68efec71f000927f.rule"
+    }
+    append definition="passive_node.energy_shield_delay.mana21" {
+        program "passive-view" source="rules/passive-view/e862b5e979cfcad5.rule"
+    }
+    append definition="passive_node.attribute.intelligence86" {
+        program "attribute-choice" source="rules/attribute-choice/4942f65b759c0b0b.rule"
+    }
+    append definition="passive_node.minion_life.minion_defence6" {
+        program "ordinary-minion-life" source="rules/ordinary-minion-life/c656e14bbeadaf77.rule"
+    }
+    append definition="passive_node.attribute.attributes26" {
+        program "attribute-choice" source="rules/attribute-choice/fb79fdf00df7f7f4.rule"
+    }
+    append definition="passive_node.deflection.deflect52" {
+        program "passive-view" source="rules/passive-view/68efec71f000927f.rule"
+    }
+    append definition="passive_node.attribute.attributes68" {
+        program "attribute-choice" source="rules/attribute-choice/dfee112a81a58d7e.rule"
+    }
+    append definition="passive_node.attribute.strength25" {
+        program "attribute-choice" source="rules/attribute-choice/3cd4152d66c47e42.rule"
+    }
+}

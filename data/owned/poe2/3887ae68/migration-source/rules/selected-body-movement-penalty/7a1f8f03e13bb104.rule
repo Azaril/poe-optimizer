@@ -1,0 +1,16 @@
+program "selected-body-movement-penalty" context actor {
+    read "ignored" as r_0: boolean = contribution_query(current, "ignore-equipment-movement-penalties", "sources");
+    read "occupied" as r_1: boolean = player_equipment_slot(equipment_slot.body_armour, occupied());
+    read "present" as r_2: boolean = player_equipment_slot(equipment_slot.body_armour, capability(capability.defence_profiles.fields.movementpenalty.presence));
+    read "raw" as r_3: quantity(unit.factor) = player_equipment_slot(equipment_slot.body_armour, stat(stat.defence_profiles.fields.movementpenalty.stat));
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = r_2;
+    let n_3 = r_3;
+    let n_4 = quantity(0, unit.factor);
+    let n_5 = n_4 - n_3;
+    let n_6 = if n_0 { n_4 } else { n_5 };
+    let n_7 = if n_2 { n_6 } else { n_4 };
+    let n_8 = if n_1 { n_7 } else { n_4 };
+    effect "body-movement-base" = contribute(current, stat.player_body_movement_penalty, add, n_8);
+}

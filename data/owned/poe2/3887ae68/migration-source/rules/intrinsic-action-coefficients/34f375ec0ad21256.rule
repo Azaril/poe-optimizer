@@ -1,0 +1,24 @@
+program "intrinsic-action-coefficients" context action {
+    read "character-level" as r_0: integer = character_level();
+    read "level" as r_1: integer = parameter(parameter.twister.level);
+    read "quality" as r_2: quantity(unit.percentage_points) = parameter(parameter.twister.quality);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = lookup(n_1, "twister.base-damage-factor");
+    let n_3 = lookup(n_1, "twister.mana-cost");
+    let n_4 = quantity(1, unit.factor);
+    let n_5 = r_2;
+    let n_6 = quantity(1, unit.factor);
+    let n_7 = scale(n_5, n_6);
+    let n_8 = round(n_7, quantity(1, unit.percentage_points), truncate);
+    let n_9 = lookup(n_1, "twister.required-character-level");
+    let n_10 = n_0 >= n_9;
+    let n_11 = lookup(n_1, "twister.attack-speed-percent");
+    let n_12 = pct(n_11, unit.factor);
+    let n_13 = n_4 + n_12;
+    effect "base-factor" = derive(current, stat.twister.base_damage_factor, n_2);
+    effect "speed-factor" = derive(current, stat.twister.attack_speed_factor, n_13);
+    effect "additional-projectile-chance" = derive(current, stat.twister.additional_projectile_chance, n_8);
+    effect "mana-cost" = derive(current, stat.twister.mana_cost, n_3);
+    effect "character-level-requirement" = requirement(n_10, "required-character-level");
+}

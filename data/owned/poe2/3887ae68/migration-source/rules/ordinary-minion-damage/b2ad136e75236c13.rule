@@ -1,0 +1,4 @@
+program "ordinary-minion-damage" context actor {
+    let n_0 = quantity(16, unit.percentage_points);
+    effect "grant" = contribute(player, stat.player_granted_minion_damage_increase, increase, n_0);
+}

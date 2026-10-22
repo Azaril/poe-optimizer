@@ -1,0 +1,11 @@
+program "passive-view" context actor {
+    let n_0 = any();
+    let n_1 = any();
+    let n_2 = quantity(12, unit.percentage_points);
+    let n_3 = quantity(4, unit.percentage_points);
+    let n_4 = false;
+    let n_5 = not n_0;
+    let n_6 = if n_1 { n_4 } else { n_5 };
+    effect "default-effect-0" when n_6 = contribute(player, stat.permanent_reward_effects.channels.armour, increase, n_2);
+    effect "default-effect-1" when n_6 = contribute(player, stat.passive_defence_inputs.channels.energy_shield_recharge_delay.id, increase, n_3);
+}

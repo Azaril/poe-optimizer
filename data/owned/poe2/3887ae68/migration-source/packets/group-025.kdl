@@ -1,0 +1,35 @@
+packet "retained-025" {
+    append definition="passive_node.attribute.attributes14" {
+        program "attribute-choice" source="rules/attribute-choice/cae919ca43fbf063.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour52" {
+        program "passive-view" source="rules/passive-view/d6a788c2bddf9971.rule"
+    }
+    append definition="passive_node.evasion.evasion13" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.energy_shield_delay.energy_shield_recovery28" {
+        program "passive-view" source="rules/passive-view/e862b5e979cfcad5.rule"
+    }
+    append definition="passive_node.energy_shield_delay.energy_shield_recovery21" {
+        program "passive-view" source="rules/passive-view/e862b5e979cfcad5.rule"
+    }
+    append definition="passive_node.dexterity.dexterity108" {
+        program "passive-view" source="rules/passive-view/b5daae91c24596b6.rule"
+    }
+    append definition="passive_node.deflection.azmerianimals41" {
+        program "passive-view" source="rules/passive-view/68efec71f000927f.rule"
+    }
+    append definition="passive_node.attribute.dexterity7" {
+        program "attribute-choice" source="rules/attribute-choice/fbd0aba341579abe.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour18" {
+        program "passive-view" source="rules/passive-view/167aaf37cfa117c3.rule"
+    }
+    append definition="passive_node.attribute.strength76" {
+        program "attribute-choice" source="rules/attribute-choice/dda603b9571d4167.rule"
+    }
+    append definition="passive_node.armour_applies_to_elemental_damage_and_deflection.armour_and_evasion49" {
+        program "passive-view" source="rules/passive-view/28fa616b6859bd55.rule"
+    }
+}

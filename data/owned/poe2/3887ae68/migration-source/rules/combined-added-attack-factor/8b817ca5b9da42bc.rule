@@ -1,0 +1,11 @@
+program "combined-added-attack-factor" context action {
+    read "product" as r_0: quantity(unit.factor) = contribution_query(current, "intrinsic-added-attack-factors", "sources");
+    let n_0 = quantity(0.5, unit.factor);
+    let n_1 = quantity(100, unit.factor);
+    let n_2 = r_0;
+    let n_3 = scale(n_2, n_1);
+    let n_4 = n_3 + n_0;
+    let n_5 = round(n_4, quantity(1, unit.factor), floor);
+    let n_6 = divide_factor(n_5, n_1);
+    effect "factor" = derive(current, stat.selected_physical_base.combined_factor, n_6);
+}

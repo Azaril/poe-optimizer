@@ -1,0 +1,20 @@
+packet "retained-005" {
+    append definition="passive_node.energy_shield.energy_shield24" {
+        program "passive-view" source="rules/passive-view/f1919ea11eb639ae.rule"
+    }
+    append definition="passive_node.evasion_and_energy_shield.evasion_and_energy_shield18" {
+        program "passive-view" source="rules/passive-view/957163ed415cefba.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana_regeneration21" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.armour.armour28" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.spell_and_minion_damage.spells55" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.attribute.attributes27" {
+        program "attribute-choice" source="rules/attribute-choice/bd29771e0d0973a8.rule"
+    }
+}

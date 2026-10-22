@@ -1,0 +1,22 @@
+program "ordinary-minion-attack-hit-chance" context action {
+    read "accuracy" as r_0: quantity(unit.percentage_points) = stat(current, stat.action_accuracy_hit_chance);
+    read "block-base" as r_1: quantity(unit.percentage_points) = contributions(enemy, stat.configuration_block_inputs.contribution_stat, add, sum, quantity(0, unit.percentage_points));
+    read "block-reduction" as r_2: quantity(unit.percentage_points) = contributions(current, stat.action_enemy_block_reduction, add, sum, quantity(0, unit.percentage_points));
+    read "cannot-block-flags" as r_3: boolean = contribution_query(enemy, "minion-accuracy-cannot-block-flags", "sources");
+    let n_0 = r_0;
+    let n_1 = r_3;
+    let n_2 = quantity(100, unit.percentage_points);
+    let n_3 = quantity(1, unit.factor);
+    let n_4 = r_1;
+    let n_5 = min(n_4, n_2);
+    let n_6 = r_2;
+    let n_7 = n_5 - n_6;
+    let n_8 = quantity(0, unit.percentage_points);
+    let n_9 = max(n_7, n_8);
+    let n_10 = if n_1 { n_8 } else { n_9 };
+    let n_11 = pct(n_10, unit.factor);
+    let n_12 = n_3 - n_11;
+    let n_13 = scale(n_0, n_12);
+    effect "effective-enemy-block" = derive(current, stat.action_effective_enemy_block, n_10);
+    effect "hit-chance" = derive(current, stat.physical_hit_dps.inputs.hit_percent.stat, n_13);
+}

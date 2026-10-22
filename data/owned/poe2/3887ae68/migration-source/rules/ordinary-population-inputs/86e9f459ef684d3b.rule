@@ -1,0 +1,15 @@
+program "ordinary-population-inputs" context actor {
+    read "level" as r_0: integer = parameter(parameter_slot.sniper_level);
+    read "quality" as r_1: quantity(unit.percentage_points) = parameter(parameter_slot.sniper_quality);
+    let n_0 = r_0;
+    let n_1 = lookup(n_0, "sniper.actor-level");
+    let n_2 = quantity(1, unit.factor);
+    let n_3 = r_1;
+    let n_4 = quantity(1, unit.factor);
+    let n_5 = scale(n_3, n_4);
+    let n_6 = round(n_5, quantity(1, unit.percentage_points), truncate);
+    let n_7 = pct(n_6, unit.factor);
+    let n_8 = n_2 + n_7;
+    effect "project-actor-level" = project_actor_stat(actor_slot.sniper_population, stat.sniper_actor_level, n_1);
+    effect "project-quality-factor" = project_actor_stat(actor_slot.sniper_population, stat.sniper_quality_damage_factor, n_8);
+}

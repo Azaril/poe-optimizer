@@ -1,0 +1,17 @@
+packet "retained-057" {
+    append definition="passive_node.evasion_and_energy_shield.evasion_and_energy_shield22" {
+        program "passive-view" source="rules/passive-view/957163ed415cefba.rule"
+    }
+    append definition="passive_node.attribute.intelligence15" {
+        program "attribute-choice" source="rules/attribute-choice/f6e3f74804972be3.rule"
+    }
+    append definition="passive_node.attribute.dexterity73" {
+        program "attribute-choice" source="rules/attribute-choice/29de96cdc2fc8c97.rule"
+    }
+    append definition="passive_node.attribute.dexterity4" {
+        program "attribute-choice" source="rules/attribute-choice/d85c69a9f578038d.rule"
+    }
+    append definition="passive_node.polymathy.all_attributes6" {
+        program "passive-view" source="rules/passive-view/d49d6075a41a4616.rule"
+    }
+}

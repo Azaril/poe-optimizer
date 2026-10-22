@@ -1,0 +1,209 @@
+packet "retained-100" {
+    append definition="skill.summonskeletalclericsplayer" {
+        program "cleric-population-supply" source="rules/cleric-population-supply/918e1a1800e1320d.rule"
+    }
+    append definition="gem.skeletalcleric" {
+        program "primary-supply" source="rules/primary-supply/44b044b994402a47.rule"
+        program "effective-input-preparation" source="rules/effective-input-preparation/508c3776e3cb421c.rule"
+    }
+    append definition="actor.cleric_ability_supply.actor" {
+        program "heal-supply" source="rules/heal-supply/bed262338f47b0d8.rule"
+    }
+    append definition="gem.meatshieldsupporttwo" {
+        program "effective-input-preparation" source="rules/effective-input-preparation/5ecbb69c7daea989.rule"
+    }
+    append definition="gem.elementalarmamentsupporttwo" {
+        program "effective-input-preparation" source="rules/effective-input-preparation/43fa33141abb842f.rule"
+    }
+    append definition="modifier.category_inputs.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/9b407238316a954f.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/e37fb4e7a52c3dad.rule"
+        program "contribute-player-minion-gem-level" source="rules/contribute-player-minion-gem-level/77f4d48967e78256.rule"
+        program "effective-amount" source="rules/effective-amount/b9c21fc2053e2f0b.rule"
+        program "amulet-copy-minion-gem-level" source="rules/amulet-copy-minion-gem-level/4b82a473cbbdf888.rule"
+    }
+    append definition="modifier.movement_speed.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/0a25cb5b283942b7.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/9989eed3e83d9207.rule"
+        program "contribute-player-movement-speed" source="rules/contribute-player-movement-speed/0e5db6ca6b8c95d0.rule"
+        program "effective-amount" source="rules/effective-amount/67f269f241dece15.rule"
+    }
+    append definition="modifier.flat_life.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/435ac71fe84da53b.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/28268b8fddc8d466.rule"
+        program "contribute-player-flat-life" source="rules/contribute-player-flat-life/d65789718ff81842.rule"
+        program "effective-amount" source="rules/effective-amount/09ba933870d605df.rule"
+        program "amulet-copy-flat-life" source="rules/amulet-copy-flat-life/f276f40fa8826daf.rule"
+    }
+    append definition="modifier.fixed_spirit.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/4a67fbff22a59b55.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/2abdd248452390ac.rule"
+        program "contribute-player-ranged-spirit" source="rules/contribute-player-ranged-spirit/1cba6edc616545dc.rule"
+        program "effective-amount" source="rules/effective-amount/e41b84f6514d8ba8.rule"
+        program "amulet-copy-ranged-spirit" source="rules/amulet-copy-ranged-spirit/a500a4f637b1cb9e.rule"
+    }
+    append definition="modifier.fine_belt_modifiers.charm.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/afcc05ccc02ff3bc.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/cff3cab5488733d8.rule"
+        program "effective-amount" source="rules/effective-amount/037e433c02dbf2e0.rule"
+        program "local-charm-capacity-contribution" source="rules/local-charm-capacity-contribution/d2501b03fc816260.rule"
+    }
+    append definition="modifier.fine_belt_modifiers.flask.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/6aa9c16f8457146c.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/a383d689bb51728b.rule"
+        program "effective-amount" source="rules/effective-amount/a6f606166bd0317c.rule"
+        program "contribute-player-flask-charge-generation" source="rules/contribute-player-flask-charge-generation/d35420d3dcb65fcc.rule"
+    }
+    append definition="modifier.spell_damage_modifier.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/ae08557901649a11.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/a930f3fbb02c0044.rule"
+        program "effective-amount" source="rules/effective-amount/b261886e31f61b44.rule"
+    }
+    append definition="modifier.firebolt_item_grant.modifier" {
+        program "item-firebolt-raw-supply" source="rules/item-firebolt-raw-supply/b2d407b59a56ea37.rule"
+    }
+    append definition="encounter.pinnacle_default" {
+        program "configured-fire-resistance-base" source="rules/configured-fire-resistance-base/3375a7277b4dba0d.rule"
+        program "configured-cold-resistance-base" source="rules/configured-cold-resistance-base/10ebcc3626e1f818.rule"
+        program "configured-lightning-resistance-base" source="rules/configured-lightning-resistance-base/e754977d0b6bad00.rule"
+        program "configured-chaos-resistance-base" source="rules/configured-chaos-resistance-base/ada28bd0991b23a5.rule"
+        program "configured-enemy-armour-base" source="rules/configured-enemy-armour-base/60ad76fe50a51864.rule"
+        program "configured-enemy-evasion-base" source="rules/configured-enemy-evasion-base/d6ca6d064a3827da.rule"
+        program "configured-enemy-block-base" source="rules/configured-enemy-block-base/5c863b1870a2292c.rule"
+        program "configured-incoming-hit-base" source="rules/configured-incoming-hit-base/e05907618b21c756.rule"
+        program "configured-critical-weakness" source="rules/configured-critical-weakness/d3a228920672aede.rule"
+        program "configured-critical-weakness-activation" source="rules/configured-critical-weakness-activation/73fd02a1db2b37e6.rule"
+    }
+    append definition="modifier.fire_damage_modifier.modifier" {
+        program "catalyst-scalar" source="rules/catalyst-scalar/8e725a8356314c77.rule"
+        program "ordered-magnitude-scalar" source="rules/ordered-magnitude-scalar/d3d91f2abdfe1211.rule"
+        program "corrupted-base-factor" source="rules/corrupted-base-factor/5f10ffd21efcc3bb.rule"
+        program "effective-amount" source="rules/effective-amount/94347b7fa5d0b7a7.rule"
+    }
+    append definition="gem.painoffering" {
+        program "pain-offering-primary-supply" source="rules/pain-offering-primary-supply/698246e6969e3119.rule"
+        program "effective-input-preparation" source="rules/effective-input-preparation/598ce71124109323.rule"
+        program "pain-offering-final-inputs" source="rules/pain-offering-final-inputs/abddc59f45e8e1ce.rule"
+    }
+    append definition="skill.painofferingplayer" {
+        program "source-empty-buff-effect-increase" source="rules/source-empty-buff-effect-increase/dfaa630e63fe73e6.rule"
+        program "source-empty-buff-effect-more" source="rules/source-empty-buff-effect-more/8003151e9f0586ea.rule"
+        program "source-empty-magnitude" source="rules/source-empty-magnitude/2de4a5d2706f9d7e.rule"
+    }
+    append definition="usage_policy.skill_usage_inputs.policy" {
+        program "skill-effect-activation" source="rules/skill-effect-activation/382c62356d2feb96.rule"
+    }
+    append definition="gem.frostbomb" {
+        program "frost-bomb-primary-supply" source="rules/frost-bomb-primary-supply/d0083084e9d637d3.rule"
+    }
+    append definition="usage_policy.frost_bomb_inputs.policy" {
+        program "frost-bomb-requested-global-effect" source="rules/frost-bomb-requested-global-effect/dd33995c87eebb6b.rule"
+    }
+    append definition="usage_policy.sniper_reservation.policy" {
+        program "sniper-requested-count" source="rules/sniper-requested-count/1b3ac9cad71c6056.rule"
+    }
+    append definition="gem.icenova" {
+        program "ice-nova-primary-supply" source="rules/ice-nova-primary-supply/c05f796471aaad24.rule"
+        program "ice-nova-pre-support-inputs" source="rules/ice-nova-pre-support-inputs/638679493fbecec8.rule"
+        program "ice-nova-final-level" source="rules/ice-nova-final-level/965270b3bef7b418.rule"
+    }
+    append definition="gem.skeletalarsonist" {
+        program "arsonist-primary-supply" source="rules/arsonist-primary-supply/8279494122397ec3.rule"
+    }
+    append definition="skill.summonskeletalarsonistsplayer" {
+        program "arsonist-actor-supply" source="rules/arsonist-actor-supply/99fe7a5b263a4e41.rule"
+    }
+    append definition="actor.skeletal_inputs.arsonist.minion.actor" {
+        program "arsonist-first-child-supply" source="rules/arsonist-first-child-supply/f6ad1706f551daef.rule"
+    }
+    append definition="gem.skeletalfrostmage" {
+        program "frost-mage-primary-supply" source="rules/frost-mage-primary-supply/2cc81dd806a08d8d.rule"
+    }
+    append definition="skill.summonskeletalfrostmagesplayer" {
+        program "frost-mage-actor-supply" source="rules/frost-mage-actor-supply/c7eddbf42f6d9c75.rule"
+    }
+    append definition="actor.skeletal_inputs.frost_mage.minion.actor" {
+        program "frost-mage-first-child-supply" source="rules/frost-mage-first-child-supply/899de2e0ceb439d3.rule"
+    }
+    append definition="gem.skeletalreaver" {
+        program "reaver-primary-supply" source="rules/reaver-primary-supply/4a5b253a409ee463.rule"
+    }
+    append definition="skill.summonskeletalreaversplayer" {
+        program "reaver-actor-supply" source="rules/reaver-actor-supply/63626f55cfbb4e93.rule"
+    }
+    append definition="actor.skeletal_inputs.reaver.minion.actor" {
+        program "reaver-first-child-supply" source="rules/reaver-first-child-supply/801c44eb99109aed.rule"
+    }
+    append slot="action_output.commandsanddjinnknifethrowplayer.djinn_actions.summonsanddjinnplayer.command.output" {
+        program "area-modifier-eligibility" source="rules/area-modifier-eligibility/71b125bacd764bea.rule"
+    }
+    append slot="action_output.knifethrowsanddjinn.bidding_support_delivery.action_facts.sand.output" {
+        program "commandable-action-fact" source="rules/commandable-action-fact/206ff690ff18c8ad.rule"
+        program "area-modifier-eligibility" source="rules/area-modifier-eligibility/9e67223cf825e147.rule"
+    }
+    append slot="action_output.explosiveteleportsanddjinn.bidding_support_delivery.action_facts.sand.output" {
+        program "commandable-action-fact" source="rules/commandable-action-fact/206ff690ff18c8ad.rule"
+        program "area-modifier-eligibility" source="rules/area-modifier-eligibility/143dfc1be5568c0f.rule"
+    }
+    append slot="action_output.handslamsanddjinn.bidding_support_delivery.action_facts.sand.output" {
+        program "commandable-action-fact" source="rules/commandable-action-fact/206ff690ff18c8ad.rule"
+        program "area-modifier-eligibility" source="rules/area-modifier-eligibility/5d562270ae739e36.rule"
+    }
+    append definition="skill.summonsanddjinnplayer" {
+        program "sand-command-supply" source="rules/sand-command-supply/8388312d860aa49c.rule"
+        program "sand-actor-supply" source="rules/sand-actor-supply/083ed8c92513f874.rule"
+        program "sand-ordinary-preparation" source="rules/sand-ordinary-preparation/494ff012e5bfc5e1.rule"
+        program "sand-final-preparation" source="rules/sand-final-preparation/f0e90e3d1b01f1c8.rule"
+        program "sand-command-preparation" source="rules/sand-command-preparation/fde907a084221327.rule"
+        program "sand-population-level" source="rules/sand-population-level/f871a3995bb0f8e7.rule"
+    }
+    append definition="actor.djinn_actions.summonsanddjinnplayer.minion.actor" {
+        program "sand-child-1-supply" source="rules/sand-child-1-supply/c1e73450b463e3cb.rule"
+        program "sand-child-2-supply" source="rules/sand-child-2-supply/2b9d0ca89ebddb02.rule"
+        program "sand-child-3-supply" source="rules/sand-child-3-supply/7a534ef3d1f8fdfa.rule"
+    }
+    append slot="action_output.commandwaterdjinnbubbleplayer.djinn_actions.summonwaterdjinnplayer.command.output" {
+        program "area-modifier-eligibility" source="rules/area-modifier-eligibility/632f8d009be9b359.rule"
+    }
+    append slot="action_output.waterbubblewaterdjinn.bidding_support_delivery.action_facts.water.output" {
+        program "commandable-action-fact" source="rules/commandable-action-fact/206ff690ff18c8ad.rule"
+        program "area-modifier-eligibility" source="rules/area-modifier-eligibility/eb155f8eb4be82e1.rule"
+    }
+    append slot="action_output.chilledgroundburstwaterdjinn.bidding_support_delivery.action_facts.water.output" {
+        program "commandable-action-fact" source="rules/commandable-action-fact/206ff690ff18c8ad.rule"
+        program "area-modifier-eligibility" source="rules/area-modifier-eligibility/5deb3bab1c395296.rule"
+    }
+    append slot="action_output.esrechargeforcerestartwaterdjinn.bidding_support_delivery.action_facts.water.output" {
+        program "commandable-action-fact" source="rules/commandable-action-fact/206ff690ff18c8ad.rule"
+        program "area-modifier-eligibility" source="rules/area-modifier-eligibility/c922f36e11cbac2d.rule"
+    }
+    append slot="action_output.chilledgroundoasisconvertwaterdjinn.bidding_support_delivery.action_facts.water.output" {
+        program "commandable-action-fact" source="rules/commandable-action-fact/206ff690ff18c8ad.rule"
+        program "area-modifier-eligibility" source="rules/area-modifier-eligibility/da0b1ce0afb78101.rule"
+    }
+    append slot="action_output.passivetriggeredmanawavewaterdjinn.bidding_support_delivery.action_facts.water.output" {
+        program "commandable-action-fact" source="rules/commandable-action-fact/fd8fd1b7f5360daa.rule"
+        program "area-modifier-eligibility" source="rules/area-modifier-eligibility/09fa6fc2bb4d011b.rule"
+    }
+    append definition="skill.summonwaterdjinnplayer" {
+        program "water-command-supply" source="rules/water-command-supply/56f1d1f928f69e90.rule"
+        program "water-actor-supply" source="rules/water-actor-supply/dfde934d83a2a1cb.rule"
+    }
+    append definition="actor.djinn_actions.summonwaterdjinnplayer.minion.actor" {
+        program "water-child-1-supply" source="rules/water-child-1-supply/ff50059c8c2b8fdf.rule"
+        program "water-child-2-supply" source="rules/water-child-2-supply/41ed5b9963695b28.rule"
+        program "water-child-3-supply" source="rules/water-child-3-supply/b81cef9131596358.rule"
+        program "water-child-4-supply" source="rules/water-child-4-supply/6bd38c009517317f.rule"
+        program "water-child-5-supply" source="rules/water-child-5-supply/2ed18b7d555b11b5.rule"
+    }
+    append definition="skill.icenovaplayer" {
+        program "ice-nova-intrinsic-stats" source="rules/ice-nova-intrinsic-stats/65f1bd9594f11892.rule"
+    }
+}

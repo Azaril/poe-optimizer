@@ -1,0 +1,8 @@
+program "owned-minion-action-increase-factor" context action {
+    read "increase" as r_0: quantity(unit.percentage_points) = stat(current, stat.selected_physical_hit.increased_subtotal);
+    let n_0 = r_0;
+    let n_1 = pct(n_0, unit.factor);
+    let n_2 = quantity(1, unit.factor);
+    let n_3 = n_2 + n_1;
+    effect "factor" = derive(current, stat.minion_action_damage_increase_factor, n_3);
+}

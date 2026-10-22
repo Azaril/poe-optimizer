@@ -1,0 +1,21 @@
+program "effective-input-preparation" context skill {
+    read "corruption" as r_0: quantity(unit.count) = parameter(parameter_slot.painoffering.pain_offering.raw_corruption);
+    read "external-level-0" as r_1: quantity(unit.count) = contributions(player, stat.global_minion_gem_level_addition, add, sum, quantity(0, unit.count));
+    read "has-quality" as r_2: boolean = has_gem_quality(quality.standard_quality);
+    read "raw-level" as r_3: integer = gem_level();
+    read "raw-quality" as r_4: quantity(unit.percentage_points) = gem_quality_amount(quality.standard_quality);
+    let n_0 = quantity(0, unit.percentage_points);
+    let n_1 = r_0;
+    let n_2 = r_1;
+    let n_3 = r_2;
+    let n_4 = quantity(1, unit.count);
+    let n_5 = r_3;
+    let n_6 = scale_integer(n_4, n_5);
+    let n_7 = n_6 + n_1;
+    let n_8 = max(n_7, n_4);
+    let n_9 = n_8 + n_2;
+    let n_10 = r_4;
+    let n_11 = if n_3 { n_10 } else { n_0 };
+    effect "level" = derive(current, stat.pre_support_skill_level, n_9);
+    effect "quality" = derive(current, stat.pre_support_skill_quality, n_11);
+}

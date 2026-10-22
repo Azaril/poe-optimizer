@@ -1,0 +1,5 @@
+program "unconditional-minion-cooldown" context action {
+    read "incoming" as r_0: quantity(unit.percentage_points) = stat(actor, stat.growing_swarm.channels.cooldown_actor);
+    let n_0 = r_0;
+    effect "grant" = contribute(current, stat.command_cooldown.channels.action, increase, n_0);
+}

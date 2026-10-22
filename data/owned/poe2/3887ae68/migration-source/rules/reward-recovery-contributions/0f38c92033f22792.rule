@@ -1,0 +1,6 @@
+program "reward-recovery-contributions" context actor {
+    let n_0 = quantity(30, unit.percentage_points);
+    let n_1 = quantity(1, unit.count);
+    effect "grant-0" = contribute(player, stat.reward_recovery_inputs_v1.channels.charm_charges_gained_increase, increase, n_0);
+    effect "grant-1" = contribute(player, stat.reward_recovery_inputs_v1.channels.charm_capacity, add, n_1);
+}

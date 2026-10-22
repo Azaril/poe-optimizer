@@ -1,0 +1,4 @@
+program "water-command-supply" context skill {
+    let n_0 = true;
+    effect "activate" = activate_grant(grant_slot.summonwaterdjinnplayer.djinn_actions.command.entering_grant, n_0);
+}

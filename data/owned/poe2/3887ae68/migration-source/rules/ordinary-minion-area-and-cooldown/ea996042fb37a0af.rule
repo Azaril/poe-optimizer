@@ -1,0 +1,5 @@
+program "ordinary-minion-area-and-cooldown" context actor {
+    let n_0 = quantity(20, unit.percentage_points);
+    effect "area" = contribute(player, stat.growing_swarm.channels.area_player, increase, n_0);
+    effect "cooldown" = contribute(player, stat.growing_swarm.channels.cooldown_player, increase, n_0);
+}

@@ -1,0 +1,29 @@
+packet "retained-053" {
+    append definition="passive_node.attribute.attributes64" {
+        program "attribute-choice" source="rules/attribute-choice/e9ce3aea53a0d94a.rule"
+    }
+    append definition="passive_node.attribute.intelligence26" {
+        program "attribute-choice" source="rules/attribute-choice/acafc6bd8813340b.rule"
+    }
+    append definition="passive_node.attribute.attributes71" {
+        program "attribute-choice" source="rules/attribute-choice/2f216c86ffa397c1.rule"
+    }
+    append definition="passive_node.attribute.intelligence5" {
+        program "attribute-choice" source="rules/attribute-choice/1c93b9cead72e9a4.rule"
+    }
+    append definition="passive_node.minion_damage.minion_reservation4" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.attribute.strength83" {
+        program "attribute-choice" source="rules/attribute-choice/bc7e54dc9ae63d7e.rule"
+    }
+    append definition="passive_node.attribute.strength24" {
+        program "attribute-choice" source="rules/attribute-choice/56b8a37bf90ad8bd.rule"
+    }
+    append definition="passive_node.attribute.strength82" {
+        program "attribute-choice" source="rules/attribute-choice/e2e1b88c85f82e6a.rule"
+    }
+    append definition="passive_node.armour.armour10" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+}

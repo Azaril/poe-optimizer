@@ -1,0 +1,32 @@
+packet "retained-021" {
+    append definition="passive_node.attribute.strength73" {
+        program "attribute-choice" source="rules/attribute-choice/6651ded7470a3ed3.rule"
+    }
+    append definition="passive_node.energy_shield_delay.unarmed7" {
+        program "passive-view" source="rules/passive-view/e862b5e979cfcad5.rule"
+    }
+    append definition="passive_node.energy_shield_delay.energy_shield_recovery34" {
+        program "passive-view" source="rules/passive-view/e862b5e979cfcad5.rule"
+    }
+    append definition="passive_node.attribute.attributes10" {
+        program "attribute-choice" source="rules/attribute-choice/239481d526fa9fee.rule"
+    }
+    append definition="passive_node.armour.armour14" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.attribute.attributes31" {
+        program "attribute-choice" source="rules/attribute-choice/f575e9fd32e8944d.rule"
+    }
+    append definition="passive_node.evasion.deflect26" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.attribute.dexterity20" {
+        program "attribute-choice" source="rules/attribute-choice/96c51f3f7195326b.rule"
+    }
+    append definition="passive_node.attribute.strength85" {
+        program "attribute-choice" source="rules/attribute-choice/524497591e112971.rule"
+    }
+    append definition="passive_node.attribute.attributes17" {
+        program "attribute-choice" source="rules/attribute-choice/cf96b7918a5cf5bc.rule"
+    }
+}

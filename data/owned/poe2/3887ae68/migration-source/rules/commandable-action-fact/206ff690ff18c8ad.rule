@@ -1,0 +1,4 @@
+program "commandable-action-fact" context action {
+    let n_0 = true;
+    effect "fact" = derive(current, stat.command_damage.channels.commandable, n_0);
+}

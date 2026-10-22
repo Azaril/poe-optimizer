@@ -1,0 +1,6 @@
+program "magnified-area-damage" context action {
+    read "area-eligible" as r_0: boolean = stat(current, stat.action_area_eligibility.channel);
+    let n_0 = r_0;
+    let n_1 = quantity(1, unit.factor);
+    effect "damage-factor" when n_0 = contribute(current, stat.bidding_support_delivery.channels.damage_factor, multiply, n_1);
+}

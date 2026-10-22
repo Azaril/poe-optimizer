@@ -1,0 +1,6 @@
+program "selected-item-offhand-classification" context equipment_use {
+    let n_0 = false;
+    let n_1 = false;
+    effect "selected-item-is-shield" = capability(current, capability.player_offhand_facts.capabilities.shield, n_1);
+    effect "selected-item-is-focus" = capability(current, capability.player_offhand_facts.capabilities.focus, n_0);
+}

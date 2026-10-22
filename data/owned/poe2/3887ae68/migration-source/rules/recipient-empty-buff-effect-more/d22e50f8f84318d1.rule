@@ -1,0 +1,5 @@
+program "recipient-empty-buff-effect-more" context actor {
+    read "incoming" as r_0: quantity(unit.factor) = contribution_query(current, "recipient-empty-buff-effect-more-domain", "empty");
+    let n_0 = r_0;
+    effect "resolved" = derive(current, stat.pain_offering.recipient_effect_more, n_0);
+}

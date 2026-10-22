@@ -1,0 +1,5 @@
+program "frost-bomb-requested-global-effect" context skill {
+    read "requested" as r_0: boolean = parameter(parameter_slot.frost_bomb_inputs.policy.parameter);
+    let n_0 = r_0;
+    effect "requested-global-effect" = derive(current, stat.frost_bomb_inputs.requested_global_effect, n_0);
+}

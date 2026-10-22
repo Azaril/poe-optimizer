@@ -1,0 +1,5 @@
+program "actor-level-input" context action {
+    read "actor-level" as r_0: integer = stat(actor, stat.sniper_actor_level);
+    let n_0 = r_0;
+    effect "actor-level-input" = derive(current, stat.skeletal_sniper.basic_attack_actor_level_input, n_0);
+}

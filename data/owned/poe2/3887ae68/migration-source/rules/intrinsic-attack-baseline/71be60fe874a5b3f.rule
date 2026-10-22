@@ -1,0 +1,10 @@
+program "intrinsic-attack-baseline" context actor {
+    let n_0 = quantity(1.65, unit.action_rate);
+    let n_1 = quantity(5, unit.percentage_points);
+    let n_2 = quantity(5, unit.damage);
+    let n_3 = quantity(2, unit.damage);
+    effect "baseline-0" = derive(player, stat.intrinsic_attack.fields.attackrate.stat, n_0);
+    effect "baseline-1" = derive(player, stat.intrinsic_attack.fields.critchance.stat, n_1);
+    effect "baseline-2" = derive(player, stat.intrinsic_attack.fields.physicalmax.stat, n_2);
+    effect "baseline-3" = derive(player, stat.intrinsic_attack.fields.physicalmin.stat, n_3);
+}

@@ -1,0 +1,35 @@
+packet "retained-008" {
+    append definition="passive_node.evasion.ascendancymonk2small2" {
+        program "passive-view" source="rules/passive-view/e68bd2cd4aa3096f.rule"
+    }
+    append definition="passive_node.attribute.strength27" {
+        program "attribute-choice" source="rules/attribute-choice/511380b3c659f3ad.rule"
+    }
+    append definition="passive_node.attack_and_minion_damage.minion_attack2" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/4b0e3bc96ac84210.rule"
+    }
+    append definition="passive_node.attribute.dexterity15" {
+        program "attribute-choice" source="rules/attribute-choice/ce75402b8466fcc6.rule"
+    }
+    append definition="passive_node.attribute.strength87" {
+        program "attribute-choice" source="rules/attribute-choice/ec1852c68484f393.rule"
+    }
+    append definition="passive_node.attribute.dexterity33" {
+        program "attribute-choice" source="rules/attribute-choice/90cd1697608b12a2.rule"
+    }
+    append definition="passive_node.evasion.azmerianimals8" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.attribute.intelligence66" {
+        program "attribute-choice" source="rules/attribute-choice/0252fa54f638d657.rule"
+    }
+    append definition="passive_node.attribute.strength21" {
+        program "attribute-choice" source="rules/attribute-choice/4b075b9289fe4e0f.rule"
+    }
+    append definition="passive_node.evasion.evasion25" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.strength_and_dexterity.azmerianimals5" {
+        program "passive-view" source="rules/passive-view/900e01da479bc5f2.rule"
+    }
+}

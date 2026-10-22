@@ -1,0 +1,17 @@
+program "configured-enemy-evasion-base" context actor {
+    read "enemy-level" as r_0: integer = enemy_level();
+    read "present" as r_1: boolean = external(current, external_input.incoming_damage_inputs.inputs.enemyevasion.presence_input);
+    read "raw" as r_2: quantity(unit.defence_rating) = external(current, external_input.incoming_damage_inputs.inputs.enemyevasion.value_input);
+    let n_0 = quantity(124.9090909090909, unit.percentage_points);
+    let n_1 = pct(n_0, unit.factor);
+    let n_2 = r_0;
+    let n_3 = 82;
+    let n_4 = r_1;
+    let n_5 = r_2;
+    let n_6 = max(n_2, n_3);
+    let n_7 = lookup(n_6, "monster-evasion-by-level");
+    let n_8 = scale(n_7, n_1);
+    let n_9 = round(n_8, quantity(1, unit.defence_rating), nearest_ties_positive);
+    let n_10 = if n_4 { n_5 } else { n_9 };
+    effect "configured-base" = contribute(current, stat.configuration_rating_inputs.inputs.enemyevasion.contribution_stat, add, n_10);
+}

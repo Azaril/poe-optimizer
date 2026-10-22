@@ -1,0 +1,21 @@
+// Exact typed addresses; slots remain qualified by their declarations.
+names game="poe2" version="owned-mechanics-v1" {
+    passive_node "passive_node.attributes.ascendancymonk1small7" key="def.0000000000000d51"
+    passive_node "passive_node.mana_regeneration.mana_regeneration13" key="def.0000000000000d61"
+    passive_node "passive_node.deflection.armour_and_evasion36" key="def.0000000000000d64"
+    passive_node "passive_node.strength.ascendancywarrior3small2" key="def.0000000000000d6f"
+    passive_node "passive_node.armour_and_energy_shield.energy_shield_and_armour20" key="def.0000000000000d79"
+    passive_node "passive_node.all_attributes.all_attributes3" key="def.0000000000000d85"
+    unit "unit.percentage_points" key="def.0000000000000002"
+    unit "unit.count" key="def.000000000000295a"
+    stat "stat.global_energy_shield_inputs.contribution" key="def.00000000000029f0"
+    stat "stat.permanent_reward_effects.channels.armour" key="def.00000000000029f2"
+    stat "stat.passive_defence_inputs.channels.mana_regeneration.id" key="def.00000000000029f3"
+    stat "stat.passive_defence_inputs.channels.evasion_gained_as_deflection.id" key="def.00000000000029f5"
+    stat "stat.attribute_empty_more.stages.strength_first.input" key="def.000000000000331b"
+    stat "stat.attribute_empty_more.stages.dexterity_first.input" key="def.000000000000331c"
+    stat "stat.attribute_empty_more.stages.intelligence_first.input" key="def.000000000000331d"
+    stat "stat.attribute_empty_more.stages.strength_second.input" key="def.000000000000331e"
+    stat "stat.attribute_empty_more.stages.dexterity_second.input" key="def.000000000000331f"
+    stat "stat.attribute_empty_more.stages.intelligence_second.input" key="def.0000000000003320"
+}

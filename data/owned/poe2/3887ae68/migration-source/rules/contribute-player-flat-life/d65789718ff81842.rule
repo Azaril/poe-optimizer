@@ -1,0 +1,12 @@
+program "contribute-player-flat-life" context equipment_use {
+    read "direct-applicability" as r_0: boolean = stat(current, stat.ordinary_item_routing.channels.direct_applicability);
+    read "effective" as r_1: quantity(unit.count) = stat(modifier, stat.modifier_effective_count);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = quantity(1, unit.count);
+    let n_3 = ratio(n_1, n_2, unit.factor);
+    let n_4 = quantity(1, unit.life);
+    let n_5 = scale(n_4, n_3);
+    let n_6 = check_domain(n_5, quantity(-137438953472, unit.life), quantity(137438953472, unit.life));
+    effect "direct-flat-life" when n_0 = contribute(player, stat.life, add, n_6);
+}

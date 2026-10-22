@@ -1,0 +1,11 @@
+program "heal-supply" context actor {
+    read "actor-level" as r_0: integer = stat(current, stat.sniper_actor_level);
+    let n_0 = 1;
+    let n_1 = quantity(0, unit.percentage_points);
+    let n_2 = r_0;
+    let n_3 = true;
+    effect "activate" = activate_grant(grant_slot.cleric_ability_supply.actor.heal.grant, n_3);
+    effect "project-ability-level" = project_skill_parameter(skill_grant_slot.cleric_ability_supply.actor.heal.supply, parameter_slot.healskeletonclericminion.cleric_ability_supply.heal.level, n_0);
+    effect "project-ability-quality" = project_skill_parameter(skill_grant_slot.cleric_ability_supply.actor.heal.supply, parameter_slot.healskeletonclericminion.cleric_ability_supply.heal.quality, n_1);
+    effect "project-actor-level" = project_skill_parameter(skill_grant_slot.cleric_ability_supply.actor.heal.supply, parameter_slot.healskeletonclericminion.cleric_ability_supply.heal.actor_level, n_2);
+}

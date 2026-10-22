@@ -1,0 +1,18 @@
+program "effective-input-preparation" context support_origin {
+    read "raw-level" as r_0: integer = gem_level();
+    read "raw-quality" as r_1: quantity(unit.percentage_points) = gem_quality_amount(quality.standard_quality);
+    let n_0 = quantity(1, unit.count);
+    let n_1 = quantity(1, unit.count);
+    let n_2 = 1;
+    let n_3 = r_0;
+    let n_4 = scale_integer(n_1, n_3);
+    let n_5 = max(n_4, n_1);
+    let n_6 = min(n_5, n_0);
+    let n_7 = quantize_integer(n_6, quantity(1, unit.count), truncate);
+    let n_8 = scale_integer(n_1, n_7);
+    let n_9 = n_6 == n_8;
+    let n_10 = if n_9 { n_7 } else { n_2 };
+    let n_11 = r_1;
+    effect "level" = derive(current, stat.prepared_support_level, n_10);
+    effect "quality" = derive(current, stat.prepared_support_quality, n_11);
+}

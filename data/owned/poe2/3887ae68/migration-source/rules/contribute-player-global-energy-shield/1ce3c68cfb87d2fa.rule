@@ -1,0 +1,5 @@
+program "contribute-player-global-energy-shield" context equipment_use {
+    read "effective" as r_0: quantity(unit.percentage_points) = stat(modifier, stat.modifier_effective_percent);
+    let n_0 = r_0;
+    effect "global-energy-shield-increase" = contribute(player, stat.global_energy_shield_inputs.contribution, increase, n_0);
+}

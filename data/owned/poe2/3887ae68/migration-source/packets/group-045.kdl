@@ -1,0 +1,26 @@
+packet "retained-045" {
+    append definition="passive_node.attribute.attributes21" {
+        program "attribute-choice" source="rules/attribute-choice/f5a47bd8677b59c1.rule"
+    }
+    append definition="passive_node.minion_damage.minion_offence20" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.attribute.intelligence52" {
+        program "attribute-choice" source="rules/attribute-choice/0a57785dbd453105.rule"
+    }
+    append definition="passive_node.attribute.intelligence85" {
+        program "attribute-choice" source="rules/attribute-choice/37539d9fa6ff3d5d.rule"
+    }
+    append definition="passive_node.dexterity.attributes113" {
+        program "passive-view" source="rules/passive-view/b5daae91c24596b6.rule"
+    }
+    append definition="passive_node.sentinels.sentinels5" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.attribute.strength54" {
+        program "attribute-choice" source="rules/attribute-choice/c762b9d0b9106188.rule"
+    }
+    append definition="passive_node.spell_damage.spells18" {
+        program "passive-view" source="rules/passive-view/84c2bfa7f6875467.rule"
+    }
+}

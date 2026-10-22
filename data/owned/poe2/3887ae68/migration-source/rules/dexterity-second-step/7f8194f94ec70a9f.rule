@@ -1,0 +1,23 @@
+program "dexterity-second-step" context actor {
+    read "base" as r_0: quantity(unit.count) = contribution_query(current, "dexterity-second-base", "ordinary");
+    read "effective-more" as r_1: quantity(unit.factor) = stat(current, stat.attribute_empty_more.stages.dexterity_second.effective_more);
+    read "increase" as r_2: quantity(unit.percentage_points) = contribution_query(current, "dexterity-second-increase", "ordinary");
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = quantity(0.5, unit.count);
+    let n_3 = r_2;
+    let n_4 = pct(n_3, unit.factor);
+    let n_5 = quantity(1, unit.factor);
+    let n_6 = n_5 + n_4;
+    let n_7 = scale(n_6, n_1);
+    let n_8 = scale(n_0, n_7);
+    let n_9 = n_8 + n_2;
+    let n_10 = round(n_9, quantity(1, unit.count), floor);
+    let n_11 = quantity(0, unit.count);
+    let n_12 = max(n_10, n_11);
+    let n_13 = quantize_integer(n_12, quantity(1, unit.count), floor);
+    let n_14 = n_0 == n_11;
+    let n_15 = 0;
+    let n_16 = if n_14 { n_15 } else { n_13 };
+    effect "result" = derive(current, stat.attributes.lanes.dexnodes.stat, n_16);
+}

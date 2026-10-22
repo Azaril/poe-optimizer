@@ -1,0 +1,6 @@
+program "intrinsic-reservation-coefficients" context action {
+    read "level" as r_0: integer = parameter(parameter_slot.sniper_level);
+    let n_0 = r_0;
+    let n_1 = lookup(n_0, "sniper.spirit-reservation");
+    effect "reservation" = derive(current, stat.sniper_spirit_reservation, n_1);
+}

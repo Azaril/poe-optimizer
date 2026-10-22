@@ -1,0 +1,5 @@
+program "local-minimum-increase" context equipment_use {
+    read "effective" as r_0: quantity(unit.percentage_points) = stat(modifier, stat.modifier_effective_percent);
+    let n_0 = r_0;
+    effect "contribute" = contribute(current, stat.local_weapon_inputs.stats.rounded_physical_minimum, increase, n_0);
+}

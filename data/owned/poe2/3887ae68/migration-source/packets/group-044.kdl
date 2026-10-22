@@ -1,0 +1,39 @@
+packet "retained-044" {
+    append definition="passive_node.attribute.intelligence54" {
+        program "attribute-choice" source="rules/attribute-choice/2986ba55e5a27535.rule"
+    }
+    append definition="passive_node.attribute.strength4" {
+        program "attribute-choice" source="rules/attribute-choice/836d8b5d23422104.rule"
+    }
+    append definition="passive_node.attribute.strength31" {
+        program "attribute-choice" source="rules/attribute-choice/fab91ee0d8869976.rule"
+    }
+    append definition="passive_node.armour.armour22" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.armour.armour8" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.attribute.attributes69" {
+        program "attribute-choice" source="rules/attribute-choice/cfbb3f2e6fecdb82.rule"
+    }
+    append definition="passive_node.armour_applies_to_elemental_damage_and_energy_shield_delay.energy_shield_and_armour38" {
+        program "passive-view" source="rules/passive-view/87947519ecfbbeca.rule"
+    }
+    append definition="passive_node.attribute.intelligence37" {
+        program "attribute-choice" source="rules/attribute-choice/e556ed9be0addbe7.rule"
+    }
+    append definition="passive_node.gigantic_following.minion_reservation16" {
+        program "ordinary-minion-gigantic" source="rules/ordinary-minion-gigantic/029f6e34885098db.rule"
+        program "ordinary-minion-reservation-efficiency" source="rules/ordinary-minion-reservation-efficiency/fb9c2c342c44db04.rule"
+    }
+    append definition="passive_node.evasion.evasion8" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.attribute.intelligence59" {
+        program "attribute-choice" source="rules/attribute-choice/266ceadfdaed6136.rule"
+    }
+    append definition="passive_node.attribute.intelligence76" {
+        program "attribute-choice" source="rules/attribute-choice/687eedd2e3e1fb9a.rule"
+    }
+}

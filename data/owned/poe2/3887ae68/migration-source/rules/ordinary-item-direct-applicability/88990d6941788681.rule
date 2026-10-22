@@ -1,0 +1,4 @@
+program "ordinary-item-direct-applicability" context equipment_use {
+    let n_0 = true;
+    effect "direct-applicability" = derive(current, stat.ordinary_item_routing.channels.direct_applicability, n_0);
+}

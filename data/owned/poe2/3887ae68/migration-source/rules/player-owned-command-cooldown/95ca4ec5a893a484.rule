@@ -1,0 +1,5 @@
+program "player-owned-command-cooldown" context actor {
+    read "incoming" as r_0: quantity(unit.percentage_points) = contributions(current, stat.command_cooldown.channels.player, increase, sum, quantity(0, unit.percentage_points));
+    let n_0 = r_0;
+    effect "final" = derive(current, stat.command_cooldown.channels.player, n_0);
+}

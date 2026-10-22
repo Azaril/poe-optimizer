@@ -1,0 +1,8 @@
+program "owned-minion-unconditional-increase-factor" context actor {
+    read "increase" as r_0: quantity(unit.percentage_points) = stat(current, stat.minion_unconditional_damage_increase);
+    let n_0 = r_0;
+    let n_1 = pct(n_0, unit.factor);
+    let n_2 = quantity(1, unit.factor);
+    let n_3 = n_2 + n_1;
+    effect "factor" = derive(current, stat.minion_unconditional_damage_increase_factor, n_3);
+}

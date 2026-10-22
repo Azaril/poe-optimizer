@@ -21,19 +21,17 @@ pub(super) fn compose(
     rules: &mut RulePackageInput,
     limits: ReleaseBuildLimits,
 ) -> Result<()> {
-    // Temporary R1 bootstrap admission, removed with the tracked source cutover.
-    // A source-based release never merges with or falls back to embedded programs.
-    if manifest.packets.is_empty() {
-        return Ok(());
-    }
     if rules
         .owners
         .iter()
         .any(|owner| !owner.programs.members.is_empty())
     {
         return Err(ReleaseBuildError::Invalid(
-            "rule packets require a program-free rules constituent",
+            "release requires a program-free rules constituent",
         ));
+    }
+    if manifest.packets.is_empty() {
+        return Ok(());
     }
     let index = OwnedDefinitionSchemaPackage::new(schema.clone(), limits.release.recipe.schema)?;
     let declared: BTreeMap<_, _> = manifest

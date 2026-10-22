@@ -268,6 +268,10 @@ to prove every other package field, including partial coverage, is unchanged.
 Use bounded symbol groups that include exact slot-declaration owners, then compile
 the complete reconstructed package through the existing Engine. Synthetic aliases
 are suitable for compiler tests, not substitutes for reviewed production names.
+Also check the actual tracked names, packets and `.rule` sources against the
+archived graphs. Exact owner/program placement and all non-program metadata must
+match independently of the production composer's assembly decisions. Historical
+IR remains test evidence; it is never an alternate production input.
 Formatting preserves token spellings and grouping; it only changes structural
 whitespace. Preserve comment bodies under the lexer's LF termination rule,
 including literal CR or trailing spaces. Output must fit both the output budget
@@ -345,10 +349,11 @@ constituent composition directly. `poe-author release build <manifest> --output
 <new-directory>` decodes those explicitly named inputs into the existing typed
 `OwnedReleaseInput` and invokes the single release assembler. It does not replay
 test staging functions or predecessor histories, synthesize missing mechanics,
-repair stale bindings, or certify complete-build coverage. Existing JSON DTOs,
-plain or explicitly gzip-encoded, are temporary migration inputs. They are not a
-second authoring language or the final runtime format; replace them with the
-accepted DSL/declarations and compiled package during the planned cutover.
+repair stale bindings, or certify complete-build coverage. Schema, tables,
+coverage and other metadata still use existing JSON DTOs, plain or explicitly
+gzip-encoded. Their declaration migration and the compiled runtime package remain
+R1-R4 work. Production program bodies come from tracked `.rule` sources and
+semantic KDL names and membership packets.
 
 The manifest schema is closed: registry, schema, rules, routing, mapping, roles,
 normalization, rewards, item rules and item-source policy are required. Tree
@@ -365,9 +370,11 @@ declarations in that same manifest. Packet memberships resolve only to declared
 rule sources. Names resolve against the actual validated schema; they do not
 grant read, write or owner authority. The existing packet lowerer constructs IR,
 then the sole release assembler and Engine checker validate the complete result.
-The rules constituent must contain no embedded program members when packets are
-present; tables, owner order, partial closure and other rule metadata remain
-explicit. No malformed source can fall back to an embedded program.
+The source rules constituent must always contain no embedded program members.
+The normal release builder rejects embedded IR even when no packets are declared;
+a program-free composition may still omit packets. Tables, owner order, partial
+closure and other rule metadata remain explicit. Source errors have no raw-program
+fallback.
 
 Paths have one role. Packets may share one names file, and memberships may reuse
 one declared rule file; both are inventoried and decoded once. Every declared
@@ -389,15 +396,23 @@ no game dependencies. Native execution still requires extraction of an immutable
 release loader so loading an existing release no longer reassembles authoring
 inputs.
 
-The tracked full source capture and reference receipt under
-[`migration-source`](../data/owned/poe2/3887ae68/migration-source/release.kdl) now
-reproduce through Rust tests and the production CLI. That capture has no
-evaluation bundle, adds no numerical coverage, and leaves 0/5 supplied originals
-complete. Until its source cutover, the offline builder still admits that
-packet-free capture's embedded IR. This temporary migration reader is scheduled
-for deletion with the source conversion, by R4; it is not another native evaluator
-or a fallback for DSL errors. Validation status belongs in the implementation
-plan, not an inferred claim from the presence of compressed files.
+The tracked source cutover under
+[`migration-source`](../data/owned/poe2/3887ae68/migration-source/release.kdl)
+replaces captured program bodies with semantic names, explicit packets and DSL.
+The conversion passes its preservation gates; detailed validation belongs in the
+[implementation plan](implementation.md). The immutable pre-migration IR corpus is
+retained only in Authoring's
+[`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz).
+Its historical receipt
+authenticates the archived bytes. Tests restore only the archived program members
+into a copy of the new composition and call the existing assembler directly to
+check preservation of every other artifact and provenance field.
+
+This representation change adds no evaluation bundle or numerical coverage;
+0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust
+publication helpers, the remaining legacy stack and runtime/authoring boundary
+cleanup still require R1-R4 work. Retiring embedded program input does not finish
+that migration or the first-build gate.
 
 ### Runtime representation and storage
 

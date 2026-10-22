@@ -1,0 +1,4 @@
+program "water-child-2-supply" context actor {
+    let n_0 = true;
+    effect "activate" = activate_grant(grant_slot.djinn_actions.summonwaterdjinnplayer.minion.actor.actions.chilledgroundburstwaterdjinn.entering_grant, n_0);
+}

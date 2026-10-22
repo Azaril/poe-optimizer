@@ -1,0 +1,13 @@
+program "passive-view" context actor {
+    let n_0 = any();
+    let n_1 = any();
+    let n_2 = quantity(30, unit.percentage_points);
+    let n_3 = quantity(30, unit.percentage_points);
+    let n_4 = quantity(30, unit.percentage_points);
+    let n_5 = false;
+    let n_6 = not n_0;
+    let n_7 = if n_1 { n_5 } else { n_6 };
+    effect "default-effect-0" when n_7 = contribute(player, stat.passive_defence_inputs.channels.armour_applies_to_fire.id, add, n_2);
+    effect "default-effect-1" when n_7 = contribute(player, stat.passive_defence_inputs.channels.armour_applies_to_cold.id, add, n_3);
+    effect "default-effect-2" when n_7 = contribute(player, stat.passive_defence_inputs.channels.armour_applies_to_lightning.id, add, n_4);
+}

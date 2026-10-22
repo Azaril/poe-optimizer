@@ -1,0 +1,35 @@
+packet "retained-061" {
+    append definition="passive_node.attribute.strength16" {
+        program "attribute-choice" source="rules/attribute-choice/9459c595be351125.rule"
+    }
+    append definition="passive_node.strength.attributes112" {
+        program "passive-view" source="rules/passive-view/f61c4224345a9cf4.rule"
+    }
+    append definition="passive_node.elemental_damage.elemental15" {
+        program "passive-view" source="rules/passive-view/291c64a140ee6a49.rule"
+    }
+    append definition="passive_node.evasion_and_energy_shield.evasion_and_energy_shield32" {
+        program "passive-view" source="rules/passive-view/957163ed415cefba.rule"
+    }
+    append definition="passive_node.armour.armour4" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour54" {
+        program "passive-view" source="rules/passive-view/e862b5e979cfcad5.rule"
+    }
+    append definition="passive_node.attribute.dexterity19" {
+        program "attribute-choice" source="rules/attribute-choice/4391009c8cb245ef.rule"
+    }
+    append definition="passive_node.strength.strength106" {
+        program "passive-view" source="rules/passive-view/f61c4224345a9cf4.rule"
+    }
+    append definition="passive_node.attribute.intelligence19" {
+        program "attribute-choice" source="rules/attribute-choice/bfa2df188811ba03.rule"
+    }
+    append definition="passive_node.command_skill_cooldown.minion_offence45" {
+        program "ordinary-command-cooldown" source="rules/ordinary-command-cooldown/be8d35f10a04685f.rule"
+    }
+    append definition="passive_node.attribute.attributes62" {
+        program "attribute-choice" source="rules/attribute-choice/428fcab317b02402.rule"
+    }
+}

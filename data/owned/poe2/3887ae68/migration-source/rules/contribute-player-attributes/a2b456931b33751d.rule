@@ -1,0 +1,13 @@
+program "contribute-player-attributes" context equipment_use {
+    read "effective" as r_0: quantity(unit.count) = stat(modifier, stat.modifier_effective_count);
+    let n_0 = r_0;
+    let n_1 = quantize_integer(n_0, quantity(1, unit.count), floor);
+    let n_2 = quantity(1, unit.count);
+    let n_3 = scale_integer(n_2, n_1);
+    effect "contribute-strength" = contribute(player, stat.attribute_empty_more.stages.strength_first.input, add, n_3);
+    effect "contribute-strength-pass-two" = contribute(player, stat.attribute_empty_more.stages.strength_second.input, add, n_3);
+    effect "contribute-dexterity" = contribute(player, stat.attribute_empty_more.stages.dexterity_first.input, add, n_3);
+    effect "contribute-dexterity-pass-two" = contribute(player, stat.attribute_empty_more.stages.dexterity_second.input, add, n_3);
+    effect "contribute-intelligence" = contribute(player, stat.attribute_empty_more.stages.intelligence_first.input, add, n_3);
+    effect "contribute-intelligence-pass-two" = contribute(player, stat.attribute_empty_more.stages.intelligence_second.input, add, n_3);
+}

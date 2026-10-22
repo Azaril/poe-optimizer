@@ -1,0 +1,5 @@
+program "resolve-inherent-doubled" context actor {
+    read "sources" as r_0: boolean = contribution_query(current, "inherent-flag-inherent-doubled", "sources");
+    let n_0 = r_0;
+    effect "resolved" = derive(current, stat.inherent_attribute_bonuses_doubled, n_0);
+}

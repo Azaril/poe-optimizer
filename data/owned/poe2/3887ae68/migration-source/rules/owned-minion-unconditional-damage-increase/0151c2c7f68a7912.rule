@@ -1,0 +1,8 @@
+program "owned-minion-unconditional-damage-increase" context actor {
+    read "applied" as r_0: quantity(unit.percentage_points) = contribution_query(current, "owned-minion-applied-damage-increase", "all");
+    read "inherited" as r_1: quantity(unit.percentage_points) = stat(current, stat.plain_minion_damage_passives.actor_stat);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = n_1 + n_0;
+    effect "increase" = derive(current, stat.minion_unconditional_damage_increase, n_2);
+}

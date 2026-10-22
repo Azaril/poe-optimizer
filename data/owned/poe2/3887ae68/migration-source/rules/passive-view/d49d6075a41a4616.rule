@@ -1,0 +1,16 @@
+program "passive-view" context actor {
+    let n_0 = any();
+    let n_1 = any();
+    let n_2 = quantity(7, unit.percentage_points);
+    let n_3 = quantity(7, unit.percentage_points);
+    let n_4 = quantity(7, unit.percentage_points);
+    let n_5 = false;
+    let n_6 = not n_0;
+    let n_7 = if n_1 { n_5 } else { n_6 };
+    effect "default-effect-0" when n_7 = contribute(player, stat.attribute_empty_more.stages.strength_first.input, increase, n_2);
+    effect "default-effect-0-pass-two" when n_7 = contribute(player, stat.attribute_empty_more.stages.strength_second.input, increase, n_2);
+    effect "default-effect-1" when n_7 = contribute(player, stat.attribute_empty_more.stages.dexterity_first.input, increase, n_3);
+    effect "default-effect-1-pass-two" when n_7 = contribute(player, stat.attribute_empty_more.stages.dexterity_second.input, increase, n_3);
+    effect "default-effect-2" when n_7 = contribute(player, stat.attribute_empty_more.stages.intelligence_first.input, increase, n_4);
+    effect "default-effect-2-pass-two" when n_7 = contribute(player, stat.attribute_empty_more.stages.intelligence_second.input, increase, n_4);
+}

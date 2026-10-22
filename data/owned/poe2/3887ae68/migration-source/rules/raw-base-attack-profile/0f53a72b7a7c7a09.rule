@@ -1,0 +1,30 @@
+program "raw-base-attack-profile" context equipment_use {
+    let n_0 = false;
+    let n_1 = quantity(1.6, unit.action_rate);
+    let n_2 = quantity(0, unit.damage);
+    let n_3 = quantity(56, unit.damage);
+    let n_4 = quantity(30, unit.damage);
+    let n_5 = quantity(13, unit.distance);
+    let n_6 = quantity(0, unit.damage);
+    let n_7 = quantity(0, unit.damage);
+    let n_8 = quantity(0, unit.damage);
+    let n_9 = quantity(5, unit.percentage_points);
+    let n_10 = quantity(0, unit.damage);
+    let n_11 = quantity(0, unit.damage);
+    let n_12 = quantity(0, unit.damage);
+    let n_13 = quantity(0, unit.damage);
+    effect "raw-0" = derive(current, stat.weapon_profiles.fields.attackratebase.stat, n_1);
+    effect "raw-1" = derive(current, stat.weapon_profiles.fields.chaosmax.stat, n_2);
+    effect "raw-2" = derive(current, stat.weapon_profiles.fields.chaosmin.stat, n_6);
+    effect "raw-3" = derive(current, stat.weapon_profiles.fields.coldmax.stat, n_7);
+    effect "raw-4" = derive(current, stat.weapon_profiles.fields.coldmin.stat, n_8);
+    effect "raw-5" = derive(current, stat.weapon_profiles.fields.critchancebase.stat, n_9);
+    effect "raw-6" = derive(current, stat.weapon_profiles.fields.firemax.stat, n_10);
+    effect "raw-7" = derive(current, stat.weapon_profiles.fields.firemin.stat, n_11);
+    effect "raw-8" = derive(current, stat.weapon_profiles.fields.lightningmax.stat, n_12);
+    effect "raw-9" = derive(current, stat.weapon_profiles.fields.lightningmin.stat, n_13);
+    effect "raw-10" = derive(current, stat.weapon_profiles.fields.physicalmax.stat, n_3);
+    effect "raw-11" = derive(current, stat.weapon_profiles.fields.physicalmin.stat, n_4);
+    effect "raw-12" = derive(current, stat.weapon_profiles.fields.range.stat, n_5);
+    effect "field-present-13" = capability(current, capability.weapon_profiles.fields.reloadtimebase.presence, n_0);
+}

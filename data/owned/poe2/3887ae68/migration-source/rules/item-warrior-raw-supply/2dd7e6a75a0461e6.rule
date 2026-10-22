@@ -1,0 +1,7 @@
+program "item-warrior-raw-supply" context equipment_use {
+    read "raw-level" as r_0: integer = parameter(parameter.skeletal_warrior.item_provider_level);
+    let n_0 = true;
+    let n_1 = r_0;
+    effect "raw-grant-level" = project_skill_parameter(skill_grant.skeletal_warrior.item_supply, parameter.skeletal_warrior.raw_granted_level, n_1);
+    effect "item-grant" = activate_grant(grant.skeletal_warrior.item_provider, n_0);
+}

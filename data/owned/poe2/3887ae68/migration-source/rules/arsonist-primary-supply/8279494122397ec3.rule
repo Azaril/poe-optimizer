@@ -1,0 +1,4 @@
+program "arsonist-primary-supply" context skill {
+    let n_0 = true;
+    effect "activate" = activate_grant(grant_slot.skeletalarsonist.skeletal_inputs.arsonist.entering_grant, n_0);
+}

@@ -1,0 +1,8 @@
+program "catalyst-inputs" context equipment_use {
+    read "catalyst-amount" as r_0: quantity(unit.percentage_points) = parameter(parameter_slot.obsidian_greatsword.weapon_catalyst_inputs.amount);
+    read "catalyst-kind" as r_1: option = parameter(parameter_slot.obsidian_greatsword.weapon_catalyst_inputs.selection);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    effect "catalyst-kind" = derive(current, stat.equipment_catalyst_kind, n_1);
+    effect "catalyst-amount" = derive(current, stat.equipment_catalyst_enabled_amount, n_0);
+}

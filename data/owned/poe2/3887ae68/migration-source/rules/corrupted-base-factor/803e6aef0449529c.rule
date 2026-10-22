@@ -1,0 +1,5 @@
+program "corrupted-base-factor" context equipment_use {
+    read "corrupted-base" as r_0: quantity(unit.factor) = parameter(parameter_slot.global_energy_shield_inputs.modifier.corrupted_base);
+    let n_0 = r_0;
+    effect "corrupted-base-factor" = derive(modifier, stat.modifier_value_inputs.stats.corrupted_base_factor, n_0);
+}

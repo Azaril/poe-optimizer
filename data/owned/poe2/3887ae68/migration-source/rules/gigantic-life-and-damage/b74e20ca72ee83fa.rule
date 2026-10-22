@@ -1,0 +1,7 @@
+program "gigantic-life-and-damage" context actor {
+    read "active" as r_0: boolean = stat(current, stat.gigantic_following.receiver.stat);
+    let n_0 = r_0;
+    let n_1 = quantity(1.2, unit.factor);
+    effect "life_more" when n_0 = contribute(current, stat.life, multiply, n_1);
+    effect "damage_more" when n_0 = contribute(current, stat.gigantic_benefits.channels.damage_more, multiply, n_1);
+}

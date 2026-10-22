@@ -1,0 +1,5 @@
+program "deliver-local-evasion-paired-shield-base" context equipment_use {
+    read "amount" as r_0: quantity(unit.count) = stat(modifier, stat.modifier_effective_count);
+    let n_0 = r_0;
+    effect "local" = contribute(current, stat.local_defence_composition.channels.evasion_energy_shield, add, n_0);
+}

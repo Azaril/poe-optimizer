@@ -1,0 +1,4 @@
+program "basic-attack-activation" context actor {
+    let n_0 = true;
+    effect "activate" = activate_grant(grant_slot.command_damage.actor.actor_ability_supply.abilities.sniper_basic_attack_skill.grant, n_0);
+}

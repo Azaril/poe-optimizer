@@ -1,0 +1,27 @@
+program "inherent-strength-life" context actor {
+    read "all-inherent-disabled" as r_0: boolean = stat(current, stat.no_attribute_bonuses);
+    read "inherent-doubled" as r_1: boolean = stat(current, stat.inherent_attribute_bonuses_doubled);
+    read "strength" as r_2: integer = stat(current, stat.strength_life.strength);
+    read "strength-inherent-disabled" as r_3: boolean = stat(current, stat.no_strength_attribute_bonuses);
+    read "strength-life-disabled" as r_4: boolean = stat(current, stat.no_strength_life);
+    read "strength-life-halved" as r_5: boolean = stat(current, stat.strength_life.inputs.strength_life_halved);
+    let n_0 = r_0;
+    let n_1 = 2;
+    let n_2 = quantity(1, unit.life);
+    let n_3 = r_1;
+    let n_4 = quantity(2, unit.life);
+    let n_5 = 1;
+    let n_6 = if n_3 { n_1 } else { n_5 };
+    let n_7 = r_2;
+    let n_8 = r_3;
+    let n_9 = r_4;
+    let n_10 = r_5;
+    let n_11 = if n_10 { n_2 } else { n_4 };
+    let n_12 = scale_integer(n_11, n_7);
+    let n_13 = scale_integer(n_12, n_6);
+    let n_14 = quantity(0, unit.life);
+    let n_15 = if n_9 { n_14 } else { n_13 };
+    let n_16 = if n_8 { n_14 } else { n_15 };
+    let n_17 = if n_0 { n_14 } else { n_16 };
+    effect "life" = derive(current, stat.inherent_life, n_17);
+}

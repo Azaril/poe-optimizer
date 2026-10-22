@@ -1,0 +1,29 @@
+packet "retained-010" {
+    append definition="passive_node.armour_applies_to_elemental_damage_and_deflection.armour_and_evasion48" {
+        program "passive-view" source="rules/passive-view/75731ca6f80963d4.rule"
+    }
+    append definition="passive_node.deflection.deflect32" {
+        program "passive-view" source="rules/passive-view/e2a2f49846c00f0b.rule"
+    }
+    append definition="passive_node.tempered_defences.armour49" {
+        program "passive-view" source="rules/passive-view/6a8f48df5c5a98d9.rule"
+    }
+    append definition="passive_node.armour.armour9" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.attribute.intelligence18" {
+        program "attribute-choice" source="rules/attribute-choice/57932c137a89e239.rule"
+    }
+    append definition="passive_node.evasion_and_energy_shield.evasion_and_energy_shield36" {
+        program "passive-view" source="rules/passive-view/957163ed415cefba.rule"
+    }
+    append definition="passive_node.attribute.intelligence12" {
+        program "attribute-choice" source="rules/attribute-choice/17664d03ee9619d9.rule"
+    }
+    append definition="passive_node.evasion.evasion21" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.attribute.attributes16" {
+        program "attribute-choice" source="rules/attribute-choice/b3f2da0a679cf384.rule"
+    }
+}

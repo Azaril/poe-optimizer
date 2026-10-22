@@ -1,0 +1,23 @@
+// Exact typed addresses; slots remain qualified by their declarations.
+names game="poe2" version="owned-mechanics-v1" {
+    passive_node "passive_node.attribute.intelligence58" key="def.0000000000001a10"
+    passive_node "passive_node.evasion_and_energy_shield.evasion_and_energy_shield17" key="def.0000000000001a1d"
+    passive_node "passive_node.intelligence.attributes104" key="def.0000000000001a1f"
+    passive_node "passive_node.mindful_awareness.evasion_and_energy_shield35" key="def.0000000000001a26"
+    passive_node "passive_node.attribute.strength68" key="def.0000000000001a33"
+    option "option.dexnodes" key="def.0000000000001bf2"
+    option "option.intnodes" key="def.0000000000001bf3"
+    option "option.strnodes" key="def.0000000000001bf4"
+    unit "unit.percentage_points" key="def.0000000000000002"
+    unit "unit.count" key="def.000000000000295a"
+    stat "stat.global_energy_shield_inputs.contribution" key="def.00000000000029f0"
+    stat "stat.player_evasion_final.contribution_stat" key="def.00000000000029f1"
+    stat "stat.attribute_empty_more.stages.strength_first.input" key="def.000000000000331b"
+    stat "stat.attribute_empty_more.stages.dexterity_first.input" key="def.000000000000331c"
+    stat "stat.attribute_empty_more.stages.intelligence_first.input" key="def.000000000000331d"
+    stat "stat.attribute_empty_more.stages.strength_second.input" key="def.000000000000331e"
+    stat "stat.attribute_empty_more.stages.dexterity_second.input" key="def.000000000000331f"
+    stat "stat.attribute_empty_more.stages.intelligence_second.input" key="def.0000000000003320"
+    choice_slot "choice_slot.attribute.intelligence58.options" key="def.0000000000001d19" owner="passive_node.attribute.intelligence58"
+    choice_slot "choice_slot.attribute.strength68.options" key="def.0000000000001d1a" owner="passive_node.attribute.strength68"
+}

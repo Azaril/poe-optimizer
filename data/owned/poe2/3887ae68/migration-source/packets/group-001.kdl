@@ -1,0 +1,32 @@
+packet "retained-001" {
+    append definition="passive_node.attribute.strength35" {
+        program "attribute-choice" source="rules/attribute-choice/5cb1d2dcf95abbcb.rule"
+    }
+    append definition="passive_node.all_attributes.all_attributes12" {
+        program "passive-view" source="rules/passive-view/2058f701fe304220.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana_regeneration33" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.armour.armour23" {
+        program "passive-view" source="rules/passive-view/f5d85a636eb75ca5.rule"
+    }
+    append definition="passive_node.attribute.attributes24" {
+        program "attribute-choice" source="rules/attribute-choice/ff9ee29fbbced468.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour30" {
+        program "passive-view" source="rules/passive-view/1773472463acc0b8.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour27" {
+        program "passive-view" source="rules/passive-view/167aaf37cfa117c3.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour45" {
+        program "passive-view" source="rules/passive-view/d6a788c2bddf9971.rule"
+    }
+    append definition="passive_node.armour.armour25" {
+        program "passive-view" source="rules/passive-view/0a11e1e612627291.rule"
+    }
+    append definition="passive_node.attribute.dexterity31" {
+        program "attribute-choice" source="rules/attribute-choice/6df29a3e7eeb8b74.rule"
+    }
+}

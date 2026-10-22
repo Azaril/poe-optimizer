@@ -1,0 +1,44 @@
+packet "retained-050" {
+    append definition="passive_node.deflection_and_energy_shield_delay.deflect60" {
+        program "passive-view" source="rules/passive-view/9d926eadac60b65e.rule"
+    }
+    append definition="passive_node.attribute.dexterity76" {
+        program "attribute-choice" source="rules/attribute-choice/d2806bdabf548828.rule"
+    }
+    append definition="passive_node.attribute.strength10" {
+        program "attribute-choice" source="rules/attribute-choice/9f5effc8019d5b5e.rule"
+    }
+    append definition="passive_node.soul_bloom.mana40" {
+        program "passive-view" source="rules/passive-view/c419d35d5789c76d.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour26" {
+        program "passive-view" source="rules/passive-view/1773472463acc0b8.rule"
+    }
+    append definition="passive_node.raw_power.witch_sorceress_notable1" {
+        program "passive-view" source="rules/passive-view/bc7d9cd182511536.rule"
+    }
+    append definition="passive_node.attribute.strength50" {
+        program "attribute-choice" source="rules/attribute-choice/8a29ea12678d9f3b.rule"
+    }
+    append definition="passive_node.attribute.strength71" {
+        program "attribute-choice" source="rules/attribute-choice/841c092fa8fca2b6.rule"
+    }
+    append definition="passive_node.armour_applies_to_elemental_damage_and_energy_shield_delay.energy_shield_and_armour43" {
+        program "passive-view" source="rules/passive-view/d6a788c2bddf9971.rule"
+    }
+    append definition="passive_node.strength.strength104" {
+        program "passive-view" source="rules/passive-view/f61c4224345a9cf4.rule"
+    }
+    append definition="passive_node.enhanced_reflexes.evasion32" {
+        program "passive-view" source="rules/passive-view/841479614fe1fb46.rule"
+    }
+    append definition="passive_node.attribute.intelligence25" {
+        program "attribute-choice" source="rules/attribute-choice/44a159718d591bfe.rule"
+    }
+    append definition="passive_node.blood_magic.passive_keystone_blood_magic" {
+        program "set-mana-override" source="rules/set-mana-override/9d1a0288bd890ca1.rule"
+    }
+    append definition="passive_node.attribute.strength51" {
+        program "attribute-choice" source="rules/attribute-choice/629970aa9a671ac0.rule"
+    }
+}

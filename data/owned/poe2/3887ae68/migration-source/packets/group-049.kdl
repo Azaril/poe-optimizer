@@ -1,0 +1,30 @@
+packet "retained-049" {
+    append definition="passive_node.evasion.evasion15" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.attribute.intelligence39" {
+        program "attribute-choice" source="rules/attribute-choice/424ccc61203f7263.rule"
+    }
+    append definition="passive_node.evasion.evasion14" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.attribute.attributes66" {
+        program "attribute-choice" source="rules/attribute-choice/8a143d071630815e.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour9" {
+        program "passive-view" source="rules/passive-view/167aaf37cfa117c3.rule"
+    }
+    append definition="passive_node.minion_damage.minion_offence35" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.intelligence.intelligence103" {
+        program "passive-view" source="rules/passive-view/bf52704df1fcc564.rule"
+    }
+    append definition="passive_node.intelligence.intelligence102" {
+        program "passive-view" source="rules/passive-view/bf52704df1fcc564.rule"
+    }
+    append definition="passive_node.minion_damage_and_command_speed.archon21" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/58c467b9b9a337e9.rule"
+        program "ordinary-command-cooldown" source="rules/ordinary-command-cooldown/ff3e800b24b4dc9e.rule"
+    }
+}

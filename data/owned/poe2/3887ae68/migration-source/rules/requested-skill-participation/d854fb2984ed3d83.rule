@@ -1,0 +1,8 @@
+program "requested-skill-participation" context skill {
+    read "group-requested" as r_0: boolean = parameter(parameter_slot.skill_participation.policy.group);
+    read "occurrence-requested" as r_1: boolean = parameter(parameter_slot.skill_participation.policy.occurrence);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = all(n_0, n_1);
+    effect "requested" = derive(current, stat.skill_participation.participation, n_2);
+}

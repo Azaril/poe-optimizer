@@ -1,0 +1,4 @@
+program "frost-bomb-primary-supply" context skill {
+    let n_0 = true;
+    effect "activate-primary" = activate_grant(grant_slot.frostbomb.frost_bomb_inputs.entering_grant, n_0);
+}

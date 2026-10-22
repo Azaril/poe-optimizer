@@ -1,0 +1,8 @@
+program "intrinsic-minion-cannot-be-evaded" context actor {
+    read "inheritance-flags" as r_0: boolean = contribution_query(player, "minion-accuracy-inheritance-flags", "sources");
+    let n_0 = r_0;
+    let n_1 = quantity(100, unit.percentage_points);
+    let n_2 = not n_0;
+    effect "cannot-be-evaded" = derive(current, stat.minion_intrinsic_cannot_be_evaded, n_2);
+    effect "accuracy-hit-chance" when n_2 = derive(current, stat.minion_intrinsic_accuracy_hit_chance, n_1);
+}

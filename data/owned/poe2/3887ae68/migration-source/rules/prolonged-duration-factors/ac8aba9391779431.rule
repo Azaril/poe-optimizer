@@ -1,0 +1,6 @@
+program "prolonged-duration-factors" context action {
+    let n_0 = quantity(1.2, unit.factor);
+    let n_1 = quantity(1.3, unit.factor);
+    effect "duration-factor" = contribute(current, stat.prolonged_duration_support_delivery.channels.duration_factor, multiply, n_1);
+    effect "cost-factor" = contribute(current, stat.magnified_area_support_delivery.channels.cost_factor, multiply, n_0);
+}

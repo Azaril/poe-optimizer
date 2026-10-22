@@ -14,7 +14,7 @@ use poe_optimizer_authoring::{
 use poe_optimizer_core::{
     owned_build::ParameterValue,
     owned_definitions::{DefId, OwnedDefinitionKey},
-    owned_rules::{RuleExpression, RuleNode, RuleProgram},
+    owned_rules::{RuleExpression, RuleNode, RulePackageInput, RuleProgram},
     owned_schema::{DefinitionSchemaIndex, SchemaSubject},
 };
 use poe_optimizer_data::{
@@ -252,10 +252,6 @@ fn metric_report(
         OwnedSupportMetricPlan::compile(Arc::new(effects), Arc::new(evaluation.metrics().clone()))
             .unwrap();
     plan.evaluate(&mut plan.new_scratch()).unwrap()
-}
-
-fn assert_metric(release: &StagedOwnedRelease) {
-    assert_eq!(metric_report(release), fixture().expected);
 }
 
 fn assert_dsl_metric(release: &StagedOwnedRelease) {
@@ -616,15 +612,21 @@ fn dsl_sources_and_names_have_exact_inventory_and_cannot_borrow_component_roles(
 
 #[test]
 fn packets_refuse_raw_programs_and_never_fall_back_after_dsl_errors() {
+    for compressed in [false, true] {
+        invalid(
+            Sources::new(&fixture().input, compressed).build(Default::default()),
+            "release requires a program-free rules constituent",
+        );
+    }
     let fixture = DslRelease::new(&fixture().input, false);
     let mut mixed = fixture.source.clone();
     mixed.replace_plain(
         "rules.json",
         serde_json::to_string(&fixture.expected.recipe.rules).unwrap(),
     );
-    assert!(
-        mixed.build(Default::default()).is_err(),
-        "mixed raw and DSL programs"
+    invalid(
+        mixed.build(Default::default()),
+        "release requires a program-free rules constituent",
     );
 
     let path = fixture.source_for("action-final");
@@ -1047,13 +1049,14 @@ fn aggregate_packet_and_ir_budgets_apply_across_the_complete_release() {
 }
 
 #[test]
-fn plain_and_gzip_constituents_reproduce_the_existing_release_and_metric() {
-    let expected = assemble_owned_release(fixture().input.clone(), Default::default()).unwrap();
+fn plain_and_gzip_constituents_build_the_same_dsl_release_and_metric() {
     for compressed in [false, true] {
-        let source = Sources::new(&fixture().input, compressed);
+        let dsl = DslRelease::new(&fixture().input, compressed);
+        let expected = assemble_owned_release(dsl.expected, Default::default()).unwrap();
+        let source = dsl.source;
         let manifest = parse_release_manifest(&source.manifest, Default::default()).unwrap();
         assert!(manifest.sources().iter().all(|spec| spec.encoding()
-            == if compressed {
+            == if compressed && spec.path().ends_with(".json.gz") {
                 SourceEncoding::Gzip
             } else {
                 SourceEncoding::Plain
@@ -1066,7 +1069,7 @@ fn plain_and_gzip_constituents_reproduce_the_existing_release_and_metric() {
         assert_eq!(actual.release().input(), expected.input());
         assert_eq!(actual.release().receipt(), expected.receipt());
         assert_eq!(files(actual.release()), files(&expected));
-        assert_metric(actual.release());
+        assert_dsl_metric(actual.release());
     }
 }
 
@@ -1091,18 +1094,14 @@ fn optional_evaluation_groups_are_explicit_and_complete() {
                     .outputs = None
             }
         }
-        let expected = assemble_owned_release(input.clone(), Default::default()).unwrap();
+        let dsl = DslRelease::new(&input, false);
+        let expected = assemble_owned_release(dsl.expected, Default::default()).unwrap();
         assert_eq!(
-            files(
-                Sources::new(&input, false)
-                    .build(Default::default())
-                    .unwrap()
-                    .release()
-            ),
+            files(dsl.source.build(Default::default()).unwrap().release()),
             files(&expected)
         );
     }
-    let source = Sources::new(&fixture().input, false);
+    let source = DslRelease::new(&fixture().input, false).source;
     for component in [
         "metrics",
         "support-stages",
@@ -1125,7 +1124,7 @@ fn optional_evaluation_groups_are_explicit_and_complete() {
 
 #[test]
 fn supplied_source_inventory_is_exact_without_fallbacks() {
-    let source = Sources::new(&fixture().input, false);
+    let source = DslRelease::new(&fixture().input, false).source;
     let manifest = parse_release_manifest(&source.manifest, Default::default()).unwrap();
     let supplied = source.sources();
     invalid(
@@ -1164,7 +1163,7 @@ fn supplied_source_inventory_is_exact_without_fallbacks() {
 #[test]
 fn encoded_decoded_and_source_count_budgets_have_exact_boundaries() {
     for compressed in [false, true] {
-        let source = Sources::new(&fixture().input, compressed);
+        let source = DslRelease::new(&fixture().input, compressed).source;
         let limits = ReleaseBuildLimits {
             max_encoded_bytes: source.encoded_bytes(),
             max_decoded_bytes: source.decoded_bytes,
@@ -1211,7 +1210,7 @@ fn encoded_decoded_and_source_count_budgets_have_exact_boundaries() {
             "source count",
         );
     }
-    let text = Sources::new(&fixture().input, false).manifest;
+    let text = DslRelease::new(&fixture().input, false).source.manifest;
     for limits in [
         ReleaseBuildLimits {
             max_sources: 0,
@@ -1240,7 +1239,7 @@ fn encoded_decoded_and_source_count_budgets_have_exact_boundaries() {
 #[test]
 fn gzip_requires_one_complete_member_without_trailing_data() {
     for case in 0..5 {
-        let mut source = Sources::new(&fixture().input, true);
+        let mut source = DslRelease::new(&fixture().input, true).source;
         let (path, bytes) = source
             .files
             .iter_mut()
@@ -1279,7 +1278,7 @@ fn gzip_requires_one_complete_member_without_trailing_data() {
 fn constituent_json_is_strict_and_reports_its_source() {
     for compressed in [false, true] {
         for suffix in [b" {}".as_slice(), b" trailing".as_slice()] {
-            let mut source = Sources::new(&fixture().input, compressed);
+            let mut source = DslRelease::new(&fixture().input, compressed).source;
             let target = if compressed {
                 "metrics.json.gz"
             } else {
@@ -1305,7 +1304,7 @@ fn constituent_json_is_strict_and_reports_its_source() {
 
 #[test]
 fn manifest_rejects_paths_unknown_fields_and_duplicate_components_or_queries() {
-    let source = Sources::new(&fixture().input, false);
+    let source = DslRelease::new(&fixture().input, false).source;
     for path in [
         "",
         "/absolute.json",
@@ -1408,8 +1407,9 @@ fn manifest_rejects_paths_unknown_fields_and_duplicate_components_or_queries() {
 
 #[test]
 fn expected_identity_and_actual_metric_authority_are_checked_after_decode() {
-    let mut source = Sources::new(&fixture().input, false);
-    let expected = assemble_owned_release(fixture().input.clone(), Default::default()).unwrap();
+    let dsl = DslRelease::new(&fixture().input, false);
+    let expected = assemble_owned_release(dsl.expected, Default::default()).unwrap();
+    let mut source = dsl.source;
     source.manifest = source.manifest.replacen(
         "release {",
         &format!("release expected_input=\"{}\" {{", expected.receipt().input),
@@ -1439,7 +1439,10 @@ fn expected_identity_and_actual_metric_authority_are_checked_after_decode() {
         metrics.namespace.clone(),
         OwnedDefinitionKey::new("missing-metric").unwrap(),
     );
-    match Sources::new(&input, false).build(Default::default()) {
+    match DslRelease::new(&input, false)
+        .source
+        .build(Default::default())
+    {
         Err(ReleaseBuildError::Assembly(OwnedReleaseError::Evaluation(_))) => {}
         Err(other) => panic!("unexpected error: {other}"),
         Ok(_) => panic!("an unregistered metric bypassed the existing checker"),
@@ -1447,14 +1450,13 @@ fn expected_identity_and_actual_metric_authority_are_checked_after_decode() {
 }
 
 #[test]
-fn tracked_bootstrap_rebuilds_every_reference_artifact_without_local_predecessors() {
+fn tracked_dsl_release_preserves_every_historical_constituent_except_program_representation() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../../data/owned/poe2/3887ae68/migration-source");
     let text = fs::read_to_string(root.join("release.kdl")).unwrap();
     let reference_bytes = fs::read(root.join("reference-release.json")).unwrap();
     let reference: OwnedReleaseReceipt = serde_json::from_slice(&reference_bytes).unwrap();
     let manifest = parse_release_manifest(&text, Default::default()).unwrap();
-    assert_eq!(manifest.expected_input(), Some(reference.input));
     let owned: Vec<_> = manifest
         .sources()
         .iter()
@@ -1471,10 +1473,75 @@ fn tracked_bootstrap_rebuilds_every_reference_artifact_without_local_predecessor
         .collect();
     let actual = build_release(&manifest, &sources, Default::default()).unwrap();
     let release = actual.release();
-    assert_eq!(release.receipt(), &reference);
-    let artifacts: BTreeMap<_, _> = release.artifacts().collect();
+    assert_eq!(manifest.expected_input(), Some(release.receipt().input));
+    assert_ne!(release.receipt().input, reference.input);
+    let current_artifacts: BTreeMap<_, _> = release.artifacts().collect();
+
+    // Historical IR is a test reference only. Restore just program members so
+    // the old receipt independently authenticates all current non-program state.
+    let retained = fs::read(
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"),
+    )
+    .unwrap();
+    let mut bytes = Vec::new();
+    let maximum = ReleaseBuildLimits::default().max_decoded_bytes;
+    GzDecoder::new(retained.as_slice())
+        .take(maximum as u64 + 1)
+        .read_to_end(&mut bytes)
+        .unwrap();
+    assert!(bytes.len() <= maximum);
+    let rule_reference = reference
+        .artifacts
+        .iter()
+        .find(|row| row.file == "rules.json")
+        .unwrap();
+    assert_eq!(bytes.len(), rule_reference.bytes);
+    assert_eq!(
+        format!("{:x}", Sha256::digest(&bytes)),
+        rule_reference.sha256
+    );
+    let historical: RulePackageInput = serde_json::from_slice(&bytes).unwrap();
+    let mut restored = release.input().clone();
+    assert_eq!(restored.recipe.rules.owners.len(), historical.owners.len());
+    for (current, original) in restored
+        .recipe
+        .rules
+        .owners
+        .iter_mut()
+        .zip(&historical.owners)
+    {
+        assert_eq!(current.owner, original.owner, "exact retained owner order");
+        assert_eq!(
+            current.programs.members.len(),
+            original.programs.members.len()
+        );
+        for (current, original) in current
+            .programs
+            .members
+            .iter()
+            .zip(&original.programs.members)
+        {
+            assert_eq!(
+                current.id, original.id,
+                "exact retained program membership order"
+            );
+        }
+        current
+            .programs
+            .members
+            .clone_from(&original.programs.members);
+    }
+    assert_eq!(
+        restored.recipe.rules, historical,
+        "all non-program rule metadata"
+    );
+    let restored = assemble_owned_release(restored, Default::default()).unwrap();
+    assert_eq!(restored.receipt(), &reference);
+    let artifacts: BTreeMap<_, _> = restored.artifacts().collect();
     assert_eq!(artifacts.len(), reference.artifacts.len() + 1);
+    assert_eq!(current_artifacts.len(), artifacts.len());
     assert_eq!(artifacts["release.json"], reference_bytes);
+    assert_ne!(current_artifacts["release.json"], reference_bytes);
     assert!(
         reference
             .artifacts
@@ -1490,31 +1557,35 @@ fn tracked_bootstrap_rebuilds_every_reference_artifact_without_local_predecessor
             "{} digest",
             row.file
         );
-    }
-    // The supplied constituents are exact retained bytes, while manifest.json
-    // is independently derived by the existing recipe assembler.
-    let mut decoded_bytes = 0;
-    for (spec, (_, encoded)) in manifest.sources().iter().zip(&owned) {
-        assert_eq!(spec.encoding(), SourceEncoding::Gzip);
-        let mut decoded = Vec::new();
-        GzDecoder::new(encoded.as_slice())
-            .read_to_end(&mut decoded)
-            .unwrap();
-        decoded_bytes += decoded.len();
-        let name = Path::new(spec.path())
-            .file_name()
-            .unwrap()
-            .to_str()
-            .unwrap()
-            .strip_suffix(".gz")
-            .unwrap();
-        if name == "provenance.json" {
-            assert_eq!(
-                serde_json::from_slice::<serde_json::Value>(&decoded).unwrap(),
-                serde_json::to_value(&reference.provenance).unwrap()
+        if matches!(row.file.as_str(), "rules.json" | "manifest.json") {
+            assert_ne!(
+                current_artifacts[row.file.as_str()],
+                bytes,
+                "new representation: {}",
+                row.file
             );
         } else {
-            assert_eq!(artifacts[name], decoded, "retained constituent: {name}");
+            assert_eq!(
+                current_artifacts[row.file.as_str()],
+                bytes,
+                "unchanged constituent: {}",
+                row.file
+            );
+        }
+    }
+    let mut decoded_bytes = 0;
+    for (spec, (_, encoded)) in manifest.sources().iter().zip(&owned) {
+        match spec.encoding() {
+            SourceEncoding::Plain => decoded_bytes += encoded.len(),
+            SourceEncoding::Gzip => {
+                let mut decoded = Vec::new();
+                GzDecoder::new(encoded.as_slice())
+                    .take(maximum as u64 + 1)
+                    .read_to_end(&mut decoded)
+                    .unwrap();
+                assert!(decoded.len() <= maximum);
+                decoded_bytes += decoded.len();
+            }
         }
     }
     assert_eq!(
@@ -1525,7 +1596,7 @@ fn tracked_bootstrap_rebuilds_every_reference_artifact_without_local_predecessor
     assert_eq!(release.input().provenance, reference.provenance);
     assert!(
         release.evaluation().is_none(),
-        "the bootstrap makes no evaluation coverage claim"
+        "the retained source release makes no evaluation coverage claim"
     );
 }
 
@@ -1553,6 +1624,16 @@ fn directory_files(path: &Path) -> BTreeMap<String, Vec<u8>> {
         .collect()
 }
 
+fn declared_files(path: &Path, source: &Sources) -> BTreeMap<String, Vec<u8>> {
+    source
+        .files
+        .iter()
+        .map(|(name, _)| name.as_str())
+        .chain(std::iter::once("release.kdl"))
+        .map(|name| (name.into(), fs::read(path.join(name)).unwrap()))
+        .collect()
+}
+
 fn directory_entries(path: &Path) -> BTreeSet<std::ffi::OsString> {
     fs::read_dir(path)
         .unwrap()
@@ -1573,6 +1654,7 @@ fn cli_builds_declared_dsl_and_rejected_dsl_leaves_no_publication() {
     }
     let manifest = input.join("release.kdl");
     fs::write(&manifest, &dsl.source.manifest).unwrap();
+    let initial_sources = declared_files(&input, &dsl.source);
     let output = temp.path().join("dsl release μ");
     let expected = assemble_owned_release(dsl.expected.clone(), Default::default()).unwrap();
     let result = cli(&manifest, &output);
@@ -1587,13 +1669,7 @@ fn cli_builds_declared_dsl_and_rejected_dsl_leaves_no_publication() {
     receipt.push(b'\n');
     assert_eq!(result.stdout, receipt);
     assert_eq!(directory_files(&output), files(&expected));
-    for (path, bytes) in &dsl.source.files {
-        assert_eq!(
-            fs::read(input.join(path)).unwrap(),
-            *bytes,
-            "source changed: {path}"
-        );
-    }
+    assert_eq!(declared_files(&input, &dsl.source), initial_sources);
 
     let rule = dsl.source_for("action-final");
     fs::write(
@@ -1617,15 +1693,18 @@ fn cli_build_publishes_exact_artifacts_and_failures_leave_no_output_or_staging()
     let temp = tempfile::tempdir().unwrap();
     let input = temp.path().join("release inputs λ");
     fs::create_dir(&input).unwrap();
-    let source = Sources::new(&fixture().input, true);
+    let dsl = DslRelease::new(&fixture().input, true);
+    let source = dsl.source;
     for (path, bytes) in &source.files {
-        fs::write(input.join(path), bytes).unwrap();
+        let target = input.join(path);
+        fs::create_dir_all(target.parent().unwrap()).unwrap();
+        fs::write(target, bytes).unwrap();
     }
     let manifest = input.join("release.kdl");
     fs::write(&manifest, &source.manifest).unwrap();
-    let initial_sources = directory_files(&input);
+    let initial_sources = declared_files(&input, &source);
     let output = temp.path().join("published release μ");
-    let expected = assemble_owned_release(fixture().input.clone(), Default::default()).unwrap();
+    let expected = assemble_owned_release(dsl.expected, Default::default()).unwrap();
     let expected_files = files(&expected);
     let result = cli(&manifest, &output);
     assert_eq!(
@@ -1639,7 +1718,7 @@ fn cli_build_publishes_exact_artifacts_and_failures_leave_no_output_or_staging()
     receipt.push(b'\n');
     assert_eq!(result.stdout, receipt);
     assert_eq!(directory_files(&output), expected_files);
-    assert_eq!(directory_files(&input), initial_sources);
+    assert_eq!(declared_files(&input, &source), initial_sources);
     let published_entries = directory_entries(temp.path());
 
     let repeated = cli(&manifest, &output);
@@ -1679,7 +1758,7 @@ fn cli_build_publishes_exact_artifacts_and_failures_leave_no_output_or_staging()
         assert_eq!(directory_files(&output), expected_files);
     }
     fs::write(&manifest, &source.manifest).unwrap();
-    assert_eq!(directory_files(&input), initial_sources);
+    assert_eq!(declared_files(&input, &source), initial_sources);
 }
 
 #[cfg(unix)]
@@ -1688,14 +1767,16 @@ fn cli_refuses_a_source_symlink_outside_the_manifest_directory() {
     let temp = tempfile::tempdir().unwrap();
     let input = temp.path().join("input");
     fs::create_dir(&input).unwrap();
-    let source = Sources::new(&fixture().input, false);
+    let source = DslRelease::new(&fixture().input, false).source;
     for (path, bytes) in &source.files {
+        let target = input.join(path);
+        fs::create_dir_all(target.parent().unwrap()).unwrap();
         if path == "metrics.json" {
             let outside = temp.path().join("outside-metrics.json");
             fs::write(&outside, bytes).unwrap();
-            std::os::unix::fs::symlink(&outside, input.join(path)).unwrap();
+            std::os::unix::fs::symlink(&outside, target).unwrap();
         } else {
-            fs::write(input.join(path), bytes).unwrap();
+            fs::write(target, bytes).unwrap();
         }
     }
     let manifest = input.join("release.kdl");

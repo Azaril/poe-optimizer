@@ -1,0 +1,17 @@
+program "ice-nova-pre-support-inputs" context skill {
+    read "corruption" as r_0: quantity(unit.count) = parameter(parameter_slot.icenova.ice_nova_source_inputs.corruption);
+    read "external-level-0" as r_1: quantity(unit.count) = contributions(player, stat.global_spell_gem_level_addition, add, sum, quantity(0, unit.count));
+    read "raw-level" as r_2: integer = gem_level();
+    read "raw-quality" as r_3: quantity(unit.percentage_points) = gem_quality_amount(quality.standard_quality);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = quantity(1, unit.count);
+    let n_3 = r_2;
+    let n_4 = scale_integer(n_2, n_3);
+    let n_5 = n_4 + n_0;
+    let n_6 = max(n_5, n_2);
+    let n_7 = n_6 + n_1;
+    let n_8 = r_3;
+    effect "level" = derive(current, stat.pre_support_skill_level, n_7);
+    effect "quality" = derive(current, stat.pre_support_skill_quality, n_8);
+}

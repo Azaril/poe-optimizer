@@ -1,0 +1,4 @@
+program "strength-life-halving" context actor {
+    let n_0 = true;
+    effect "flag" = contribute(player, stat.strength_life.inputs.strength_life_halved, flag, n_0);
+}

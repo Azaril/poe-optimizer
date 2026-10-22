@@ -1,0 +1,6 @@
+program "water-tree-raw-supply" context actor {
+    let n_0 = true;
+    let n_1 = quantity(1, unit.count);
+    effect "raw-grant-level" = project_skill_parameter(skill_grant_slot.barya_of_navira.ascendancysorceress3notable7.djinn_tree_grants.summonwaterdjinnplayer.supply, parameter_slot.summonwaterdjinnplayer.djinn_actions.raw_level, n_1);
+    effect "tree-grant" = activate_grant(grant_slot.barya_of_navira.ascendancysorceress3notable7.djinn_tree_grants.summonwaterdjinnplayer.grant, n_0);
+}

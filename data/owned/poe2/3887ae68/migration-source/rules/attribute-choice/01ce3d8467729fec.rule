@@ -1,0 +1,19 @@
+program "attribute-choice" context actor {
+    read "choice" as r_0: option = choice(choice_slot.attribute.strength89.options);
+    let n_0 = option(option.dexnodes);
+    let n_1 = option(option.intnodes);
+    let n_2 = option(option.strnodes);
+    let n_3 = r_0;
+    let n_4 = n_3 == n_0;
+    let n_5 = n_3 == n_1;
+    let n_6 = n_3 == n_2;
+    let n_7 = quantity(5, unit.count);
+    let n_8 = quantity(5, unit.count);
+    let n_9 = quantity(5, unit.count);
+    effect "contribution-0" when n_4 = contribute(player, stat.attribute_empty_more.stages.dexterity_first.input, add, n_7);
+    effect "contribution-0-pass-two" when n_4 = contribute(player, stat.attribute_empty_more.stages.dexterity_second.input, add, n_7);
+    effect "contribution-1" when n_5 = contribute(player, stat.attribute_empty_more.stages.intelligence_first.input, add, n_8);
+    effect "contribution-1-pass-two" when n_5 = contribute(player, stat.attribute_empty_more.stages.intelligence_second.input, add, n_8);
+    effect "contribution-2" when n_6 = contribute(player, stat.attribute_empty_more.stages.strength_first.input, add, n_9);
+    effect "contribution-2-pass-two" when n_6 = contribute(player, stat.attribute_empty_more.stages.strength_second.input, add, n_9);
+}

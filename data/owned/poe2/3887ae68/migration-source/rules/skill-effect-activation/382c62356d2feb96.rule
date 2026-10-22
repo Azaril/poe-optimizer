@@ -1,0 +1,5 @@
+program "skill-effect-activation" context skill {
+    read "enabled" as r_0: boolean = parameter(parameter_slot.skill_usage_inputs.policy.parameter);
+    let n_0 = r_0;
+    effect "effect-active" = derive(current, stat.pain_offering.effect_active, n_0);
+}

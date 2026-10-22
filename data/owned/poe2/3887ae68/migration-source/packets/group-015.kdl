@@ -1,0 +1,45 @@
+packet "retained-015" {
+    append definition="passive_node.intelligence.azmerianimals65" {
+        program "passive-view" source="rules/passive-view/bf52704df1fcc564.rule"
+    }
+    append definition="passive_node.elemental_damage.elemental14" {
+        program "passive-view" source="rules/passive-view/291c64a140ee6a49.rule"
+    }
+    append definition="passive_node.deflection.deflect36" {
+        program "passive-view" source="rules/passive-view/68efec71f000927f.rule"
+    }
+    append definition="passive_node.minion_damage.minion_offence5" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.attribute.intelligence11" {
+        program "attribute-choice" source="rules/attribute-choice/f1829e817db00388.rule"
+    }
+    append definition="passive_node.pure_energy.witch_sorceress_notable2" {
+        program "passive-view" source="rules/passive-view/bb340d022da2cdfb.rule"
+    }
+    append definition="passive_node.attribute.strength9" {
+        program "attribute-choice" source="rules/attribute-choice/bf76a30b070f841d.rule"
+    }
+    append definition="passive_node.deflection.deflect31" {
+        program "passive-view" source="rules/passive-view/e2a2f49846c00f0b.rule"
+    }
+    append definition="passive_node.attribute.strength11" {
+        program "attribute-choice" source="rules/attribute-choice/7aa91b1d9317f89e.rule"
+    }
+    append definition="passive_node.minion_damage.minion_reservation1" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/0dbe62250da13c35.rule"
+    }
+    append definition="passive_node.minion_damage_and_life.minion_reservation15" {
+        program "ordinary-minion-damage" source="rules/ordinary-minion-damage/58c467b9b9a337e9.rule"
+        program "ordinary-minion-life" source="rules/ordinary-minion-life/3c7f20e53e7e948c.rule"
+    }
+    append definition="passive_node.attribute.strength20" {
+        program "attribute-choice" source="rules/attribute-choice/7a2d8383139315ef.rule"
+    }
+    append definition="passive_node.attribute.attributes58" {
+        program "attribute-choice" source="rules/attribute-choice/be31c039a1e5fd0c.rule"
+    }
+    append definition="passive_node.energy_shield_delay_and_armour_applies_to_elemental_damage.energy_shield_and_armour23" {
+        program "passive-view" source="rules/passive-view/2705ab0e2773f30c.rule"
+    }
+}

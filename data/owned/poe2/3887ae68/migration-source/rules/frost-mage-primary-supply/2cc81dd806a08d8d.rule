@@ -1,0 +1,4 @@
+program "frost-mage-primary-supply" context skill {
+    let n_0 = true;
+    effect "activate" = activate_grant(grant_slot.skeletalfrostmage.skeletal_inputs.frost_mage.entering_grant, n_0);
+}

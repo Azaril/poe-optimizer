@@ -1,0 +1,47 @@
+packet "retained-026" {
+    append definition="passive_node.attribute.intelligence78" {
+        program "attribute-choice" source="rules/attribute-choice/1b69ba7ca007152f.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana34" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.deflection_and_energy_shield_delay.evasion_and_energy_shield19" {
+        program "passive-view" source="rules/passive-view/9d926eadac60b65e.rule"
+    }
+    append definition="passive_node.evasion.evasion26" {
+        program "passive-view" source="rules/passive-view/e8e26bc77e459bd1.rule"
+    }
+    append definition="passive_node.melding.energy_shield35" {
+        program "passive-view" source="rules/passive-view/9e77c4ef6347fbbc.rule"
+    }
+    append definition="passive_node.attribute.attributes22" {
+        program "attribute-choice" source="rules/attribute-choice/e3a681ccd2ae901c.rule"
+    }
+    append definition="passive_node.attribute.intelligence34" {
+        program "attribute-choice" source="rules/attribute-choice/a2008024ce2dbdd1.rule"
+    }
+    append definition="passive_node.attributes.ascendancyhuntress3small2" {
+        program "passive-view" source="rules/passive-view/d546292eaa53061b.rule"
+    }
+    append definition="passive_node.giant_s_blood.passive_keystone_giants_blood" {
+        program "strength-life-halving" source="rules/strength-life-halving/268bd2f614848f85.rule"
+    }
+    append definition="passive_node.mana_regeneration.mana_regeneration14" {
+        program "passive-view" source="rules/passive-view/f538d16415efc6d0.rule"
+    }
+    append definition="passive_node.intelligence.attributes111" {
+        program "passive-view" source="rules/passive-view/bf52704df1fcc564.rule"
+    }
+    append definition="passive_node.attribute.attributes4" {
+        program "attribute-choice" source="rules/attribute-choice/3d5f78c7095b120c.rule"
+    }
+    append definition="passive_node.attribute.attributes1" {
+        program "attribute-choice" source="rules/attribute-choice/7210947c5ad03b26.rule"
+    }
+    append definition="passive_node.deflection.armour_and_evasion39" {
+        program "passive-view" source="rules/passive-view/68efec71f000927f.rule"
+    }
+    append definition="passive_node.armour_and_energy_shield.energy_shield_and_armour2" {
+        program "passive-view" source="rules/passive-view/167aaf37cfa117c3.rule"
+    }
+}

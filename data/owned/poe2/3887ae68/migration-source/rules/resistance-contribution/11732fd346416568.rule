@@ -1,0 +1,5 @@
+program "resistance-contribution" context equipment_use {
+    read "amount" as r_0: quantity(unit.percentage_points) = parameter(parameter.flat_cold_resistance.roll);
+    let n_0 = r_0;
+    effect "add-resistance" = contribute(player, stat.cold_resistance_base_contributions, add, n_0);
+}

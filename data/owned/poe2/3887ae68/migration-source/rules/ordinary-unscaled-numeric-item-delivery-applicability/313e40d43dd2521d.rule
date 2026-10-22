@@ -1,0 +1,4 @@
+program "ordinary-unscaled-numeric-item-delivery-applicability" context equipment_use {
+    let n_0 = true;
+    effect "unscaled-direct-applicability" = derive(current, stat.cold_item_delivery.applicability, n_0);
+}

@@ -1,0 +1,9 @@
+program "ordinary-population-requirements" context actor {
+    read "character-level" as r_0: integer = character_level();
+    read "level" as r_1: integer = parameter(parameter_slot.sniper_level);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    let n_2 = lookup(n_1, "sniper.required-character-level");
+    let n_3 = n_0 >= n_2;
+    effect "character-level-requirement" = requirement(n_3, "required-character-level");
+}

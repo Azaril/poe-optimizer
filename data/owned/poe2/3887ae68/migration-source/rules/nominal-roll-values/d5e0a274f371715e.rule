@@ -1,0 +1,5 @@
+program "nominal-roll-values" context equipment_use {
+    read "amount" as r_0: quantity(unit.percentage_points) = parameter(parameter_slot.modifier_value_inputs.critical_flat.predecessor.slot_migration.canonical_unrounded_amount.predecessor);
+    let n_0 = r_0;
+    effect "nominal-amount" = derive(modifier, stat.local_modifier_inputs.stats.nominal_percent, n_0);
+}

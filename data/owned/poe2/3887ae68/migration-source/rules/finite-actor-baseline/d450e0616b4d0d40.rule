@@ -1,0 +1,18 @@
+program "finite-actor-baseline" context actor {
+    read "level-0" as r_0: integer = stat(actor, stat.sniper_actor_level);
+    let n_0 = quantity(1.5, unit.seconds);
+    let n_1 = quantity(1.15, unit.factor);
+    let n_2 = quantity(0.3, unit.factor);
+    let n_3 = quantity(5, unit.percentage_points);
+    let n_4 = quantity(80, unit.distance);
+    let n_5 = true;
+    let n_6 = r_0;
+    let n_7 = lookup(n_6, "actor.allied-damage-by-level");
+    effect "fact-0" = derive(current, stat.actor_baselines.stats.attack_time, n_0);
+    effect "fact-1" = derive(current, stat.actor_baselines.stats.damage_scale, n_1);
+    effect "fact-2" = derive(current, stat.actor_baselines.stats.damage_spread, n_2);
+    effect "fact-3" = derive(current, stat.actor_baselines.stats.critical_chance, n_3);
+    effect "fact-4" = derive(current, stat.actor_baselines.stats.attack_range, n_4);
+    effect "fact-5" = derive(current, stat.actor_baselines.stats.base_damage_ignores_attack_speed, n_5);
+    effect "curve-0" = derive(current, stat.actor_baselines.stats.allied_level_damage, n_7);
+}

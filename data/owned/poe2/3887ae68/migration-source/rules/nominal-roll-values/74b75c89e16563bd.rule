@@ -1,0 +1,8 @@
+program "nominal-roll-values" context equipment_use {
+    read "maximum" as r_0: quantity(unit.damage) = parameter(parameter_slot.modifier_value_inputs.lightning_flat.predecessor.slot_migration.canonical_unrounded_maximum.predecessor);
+    read "minimum" as r_1: quantity(unit.damage) = parameter(parameter_slot.modifier_value_inputs.lightning_flat.predecessor.slot_migration.canonical_unrounded_minimum.predecessor);
+    let n_0 = r_0;
+    let n_1 = r_1;
+    effect "nominal-minimum" = derive(modifier, stat.local_modifier_inputs.stats.nominal_damage_minimum, n_1);
+    effect "nominal-maximum" = derive(modifier, stat.local_modifier_inputs.stats.nominal_damage_maximum, n_0);
+}
