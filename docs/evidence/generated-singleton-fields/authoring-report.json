@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "scope": "generated-singleton-four-field-data-authoring",
+  "producer_sha256": "8494a7ebcafeb16206a2f2b2503e55cf1fed639d423d5eb6654b366cfe0990d2",
+  "before_input": "a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905",
+  "changes": [
+    {
+      "path": "data/owned/poe2/3887ae68/generated-firebolt-dispositions/bindings.json",
+      "before_sha256": "bfbbd8e70a5d4a777700322624323a6f0809923a53b55671d118ef0862a9ecfe",
+      "after_sha256": "5ff637bb3ca9cf42e346f7a2a5d1fa312f48a92947f97a58b46ea26ecdb49b20",
+      "before_bytes": 66915,
+      "after_bytes": 64726,
+      "whole_byte_inverse": true
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/generated-firebolt-dispositions/review.json",
+      "before_sha256": "fe21b428e73a8b285d7d08b7c2ad51dc46739e1e48726126de4308dbe9ef5f38",
+      "after_sha256": "b9e4b303c91acbafcdce72ebe851e479dd70b51044d2d163ee12db2884b623c6",
+      "before_bytes": 112799,
+      "after_bytes": 120037,
+      "whole_byte_inverse": true
+    }
+  ],
+  "field_changes": [
+    {
+      "field": {
+        "kind": "group_attribute",
+        "name": "mainActiveSkill"
+      },
+      "before": [
+        {
+          "kind": "deferred",
+          "reason": "group-field-consumers-not-yet-reviewed"
+        }
+      ],
+      "after": [
+        {
+          "kind": "input_disposition"
+        }
+      ]
+    },
+    {
+      "field": {
+        "kind": "group_attribute",
+        "name": "mainActiveSkillCalcs"
+      },
+      "before": [
+        {
+          "kind": "deferred",
+          "reason": "group-field-consumers-not-yet-reviewed"
+        }
+      ],
+      "after": [
+        {
+          "kind": "input_disposition"
+        }
+      ]
+    },
+    {
+      "field": {
+        "kind": "occurrence_attribute",
+        "name": "count"
+      },
+      "before": [
+        {
+          "kind": "deferred",
+          "reason": "source-field-consumers-not-yet-reviewed"
+        },
+        {
+          "kind": "usage_parameter",
+          "policy": {
+            "kind": "usage_policy",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000326a"
+          },
+          "parameter": {
+            "declaration": {
+              "kind": "usage_policy",
+              "definition": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000326a"
+              }
+            },
+            "slot": {
+              "kind": "parameter_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000326b"
+            }
+          }
+        }
+      ],
+      "after": [
+        {
+          "kind": "input_disposition"
+        },
+        {
+          "kind": "usage_parameter",
+          "policy": {
+            "kind": "usage_policy",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000326a"
+          },
+          "parameter": {
+            "declaration": {
+              "kind": "usage_policy",
+              "definition": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000326a"
+              }
+            },
+            "slot": {
+              "kind": "parameter_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000326b"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "field": {
+        "kind": "occurrence_attribute",
+        "name": "enableGlobal2"
+      },
+      "before": [
+        {
+          "kind": "deferred",
+          "reason": "source-field-consumers-not-yet-reviewed"
+        }
+      ],
+      "after": [
+        {
+          "kind": "input_disposition"
+        }
+      ]
+    }
+  ],
+  "whole_row_inverse": true,
+  "whole_packet_byte_inverses": true,
+  "current_package_artifacts_authenticated": 18,
+  "original05_reporting_enabled_snapshots_unchanged": true,
+  "alternative_row_unchanged": true,
+  "native_schema_or_rules_changed": false,
+  "adapter_tests_executed": false,
+  "publication_executed": false,
+  "installed": false,
+  "immutable_inputs": [
+    {
+      "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_inputs.rs",
+      "sha256": "1d78e4599bb55d94c77210bb6e9989419f6da22c6c2ce77f74e1ddf7419f5763",
+      "bytes": 16954
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_inputs/dispositions.rs",
+      "sha256": "9df1dcdcdf325239099fe00ad8db3dd00f8bae97d85b97b379e9312e35bc486c",
+      "bytes": 71531
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_inputs/dispositions/catalog_singleton.rs",
+      "sha256": "12746371b00dac9e16eb9ce92a5c7ef8f7861fd671cb6ac92ebbad9e3b893b3d",
+      "bytes": 3804
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_sources.rs",
+      "sha256": "2412cfa342033b8007334b1b0eef21f4aa82bf3f754d7d38ad8f217d7ef5a6a9",
+      "bytes": 36864
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_normalize/skill_input_disposition.rs",
+      "sha256": "ab4831f2e15de533cc7201a0a7f16b3ddbd738ccf1ceaf0f61cc26fd73f64815",
+      "bytes": 26966
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_normalize/usage_inputs/inventory.rs",
+      "sha256": "43fbd83e2751eaeb933ac2227d427200c4d6ac4dac95dad89ed18c608ed316e7",
+      "bytes": 53634
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_normalize/usage_inputs/inventory/group_selectors.rs",
+      "sha256": "41a5c3b177fb7f659ce2b8fcca5a007dbb57d54334bf47d2e8e263c160497f97",
+      "bytes": 15109
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_normalize/usage_inputs/occurrences.rs",
+      "sha256": "8168fdc66990a6b3b49584738c5f5ae49be643e3389c0aad5fc3d9b924dd9435",
+      "bytes": 22027
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_skill_catalog/reverse_primary.rs",
+      "sha256": "eedc51465f46485b6e2e9099edfd857b46543a5b5aaf0179cf7ad1e0fbbab897",
+      "bytes": 8998
+    },
+    {
+      "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+      "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+      "bytes": 217603
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/owned_generated_source_dispatch_source.rs",
+      "sha256": "77175e9c09a5162cf016d9d32dcaf4553c0888d3db6293ade58e57112eae10f7",
+      "bytes": 23304
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/owned_secondary_effect_switch_source.rs",
+      "sha256": "b7ef77023caf8a4f5e556723f79e3c82df893248fc9aa8fcc61a834ce78f6946",
+      "bytes": 75256
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/generated-firebolt-dispositions/bindings.json",
+      "sha256": "bfbbd8e70a5d4a777700322624323a6f0809923a53b55671d118ef0862a9ecfe",
+      "bytes": 66915
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/generated-firebolt-dispositions/review.json",
+      "sha256": "fe21b428e73a8b285d7d08b7c2ad51dc46739e1e48726126de4308dbe9ef5f38",
+      "bytes": 112799
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+      "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e",
+      "bytes": 2247063
+    },
+    {
+      "path": "docs/evidence/generated-enabled-fields/logs/generated-enabled-source-20261021-01.log",
+      "sha256": "85f8632a595b9879b3c6b61b7262e706e7a2540b13f1576cc977e5b264954b46",
+      "bytes": 3279
+    },
+    {
+      "path": "docs/evidence/generated-enabled-fields/validation.json",
+      "sha256": "9fd0c4a897c8b06d7bc2c00beb34b15392f1b3fde1cb3ebf0489167b555d309f",
+      "bytes": 14100
+    },
+    {
+      "path": "docs/evidence/reverse-primary-census/logs/reverse-primary-source-fixed-20261021-01.log",
+      "sha256": "e8a94e6cb5eb44edd20ba1f58b59663bc9ee06c95612e2500f1cd2c52d24076d",
+      "bytes": 1100
+    },
+    {
+      "path": "docs/evidence/reverse-primary-census/publication-validation.json",
+      "sha256": "fe23ed9f1593f61f657893c59a722cbcedf20d27dbd41cc5ad438c0d8e39ea2a",
+      "bytes": 1431
+    },
+    {
+      "path": "docs/evidence/reverse-primary-census/validation.json",
+      "sha256": "a7efa507b5a3327b0aa7e71d749e5007922b61b0d3a830981f6f2da576197227",
+      "bytes": 5376
+    },
+    {
+      "path": "runs/generated-singleton-fields-authoring-20261021/src/main.rs",
+      "sha256": "8494a7ebcafeb16206a2f2b2503e55cf1fed639d423d5eb6654b366cfe0990d2",
+      "bytes": 24544
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/item-source.json",
+      "sha256": "2dbc016ab5df8f1090bd4f51e7110cef78c4436f36bb1664ca6889054869a999",
+      "bytes": 1412286
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/items.json",
+      "sha256": "7b8be31f3323274e52932e39aa6ead731e35c150e49e6e025c8f3cab56fe8652",
+      "bytes": 1643390
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/manifest.json",
+      "sha256": "fbf4af57eddc2c1bba3b49b902257438156ec007413f0e822e6c979917443a8f",
+      "bytes": 1510
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/mapping.json",
+      "sha256": "d51820b0c5e85f26e1410b35b68d3c6579627b9422090c9789560d59f45e6075",
+      "bytes": 3947392
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/normalization.json",
+      "sha256": "19abc04e1d4dd223a6bdcfab6931c437ab9e24bb5a073f036f61d4d1d72c4644",
+      "bytes": 1962666
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/queries-original-01.json",
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7",
+      "bytes": 4710
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/queries-original-02.json",
+      "sha256": "eb2691aa77552e1729de12621b7564ce45ba78f6f97d0d880f0dfba474b007ca",
+      "bytes": 7130
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/queries-original-03.json",
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7",
+      "bytes": 4710
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/queries-original-04.json",
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7",
+      "bytes": 4710
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/queries-original-05.json",
+      "sha256": "4b520d4204aa9a4124b9a8963af1c7cc445c18218766655cca21686993f69fa0",
+      "bytes": 9732
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/registry.json",
+      "sha256": "c8bb0a1d573c000da12d1b0feffe49b659cfe8abc8a8b48fd0734accdac448e7",
+      "bytes": 3574293
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/release.json",
+      "sha256": "46f233e58f7449f789a93e0b9d589892b4883fe40dbff672954aa6af22faa538",
+      "bytes": 58133
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/rewards.json",
+      "sha256": "5a62fc8621e77971b32fd5d1201daa60873b5ccbabc803f3e82f239f7337d6b1",
+      "bytes": 28931
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/roles.json",
+      "sha256": "bb33a808938d50f75e8bebed949e7c79b23047f6996afc9238cc295d5b960401",
+      "bytes": 1705565
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/routing.json",
+      "sha256": "3ea5aa536cba1c921f1235b2b039f262f07722ce2e6cba36390ffd467dcdc508",
+      "bytes": 17085
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/rules.json",
+      "sha256": "6ebd514b3c9e57a41a025426d9bf3c80f1fc64749fa665c9e8f82ebcf41b1366",
+      "bytes": 17488370
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/schema.json",
+      "sha256": "31a10555000d7d3a85ad71418d4845894480e57a602d003acd7c383a79b41522",
+      "bytes": 32184798
+    },
+    {
+      "path": "runs/owned-reverse-primary-cutover-01/package/tree-normalization.json",
+      "sha256": "e63be8419cf9c49b9d33acc74526ff4e5c0b40636ce1f871b8a94a5c8fd13a44",
+      "bytes": 2101994
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "bytes": 106378
+    }
+  ]
+}

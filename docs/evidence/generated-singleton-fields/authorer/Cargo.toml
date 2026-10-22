@@ -1,0 +1,11 @@
+[package]
+name = "generated-singleton-fields-authoring"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[workspace]
+
+[dependencies]
+serde_json = { version = "=1.0.151", features = ["float_roundtrip", "preserve_order"] }
+sha2 = "=0.10.9"

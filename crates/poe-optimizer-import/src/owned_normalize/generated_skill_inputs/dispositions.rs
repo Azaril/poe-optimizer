@@ -8,6 +8,8 @@ use crate::owned_normalize::skill_input_disposition::{
 };
 use source_shape::{container_text, plain_row, value};
 
+mod catalog_singleton;
+
 const GEM_FIELDS: &[&str] = &[
     "gemId",
     "variantId",
@@ -184,6 +186,20 @@ impl CheckedInputDisposition {
                         && actual.selection.policy == binding.selection.policy
                 })) == Some(binding)
             })
+    }
+
+    /// Source-reference authority for the exact live generated occurrence.
+    /// Neither a catalog singleton nor a saved group alone proves this route.
+    pub(in crate::owned_normalize) fn matches_catalog_singleton(
+        &self,
+        b: &mut Builder<'_, '_>,
+        draft: &DraftSessionInput,
+        preset: &SkillPresetDraft,
+    ) -> Result<bool> {
+        if !self.matches_current(b, draft, preset)? {
+            return Ok(false);
+        }
+        catalog_singleton::prove(b, self.source, &self.correspondence)
     }
 
     /// Revalidate output snapshots and the actual supplying records. This checks
@@ -654,7 +670,8 @@ fn intrinsic_attributes(
     (occurrence, group)
 }
 
-/// Only the successful live branch calls this after all reference/link checks.
+/// Only the successful live branch calls this after all reference/link checks
+/// and `outputs_match`, including its independent exact typed count proof.
 /// Optional inventory accounting pays for its own snapshots and revalidation.
 fn capture_checked(
     b: &mut Builder<'_, '_>,
@@ -687,7 +704,7 @@ fn capture_checked(
     let source = &b.evidence.rows()[receipt.source.ordinal() as usize];
     let group = &b.evidence.rows()[receipt.group.ordinal() as usize];
     let (occurrence_attributes, group_attributes) = intrinsic_attributes(source, group);
-    let proof = CheckedInputDisposition {
+    let mut proof = CheckedInputDisposition {
         source: receipt.source,
         group: receipt.group,
         set: receipt.set,
@@ -712,7 +729,30 @@ fn capture_checked(
         descendants: children.to_vec(),
         provider,
     };
-    Ok(proof.matches_current(b, draft, preset)?.then_some(proof))
+    if !proof.matches_current(b, draft, preset)? {
+        return Ok(None);
+    }
+    if catalog_singleton::prove(b, proof.source, &proof.correspondence)? {
+        // The independent count materializer proves every present lane,
+        // including a shadowed Gem count. Preserve its exact binding snapshot;
+        // this catalog route establishes the consumer, not a numeric default.
+        // Reuse that checked result instead of re-cloning/comparing every
+        // generated target. This function has only the successful live caller.
+        b.charge(source.attributes().len().saturating_mul(2))?;
+        if source.attribute("count").is_some() {
+            proof.occurrence_attributes.insert("count".into());
+        }
+        if source.attribute("enableGlobal2").is_some_and(|attribute| {
+            matches!(attribute.raw(), "nil" | "true" | "false")
+                && attribute.decoded().ok() == Some(attribute.raw())
+        }) {
+            // No second constructed effect exists. The saved nil sentinel and
+            // both literal Booleans are unread source-field accounting, not a
+            // native default or primary participation policy.
+            proof.occurrence_attributes.insert("enableGlobal2".into());
+        }
+    }
+    Ok(Some(proof))
 }
 
 /// Run only after both independent materializers. Failed accounting does not
@@ -1435,7 +1475,7 @@ mod tests {
                     },
                 },
             };
-            let usages = [usage, participation_usage];
+            let mut usages = [usage, participation_usage];
             let prior_usage = draft.skill_presets.members[0]
                 .usage_preferences
                 .take()
@@ -1534,6 +1574,26 @@ mod tests {
             )
             .unwrap();
             assert_eq!(b.work - before_work, absent_work);
+            // A numeric binding alone is not the independently checked count
+            // receipt. Removing that proof cannot borrow participation's live
+            // Boolean outputs or create a new source-field disposition.
+            b.origins = prior_origins.clone();
+            usages[0].counts = false;
+            let mut without_count_proof = vec![];
+            account(
+                b,
+                &draft,
+                Some(&compiled),
+                None,
+                None,
+                &inputs,
+                &usages,
+                Some(&mut without_count_proof),
+            )
+            .unwrap();
+            assert!(without_count_proof.is_empty());
+            assert_eq!(b.origins, prior_origins);
+            usages[0].counts = true;
             for mutation in 0..8 {
                 let mut changed = draft.clone();
                 let intent = changed.skill_presets.members[0].intent.as_mut().unwrap();

@@ -110,6 +110,18 @@ altered candidates. No native schema, calculation behavior, Lua evaluator or old
 reader is added. Rebuild and validation status belong to the implementation plan;
 the census itself retires no selected input issue.
 
+Generated field accounting now consumes that census through the existing private
+receipt path. A unique reverse candidate must match the exact owned Skill, Gem
+and saved catalog tuple; the observed construction must contain just its primary
+effect. The source, provider, preset and output snapshots must still match. This
+can account for present literal `nil`/`1` group selectors and an unread secondary
+switch (`nil`, `false` or `true`). Saved count retains its independent typed value
+and count-consumer proof, including group overrides and malformed losing lanes.
+An additional stat set does not create another effect; a real additional or
+missing effect prevents this singleton proof. No native default, selection,
+participation or mechanical completeness follows from it. Publication and actual
+build progress remain recorded in the implementation plan.
+
 Two input contracts were accepted October 19:
 numeric progression imported through existing Choice rewards, with unique
 authority checked after composition; and Scenario-owned usage intent resolved

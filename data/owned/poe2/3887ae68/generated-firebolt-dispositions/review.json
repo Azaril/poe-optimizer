@@ -1,25 +1,27 @@
 {
   "schema_version": 1,
-  "scope": "fifteen checked generated InputDisposition destinations and two reporting Deferred removals; enabled=true is nonrestricting and retains typed participation; no completion",
+  "scope": "four current generated singleton field destinations; independent typed count retained; no build completion claim",
   "predecessor": {
-    "input": "6f58eba00e71984264123419f51114f375bdce23440eaa4ff3ffa4999e2beb11",
+    "input": "a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905",
     "release": {
-      "path": "runs/owned-import-preferences-publication-01/package/release.json",
-      "sha256": "73393bbd6b8629e564ad31073c90eeb69133932d9bad77510fc9874b36dcc856",
-      "bytes": 57693
+      "path": "runs/owned-reverse-primary-cutover-01/package/release.json",
+      "sha256": "46f233e58f7449f789a93e0b9d589892b4883fe40dbff672954aa6af22faa538",
+      "bytes": 58133,
+      "encoding": "raw"
     },
     "normalization": {
-      "path": "runs/owned-import-preferences-publication-01/package/normalization.json",
-      "sha256": "105e17d88d451c45aea01cf6aa01754fda912b486be9729cd30fee8ba5ceffbb",
-      "bytes": 1963443
+      "path": "runs/owned-reverse-primary-cutover-01/package/normalization.json",
+      "sha256": "19abc04e1d4dd223a6bdcfab6931c437ab9e24bb5a073f036f61d4d1d72c4644",
+      "bytes": 1962666,
+      "encoding": "raw"
     },
-    "inventory_evidence": "2a9897dac5f853b9fc16b53e1c2518cbd1bd9c8cc5a2b2b92bc2f77a4a94529f"
+    "inventory_evidence": "fe21b428e73a8b285d7d08b7c2ad51dc46739e1e48726126de4308dbe9ef5f38"
   },
   "producer_consumer_files": [
     {
       "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_inputs/dispositions.rs",
-      "sha256": "d6c1de786efeb5054a9d7c1e3b98b18bb67c76082d9f8553c8fd5d92cb52a532",
-      "bytes": 68898,
+      "sha256": "9df1dcdcdf325239099fe00ad8db3dd00f8bae97d85b97b379e9312e35bc486c",
+      "bytes": 71531,
       "encoding": "utf8-lf"
     },
     {
@@ -30,8 +32,8 @@
     },
     {
       "path": "crates/poe-optimizer-import/src/owned_normalize/usage_inputs/inventory.rs",
-      "sha256": "1cbf661f798019bf336d945d3230d6c98c592162967f484c291155f23b202273",
-      "bytes": 53351,
+      "sha256": "43fbd83e2751eaeb933ac2227d427200c4d6ac4dac95dad89ed18c608ed316e7",
+      "bytes": 53634,
       "encoding": "utf8-lf"
     },
     {
@@ -51,67 +53,42 @@
       "sha256": "8168fdc66990a6b3b49584738c5f5ae49be643e3389c0aad5fc3d9b924dd9435",
       "bytes": 22027,
       "encoding": "utf8-lf"
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_normalize/generated_skill_inputs/dispositions/catalog_singleton.rs",
+      "sha256": "12746371b00dac9e16eb9ce92a5c7ef8f7861fd671cb6ac92ebbad9e3b893b3d",
+      "bytes": 3804,
+      "encoding": "utf8-lf"
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_normalize/usage_inputs/inventory/group_selectors.rs",
+      "sha256": "41a5c3b177fb7f659ce2b8fcca5a007dbb57d54334bf47d2e8e263c160497f97",
+      "bytes": 15109,
+      "encoding": "utf8-lf"
+    },
+    {
+      "path": "crates/poe-optimizer-import/src/owned_skill_catalog/reverse_primary.rs",
+      "sha256": "eedc51465f46485b6e2e9099edfd857b46543a5b5aaf0179cf7ad1e0fbbab897",
+      "bytes": 8998,
+      "encoding": "utf8-lf"
     }
   ],
   "selectors": [
     {
       "kind": "group_attribute",
-      "name": "source"
+      "name": "mainActiveSkill"
     },
     {
       "kind": "group_attribute",
-      "name": "slot"
-    },
-    {
-      "kind": "group_attribute",
-      "name": "label"
+      "name": "mainActiveSkillCalcs"
     },
     {
       "kind": "occurrence_attribute",
-      "name": "corrupted"
+      "name": "count"
     },
     {
       "kind": "occurrence_attribute",
-      "name": "corruptLevel"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "gemId"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "variantId"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "skillId"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "nameSpec"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "level"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "quality"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "enableGlobal1"
-    },
-    {
-      "kind": "reference_descendants"
-    },
-    {
-      "kind": "group_attribute",
-      "name": "enabled"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "enabled"
+      "name": "enableGlobal2"
     }
   ],
   "reporting": {
@@ -255,24 +232,7 @@
     "primary_gate": "raw and decoded literal true only; no participation result",
     "enabled_gate": "raw and decoded literal true only; retain exact typed participation destinations; no activation or topology claim"
   },
-  "unchanged_deferred_fields": [
-    {
-      "kind": "group_attribute",
-      "name": "mainActiveSkill"
-    },
-    {
-      "kind": "group_attribute",
-      "name": "mainActiveSkillCalcs"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "count"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "enableGlobal2"
-    }
-  ],
+  "unchanged_deferred_fields": [],
   "unresolved_alternative_before": {
     "source": {
       "kind": "occurrence",
@@ -502,10 +462,6 @@
           "name": "includeInFullDPS"
         },
         "destinations": [
-          {
-            "kind": "deferred",
-            "reason": "group-field-consumers-not-yet-reviewed"
-          },
           {
             "kind": "usage_parameter",
             "policy": {
@@ -3600,5 +3556,236 @@
       }
     ],
     "portability": "Ordinary CLI checks compare source_files to the bundled authenticated manifest; only the PoB source target requires vendor source."
+  },
+  "singleton_gate": {
+    "schema_version": 1,
+    "scope": "generated-catalog-singleton-field-dispositions",
+    "status": "source-components-validated-adapter-validation-pending",
+    "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "catalog": {
+      "path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+      "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e",
+      "bytes": 2247063,
+      "encoding": "raw"
+    },
+    "source_manifest": {
+      "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+      "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+      "bytes": 217603,
+      "encoding": "raw"
+    },
+    "files": [
+      {
+        "path": "docs/evidence/reverse-primary-census/validation.json",
+        "sha256": "a7efa507b5a3327b0aa7e71d749e5007922b61b0d3a830981f6f2da576197227",
+        "bytes": 5376,
+        "encoding": "raw"
+      },
+      {
+        "path": "docs/evidence/generated-enabled-fields/validation.json",
+        "sha256": "9fd0c4a897c8b06d7bc2c00beb34b15392f1b3fde1cb3ebf0489167b555d309f",
+        "bytes": 14100,
+        "encoding": "raw"
+      },
+      {
+        "path": "crates/poe-optimizer-pob/tests/owned_generated_source_dispatch_source.rs",
+        "sha256": "77175e9c09a5162cf016d9d32dcaf4553c0888d3db6293ade58e57112eae10f7",
+        "bytes": 23304,
+        "encoding": "raw"
+      },
+      {
+        "path": "crates/poe-optimizer-pob/tests/owned_secondary_effect_switch_source.rs",
+        "sha256": "b7ef77023caf8a4f5e556723f79e3c82df893248fc9aa8fcc61a834ce78f6946",
+        "bytes": 75256,
+        "encoding": "raw"
+      },
+      {
+        "path": "docs/evidence/reverse-primary-census/logs/reverse-primary-source-fixed-20261021-01.log",
+        "sha256": "e8a94e6cb5eb44edd20ba1f58b59663bc9ee06c95612e2500f1cd2c52d24076d",
+        "bytes": 1100,
+        "encoding": "raw"
+      },
+      {
+        "path": "docs/evidence/generated-enabled-fields/logs/generated-enabled-source-20261021-01.log",
+        "sha256": "85f8632a595b9879b3c6b61b7262e706e7a2540b13f1576cc977e5b264954b46",
+        "bytes": 3279,
+        "encoding": "raw"
+      },
+      {
+        "path": "docs/evidence/reverse-primary-census/publication-validation.json",
+        "sha256": "fe23ed9f1593f61f657893c59a722cbcedf20d27dbd41cc5ad438c0d8e39ea2a",
+        "bytes": 1431,
+        "encoding": "raw"
+      }
+    ],
+    "source_files": [
+      {
+        "path": "src/Modules/Data.lua",
+        "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4",
+        "bytes": 38313,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/Common.lua",
+        "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8",
+        "bytes": 30833,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/CalcSetup.lua",
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+        "bytes": 100609,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/CalcTools.lua",
+        "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c",
+        "bytes": 11517,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/CalcDefence.lua",
+        "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2",
+        "bytes": 239878,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Modules/BuildExportPoE2.lua",
+        "sha256": "1581790b106d658ebab9d75ca5e51da3ae32603e9f622b96dc7270413eeb4152",
+        "bytes": 13732,
+        "encoding": "utf8-lf"
+      },
+      {
+        "path": "src/Classes/SkillsTab.lua",
+        "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08",
+        "bytes": 69652,
+        "encoding": "utf8-lf"
+      }
+    ],
+    "current_route": {
+      "route": {
+        "skill": {
+          "effect_id": "FireboltPlayer",
+          "resolution": {
+            "kind": "mapped",
+            "value": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000134"
+            }
+          }
+        },
+        "candidates": [
+          {
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000778"
+            },
+            "catalog_gem_key": "Metadata/Items/Gems/SkillGemFirebolt"
+          }
+        ]
+      },
+      "construction": {
+        "catalog_gem_key": "Metadata/Items/Gems/SkillGemFirebolt",
+        "winning_declaration": 287,
+        "game_id": "Metadata/Items/Gems/SkillGemFirebolt",
+        "variant_id": "Firebolt",
+        "primary": {
+          "effect_id": "FireboltPlayer",
+          "resolution": {
+            "kind": "mapped",
+            "value": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000134"
+            }
+          }
+        },
+        "declared_additional_effects": [],
+        "constructed_additional_effects": [],
+        "resolved_additional_effects": [],
+        "resolved_effects": [
+          {
+            "effect_id": "FireboltPlayer",
+            "resolution": {
+              "kind": "mapped",
+              "value": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000134"
+              }
+            }
+          }
+        ],
+        "display_order": null,
+        "additional_stat_sets": [
+          {
+            "index": 1,
+            "id": "FireboltExplosionPlayer"
+          }
+        ],
+        "missing_references": []
+      }
+    },
+    "law": {
+      "selectors": [
+        "mainActiveSkill",
+        "mainActiveSkillCalcs"
+      ],
+      "selector_tokens": [
+        "nil",
+        "1"
+      ],
+      "secondary_tokens": [
+        "nil",
+        "false",
+        "true"
+      ],
+      "raw_equals_decoded": true,
+      "missing_fields": "not fabricated or accounted by this receipt",
+      "catalog_route": "exact effect ID and owned Skill; observed one candidate joined to Gem/catalog key and full source construction",
+      "retained_group": "one child; exact current source, slot, provider, saved/provider level and same-attempt output receipts; unsupported competing saved groups refuse",
+      "count": "existing checked count recipe and exact typed usage receipt; group override including zero; validate shadowed occurrence count independently",
+      "count_policy": "def.000000000000326a",
+      "count_parameter": "def.000000000000326b",
+      "actual_original05_tokens": {
+        "count": "nil",
+        "enableGlobal2": "nil"
+      },
+      "stat_sets": "additional stat-set alias is not another effect",
+      "refusals": [
+        "unavailable",
+        "missing route",
+        "observed zero",
+        "multiple candidates",
+        "wrong owned Skill/Gem",
+        "missing or additional effect",
+        "stale or borrowed provider/output",
+        "archived syntax"
+      ]
+    },
+    "validated_source_components": {
+      "complete_dispatch": 4,
+      "secondary_and_existing_components": 24
+    },
+    "claims": {
+      "adapter_tests_executed_by_author": false,
+      "source_executed_by_author": false,
+      "native_coverage": false,
+      "whole_build_complete": false
+    }
   }
 }

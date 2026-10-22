@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "before": "6f58eba00e71984264123419f51114f375bdce23440eaa4ff3ffa4999e2beb11",
+  "before": "a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905",
   "rows": [
     {
       "before": {
@@ -149,8 +149,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "group-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               },
               {
                 "kind": "usage_parameter",
@@ -233,10 +232,6 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "group-field-consumers-not-yet-reviewed"
-              },
-              {
                 "kind": "usage_parameter",
                 "policy": {
                   "kind": "usage_policy",
@@ -277,8 +272,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "group-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -313,8 +307,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "group-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -325,8 +318,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "group-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -337,8 +329,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -349,8 +340,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -405,8 +395,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               },
               {
                 "kind": "usage_parameter",
@@ -449,8 +438,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -473,8 +461,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -485,8 +472,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -497,8 +483,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -509,8 +494,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -521,8 +505,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -533,8 +516,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -544,8 +526,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "exact-source-reference-accounting-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           }
@@ -831,8 +812,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "group-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -843,8 +823,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "group-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -899,8 +878,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               },
               {
                 "kind": "usage_parameter",
@@ -997,8 +975,7 @@
             },
             "destinations": [
               {
-                "kind": "deferred",
-                "reason": "source-field-consumers-not-yet-reviewed"
+                "kind": "input_disposition"
               }
             ]
           },
@@ -1311,10 +1288,6 @@
               "name": "includeInFullDPS"
             },
             "destinations": [
-              {
-                "kind": "deferred",
-                "reason": "group-field-consumers-not-yet-reviewed"
-              },
               {
                 "kind": "usage_parameter",
                 "policy": {
@@ -2179,64 +2152,21 @@
   "selectors": [
     {
       "kind": "group_attribute",
-      "name": "source"
+      "name": "mainActiveSkill"
     },
     {
       "kind": "group_attribute",
-      "name": "slot"
-    },
-    {
-      "kind": "group_attribute",
-      "name": "label"
+      "name": "mainActiveSkillCalcs"
     },
     {
       "kind": "occurrence_attribute",
-      "name": "corrupted"
+      "name": "count"
     },
     {
       "kind": "occurrence_attribute",
-      "name": "corruptLevel"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "gemId"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "variantId"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "skillId"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "nameSpec"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "level"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "quality"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "enableGlobal1"
-    },
-    {
-      "kind": "reference_descendants"
-    },
-    {
-      "kind": "group_attribute",
-      "name": "enabled"
-    },
-    {
-      "kind": "occurrence_attribute",
-      "name": "enabled"
+      "name": "enableGlobal2"
     }
   ],
-  "prior_evidence": "2a9897dac5f853b9fc16b53e1c2518cbd1bd9c8cc5a2b2b92bc2f77a4a94529f",
-  "evidence": "fe21b428e73a8b285d7d08b7c2ad51dc46739e1e48726126de4308dbe9ef5f38"
+  "prior_evidence": "fe21b428e73a8b285d7d08b7c2ad51dc46739e1e48726126de4308dbe9ef5f38",
+  "evidence": "b9e4b303c91acbafcdce72ebe851e479dd70b51044d2d163ee12db2884b623c6"
 }

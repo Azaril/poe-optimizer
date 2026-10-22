@@ -27,6 +27,55 @@ fn exact_neutral(group: &SourceEvidenceRow<'_>, name: &str) -> bool {
     })
 }
 
+/// A generated group needs its own live provider receipt and complete reverse
+/// catalog route. It cannot borrow the manual Direct or physical-source proof.
+fn generated(
+    b: &mut Builder<'_, '_>,
+    draft: &DraftSessionInput,
+    preset: &SkillPresetDraft,
+    group: &SourceEvidenceRow<'_>,
+    receipts: &InventoryReceipts,
+    main: bool,
+    calcs: bool,
+) -> Result<Option<GroupSelectors>> {
+    b.charge(group.children().len().saturating_add(receipts.inputs.len()))?;
+    let [source] = group.children() else {
+        return Ok(None);
+    };
+    let mut matching = receipts.inputs.iter().filter(|receipt| {
+        receipt.source == *source
+            && receipt.group == group.occurrence().id()
+            && receipt.preset == preset.id
+    });
+    let Some(receipt) = matching.next() else {
+        return Ok(None);
+    };
+    if matching.next().is_some() {
+        return Ok(None);
+    }
+    let InputOutput::Generated(proof) = &receipt.output else {
+        return Ok(None);
+    };
+    // This private output and identity are produced together by the existing
+    // generated receipt transfer. Recheck its exact attachment and current
+    // provider/output snapshots before adding any group-field authority.
+    if proof.source() != *source
+        || proof.group() != group.occurrence().id()
+        || proof.preset() != preset.id
+        || !matches!(&receipt.identity,
+            UsageInventorySource::Occurrence { target }
+            if matches!(target.as_ref(), OccurrenceUsageTarget::Generated { .. }))
+        || !proof.matches_catalog_singleton(b, draft, preset)?
+    {
+        return Ok(None);
+    }
+    Ok(Some(GroupSelectors {
+        source: *source,
+        main,
+        calcs,
+    }))
+}
+
 /// Source-reference selection may retain missing additional references without
 /// treating the missing mechanic as absent. The authenticated constructor must
 /// have produced exactly the mapped primary. Every added reference must remain
@@ -151,7 +200,9 @@ fn constructed_direct_prefix(
 /// intrinsic/reference receipt. One physical SkillUse uses the existing
 /// constructed-primary proof; one authored Direct uses its reviewed first-effect
 /// prefix. All other children must be exact physical support assignments to that
-/// same occurrence. Neither path proves admission or execution.
+/// same occurrence. A generated single-child group instead requires its exact
+/// live provider receipt and unique catalog singleton. No path proves admission
+/// or execution.
 ///
 /// Retain only exact, present, literal nil/1 selector fields on the primary
 /// receipt. Missing source is distinct from source="", and an absent selector
@@ -172,8 +223,11 @@ pub(super) fn prove(
     )?;
     let main = exact_neutral(group, "mainActiveSkill");
     let calcs = exact_neutral(group, "mainActiveSkillCalcs");
-    if (!main && !calcs) || group.attribute("source").is_some() {
+    if !main && !calcs {
         return Ok(None);
+    }
+    if group.attribute("source").is_some() {
+        return generated(b, draft, preset, group, receipts, main, calcs);
     }
     let mut primary = None;
     let mut targets = Vec::new();

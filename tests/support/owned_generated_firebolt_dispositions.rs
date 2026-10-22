@@ -14,9 +14,9 @@ use std::{
     path::{Path, PathBuf},
 };
 
-const BEFORE: &str = "6f58eba00e71984264123419f51114f375bdce23440eaa4ff3ffa4999e2beb11";
-const BINDINGS: &str = "bfbbd8e70a5d4a777700322624323a6f0809923a53b55671d118ef0862a9ecfe";
-const REVIEW: &str = "fe21b428e73a8b285d7d08b7c2ad51dc46739e1e48726126de4308dbe9ef5f38";
+const BEFORE: &str = "a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905";
+const BINDINGS: &str = "5ff637bb3ca9cf42e346f7a2a5d1fa312f48a92947f97a58b46ea26ecdb49b20";
+const REVIEW: &str = "b9e4b303c91acbafcdce72ebe851e479dd70b51044d2d163ee12db2884b623c6";
 fn data() -> PathBuf {
     family::root().join("data/owned/poe2/3887ae68/generated-firebolt-dispositions")
 }
@@ -35,7 +35,15 @@ pub fn check() -> (Value, Value) {
         review["predecessor"]["inventory_evidence"]
     );
     assert_eq!(bindings["selectors"], review["selectors"]);
-    assert_eq!(bindings["selectors"].as_array().unwrap().len(), 15);
+    assert_eq!(
+        bindings["selectors"],
+        json!([
+            {"kind":"group_attribute","name":"mainActiveSkill"},
+            {"kind":"group_attribute","name":"mainActiveSkillCalcs"},
+            {"kind":"occurrence_attribute","name":"count"},
+            {"kind":"occurrence_attribute","name":"enableGlobal2"}
+        ])
+    );
     for pin in review["producer_consumer_files"].as_array().unwrap() {
         let bytes = fs::read(family::root().join(pin["path"].as_str().unwrap())).unwrap();
         let normalized = String::from_utf8(bytes).unwrap().replace("\r\n", "\n");
@@ -77,6 +85,7 @@ pub fn check() -> (Value, Value) {
         assert_eq!(matches, vec![pin]);
     }
     check_enabled_evidence(&review["enabled_gate"], &manifest);
+    check_singleton_evidence(&review["singleton_gate"], &manifest);
     let source_evidence = family::read(
         family::root().join("data/owned/poe2/3887ae68/reporting-inclusion/source-evidence.json"),
     );
@@ -97,6 +106,50 @@ pub fn check() -> (Value, Value) {
     );
     check_rows(&bindings);
     (bindings, review)
+}
+fn check_singleton_evidence(proof: &Value, manifest: &Value) {
+    assert_eq!(proof["schema_version"], 1);
+    assert_eq!(
+        proof["scope"],
+        "generated-catalog-singleton-field-dispositions"
+    );
+    assert_eq!(
+        proof["status"],
+        "source-components-validated-adapter-validation-pending"
+    );
+    assert_eq!(proof["source_revision"], manifest["upstream_revision"]);
+    let files = proof["files"].as_array().unwrap();
+    assert!(!files.is_empty());
+    for pin in files
+        .iter()
+        .chain([&proof["catalog"], &proof["source_manifest"]])
+    {
+        let bytes = fs::read(family::root().join(pin["path"].as_str().unwrap())).unwrap();
+        let bytes = match pin["encoding"].as_str().unwrap() {
+            "raw" => bytes,
+            "utf8-lf" => String::from_utf8(bytes)
+                .unwrap()
+                .replace("\r\n", "\n")
+                .into_bytes(),
+            _ => panic!("unrecognized singleton evidence encoding"),
+        };
+        assert_eq!(family::sha(&bytes), pin["sha256"]);
+        assert_eq!(bytes.len(), pin["bytes"]);
+    }
+    let sources = proof["source_files"].as_array().unwrap();
+    assert!(!sources.is_empty());
+    for pin in sources {
+        assert_eq!(pin["encoding"], "utf8-lf");
+        let matches: Vec<_> = manifest["files"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|row| row["path"] == pin["path"])
+            .collect();
+        assert_eq!(matches.len(), 1);
+        assert_eq!(matches[0]["sha256"], pin["sha256"]);
+        assert_eq!(matches[0]["bytes"], pin["bytes"]);
+    }
 }
 fn check_enabled_evidence(proof: &Value, manifest: &Value) {
     assert_eq!(proof["schema_version"], 1);
@@ -148,7 +201,7 @@ fn check_rows(packet: &Value) {
     let rows = packet["rows"].as_array().unwrap();
     assert_eq!(rows.len(), 2);
     let mut intrinsic = 0;
-    let mut reporting = 0;
+    let mut retained_reporting = 0;
     for (i, pair) in rows.iter().enumerate() {
         let before = &pair["before"];
         let mut inverse = pair["after"].clone();
@@ -169,34 +222,21 @@ fn check_rows(packet: &Value) {
                     .collect();
                 assert_eq!(deferred.len(), 1);
                 destinations[deferred[0]] = json!({"kind":"input_disposition"});
-                if new["field"]["name"] == "enabled" {
+                if new["field"]["name"] == "count" {
                     assert_eq!(destinations.len(), 2);
                     let usage = destinations
                         .iter()
                         .find(|destination| destination["kind"] == "usage_parameter")
                         .unwrap();
-                    assert_eq!(usage["policy"]["key"], "def.000000000000332b");
-                    assert_eq!(
-                        usage["parameter"]["slot"]["key"],
-                        if new["field"]["kind"] == "group_attribute" {
-                            "def.000000000000332c"
-                        } else {
-                            "def.000000000000332d"
-                        }
-                    );
+                    assert_eq!(usage["policy"]["key"], "def.000000000000326a");
+                    assert_eq!(usage["parameter"]["slot"]["key"], "def.000000000000326b");
                 } else {
                     assert_eq!(destinations.len(), 1);
                 }
                 assert_eq!(new["destinations"], json!(destinations));
                 intrinsic += 1;
             } else if new["field"] == json!({"kind":"group_attribute","name":"includeInFullDPS"}) {
-                let original = old["destinations"].as_array().unwrap();
-                assert_eq!(original.len(), 2);
-                let retained: Vec<_> = original
-                    .iter()
-                    .filter(|d| d["kind"] != "deferred")
-                    .cloned()
-                    .collect();
+                let retained = old["destinations"].as_array().unwrap();
                 assert_eq!(retained.len(), 1);
                 assert_eq!(retained[0]["kind"], "usage_parameter");
                 assert_eq!(retained[0]["policy"]["key"], "def.000000000000338e");
@@ -205,7 +245,7 @@ fn check_rows(packet: &Value) {
                     "def.000000000000338f"
                 );
                 assert_eq!(new["destinations"], json!(retained));
-                reporting += 1;
+                retained_reporting += 1;
             } else {
                 assert_eq!(new, old);
             }
@@ -226,10 +266,10 @@ fn check_rows(packet: &Value) {
                     .iter()
                     .any(|d| d["kind"] == "deferred"))
                 .count(),
-            [4, 19][i]
+            [0, 19][i]
         );
     }
-    assert_eq!((intrinsic, reporting), (15, 2));
+    assert_eq!((intrinsic, retained_reporting), (4, 2));
 }
 pub fn mutation_controls() {
     let (packet, _) = check();
@@ -244,14 +284,18 @@ pub fn mutation_controls() {
         row["destinations"] = json!([{"kind":"deferred","reason":"missing-checked-proof"}]);
         assert!(std::panic::catch_unwind(|| check_rows(&changed)).is_err());
     }
-    for kind in ["group_attribute", "occurrence_attribute"] {
+    for (kind, name) in [
+        ("group_attribute", "enabled"),
+        ("occurrence_attribute", "enabled"),
+        ("occurrence_attribute", "count"),
+    ] {
         for omitted in ["input_disposition", "usage_parameter"] {
             let mut changed = packet.clone();
             let row = changed["rows"][0]["after"]["fields"]
                 .as_array_mut()
                 .unwrap()
                 .iter_mut()
-                .find(|field| field["field"] == json!({"kind":kind,"name":"enabled"}))
+                .find(|field| field["field"] == json!({"kind":kind,"name":name}))
                 .unwrap();
             row["destinations"]
                 .as_array_mut()
@@ -259,7 +303,7 @@ pub fn mutation_controls() {
                 .retain(|destination| destination["kind"] != omitted);
             assert!(
                 std::panic::catch_unwind(|| check_rows(&changed)).is_err(),
-                "the reviewed policy retains both independent enabled consumers"
+                "the reviewed policy retains both independent {name} consumers"
             );
         }
     }
@@ -356,8 +400,7 @@ fn stage(prior: &StagedOwnedRelease, packet: &Value) -> StagedOwnedRelease {
         old.tree.as_ref().unwrap().content
     );
     full.provenance.push(OwnedReleaseProvenance {
-        kind: OwnedDefinitionKey::new("checked-generated-intrinsic-and-reporting-destinations")
-            .unwrap(),
+        kind: OwnedDefinitionKey::new("checked-generated-singleton-field-destinations").unwrap(),
         prior_input: prior.receipt().input,
         authoring_input: REVIEW.parse().unwrap(),
     });
@@ -470,6 +513,12 @@ pub fn run() {
     let prior_files = release::inventory(&prior_path);
     let prior = release::load(&prior_path);
     let next = stage(&prior, &packet);
+    let saved_baseline = family::root().join("runs/owned-reverse-primary-validation-01");
+    let saved_validation = fs::read(saved_baseline.join("validation.json")).unwrap();
+    assert_eq!(
+        family::sha(&saved_validation),
+        "fe23ed9f1593f61f657893c59a722cbcedf20d27dbd41cc5ad438c0d8e39ea2a"
+    );
     fs::create_dir_all(&out).unwrap();
     family::write(out.join("endpoint.json"), next.input());
     let package = out.join("package");
@@ -512,6 +561,17 @@ pub fn run() {
         let before = family::checked_output(&old, &prior_path, case, &prior, &xml);
         let after = family::checked_output(&new, &package, case, &next, &xml);
         assert_eq!(
+            before,
+            family::checked_output(
+                &saved_baseline.join(format!("original-{case:02}")),
+                &prior_path,
+                case,
+                &prior,
+                &xml
+            ),
+            "the independent previous-code baseline is preserved"
+        );
+        assert_eq!(
             before, after,
             "whole draft, allocator, bindings, origins and report"
         );
@@ -539,6 +599,14 @@ pub fn run() {
             &package.join("schema.json"),
             &out.join(format!("selection-{case:02}.json")),
         );
+        let mut saved_issues = family::read(saved_baseline.join(format!("report-{case:02}.json")))
+            ["finalization"]["issues"]
+            .clone();
+        selected::canonical(&mut saved_issues);
+        assert_eq!(
+            old_issues, saved_issues,
+            "saved complete selected diagnostics"
+        );
         assert_eq!(old_issues, new_issues);
         assert_eq!(
             new_issues.as_array().unwrap().len(),
@@ -550,6 +618,6 @@ pub fn run() {
     assert_eq!(prior_files, release::inventory(&prior_path));
     family::write(
         out.join("validation.json"),
-        &json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":cases,"intrinsic_destinations":15,"enabled_nonrestricting_destinations":2,"retained_enabled_participation_destinations":2,"reporting_deferred_destinations_removed":2,"retired_issues":0,"complete_original_builds":0,"queries_unchanged":110,"rebuild_byte_identical":true,"actual_persisted_bindings_and_origins_preserved":true,"private_actual_receipts_observed":false,"calculation":"not_run"}),
+        &json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":cases,"new_intrinsic_destinations":4,"live_deferred_fields":0,"unresolved_alternative_deferred_fields":19,"retained_count_destination":true,"retained_enabled_participation_destinations":2,"retained_reporting_destinations":2,"retired_issues":0,"complete_original_builds":0,"queries_unchanged":110,"rebuild_byte_identical":true,"actual_persisted_bindings_and_origins_preserved":true,"previous_code_outputs_preserved":true,"private_actual_receipts_observed":false,"calculation":"not_run"}),
     );
 }

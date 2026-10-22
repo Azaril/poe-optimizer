@@ -170,11 +170,17 @@ and can take the direct-effect fallback. Complete source construction, explicit
 Gem selection and both alias-construction orders are separate observations.
 These tests supply source evidence, not runtime Import or native authority.
 
-Existing generated-field adapters still need their exact live provider, source,
-slot and level checks before consuming the census. Count, secondary-switch and
-reference-selection proofs remain independent. Both Djinn effects and unresolved
-cases must survive; Firebolt's singleton cannot stand in for them. This change
-adds no native behavior or schema revision and retires no selected input issue.
+The generated-field adapter now joins the census to its existing exact live
+provider, source, slot, level and output checks. The bounded singleton path
+accounts for present literal `nil`/`1` group selectors and an unread literal
+`nil`/`false`/`true` secondary switch. Count still requires the independently
+materialized typed count receipt; it cannot be inferred from selector neutrality.
+The actual Firebolt source saves both count and secondary switch as `nil`, so
+Boolean-only controls would miss the unchanged input. Explicit source projection
+and non-consumption are different proofs; neither becomes a native default.
+Both Djinn effects and unresolved cases survive; Firebolt's singleton cannot
+stand in for them. This adds no native behavior or schema revision. Execution
+and publication status, including any issue retirement, belong to the plan.
 The bounded audit is `runs/generated-source-reverse-routes-audit-20261021/README.md`;
 the implementation plan records its priority and execution status.
 
