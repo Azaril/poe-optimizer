@@ -24,6 +24,7 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | DSL / KDL / binary pack | `poe-author rule fmt` and `release build` implemented. One shared Host publisher handles new release directories. Named-registry filesystem CAS, broader declarations, all-program DSL conversion and binary pack remain pending |
 | Current release | Tracked `migration-source/release.kdl` and compressed inputs reproduce all 17 constituent artifacts and the exact historical receipt through the production command. No local predecessor needed; evaluation bundle still absent |
+| CLI parsing | `clap` is the accepted standard for all future CLI work. Main CLI already uses it; `poe-author` and four developer examples still have custom parsers. R0 convergence is pending |
 | CI | Baseline `ae90ec82` run `39857163789` has seven successful jobs (including both platform validation jobs), eleven still running and no failures at the latest inspection. This checkpoint needs its own hosted result; no green suite claim |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
@@ -468,6 +469,40 @@ Windows/Linux CI; target coverage is enumerated, not silently dropped; no source
 text pins block a formatting-only change. Record hosted run ID and conclusion.
 Missing current-release inputs remain an explicit R1 failure, never a skipped pass.
 
+#### CLI parsing convergence
+
+**Pending.** Use `clap` for all new CLI work now. Convert existing custom parsers before
+extending their command trees; this can proceed alongside library-only R1/R2 work.
+The root `poe-optimizer` CLI and its command modules already use `clap`.
+Centralize the dependency under `[workspace.dependencies]` and reuse it from
+executable crates or example dev-dependencies, preserving library boundaries.
+
+Remaining audited scope:
+
+- `crates/poe-optimizer-authoring/src/main.rs` and
+  `crates/poe-optimizer-authoring/src/release_cli.rs`: replace the
+  handwritten dispatch, argument loops and help text for `poe-author rule fmt`
+  and `release build` with one `clap` command tree.
+- `crates/poe-optimizer-data/examples/seal_package.rs` and `profile_allocations.rs`:
+  migrate retained argument handling; parse profiling arguments before measured
+  allocation intervals and keep allocator isolation.
+- `crates/poe-optimizer-pob/examples/regenerate_game_data.rs` and
+  `inspect_parser_programs.rs`: migrate retained tools, keeping callback-count,
+  positive-ID and uniqueness validation. Retire obsolete examples instead of
+  preserving another command surface.
+
+Validation must retain OS-native paths, `--` handling, formatter stdin `-`,
+required arguments, rejection of invalid/extra arguments and the intentional
+formatter exit contract (0 success, 1 formatting difference, 2 failure).
+Accept normal `clap` help/diagnostics rather than copying custom-parser quirks.
+Keep bounded reads/decompression, syntax-only formatting and atomic no-clobber
+publication unchanged. Exercise actual commands in Rust integration tests and
+remove superseded parsing tests/code; no compatibility parser or fallback.
+
+**Exit:** every retained Rust CLI entry point uses `clap`; documentation and
+help agree, parsing failures perform no command work, and focused Windows/Linux
+tests pass. This work item is recorded only; conversion has not been implemented.
+
 ### R1 — Separate authoring and define one compact release
 
 Move offline catalogs, recipes, assembly and publication into
@@ -748,7 +783,9 @@ These are retained obligations, not extra competing phases.
    Authoring out of the runtime dependency closure and reuse the shared Host
    publisher. The focused verification
    command is `cargo test --locked -p poe-optimizer-authoring --all-targets`
-   with the bounded optimized profile used by CI. Continue R0 source-pin removal and CLI/PoB suite
+   with the bounded optimized profile used by CI. Follow the `clap` standard for
+   every new CLI change and complete the R0 parsing convergence before extending
+   the existing custom command trees. Continue R0 source-pin removal and CLI/PoB suite
    consolidation alongside that work, using the audited hazards above. Retain
    actual upstream/content authentication. Serialize Cargo jobs in this shared
    checkout; parallel agents own disjoint files.

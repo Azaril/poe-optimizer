@@ -500,6 +500,27 @@ bounded malformed inputs, deterministic execution, units/ownership, real mechani
 vectors and full-build parity. Preserve independent fixtures when deleting their
 old scaffolding. No new receipt type is justified solely by a refactor.
 
+### Command-line parsing
+
+`clap` is the project standard for all Rust command-line entry points, including
+the runtime CLI, offline authoring tools and retained developer examples. Use it
+for new commands and options immediately. Prefer its `Parser`, `Args` and
+`Subcommand` derives; use its builder/value-parser APIs when a command needs them.
+Command structure, option handling, help/usage and argument errors belong to
+`clap`. Do not add a parallel argv tokenizer or handwritten help dispatcher.
+
+Keep parsed arguments at the executable boundary. Libraries receive typed inputs
+and retain domain validation, bounded reads and publication checks. `clap` belongs
+in executable dependencies or example dev-dependencies, outside model/evaluation
+APIs. Share its dependency declaration through the Cargo workspace. This standard
+does not change the formula DSL, KDL or external build-format parsers.
+
+Converge retained custom CLI parsers on this standard and delete their old parsing
+code; retire obsolete tools instead of migrating them. Conventional `clap` help
+and diagnostics may replace incidental custom behavior without compatibility
+shims. The [implementation plan](implementation.md#cli-parsing-convergence)
+tracks the remaining entry points and behavioral checks.
+
 ## Options and consequences
 
 The chosen DSL retains a verified execution substrate while making formulas and

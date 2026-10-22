@@ -44,6 +44,12 @@ Use the pinned Rust toolchain in `rust-toolchain.toml` and Cargo's locked depend
 set. Windows builds require the appropriate native compiler toolchain. New core,
 data tooling and tests use Rust; shell scripts may orchestrate commands.
 
+Use `clap` for command-line parsing in all new or extended Rust executables,
+including offline tools and retained developer examples. The main CLI already
+uses it; convergence of the remaining custom parsers is tracked in
+[R0](docs/implementation.md#cli-parsing-convergence). See the
+[CLI standard](docs/domain-architecture.md#command-line-parsing).
+
 ```powershell
 cargo run --locked --bin poe-optimizer -- --help
 cargo run --locked --bin poe-optimizer -- evaluate-owned --help
