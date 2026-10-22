@@ -8,9 +8,25 @@ mod fixture;
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{
     BuiltRelease, ReleaseBuildError, ReleaseBuildLimits, ReleaseSource, SourceEncoding,
-    build_release, parse_release_manifest,
+    SymbolRegistry, build_release, load_names, lower_program, parse_program,
+    parse_release_manifest, raise_program,
 };
-use poe_optimizer_core::owned_definitions::{DefId, OwnedDefinitionKey};
+use poe_optimizer_core::{
+    owned_build::ParameterValue,
+    owned_definitions::{DefId, OwnedDefinitionKey},
+    owned_rules::{RuleExpression, RuleNode, RuleProgram},
+    owned_schema::{DefinitionSchemaIndex, SchemaSubject},
+};
+use poe_optimizer_data::{
+    owned_routing::OwnedActionRouting,
+    owned_rules::OwnedRulePackage,
+    owned_schema::OwnedDefinitionSchemaPackage,
+    owned_stages::OwnedEvaluationStages,
+    owned_support_inputs::OwnedSupportInputBindings,
+    owned_support_outputs::{OwnedSupportOutputBindings, SupportOutputDependencies},
+    owned_support_receiving::OwnedSupportReceiving,
+    owned_supports::OwnedSupportPreparation,
+};
 use poe_optimizer_engine::{
     owned_plan::{OwnedSupportEffectPlan, OwnedSupportMetricPlan, SupportEffectPlanInputs},
     owned_rules::CompiledRulePackage,
@@ -42,6 +58,7 @@ fn gzip(bytes: &[u8]) -> Vec<u8> {
     encoder.finish().unwrap()
 }
 
+#[derive(Clone)]
 struct Sources {
     manifest: String,
     files: Vec<(String, Vec<u8>)>,
@@ -121,7 +138,7 @@ impl Sources {
         } else {
             path.into()
         };
-        let encoding = if compressed { "gzip" } else { "json" };
+        let encoding = if compressed { "gzip" } else { "plain" };
         let declaration = match query {
             Some(name) => {
                 format!("    queries \"{name}\" source=\"{path}\" encoding=\"{encoding}\"\n")
@@ -149,6 +166,32 @@ impl Sources {
     fn encoded_bytes(&self) -> usize {
         self.files.iter().map(|(_, bytes)| bytes.len()).sum()
     }
+
+    fn declare(&mut self, declaration: &str) {
+        self.manifest
+            .insert_str(self.manifest.rfind('}').unwrap(), declaration);
+    }
+
+    fn add_plain(&mut self, path: &str, text: String) {
+        assert!(!self.files.iter().any(|(name, _)| name == path));
+        self.decoded_bytes += text.len();
+        self.files.push((path.into(), text.into_bytes()));
+    }
+
+    fn text(&self, path: &str) -> &str {
+        std::str::from_utf8(&self.files.iter().find(|(name, _)| name == path).unwrap().1).unwrap()
+    }
+
+    fn replace_plain(&mut self, path: &str, text: String) {
+        let bytes = &mut self
+            .files
+            .iter_mut()
+            .find(|(name, _)| name == path)
+            .unwrap()
+            .1;
+        self.decoded_bytes = self.decoded_bytes - bytes.len() + text.len();
+        *bytes = text.into_bytes();
+    }
 }
 
 fn files(release: &StagedOwnedRelease) -> BTreeMap<String, Vec<u8>> {
@@ -174,7 +217,9 @@ fn limited<T>(result: Result<T, ReleaseBuildError>, message: &str) {
     }
 }
 
-fn assert_metric(release: &StagedOwnedRelease) {
+fn metric_report(
+    release: &StagedOwnedRelease,
+) -> poe_optimizer_engine::owned_plan::OwnedSupportMetricReport {
     let recipe = release.assembled();
     let definitions = Arc::new(recipe.schema().clone());
     let rules = Arc::new(
@@ -206,14 +251,803 @@ fn assert_metric(release: &StagedOwnedRelease) {
     let plan =
         OwnedSupportMetricPlan::compile(Arc::new(effects), Arc::new(evaluation.metrics().clone()))
             .unwrap();
+    plan.evaluate(&mut plan.new_scratch()).unwrap()
+}
+
+fn assert_metric(release: &StagedOwnedRelease) {
+    assert_eq!(metric_report(release), fixture().expected);
+}
+
+fn assert_dsl_metric(release: &StagedOwnedRelease) {
+    let actual = metric_report(release);
+    let expected = &fixture().expected;
+    // Renamed graph nodes alter content identity, not the independently held
+    // observations, support disposition, gaps or requirement assessment.
+    assert_ne!(actual.evaluation.identity, expected.evaluation.identity);
+    assert_eq!(actual.evaluation.results, expected.evaluation.results);
+    assert_eq!(actual.evaluation.gaps, expected.evaluation.gaps);
     assert_eq!(
-        plan.evaluate(&mut plan.new_scratch()).unwrap(),
-        fixture().expected
+        actual.evaluation.requirements,
+        expected.evaluation.requirements
     );
+    assert_eq!(actual.support, expected.support);
+}
+
+// Fixture aliases are deliberately synthetic. They exercise the public text APIs
+// without establishing a production naming policy or interpreting source labels.
+fn fixture_names(schema: &OwnedDefinitionSchemaPackage) -> (String, SymbolRegistry) {
+    let definitions: Vec<_> = schema
+        .input()
+        .definitions
+        .iter()
+        .map(|entry| entry.address())
+        .collect();
+    let mut text = format!(
+        "names game=\"{}\" version=\"{}\" {{\n",
+        schema.namespace().game(),
+        schema.namespace().version()
+    );
+    for (index, address) in definitions.iter().enumerate() {
+        text.push_str(&format!(
+            " {} \"d_{index}\" key=\"{}\"\n",
+            address.kind().as_str(),
+            address.key()
+        ));
+    }
+    for (index, entry) in schema.input().slots.iter().enumerate() {
+        let address = entry.address();
+        let owner = address.declaration();
+        let owner_index = definitions
+            .iter()
+            .position(|definition| {
+                definition.kind() == owner.kind()
+                    && definition.namespace() == owner.namespace()
+                    && definition.key() == owner.key()
+            })
+            .unwrap();
+        text.push_str(&format!(
+            " {} \"s_{index}\" key=\"{}\" owner=\"d_{owner_index}\"\n",
+            address.kind().as_str(),
+            address.key()
+        ));
+    }
+    text.push_str("}\n");
+    let symbols = load_names(&text, schema, Default::default()).unwrap();
+    (text, symbols)
+}
+
+// Alpha-renaming changes the rule artifact identity. Author all dependent test
+// headers against that exact expected package before invoking the release seam.
+// Production composition must neither repair stale headers nor infer authority.
+fn bind_evaluation_to_rules(input: &mut OwnedReleaseInput, schema: &OwnedDefinitionSchemaPackage) {
+    let rules =
+        OwnedRulePackage::new(input.recipe.rules.clone(), schema, Default::default()).unwrap();
+    let routing =
+        OwnedActionRouting::new(input.recipe.routing.clone(), schema, Default::default()).unwrap();
+    let Some(support) = input
+        .evaluation
+        .as_mut()
+        .and_then(|evaluation| evaluation.support.as_mut())
+    else {
+        return;
+    };
+    support.stages.rules = *rules.identity();
+    let stages = OwnedEvaluationStages::new(
+        support.stages.clone(),
+        schema,
+        &rules,
+        &routing,
+        Default::default(),
+    )
+    .unwrap();
+    support.preparation.rules = *rules.identity();
+    let preparation = OwnedSupportPreparation::new(
+        support.preparation.clone(),
+        schema,
+        &rules,
+        Default::default(),
+    )
+    .unwrap();
+    support.inputs.rules = *rules.identity();
+    support.inputs.preparation = *preparation.identity();
+    support.inputs.stages = *stages.identity();
+    let inputs = OwnedSupportInputBindings::new(
+        support.inputs.clone(),
+        schema,
+        &rules,
+        &preparation,
+        &stages,
+        Default::default(),
+    )
+    .unwrap();
+    support.receiving.rules = *rules.identity();
+    support.receiving.preparation = *preparation.identity();
+    support.receiving.inputs = *inputs.identity();
+    support.receiving.stages = *stages.identity();
+    let receiving = OwnedSupportReceiving::new(
+        support.receiving.clone(),
+        schema,
+        &rules,
+        &preparation,
+        &inputs,
+        &stages,
+        Default::default(),
+    )
+    .unwrap();
+    if let Some(outputs) = &mut support.outputs {
+        outputs.rules = *rules.identity();
+        outputs.preparation = *preparation.identity();
+        outputs.inputs = *inputs.identity();
+        outputs.receiving = *receiving.identity();
+        outputs.stages = *stages.identity();
+        OwnedSupportOutputBindings::new(
+            outputs.clone(),
+            &SupportOutputDependencies {
+                definitions: schema,
+                rules: &rules,
+                preparation: &preparation,
+                inputs: &inputs,
+                receiving: &receiving,
+                stages: &stages,
+            },
+            Default::default(),
+        )
+        .unwrap();
+    }
+}
+
+struct DslRelease {
+    source: Sources,
+    expected: OwnedReleaseInput,
+    packets: Vec<String>,
+    expanded_bytes: usize,
+    components: usize,
+}
+
+impl DslRelease {
+    fn new(input: &OwnedReleaseInput, compressed_components: bool) -> Self {
+        let schema =
+            OwnedDefinitionSchemaPackage::new(input.recipe.schema.clone(), Default::default())
+                .unwrap();
+        let (names, symbols) = fixture_names(&schema);
+        let mut expected = input.clone();
+        let mut bodies = BTreeMap::<String, String>::new();
+        let mut packet_texts = Vec::new();
+        let mut expanded_bytes = 0;
+        for (index, owner) in input.recipe.rules.owners.iter().enumerate() {
+            if owner.programs.members.is_empty() {
+                continue;
+            }
+            let (kind, name) = match &owner.owner {
+                SchemaSubject::Definition(address) => (
+                    "definition",
+                    symbols
+                        .definitions()
+                        .find(|(_, target)| *target == address)
+                        .unwrap()
+                        .0,
+                ),
+                SchemaSubject::Slot(address) => (
+                    "slot",
+                    symbols
+                        .slots()
+                        .find(|(_, target)| *target == address)
+                        .unwrap()
+                        .0,
+                ),
+            };
+            let mut packet =
+                format!("packet \"fixture-{index}\" {{\n append {kind}=\"{name}\" {{\n");
+            for (program_index, program) in owner.programs.members.iter().enumerate() {
+                let raised = raise_program(program, &symbols, Default::default()).unwrap();
+                let parsed = parse_program(&raised.source, Default::default()).unwrap();
+                let lowered = lower_program(
+                    &parsed,
+                    &schema,
+                    &symbols,
+                    &input.recipe.rules.tables,
+                    Default::default(),
+                )
+                .unwrap();
+                expected.recipe.rules.owners[index].programs.members[program_index] =
+                    lowered.program;
+                expanded_bytes += raised.source.len();
+                let next = bodies.len();
+                let path = bodies
+                    .entry(raised.source)
+                    .or_insert_with(|| format!("rules/source-{next}.rule"));
+                packet.push_str(&format!("  program \"{}\" source=\"{path}\"\n", program.id));
+            }
+            packet.push_str(" }\n}\n");
+            packet_texts.push((format!("rules/packet-{index}.kdl"), packet));
+        }
+        bind_evaluation_to_rules(&mut expected, &schema);
+        let mut metadata = expected.clone();
+        for owner in &mut metadata.recipe.rules.owners {
+            owner.programs.members.clear();
+        }
+        let mut source = Sources::new(&metadata, compressed_components);
+        let components = source.files.len();
+        source.add_plain("rules/names.kdl", names);
+        let mut packets = Vec::new();
+        for (path, packet) in packet_texts {
+            source.declare(&format!(
+                " rule-packet \"{path}\" names=\"rules/names.kdl\"\n"
+            ));
+            source.add_plain(&path, packet);
+            packets.push(path);
+        }
+        for (text, path) in bodies {
+            source.declare(&format!(" rule-source \"{path}\"\n"));
+            source.add_plain(&path, text);
+        }
+        Self {
+            source,
+            expected,
+            packets,
+            expanded_bytes,
+            components,
+        }
+    }
+
+    fn source_for(&self, id: &str) -> String {
+        let header = format!("program \"{id}\" ");
+        self.source
+            .files
+            .iter()
+            .find(|(path, bytes)| {
+                path.ends_with(".rule") && std::str::from_utf8(bytes).unwrap().starts_with(&header)
+            })
+            .unwrap()
+            .0
+            .clone()
+    }
 }
 
 #[test]
-fn json_and_gzip_constituents_reproduce_the_existing_release_and_metric() {
+fn declared_kdl_and_dsl_build_a_complete_release_with_the_independent_metric() {
+    for compressed in [false, true] {
+        let fixture = DslRelease::new(&fixture().input, compressed);
+        let expected =
+            assemble_owned_release(fixture.expected.clone(), Default::default()).unwrap();
+        let manifest =
+            parse_release_manifest(&fixture.source.manifest, Default::default()).unwrap();
+        assert_eq!(manifest.sources().len(), fixture.source.files.len());
+        assert_eq!(
+            manifest
+                .sources()
+                .iter()
+                .filter(|source| source.path() == "rules/names.kdl")
+                .count(),
+            1
+        );
+        let mut sources = fixture.source.sources();
+        sources.reverse();
+        let actual = build_release(&manifest, &sources, Default::default()).unwrap();
+        assert_eq!(actual.release().input(), expected.input());
+        assert_eq!(files(actual.release()), files(&expected));
+        assert_eq!(actual.encoded_bytes(), fixture.source.encoded_bytes());
+        assert_eq!(actual.decoded_bytes(), fixture.source.decoded_bytes);
+        assert_dsl_metric(actual.release());
+    }
+}
+
+#[test]
+fn dsl_sources_and_names_have_exact_inventory_and_cannot_borrow_component_roles() {
+    let fixture = DslRelease::new(&fixture().input, false);
+    let manifest = parse_release_manifest(&fixture.source.manifest, Default::default()).unwrap();
+    let sources = fixture.source.sources();
+    let program_path = fixture.source_for("action-final");
+    for path in [
+        "rules/names.kdl",
+        fixture.packets[0].as_str(),
+        program_path.as_str(),
+    ] {
+        let missing: Vec<_> = sources
+            .iter()
+            .copied()
+            .filter(|source| source.path != path)
+            .collect();
+        assert!(
+            build_release(&manifest, &missing, Default::default()).is_err(),
+            "missing {path}"
+        );
+    }
+    let mut extra = sources;
+    extra.push(ReleaseSource {
+        path: "rules/extra.rule",
+        bytes: b"program \"extra\" context actor {}",
+    });
+    assert!(build_release(&manifest, &extra, Default::default()).is_err());
+
+    let mut unused = fixture.source.clone();
+    unused.declare(" rule-source \"rules/unused.rule\"\n");
+    unused.add_plain(
+        "rules/unused.rule",
+        "program \"unused\" context actor {}".into(),
+    );
+    assert!(
+        unused.build(Default::default()).is_err(),
+        "declared but unused rule source"
+    );
+
+    let packet = &fixture.packets[0];
+    let first_path = fixture
+        .source
+        .text(packet)
+        .split("source=\"")
+        .nth(1)
+        .unwrap()
+        .split('"')
+        .next()
+        .unwrap();
+    for target in [
+        "rules/not-declared.rule",
+        "schema.json",
+        "rules/names.kdl",
+        packet.as_str(),
+    ] {
+        let mut changed = fixture.source.clone();
+        changed.replace_plain(
+            packet,
+            fixture.source.text(packet).replace(
+                &format!("source=\"{first_path}\""),
+                &format!("source=\"{target}\""),
+            ),
+        );
+        assert!(
+            changed.build(Default::default()).is_err(),
+            "packet borrowed {target}"
+        );
+    }
+    for declaration in [
+        " rule-source \"schema.json\"\n",
+        " rule-source \"rules/names.kdl\"\n",
+        " rule-packet \"schema.json\" names=\"rules/names.kdl\"\n",
+    ] {
+        let mut changed = fixture.source.clone();
+        changed.declare(declaration);
+        assert!(
+            parse_release_manifest(&changed.manifest, Default::default()).is_err(),
+            "{declaration}"
+        );
+    }
+}
+
+#[test]
+fn packets_refuse_raw_programs_and_never_fall_back_after_dsl_errors() {
+    let fixture = DslRelease::new(&fixture().input, false);
+    let mut mixed = fixture.source.clone();
+    mixed.replace_plain(
+        "rules.json",
+        serde_json::to_string(&fixture.expected.recipe.rules).unwrap(),
+    );
+    assert!(
+        mixed.build(Default::default()).is_err(),
+        "mixed raw and DSL programs"
+    );
+
+    let path = fixture.source_for("action-final");
+    let text = fixture.source.text(&path);
+    let measurement = text
+        .lines()
+        .find(|line| line.contains("effect \"measurement\""))
+        .unwrap();
+    assert!(measurement.contains("derive(current, "));
+    let stat = measurement
+        .split("derive(current, ")
+        .nth(1)
+        .unwrap()
+        .split(',')
+        .next()
+        .unwrap();
+    let unit_name = fixture
+        .source
+        .text("rules/names.kdl")
+        .lines()
+        .find(|line| line.trim_start().starts_with("unit "))
+        .unwrap()
+        .split('"')
+        .nth(1)
+        .unwrap();
+    for (target, expected) in [
+        (
+            "missing_stat",
+            poe_optimizer_authoring::DiagnosticCode::UnknownSymbol,
+        ),
+        (
+            unit_name,
+            poe_optimizer_authoring::DiagnosticCode::TypeMismatch,
+        ),
+    ] {
+        let mut changed = fixture.source.clone();
+        let bad = measurement.replace(
+            &format!("derive(current, {stat},"),
+            &format!("derive(current, {target},"),
+        );
+        changed.replace_plain(&path, text.replace(measurement, &bad));
+        match changed.build(Default::default()) {
+            Err(ReleaseBuildError::Packet { source, .. }) => {
+                assert_eq!(source.diagnostic.unwrap().code, expected)
+            }
+            Err(other) => panic!("wrong rejection for {bad}: {other}"),
+            Ok(_) => panic!("accepted {bad}"),
+        }
+    }
+
+    let value = measurement
+        .rsplit(", ")
+        .next()
+        .unwrap()
+        .trim_end_matches(");");
+    let binding = text
+        .lines()
+        .find(|line| line.trim_start().starts_with(&format!("let {value} = ")))
+        .unwrap();
+    for invalid in [
+        text.replace(
+            measurement,
+            &measurement.replace("derive(current, ", "derive(modifier, "),
+        ),
+        text.replace(binding, &format!("    let {value} = true;")),
+    ] {
+        let mut unauthorized = fixture.source.clone();
+        unauthorized.replace_plain(&path, invalid);
+        assert!(matches!(
+            unauthorized.build(Default::default()),
+            Err(ReleaseBuildError::Assembly(OwnedReleaseError::Recipe(
+                poe_optimizer_import::owned_recipe::OwnedRecipeError::Compile(_)
+            )))
+        ));
+    }
+
+    // A syntactically valid alias still has to resolve against the exact schema.
+    let mut changed = fixture.source.clone();
+    let names = fixture.source.text("rules/names.kdl");
+    let corrupt = names.replacen("key=\"def.", "key=\"unknown.", 1);
+    assert_ne!(names, corrupt);
+    changed.replace_plain("rules/names.kdl", corrupt);
+    assert!(changed.build(Default::default()).is_err());
+}
+
+#[test]
+fn release_packets_preserve_duplicate_membership_and_source_header_rejections() {
+    let fixture = DslRelease::new(&fixture().input, false);
+    let duplicate_path = "rules/duplicate-packet.kdl";
+    let packet = fixture.source.text(&fixture.packets[0]);
+    let duplicate = packet.replacen("packet \"fixture-", "packet \"duplicate-fixture-", 1);
+    assert_ne!(packet, duplicate);
+    let mut changed = fixture.source.clone();
+    changed.declare(&format!(
+        " rule-packet \"{duplicate_path}\" names=\"rules/names.kdl\"\n"
+    ));
+    changed.add_plain(duplicate_path, duplicate);
+    match changed.build(Default::default()) {
+        Err(ReleaseBuildError::Packet { path, source }) => {
+            assert_eq!(path, duplicate_path);
+            assert_eq!(
+                source.kind,
+                poe_optimizer_authoring::PacketErrorKind::DuplicateProgram
+            );
+            assert_eq!(
+                source.location,
+                poe_optimizer_authoring::PacketLocation::Member {
+                    append: 0,
+                    program: 0,
+                }
+            );
+        }
+        Err(other) => panic!("wrong duplicate-program rejection: {other}"),
+        Ok(_) => panic!("accepted duplicate owner-qualified programs across packets"),
+    }
+
+    let source_path = fixture.source_for("action-final");
+    let packet_path = fixture
+        .packets
+        .iter()
+        .find(|path| {
+            fixture
+                .source
+                .text(path)
+                .contains(&format!("source=\"{source_path}\""))
+        })
+        .unwrap();
+    let original = fixture.source.text(&source_path);
+    let mismatched = original.replacen(
+        "program \"action-final\" ",
+        "program \"different-header\" ",
+        1,
+    );
+    assert_ne!(original, mismatched);
+    let mut changed = fixture.source.clone();
+    changed.replace_plain(&source_path, mismatched);
+    match changed.build(Default::default()) {
+        Err(ReleaseBuildError::Packet { path, source }) => {
+            assert_eq!(&path, packet_path);
+            assert_eq!(
+                source.kind,
+                poe_optimizer_authoring::PacketErrorKind::SourceProgramMismatch
+            );
+        }
+        Err(other) => panic!("wrong source-header rejection: {other}"),
+        Ok(_) => panic!("accepted a source header that differs from packet membership"),
+    }
+}
+
+#[test]
+fn composed_rules_require_current_evaluation_headers_and_expected_release_identity() {
+    let dsl = DslRelease::new(&fixture().input, false);
+    let expected = assemble_owned_release(dsl.expected.clone(), Default::default()).unwrap();
+    let mut bound = dsl.source.clone();
+    bound.manifest = bound.manifest.replacen(
+        "release {",
+        &format!("release expected_input=\"{}\" {{", expected.receipt().input),
+        1,
+    );
+    assert_eq!(
+        bound.build(Default::default()).unwrap().release().receipt(),
+        expected.receipt()
+    );
+    bound.manifest = bound
+        .manifest
+        .replace(&expected.receipt().input.to_string(), &"0".repeat(64));
+    invalid(
+        bound.build(Default::default()),
+        "assembled input identity differs from expected_input",
+    );
+
+    let mut stale = dsl.source;
+    let original_stages = &fixture()
+        .input
+        .evaluation
+        .as_ref()
+        .unwrap()
+        .support
+        .as_ref()
+        .unwrap()
+        .stages;
+    assert_ne!(
+        original_stages.rules,
+        dsl.expected
+            .evaluation
+            .as_ref()
+            .unwrap()
+            .support
+            .as_ref()
+            .unwrap()
+            .stages
+            .rules
+    );
+    stale.replace_plain(
+        "support-stages.json",
+        serde_json::to_string(original_stages).unwrap(),
+    );
+    assert!(matches!(
+        stale.build(Default::default()),
+        Err(ReleaseBuildError::Assembly(OwnedReleaseError::Evaluation(
+            _
+        )))
+    ));
+}
+
+#[test]
+fn shared_rule_sources_charge_each_occurrence_without_coalescing_distinct_bodies() {
+    let mut input = fixture().input.clone();
+    let candidates: Vec<_> = input
+        .recipe
+        .rules
+        .owners
+        .iter()
+        .enumerate()
+        .filter_map(|(index, owner)| {
+            owner
+                .programs
+                .members
+                .first()
+                .map(|program| (index, program.context))
+        })
+        .collect();
+    let (first, second, context) = candidates
+        .iter()
+        .find_map(|(first, context)| {
+            candidates
+                .iter()
+                .find(|(second, other)| second != first && other == context)
+                .map(|(second, _)| (*first, *second, *context))
+        })
+        .unwrap();
+    let literal = |id: &str, value| RuleProgram {
+        id: OwnedDefinitionKey::new(id).unwrap(),
+        context,
+        reads: vec![],
+        nodes: vec![RuleNode {
+            id: OwnedDefinitionKey::new("marker").unwrap(),
+            expression: RuleExpression::Literal {
+                value: ParameterValue::Boolean(value),
+            },
+        }],
+        effects: vec![],
+    };
+    for index in [first, second] {
+        let owner = &input.recipe.rules.owners[index];
+        let stages = &mut input
+            .evaluation
+            .as_mut()
+            .unwrap()
+            .support
+            .as_mut()
+            .unwrap()
+            .stages
+            .programs
+            .members;
+        let placement = stages
+            .iter()
+            .find(|row| row.owner == owner.owner && row.program == owner.programs.members[0].id)
+            .unwrap()
+            .clone();
+        for id in ["shared-marker", "distinct-marker"] {
+            let mut marker = placement.clone();
+            marker.program = OwnedDefinitionKey::new(id).unwrap();
+            stages.push(marker);
+        }
+        input.recipe.rules.owners[index]
+            .programs
+            .members
+            .push(literal("shared-marker", true));
+        input.recipe.rules.owners[index]
+            .programs
+            .members
+            .push(literal("distinct-marker", index == first));
+    }
+    let fixture = DslRelease::new(&input, false);
+    let source_bodies: Vec<_> = fixture
+        .source
+        .files
+        .iter()
+        .filter(|(path, _)| path.ends_with(".rule"))
+        .map(|(_, bytes)| std::str::from_utf8(bytes).unwrap())
+        .collect();
+    assert_eq!(
+        source_bodies
+            .iter()
+            .filter(|text| text.starts_with("program \"shared-marker\" "))
+            .count(),
+        1
+    );
+    assert_eq!(
+        source_bodies
+            .iter()
+            .filter(|text| text.starts_with("program \"distinct-marker\" "))
+            .count(),
+        2
+    );
+    let actual = fixture.source.build(Default::default()).unwrap();
+    // Stage rows are an unordered declaration inventory. Compare through the
+    // same canonical constituent constructors as the packet-free expected path;
+    // its program bodies were lowered independently of packet composition.
+    let expected = assemble_owned_release(fixture.expected.clone(), Default::default()).unwrap();
+    assert_eq!(actual.release().input(), expected.input());
+    assert_dsl_metric(actual.release());
+    assert!(fixture.expanded_bytes > source_bodies.iter().map(|text| text.len()).sum::<usize>());
+    let exact = ReleaseBuildLimits {
+        max_expanded_rule_bytes: fixture.expanded_bytes,
+        ..Default::default()
+    };
+    assert!(fixture.source.build(exact).is_ok());
+    assert!(matches!(
+        fixture.source.build(ReleaseBuildLimits {
+            max_expanded_rule_bytes: fixture.expanded_bytes - 1,
+            ..exact
+        }),
+        Err(ReleaseBuildError::Limit(_))
+    ));
+}
+
+#[test]
+fn aggregate_packet_and_ir_budgets_apply_across_the_complete_release() {
+    let fixture = DslRelease::new(&fixture().input, false);
+    assert!(fixture.packets.len() > 1);
+    let limits = ReleaseBuildLimits {
+        max_components: fixture.components,
+        max_rule_packets: fixture.packets.len(),
+        max_sources: fixture.source.files.len(),
+        max_expanded_rule_bytes: fixture.expanded_bytes,
+        max_encoded_bytes: fixture.source.encoded_bytes(),
+        max_decoded_bytes: fixture.source.decoded_bytes,
+        ..Default::default()
+    };
+    assert!(fixture.source.build(limits).is_ok());
+    let manifest = parse_release_manifest(&fixture.source.manifest, limits).unwrap();
+    let supplied = fixture.source.sources();
+    for (stricter, message) in [
+        (
+            ReleaseBuildLimits {
+                max_components: limits.max_components - 1,
+                ..limits
+            },
+            "component count",
+        ),
+        (
+            ReleaseBuildLimits {
+                max_rule_packets: limits.max_rule_packets - 1,
+                ..limits
+            },
+            "rule packet count",
+        ),
+    ] {
+        limited(build_release(&manifest, &supplied, stricter), message);
+    }
+    for smaller in [
+        ReleaseBuildLimits {
+            max_components: limits.max_components - 1,
+            ..limits
+        },
+        ReleaseBuildLimits {
+            max_rule_packets: limits.max_rule_packets - 1,
+            ..limits
+        },
+        ReleaseBuildLimits {
+            max_sources: limits.max_sources - 1,
+            ..limits
+        },
+        ReleaseBuildLimits {
+            max_encoded_bytes: limits.max_encoded_bytes - 1,
+            ..limits
+        },
+        ReleaseBuildLimits {
+            max_decoded_bytes: limits.max_decoded_bytes - 1,
+            ..limits
+        },
+        ReleaseBuildLimits {
+            max_expanded_rule_bytes: limits.max_expanded_rule_bytes - 1,
+            ..limits
+        },
+    ] {
+        assert!(matches!(
+            fixture.source.build(smaller),
+            Err(ReleaseBuildError::Limit(_))
+        ));
+    }
+    let programs: Vec<_> = fixture
+        .expected
+        .recipe
+        .rules
+        .owners
+        .iter()
+        .flat_map(|owner| &owner.programs.members)
+        .collect();
+    let totals = [
+        programs.len(),
+        programs.iter().map(|program| program.reads.len()).sum(),
+        programs.iter().map(|program| program.nodes.len()).sum(),
+        programs.iter().map(|program| program.effects.len()).sum(),
+    ];
+    for (field, total) in totals.into_iter().enumerate() {
+        assert!(total > 1);
+        let mut exact = limits;
+        let bound = match field {
+            0 => &mut exact.release.recipe.compile.max_programs,
+            1 => &mut exact.release.recipe.compile.max_reads,
+            2 => &mut exact.release.recipe.compile.max_nodes,
+            _ => &mut exact.release.recipe.compile.max_effects,
+        };
+        *bound = total;
+        assert!(fixture.source.build(exact).is_ok());
+        match field {
+            0 => exact.release.recipe.compile.max_programs -= 1,
+            1 => exact.release.recipe.compile.max_reads -= 1,
+            2 => exact.release.recipe.compile.max_nodes -= 1,
+            _ => exact.release.recipe.compile.max_effects -= 1,
+        }
+        assert!(matches!(
+            fixture.source.build(exact),
+            Err(ReleaseBuildError::Limit(_))
+        ));
+    }
+}
+
+#[test]
+fn plain_and_gzip_constituents_reproduce_the_existing_release_and_metric() {
     let expected = assemble_owned_release(fixture().input.clone(), Default::default()).unwrap();
     for compressed in [false, true] {
         let source = Sources::new(&fixture().input, compressed);
@@ -222,7 +1056,7 @@ fn json_and_gzip_constituents_reproduce_the_existing_release_and_metric() {
             == if compressed {
                 SourceEncoding::Gzip
             } else {
-                SourceEncoding::Json
+                SourceEncoding::Plain
             }));
         let mut supplied = source.sources();
         supplied.reverse();
@@ -497,8 +1331,13 @@ fn manifest_rejects_paths_unknown_fields_and_duplicate_components_or_queries() {
             "invalid release root fields",
         ),
         (
-            "schema \"schema.json\" encoding=\"json\"",
+            "schema \"schema.json\" encoding=\"plain\"",
             "schema \"schema.json\" encoding=\"zstd\"",
+            "unknown source encoding",
+        ),
+        (
+            "schema \"schema.json\" encoding=\"plain\"",
+            "schema \"schema.json\" encoding=\"json\"",
             "unknown source encoding",
         ),
         (
@@ -719,6 +1558,58 @@ fn directory_entries(path: &Path) -> BTreeSet<std::ffi::OsString> {
         .unwrap()
         .map(|entry| entry.unwrap().file_name())
         .collect()
+}
+
+#[test]
+fn cli_builds_declared_dsl_and_rejected_dsl_leaves_no_publication() {
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("dsl inputs λ");
+    fs::create_dir(&input).unwrap();
+    let dsl = DslRelease::new(&fixture().input, false);
+    for (path, bytes) in &dsl.source.files {
+        let target = input.join(path);
+        fs::create_dir_all(target.parent().unwrap()).unwrap();
+        fs::write(target, bytes).unwrap();
+    }
+    let manifest = input.join("release.kdl");
+    fs::write(&manifest, &dsl.source.manifest).unwrap();
+    let output = temp.path().join("dsl release μ");
+    let expected = assemble_owned_release(dsl.expected.clone(), Default::default()).unwrap();
+    let result = cli(&manifest, &output);
+    assert_eq!(
+        result.status.code(),
+        Some(0),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    assert!(result.stderr.is_empty());
+    let mut receipt = files(&expected)["release.json"].clone();
+    receipt.push(b'\n');
+    assert_eq!(result.stdout, receipt);
+    assert_eq!(directory_files(&output), files(&expected));
+    for (path, bytes) in &dsl.source.files {
+        assert_eq!(
+            fs::read(input.join(path)).unwrap(),
+            *bytes,
+            "source changed: {path}"
+        );
+    }
+
+    let rule = dsl.source_for("action-final");
+    fs::write(
+        input.join(&rule),
+        "program \"action-final\" context action { let invalid = ; }",
+    )
+    .unwrap();
+    let failed_output = temp.path().join("must not publish");
+    let before = directory_entries(temp.path());
+    let failed = cli(&manifest, &failed_output);
+    assert_eq!(failed.status.code(), Some(2));
+    assert!(failed.stdout.is_empty());
+    assert!(String::from_utf8_lossy(&failed.stderr).contains("invalid rule packet"));
+    assert!(!failed_output.exists());
+    assert_eq!(directory_entries(temp.path()), before);
+    assert_eq!(directory_files(&output), files(&expected));
 }
 
 #[test]

@@ -16,16 +16,16 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; production release composition `970cdf29`; CLI standard `710ce536`; this checkpoint validates the full retained corpus through KDL/DSL and implements CLI convergence |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; production release composition `970cdf29`; CLI standard `710ce536`; full retained corpus gate and clap convergence `265b2afb`; current work connects declared DSL sources to release composition |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
 | Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation and production release command. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Connected offline modules still need to move out of Import |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | `poe-author rule fmt` and `release build` implemented. Every retained program passes KDL/DSL reconstruction and complete Engine checking. Production `.rule` source cutover, named-registry filesystem CAS, broader declarations and binary pack remain pending |
+| DSL / KDL / binary pack | `poe-author rule fmt` and `release build` implemented. Every retained program passes KDL/DSL reconstruction and complete Engine checking. Release composition accepts explicit names/packets/rule sources through that same compiler; integration and CLI tests pass. Tracked `.rule` source cutover, named-registry filesystem CAS, broader declarations and binary pack remain pending |
 | Current release | Tracked `migration-source/release.kdl` and compressed inputs reproduce all 17 constituent artifacts and the exact historical receipt through the production command. No local predecessor needed; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 22:18 UTC, baseline `ae90ec82` run `39857163789` had seven successful jobs and eleven running, with no failures. `710ce536` run `39863482739` was pending; `970cdf29` run `39863072990` was cancelled before any job started by main-queue coalescing. This checkpoint needs its own hosted result; no green suite claim |
+| CI | At 22:55 UTC, baseline `ae90ec82` run `39857163789` had eight successful jobs and ten running, with no failures. `265b2afb` run `39866525789` was pending; the earlier `710ce536` and `970cdf29` runs were cancelled by main-queue coalescing. This checkpoint needs its own hosted result; no green suite claim |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release`
@@ -358,6 +358,41 @@ review is clear. Logs: `runs/r1-release-tests-final-20261022.log`,
 `runs/r1-host-tests-unrestricted-20261022.log`,
 `runs/r1-release-clippy-20261022.log`, `runs/r1-release-cli-20261022.log`.
 
+**R2 release source composition:** the same production command now accepts
+explicit `rule-packet`/`rule-source` declarations, shared exact names and plain
+UTF-8 DSL sources. Packets require program-free rule metadata. Every source has
+one role, unused rule files fail, and reused memberships charge expanded work
+individually. Lowering uses the existing packet frontend; the sole assembler
+still checks types, ownership, complete stages and all dependent identities.
+The builder does not repair stale headers. The zero-packet bootstrap reader is
+temporary and must be deleted with tracked source conversion, by R4.
+
+Distinct source capacity is now 4,096, with separate bounds of 128 constituents
+(including query sets), 128 packets and 16 MiB expanded rule text. The corpus
+gate measured 103 packets, 2,561 distinct bodies and about 3.2 MB expanded text;
+these bounds admit that migration without raising the existing 64 MiB encoded
+or decoded limits. Shared files are decoded and charged once; aggregate expanded
+program/read/node/effect limits additionally reuse the Engine's release bounds.
+Data is now a normal Authoring dependency for its existing checked schema index;
+the native runtime still has no Authoring dependency.
+
+Validation: **178 Authoring tests pass** (153 library, seven CLI and eighteen
+release), none ignored. Strict all-target Clippy, per-package formatting and the
+normal runtime dependency guard pass. Integration covers independent metric
+observations, complete artifact equality, shared sources and distinct same-ID
+bodies, exact aggregate bounds, invalid symbols/types/authority, cross-packet
+duplicates, source-header mismatches and stale evaluation bindings. The CLI
+publishes DSL-derived artifacts and leaves no output/staging after invalid DSL.
+The tracked bootstrap still reproduces every reference artifact byte-for-byte.
+Two new-fixture assertions needed repair: added marker programs must appear in
+the complete stage inventory, and unordered stage rows compare after canonical
+assembly. Neither repair changes production checks or expected metric values.
+Logs: `runs/r2-release-dsl-tests-20261022.log` (library/CLI pass, initial release
+fixture failure), `runs/r2-release-dsl-tests-final2-20261022.log` (all release
+tests pass), `runs/r2-release-dsl-clippy-20261022.log` and
+`runs/r2-release-dsl-runtime-dependencies-20261022.log`. Hosted results remain
+pending. No original build, game law or production source capture changed.
+
 The mixed attribute source audits no longer compare seven historical `.rs` hash
 pins to current Rust files. Lua observer, report/XML, data artifact and upstream
 authentication remain intact, as do the semantic assertions. Historical receipt
@@ -635,7 +670,7 @@ for deletion at R4. No compatibility reader enters the normal CLI/library path.
 
 ### R2 — Formula DSL and declarative authoring
 
-**Started: complete program syntax, exact symbols, raising/formatting, name/membership KDL and whole-corpus conversion gate.**
+**Started: complete program syntax, exact symbols, raising/formatting, name/membership KDL, whole-corpus conversion gate and the release source seam.**
 Next move retained real programs and their publication consumers into KDL manifests and `.rule` source, preserving
 full graph alpha-equivalence and executable expectations. Complete the shared behavioral
 harness; do not create a second evaluation model. The current unchecked compiler
@@ -840,11 +875,21 @@ These are retained obligations, not extra competing phases.
    There are 2,561 distinct complete program bodies and 2,631 nonempty owners;
    exact-body deduplication can retain all 8,212 memberships within current packet
    source/append counts. Keep all 6,550 owner/coverage rows, including empty owners.
-   The 13,264 schema addresses exceed default name budgets: inject reviewed exact
-   aliases for used addresses or bounded families, never inferred mechanics.
-   Then compose program-free rule metadata with names, KDL packets and `.rule`
-   sources using the existing packet compiler and release assembler. Reject
-   embedded program members in that composition; keep one source of authority.
+   The full schema has 13,264 addresses. The read-only name audit found 5,011
+   needed by the retained owner/program corpus, including declaration owners;
+   4,952 have primary binding/policy/mapping evidence, and the remaining 59 have
+   exact supplemental records. This is address availability, not approval to turn
+   arbitrary JSON array paths into semantic names. Use typed reference collection,
+   explicit semantic adapters and reviewed aliases for the remaining entries.
+   Both inventories exceed the default per-file symbol bound; keep bounded local
+   name sets (the corpus gate's measured maximum is 921), not a global limit bump.
+   Local audit evidence: `runs/dsl-name-coverage-audit.json` and
+   `runs/dsl-name-gap-evidence.json`. Future generation must use tracked inputs.
+   The release source seam now composes program-free rule metadata with names,
+   KDL packets and `.rule` sources using the existing packet compiler and release
+   assembler, with integration and CLI validation passing. Use it for tracked
+   source conversion next. Remove packet-free embedded-program admission with that conversion,
+   by R4; no production DSL error may fall back to it.
    Preserve tables, receiver/query/application inventories and partial closure.
    Preserve both owner-specific `contribute-inherent-strength-life` variants:
    the Player's seven-node checked-range successor and supplied Actor's six-node
@@ -857,8 +902,8 @@ These are retained obligations, not extra competing phases.
    publisher. The focused verification
    command is `cargo test --locked -p poe-optimizer-authoring --all-targets`
    with the bounded optimized profile used by CI. Follow the `clap` standard for
-   every new CLI change and complete the R0 parsing convergence before extending
-   the existing custom command trees. Continue R0 source-pin removal and CLI/PoB suite
+   every new CLI change; convergence is implemented and locally tested, with
+   hosted confirmation pending. Continue R0 source-pin removal and CLI/PoB suite
    consolidation alongside that work, using the audited hazards above. Retain
    actual upstream/content authentication. Serialize Cargo jobs in this shared
    checkout; parallel agents own disjoint files.

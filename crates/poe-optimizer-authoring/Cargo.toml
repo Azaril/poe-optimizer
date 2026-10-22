@@ -22,6 +22,7 @@ path = "tests/release.rs"
 [dependencies]
 clap = { workspace = true }
 poe-optimizer-core = { path = "../poe-optimizer-core" }
+poe-optimizer-data = { path = "../poe-optimizer-data", default-features = false }
 # Temporary R1 seam: reuse the sole allocator until offline Import modules move here.
 poe-optimizer-import = { path = "../poe-optimizer-import" }
 poe-optimizer-host = { path = "../poe-optimizer-host" }
@@ -33,7 +34,6 @@ flate2 = { version = "1", default-features = false, features = ["rust_backend"] 
 kdl = { version = "=6.5.0", default-features = false }
 
 [dev-dependencies]
-poe-optimizer-data = { path = "../poe-optimizer-data", default-features = false }
 poe-optimizer-engine = { path = "../poe-optimizer-engine", default-features = false }
 tempfile = "3"
 sha2 = "0.10"

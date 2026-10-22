@@ -355,13 +355,33 @@ normalization, rewards, item rules and item-source policy are required. Tree
 normalization and provenance are optional. Metrics may stand alone; support
 stages, preparation, input bindings and receiving must appear together with
 metrics, with optional support outputs. Named query sets retain manifest order.
-Unknown fields, duplicate components/paths/query names and incomplete evaluation
+Unknown fields, duplicate components/query names and incomplete evaluation
 groups fail. Optional `expected_input` asserts the exact assembled release-input
 identity; it grants no completeness or reference-parity claim.
 
+Rule source composition uses `rule-packet "family/packet.kdl"
+names="family/names.kdl"` and explicit `rule-source "rules/example.rule"`
+declarations in that same manifest. Packet memberships resolve only to declared
+rule sources. Names resolve against the actual validated schema; they do not
+grant read, write or owner authority. The existing packet lowerer constructs IR,
+then the sole release assembler and Engine checker validate the complete result.
+The rules constituent must contain no embedded program members when packets are
+present; tables, owner order, partial closure and other rule metadata remain
+explicit. No malformed source can fall back to an embedded program.
+
+Paths have one role. Packets may share one names file, and memberships may reuse
+one declared rule file; both are inventoried and decoded once. Every declared
+rule source must be used. Repeated memberships are charged separately against
+expanded source and IR budgets, even when they share a file or program ID.
+Distinct bodies with the same local program ID remain independent. Node renaming
+changes compiled identity: dependent authored bindings must match the actual
+composed package; composition never repairs stale headers or reference evidence.
+
 The library receives injected source bytes. The CLI resolves bounded regular
 files within the manifest directory. Encoded and decoded aggregate byte budgets
-are independent, alongside source-count and typed assembly limits. Gzip is a
+are independent, alongside source/component/packet counts, expanded rule work
+and typed assembly limits. `plain` is the default transport encoding; rule,
+packet and names files are plain UTF-8. Constituent DTOs can opt into gzip. Gzip is a
 single-member lossless transport: trailing bytes and concatenated members fail.
 Only after complete assembly succeeds does the shared Host crate publish a new
 directory without replacement. Both CLI hosts use that one publisher; Host has
@@ -373,8 +393,11 @@ The tracked full source capture and reference receipt under
 [`migration-source`](../data/owned/poe2/3887ae68/migration-source/release.kdl) now
 reproduce through Rust tests and the production CLI. That capture has no
 evaluation bundle, adds no numerical coverage, and leaves 0/5 supplied originals
-complete. Validation status belongs in the implementation plan, not an inferred
-claim from the presence of compressed files.
+complete. Until its source cutover, the offline builder still admits that
+packet-free capture's embedded IR. This temporary migration reader is scheduled
+for deletion with the source conversion, by R4; it is not another native evaluator
+or a fallback for DSL errors. Validation status belongs in the implementation
+plan, not an inferred claim from the presence of compressed files.
 
 ### Runtime representation and storage
 
