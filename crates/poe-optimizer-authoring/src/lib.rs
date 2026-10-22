@@ -103,3 +103,6 @@ mod packet_tests;
 
 #[cfg(test)]
 mod allocation_tests;
+
+#[cfg(test)]
+mod corpus_tests;

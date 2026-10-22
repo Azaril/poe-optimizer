@@ -126,14 +126,23 @@ fn invalid_encoding_syntax_and_oversized_inputs_produce_no_partial_source() {
 }
 
 #[test]
-fn help_argument_errors_and_missing_files_do_not_claim_semantic_validation() {
-    let help = run(&text_args(&["--help"]), b"");
-    assert_eq!(help.status.code(), Some(0));
-    assert!(
-        String::from_utf8(help.stdout)
-            .unwrap()
-            .contains("syntax only")
-    );
+fn help_is_available_at_each_command_level_without_running_the_command() {
+    for (args, expected) in [
+        (vec!["--help"], "syntax only"),
+        (vec!["rule", "--help"], "fmt"),
+        (vec!["rule", "fmt", "--help"], "syntax only"),
+        (vec!["release", "--help"], "build"),
+        (vec!["release", "build", "--help"], "--output"),
+    ] {
+        let output = run(&text_args(&args), b"");
+        assert_eq!(output.status.code(), Some(0), "{args:?}");
+        assert!(String::from_utf8_lossy(&output.stdout).contains(expected));
+        assert!(output.stderr.is_empty());
+    }
+}
+
+#[test]
+fn argument_errors_stop_before_opening_inputs_or_publishing_outputs() {
     for args in [
         vec![],
         vec!["rule", "fmt"],
@@ -168,8 +177,37 @@ fn help_argument_errors_and_missing_files_do_not_claim_semantic_validation() {
         let output = run(&text_args(&args), b"");
         assert_eq!(output.status.code(), Some(2), "{args:?}");
         assert!(output.stdout.is_empty());
-        assert!(!output.stderr.is_empty());
+        let error = String::from_utf8_lossy(&output.stderr);
+        assert!(!error.is_empty(), "{args:?}");
+        assert!(!error.contains("cannot open"), "{args:?}: {error}");
+        assert!(
+            !error.contains("cannot resolve manifest"),
+            "{args:?}: {error}"
+        );
     }
+
+    let directory = TestDirectory::new();
+    let missing = directory.0.join("absent.kdl");
+    let destination = directory.0.join("unpublished");
+    let output = run(
+        &[
+            OsStr::new("release"),
+            OsStr::new("build"),
+            missing.as_os_str(),
+            OsStr::new("--output"),
+            destination.as_os_str(),
+            OsStr::new("extra.kdl"),
+        ],
+        b"",
+    );
+    assert_eq!(output.status.code(), Some(2));
+    assert!(output.stdout.is_empty());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("unexpected argument"));
+    assert_eq!(fs::read_dir(&directory.0).unwrap().count(), 0);
+}
+
+#[test]
+fn missing_input_reports_an_io_failure_without_formatted_output() {
     let directory = TestDirectory::new();
     let missing = directory.0.join("absent.rule");
     let output = run(
@@ -183,4 +221,47 @@ fn help_argument_errors_and_missing_files_do_not_claim_semantic_validation() {
             .unwrap()
             .contains("cannot open")
     );
+}
+
+#[test]
+fn release_option_terminator_accepts_a_manifest_path_beginning_with_a_dash() {
+    let directory = tempfile::tempdir().unwrap();
+    let name = "-release input λ.kdl";
+    let source = "release {\n unknown \"unused.json\"\n}\n";
+    fs::write(directory.path().join(name), source).unwrap();
+    let destination = directory.path().join("new release μ");
+    let output = Command::new(env!("CARGO_BIN_EXE_poe-author"))
+        .current_dir(directory.path())
+        .args(["release", "build", "--output"])
+        .arg(&destination)
+        .args(["--", name])
+        .output()
+        .unwrap();
+    assert_eq!(output.status.code(), Some(2));
+    assert!(output.stdout.is_empty());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("unknown source component"));
+    assert!(!destination.exists());
+    assert_eq!(
+        fs::read_to_string(directory.path().join(name)).unwrap(),
+        source
+    );
+}
+
+#[cfg(unix)]
+#[test]
+fn formatter_accepts_non_utf8_os_paths() {
+    use std::{ffi::OsString, os::unix::ffi::OsStringExt};
+
+    let directory = tempfile::tempdir().unwrap();
+    let input = directory
+        .path()
+        .join(OsString::from_vec(b"input-\xff.rule".to_vec()));
+    fs::write(&input, SOURCE).unwrap();
+    let output = run(
+        &[OsStr::new("rule"), OsStr::new("fmt"), input.as_os_str()],
+        b"",
+    );
+    assert_eq!(output.status.code(), Some(0));
+    assert_eq!(output.stdout, FORMATTED.as_bytes());
+    assert_eq!(fs::read(&input).unwrap(), SOURCE.as_bytes());
 }

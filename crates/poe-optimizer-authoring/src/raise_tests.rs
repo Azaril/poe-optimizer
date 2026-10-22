@@ -132,7 +132,11 @@ fn effect_references(effect: &mut RuleEffect, mut change: impl FnMut(&mut OwnedD
     change(value);
 }
 
-fn compare_graph(original: &RuleProgram, raised: &RaisedProgram, lowered: &LoweredProgram) {
+pub(super) fn compare_graph(
+    original: &RuleProgram,
+    raised: &RaisedProgram,
+    lowered: &LoweredProgram,
+) {
     let original_ids: BTreeSet<_> = original.nodes.iter().map(|node| node.id.clone()).collect();
     assert_eq!(original_ids.len(), original.nodes.len());
     let names: BTreeMap<_, _> = raised

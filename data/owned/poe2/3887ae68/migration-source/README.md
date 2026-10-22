@@ -80,6 +80,14 @@ reproduces all seventeen constituent artifacts and the byte-exact receipt.
 No local predecessor or test staging helper is needed. This validates release
 reproduction, not whole-build coverage or completion of the format migration.
 
+The Authoring corpus test also raises all 8,212 program occurrences through
+bounded KDL names/packets and the formula DSL, proves graph equivalence and exact
+post-assembly owner membership, and compiles the complete reconstructed package
+with the existing Engine. Every non-program field and partial-coverage declaration
+is preserved. This is the migration gate for replacing the captured rule JSON;
+the production release still consumes that capture until maintained declarations
+and `.rule` source replace it. Test-generated aliases are not production names.
+
 Decoded hashes below identify JSON source bytes. The compressed files are capture
 artifacts using standard gzip; builds consume these tracked bytes and need not
 regenerate identical compressed streams on every platform.

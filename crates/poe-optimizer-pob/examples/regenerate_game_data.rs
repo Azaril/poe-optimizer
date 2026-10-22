@@ -1,14 +1,21 @@
 //! Explicit maintainer preparation of a source-audited package migration.
 //! Writes a new directory only; never edits the compiled reviewed artifacts.
+use clap::Parser;
 use poe_optimizer_pob::game_data::extract_pinned_game_data_for_review;
 use sha2::{Digest, Sha256};
 use std::{fs, path::PathBuf};
+
+/// Extract the pinned source package into a new directory for maintainer review.
+#[derive(Parser)]
+#[command(name = "regenerate_game_data")]
+struct Args {
+    /// New output directory; an existing directory is never overwritten.
+    #[arg(value_name = "NEW_OUTPUT_DIRECTORY")]
+    destination: PathBuf,
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut args = std::env::args_os().skip(1);
-    let destination = PathBuf::from(args.next().ok_or("provide a new output directory")?);
-    if args.next().is_some() {
-        return Err("expected exactly one output directory".into());
-    }
+    let destination = Args::parse().destination;
     if destination.exists() {
         return Err("output directory already exists".into());
     }

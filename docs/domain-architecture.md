@@ -261,6 +261,13 @@ errors, not a reason to invent identifiers. Numeric spelling must round-trip
 finite quantities and bounded integers exactly. Raising is an offline migration
 tool, not a semantic validator or source formatter: formatting must preserve
 authored names and comments and be idempotent, independently of IR node naming.
+The migration gate covers every exact owner/program occurrence. A program ID is
+owner-local and cannot identify a reusable body by itself. Verify both graph
+equivalence and exact placement after packet assembly; restore only program bodies
+to prove every other package field, including partial coverage, is unchanged.
+Use bounded symbol groups that include exact slot-declaration owners, then compile
+the complete reconstructed package through the existing Engine. Synthetic aliases
+are suitable for compiler tests, not substitutes for reviewed production names.
 Formatting preserves token spellings and grouping; it only changes structural
 whitespace. Preserve comment bodies under the lexer's LF termination rule,
 including literal CR or trailing spaces. Output must fit both the output budget

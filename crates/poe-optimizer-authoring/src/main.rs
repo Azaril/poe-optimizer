@@ -3,77 +3,53 @@
 
 mod release_cli;
 
+use clap::{Args, Parser, Subcommand};
 use poe_optimizer_authoring::{FormatLimits, format_program};
 use std::{
-    env,
-    ffi::{OsStr, OsString},
     fs::File,
     io::{self, Read, Write},
     path::PathBuf,
     process::ExitCode,
 };
 
-const HELP: &str = "Usage: poe-author rule fmt [--check] [--] <path|->\n\
-       poe-author release build <release.kdl> --output <new-directory>\n\
-\n\
-Format one .rule program to stdout; '-' reads stdin.\n\
---check emits no source and exits 1 if formatting differs.\n\
-Exit 0 means success; exit 2 means an argument, I/O or syntax error.\n\
-Formatting validates syntax only, not rule types, ownership or coverage.\n\
-Release build checks all declared constituents before atomic publication.\n\
-Input files and existing output directories are never overwritten.\n";
+#[derive(Parser)]
+#[command(
+    name = "poe-author",
+    about = "Offline release construction and syntax only rule formatting",
+    after_help = "Input files and existing output directories are never overwritten."
+)]
+struct Cli {
+    #[command(subcommand)]
+    command: Command,
+}
 
+#[derive(Args)]
+#[command(
+    after_help = "Formatting validates syntax only, not rule types, ownership or coverage.\nExit 0 means success; exit 1 means formatting differs; exit 2 means an argument, I/O or syntax error."
+)]
 struct FormatCommand {
-    input: OsString,
+    /// Input .rule path; '-' reads stdin
+    #[arg(value_name = "PATH|-")]
+    input: PathBuf,
+    /// Emit no source and exit 1 if formatting differs
+    #[arg(long)]
     check: bool,
 }
 
+#[derive(Subcommand)]
 enum Command {
-    Help,
-    Format(FormatCommand),
+    /// Work with rule source programs
+    #[command(subcommand)]
+    Rule(RuleCommand),
+    /// Construct releases from checked final constituents
+    #[command(subcommand)]
     Release(release_cli::Command),
 }
 
-fn arguments(mut args: impl Iterator<Item = OsString>) -> Result<Command, &'static str> {
-    let Some(first) = args.next() else {
-        return Err("expected a command; use --help");
-    };
-    if first == "--help" || first == "-h" {
-        return if args.next().is_none() {
-            Ok(Command::Help)
-        } else {
-            Err("unexpected arguments after --help")
-        };
-    }
-    if first == "release" {
-        return release_cli::arguments(args).map(Command::Release);
-    }
-    if first != "rule" || args.next().as_deref() != Some(OsStr::new("fmt")) {
-        return Err("expected 'rule fmt' or 'release build'; use --help");
-    }
-    let mut check = false;
-    let mut positional_only = false;
-    let mut input = None;
-    for arg in args {
-        if !positional_only && arg == "--" {
-            positional_only = true;
-        } else if !positional_only && arg == "--check" {
-            if check {
-                return Err("--check may only be specified once");
-            }
-            check = true;
-        } else if !positional_only && (arg == "--help" || arg == "-h") {
-            return Err("use 'poe-author --help' for usage");
-        } else if !positional_only && arg != "-" && arg.as_encoded_bytes().starts_with(b"-") {
-            return Err("unknown option; use '--' before a path beginning with '-'");
-        } else if input.replace(arg).is_some() {
-            return Err("expected exactly one input path or '-'");
-        }
-    }
-    Ok(Command::Format(FormatCommand {
-        input: input.ok_or("expected one input path or '-'")?,
-        check,
-    }))
+#[derive(Subcommand)]
+enum RuleCommand {
+    /// Format one .rule program to stdout without changing its source file
+    Fmt(FormatCommand),
 }
 
 fn read_source(reader: impl Read, maximum: usize) -> Result<String, String> {
@@ -96,26 +72,18 @@ fn read_source(reader: impl Read, maximum: usize) -> Result<String, String> {
 
 fn run(command: Command) -> Result<ExitCode, String> {
     let command = match command {
-        Command::Help => {
-            io::stdout()
-                .lock()
-                .write_all(HELP.as_bytes())
-                .map_err(|error| format!("cannot write help: {error}"))?;
-            return Ok(ExitCode::SUCCESS);
-        }
-        Command::Format(command) => command,
+        Command::Rule(RuleCommand::Fmt(command)) => command,
         Command::Release(command) => return release_cli::run(command),
     };
     let limits = FormatLimits::default();
-    let source = if command.input == "-" {
+    let source = if command.input.as_os_str() == "-" {
         read_source(
             io::stdin().lock(),
             limits.parse.expressions.max_source_bytes,
         )?
     } else {
-        let path = PathBuf::from(&command.input);
-        let file = File::open(&path)
-            .map_err(|error| format!("cannot open '{}': {error}", path.display()))?;
+        let file = File::open(&command.input)
+            .map_err(|error| format!("cannot open '{}': {error}", command.input.display()))?;
         read_source(file, limits.parse.expressions.max_source_bytes)?
     };
     let formatted = format_program(&source, limits).map_err(|error| error.to_string())?;
@@ -136,10 +104,7 @@ fn run(command: Command) -> Result<ExitCode, String> {
 }
 
 fn main() -> ExitCode {
-    match arguments(env::args_os().skip(1))
-        .map_err(str::to_owned)
-        .and_then(run)
-    {
+    match run(Cli::parse().command) {
         Ok(code) => code,
         Err(error) => {
             eprintln!("poe-author: {error}");

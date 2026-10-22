@@ -46,7 +46,8 @@ data tooling and tests use Rust; shell scripts may orchestrate commands.
 
 Use `clap` for command-line parsing in all new or extended Rust executables,
 including offline tools and retained developer examples. The main CLI already
-uses it; convergence of the remaining custom parsers is tracked in
+uses it, and `poe-author` and the retained examples now use the shared workspace
+dependency. Validation is tracked in
 [R0](docs/implementation.md#cli-parsing-convergence). See the
 [CLI standard](docs/domain-architecture.md#command-line-parsing).
 

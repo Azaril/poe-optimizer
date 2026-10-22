@@ -1,47 +1,29 @@
 //! Filesystem boundary for offline final-release construction.
+use clap::{Args, Subcommand};
 use poe_optimizer_authoring::{
     ReleaseBuildLimits, ReleaseSource, build_release, parse_release_manifest,
 };
 use std::{
-    ffi::OsString,
     fs::{self, File},
     io::{self, Read, Write},
     path::{Path, PathBuf},
     process::ExitCode,
 };
 
-pub(super) struct Command {
-    manifest: PathBuf,
-    output: PathBuf,
+#[derive(Subcommand)]
+pub(super) enum Command {
+    /// Check all declared constituents and atomically publish a new release directory
+    Build(BuildCommand),
 }
 
-pub(super) fn arguments(mut args: impl Iterator<Item = OsString>) -> Result<Command, &'static str> {
-    if args.next().as_deref() != Some(std::ffi::OsStr::new("build")) {
-        return Err("expected 'release build'; use --help");
-    }
-    let mut manifest = None;
-    let mut output = None;
-    let mut positional_only = false;
-    while let Some(arg) = args.next() {
-        if !positional_only && arg == "--" {
-            positional_only = true;
-        } else if !positional_only && arg == "--output" {
-            if output.is_some() {
-                return Err("--output may only be specified once");
-            }
-            output = Some(PathBuf::from(
-                args.next().ok_or("--output requires a directory")?,
-            ));
-        } else if !positional_only && arg.as_encoded_bytes().starts_with(b"-") {
-            return Err("unknown release option; use '--' before a path beginning with '-'");
-        } else if manifest.replace(PathBuf::from(arg)).is_some() {
-            return Err("expected one release manifest");
-        }
-    }
-    Ok(Command {
-        manifest: manifest.ok_or("expected one release manifest")?,
-        output: output.ok_or("release build requires --output")?,
-    })
+#[derive(Args)]
+pub(super) struct BuildCommand {
+    /// Release manifest to build
+    #[arg(value_name = "RELEASE.KDL")]
+    manifest: PathBuf,
+    /// New output directory; an existing directory is never overwritten
+    #[arg(long, value_name = "NEW_DIRECTORY")]
+    output: PathBuf,
 }
 
 fn read(path: &Path, maximum: usize) -> Result<Vec<u8>, String> {
@@ -69,6 +51,7 @@ fn read(path: &Path, maximum: usize) -> Result<Vec<u8>, String> {
 }
 
 pub(super) fn run(command: Command) -> Result<ExitCode, String> {
+    let Command::Build(command) = command;
     let limits = ReleaseBuildLimits::default();
     let manifest_path = command
         .manifest

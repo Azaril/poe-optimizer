@@ -1,19 +1,31 @@
 //! Developer package authoring helper. Section digests do not confer reviewed trust.
+use clap::Parser;
 use poe_optimizer_data::game_data::{GameDataLoader, GameDataPackage, LoadLimits, TrustPolicy};
 use std::{
     fs::{File, OpenOptions},
     io::{Read, Write},
+    path::PathBuf,
 };
+
+/// Refresh package section digests and write a new custom, unreviewed package.
+#[derive(Parser)]
+#[command(name = "seal_package")]
+struct Args {
+    /// Package JSON to seal.
+    #[arg(value_name = "INPUT.json")]
+    input: PathBuf,
+    /// New output JSON file; an existing file is never overwritten.
+    #[arg(value_name = "NEW_OUTPUT.json")]
+    output: PathBuf,
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let args: Vec<_> = std::env::args_os().collect();
-    if args.len() != 3 {
-        return Err("usage: seal_package INPUT.json NEW_OUTPUT.json".into());
-    }
+    let args = Args::parse();
     let limits = LoadLimits::default();
-    if !std::fs::metadata(&args[1])?.is_file() {
+    if !std::fs::metadata(&args.input)?.is_file() {
         return Err("input must be a regular file".into());
     }
-    let input = File::open(&args[1])?;
+    let input = File::open(&args.input)?;
     if !input.metadata()?.is_file() || input.metadata()?.len() > limits.max_bytes as u64 {
         return Err("input must be a regular file within the package byte limit".into());
     }
@@ -28,7 +40,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut output = OpenOptions::new()
         .write(true)
         .create_new(true)
-        .open(&args[2])?;
+        .open(&args.output)?;
     output.write_all(&bytes)?;
     output.sync_all()?;
     println!("{} custom_unreviewed", snapshot.identity().content_sha256);

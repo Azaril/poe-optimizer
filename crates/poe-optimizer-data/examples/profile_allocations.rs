@@ -1,6 +1,7 @@
 //! Developer-only requested-allocation accounting; no production instrumentation.
 //! Run `profile_allocations --self-check` in a separate process before measurement.
 //! Run `profile_allocations` with no arguments for one cold/later load lifecycle.
+use clap::Parser;
 use poe_optimizer_data::{
     self as data,
     game_data::{
@@ -23,6 +24,15 @@ use std::{
     },
     time::Instant,
 };
+
+/// Measure requested allocations for one cold/later bundled-data load lifecycle.
+#[derive(Parser)]
+#[command(name = "profile_allocations")]
+struct Args {
+    /// Check allocation counters in isolation without loading bundled data.
+    #[arg(long)]
+    self_check: bool,
+}
 
 struct RequestedAllocator;
 #[global_allocator]
@@ -378,14 +388,8 @@ fn self_check() -> Result<(), Box<dyn Error>> {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let self_check_mode = {
-        let mut args = std::env::args().skip(1);
-        let mode = args.next();
-        if args.next().is_some() || mode.as_deref().is_some_and(|x| x != "--self-check") {
-            return Err("Usage: profile_allocations [--self-check]".into());
-        }
-        mode.is_some()
-    };
+    // Finish parsing and drop its temporary allocations before measuring anything.
+    let self_check_mode = Args::parse().self_check;
     if self_check_mode {
         return self_check();
     }

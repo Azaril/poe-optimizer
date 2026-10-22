@@ -16,16 +16,16 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; official kdl-rs `de02c87a`; stable named allocation `ae90ec82`; this checkpoint adds production final-release composition, shared Host publication and attribute source-pin cleanup |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; production release composition `970cdf29`; CLI standard `710ce536`; this checkpoint validates the full retained corpus through KDL/DSL and implements CLI convergence |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
 | Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation and production release command. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Connected offline modules still need to move out of Import |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | `poe-author rule fmt` and `release build` implemented. One shared Host publisher handles new release directories. Named-registry filesystem CAS, broader declarations, all-program DSL conversion and binary pack remain pending |
+| DSL / KDL / binary pack | `poe-author rule fmt` and `release build` implemented. Every retained program passes KDL/DSL reconstruction and complete Engine checking. Production `.rule` source cutover, named-registry filesystem CAS, broader declarations and binary pack remain pending |
 | Current release | Tracked `migration-source/release.kdl` and compressed inputs reproduce all 17 constituent artifacts and the exact historical receipt through the production command. No local predecessor needed; evaluation bundle still absent |
-| CLI parsing | `clap` is the accepted standard for all future CLI work. Main CLI already uses it; `poe-author` and four developer examples still have custom parsers. R0 convergence is pending |
-| CI | Baseline `ae90ec82` run `39857163789` has seven successful jobs (including both platform validation jobs), eleven still running and no failures at the latest inspection. This checkpoint needs its own hosted result; no green suite claim |
+| CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
+| CI | At 22:18 UTC, baseline `ae90ec82` run `39857163789` had seven successful jobs and eleven running, with no failures. `710ce536` run `39863482739` was pending; `970cdf29` run `39863072990` was cancelled before any job started by main-queue coalescing. This checkpoint needs its own hosted result; no green suite claim |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release`
@@ -109,8 +109,9 @@ values, missing-input and numerical-failure branches, exact unit/type refusals,
 compiler authority rejection and 1 MiB-stack long expressions. A retained Life
 contribution guard lowers to the original graph up to node names and replays its
 13 source emission cases. Its observed amount is an input to that guard test,
-not evidence that the whole Life calculation or a build is implemented. Full
-program raise/lower alpha-equivalence remains an R2 exit requirement.
+not evidence that the whole Life calculation or a build is implemented. The later
+whole-corpus checkpoint below now verifies complete program graph equivalence;
+production source cutover remains an R2 requirement.
 
 Expression checkpoint `e1841725`: all **32 Authoring tests pass**, with no ignored cases. Formatting and strict
 all-target Clippy pass. Independent review found no remaining blocker. Final
@@ -393,6 +394,52 @@ Preserve retained laws, not redundant copies of the same fixture or the historic
 number of tests. The manifest-driven harness is completed with R2, whose authoring
 declarations make generic fixture construction possible.
 
+**Whole retained-corpus migration gate:** the ordinary Authoring unit suite now
+loads the tracked schema/rule bootstrap, compiles the original package, and raises
+every exact owner/program occurrence. Bounded groups pass through actual KDL
+names/membership parsing, DSL lowering and transactional packet application. An
+independent node-remapping comparator checks each program; a separately assembled
+expected package checks exact owner/member placement after application. Restoring
+only original program bodies proves all other fields are unchanged, including
+coverage gaps, receivers, contribution queries, tables and operation versions.
+The complete reconstructed package passes the existing Engine compiler.
+
+The measured corpus has **8,212 occurrences**, **2,561 distinct complete program
+bodies**, but only **247 program IDs**. No ID-only deduplication is permitted.
+The test uses **103 groups**, at most **921 symbols**, **58,524 name-manifest
+bytes**, **9,983 bytes per program**, and **22,777 membership-manifest bytes**.
+Expanded DSL source totals **3,198,372 bytes**, excluding declarations/metadata.
+All current default limits remain unchanged. Test aliases are synthetic exact
+bindings; they are not production names or inferred game mechanics.
+
+Validation: all **153 Authoring library tests pass**, with none ignored, in the
+bounded optimized test profile. This includes existing independent execution
+vectors and malformed-input checks. Log: `runs/r2-whole-corpus-tests-20261022.log`.
+The initial test review caught a placement gap; comparing only pre-assembly
+programs would not detect assignment to the wrong same-context owner. The final
+test independently checks the assembled result. This validates representation
+conversion, not complete-build parity. No native original is newly complete.
+
+**Next migration action:** make the existing release builder consume program-free
+rule metadata plus maintained names, packet manifests and `.rule` sources through
+the existing packet APIs. Preserve every empty/partial owner and both distinct
+owner-local Life programs. Assign reviewed semantic names; do not ship the test's
+synthetic aliases as the maintained authoring surface. Replace the captured program
+JSON with that composition, using this whole-corpus gate and independent numerical
+vectors to verify the change. Then move the connected offline Import modules out
+of the runtime dependency path. Do not resume the historical succession chain.
+
+Naming seeds under `data/owned/poe2/3887ae68/` include
+`inherent-life-contribution/names.kdl`, family `bindings.json` files such as
+`global-minion-gem-level`, `strength-life`, `minion-life-source` and `command-damage`,
+and `attributes/policy.json` / `actor-baselines/native-policy.json`. Their explicit
+role-to-address bindings are review evidence, not a current-release certificate:
+validate every typed address and slot declaration against the final schema and
+active registry, reject collisions, and disregard historical predecessor seals.
+For content labels, join the final mapping to pinned catalog identities; labels
+must not establish mechanics or authority. No complete semantic-name registry
+already exists. Named-registry filesystem CAS remains separate from this cutover.
+
 Remaining consolidation can use three PoB and four CLI suites. CLI helpers
 require explicit parent-relative bindings before their roots become modules.
 Some shared helpers contain tests: move each unique
@@ -471,25 +518,24 @@ Missing current-release inputs remain an explicit R1 failure, never a skipped pa
 
 #### CLI parsing convergence
 
-**Pending.** Use `clap` for all new CLI work now. Convert existing custom parsers before
-extending their command trees; this can proceed alongside library-only R1/R2 work.
-The root `poe-optimizer` CLI and its command modules already use `clap`.
-Centralize the dependency under `[workspace.dependencies]` and reuse it from
-executable crates or example dev-dependencies, preserving library boundaries.
+**Implemented and locally tested; hosted confirmation pending.** All retained argument parsing now uses
+`clap`, with its dependency centralized under `[workspace.dependencies]`.
+The root `poe-optimizer` CLI and its command modules already used it. New CLI
+work must follow the same standard; libraries continue to receive typed inputs.
 
-Remaining audited scope:
+Converted scope:
 
 - `crates/poe-optimizer-authoring/src/main.rs` and
-  `crates/poe-optimizer-authoring/src/release_cli.rs`: replace the
+  `crates/poe-optimizer-authoring/src/release_cli.rs`: the
   handwritten dispatch, argument loops and help text for `poe-author rule fmt`
-  and `release build` with one `clap` command tree.
+  and `release build` are replaced with one `clap` command tree.
 - `crates/poe-optimizer-data/examples/seal_package.rs` and `profile_allocations.rs`:
-  migrate retained argument handling; parse profiling arguments before measured
-  allocation intervals and keep allocator isolation.
+  argument handling uses `clap`; profiling arguments are parsed and temporary
+  allocations dropped before measured intervals, preserving allocator isolation.
 - `crates/poe-optimizer-pob/examples/regenerate_game_data.rs` and
-  `inspect_parser_programs.rs`: migrate retained tools, keeping callback-count,
-  positive-ID and uniqueness validation. Retire obsolete examples instead of
-  preserving another command surface.
+  `inspect_parser_programs.rs`: argument handling uses `clap`, retaining callback
+  count, positive-ID and uniqueness validation before data/extraction work.
+  These examples use dev-dependencies; no CLI type enters their library APIs.
 
 Validation must retain OS-native paths, `--` handling, formatter stdin `-`,
 required arguments, rejection of invalid/extra arguments and the intentional
@@ -499,9 +545,35 @@ Keep bounded reads/decompression, syntax-only formatting and atomic no-clobber
 publication unchanged. Exercise actual commands in Rust integration tests and
 remove superseded parsing tests/code; no compatibility parser or fallback.
 
+The Authoring commands pass seven Windows CLI tests and all ten release tests,
+including exact bootstrap reproduction, no-clobber publication, stdin, bounded
+reads, invalid/extra arguments before I/O and dash-prefixed paths. Unix also has
+a non-UTF8 path regression. An initial assertion incorrectly required a usage
+banner in every clap error; it now tests rejection before work without pinning
+incidental diagnostics. Log: `runs/clap-authoring-tests.log`.
+
+All four developer examples build; the three callback-argument tests pass. Actual
+executables pass help, required/extra/unknown/duplicate-argument checks, callback
+count/zero/overflow/uniqueness checks, OS-path/`--` cases, no writes on argument
+failure, and existing-output preservation. The allocation counter's isolated
+`--self-check` passes after parsing. No custom argv loops remain in `src/` or
+`crates/`. Logs: `runs/clap-example-tests.log`, `runs/clap-example-build.log`,
+`runs/clap-command-checks.log`. The optional PoB build still emits its existing
+LNK4098 CRT linker warning; it is not a test failure.
+
+Together with the corpus checkpoint, **170 Authoring tests** and **three callback
+tests** pass, with no ignored cases; **22 example executable checks** pass.
+Strict all-target Authoring Clippy and focused four-example Clippy pass. The
+normal runtime dependency guard still excludes Authoring, KDL, PoB and Lua.
+Formatting passes for all three affected packages, using the per-package approach
+already used by CI to avoid Windows' workspace-wide command-line length limit.
+Logs: `runs/clap-authoring-clippy.log`, `runs/clap-example-clippy.log`,
+`runs/clap-runtime-dependencies.log`. This guard does not prove retirement of the
+legacy Rust data/parser stack, which remains explicit R1/R4 work.
+
 **Exit:** every retained Rust CLI entry point uses `clap`; documentation and
 help agree, parsing failures perform no command work, and focused Windows/Linux
-tests pass. This work item is recorded only; conversion has not been implemented.
+tests pass. This commit's hosted Windows/Linux results remain to be recorded.
 
 ### R1 — Separate authoring and define one compact release
 
@@ -545,10 +617,11 @@ succession chain.
 
 The current-release census contains 8,212 program occurrences, 2,561 distinct
 serialized programs across 2,631 nonempty owners, and 18 integer tables with 975
-rows. Every observed operation is represented by the DSL; a whole-release Rust
-raise/lower check is still required. The schema has 9,391 definitions and 3,873
+rows. Every program now passes the whole-corpus Rust KDL/DSL migration gate and
+complete Engine compilation. The schema has 9,391 definitions and 3,873
 slots: use bounded per-source symbol groups rather than assuming one default-size
-names manifest fits. All eleven core/Import constituent files differ from the
+names manifest fits; the tested groups require at most 921 symbols without raising
+limits. All eleven core/Import constituent files differ from the
 tracked `current/` baseline. The production `poe-author release build` path reads
 the final captured composition without local `runs/` or historical stage helpers.
 Next replace its temporary constituents with declarations.
@@ -562,7 +635,7 @@ for deletion at R4. No compatibility reader enters the normal CLI/library path.
 
 ### R2 — Formula DSL and declarative authoring
 
-**Started: complete program syntax, exact symbols, raising/formatting and name/membership KDL.**
+**Started: complete program syntax, exact symbols, raising/formatting, name/membership KDL and whole-corpus conversion gate.**
 Next move retained real programs and their publication consumers into KDL manifests and `.rule` source, preserving
 full graph alpha-equivalence and executable expectations. Complete the shared behavioral
 harness; do not create a second evaluation model. The current unchecked compiler

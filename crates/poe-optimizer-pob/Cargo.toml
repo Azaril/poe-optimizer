@@ -19,5 +19,6 @@ tempfile = "3"
 thiserror = "2"
 
 [dev-dependencies]
+clap = { workspace = true }
 poe-optimizer-engine = { path = "../poe-optimizer-engine" }
 flate2 = { version = "1", default-features = false, features = ["rust_backend"] }

@@ -20,6 +20,7 @@ name = "release"
 path = "tests/release.rs"
 
 [dependencies]
+clap = { workspace = true }
 poe-optimizer-core = { path = "../poe-optimizer-core" }
 # Temporary R1 seam: reuse the sole allocator until offline Import modules move here.
 poe-optimizer-import = { path = "../poe-optimizer-import" }

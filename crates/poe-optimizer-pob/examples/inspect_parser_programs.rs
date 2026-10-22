@@ -1,5 +1,5 @@
 //! Offline diagnostic for actual typed-program rejections, never runtime admission.
-//! Usage: inspect_parser_programs <new-output.json> <callback-id>...
+use clap::{CommandFactory, Parser, error::ErrorKind};
 use poe_optimizer_data::{
     game_data::bundled_snapshot, item_loading::ItemLoadingSource, modifier_parser::*,
 };
@@ -9,6 +9,7 @@ use std::{
     collections::{BTreeSet, VecDeque},
     fs::OpenOptions,
     io::{self, Write},
+    num::NonZeroU32,
     path::PathBuf,
 };
 
@@ -16,6 +17,30 @@ const MAX_REQUESTED: usize = 16;
 const MAX_CALLBACKS: usize = 64;
 const MAX_DEPTH: usize = 8;
 const MAX_OUTPUT_BYTES: usize = 2 * 1024 * 1024;
+
+/// Inspect typed-program rejections for distinct callbacks from the pinned source.
+#[derive(Debug, Parser)]
+#[command(name = "inspect_parser_programs")]
+struct Args {
+    /// New diagnostic JSON file; an existing file is never overwritten.
+    #[arg(value_name = "NEW_OUTPUT.json")]
+    destination: PathBuf,
+    /// Positive, distinct callback IDs (at most 16).
+    #[arg(value_name = "CALLBACK_ID", required = true, num_args = 1..=MAX_REQUESTED)]
+    callbacks: Vec<NonZeroU32>,
+}
+
+impl Args {
+    fn validate(&self) -> Result<(), clap::Error> {
+        for (index, id) in self.callbacks.iter().enumerate() {
+            if self.callbacks[..index].contains(id) {
+                return Err(Self::command()
+                    .error(ErrorKind::ValueValidation, "callback IDs must be distinct"));
+            }
+        }
+        Ok(())
+    }
+}
 
 #[derive(Serialize)]
 struct CallbackReport<'a> {
@@ -60,25 +85,17 @@ impl Write for Output {
     }
 }
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut args = std::env::args_os().skip(1);
-    let destination = PathBuf::from(args.next().ok_or("provide a new JSON output path")?);
+    let args = Args::parse();
+    args.validate().unwrap_or_else(|error| error.exit());
+    let destination = args.destination;
+    let requested: Vec<_> = args
+        .callbacks
+        .into_iter()
+        .map(|id| ParserCallbackId(id.get()))
+        .collect();
+    let mut seen: BTreeSet<_> = requested.iter().copied().collect();
     if destination.exists() {
         return Err("output path already exists".into());
-    }
-    let mut requested = Vec::new();
-    let mut seen = BTreeSet::new();
-    for arg in args {
-        if requested.len() == MAX_REQUESTED {
-            return Err("at most 16 callback IDs may be requested".into());
-        }
-        let id = ParserCallbackId(arg.to_str().ok_or("callback ID is not UTF-8")?.parse()?);
-        if id.0 == 0 || !seen.insert(id) {
-            return Err("callback IDs must be positive and distinct".into());
-        }
-        requested.push(id);
-    }
-    if requested.is_empty() {
-        return Err("provide at least one callback ID".into());
     }
     let snapshot = bundled_snapshot()?;
     let owner = snapshot.modifier_parser();
@@ -159,4 +176,58 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     file.write_all(&output.0)?;
     println!("Wrote program diagnostic: {}", destination.display());
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn parse_ids(ids: &[&str]) -> Result<Args, clap::Error> {
+        let args = Args::try_parse_from(
+            ["inspect_parser_programs", "new-output.json"]
+                .into_iter()
+                .chain(ids.iter().copied()),
+        )?;
+        args.validate()?;
+        Ok(args)
+    }
+
+    #[test]
+    fn callback_request_bounds_and_order_are_preserved() {
+        let args = parse_ids(&["4294967295"]).unwrap();
+        assert_eq!(args.callbacks[0].get(), u32::MAX);
+
+        let ids: Vec<_> = (1..=MAX_REQUESTED).rev().map(|id| id.to_string()).collect();
+        let values: Vec<_> = ids.iter().map(String::as_str).collect();
+        let args = parse_ids(&values).unwrap();
+        assert_eq!(args.callbacks.len(), MAX_REQUESTED);
+        assert_eq!(args.callbacks[0].get(), 16);
+        assert_eq!(args.callbacks[15].get(), 1);
+
+        assert!(parse_ids(&[]).is_err());
+        let mut too_many = values;
+        too_many.push("17");
+        assert!(parse_ids(&too_many).is_err());
+    }
+
+    #[test]
+    fn callback_ids_must_be_positive_u32_values_and_unique() {
+        for invalid in ["0", "-1", "4294967296", "callback", "1.5"] {
+            assert!(parse_ids(&[invalid]).is_err(), "accepted {invalid}");
+        }
+        for duplicates in [["1", "1"], ["1", "01"]] {
+            assert_eq!(
+                parse_ids(&duplicates).unwrap_err().kind(),
+                ErrorKind::ValueValidation,
+            );
+        }
+    }
+
+    #[test]
+    fn separator_allows_option_like_output_paths() {
+        let args =
+            Args::try_parse_from(["inspect_parser_programs", "--", "--output.json", "1"]).unwrap();
+        args.validate().unwrap();
+        assert_eq!(args.destination, PathBuf::from("--output.json"));
+    }
 }
