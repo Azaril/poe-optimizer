@@ -1,6 +1,7 @@
 use crate::{
-    BinaryOperator, Diagnostic, DiagnosticCode, ExprId, ExprKind, ExprNode, LetStatement,
-    LimitKind, NumericLiteral, ParsedBlock, ParsedExpression, Span, UnaryOperator, UnitSuffix,
+    BinaryOperator, Diagnostic, DiagnosticCode, EffectDeclaration, ExprId, ExprKind, ExprNode,
+    LetStatement, LimitKind, NumericLiteral, ParsedBlock, ParsedExpression, ParsedProgram,
+    ReadDeclaration, Span, UnaryOperator, UnitSuffix,
     lexer::{Token, TokenKind, lex},
 };
 
@@ -42,6 +43,26 @@ impl Default for BlockParseLimits {
         Self {
             expressions: ParseLimits::default(),
             max_statements: 4096,
+        }
+    }
+}
+
+/// All expression budgets apply to the entire program, including metadata.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ProgramParseLimits {
+    pub expressions: ParseLimits,
+    pub max_reads: usize,
+    pub max_statements: usize,
+    pub max_effects: usize,
+}
+
+impl Default for ProgramParseLimits {
+    fn default() -> Self {
+        Self {
+            expressions: ParseLimits::default(),
+            max_reads: 4096,
+            max_statements: 4096,
+            max_effects: 4096,
         }
     }
 }
@@ -88,27 +109,102 @@ pub fn parse_block(source: &str, limits: BlockParseLimits) -> Result<ParsedBlock
                 "formula block exceeds the statement limit",
             ));
         }
-        let start = parser
-            .expect(TokenKind::Let, "expected a let declaration")?
-            .span;
-        let name = parser
-            .expect(TokenKind::Identifier, "expected a local name")?
-            .span;
-        parser.expect(TokenKind::Assign, "expected '=' after local name")?;
-        let value = parser.expression(0, 1)?;
-        let end = parser
-            .expect(TokenKind::Semicolon, "expected ';' after expression")?
-            .span;
-        statements.push(LetStatement {
-            name,
-            value,
-            span: start.cover(end),
-        });
+        statements.push(parser.let_statement()?);
     }
     Ok(ParsedBlock {
         source,
         nodes: parser.nodes,
         statements,
+    })
+}
+
+/// Parse a single `program "id" context kind { ... }` declaration.
+/// Reads must precede lets, and lets must precede effects. Constructors and
+/// guards remain unchecked expressions; lowering establishes their contracts.
+/// Empty sections are allowed, but they do not establish complete rule coverage.
+pub fn parse_program(
+    source: &str,
+    limits: ProgramParseLimits,
+) -> Result<ParsedProgram<'_>, Diagnostic> {
+    let mut parser = Parser::new(source, limits.expressions)?;
+    parser.expect_word("program", "expected a program declaration")?;
+    let id = parser.key_span("expected a quoted program key")?;
+    parser.expect_word("context", "expected 'context' after program key")?;
+    let context = parser
+        .expect(TokenKind::Identifier, "expected a program context")?
+        .span;
+    parser.expect(TokenKind::LeftBrace, "expected '{' before program body")?;
+    let mut reads = Vec::new();
+    let mut statements = Vec::new();
+    let mut effects = Vec::new();
+    let mut section = 0;
+    while !parser
+        .peek()
+        .is_some_and(|token| token.kind == TokenKind::RightBrace)
+    {
+        if parser.is_word("read") {
+            if section != 0 {
+                return Err(parser.error(
+                    DiagnosticCode::ExpectedToken,
+                    "read declarations must precede all lets and effects",
+                ));
+            }
+            if reads.len() == limits.max_reads {
+                return Err(parser.error(
+                    DiagnosticCode::LimitExceeded(LimitKind::Reads),
+                    "program exceeds the read declaration limit",
+                ));
+            }
+            reads.push(parser.read_declaration()?);
+        } else if parser
+            .peek()
+            .is_some_and(|token| token.kind == TokenKind::Let)
+        {
+            if section == 2 {
+                return Err(parser.error(
+                    DiagnosticCode::ExpectedToken,
+                    "let declarations must precede all effects",
+                ));
+            }
+            section = 1;
+            if statements.len() == limits.max_statements {
+                return Err(parser.error(
+                    DiagnosticCode::LimitExceeded(LimitKind::Statements),
+                    "program exceeds the statement limit",
+                ));
+            }
+            statements.push(parser.let_statement()?);
+        } else if parser.is_word("effect") {
+            section = 2;
+            if effects.len() == limits.max_effects {
+                return Err(parser.error(
+                    DiagnosticCode::LimitExceeded(LimitKind::Effects),
+                    "program exceeds the effect declaration limit",
+                ));
+            }
+            effects.push(parser.effect_declaration()?);
+        } else {
+            return Err(parser.error(
+                DiagnosticCode::ExpectedToken,
+                "expected a read, let, effect or closing program brace",
+            ));
+        }
+    }
+    parser.expect(TokenKind::RightBrace, "expected '}' after program body")?;
+    if parser.peek().is_some() {
+        return Err(parser.error(
+            DiagnosticCode::TrailingInput,
+            "unexpected input after program",
+        ));
+    }
+    Ok(ParsedProgram {
+        source,
+        nodes: parser.nodes,
+        id,
+        context,
+        reads,
+        statements,
+        effects,
     })
 }
 
@@ -169,6 +265,96 @@ impl<'source> Parser<'source> {
     fn expect(&mut self, kind: TokenKind, message: &'static str) -> Result<Token, Diagnostic> {
         self.eat(kind)
             .ok_or_else(|| self.error(DiagnosticCode::ExpectedToken, message))
+    }
+
+    fn is_word(&self, word: &str) -> bool {
+        self.peek().is_some_and(|token| {
+            token.kind == TokenKind::Identifier && token.span.text(self.source) == Some(word)
+        })
+    }
+
+    fn expect_word(&mut self, word: &str, message: &'static str) -> Result<Token, Diagnostic> {
+        if self.is_word(word) {
+            self.expect(TokenKind::Identifier, message)
+        } else {
+            Err(self.error(DiagnosticCode::ExpectedToken, message))
+        }
+    }
+
+    fn key_span(&mut self, message: &'static str) -> Result<Span, Diagnostic> {
+        let token = self.expect(TokenKind::Key, message)?;
+        Ok(key_contents(token.span))
+    }
+
+    fn let_statement(&mut self) -> Result<LetStatement, Diagnostic> {
+        let start = self
+            .expect(TokenKind::Let, "expected a let declaration")?
+            .span;
+        let name = self
+            .expect(TokenKind::Identifier, "expected a local name")?
+            .span;
+        self.expect(TokenKind::Assign, "expected '=' after local name")?;
+        let value = self.expression(0, 1)?;
+        let end = self
+            .expect(TokenKind::Semicolon, "expected ';' after expression")?
+            .span;
+        Ok(LetStatement {
+            name,
+            value,
+            span: start.cover(end),
+        })
+    }
+
+    fn read_declaration(&mut self) -> Result<ReadDeclaration, Diagnostic> {
+        let start = self
+            .expect_word("read", "expected a read declaration")?
+            .span;
+        let id = self.key_span("expected a quoted read key")?;
+        self.expect_word("as", "expected 'as' after read key")?;
+        let name = self
+            .expect(TokenKind::Identifier, "expected a read alias")?
+            .span;
+        self.expect(TokenKind::Colon, "expected ':' after read alias")?;
+        let value_type = self.expression(0, 1)?;
+        self.expect(TokenKind::Assign, "expected '=' after read type")?;
+        let source = self.expression(0, 1)?;
+        let end = self
+            .expect(TokenKind::Semicolon, "expected ';' after read source")?
+            .span;
+        Ok(ReadDeclaration {
+            id,
+            name,
+            value_type,
+            source,
+            span: start.cover(end),
+        })
+    }
+
+    fn effect_declaration(&mut self) -> Result<EffectDeclaration, Diagnostic> {
+        let start = self
+            .expect_word("effect", "expected an effect declaration")?
+            .span;
+        let id = self.key_span("expected a quoted effect key")?;
+        let when = if self.is_word("when") {
+            self.expect_word("when", "expected 'when'")?;
+            Some(self.expression(0, 1)?)
+        } else {
+            None
+        };
+        self.expect(TokenKind::Assign, "expected '=' before effect constructor")?;
+        let effect = self.expression(0, 1)?;
+        let end = self
+            .expect(
+                TokenKind::Semicolon,
+                "expected ';' after effect constructor",
+            )?
+            .span;
+        Ok(EffectDeclaration {
+            id,
+            when,
+            effect,
+            span: start.cover(end),
+        })
     }
 
     fn push(&mut self, span: Span, kind: ExprKind) -> Result<ExprId, Diagnostic> {
@@ -256,6 +442,7 @@ impl<'source> Parser<'source> {
             TokenKind::True | TokenKind::False => {
                 self.push(token.span, ExprKind::Boolean(token.kind == TokenKind::True))
             }
+            TokenKind::Key => self.push(token.span, ExprKind::Key(key_contents(token.span))),
             TokenKind::Identifier => self.path_or_call(token, depth),
             TokenKind::Minus | TokenKind::Not => {
                 let operand = self.expression(11, depth + 1)?;
@@ -357,6 +544,13 @@ impl<'source> Parser<'source> {
                 else_branch,
             },
         )
+    }
+}
+
+fn key_contents(span: Span) -> Span {
+    Span {
+        start: span.start + 1,
+        end: span.end - 1,
     }
 }
 

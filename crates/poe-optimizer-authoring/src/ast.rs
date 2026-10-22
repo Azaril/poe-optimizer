@@ -84,6 +84,9 @@ impl BinaryOperator {
 pub enum ExprKind {
     Number(NumericLiteral),
     Boolean(bool),
+    /// A quoted, validated Core key. This is metadata, never a scalar string.
+    /// The inner span excludes quotes; the containing node's span includes them.
+    Key(Span),
     Path {
         segments: Vec<Span>,
     },
@@ -182,6 +185,79 @@ impl<'source> ParsedBlock<'source> {
 
     pub fn statements(&self) -> &[LetStatement] {
         &self.statements
+    }
+
+    pub fn node(&self, id: ExprId) -> Option<&ExprNode> {
+        self.nodes.get(id.0)
+    }
+
+    pub fn text(&self, span: Span) -> Option<&'source str> {
+        span.text(self.source)
+    }
+}
+
+/// One declared read's identity, authoring alias, type and source constructor.
+/// Parsing does not authenticate the source or infer the alias's value type.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ReadDeclaration {
+    pub id: Span,
+    pub name: Span,
+    pub value_type: ExprId,
+    pub source: ExprId,
+    pub span: Span,
+}
+
+/// One declared effect, retaining its exact identity and optional guard.
+/// Lowering validates its constructor and requires existing named value handles.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct EffectDeclaration {
+    pub id: Span,
+    pub when: Option<ExprId>,
+    pub effect: ExprId,
+    pub span: Span,
+}
+
+/// An unchecked program declaration with ordered reads, formulas and effects.
+/// Every expression uses the same flat arena and original source byte offsets.
+/// Metadata constructors are syntax only and do not become executable values.
+#[derive(Debug, PartialEq, Eq)]
+pub struct ParsedProgram<'source> {
+    pub(crate) source: &'source str,
+    pub(crate) nodes: Vec<ExprNode>,
+    pub(crate) id: Span,
+    pub(crate) context: Span,
+    pub(crate) reads: Vec<ReadDeclaration>,
+    pub(crate) statements: Vec<LetStatement>,
+    pub(crate) effects: Vec<EffectDeclaration>,
+}
+
+impl<'source> ParsedProgram<'source> {
+    pub fn source(&self) -> &'source str {
+        self.source
+    }
+
+    pub fn nodes(&self) -> &[ExprNode] {
+        &self.nodes
+    }
+
+    pub fn id(&self) -> Span {
+        self.id
+    }
+
+    pub fn context(&self) -> Span {
+        self.context
+    }
+
+    pub fn reads(&self) -> &[ReadDeclaration] {
+        &self.reads
+    }
+
+    pub fn statements(&self) -> &[LetStatement] {
+        &self.statements
+    }
+
+    pub fn effects(&self) -> &[EffectDeclaration] {
+        &self.effects
     }
 
     pub fn node(&self, id: ExprId) -> Option<&ExprNode> {

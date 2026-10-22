@@ -26,21 +26,33 @@ perform publication. The latest validated release is local under ignored `runs/`
 the tracked directory called `current/` is a historical baseline. That is a
 reproducibility defect, not a supported distribution arrangement.
 
-The new `poe-optimizer-authoring` crate parses bounded expressions and ordered
-`let` blocks. Named intermediates share one rule-node graph without duplicating
-calculations or inventing reads. It
-binds names to explicitly declared reads and exact schema units. Its expression
-lowerer emits the existing IR for arithmetic, comparisons, Boolean operations,
-conditionals and explicit rounding/conversion functions. It does not evaluate
-formulas. A fragment still needs the existing Engine's complete package checks
-before it can execute. Core is its only normal dependency; Data/Engine are used
-in tests. No runtime package depends on Authoring.
+The new `poe-optimizer-authoring` crate parses bounded program declarations,
+typed reads, ordered `let` calculations and guarded effects. A checked symbol
+registry resolves readable names to existing exact definition/slot addresses.
+Named intermediates share one rule-node graph without duplicating calculations
+or inventing reads. Arithmetic, comparisons, Boolean operations, conditionals and
+explicit rounding/conversion functions lower into the existing IR.
 
-This is still a formula frontend, not the complete `.rule` compiler. Full
-read/effect/program declarations, remaining IR operations,
-raising/formatting, KDL manifests and release construction remain pending. The
-current tests insert lowered expressions into existing checked programs; they
-do not establish complete-build parity or migrate the release.
+For example, this is a complete source program given the named definitions:
+
+```text
+program "add-life" context actor {
+    read "base-life" as base: quantity(unit.life) = stat(current, stat.base_life);
+    let total = base + quantity(20, unit.life);
+    effect "life" = derive(current, stat.life, total);
+}
+```
+
+The source does not declare its owning definition or claim complete membership.
+Those belong to the manifest. Lowering produces an unchecked `RuleProgram`,
+which still needs the existing Engine's complete package checks before execution.
+Core is Authoring's only normal dependency; Data/Engine are used in tests. No
+runtime package depends on Authoring, and it does not evaluate formulas.
+
+Remaining expression operations, raising/formatting, KDL manifests, stable
+binding publication and release construction remain pending. Existing component
+programs exercise the compiler; this does not establish complete-build parity
+or migrate the release.
 
 `evaluate-owned` is the current native CLI path. The `evaluate` command is the
 optional reference backend, available when Cargo builds with `--features pob`. Existing

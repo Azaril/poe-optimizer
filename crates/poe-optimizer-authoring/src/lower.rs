@@ -70,9 +70,9 @@ pub struct LoweredBlock {
 
 /// Borrowed syntax shared by expression and block lowering. The parser owns the
 /// flat arena, so lowering does not copy it when advancing between statements.
-struct Syntax<'a> {
-    source: &'a str,
-    nodes: &'a [ExprNode],
+pub(crate) struct Syntax<'a> {
+    pub(crate) source: &'a str,
+    pub(crate) nodes: &'a [ExprNode],
 }
 
 impl Syntax<'_> {
@@ -80,11 +80,11 @@ impl Syntax<'_> {
         self.nodes
     }
 
-    fn node(&self, id: ExprId) -> Option<&ExprNode> {
+    pub(crate) fn node(&self, id: ExprId) -> Option<&ExprNode> {
         self.nodes.get(id.index())
     }
 
-    fn text(&self, span: Span) -> Option<&str> {
+    pub(crate) fn text(&self, span: Span) -> Option<&str> {
         span.text(self.source)
     }
 }
@@ -139,7 +139,11 @@ fn arguments_error(span: Span, message: &'static str) -> Diagnostic {
     error(DiagnosticCode::InvalidArguments, span, message)
 }
 
-fn validate_limits(limits: LowerLimits, syntax_nodes: usize, span: Span) -> Result<(), Diagnostic> {
+pub(crate) fn validate_limits(
+    limits: LowerLimits,
+    syntax_nodes: usize,
+    span: Span,
+) -> Result<(), Diagnostic> {
     if limits.max_syntax_nodes == 0 || limits.max_nodes == 0 || limits.max_statements == 0 {
         return Err(error(
             DiagnosticCode::InvalidLimits,
@@ -198,28 +202,58 @@ pub fn lower_block(
     bindings: &ExpressionBindings,
     limits: LowerLimits,
 ) -> Result<LoweredBlock, Diagnostic> {
+    let end = parsed
+        .statements()
+        .last()
+        .map_or(0, |s| s.value.index() + 1);
+    if end != parsed.nodes().len() {
+        return Err(arguments_error(
+            Span {
+                start: 0,
+                end: parsed.source().len(),
+            },
+            "block contains unassigned syntax",
+        ));
+    }
+    lower_statements(
+        &Syntax {
+            source: parsed.source(),
+            nodes: parsed.nodes(),
+        },
+        parsed.statements(),
+        0,
+        bindings,
+        limits,
+    )
+}
+
+/// Shared formula lowering inside a larger source arena. Read and effect
+/// constructors are syntax metadata and are not executable formula nodes.
+pub(crate) fn lower_statements(
+    syntax: &Syntax<'_>,
+    statements: &[crate::LetStatement],
+    start: usize,
+    bindings: &ExpressionBindings,
+    limits: LowerLimits,
+) -> Result<LoweredBlock, Diagnostic> {
     let span = Span {
         start: 0,
-        end: parsed.source().len(),
+        end: syntax.source.len(),
     };
-    validate_limits(limits, parsed.nodes().len(), span)?;
-    if parsed.statements().len() > limits.max_statements {
+    validate_limits(limits, syntax.nodes().len(), span)?;
+    if statements.len() > limits.max_statements {
         return Err(error(
             DiagnosticCode::LimitExceeded(LimitKind::Statements),
-            parsed.statements()[limits.max_statements].span,
+            statements[limits.max_statements].span,
             "lowering statement limit exceeded",
         ));
     }
-    let syntax = Syntax {
-        source: parsed.source(),
-        nodes: parsed.nodes(),
-    };
     let mut emitter = Emitter::new(limits.max_nodes);
     let mut locals = BTreeMap::new();
-    let mut declarations = Vec::with_capacity(parsed.statements().len());
-    let mut start = 0;
-    for statement in parsed.statements() {
-        let name = parsed
+    let mut declarations = Vec::with_capacity(statements.len());
+    let mut start = start;
+    for statement in statements {
+        let name = syntax
             .text(statement.name)
             .ok_or_else(|| arguments_error(statement.name, "invalid declaration name span"))?;
         if bindings.value(name).is_some() || locals.contains_key(name) {
@@ -230,7 +264,7 @@ pub fn lower_block(
             ));
         }
         let value = append_expression(
-            &syntax,
+            syntax,
             bindings,
             &locals,
             start,
@@ -245,9 +279,6 @@ pub fn lower_block(
             span: statement.span,
         });
         locals.insert(name, value);
-    }
-    if start != parsed.nodes().len() {
-        return Err(arguments_error(span, "block contains unassigned syntax"));
     }
     Ok(LoweredBlock {
         nodes: emitter.nodes,
@@ -322,7 +353,10 @@ fn append_expression(
                 require(*then_branch)?;
                 require(*else_branch)?;
             }
-            ExprKind::Number(_) | ExprKind::Boolean(_) | ExprKind::Path { .. } => {}
+            ExprKind::Number(_)
+            | ExprKind::Boolean(_)
+            | ExprKind::Path { .. }
+            | ExprKind::Key(_) => {}
         }
     }
 
@@ -346,6 +380,12 @@ fn append_expression(
             )?,
             ExprKind::Boolean(value) => {
                 emitter.literal(ParameterValue::Boolean(*value), node.span)?
+            }
+            ExprKind::Key(_) => {
+                return Err(arguments_error(
+                    node.span,
+                    "owned key literals are metadata, not formula values",
+                ));
             }
             ExprKind::Path { .. } => {
                 let name = path_name(parsed, ExprId(index))?;
@@ -515,7 +555,7 @@ impl Emitter {
     }
 }
 
-fn path_name(parsed: &Syntax<'_>, id: ExprId) -> Result<String, Diagnostic> {
+pub(crate) fn path_name(parsed: &Syntax<'_>, id: ExprId) -> Result<String, Diagnostic> {
     let node = parsed
         .node(id)
         .ok_or_else(|| arguments_error(Span { start: 0, end: 0 }, "missing symbolic path"))?;
@@ -741,6 +781,40 @@ fn static_quantum(
         return Err(arguments_error(node.span, "quantum must be positive"));
     }
     Ok(quantity)
+}
+
+/// A literal constructor used in read metadata. It never emits or evaluates
+/// a formula; arithmetic, named values and calls other than quantity fail.
+pub(crate) fn static_literal(
+    parsed: &Syntax<'_>,
+    bindings: &ExpressionBindings,
+    id: ExprId,
+) -> Result<ParameterValue, Diagnostic> {
+    let id = ungroup(parsed, id)?;
+    let node = &parsed.nodes()[id.index()];
+    match &node.kind {
+        ExprKind::Number(number) => number_value(parsed, bindings, *number, false, node.span),
+        ExprKind::Boolean(value) => Ok(ParameterValue::Boolean(*value)),
+        ExprKind::Unary {
+            operator: UnaryOperator::Negate,
+            operand,
+            ..
+        } => {
+            let operand = ungroup(parsed, *operand)?;
+            let ExprKind::Number(number) = parsed.nodes()[operand.index()].kind else {
+                return Err(arguments_error(
+                    node.span,
+                    "expected a signed numeric literal",
+                ));
+            };
+            number_value(parsed, bindings, number, true, node.span)
+        }
+        ExprKind::Call { callee, arguments } if path_name(parsed, *callee)? == "quantity" => {
+            quantity_constructor(parsed, bindings, arguments, node.span)
+                .map(ParameterValue::Quantity)
+        }
+        _ => Err(arguments_error(node.span, "expected a static literal")),
+    }
 }
 
 fn arity(arguments: &[ExprId], count: usize, span: Span) -> Result<(), Diagnostic> {

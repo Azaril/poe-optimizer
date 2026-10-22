@@ -1,9 +1,11 @@
 use crate::{Diagnostic, DiagnosticCode, LimitKind, ParseLimits, Span};
+use poe_optimizer_core::owned_definitions::OwnedDefinitionKey;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum TokenKind {
     Identifier,
     Number,
+    Key,
     True,
     False,
     If,
@@ -31,6 +33,7 @@ pub(crate) enum TokenKind {
     Comma,
     Assign,
     Semicolon,
+    Colon,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -89,6 +92,9 @@ pub(crate) fn lex(source: &str, limits: ParseLimits) -> Result<Vec<Token>, Diagn
         {
             lexer.number()?;
             TokenKind::Number
+        } else if character == '"' {
+            lexer.key()?;
+            TokenKind::Key
         } else if character.is_ascii_alphabetic() || character == '_' {
             lexer.cursor += 1;
             while lexer.byte(0).is_some_and(identifier_continue) {
@@ -120,6 +126,7 @@ pub(crate) fn lex(source: &str, limits: ParseLimits) -> Result<Vec<Token>, Diagn
                 '}' => TokenKind::RightBrace,
                 ',' => TokenKind::Comma,
                 ';' => TokenKind::Semicolon,
+                ':' => TokenKind::Colon,
                 '=' if lexer.eat(b'=') => TokenKind::Equal,
                 '=' => TokenKind::Assign,
                 '!' if lexer.eat(b'=') => TokenKind::NotEqual,
@@ -161,6 +168,35 @@ struct Lexer<'source> {
 }
 
 impl Lexer<'_> {
+    fn key(&mut self) -> Result<(), Diagnostic> {
+        let start = self.cursor;
+        self.cursor += 1;
+        let contents = self.cursor;
+        while self.cursor < self.source.len() {
+            let character = self.source[self.cursor..].chars().next().unwrap();
+            self.cursor += character.len_utf8();
+            if character == '"' {
+                return OwnedDefinitionKey::new(&self.source[contents..self.cursor - 1])
+                    .map(|_| ())
+                    .map_err(|_| {
+                        Diagnostic::new(
+                            DiagnosticCode::InvalidKey,
+                            Span { start, end: self.cursor },
+                            "quoted key must be a bounded Core definition key; escapes are not supported",
+                        )
+                    });
+            }
+        }
+        Err(Diagnostic::new(
+            DiagnosticCode::InvalidKey,
+            Span {
+                start,
+                end: self.cursor,
+            },
+            "quoted key requires a closing quote",
+        ))
+    }
+
     fn byte(&self, offset: usize) -> Option<u8> {
         self.source.as_bytes().get(self.cursor + offset).copied()
     }

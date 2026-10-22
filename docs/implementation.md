@@ -16,15 +16,15 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/initial parser `0e5a9b7b`; typed expression lowering `e1841725`; this checkpoint adds shared named formula blocks |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; architecture adoption `4a327db`; R0 consolidation/repairs `6c6d0add`; Import consolidation/initial parser `0e5a9b7b`; typed expressions `e1841725`; named blocks `15de8529`; this checkpoint adds explicit programs and exact symbols |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
-| Authoring | Bounded Rust expressions and ordered named blocks, explicit read/unit binding and shared-SSA lowering to existing IR; Core is the only normal dependency. Catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
+| Authoring | Bounded Rust program/read/effect declarations, exact typed symbols and shared-SSA formula lowering to existing IR; Core is the only normal dependency. Catalog/publication machinery remains in Import and test staging, with hand-authored IR JSON and source-file hash dependencies |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| DSL / KDL / binary pack | Typed expressions and named intermediates implemented; full programs, remaining operations, raise/format, stable symbol registry, KDL and binary pack remain pending |
+| DSL / KDL / binary pack | Program syntax, typed symbol lookup and named intermediates implemented; remaining expressions, raise/format, stable binding publication, KDL and binary pack remain pending |
 | Current release | Latest validated artifacts are local under ignored `runs/`, have no complete evaluation bundle, and cannot yet be reproduced from a fresh clone with one supported command |
-| CI | Focused repairs for the two fixture families pass locally. At 19:20 UTC, main run `39838914471` for `e1841725` was pending with no jobs, behind architecture-only run `39815736980` (nine passed, three known failures, six running). No new failure class or green hosted claim |
+| CI | Focused repairs for the two fixture families pass locally. At 19:44 UTC, main run `39841825579` for `15de8529` was pending behind architecture-only run `39815736980`, still in progress. The intervening pending runs were superseded/cancelled. No green hosted claim |
 
 Last validated release: `runs/owned-reverse-primary-cutover-01/package`.
 Its endpoint is `runs/owned-reverse-primary-cutover-01/endpoint.json`,
@@ -122,7 +122,7 @@ names, read shadowing and forward/self references fail. Whole-source byte/token/
 syntax/statement limits and whole-block emission limits are checked; per-statement
 scratch covers only that statement, avoiding repeated scans of earlier syntax.
 
-All **43 Authoring tests pass**, with no ignored cases. Formatting and strict
+Named-block checkpoint `15de8529`: all **43 Authoring tests pass**, with no ignored cases. Formatting and strict
 all-target Clippy pass; independent review found no blocker. Tests include a
 1,000-alias block on a 1 MiB stack, lazy missing-input/failure branches, and an
 existing multi-effect program whose applicability result also guards a
@@ -131,12 +131,32 @@ preserve inactive effects as distinct from applied values. Final local logs:
 `runs/r2-named-block-tests-final-20261022.log` and
 `runs/r2-named-block-clippy-final-20261022.log`.
 
-This remains an unchecked formula block over injected read declarations. It is
-not a complete RuleProgram compiler or a new output-only language with effects
-moved into KDL. The next slice must add explicit program ID/context, typed reads
-and guarded effects in `.rule`, resolving typed definitions/slots directly into
-existing Core variants. Preserve guards as `RuleEffect.when` (inactive remains
-distinct from an applied zero); keep owner membership/closure in the manifest.
+**R2 explicit programs:** source now includes stable program/read/effect IDs,
+execution context, typed read declarations and guarded effects. All 25 read-source
+variants and all nine effect variants construct the existing Core enums directly.
+Readable definitions and exact declared slots use a bounded registry checked
+against the schema; wrong kinds, missing/unmapped addresses, foreign namespaces
+and inconsistent index responses are rejected. Source aliases and semantic read
+IDs stay distinct. Metadata literals never become executable strings.
+
+Ordered declarations reuse the same parser and formula lowerer; effects refer
+to existing named values. Guards remain `RuleEffect.when`, and owner membership
+and completeness stay outside the source program. The result is deliberately
+unchecked until the existing Engine validates its containing package. There is
+no second native evaluator or JSON escape hatch. This is a compiler migration
+checkpoint, not new game coverage or a complete data release.
+
+All **67 Authoring tests pass**, with no ignored cases; strict all-target Clippy
+and formatting pass. Full support-program lowering is alpha-equivalent to the
+retained IR and preserves independent enabled/disabled, missing-input and lazy
+numerical-failure results through the existing Engine. Constructor matrices cover
+every read/effect variant as transport checks, not as authority to execute them
+in arbitrary contexts. Wrong owners and read types still fail Engine compilation.
+Review found and fixed cross-schema registry reuse and late budget enforcement;
+regressions cover both. An older malformed-JSON test now expects the parser's
+expression error because quoted keys/colons are valid metadata tokens; JSON is
+still refused. Final logs: `runs/r2-program-tests-final-20261022.log` and
+`runs/r2-program-clippy-final-20261022.log`.
 
 Two hosted failures were isolated to fixtures: an unavailable skill catalog
 retained an inconsistent reverse-primary census, and the Mana equipment review
@@ -277,15 +297,13 @@ for deletion at R4. No compatibility reader enters the normal CLI/library path.
 
 ### R2 — Formula DSL and declarative authoring
 
-**Started: expressions and shared named intermediates.** Next implement complete
-program/read/effect syntax using existing contracts and exact SSA sharing.
-Resolve symbol kinds and exact slot declarations explicitly; execution context
-does not imply ownership. Add the remaining live operations (checked numeric domains, integer
+**Started: explicit programs, exact symbols and shared named intermediates.**
+Next add the remaining live expression operations (checked numeric domains, integer
 table lookup, ordinary timing and option literals) and raise/format support.
 Use retained real programs to prove full graph alpha-equivalence before moving
 their authoring sources. Then complete manifests and the shared behavioral
-harness; do not create a second evaluation model. The current expression fragment
-is not a supported release format or a substitute for full program validation.
+harness; do not create a second evaluation model. The current unchecked compiler
+output is not a supported release format or a substitute for full package validation.
 
 Implement Rust parsing, spans, symbol resolution, formatting and exact lowering
 of `.rule` files into the existing checked IR. Add KDL definition/packet manifests
@@ -467,9 +485,14 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. Prioritize **Authoring symbol/type resolution and
-   exact IR lowering of retained formulas**, using the existing checked IR compiler
-   without an Import/PoB runtime dependency. Continue remaining R0 source-pin removal and CLI/PoB suite
+1. Read this plan and Git status. Prioritize **remaining expression coverage and
+   exact raise/lower of retained complete programs**, using the existing checked IR
+   compiler without an Import/PoB runtime dependency. Extend the existing call
+   lowering with checked domains, integer tables, atomic ordinary timing and
+   exact Option identities; do not add another expression interpreter. Then add
+   canonical raising/formatting and KDL/publication. The focused verification
+   command is `cargo test --locked -p poe-optimizer-authoring --all-targets`
+   with the bounded optimized profile used by CI. Continue R0 source-pin removal and CLI/PoB suite
    consolidation alongside that work, using the audited hazards above. Retain
    actual upstream/content authentication. Serialize Cargo jobs in this shared
    checkout; parallel agents own disjoint files.

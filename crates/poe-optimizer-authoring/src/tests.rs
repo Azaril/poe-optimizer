@@ -383,7 +383,7 @@ fn malformed_expressions_have_specific_diagnostics() {
             "{source}"
         );
     }
-    for source in ["!true", "a && b", "a ^ b", "{\"raw\":true}"] {
+    for source in ["!true", "a && b", "a ^ b"] {
         assert_eq!(
             parse_expression(source, ParseLimits::default())
                 .unwrap_err()
@@ -392,6 +392,14 @@ fn malformed_expressions_have_specific_diagnostics() {
             "{source}"
         );
     }
+    // Quoted keys and colons are now valid metadata tokens, but an object is
+    // still not a formula and does not provide a raw-JSON escape hatch.
+    assert_eq!(
+        parse_expression("{\"raw\":true}", ParseLimits::default())
+            .unwrap_err()
+            .code,
+        DiagnosticCode::ExpectedExpression,
+    );
     let error = parse_expression("a +", ParseLimits::default()).unwrap_err();
     assert_eq!(error.span, Span { start: 3, end: 3 });
     assert_eq!(error.to_string(), "expected expression at bytes 3..3");
@@ -599,7 +607,10 @@ fn arena_edges_are_backward_and_foreign_out_of_range_ids_are_checked() {
     let parsed = parse("if a and not b { f(c + d, e) } else { (g) }");
     for (index, node) in parsed.nodes().iter().enumerate() {
         let children = match &node.kind {
-            ExprKind::Number(_) | ExprKind::Boolean(_) | ExprKind::Path { .. } => Vec::new(),
+            ExprKind::Number(_)
+            | ExprKind::Boolean(_)
+            | ExprKind::Path { .. }
+            | ExprKind::Key(_) => Vec::new(),
             ExprKind::Call { callee, arguments } => std::iter::once(*callee)
                 .chain(arguments.iter().copied())
                 .collect(),

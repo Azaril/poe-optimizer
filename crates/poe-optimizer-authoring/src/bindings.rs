@@ -193,7 +193,7 @@ fn known_dimension<I: DefinitionSchemaIndex>(index: &I, unit: &UnitDefId) -> Opt
     }
 }
 
-fn valid_name(name: &str) -> bool {
+pub(crate) fn valid_name(name: &str) -> bool {
     name.split('.').all(|part| {
         let mut bytes = part.bytes();
         bytes

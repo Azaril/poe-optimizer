@@ -207,6 +207,17 @@ an assertion of Actor ownership. The compiler resolves typed symbols directly
 into existing Core read/effect variants and submits the complete package to the
 existing checker; no second domain model or implicit Complete inventory is added.
 
+Program, read and effect IDs are explicit quoted owned keys. Reads have separate
+authoring aliases; renaming an alias does not rename the read's semantic ID.
+Declarations are ordered reads, then formulas, then effects. Effects and guards
+reference earlier named values, preserving shared graph nodes and inactive
+effects without inserting incidental calculations. Definition symbols and exact
+slot symbols use separate checked name spaces; a slot binding includes its
+declaring definition. The registry proves known addresses, not contextual
+permission. KDL publication retains responsibility for allocating stable bindings
+and validating the complete release. Quoted keys are metadata, never native
+string expressions or a general source-language escape hatch.
+
 Diagnostic spans relate type/unit/ownership failures to named source expressions.
 `rule fmt`, `check`, `lower --emit-ir`, `raise` and `explain` are offline developer
 tools. Raising existing IR must preserve graph semantics; lowering the result must

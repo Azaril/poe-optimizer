@@ -9,6 +9,9 @@ pub enum LimitKind {
     Nodes,
     LoweredNodes,
     Statements,
+    Reads,
+    Effects,
+    Bindings,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -17,6 +20,7 @@ pub enum DiagnosticCode {
     InvalidLimits,
     UnexpectedCharacter,
     InvalidNumber,
+    InvalidKey,
     ExpectedExpression,
     ExpectedToken,
     ChainedComparison,
