@@ -143,7 +143,7 @@ impl Default for OwnedReleaseLimits {
     }
 }
 impl OwnedReleaseLimits {
-    pub(crate) fn validate(self) -> Result<()> {
+    pub fn validate(self) -> Result<()> {
         let hard = Self::default();
         for (name, value, maximum) in [
             ("input bytes", self.max_input_bytes, hard.max_input_bytes),

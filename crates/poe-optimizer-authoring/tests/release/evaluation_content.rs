@@ -1,14 +1,19 @@
 //! Authored evaluation relationships construct the existing checked graph.
 //! Only a complete checked owner can discard inherited dependency commitments.
-use super::{files, fixture, key, stage};
+use super::{files, fixture};
+use poe_optimizer_authoring::OwnedReleaseEvaluationContent;
 use poe_optimizer_core::{
     owned_build::ParameterValue,
     owned_content::{ContentDigestError, digest_owned},
+    owned_definitions::OwnedDefinitionKey,
     owned_rules::{RuleExpression, RuleNode},
     owned_schema::{SchemaClosure, SchemaFacet, SchemaGap, SchemaState},
     owned_supports::SupportTypePredicate,
 };
-use poe_optimizer_data::owned_stages::StageStorageError;
+use poe_optimizer_data::{
+    owned_evaluation_budget::{EvaluationBudgetLimits, charge_evaluation_entries},
+    owned_stages::StageStorageError,
+};
 use poe_optimizer_engine::owned_plan::{
     OwnedSupportEffectPlan, OwnedSupportMetricPlan, OwnedSupportMetricReport,
     SupportEffectPlanInputs,
@@ -16,11 +21,17 @@ use poe_optimizer_engine::owned_plan::{
 use poe_optimizer_import::{
     owned_recipe::CheckedOwnedRecipe,
     owned_release::*,
-    owned_release_evaluation::{
-        OwnedReleaseEvaluationContent, OwnedReleaseEvaluationError, OwnedReleaseEvaluationInput,
-    },
+    owned_release_evaluation::{OwnedReleaseEvaluationError, OwnedReleaseEvaluationInput},
 };
 use std::sync::Arc;
+
+fn key(value: &str) -> OwnedDefinitionKey {
+    OwnedDefinitionKey::new(value).unwrap()
+}
+
+fn stage(input: OwnedReleaseInput) -> StagedOwnedRelease {
+    assemble_owned_release(input, Default::default()).unwrap()
+}
 
 fn content(
     input: OwnedReleaseInput,
@@ -33,7 +44,7 @@ fn content(
     let checked = load_owned_release_artifacts(&files(&release), Default::default()).unwrap();
     let recipe = checked.recipe().clone();
     let original = checked.evaluation().unwrap().input().clone();
-    let authored = checked.into_evaluation().unwrap().into_authored_content();
+    let authored = OwnedReleaseEvaluationContent::from_checked(checked.into_evaluation().unwrap());
     (recipe, original, authored)
 }
 
@@ -85,7 +96,7 @@ fn checked_content_roundtrip_preserves_input_receipt_and_runtime_result() {
     let checked = load_owned_release_artifacts(&files(&rebuilt), Default::default()).unwrap();
     assert_eq!(report(&checked), fixture().expected);
     assert_eq!(
-        checked.into_evaluation().unwrap().into_authored_content(),
+        OwnedReleaseEvaluationContent::from_checked(checked.into_evaluation().unwrap()),
         authored
     );
 }
@@ -165,7 +176,7 @@ fn authored_content_binds_each_dependency_to_the_changed_checked_recipe() {
     );
     assert_eq!(result.support, fixture().expected.support);
     assert_eq!(
-        checked.into_evaluation().unwrap().into_authored_content(),
+        OwnedReleaseEvaluationContent::from_checked(checked.into_evaluation().unwrap()),
         saved
     );
 }
@@ -183,7 +194,7 @@ fn source_prefix_checks_and_runtime_fragments_never_authorize_seal_stripping() {
         .stages
         .rules = digest_owned("stale-evaluation-source", &1, 100).unwrap();
     // This boundary authenticates Import dependencies only. Success is not a
-    // checked evaluation owner and cannot expose into_authored_content().
+    // checked evaluation owner and cannot be consumed by from_checked().
     check_release_source_dependencies(&stale, Default::default()).unwrap();
     assert!(matches!(
         assemble_owned_release(stale, Default::default()),
@@ -241,6 +252,46 @@ fn authored_content_preserves_absent_evaluation_support_and_outputs() {
             authored.into_input(&recipe, Default::default()).unwrap(),
             original
         );
+    }
+}
+
+#[test]
+fn runtime_and_authored_views_have_identical_costs_errors_and_partial_debits() {
+    let limits = EvaluationBudgetLimits::new(Default::default(), Default::default()).unwrap();
+    for support_mode in 0..3 {
+        let mut input = fixture().input.clone();
+        match support_mode {
+            0 => input.evaluation.as_mut().unwrap().support = None,
+            1 => {
+                input
+                    .evaluation
+                    .as_mut()
+                    .unwrap()
+                    .support
+                    .as_mut()
+                    .unwrap()
+                    .outputs = None
+            }
+            _ => {}
+        }
+        let (_, runtime, authored) = content(input);
+        let maximum = OwnedReleaseLimits::default().max_validation_entries;
+        let mut remainder = maximum;
+        charge_evaluation_entries((&runtime).into(), limits, &mut remainder).unwrap();
+        let cost = maximum - remainder;
+        for available in 0..=cost + 1 {
+            let mut runtime_remaining = available;
+            let mut authored_remaining = available;
+            let runtime_result =
+                charge_evaluation_entries((&runtime).into(), limits, &mut runtime_remaining)
+                    .map_err(|error| error.to_string());
+            let authored_result =
+                charge_evaluation_entries((&authored).into(), limits, &mut authored_remaining)
+                    .map_err(|error| error.to_string());
+            assert_eq!(runtime_result, authored_result);
+            assert_eq!(runtime_remaining, authored_remaining);
+            assert_eq!(runtime_result.is_ok(), available >= cost);
+        }
     }
 }
 

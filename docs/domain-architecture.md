@@ -446,6 +446,12 @@ receiving contracts are preserved explicitly, with no implicit upgrade.
 One borrowed semantic view drives the aggregate work traversal for both authored
 and runtime inputs. The source builder reserves evaluation work from the same
 release counter before checking or copying the other source dependencies.
+Data owns that view and traversal; Authoring owns evaluation-content DTOs and
+dependency construction. Import retains sealed runtime inputs, checked packages
+and loader validation. Consuming checked evaluation may surrender its actual
+Data packages, but it must not return an offline authoring type or strip seals
+from unchecked input. Neutral budget APIs must retain validated hard depth caps
+even when called directly, not rely on a particular upstream caller.
 Final full release assembly still checks the combined graph and budgets; neither
 new bindings nor declarations turn partial inventories into complete coverage.
 This is offline construction. Runtime artifact loading and candidate evaluation
@@ -673,6 +679,11 @@ and legacy fields separately from typed Encounter inputs. Proving constructor
 absence or literal emptiness can close that source family; disabled, overwritten
 or unparsable nonempty text does not prove absence. Until an explicit owned model
 can retain dormant custom text and activation, such text remains unresolved.
+Family accounting is explicitly requested by the checked configuration census.
+It uses the same source ledger and retirement transaction as scalar accounting,
+while retaining every repeated occurrence and its exact Scenario. A partial
+census cannot complete an inventory. Policies that do not request the family
+keep their existing behavior and work accounting.
 Preserve normal-load migration and headless fallback as separate external source
 behaviors. No source receipt can certify an Encounter's intrinsic domain without
 also checking every admitted typed consumer.

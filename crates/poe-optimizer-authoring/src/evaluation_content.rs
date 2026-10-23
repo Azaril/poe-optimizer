@@ -1,13 +1,27 @@
 //! Offline declarations, without runtime dependency commitments.
-use super::*;
-use crate::owned_release::{OwnedReleaseError, OwnedReleaseLimits};
 use poe_optimizer_core::owned_content::digest_owned;
 use poe_optimizer_data::{
-    owned_metrics::MetricMappingContent, owned_stages::EvaluationStagesContent,
-    owned_support_inputs::SupportInputBindingsContent,
-    owned_support_outputs::SupportOutputBindingsContent,
-    owned_support_receiving::SupportReceivingContent, owned_supports::SupportPreparationContent,
+    owned_evaluation_budget::{
+        EvaluationBudgetLimits, EvaluationBudgetView, SupportBudgetView, charge_evaluation_entries,
+    },
+    owned_metrics::{MetricMappingContent, OwnedMetricMapping},
+    owned_stages::{EvaluationStagesContent, OwnedEvaluationStages},
+    owned_support_inputs::{OwnedSupportInputBindings, SupportInputBindingsContent},
+    owned_support_outputs::{
+        OwnedSupportOutputBindings, SupportOutputBindingsContent, SupportOutputDependencies,
+    },
+    owned_support_receiving::{OwnedSupportReceiving, SupportReceivingContent},
+    owned_supports::{OwnedSupportPreparation, SupportPreparationContent},
 };
+use poe_optimizer_import::{
+    owned_recipe::CheckedOwnedRecipe,
+    owned_release::{OwnedReleaseError, OwnedReleaseLimits},
+    owned_release_evaluation::{
+        CheckedOwnedReleaseEvaluation, OwnedReleaseEvaluationError, OwnedReleaseEvaluationInput,
+        OwnedReleaseEvaluationLimits, OwnedReleaseSupportInput,
+    },
+};
+use serde::{Deserialize, Serialize};
 
 /// Author-supplied evaluation semantics. Dependency identities are derived from
 /// checked final packages, never supplied or repaired as part of this format.
@@ -30,19 +44,38 @@ pub struct OwnedReleaseSupportContent {
     pub outputs: Option<SupportOutputBindingsContent>,
 }
 
-impl CheckedOwnedReleaseEvaluation {
-    /// Consume the checked owners, not a raw input whose seals might be stale.
-    pub fn into_authored_content(self) -> OwnedReleaseEvaluationContent {
-        OwnedReleaseEvaluationContent {
-            metrics: self.metrics.into_authored_content(),
-            support: self.support.map(|s| OwnedReleaseSupportContent {
-                stages: s.stages.into_authored_content(),
-                preparation: s.preparation.into_authored_content(),
-                inputs: s.inputs.into_authored_content(),
-                receiving: s.receiving.into_authored_content(),
-                outputs: s
-                    .outputs
-                    .map(OwnedSupportOutputBindings::into_authored_content),
+impl OwnedReleaseEvaluationContent {
+    /// Consume the actual checked owners, never a raw input with inherited seals.
+    pub fn from_checked(checked: CheckedOwnedReleaseEvaluation) -> Self {
+        let parts = checked.into_parts();
+        Self {
+            metrics: parts.metrics.into_authored_content(),
+            support: parts.support.map(|support| {
+                let parts = support.into_parts();
+                OwnedReleaseSupportContent {
+                    stages: parts.stages.into_authored_content(),
+                    preparation: parts.preparation.into_authored_content(),
+                    inputs: parts.inputs.into_authored_content(),
+                    receiving: parts.receiving.into_authored_content(),
+                    outputs: parts
+                        .outputs
+                        .map(OwnedSupportOutputBindings::into_authored_content),
+                }
+            }),
+        }
+    }
+}
+
+impl<'a> From<&'a OwnedReleaseEvaluationContent> for EvaluationBudgetView<'a> {
+    fn from(input: &'a OwnedReleaseEvaluationContent) -> Self {
+        Self {
+            metric_bindings: input.metrics.bindings.len(),
+            support: input.support.as_ref().map(|s| SupportBudgetView {
+                stages: (&s.stages).into(),
+                preparation: (&s.preparation).into(),
+                target: &s.inputs.target,
+                receiving: (&s.receiving).into(),
+                outputs: s.outputs.as_ref().map(|o| o.final_skill_types.len()),
             }),
         }
     }
@@ -63,7 +96,11 @@ impl OwnedReleaseEvaluationContent {
         if *remaining > limits.max_validation_entries {
             return Err(OwnedReleaseError::InvalidLimit("validation entries"));
         }
-        super::preflight::check(self.into(), limits.evaluation, remaining)
+        let budget = EvaluationBudgetLimits::new(
+            limits.evaluation.preparation,
+            limits.evaluation.receiving,
+        )?;
+        charge_evaluation_entries(self.into(), budget, remaining).map_err(Into::into)
     }
 
     /// Construct all dependencies in order. This returns raw canonical inputs;

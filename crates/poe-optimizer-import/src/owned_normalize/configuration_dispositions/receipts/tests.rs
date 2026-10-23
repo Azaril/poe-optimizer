@@ -73,6 +73,7 @@ fn receipts_preserve_no_origin_states_order_targets_and_duplicate_consumers() {
             .map(|(i, state)| row(scope, (!matches!(i, 3..=5)).then_some(origin), *state))
             .collect(),
         encounter_absence: EncounterAbsence::MissingProof,
+        custom_modifiers: None,
     };
     assert_eq!(receipts.len(), states.len());
     assert_eq!(
@@ -142,6 +143,7 @@ fn leaf_lookup_requires_exact_source_scope_lane_name_and_consumer() {
             scenario: ScenarioPresetId::from_instance_id(instance(3)),
             rows: vec![actual],
             encounter_absence: EncounterAbsence::MissingProof,
+            custom_modifiers: None,
         };
         assert_eq!(
             receipts
@@ -172,6 +174,7 @@ fn encounter_absence_is_exact_borrowed_source_authority_not_adapter_presence() {
             scenario,
             rows: vec![],
             encounter_absence: state,
+            custom_modifiers: None,
         };
         assert_eq!(receipts.has_encounter_proof(), supplied);
         assert_eq!(

@@ -4,6 +4,7 @@
 //! A leaf receipt never completes a configuration or scenario inventory.
 use super::*;
 mod accounting;
+mod custom_modifiers;
 mod inventory;
 mod receipts;
 pub use inventory::{
@@ -63,6 +64,10 @@ pub struct ConfigurationDispositionDependencies {
 pub enum ConfigurationAdapterControl {
     Encounter,
     EnemyLevel,
+    /// One complete saved-source family, checked per ConfigSet. Only absent or
+    /// literally empty blocks/legacy text are admitted; this is not a native
+    /// modifier owner or permission to discard dormant nonempty text.
+    StrictEmptyCustomModifiers,
     Reward {
         recipe: OwnedDefinitionKey,
     },
@@ -369,7 +374,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                         },
                         ConfigurationAdapterControl::ScalarInput { input } => input.key().as_str().len(),
                         ConfigurationAdapterControl::UsageIntent { policy, parameter } => policy.key().as_str().len().saturating_add(parameter.slot.key().as_str().len()),
-                        ConfigurationAdapterControl::Encounter | ConfigurationAdapterControl::EnemyLevel => 1,
+                        ConfigurationAdapterControl::Encounter | ConfigurationAdapterControl::EnemyLevel | ConfigurationAdapterControl::StrictEmptyCustomModifiers => 1,
                     };
                     work = work.saturating_add(adapter_work);
                     if work > limits.max_work { return Err(NormalizationError::Limit("configuration disposition policy work")); }

@@ -20,6 +20,8 @@ mod defence_components;
 #[allow(dead_code, unused_imports)]
 #[path = "../../poe-optimizer-engine/tests/support/owned_fixtures.rs"]
 mod engine_fixtures;
+#[path = "release/evaluation_content.rs"]
+mod evaluation_content;
 #[path = "../../../tests/support/owned_evaluation_release_fixture.rs"]
 mod fixture;
 #[path = "release/gem_support_domains.rs"]
@@ -71,9 +73,9 @@ mod view_support_source;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{
-    BuiltRelease, ReleaseAllocationBase, ReleaseBuildError, ReleaseBuildLimits, ReleaseSource,
-    SourceEncoding, SymbolRegistry, build_release, load_names, lower_program, parse_program,
-    parse_release_manifest, raise_program,
+    BuiltRelease, OwnedReleaseEvaluationContent, ReleaseAllocationBase, ReleaseBuildError,
+    ReleaseBuildLimits, ReleaseSource, SourceEncoding, SymbolRegistry, build_release, load_names,
+    lower_program, parse_program, parse_release_manifest, raise_program,
 };
 use poe_optimizer_core::{
     owned_build::ParameterValue,
@@ -92,7 +94,6 @@ use poe_optimizer_import::{
         OWNED_RELEASE_VERSION, OwnedReleaseError, OwnedReleaseInput, OwnedReleaseReceipt,
         StagedOwnedRelease, assemble_owned_release, load_owned_release_artifacts,
     },
-    owned_release_evaluation::OwnedReleaseEvaluationContent,
 };
 use sha2::{Digest, Sha256};
 use std::{
@@ -470,7 +471,7 @@ fn authored_evaluation(input: &OwnedReleaseInput) -> Option<OwnedReleaseEvaluati
     load_owned_release_artifacts(&files(&staged), Default::default())
         .unwrap()
         .into_evaluation()
-        .map(|checked| checked.into_authored_content())
+        .map(OwnedReleaseEvaluationContent::from_checked)
 }
 
 struct DslRelease {

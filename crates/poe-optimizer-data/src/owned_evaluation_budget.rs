@@ -1,5 +1,11 @@
-use super::{
-    OwnedReleaseEvaluationContent, OwnedReleaseEvaluationInput, OwnedReleaseEvaluationLimits,
+//! Shared bounded accounting for authored and runtime evaluation declarations.
+//! Charging entries establishes neither dependency validity nor coverage authority.
+use crate::{
+    owned_stages::EvaluationStagesContent,
+    owned_support_receiving::{
+        SupportReceivingContent, SupportReceivingStorageError, SupportReceivingStorageLimits,
+    },
+    owned_supports::{SupportPreparationContent, SupportStorageError, SupportStorageLimits},
 };
 use poe_optimizer_core::{
     owned_definitions::OwnedDefinitionKey,
@@ -9,43 +15,43 @@ use poe_optimizer_core::{
         SourcePropertyEffectEndpoint, SourcePropertyOccurrence, SourcePropertyPreparationInput,
     },
     owned_stages::{
-        EvaluationStage, FrozenStageChannel, StagedEffectApplication, StagedRuleProgram,
+        EvaluationStage, EvaluationStagesInput, FrozenStageChannel, StagedEffectApplication,
+        StagedRuleProgram,
     },
     owned_support_inputs::SupportTargetInputBindings,
     owned_support_receiving::{
-        SupportAdmissionContext, SupportReceivingEntry, SupportReceivingRole,
-        SupportTargetReceivingRoles,
+        SupportAdmissionContext, SupportReceivingEntry, SupportReceivingInput,
+        SupportReceivingRole, SupportTargetReceivingRoles,
     },
-    owned_supports::{SupportPreparationEntry, SupportTypePredicate},
+    owned_supports::{SupportPreparationEntry, SupportPreparationInput, SupportTypePredicate},
 };
 
-// A borrowed semantic view shares the exact budget traversal between runtime
-// inputs and authored content without copying payloads or inventing seals.
-pub(super) struct EvaluationBudgetView<'a> {
-    metric_bindings: usize,
-    support: Option<SupportBudgetView<'a>>,
+/// Borrowed semantic entries share one traversal without copying payloads or seals.
+pub struct EvaluationBudgetView<'a> {
+    pub metric_bindings: usize,
+    pub support: Option<SupportBudgetView<'a>>,
 }
-struct SupportBudgetView<'a> {
-    stages: StagesBudgetView<'a>,
-    preparation: PreparationBudgetView<'a>,
-    target: &'a SupportTargetInputBindings,
-    receiving: ReceivingBudgetView<'a>,
-    outputs: Option<usize>,
+pub struct SupportBudgetView<'a> {
+    pub stages: StagesBudgetView<'a>,
+    pub preparation: PreparationBudgetView<'a>,
+    pub target: &'a SupportTargetInputBindings,
+    pub receiving: ReceivingBudgetView<'a>,
+    pub outputs: Option<usize>,
 }
-struct StagesBudgetView<'a> {
+pub struct StagesBudgetView<'a> {
     stages: &'a [EvaluationStage],
     programs: &'a DeclaredSet<StagedRuleProgram>,
     effect_applications: &'a Option<DeclaredSet<StagedEffectApplication>>,
     frozen_channels: &'a [FrozenStageChannel],
     readiness: &'a Option<ReadinessInput>,
 }
-struct PreparationBudgetView<'a> {
+pub struct PreparationBudgetView<'a> {
     types: &'a [OwnedDefinitionKey],
     effects: &'a [OwnedDefinitionKey],
     families: &'a [OwnedDefinitionKey],
     supports: &'a [SupportPreparationEntry],
 }
-struct ReceivingBudgetView<'a> {
+pub struct ReceivingBudgetView<'a> {
     roles: &'a [SupportReceivingRole],
     targets: &'a [SupportTargetReceivingRoles],
     supports: &'a [SupportReceivingEntry],
@@ -54,57 +60,84 @@ struct ReceivingBudgetView<'a> {
 
 // Only projection is repeated: every accounting rule below has one definition.
 macro_rules! budget_view {
-    ($input:ty) => {
-        impl<'a> From<&'a $input> for EvaluationBudgetView<'a> {
+    ($view:ident, [$($input:ty),+], $fields:tt) => {
+        $(budget_view!(@one $view, $input, $fields);)+
+    };
+    (@one $view:ident, $input:ty, [$($field:ident),+]) => {
+        impl<'a> From<&'a $input> for $view<'a> {
             fn from(input: &'a $input) -> Self {
-                Self {
-                    metric_bindings: input.metrics.bindings.len(),
-                    support: input.support.as_ref().map(|s| SupportBudgetView {
-                        stages: StagesBudgetView {
-                            stages: &s.stages.stages,
-                            programs: &s.stages.programs,
-                            effect_applications: &s.stages.effect_applications,
-                            frozen_channels: &s.stages.frozen_channels,
-                            readiness: &s.stages.readiness,
-                        },
-                        preparation: PreparationBudgetView {
-                            types: &s.preparation.types,
-                            effects: &s.preparation.effects,
-                            families: &s.preparation.families,
-                            supports: &s.preparation.supports,
-                        },
-                        target: &s.inputs.target,
-                        receiving: ReceivingBudgetView {
-                            roles: &s.receiving.roles,
-                            targets: &s.receiving.targets,
-                            supports: &s.receiving.supports,
-                            source_properties: &s.receiving.source_properties,
-                        },
-                        outputs: s.outputs.as_ref().map(|o| o.final_skill_types.len()),
-                    }),
-                }
+                Self { $($field: &input.$field),+ }
             }
         }
     };
 }
-budget_view!(OwnedReleaseEvaluationInput);
-budget_view!(OwnedReleaseEvaluationContent);
+budget_view!(
+    StagesBudgetView,
+    [EvaluationStagesInput, EvaluationStagesContent],
+    [
+        stages,
+        programs,
+        effect_applications,
+        frozen_channels,
+        readiness
+    ]
+);
+budget_view!(
+    PreparationBudgetView,
+    [SupportPreparationInput, SupportPreparationContent],
+    [types, effects, families, supports]
+);
+budget_view!(
+    ReceivingBudgetView,
+    [SupportReceivingInput, SupportReceivingContent],
+    [roles, targets, supports, source_properties]
+);
+
+/// Checked traversal depths. Private fields prevent callers from bypassing the
+/// existing storage hard ceilings and authorizing unbounded predicate recursion.
+#[derive(Clone, Copy, Debug)]
+pub struct EvaluationBudgetLimits {
+    max_predicate_depth: usize,
+    max_path_depth: usize,
+}
+impl EvaluationBudgetLimits {
+    pub fn new(
+        preparation: SupportStorageLimits,
+        receiving: SupportReceivingStorageLimits,
+    ) -> Result<Self, EvaluationBudgetError> {
+        preparation.validate()?;
+        receiving.validate()?;
+        Ok(Self {
+            max_predicate_depth: preparation.max_predicate_depth,
+            max_path_depth: receiving.max_path_depth,
+        })
+    }
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum EvaluationBudgetError {
+    #[error("evaluation declarations exceed {0}")]
+    Limit(&'static str),
+    #[error(transparent)]
+    Preparation(#[from] SupportStorageError),
+    #[error(transparent)]
+    Receiving(#[from] SupportReceivingStorageError),
+}
 
 /// Charge nested membership and semantic nodes before constituent cloning. The
 /// shared counter includes the ordinary release; no per-bundle budget reset.
-pub(super) fn check(
+pub fn charge_evaluation_entries(
     input: EvaluationBudgetView<'_>,
-    limits: OwnedReleaseEvaluationLimits,
+    limits: EvaluationBudgetLimits,
     left: &mut usize,
-) -> Result<(), crate::owned_release::OwnedReleaseError> {
-    use crate::owned_release::OwnedReleaseError;
-    fn charge(left: &mut usize, n: usize) -> Result<(), OwnedReleaseError> {
+) -> Result<(), EvaluationBudgetError> {
+    fn charge(left: &mut usize, n: usize) -> Result<(), EvaluationBudgetError> {
         *left = left
             .checked_sub(n)
-            .ok_or(OwnedReleaseError::Limit("validation entries"))?;
+            .ok_or(EvaluationBudgetError::Limit("validation entries"))?;
         Ok(())
     }
-    fn closure(left: &mut usize, value: &SchemaClosure) -> Result<(), OwnedReleaseError> {
+    fn closure(left: &mut usize, value: &SchemaClosure) -> Result<(), EvaluationBudgetError> {
         if let SchemaClosure::Partial { gaps } = value {
             charge(left, gaps.len())?;
         }
@@ -115,12 +148,12 @@ pub(super) fn check(
         value: &SupportTypePredicate,
         depth: usize,
         maximum: usize,
-    ) -> Result<(), OwnedReleaseError> {
+    ) -> Result<(), EvaluationBudgetError> {
         // Bounded recursion avoids an unbounded traversal or stack before the
         // component constructor's own predicate validation and serialization.
         charge(left, 1)?;
         if depth > maximum {
-            return Err(OwnedReleaseError::Limit("support predicate depth"));
+            return Err(EvaluationBudgetError::Limit("support predicate depth"));
         }
         match value {
             SupportTypePredicate::Type(_) => {}
@@ -184,7 +217,7 @@ pub(super) fn check(
                 charge(left, p.families.as_ref().map_or(0, Vec::len))?;
                 charge(left, p.added_types.len())?;
                 for p in [&p.requires, &p.excludes].into_iter().flatten() {
-                    predicate(left, p, 1, limits.preparation.max_predicate_depth)?;
+                    predicate(left, p, 1, limits.max_predicate_depth)?;
                 }
             }
         }
@@ -213,16 +246,16 @@ pub(super) fn check(
             closure(left, &role.endpoints.closure)?;
             for endpoint in &role.endpoints.members {
                 charge(left, endpoint.path().len())?;
-                if endpoint.path().len() > limits.receiving.max_path_depth {
-                    return Err(OwnedReleaseError::Limit("support receiver path depth"));
+                if endpoint.path().len() > limits.max_path_depth {
+                    return Err(EvaluationBudgetError::Limit("support receiver path depth"));
                 }
                 if let SupportAdmissionContext::ReceivingSkill {
                     summoner_path: Some(path),
                 } = endpoint.admission()
                 {
                     charge(left, path.len())?;
-                    if path.len() > limits.receiving.max_path_depth {
-                        return Err(OwnedReleaseError::Limit("support summoner path depth"));
+                    if path.len() > limits.max_path_depth {
+                        return Err(EvaluationBudgetError::Limit("support summoner path depth"));
                     }
                 }
             }
@@ -279,8 +312,8 @@ pub(super) fn check(
                 if let SourcePropertyEffectEndpoint::Generated { path, .. } = &effect.endpoint {
                     charge(left, 1)?;
                     charge(left, path.len())?;
-                    if path.len() > limits.receiving.max_path_depth {
-                        return Err(OwnedReleaseError::Limit("source effect path depth"));
+                    if path.len() > limits.max_path_depth {
+                        return Err(EvaluationBudgetError::Limit("source effect path depth"));
                     }
                 }
                 if let SupportAdmissionContext::ReceivingSkill {
@@ -288,8 +321,8 @@ pub(super) fn check(
                 } = &effect.admission
                 {
                     charge(left, path.len())?;
-                    if path.len() > limits.receiving.max_path_depth {
-                        return Err(OwnedReleaseError::Limit("source summoner path depth"));
+                    if path.len() > limits.max_path_depth {
+                        return Err(EvaluationBudgetError::Limit("source summoner path depth"));
                     }
                 }
             }
@@ -299,4 +332,73 @@ pub(super) fn check(
         charge(left, *outputs)?;
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn direct_callers_cannot_authorize_unbounded_or_zero_depth() {
+        let preparation = SupportStorageLimits::default();
+        let receiving = SupportReceivingStorageLimits::default();
+        EvaluationBudgetLimits::new(preparation, receiving).unwrap();
+        for depth in [0, preparation.max_predicate_depth + 1, usize::MAX] {
+            assert!(matches!(
+                EvaluationBudgetLimits::new(
+                    SupportStorageLimits {
+                        max_predicate_depth: depth,
+                        ..preparation
+                    },
+                    receiving,
+                ),
+                Err(EvaluationBudgetError::Preparation(
+                    SupportStorageError::InvalidLimit("predicate depth")
+                ))
+            ));
+        }
+        for depth in [0, receiving.max_path_depth + 1, usize::MAX] {
+            assert!(matches!(
+                EvaluationBudgetLimits::new(
+                    preparation,
+                    SupportReceivingStorageLimits {
+                        max_path_depth: depth,
+                        ..receiving
+                    },
+                ),
+                Err(EvaluationBudgetError::Receiving(
+                    SupportReceivingStorageError::InvalidLimit("path depth")
+                ))
+            ));
+        }
+    }
+
+    #[test]
+    fn direct_accounting_preserves_prior_debits_and_cannot_overflow() {
+        let limits = EvaluationBudgetLimits::new(Default::default(), Default::default()).unwrap();
+        let mut exact = 3;
+        charge_evaluation_entries(
+            EvaluationBudgetView {
+                metric_bindings: 2,
+                support: None,
+            },
+            limits,
+            &mut exact,
+        )
+        .unwrap();
+        assert_eq!(exact, 0);
+        let mut available = usize::MAX;
+        assert!(matches!(
+            charge_evaluation_entries(
+                EvaluationBudgetView {
+                    metric_bindings: usize::MAX,
+                    support: None,
+                },
+                limits,
+                &mut available,
+            ),
+            Err(EvaluationBudgetError::Limit("validation entries"))
+        ));
+        assert_eq!(available, usize::MAX - 1);
+    }
 }

@@ -33,6 +33,13 @@ The same rule applies to evaluation content construction. Maintained evaluation
 source files now reject runtime headers; the release-test helper that manually
 repaired evaluation digests is retired. Runtime stale-binding tests remain useful
 and must survive. Do not add a compatibility reader for the replaced source format.
+Evaluation-content DTOs and dependency construction now live in Authoring. The
+replaced Import content module and its local budget traversal are removed; Data
+owns the one shared borrowed traversal. The seven content laws moved into the
+maintained Authoring harness, while runtime aggregate and stale-binding tests
+remain in Import. Consuming checked package parts replaces the runtime container's
+offline-content API, with no compatibility re-export. The rest of the publication
+core and allocator still require the R1 extraction described in the plan.
 
 Atomic authoring checkpoints replace the old flat authoring CLI output contract
 and its optional caller-assembled declaration context. All CLI builds now preserve

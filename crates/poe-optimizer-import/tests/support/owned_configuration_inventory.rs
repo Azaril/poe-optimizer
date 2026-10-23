@@ -1,6 +1,8 @@
 //! Actual normalizer controls; the reviewed fixture census is authored from its
 //! three configured source consumers, never inferred from emitted output counts.
 use super::*;
+#[path = "owned_configuration_custom_modifiers.rs"]
+mod custom_modifiers;
 #[path = "owned_configuration_inventory_real.rs"]
 mod real;
 

@@ -262,7 +262,7 @@ fn full_catalogue_compile_keeps_partial_rows_and_exact_work_boundaries() {
     assert_eq!(partial.controls, complete.controls);
     with_receipts(&xml(COUNT, ""), &partial, work, |b, scope, receipts| {
         let before = b.work;
-        assert!(!match_receipts(b, scope, &partial, &receipts).unwrap());
+        assert!(!match_receipts(b, scope, &partial, &receipts, None).unwrap());
         assert_eq!(b.work, before);
     });
     f.owner.inventory.as_mut().unwrap().dispositions.pop();
@@ -279,13 +279,13 @@ fn full_catalogue_receipts_share_default_budget_and_have_an_exact_boundary() {
         let initial = b.work;
         let origins = b.origins.clone();
         let allocator = b.allocator.state();
-        assert!(match_receipts(b, scope, &inventory, &receipts).unwrap());
+        assert!(match_receipts(b, scope, &inventory, &receipts, None).unwrap());
         let required = b.work;
         assert!(required < NormalizationLimits::default().max_work);
         for sufficient in [true, false] {
             b.work = initial;
             b.limits.max_work = required - usize::from(!sufficient);
-            let result = match_receipts(b, scope, &inventory, &receipts);
+            let result = match_receipts(b, scope, &inventory, &receipts, None);
             if sufficient {
                 assert!(result.unwrap());
                 assert_eq!(b.work, required);
@@ -363,7 +363,7 @@ fn late_receipt_faults_never_borrow_another_consumer_or_scope() {
                 let origins = b.origins.clone();
                 let allocator = b.allocator.state();
                 assert!(
-                    !match_receipts(b, scope, &inventory, &receipts).unwrap(),
+                    !match_receipts(b, scope, &inventory, &receipts, None).unwrap(),
                     "mutation {mutation}"
                 );
                 assert_eq!(b.origins, origins);
@@ -411,7 +411,7 @@ fn duplicate_selector_consumers_remain_distinct_and_source_ambiguity_refuses() {
         |b, scope, receipts| {
             assert_eq!(receipts[0].origin, receipts[COUNT - 1].origin);
             assert_ne!(receipts[0].control, receipts[COUNT - 1].control);
-            assert!(match_receipts(b, scope, &inventory, &receipts).unwrap());
+            assert!(match_receipts(b, scope, &inventory, &receipts, None).unwrap());
         },
     );
     let policy = f.owner.inventory.as_mut().unwrap();
@@ -436,7 +436,7 @@ fn duplicate_selector_consumers_remain_distinct_and_source_ambiguity_refuses() {
             &inventory,
             work,
             |b, scope, receipts| {
-                assert!(!match_receipts(b, scope, &inventory, &receipts).unwrap());
+                assert!(!match_receipts(b, scope, &inventory, &receipts, None).unwrap());
             },
         );
     }

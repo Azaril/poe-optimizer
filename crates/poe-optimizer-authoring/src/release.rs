@@ -7,7 +7,7 @@
 //! evaluation. Publication happens only after complete assembly succeeds.
 use crate::{
     DeclarationError, DeclarationLimits, ManifestError, ManifestLimits, NamedIdRegistry,
-    manifest_parse::parse_document,
+    OwnedReleaseEvaluationContent, OwnedReleaseSupportContent, manifest_parse::parse_document,
 };
 use poe_optimizer_core::{
     owned_content::OwnedContentDigest, owned_definitions::OwnedDefinitionKey,
@@ -21,7 +21,6 @@ use poe_optimizer_import::{
         OwnedReleaseInput, OwnedReleaseLimits, StagedOwnedRelease, assemble_owned_release,
         assemble_owned_release_with_checked_recipe, check_release_source_dependencies,
     },
-    owned_release_evaluation::{OwnedReleaseEvaluationContent, OwnedReleaseSupportContent},
 };
 use serde::de::DeserializeOwned;
 use std::{

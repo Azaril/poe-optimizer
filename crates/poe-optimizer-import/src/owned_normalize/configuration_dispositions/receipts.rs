@@ -58,6 +58,7 @@ impl<'d> ScalarReceipts<'d> {
         b: &mut Builder<'_, '_>,
         draft: &DraftSessionInput,
         adapters: &AdapterReceipts<'p>,
+        strict_empty_custom_modifiers: bool,
     ) -> Result<ScopeReceipts<'p>> {
         self.rows
             .extend(usage_inputs::checked_configuration_receipts(
@@ -90,11 +91,17 @@ impl<'d> ScalarReceipts<'d> {
                 None if proof.is_some() => EncounterAbsence::Unavailable,
                 None => EncounterAbsence::MissingProof,
             };
+        let custom_modifiers = if strict_empty_custom_modifiers {
+            custom_modifiers::collect(b, self.scope, self.scenario.id)?
+        } else {
+            None
+        };
         Ok(ScopeReceipts {
             scope: self.scope,
             scenario: self.scenario.id,
             rows: self.rows,
             encounter_absence,
+            custom_modifiers,
         })
     }
 }
@@ -110,9 +117,16 @@ pub(super) struct ScopeReceipts<'p> {
     scenario: ScenarioPresetId,
     rows: Vec<CheckedConfigurationReceipt>,
     encounter_absence: EncounterAbsence<'p>,
+    custom_modifiers: Option<custom_modifiers::CheckedCustomModifiers>,
 }
 
 impl ScopeReceipts<'_> {
+    pub(super) fn custom_modifiers(&self) -> Option<&custom_modifiers::CheckedCustomModifiers> {
+        self.custom_modifiers
+            .as_ref()
+            .filter(|receipt| receipt.belongs_to(self.scope, self.scenario))
+    }
+
     pub(super) fn len(&self) -> usize {
         self.rows.len()
     }

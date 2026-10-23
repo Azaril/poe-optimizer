@@ -29,6 +29,7 @@ pub mod modifier_parser;
 #[cfg(feature = "legacy")]
 mod movement;
 pub mod owned_allocations;
+pub mod owned_evaluation_budget;
 pub mod owned_metrics;
 pub mod owned_routing;
 pub mod owned_rules;

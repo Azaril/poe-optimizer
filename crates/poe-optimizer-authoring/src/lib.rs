@@ -13,6 +13,7 @@ mod bindings;
 mod checkpoint;
 mod declarations;
 mod diagnostic;
+mod evaluation_content;
 mod format;
 mod lexer;
 mod lower;
@@ -49,6 +50,7 @@ pub use declarations::{
     stage_stat_declarations,
 };
 pub use diagnostic::{Diagnostic, DiagnosticCode, LimitKind};
+pub use evaluation_content::{OwnedReleaseEvaluationContent, OwnedReleaseSupportContent};
 pub use format::{FormatLimits, format_program};
 pub use lower::{
     LowerLimits, LoweredBinding, LoweredBlock, LoweredExpression, lower_block, lower_expression,

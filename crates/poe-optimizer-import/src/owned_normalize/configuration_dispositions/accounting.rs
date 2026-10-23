@@ -107,6 +107,44 @@ fn apply(
     Ok(())
 }
 
+/// The family receipt is all-or-nothing. Before retiring any source leaf, every
+/// member must retain exactly this inventory's unresolved responsibility. A
+/// scalar adapter, foreign issue or prior disposition cannot be overwritten.
+fn apply_custom_modifiers(
+    b: &mut Builder<'_, '_>,
+    scope: SourceOccurrenceId,
+    scenario: ScenarioPresetId,
+    issue: DraftIssueId,
+    receipt: &custom_modifiers::CheckedCustomModifiers,
+) -> Result<()> {
+    if !receipt.belongs_to(scope, scenario) {
+        return Ok(());
+    }
+    for origin in receipt.origins() {
+        let row = &b.origins[origin.ordinal() as usize];
+        b.charge(row.links.len().saturating_add(1))?;
+        let row = &b.origins[origin.ordinal() as usize];
+        if row.disposition != SourceDisposition::Contributes
+            || row.links.as_slice() != [OwnedOriginTarget::Issue(issue)]
+        {
+            return Ok(());
+        }
+    }
+    let target = OwnedOriginTarget::ScenarioPreset(scenario);
+    let reason = key("literal-empty-custom-modifier-source");
+    for origin in receipt.origins() {
+        apply(
+            b,
+            scope,
+            *origin,
+            issue,
+            std::slice::from_ref(&target),
+            Some(&reason),
+        )?;
+    }
+    Ok(())
+}
+
 fn branch_proven(
     b: &mut Builder<'_, '_>,
     origin: SourceOccurrenceId,
@@ -244,7 +282,15 @@ pub(in crate::owned_normalize) fn account(
         let Some(policy) = policy else {
             continue;
         };
-        let receipts = receipts.finish(b, draft, &adapters)?;
+        let receipts = receipts.finish(
+            b,
+            draft,
+            &adapters,
+            policy
+                .inventory
+                .as_ref()
+                .is_some_and(|inventory| inventory.requests_strict_empty_custom_modifiers()),
+        )?;
         let evidence = b.evidence;
         let children = evidence.rows()[scope.ordinal() as usize].children();
         b.charge(children.len().saturating_mul(policy.rules.len()))?;
@@ -331,6 +377,9 @@ pub(in crate::owned_normalize) fn account(
                     )?;
                 }
             }
+        }
+        if let Some(receipt) = receipts.custom_modifiers() {
+            apply_custom_modifiers(b, scope, scenario.id, issue, receipt)?;
         }
         if let Some(inventory) = &policy.inventory
             && let Some(proof) = inventory::prepare(

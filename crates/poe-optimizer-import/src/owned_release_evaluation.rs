@@ -8,6 +8,10 @@ use poe_optimizer_core::{
     owned_support_receiving::SupportReceivingInput, owned_supports::SupportPreparationInput,
 };
 use poe_optimizer_data::{
+    owned_evaluation_budget::{
+        EvaluationBudgetError, EvaluationBudgetLimits, EvaluationBudgetView, SupportBudgetView,
+        charge_evaluation_entries,
+    },
     owned_metrics::{MetricMappingError, MetricMappingLimits, OwnedMetricMapping},
     owned_stages::{OwnedEvaluationStages, StageStorageError, StageStorageLimits},
     owned_support_inputs::{
@@ -115,7 +119,28 @@ pub struct CheckedOwnedReleaseSupport {
     receiving: OwnedSupportReceiving,
     outputs: Option<OwnedSupportOutputBindings>,
 }
+
+/// Owned checked constituents, not a certificate for a reassembled release.
+pub struct OwnedReleaseEvaluationParts {
+    pub metrics: OwnedMetricMapping,
+    pub support: Option<CheckedOwnedReleaseSupport>,
+}
+
+/// Consuming a support bundle retains each actual checked Data package.
+pub struct OwnedReleaseSupportParts {
+    pub stages: OwnedEvaluationStages,
+    pub preparation: OwnedSupportPreparation,
+    pub inputs: OwnedSupportInputBindings,
+    pub receiving: OwnedSupportReceiving,
+    pub outputs: Option<OwnedSupportOutputBindings>,
+}
 impl CheckedOwnedReleaseEvaluation {
+    pub fn into_parts(self) -> OwnedReleaseEvaluationParts {
+        OwnedReleaseEvaluationParts {
+            metrics: self.metrics,
+            support: self.support,
+        }
+    }
     pub fn input(&self) -> &OwnedReleaseEvaluationInput {
         &self.input
     }
@@ -220,6 +245,15 @@ impl CheckedOwnedReleaseEvaluation {
     }
 }
 impl CheckedOwnedReleaseSupport {
+    pub fn into_parts(self) -> OwnedReleaseSupportParts {
+        OwnedReleaseSupportParts {
+            stages: self.stages,
+            preparation: self.preparation,
+            inputs: self.inputs,
+            receiving: self.receiving,
+            outputs: self.outputs,
+        }
+    }
     pub fn stages(&self) -> &OwnedEvaluationStages {
         &self.stages
     }
@@ -246,14 +280,40 @@ impl CheckedOwnedReleaseSupport {
     }
 }
 
-mod content;
-mod preflight;
-pub use content::{OwnedReleaseEvaluationContent, OwnedReleaseSupportContent};
+impl<'a> From<&'a OwnedReleaseEvaluationInput> for EvaluationBudgetView<'a> {
+    fn from(input: &'a OwnedReleaseEvaluationInput) -> Self {
+        Self {
+            metric_bindings: input.metrics.bindings.len(),
+            support: input.support.as_ref().map(|s| SupportBudgetView {
+                stages: (&s.stages).into(),
+                preparation: (&s.preparation).into(),
+                target: &s.inputs.target,
+                receiving: (&s.receiving).into(),
+                outputs: s.outputs.as_ref().map(|o| o.final_skill_types.len()),
+            }),
+        }
+    }
+}
+
+impl From<EvaluationBudgetError> for crate::owned_release::OwnedReleaseError {
+    fn from(error: EvaluationBudgetError) -> Self {
+        match error {
+            EvaluationBudgetError::Limit(name) => Self::Limit(name),
+            EvaluationBudgetError::Preparation(error) => {
+                Self::Evaluation(OwnedReleaseEvaluationError::Preparation(error))
+            }
+            EvaluationBudgetError::Receiving(error) => {
+                Self::Evaluation(OwnedReleaseEvaluationError::Receiving(error))
+            }
+        }
+    }
+}
 
 pub(crate) fn preflight(
     input: &OwnedReleaseEvaluationInput,
     limits: OwnedReleaseEvaluationLimits,
     left: &mut usize,
 ) -> Result<(), crate::owned_release::OwnedReleaseError> {
-    preflight::check(input.into(), limits, left)
+    let budget = EvaluationBudgetLimits::new(limits.preparation, limits.receiving)?;
+    charge_evaluation_entries(input.into(), budget, left).map_err(Into::into)
 }

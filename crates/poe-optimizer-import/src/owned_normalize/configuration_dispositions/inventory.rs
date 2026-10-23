@@ -18,7 +18,8 @@ pub enum ConfigurationCensusClosure {
 #[serde(deny_unknown_fields)]
 pub struct ConfigurationInventoryControl {
     pub id: OwnedDefinitionKey,
-    /// None is reserved for the checked fresh Encounter absence constructor.
+    /// None identifies the checked fresh Encounter absence constructor or the
+    /// complete strict-empty custom-modifier source family, never a wildcard.
     pub selector: Option<ValueSelector>,
     pub source_states: Vec<ConfigurationSourceState>,
 }
@@ -63,10 +64,17 @@ pub fn configuration_inventory_census_identity(
 
 pub(super) struct CompiledInventory {
     complete: bool,
+    strict_empty_custom_modifiers: bool,
     controls: Vec<(
         ConfigurationInventoryControl,
         Vec<ConfigurationAdapterControl>,
     )>,
+}
+
+impl CompiledInventory {
+    pub(super) fn requests_strict_empty_custom_modifiers(&self) -> bool {
+        self.strict_empty_custom_modifiers
+    }
 }
 
 fn charge(work: &mut usize, amount: usize, limits: NormalizationLimits) -> Result<()> {
@@ -155,6 +163,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         ConfigurationInventoryControl,
         Vec<ConfigurationAdapterControl>,
     )> = Vec::new();
+    let mut strict_empty_custom_modifiers = false;
     for row in &census.controls {
         charge(
             work,
@@ -234,6 +243,17 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                 ));
             }
             match adapter {
+                ConfigurationAdapterControl::StrictEmptyCustomModifiers
+                    if row.selector.is_none()
+                        && adapters.len() == 1
+                        && states
+                            == BTreeSet::from([
+                                &ConfigurationSourceState::Absent,
+                                &ConfigurationSourceState::AuthoredNone,
+                            ]) =>
+                {
+                    strict_empty_custom_modifiers = true;
+                }
                 ConfigurationAdapterControl::Encounter
                     if policy.encounter.is_some()
                         && row.selector.is_none()
@@ -316,7 +336,11 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             "configuration inventory unknown source control",
         ));
     }
-    Ok(Some(CompiledInventory { complete, controls }))
+    Ok(Some(CompiledInventory {
+        complete,
+        strict_empty_custom_modifiers,
+        controls,
+    }))
 }
 
 pub(super) struct Retirement {
@@ -363,7 +387,9 @@ fn adapter_size(adapter: &ConfigurationAdapterControl) -> usize {
             .saturating_add(1)
     };
     match adapter {
-        ConfigurationAdapterControl::Encounter | ConfigurationAdapterControl::EnemyLevel => 1,
+        ConfigurationAdapterControl::Encounter
+        | ConfigurationAdapterControl::EnemyLevel
+        | ConfigurationAdapterControl::StrictEmptyCustomModifiers => 1,
         ConfigurationAdapterControl::Reward { recipe } => recipe.as_str().len().saturating_add(1),
         ConfigurationAdapterControl::ScalarInput { input } => input
             .key()
@@ -395,6 +421,7 @@ fn match_receipts(
     scope: SourceOccurrenceId,
     inventory: &CompiledInventory,
     receipts: &[CheckedConfigurationReceipt],
+    custom_modifiers: Option<&custom_modifiers::CheckedCustomModifiers>,
 ) -> Result<bool> {
     if !inventory.complete {
         return Ok(false);
@@ -437,7 +464,22 @@ fn match_receipts(
             .push(index);
     }
     let mut covered = vec![false; receipts.len()];
+    let mut custom_origins = None;
     for (control, adapters) in &inventory.controls {
+        if adapters.as_slice() == [ConfigurationAdapterControl::StrictEmptyCustomModifiers] {
+            let Some(checked) = custom_modifiers else {
+                return Ok(false);
+            };
+            b.charge(control.source_states.len().saturating_add(1))?;
+            if checked.scope() != scope
+                || !control.source_states.contains(&checked.state())
+                || custom_origins.is_some()
+            {
+                return Ok(false);
+            }
+            custom_origins = Some(checked.origins());
+            continue;
+        }
         let expected_origin = if let Some(selector) = &control.selector {
             b.charge(index_work(
                 origins.len(),
@@ -508,6 +550,20 @@ fn match_receipts(
             receipt_origins.insert(origin);
         }
     }
+    if let Some(origins) = custom_origins {
+        for origin in origins {
+            b.charge(index_work(receipt_origins.len(), 1))?;
+            if evidence.rows()[origin.ordinal() as usize]
+                .occurrence()
+                .parent()
+                != Some(scope)
+                || !receipt_origins.insert(*origin)
+            {
+                // The source family cannot double-account a scalar receipt.
+                return Ok(false);
+            }
+        }
+    }
     for source in children {
         b.charge(index_work(receipt_origins.len(), 1))?;
         if !receipt_origins.contains(source) {
@@ -536,13 +592,22 @@ pub(super) fn prepare(
     } = authority;
     let evidence = b.evidence;
     let children = evidence.rows()[scope.ordinal() as usize].children();
-    if !match_receipts(b, scope, inventory, receipts.iter().as_slice())? {
+    if !match_receipts(
+        b,
+        scope,
+        inventory,
+        receipts.iter().as_slice(),
+        receipts.custom_modifiers(),
+    )? {
         return Ok(None);
     }
     for source in children {
         b.charge(1)?;
         let row = &evidence.rows()[source.ordinal() as usize];
-        if !matches!(row.occurrence().name(), "Input" | "Placeholder") {
+        if !matches!(row.occurrence().name(), "Input" | "Placeholder")
+            && !(row.occurrence().name() == "CustomModifierBlock"
+                && receipts.custom_modifiers().is_some())
+        {
             return Ok(None);
         }
         b.charge(b.origins[source.ordinal() as usize].links.len())?;
