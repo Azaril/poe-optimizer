@@ -1,39 +1,14 @@
-//! One authenticated default Class-start passive, with independent Class and
-//! external transformation coverage preserved.
-use super::passive_publication;
-use poe_optimizer_core::{
-    owned_content::digest_owned, owned_rules::DefinitionRules, owned_schema::DefinitionDescriptor,
-};
-use poe_optimizer_import::{
-    owned_release::StagedOwnedRelease, owned_release_migration::OwnedReleaseMigrationInput,
-};
+//! Archived constructor evidence and corruption laws; no publication or VM execution.
+use super::{FIELDS, hash, root};
 use serde::de::DeserializeOwned;
 use serde_json::{Value, json};
-use sha2::{Digest, Sha256};
 use std::{collections::BTreeSet, fs, path::PathBuf};
 
-pub const KIND: &str = "class-start-root-default-inventory";
-const DOMAIN: &str = "owned-class-start-root-v1";
-const FIELDS: [&str; 7] = [
-    "parameters",
-    "choices",
-    "grants",
-    "actors",
-    "skill_grants",
-    "outputs",
-    "sockets",
-];
-fn root() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-}
 pub fn data() -> PathBuf {
     root().join("data/owned/poe2/3887ae68/class-start-root")
 }
 pub fn read<T: DeserializeOwned>(name: &str) -> T {
     serde_json::from_slice(&fs::read(data().join(name)).unwrap()).unwrap()
-}
-fn hash(bytes: &[u8]) -> String {
-    format!("{:x}", Sha256::digest(bytes))
 }
 fn rows(value: &Value) -> &[Value] {
     if let Some(rows) = value.as_array() {
@@ -43,13 +18,6 @@ fn rows(value: &Value) -> &[Value] {
         &[]
     }
 }
-fn without_probe(mut host: Value) -> Value {
-    let state = host["state"].as_object_mut().unwrap();
-    state.remove("executed");
-    state.remove("constructor_probe");
-    host
-}
-
 /// Only the eight explicitly reviewed inventory closure markers may change.
 pub fn check_rows(dependencies: &Value, closure: &Value) {
     assert_eq!(dependencies["definitions"].as_array().unwrap().len(), 1);
@@ -160,24 +128,6 @@ pub fn check_authored() {
     ] {
         assert_eq!(a["scope"][field], false);
     }
-    let m: OwnedReleaseMigrationInput = read("migration.json");
-    assert_eq!(m.schema_version, 5);
-    assert_eq!(json!(m.before), a["before"]);
-    assert_eq!(m.release.as_str(), "pob-3887ae68-class-start-root-v1");
-    assert_eq!(json!(m.release), b["release"]);
-    assert_eq!(m.contract.schema_version, 7);
-    assert_eq!(
-        m.contract.operations_version.as_str(),
-        "owned-domain-operations-v20"
-    );
-    assert!(
-        m.schema.is_empty()
-            && m.owners.is_empty()
-            && m.tables.is_empty()
-            && m.receivers.is_empty()
-            && m.query_targets.is_empty()
-            && m.evaluation.is_none()
-    );
     let names: BTreeSet<_> = a["artifacts"]
         .as_array()
         .unwrap()
@@ -205,18 +155,17 @@ pub fn check_authored() {
         .collect()
     );
     check_rows(&d, &c);
-    check_vectors(&a, &v, false);
+    check_vectors(&a, &v);
+    authenticate_source(&a, &v, false);
 }
 
-/// Full constructor projection is committed once; JIT reports are authenticated
-/// separately rather than substituting a count or source-label filter for it.
-pub fn check_vectors(a: &Value, v: &Value, authenticate: bool) {
-    check_root_vectors(a, v, authenticate, false);
+/// Full constructor projection preserves the exact intrinsic inventory.
+pub fn check_vectors(a: &Value, v: &Value) {
+    check_root_vectors(a, v, false);
 }
 
-/// Shared complete root evidence validation. Historical Class reports retain their
-/// exact archived witness; current Ascendancy reports authenticate the live witness.
-pub fn check_root_vectors(a: &Value, v: &Value, authenticate: bool, ascendancy: bool) {
+/// Shared complete root evidence validation; source labels do not substitute for ownership.
+pub fn check_root_vectors(a: &Value, v: &Value, ascendancy: bool) {
     let root_id = if ascendancy { 8305 } else { 54447 };
     assert_eq!(v["status"], "passed");
     assert_eq!(a["source_validation"]["status"], "passed");
@@ -481,82 +430,56 @@ pub fn check_root_vectors(a: &Value, v: &Value, authenticate: bool, ascendancy: 
             assert_eq!(row["sha256"], a["source_validation"]["report_sha256"]);
         }
     }
-    if authenticate {
-        let mut prior_bytes = None;
-        for row in reports {
-            let bytes = fs::read(root().join(row["path"].as_str().unwrap())).unwrap();
-            assert_eq!(bytes.len() as u64, row["bytes"].as_u64().unwrap());
-            assert_eq!(hash(&bytes), row["sha256"]);
-            if let Some(prior) = &prior_bytes {
-                assert!(*prior == bytes, "independent JIT reports differ");
-            }
-            let report: Value = serde_json::from_slice(&bytes).unwrap();
-            assert_eq!(report["source_revision"], a["source_revision"]);
-            assert_eq!(report["original"]["state"], v["projection"]);
-            assert_eq!(report["original"], report["repeat"]);
-            assert!(
-                without_probe(report["original"].clone())
-                    == without_probe(report["control"].clone()),
-                "constructor probe changed the current root, selection or scalar output"
-            );
-            assert_eq!(report["control"]["state"]["executed"], false);
-            assert!(
-                report["control"]["state"]
-                    .get("constructor_probe")
-                    .is_none()
-            );
-            let mut observed_metadata = report.as_object().unwrap().clone();
-            for field in ["original", "repeat", "control"] {
-                observed_metadata.remove(field);
-            }
-            assert_eq!(json!(observed_metadata), *metadata);
-            prior_bytes = Some(bytes);
-        }
-        for row in files {
-            let text = fs::read_to_string(
-                root()
-                    .join("vendor/path-of-building-poe2")
-                    .join(row["path"].as_str().unwrap()),
-            )
-            .unwrap();
-            assert_eq!(hash(text.replace("\r\n", "\n").as_bytes()), row["sha256"]);
-        }
-        // These two pin domains match source::read_verified_text and
-        // manifest_sha256. Observer, report and fixture pins remain raw bytes.
-        let manifest = fs::read_to_string(
-            root().join("crates/poe-optimizer-pob/data/pob-source-manifest.json"),
+}
+
+/// Authenticate full source bytes and capture provenance without loading historical run reports.
+pub fn authenticate_source(a: &Value, v: &Value, ascendancy: bool) {
+    let metadata = &v["metadata"];
+    let files = metadata["files"].as_array().unwrap();
+    for row in files {
+        let text = fs::read_to_string(
+            root()
+                .join("vendor/path-of-building-poe2")
+                .join(row["path"].as_str().unwrap()),
         )
         .unwrap();
-        assert_eq!(
-            hash(manifest.replace("\r\n", "\n").as_bytes()),
-            metadata["manifest_sha256"]
-        );
-        for (path, field) in [
-            (
-                if ascendancy {
-                    "crates/poe-optimizer-pob/tests/support/implicit_class_start_source.lua"
-                } else {
-                    "data/owned/poe2/3887ae68/class-start-root/evidence/implicit_class_start_source.lua"
-                },
-                "observer_sha256",
-            ),
-            (
-                "crates/poe-optimizer-pob/tests/support/configuration_preparation_source.rs",
-                "bootstrap_sha256",
-            ),
-        ] {
-            assert_eq!(hash(&fs::read(root().join(path)).unwrap()), metadata[field]);
-        }
-        let source = &metadata["original_source"];
-        assert_eq!(
-            source["path"],
-            "tests/fixtures/builds/breadth-20260908/build-05.xml"
-        );
-        assert_eq!(
-            hash(&fs::read(root().join(source["path"].as_str().unwrap())).unwrap()),
-            source["sha256"]
-        );
-        assert_eq!(
+        assert_eq!(hash(text.replace("\r\n", "\n").as_bytes()), row["sha256"]);
+    }
+    // These two pin domains match source::read_verified_text and
+    // manifest_sha256. Observer, report and fixture pins remain raw bytes.
+    let manifest =
+        fs::read_to_string(root().join("crates/poe-optimizer-pob/data/pob-source-manifest.json"))
+            .unwrap();
+    assert_eq!(
+        hash(manifest.replace("\r\n", "\n").as_bytes()),
+        metadata["manifest_sha256"]
+    );
+    for (path, field) in [
+        (
+            if ascendancy {
+                "crates/poe-optimizer-pob/tests/support/implicit_class_start_source.lua"
+            } else {
+                "data/owned/poe2/3887ae68/class-start-root/evidence/implicit_class_start_source.lua"
+            },
+            "observer_sha256",
+        ),
+        (
+            "crates/poe-optimizer-pob/tests/support/configuration_preparation_source.rs",
+            "bootstrap_sha256",
+        ),
+    ] {
+        assert_eq!(hash(&fs::read(root().join(path)).unwrap()), metadata[field]);
+    }
+    let source = &metadata["original_source"];
+    assert_eq!(
+        source["path"],
+        "tests/fixtures/builds/breadth-20260908/build-05.xml"
+    );
+    assert_eq!(
+        hash(&fs::read(root().join(source["path"].as_str().unwrap())).unwrap()),
+        source["sha256"]
+    );
+    assert_eq!(
             hash(
                 &fs::read(
                     root().join(
@@ -567,73 +490,4 @@ pub fn check_root_vectors(a: &Value, v: &Value, authenticate: bool, ascendancy: 
             ),
             a["source_validation"]["witness_test_sha256"]
         );
-    }
-}
-
-pub fn assert_endpoint(endpoint: &StagedOwnedRelease) {
-    check_authored();
-    let a: Value = read("authoring.json");
-    let b: Value = read("bindings.json");
-    let d: Value = read("dependencies.json");
-    let c: Value = read("closure.json");
-    let v: Value = read("source-vectors.json");
-    let proof = endpoint.receipt().provenance.last().unwrap();
-    assert_eq!(proof.kind.as_str(), KIND);
-    assert_eq!(json!(proof.prior_input), a["before"]);
-    assert_eq!(
-        proof.authoring_input,
-        digest_owned(
-            DOMAIN,
-            &(a, b.clone(), d.clone(), c.clone(), v),
-            4 * 1024 * 1024
-        )
-        .unwrap()
-    );
-    assert_eq!(json!(endpoint.input().recipe.schema.release), b["release"]);
-    assert_eq!(endpoint.input().recipe.registry.last_issued.get(), 0x3320);
-    for row in c["definitions"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .chain(d["supporting_definitions"].as_array().unwrap())
-    {
-        let expected: DefinitionDescriptor = serde_json::from_value(row.clone()).unwrap();
-        assert_eq!(
-            endpoint
-                .input()
-                .recipe
-                .schema
-                .definitions
-                .iter()
-                .filter(|v| **v == expected)
-                .count(),
-            1
-        );
-    }
-    for row in c["owners"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .chain(d["action_owners"].as_array().unwrap())
-    {
-        let expected: DefinitionRules = serde_json::from_value(row.clone()).unwrap();
-        assert_eq!(
-            endpoint
-                .input()
-                .recipe
-                .rules
-                .owners
-                .iter()
-                .filter(|v| **v == expected)
-                .count(),
-            1
-        );
-    }
-}
-pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
-    check_authored();
-    check_vectors(&read("authoring.json"), &read("source-vectors.json"), true);
-    let next = passive_publication::stage_refinement(prior, &data(), KIND, DOMAIN);
-    assert_endpoint(&next);
-    next
 }

@@ -1,40 +1,19 @@
-//! Intrinsic named-Ascendancy metadata closure. Descendant passives, Player
-//! initialization and external transformations retain their separate coverage.
-use super::passive_publication;
-use poe_optimizer_core::{owned_content::digest_owned, owned_schema::DefinitionDescriptor};
-use poe_optimizer_import::owned_release::StagedOwnedRelease;
+//! Archived constructor evidence and corruption laws; no publication or VM execution.
+use super::{FIELDS, hash, root};
 use serde::de::DeserializeOwned;
 use serde_json::{Value, json};
-use sha2::{Digest, Sha256};
 use std::{collections::BTreeSet, fs, path::PathBuf};
 
-pub const KIND: &str = "ascendancy-owner-default-inventory";
-const DOMAIN: &str = "owned-ascendancy-owner-closure-v1";
 const OWNER: &str = "def.0000000000000a36";
-const FIELDS: [&str; 7] = [
-    "parameters",
-    "choices",
-    "grants",
-    "actors",
-    "skill_grants",
-    "outputs",
-    "sockets",
-];
 const SUPPORTERS: [&str; 17] = [
     "0a23", "332a", "1790", "1b5d", "10d4", "173f", "0bb3", "0e15", "0b34", "1760", "11c2", "0d0f",
     "14d8", "1b48", "0a6d", "19ec", "0f2a",
 ];
-fn root() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-}
 pub fn data() -> PathBuf {
     root().join("data/owned/poe2/3887ae68/ascendancy-owner-closure")
 }
 pub fn read<T: DeserializeOwned>(name: &str) -> T {
     serde_json::from_slice(&fs::read(data().join(name)).unwrap()).unwrap()
-}
-fn hash(bytes: &[u8]) -> String {
-    format!("{:x}", Sha256::digest(bytes))
 }
 fn keys(value: &Value) -> BTreeSet<&str> {
     value
@@ -127,7 +106,7 @@ pub fn check_rows(d: &Value, c: &Value) {
     );
 }
 
-pub fn check_vectors(v: &Value, authenticate: bool) {
+pub fn check_vectors(v: &Value) {
     assert_eq!(v["schema_version"], 1);
     assert_eq!(v["status"], "passed_retained_full_source_evidence");
     assert_eq!(
@@ -291,9 +270,12 @@ pub fn check_vectors(v: &Value, authenticate: bool) {
         .into_iter()
         .collect()
     );
-    if !authenticate {
-        return;
-    }
+}
+
+/// Full source census and pinned capture files, independent of local run reports.
+fn authenticate_source(v: &Value) {
+    let helpers = v["capture_helpers"].as_array().unwrap();
+    let inventory = v["consumer_inventory"].as_array().unwrap();
     for pin in helpers {
         pin_bytes(pin);
     }
@@ -391,113 +373,6 @@ pub fn check_vectors(v: &Value, authenticate: bool) {
             .collect();
         assert_eq!(json!(matches), file["matches"]);
     }
-    for report_pin in reports {
-        let report: Value = serde_json::from_slice(&pin_bytes(report_pin)).unwrap();
-        let metadata = &v[if report_pin["kind"] == "loaded" {
-            "loaded_metadata"
-        } else {
-            "root_metadata"
-        }];
-        for (key, value) in metadata.as_object().unwrap() {
-            assert_eq!(&report[key], value);
-        }
-        if report_pin["kind"] == "loaded" {
-            assert_eq!(report["cases"].as_array().unwrap().len(), rows.len());
-            for (case, expected) in report["cases"].as_array().unwrap().iter().zip(rows) {
-                for field in ["name", "xml_sha256"] {
-                    assert_eq!(case[field], expected[field]);
-                }
-                let state = &case["original"]["state"];
-                let constructor = &state["constructors"][0];
-                assert_eq!(state["constructors"].as_array().unwrap().len(), 1);
-                assert_eq!(state["evidence"], expected["evidence"]);
-                assert_eq!(state["tree_version"], expected["tree_version"]);
-                assert_eq!(case["original"]["selected"], expected["selected"]);
-                let raw = constructor["raw_classes"]
-                    .as_array()
-                    .unwrap()
-                    .iter()
-                    .find(|r| r["integerId"] == 7)
-                    .unwrap();
-                assert_eq!(
-                    constructor["raw_classes"]
-                        .as_array()
-                        .unwrap()
-                        .iter()
-                        .filter(|r| r["integerId"] == 7)
-                        .count(),
-                    1
-                );
-                let constructed = constructor["constructed_classes"]
-                    .as_array()
-                    .unwrap()
-                    .iter()
-                    .find(|r| r["id"] == 7)
-                    .unwrap();
-                assert_eq!(
-                    constructor["constructed_classes"]
-                        .as_array()
-                        .unwrap()
-                        .iter()
-                        .filter(|r| r["id"] == 7)
-                        .count(),
-                    1
-                );
-                assert_eq!(
-                    raw["ascendancies"]
-                        .as_array()
-                        .unwrap()
-                        .iter()
-                        .filter(|r| r["internalId"] == "Sorceress3")
-                        .count(),
-                    1
-                );
-                assert_eq!(
-                    constructed["ascendancies"]
-                        .as_array()
-                        .unwrap()
-                        .iter()
-                        .filter(|r| r["index"] == 3)
-                        .count(),
-                    1
-                );
-                assert_eq!(raw["ascendancies"][2], expected["raw"]);
-                assert_eq!(constructed["ascendancies"][3], expected["constructed"]);
-                assert_eq!(
-                    constructor["exact_selected_tree"],
-                    expected["exact_selected_tree"]
-                );
-                assert_eq!(
-                    constructed["classes_alias_ascendancies"],
-                    expected["classes_alias_ascendancies"]
-                );
-            }
-            for field in ["original", "unhooked"] {
-                assert_eq!(report["cases"][4][field], report["cases"][5][field]);
-            }
-        } else {
-            assert_eq!(report["original"], report["repeat"]);
-            for case in ["original", "repeat", "control"] {
-                assert_eq!(report[case]["state"]["selected_root"], v["root_selected"]);
-                assert_eq!(
-                    report[case]["state"]["ascendancies"]
-                        .as_array()
-                        .unwrap()
-                        .iter()
-                        .filter(|r| r["class_id"] == 7 && r["ascendancy_id"] == 3)
-                        .count(),
-                    1
-                );
-                let observed = report[case]["state"]["ascendancies"]
-                    .as_array()
-                    .unwrap()
-                    .iter()
-                    .find(|r| r["class_id"] == 7 && r["ascendancy_id"] == 3)
-                    .unwrap();
-                assert_eq!(observed, &v["root_ascendancy"]);
-            }
-        }
-    }
 }
 
 pub fn check_authored() {
@@ -591,32 +466,6 @@ pub fn check_authored() {
         .collect()
     );
     check_rows(&d, &c);
-    check_vectors(&v, false);
-}
-
-pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
-    check_authored();
-    let a: Value = read("authoring.json");
-    let b: Value = read("bindings.json");
-    let d: Value = read("dependencies.json");
-    let c: Value = read("closure.json");
-    let v: Value = read("source-vectors.json");
-    check_vectors(&v, true);
-    let next = passive_publication::stage_declaration_refinement(prior, &data(), KIND, DOMAIN);
-    let proof = next.receipt().provenance.last().unwrap();
-    assert_eq!(proof.kind.as_str(), KIND);
-    assert_eq!(proof.prior_input, prior.receipt().input);
-    assert_eq!(
-        proof.authoring_input,
-        digest_owned(DOMAIN, &(a, b, d, c.clone(), v), 4 * 1024 * 1024).unwrap()
-    );
-    let expected: DefinitionDescriptor =
-        serde_json::from_value(c["definitions"][0].clone()).unwrap();
-    assert!(next.input().recipe.schema.definitions.contains(&expected));
-    assert_eq!(next.input().recipe.registry, prior.input().recipe.registry);
-    next
-}
-
-pub fn assert_source_from_disk() {
-    check_vectors(&read("source-vectors.json"), true);
+    check_vectors(&v);
+    authenticate_source(&v);
 }

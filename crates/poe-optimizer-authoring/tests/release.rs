@@ -26,12 +26,16 @@ mod local_scaling;
 mod normalization_content;
 #[path = "release/originals.rs"]
 mod originals;
+#[path = "release/root_support_domains.rs"]
+mod root_support_domains;
 #[path = "release/scalar_attributes.rs"]
 mod scalar_attributes;
 #[path = "release/sniper_support_domains.rs"]
 mod sniper_support_domains;
 #[path = "release/source_dependencies.rs"]
 mod source_dependencies;
+#[path = "release/usage_support_domains.rs"]
+mod usage_support_domains;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{
@@ -1687,7 +1691,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     let current_artifacts: BTreeMap<_, _> = release.artifacts().collect();
 
     // Historical IR remains a test reference only. Authenticate the exact new
-    // producer, 69 Boolean channels and eight support-source domains before
+    // producer, 69 Boolean channels and fifteen support-source domains before
     // reconstructing old commitments through maintained APIs.
     let retained = fs::read(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"),
@@ -1815,7 +1819,11 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         .unwrap()
         .providers;
     let prior_domains = &historical.support_discovery.as_ref().unwrap().providers;
-    let additions = sniper_support_domains::declarations();
+    let additions: Vec<_> = sniper_support_domains::declarations()
+        .into_iter()
+        .chain(root_support_domains::declarations())
+        .chain(usage_support_domains::declarations())
+        .collect();
     assert_eq!(domains.len(), prior_domains.len() + additions.len());
     for added in &additions {
         assert!(prior_domains.iter().all(|row| row.owner != added.owner));

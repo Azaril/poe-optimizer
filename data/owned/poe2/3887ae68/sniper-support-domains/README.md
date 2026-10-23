@@ -83,7 +83,8 @@ summoner output was already complete with no programs and remains so. The Gem's
 construction. The separately reviewed export classifies it as an active effect,
 not a support; that does not construct or validate its missing gameplay.
 
-The release still has no executable evaluation bundle. Adding these eight rows
-raises the source-domain inventory to 994 declarations: 965 known domains and
-29 unmapped domains. It supplies no numerical rule, readiness classification,
+The release still has no executable evaluation bundle. At introduction, these
+eight rows raised the inventory to 994 declarations (965 Known, 29 Unmapped);
+the living implementation plan records subsequent additions. This proof supplies
+no numerical rule, readiness classification,
 support eligibility default, complete-build certificate, or result-parity claim.

@@ -677,6 +677,34 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
         SchemaSubject::Definition(DefinitionAddress::Skill(skill("0024"))),
         output("0024", "0025"),
         output("0012", "0015"),
+        SchemaSubject::Definition(DefinitionAddress::Ascendancy(AscendancyDefId::new(
+            ns.clone(),
+            key("0a36"),
+        ))),
+        SchemaSubject::Definition(DefinitionAddress::PassiveNode(PassiveNodeDefId::new(
+            ns.clone(),
+            key("1790"),
+        ))),
+        SchemaSubject::Definition(DefinitionAddress::PassiveNode(PassiveNodeDefId::new(
+            ns.clone(),
+            key("1b5d"),
+        ))),
+        SchemaSubject::Definition(DefinitionAddress::UsagePolicy(UsagePolicyDefId::new(
+            ns.clone(),
+            key("3259"),
+        ))),
+        SchemaSubject::Definition(DefinitionAddress::UsagePolicy(UsagePolicyDefId::new(
+            ns.clone(),
+            key("3267"),
+        ))),
+        SchemaSubject::Definition(DefinitionAddress::UsagePolicy(UsagePolicyDefId::new(
+            ns.clone(),
+            key("326a"),
+        ))),
+        SchemaSubject::Definition(DefinitionAddress::UsagePolicy(UsagePolicyDefId::new(
+            ns.clone(),
+            key("332b"),
+        ))),
     ]
     .into_iter()
     .map(|owner| SupportSourceDomainDeclaration {

@@ -1,5 +1,10 @@
 # Intrinsic named-Ascendancy metadata closure
 
+This is retained historical evidence. The replaced publisher and root test target
+are removed. The maintained Authoring release harness preserves all three
+ordinary laws and authenticates source bytes without Lua execution or local run
+reports. Production publication uses the [maintained manifest](../migration-source/README.md).
+
 This packet closes the seven empty intrinsic declaration inventories and the empty program inventory of Disciple of Varashta (`0a36`). It uses the existing typed declaration-refinement transition. It allocates no definitions and changes no expression, table, receiver, query, mapping, import policy, class relation or implicit-root relation.
 
 The predecessor is Warrior correspondence publication07 (`9299c4298a416886e4d4c748ff249f4633270cb8b6716e280d7cd77e535d9367`). The exact source identity is class7, ascendancy3, `Sorceress3`, named `Disciple of Varashta`; the constructor adds start node8305, already represented by the separate complete passive owner `1b5d`.
@@ -15,8 +20,5 @@ Ordinary tests authenticate the authored packet and refuse unknown metadata fiel
 Publication01 and retained-source authentication pass in 26.62s. Its input is `37e12592a376ea2d79a190678a3691760f701cf9d0fb3ab270b8024579b141fa`, with 167 provenance rows, no allocated definitions and no evaluation bundle. The final three ordinary tests and separate source-authentication rerun pass; strict all-feature Clippy passes. The shared passive path also reproduces its previous eighteen-file publication exactly, and the joined Sniper replay remains byte-identical. Complete native originals remain **0/5**. See the [implementation checkpoint](../../../../../docs/implementation.md) for exact logs and the next dependency.
 
 ```powershell
-cargo test --locked --all-features --test owned_ascendancy_owner_closure
-$env:POE_OPTIMIZER_TEST_ASCENDANCY_OWNER_PRIOR = 'runs/owned-warrior-correspondence-publication-07/package'
-$env:POE_OPTIMIZER_TEST_ASCENDANCY_OWNER_OUTPUT = 'runs/owned-ascendancy-owner-publication-01'
-cargo test --locked --all-features --test owned_ascendancy_owner_closure -- --ignored --nocapture
+cargo test --locked -p poe-optimizer-authoring --test release root_support_domains
 ```

@@ -620,11 +620,20 @@ retained only in Authoring's
 [`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz).
 Its historical receipt
 authenticates the archived bytes. Tests remove only the exact admitted 69-Stat,
-one-program and eight support-domain additions, restore the archived program
+one-program and fifteen support-domain additions, restore the archived program
 members, and reconstruct the original dependency bindings with maintained content
 constructors. The existing
 assembler then checks every historical artifact and provenance field. A separate
 corpus gate preserves original graph semantics and owner/program placement.
+
+Intrinsic support-source absence is an explicit reviewed declaration, separate
+from numerical completeness and inherited or externally supplied sources. Proof
+families may authenticate full source constructors or inspect complete checked
+owned programs and declarations. Neither an empty selected list nor an incomplete
+program inventory proves absence. Move reusable proof laws into the maintained
+release harness and remove their replaced publication paths at each cutover.
+Historical proof packets retain their own coverage state; current owners may
+have independently advanced without changing that historical evidence.
 
 This representation change adds no evaluation bundle or numerical coverage;
 0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust

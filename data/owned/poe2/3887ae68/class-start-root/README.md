@@ -1,5 +1,10 @@
 # Default shared Class start root
 
+This is retained historical evidence. The replaced publication helper and root
+test target are removed. Current source authentication and corruption laws run
+with `cargo test --locked -p poe-optimizer-authoring --test release root_support_domains`.
+Production publication uses the [maintained manifest](../migration-source/README.md).
+
 This packet refines only the default passive root `1790` (source node `54447`), shared by Witch and Sorceress. It adds no definitions or numerical programs. Its seven intrinsic declaration inventories and empty default program inventory are supported by original-constructor evidence. The predecessor is `runs/owned-attribute-count-01/package`, input `fffc60b6e9e7754b7cf394fcead94bb9c8db4f2dfc9c788acf68e5798e621275`.
 
 The Class owners, universal Player initialization, neighboring-node connection modifiers, external radius transformations, topology, pool semantics and complete-build coverage remain independent. A source label `Tree:54447` alone does not establish root ownership of a modifier.
@@ -16,4 +21,7 @@ The existing pure passive-refinement publisher enforces the exact whole-recipe c
 
 All three authored tests passed in 0.01 seconds. Publication passed in 25.70 seconds at `runs/owned-class-start-root-01/package`, input `efa964b8de7b98ab09007b3a616dc1239eb72dbab9bf1abab20e2b7ba8060ba6`, definitions release `pob-3887ae68-class-start-root-v1`. Its eighteen files total 61,301,920 bytes with 122 provenance rows and rebuild byte-identically. All five drafts, sidecars, selections and 110 queries are preserved. Selected unresolved issues remain 106/117/109/122/5; no input issues retire, no evaluation bundle is added, and complete native builds remain 0/5. See `runs/owned-class-start-root-01/validation.json` for the exact publication checks.
 
-Compile `owned_class_start_root` with `--no-run`, then use its exact executable. The ignored publication test is `publish_default_start_root_preserving_all_five_originals`; set `POE_OPTIMIZER_TEST_CLASS_START_ROOT_PRIOR` to the predecessor and `POE_OPTIMIZER_TEST_CLASS_START_ROOT_OUTPUT` to a fresh directory. The three ordinary authored tests also reject hidden modifier records, declaration fields, topology changes and Class promotion. The source test remains optional in `poe-optimizer-pob`.
+The three ordinary authored laws still reject hidden modifier records, declaration
+fields, topology changes and Class promotion in the maintained harness. They
+authenticate committed evidence and full pinned source bytes without local run
+reports. A fresh source execution remains optional in `poe-optimizer-pob`.

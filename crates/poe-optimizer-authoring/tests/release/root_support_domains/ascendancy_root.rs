@@ -1,35 +1,18 @@
-//! Bounded default Ascendancy-root closure using the existing root evidence and
-//! passive-refinement publisher. Other owners and transformations stay separate.
-use super::{family, passive_publication};
-use poe_optimizer_core::{owned_content::digest_owned, owned_schema::DefinitionDescriptor};
-use poe_optimizer_import::owned_release::StagedOwnedRelease;
+//! Archived constructor evidence and corruption laws; no publication or VM execution.
+use super::{FIELDS, hash, root};
 use serde::de::DeserializeOwned;
 use serde_json::{Value, json};
-use sha2::{Digest, Sha256};
 use std::{collections::BTreeSet, fs, path::PathBuf};
 
-pub const KIND: &str = "ascendancy-start-root-default-inventory";
-const DOMAIN: &str = "owned-ascendancy-start-root-v1";
+use super::family;
 const ROOT: &str = "def.0000000000001b5d";
-const FIELDS: [&str; 7] = [
-    "parameters",
-    "choices",
-    "grants",
-    "actors",
-    "skill_grants",
-    "outputs",
-    "sockets",
-];
+
 pub fn data() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("data/owned/poe2/3887ae68/ascendancy-start-root")
+    root().join("data/owned/poe2/3887ae68/ascendancy-start-root")
 }
 pub fn read<T: DeserializeOwned>(name: &str) -> T {
     serde_json::from_slice(&fs::read(data().join(name)).unwrap()).unwrap()
 }
-fn hash(bytes: &[u8]) -> String {
-    format!("{:x}", Sha256::digest(bytes))
-}
-
 pub fn check_rows(d: &Value, c: &Value) {
     assert_eq!(d["definitions"].as_array().unwrap().len(), 1);
     assert_eq!(d["owners"].as_array().unwrap().len(), 1);
@@ -91,8 +74,8 @@ pub fn check_rows(d: &Value, c: &Value) {
     );
 }
 
-pub fn check_vectors(a: &Value, v: &Value, authenticate: bool) {
-    family::check_root_vectors(a, v, authenticate, true);
+pub fn check_vectors(a: &Value, v: &Value) {
+    family::check_root_vectors(a, v, true);
     assert_eq!(v["metadata"]["source_root"], 8305);
     let projection = &v["projection"];
     // Every source/constructed field has an explicit reviewed disposition. A new
@@ -223,7 +206,8 @@ pub fn check_authored() {
         .collect()
     );
     check_rows(&d, &c);
-    check_vectors(&a, &v, false);
+    check_vectors(&a, &v);
+    family::authenticate_source(&a, &v, true);
     let source_ids: BTreeSet<_> = v["projection"]["constructed"]["fields"]["linkedId"]
         .as_array()
         .unwrap()
@@ -260,28 +244,4 @@ pub fn check_authored() {
         d["tree_tokens"],
         json!([{"token":"8305","role":{"kind":"implicit_root","value":{"node":b["node"]}}}])
     );
-}
-
-pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
-    check_authored();
-    let a: Value = read("authoring.json");
-    let b: Value = read("bindings.json");
-    let d: Value = read("dependencies.json");
-    let c: Value = read("closure.json");
-    let v: Value = read("source-vectors.json");
-    check_vectors(&a, &v, true);
-    let next = passive_publication::stage_refinement(prior, &data(), KIND, DOMAIN);
-    let proof = next.receipt().provenance.last().unwrap();
-    assert_eq!(proof.kind.as_str(), KIND);
-    assert_eq!(proof.prior_input, prior.receipt().input);
-    assert_eq!(
-        proof.authoring_input,
-        digest_owned(DOMAIN, &(a, b, d, c.clone(), v), 4 * 1024 * 1024).unwrap()
-    );
-    for row in c["definitions"].as_array().unwrap() {
-        let expected: DefinitionDescriptor = serde_json::from_value(row.clone()).unwrap();
-        assert!(next.input().recipe.schema.definitions.contains(&expected));
-    }
-    assert_eq!(next.input().recipe.registry, prior.input().recipe.registry);
-    next
 }

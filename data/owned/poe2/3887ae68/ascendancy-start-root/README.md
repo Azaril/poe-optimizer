@@ -1,5 +1,10 @@
 # Default Ascendancy root inventory
 
+This is retained historical evidence. The replaced publication helper and root
+test target are removed. Current source authentication and corruption laws run
+with `cargo test --locked -p poe-optimizer-authoring --test release root_support_domains`.
+Production publication uses the [maintained manifest](../migration-source/README.md).
+
 This packet closes only the intrinsic, stat-free default inventory of source
 node `8305`, owned passive `1b5d`. It adds no definitions, programs or receivers.
 The seven empty declaration inventories and empty default rule inventory become
@@ -36,10 +41,10 @@ code. Together both roots pass twelve full loads in 23.68 seconds.
 
 The compact committed projection is authenticated to both reports. Reviewed raw
 and constructed field dispositions reject unknown fields; selected ModList,
-declaration, root-identity and topology mutations also reject. The existing
-passive-refinement publisher checks the exact predecessor, complete inverse and
-all-five import/query preservation. New ordinary tests share the existing
-`owned_class_start_root` target and root evidence validator.
+declaration, root-identity and topology mutations also reject. The historical
+passive-refinement publisher checked the exact predecessor, complete inverse and
+all-five import/query preservation. The laws now run in the maintained Authoring
+release target with the shared root evidence validator.
 
 ## Reproduction
 
@@ -59,13 +64,10 @@ Use fresh output paths, the pinned source and serial Cargo execution:
 ```powershell
 $env:POE_OPTIMIZER_TEST_IMPLICIT_CLASS_START_SOURCE_OUT = 'runs/owned-implicit-roots-source-fresh'
 cargo test --locked -p poe-optimizer-pob --test owned_implicit_class_start_source actual_implicit_class_start_preserves_default_inventory_and_shared_root -- --ignored --exact --nocapture
-cargo test --locked -p poe-optimizer-cli --test owned_class_start_root
-$env:POE_OPTIMIZER_TEST_ASCENDANCY_START_ROOT_PRIOR = 'runs/owned-mana-override-publication-01/package'
-$env:POE_OPTIMIZER_TEST_ASCENDANCY_START_ROOT_OUTPUT = 'runs/owned-ascendancy-start-root-publication-fresh'
-cargo test --locked -p poe-optimizer-cli --test owned_class_start_root publish_default_ascendancy_root_preserving_all_five_originals -- --ignored --exact --nocapture
+cargo test --locked -p poe-optimizer-authoring --test release root_support_domains
 ```
 
-Publication authenticates the exact reviewed source-report paths recorded in
-`source-vectors.json`. A deliberately refreshed source run requires review and
-updated report/observer/driver hashes before publication; a fresh run is not
-silently substituted for the retained evidence.
+The maintained harness authenticates the committed projection and pinned source
+bytes without reading historical report paths. A deliberately refreshed source
+run requires review and updated report/observer/driver hashes; a fresh run is not
+silently substituted for retained evidence.

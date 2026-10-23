@@ -6,7 +6,8 @@ evidence only; Cargo does not compile this directory, and no application path
 loads its Lua file.
 
 The original packet hashes and provenance remain unchanged. Its evidence checker
-in `tests/support/owned_class_start_root.rs` resolves the original observer and
+in `crates/poe-optimizer-authoring/tests/release/root_support_domains/class_root.rs`
+resolves the original observer and
 driver pins to these files explicitly, with no fallback to the current witness.
 The original report metadata pins the source contents, not their disk locations.
 

@@ -1,23 +1,5 @@
-//! Default root inventory closure is distinct from Class mechanics and whole-build coverage.
-#[path = "support/owned_ascendancy_start_root.rs"]
-mod ascendancy_family;
-#[path = "support/owned_class_start_root.rs"]
-mod family;
-#[path = "support/owned_release_migration_preservation.rs"]
-mod migration_preservation;
-#[path = "support/owned_passive_refinement_publication.rs"]
-mod passive_publication;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_support_delivery_publication.rs"]
-mod publication;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[path = "support/owned_selected_request.rs"]
-mod selected;
+use super::{ascendancy, ascendancy_family, family};
 use serde_json::{Value, json};
-use std::path::PathBuf;
 
 #[test]
 fn default_start_root_has_complete_source_inventory_and_no_class_promotion() {
@@ -66,7 +48,7 @@ fn empty_default_proof_rejects_extra_effects_or_declarations() {
                 .push(json!({"key":"grantedSkills","reason":"render_geometry"})),
             _ => unreachable!(),
         }
-        assert!(std::panic::catch_unwind(|| family::check_vectors(&a, &changed, false)).is_err());
+        assert!(std::panic::catch_unwind(|| family::check_vectors(&a, &changed)).is_err());
     }
 }
 
@@ -121,63 +103,60 @@ fn ascendancy_root_proof_rejects_unknown_fields_and_changed_selected_modifiers()
             _ => unreachable!(),
         }
         assert!(
-            std::panic::catch_unwind(|| ascendancy_family::check_vectors(&a, &changed, false))
-                .is_err()
+            std::panic::catch_unwind(|| ascendancy_family::check_vectors(&a, &changed)).is_err()
         );
     }
 }
 
 #[test]
-#[ignore = "requires ASCENDANCY_START_ROOT_PRIOR, fresh OUTPUT and passed original-constructor reports"]
-fn publish_default_ascendancy_root_preserving_all_five_originals() {
-    publication::run_with_item_parameter_completions_and_counts(
-        PathBuf::from(
-            std::env::var_os("POE_OPTIMIZER_TEST_ASCENDANCY_START_ROOT_PRIOR")
-                .expect("checked predecessor"),
-        ),
-        PathBuf::from(
-            std::env::var_os("POE_OPTIMIZER_TEST_ASCENDANCY_START_ROOT_OUTPUT")
-                .expect("fresh output"),
-        ),
-        &ascendancy_family::data(),
-        &[],
-        &["source-vectors.json"],
-        ascendancy_family::stage,
-        publication::PublicationScope {
-            closed_existing_rule_owners: 1,
-            passive_refinement: true,
-            extra: json!({"new_definitions":0,"new_programs":0,"closed_intrinsic_declaration_inventories":7,
-                "class_rule_coverage_preserved":true,"ascendancy_rule_coverage_preserved":true,
-                "default_root_only":true,"universal_player_initialization_closed":false,"external_transformations_closed":false}),
-        },
-        &[],
-        [107, 117, 109, 123, 4],
-    );
+fn authored_metadata_closure_preserves_seventeen_independent_owners() {
+    ascendancy::check_authored();
 }
 
 #[test]
-#[ignore = "requires CLASS_START_ROOT_PRIOR, fresh OUTPUT and passed original-constructor reports"]
-fn publish_default_start_root_preserving_all_five_originals() {
-    publication::run_with_scope(
-        PathBuf::from(
-            std::env::var_os("POE_OPTIMIZER_TEST_CLASS_START_ROOT_PRIOR")
-                .expect("checked predecessor"),
-        ),
-        PathBuf::from(
-            std::env::var_os("POE_OPTIMIZER_TEST_CLASS_START_ROOT_OUTPUT").expect("fresh output"),
-        ),
-        &family::data(),
-        &[],
-        &["source-vectors.json"],
-        family::stage,
-        publication::PublicationScope {
-            closed_existing_rule_owners: 1,
-            passive_refinement: true,
-            extra: json!({
-                "new_definitions":0,"new_programs":0,"closed_intrinsic_declaration_inventories":7,
-                "class_rule_coverage_preserved":true,"default_root_only":true,
-                "universal_player_initialization_closed":false,"external_transformations_closed":false
-            }),
-        },
-    );
+fn metadata_inventory_rejects_unknown_empty_fields_and_changed_source_relations() {
+    let original: Value = ascendancy::read("source-vectors.json");
+    for edit in 0..9 {
+        let mut changed = original.clone();
+        match edit {
+            0 => changed["projections"][0]["raw"]["stats"] = json!([]),
+            1 => changed["projections"][0]["constructed"]["fields"]["grantedSkills"] = json!({}),
+            2 => changed["projections"][0]["raw"]["replace"] = Value::Null,
+            3 => changed["projections"][0]["raw_class_id"] = json!(1),
+            4 => changed["projections"][0]["constructed"]["index"] = json!(2),
+            5 => changed["projections"][0]["raw"]["internalId"] = json!("Sorceress2"),
+            6 => changed["projections"][0]["constructed"]["fields"]["startNodeId"] = json!(54447),
+            7 => changed["root_ascendancy"]["same_root"] = json!(false),
+            8 => changed["projections"][0]["evidence"]["original_constructor"] = json!(false),
+            _ => unreachable!(),
+        }
+        assert!(std::panic::catch_unwind(|| ascendancy::check_vectors(&changed)).is_err());
+    }
+}
+
+#[test]
+fn closure_cannot_hide_new_members_or_promote_class_player_and_passives() {
+    let original_d: Value = ascendancy::read("dependencies.json");
+    let original_c: Value = ascendancy::read("closure.json");
+    for edit in 0..7 {
+        let mut d = original_d.clone();
+        let mut c = original_c.clone();
+        match edit {
+            0 => {
+                c["definitions"][0]["value"]["schema"]["value"]["declarations"]["grants"]["members"] =
+                    json!(["unknown"])
+            }
+            1 => c["owners"][0]["programs"]["members"] = json!(["unknown"]),
+            2 => c["definitions"][0]["value"]["schema"]["value"]["classes"]["members"] = json!([]),
+            3 => {
+                c["definitions"][0]["value"]["schema"]["value"]["implicit_passives"]["members"] =
+                    json!([])
+            }
+            4 => d["action_owners"][0]["programs"]["closure"] = json!({"kind":"complete"}),
+            5 => d["action_owners"][1]["programs"]["closure"] = json!({"kind":"complete"}),
+            6 => d["action_owners"][4]["programs"]["closure"] = json!({"kind":"complete"}),
+            _ => unreachable!(),
+        }
+        assert!(std::panic::catch_unwind(|| ascendancy::check_rows(&d, &c)).is_err());
+    }
 }
