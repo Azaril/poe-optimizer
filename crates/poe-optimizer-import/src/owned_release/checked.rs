@@ -1,5 +1,5 @@
 //! Shared constituent validation, without authoring or publication buffers.
-use super::constituents::CheckedImportConstituents;
+use super::constituents::{CheckedImportConstituents, CheckedNormalizationPolicy};
 use super::*;
 use crate::owned_recipe::{CheckedOwnedRecipe, OwnedRecipeView};
 
@@ -50,7 +50,7 @@ pub struct CheckedOwnedRelease {
     recipe: CheckedOwnedRecipe,
     mapping: OwnedMappingIndex,
     roles: OwnedSkillRoleIndex,
-    normalization: NormalizationPolicy,
+    normalization: CheckedNormalizationPolicy,
     rewards: OwnedRewardPolicy,
     items: OwnedItemLinePolicy,
     item_source: ItemSourceLayoutPolicy,
@@ -95,7 +95,7 @@ impl CheckedOwnedRelease {
             recipe: recipe.view(),
             mapping: mapping.input(),
             roles: roles.input(),
-            normalization: input.normalization,
+            normalization: normalization.input(),
             rewards: rewards.input(),
             items: items.input(),
             item_source: item_source.input(),
@@ -115,7 +115,7 @@ impl CheckedOwnedRelease {
             routing: *recipe.routing().identity(),
             mapping: *mapping.identity(),
             roles: *roles.identity(),
-            normalization,
+            normalization: *normalization.identity(),
             rewards: *rewards.identity(),
             items: *items.identity(),
             item_source: *item_source.identity(),
@@ -135,7 +135,7 @@ impl CheckedOwnedRelease {
             recipe,
             mapping,
             roles,
-            normalization: input.normalization.clone(),
+            normalization,
             rewards,
             items,
             item_source,
@@ -156,7 +156,7 @@ impl CheckedOwnedRelease {
         &self.roles
     }
     pub fn normalization(&self) -> &NormalizationPolicy {
-        &self.normalization
+        self.normalization.input()
     }
     pub fn rewards(&self) -> &OwnedRewardPolicy {
         &self.rewards
@@ -190,7 +190,7 @@ impl OwnedReleaseInput {
             recipe: release.recipe.view().to_input(),
             mapping: release.mapping.input().clone(),
             roles: release.roles.input().clone(),
-            normalization: release.normalization.clone(),
+            normalization: release.normalization.input().clone(),
             rewards: release.rewards.input().clone(),
             items: release.items.input().clone(),
             item_source: release.item_source.input().clone(),

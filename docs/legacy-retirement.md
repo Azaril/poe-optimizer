@@ -24,6 +24,11 @@ Item-metadata preamble laws now run against the same cached release; the old
 `check_preamble_cases`, its caller and private source helpers are removed.
 `metadata_only` and original-build/publication assertions still have live consumers.
 
+Maintained Authoring does not use the historical release revision/migration
+compilers. Construct normalization content in the maintained source builder;
+do not retrofit those old compilers with the new content APIs. Transfer their
+remaining relevant laws, then delete their dependency-repair helpers and callers.
+
 Do not let a refactor turn unresolved semantics into default values or complete
 coverage. Delete unsupported abandoned features honestly; preserve a precise
 unsupported diagnostic when the feature is needed by an actual build.

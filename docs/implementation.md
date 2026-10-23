@@ -15,7 +15,8 @@ The first complete unchanged build must use the new format and sole native path.
 Legacy deletion is a gate before that milestone, not work deferred until five builds.
 The computed-support unused-input repair, immutable typed Stat declaration compiler,
 original-source dependency validation and five Import content constructors under
-R2 are implemented. Aggregate evaluation preflight accounting is repaired.
+R2 are implemented. Aggregate evaluation preflight accounting is repaired; the
+validated normalization policy and its digest now share one private checked owner.
 Continue independent harness retirement while
 integrating declarations with maintained release publication and completing the
 current release's real execution declarations. Do not add a new provenance API
@@ -23,7 +24,7 @@ for dormant support flags.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; current checkpoint repairs nested budgets, adds Import content construction and transfers metadata laws |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; current checkpoint retains normalization in one private checked owner |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -33,7 +34,7 @@ for dormant support flags.
 | DSL / KDL / binary pack | Every retained program now comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Exact graph/placement and historical non-program preservation gates pass; named-registry filesystem CAS, declaration publication/remaining descriptor kinds and binary pack remain pending |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Node renaming changes rule/input identity; other emitted constituents remain byte-exact. No local predecessor needed; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 04:56:49–50 UTC on October 23, baseline `ae90ec82` run `39857163789` had completed successfully with all twenty jobs passing. `a7069aa1` run `39889225006` had twelve successful jobs, six running, no failures; remaining were Ubuntu CLI-1, four Windows CLI shards and Windows PoB. `8fd6ab5c` run `39900272607` was pending with no jobs created. Each checkpoint needs its own hosted result; baseline success does not certify later commits |
+| CI | At 05:07:26 UTC on October 23, baseline `ae90ec82` run `39857163789` had completed successfully with all twenty jobs passing. `a7069aa1` run `39889225006` had thirteen successful jobs, five running, no failures; remaining were Ubuntu CLI-1, Windows CLI-0/1/2 and Windows PoB. `22899910` run `39903313363` was pending; earlier pending `8fd6ab5c`/`dde32fef`/`1a88f37c` revisions were cancelled. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release`
@@ -1020,19 +1021,32 @@ historical source pins, catalogs, `mapping_source` and configuration source-cens
 identities as evidence; they are not current schema seals to refresh.
 Extract content from an original checked owner, or validate original dependencies
 before consuming the policy; normalization has no standalone checked package
-today, so a raw seal-stripping helper is unsafe. Replace the normalization segment
-of `owned_release_revision::rebind_release_dependencies`, its eight exported
-normalization rebind helpers and nested `owned_source_actions::rebind_input` as one
-coherent slice. A leaf SourceAction constructor alone cannot retire callers that
-already discarded original seals after schema mutation. Test unchanged identities,
-appended Stats, stale nested seals, absent tree, optional/Unconverted preservation,
+with public extraction today, so a raw seal-stripping helper is unsafe. Construct
+the connected normalization subgraph in the maintained source builder. Its
+historical replacement targets are the normalization segment of
+`owned_release_revision::rebind_release_dependencies`, eight exported normalization
+rebind helpers and nested `owned_source_actions::rebind_input`. These are retirement
+targets, not callers to retrofit with the new content API. Maintained Authoring
+does not invoke revision/migration; transfer their remaining relevant laws into
+the maintained harness, then delete the obsolete callers and helpers. This gate
+includes historical modes in `src/owned_release_cli.rs`, root CLI tests and their
+succession helpers, not only Import's own tests. A constructor alone cannot claim
+the repair chain retired. A leaf-only
+SourceAction constructor would leave the same repair authority and a temporary
+parallel path. Test unchanged identities, appended Stats, stale nested seals,
+absent tree, optional/Unconverted preservation,
 pending coverage and bounded transactional failure before removing those helpers.
 
-The next structural step is to retain the checked normalization policy as an
-owning package, reusing `NormalizationArtifacts` and the existing validators.
-Current release readers store its raw policy and computed digest separately.
-Move those into the checked owner without changing validation order or coverage,
-then consume that owner to extract content. The source compiler should retain its
+The checked normalization policy now has a private owning package in the existing
+constituent-validation pipeline. Its policy and digest are kept together only after
+all existing dependency checks succeed; release readers and staged accessors use
+that owner. Validation order, wire formats and coverage are unchanged. No second
+standalone validator or public constructor was added. Next consume this owner to
+extract content, reusing existing dependency inputs where applicable. Use one
+normalization-content aggregate, keeping dependency-bearing leaf types with their
+current modules and reusing seal-free DTOs; avoid another interpretation or policy
+implementation. Do not hide a raw sealed policy remainder or default dependency
+fields inside that content representation. The source compiler should retain its
 actual checked Import constituents rather than discard them and revalidate them
 solely for extraction. Such a source result certifies only its checked Import
 dependencies; it must not imply checked rule programs or evaluation authority.
@@ -1089,7 +1103,7 @@ pass. Independent review found no issue in shared validation or the transferred
 laws. The nine protected incoming-critical files remain unchanged. This checkpoint
 does not change current release identity, coverage or the **0/5** original count.
 
-**Content binding and metadata checkpoint:** the five component constructors
+**Content binding and metadata checkpoint (`22899910`):** the five component constructors
 reproduce unchanged current artifact identities and revalidate after an immutable,
 symbolically allocated Boolean Stat append. Tests preserve source provenance,
 compiler receipts, pending evidence and semantic content; corrupt members,
@@ -1118,6 +1132,32 @@ or transferred metadata laws. The nine protected incoming-critical files still
 match their recorded hashes. Release identity, coverage and the **0/5** original
 count are unchanged. Normalization construction remains the next implementation
 step; filesystem declaration publication still awaits the recorded workflow choice.
+
+**Checked normalization ownership checkpoint:** the existing constituent pipeline
+now constructs `CheckedNormalizationPolicy` after passive-socket placement checks.
+The runtime reader moves this owner into `CheckedOwnedRelease`; canonical hashing,
+receipts, authored-input reconstruction and staged accessors read the same stored
+policy. The runtime path retains its existing single policy clone. Source-only
+validation adds one clone after its existing aggregate and policy-byte bounds,
+and still returns only a schema; it does not gain evaluation authority. Independent
+review found no validation-order, identity or coverage change. Strict all-target
+Authoring/Import Clippy passes (`runs/normalization-owner-clippy.log`). All **19
+focused Import release tests pass**, with none ignored; compilation took 8m07s
+and execution 1.61s (`runs/normalization-owner-import-tests.log`). All **six focused
+Authoring source-dependency tests pass**, with none ignored; compilation took
+7m15s and execution 4.97s (`runs/normalization-owner-authoring-tests.log`). The
+follow-up therefore passes **25 focused regression checks** plus strict lint.
+Scoped formatting, diff checks and the nine protected-file hashes also pass.
+No release identity, serialized data or original-build coverage changed. This is
+the storage prerequisite for content extraction, not completion of that migration.
+
+CI follow-up: the remaining jobs above were inside four CLI two-feature-profile
+test steps and Windows PoB tests for about 163 minutes. Each CLI step compiles and
+tests both profiles serially; public step metadata does not identify its current
+subphase or establish ongoing log progress. Windows CLI-3 completed at 05:04:43 UTC,
+so the snapshot does not indicate a workflow-wide hang. Keep the existing R0 work
+on shared fixtures, test-binary reduction, CLI/PoB consolidation and partitioning;
+no workflow or concurrency change is justified solely by that snapshot.
 
 The [support target facts investigation](owned-support-target-facts-proposal.md)
 also records a deferred recommendation for narrow structural source reads, which

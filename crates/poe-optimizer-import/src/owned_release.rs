@@ -287,7 +287,7 @@ impl StagedOwnedRelease {
         self.checked.roles()
     }
     pub fn normalization(&self) -> &NormalizationPolicy {
-        &self.input.normalization
+        self.checked.normalization()
     }
     pub fn rewards(&self) -> &OwnedRewardPolicy {
         self.checked.rewards()

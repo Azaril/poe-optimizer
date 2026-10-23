@@ -4,10 +4,28 @@ use super::*;
 use crate::owned_mapping::OwnedIdRegistrySnapshot;
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 
+/// Own the exact policy only after every constituent-dependent check succeeds.
+/// Construction stays private to this module's validation pipeline; retaining
+/// the policy and its digest grants no rule or complete-build coverage.
+pub(super) struct CheckedNormalizationPolicy {
+    input: NormalizationPolicy,
+    identity: OwnedContentDigest,
+}
+
+impl CheckedNormalizationPolicy {
+    pub(super) fn input(&self) -> &NormalizationPolicy {
+        &self.input
+    }
+
+    pub(super) fn identity(&self) -> &OwnedContentDigest {
+        &self.identity
+    }
+}
+
 pub(super) struct CheckedImportConstituents {
     pub(super) mapping: OwnedMappingIndex,
     pub(super) roles: OwnedSkillRoleIndex,
-    pub(super) normalization: OwnedContentDigest,
+    pub(super) normalization: CheckedNormalizationPolicy,
     pub(super) rewards: OwnedRewardPolicy,
     pub(super) items: OwnedItemLinePolicy,
     pub(super) item_source: ItemSourceLayoutPolicy,
@@ -104,7 +122,10 @@ impl CheckedImportConstituents {
         Ok(Self {
             mapping,
             roles,
-            normalization,
+            normalization: CheckedNormalizationPolicy {
+                input: input.normalization.clone(),
+                identity: normalization,
+            },
             rewards,
             items,
             item_source,

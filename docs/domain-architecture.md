@@ -372,6 +372,13 @@ without another clone. Current item construction rejects implicit upgrades from
 older numerical or attribution contracts. Raw sealed runtime artifacts are not
 accepted as authored content and remain subject to strict binding validation.
 
+The shared constituent pipeline retains normalization as one private checked owner:
+the exact immutable policy plus its existing digest. It constructs that owner only
+after all dependent checks, including passive-socket placement, succeed. Runtime
+hashing, receipts and public policy access use this same storage. This adds no
+standalone validator, public authority or wire format; subsequent content extraction
+must consume this checked storage rather than strip seals from arbitrary input.
+
 This is a component construction seam. Normalization's nested commitments and
 evaluation content still require owner-local construction before the maintained
 release compiler can publish a declaration append. Neither component success nor
