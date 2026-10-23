@@ -104,26 +104,22 @@ Optional `stat-declarations "definitions.kdl" names="declaration-names.kdl"`
 entries in a release manifest stage typed Stats through the stable name allocator
 before packet lowering; declaration aliases stay separate from packet aliases.
 
-Reproduce the fixed first-allocation source revision into a new directory with:
+First reproduce the fixed allocation checkpoint using the
+[canonical genesis reference](data/owned/poe2/3887ae68/authoring-genesis.md).
+Then build current source into a fresh directory:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output rebuilt-checkpoint
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109 --output rebuilt-checkpoint
 ```
 
 The output contains `checkpoint.json`, `names.json` and the closed `runtime/`
 release directory. Pass `rebuilt-checkpoint/runtime` to runtime consumers.
 The command writes the checkpoint receipt to stdout and prints its checkpoint
-identity on stderr. Use that identity to continue allocation history explicitly:
-
-```powershell
-$checkpointIdentity = "<checkpoint identity printed by the previous build>"
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor rebuilt-checkpoint --expected-predecessor $checkpointIdentity --output next-checkpoint
-```
+identity on stderr. Later checkpoints can be selected explicitly with their
+reported identity; predecessor selection is never implicit.
 
 The first declaration checkpoint contains 69 generic Skill Boolean Stats and
-Sniper's initial-type producer. The plan records its checkpoint digest; pin its
-Git source revision immediately after the source commit, outside the compiled
-inventory. Use that fixed genesis as the
+Sniper's initial-type producer. Use that fixed genesis as the
 checked predecessor for later source builds; do not bootstrap evolving sources.
 Before another allocation generation requires a newer predecessor, the plan
 requires distributing a complete checked snapshot rather than replaying history.

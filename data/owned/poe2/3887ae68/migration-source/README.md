@@ -1,20 +1,21 @@
 # Tracked rule source and remaining metadata bootstrap
 
 `release.kdl` is the sole production source manifest for the retained release.
-It lists every input explicitly, relative to this directory. Build into a fresh
-output directory with:
+It lists every input explicitly, relative to this directory. First reproduce the
+allocation predecessor using the [canonical reference](../authoring-genesis.md),
+then build into a fresh output directory:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output rebuilt-release
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109 --output rebuilt-release
 ```
 
-This bootstrap command reproduces the first 69-name allocation genesis at its
-fixed source revision. Later source builds must use that checked checkpoint with
+Bootstrap reproduces the first 69-name allocation genesis only at its fixed
+source revision. Later source builds use that checked checkpoint with
 `--predecessor` and `--expected-predecessor`; do not bootstrap evolving sources.
 The output contains `checkpoint.json`, `names.json` and `runtime/`. Runtime
-consumers receive `rebuilt-release/runtime`. The canonical source revision and
-checkpoint digest are recorded outside this compiled inventory after the source
-commit; local `runs/` outputs are only verification evidence.
+consumers receive `rebuilt-release/runtime`. The [canonical reference](../authoring-genesis.md)
+records the source revision, checkpoint digest and clean-clone commands outside
+this compiled inventory; local `runs/` outputs are only verification evidence.
 
 Rule programs live in the declared `.rule` files. KDL packets bind each program
 to its exact definition or declared slot and preserve membership order. The

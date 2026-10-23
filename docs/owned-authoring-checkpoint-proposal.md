@@ -77,8 +77,12 @@ verification evidence, not that genesis. Record the exact Git source revision,
 manifest path and expected checkpoint identity in a maintained reference outside
 the compiled manifest's source inventory. Record those values after the validated
 content commit, in a follow-up reference/documentation commit; the manifest must
-not refer to its own future Git commit or checkpoint identity. The exact reference
-is pending validation and publication of the first declaration slice.
+not refer to its own future Git commit or checkpoint identity. The
+[canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md) now pins source
+revision `caca40a55885e5c8612e7d9b47c1691f8ea321a9` and checkpoint
+`e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109`.
+An archive of that committed source reproduced the digest, then passed normal
+checked predecessor loading and retained all name/runtime bytes.
 
 A clean clone reproduces genesis by obtaining that fixed source revision and
 running the maintained compiler with explicit `--bootstrap` against its manifest.

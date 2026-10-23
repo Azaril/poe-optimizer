@@ -39,7 +39,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; current checkpoint adds the first production declarations |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; current checkpoint pins and verifies their canonical source reference |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -52,10 +52,11 @@ silently become a second supported implementation.
 | CI | At 15:59:48 UTC on October 23, `509f2008` run `39979772636` remained pending with no created jobs or failures. The earlier 15:24:38 snapshot of `96e5533e` run `39962517895` had nine of eighteen created jobs passing and nine running, with no failures. `f5e5f49d` run `39966836052` was cancelled before any job started. Baselines `a7069aa1` and `ae90ec82` completed all twenty jobs successfully. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
-Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output rebuilt-release`
+First reproduce the allocation predecessor using the
+[canonical genesis reference](../data/owned/poe2/3887ae68/authoring-genesis.md), then use
+`cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109 --output rebuilt-release`
 with a fresh output directory; runtime consumers use `rebuilt-release/runtime`.
-Resume allocation with `--predecessor <checkpoint> --expected-predecessor <identity>`
-instead of `--bootstrap`. Successful publication prints the checkpoint identity to
+Successful publication prints the checkpoint identity to
 stderr and receipt JSON to stdout. Bootstrap reproduces the fixed first-allocation
 source revision only; later builds must preserve its ledger as a checked
 predecessor. Current runtime input identity:
@@ -993,9 +994,9 @@ owner coverage remains Partial. Independent controls distinguish own Attack=fals
 minion Attack=true and own Physical=true from minion Physical=false. Exact repeated
 Skill recipients and missing-producer plan controls belong with the upcoming actual
 execution bundle; the current slice does not construct a parallel fixture bundle.
-Pin the validated first
-source revision and checkpoint digest in a follow-up reference commit, outside
-the compiled inventory, to avoid self-reference. Reproduce only that fixed genesis
+The validated first source revision and checkpoint digest are now pinned in the
+canonical reference, outside the compiled inventory, to avoid self-reference.
+Reproduce only that fixed genesis
 with the maintained compiler, verify/load it normally, then use it as predecessor.
 Before a second allocation generation needs a new predecessor, R3 must distribute
 one complete checked snapshot. Do not grow a historical source-replay chain;
@@ -1418,8 +1419,14 @@ Replaying through the ordinary checked predecessor loader produced checkpoint
 `d15cabc5774b85149fa98d7672257e8b9188fa586c9fee8c598cdf732d8c4622`; the ledger
 and all eighteen runtime files are byte-identical. Source text has LF bytes on
 all 2,771 inventoried KDL/rule paths, including the manifest. Git attributes retain
-those bytes across platforms. Pin the source Git revision in the immediately
-following reference commit to avoid a self-referential source commitment.
+those bytes across platforms. The following reference checkpoint pins source
+revision `caca40a55885e5c8612e7d9b47c1691f8ea321a9`, avoiding a self-referential
+source commitment. A fresh `git archive` of that revision reproduced the exact
+genesis digest with the maintained CLI. Its normal checked-predecessor replay
+preserved the ledger and all eighteen runtime artifacts byte for byte. See
+`runs/initial-types-archived-{genesis,successor}.{stdout,stderr}.log` for local
+evidence; reproduction requires no pre-existing local checkpoint. This reference
+update changes documentation only, so the 245-test validation below still applies.
 
 Validation covers real declaration types/ownership and Sniper facts, reused rule
 scratch, six independently specified projection controls, and absent versus
@@ -1674,7 +1681,7 @@ These are retained obligations, not extra competing phases.
 | Repository/release hygiene | R0-R4 dependency boundaries, deduplicated tests/artifacts/docs, one MSRV policy and locked workspace dependencies; batch Windows formatting by package while workspace-wide `cargo fmt --all` exceeds the process command-line limit (OS error 206); R6 release packaging, dependency audit and measured release-profile tuning |
 | Repeated offline recipe validation | During R1 publication-core extraction, reuse the final checked recipe between authored evaluation construction and full assembly while retaining all shared aggregate and dependency checks; measure before broader performance work. No native candidate path is affected |
 | Mutable authoring-head promotion | Deferred until a shared mutable head is introduced; the first approved checkpoint publisher uses an explicit immutable predecessor. Implement actual stored-predecessor CAS/concurrency control and interruption tests before exposing head promotion; read-compare-rename alone is insufficient |
-| Canonical allocation-history distribution | R2 first-generation bridge: pin this 69-name genesis source Git revision + checkpoint digest outside the compiled inventory and verify clean-clone reproduction with the maintained compiler/loader. Before a second allocation generation needs a new predecessor, R3 must archive/distribute one full checked snapshot. No historical source-replay chain, silent rebootstrap, machine-local dependency or second ledger importer |
+| Canonical allocation-history distribution | R2 first-generation bridge implemented: canonical reference pins source `caca40a5` + checkpoint digest outside the compiled inventory; fresh source-archive reproduction and normal checked loading pass. Before a second allocation generation needs a new predecessor, R3 must archive/distribute one full checked snapshot. No historical source-replay chain, silent rebootstrap, machine-local dependency or second ledger importer |
 
 ## Review finding coverage
 
@@ -1753,8 +1760,9 @@ copying source-language accidents into the native model.
    closed inventories and atomic no-clobber publication. Mutable-head promotion
    remains deferred; do not add another publication layout or allocation command.
    Sniper's real initial-type facts are now authored from pinned source evidence.
-   Next complete canonical first-genesis publication and the composed Original05
-   support-source audit above, followed by execution inputs: explicit shared
+   Canonical first-genesis reproduction is verified and its reference published.
+   Next complete the composed Original05 support-source audit above, followed by
+   execution inputs: explicit shared
    support-prohibition authority and assigned-target summoner presence, then
    program classification, freezing, readiness, receiving and metrics. Inherited
    summoner context already uses the exact-parent receiving relation. A missing

@@ -552,7 +552,8 @@ owner's remaining programs or complete-build coverage.
 
 Canonical allocation history must be available from a clean clone. The bounded
 first-generation bridge pins an immutable Git source revision and expected
-checkpoint digest outside the compiled inventory. Reproduce that fixed genesis,
+checkpoint digest in the [canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md),
+outside the compiled inventory. Reproduce that fixed genesis,
 verify and load it through the ordinary checkpoint reader, then use it as the
 predecessor for current source builds. Never bootstrap evolving current sources
 to recover IDs. Before a second allocation generation needs a new predecessor,
