@@ -1,6 +1,6 @@
 # Empty intrinsic passive socket
 
-This packet completes the default intrinsic program inventory of Passive `1b48`
+This historical packet completed the default intrinsic program inventory of Passive `1b48`
 (source node `7960`) and its seven declaration inventories. Six remain empty;
 the socket inventory keeps exactly the existing Socket `320e`. It adds no
 definitions or programs and changes no topology, point pool, provider, query,
@@ -33,13 +33,13 @@ CRLF normalized to LF, checked against the manifest digest before retention;
 the existing CalcSetup archive is reused. This is offline authoring evidence.
 The native runtime receives only the normal owned definition/rule data.
 
-The predecessor is distance-input endpoint
+The historical predecessor was distance-input endpoint
 `0efaf9bebc6a3f40e448cb22596c539b53436e15c063f92209c87627a6b4fa62`.
-The published endpoint is
+The historical published endpoint was
 `d6e9d0f455087d0d240cc014514c94360b52a1b8bb5ba3efe810603aa13e6474`,
 at `runs/owned-empty-passive-socket-publication-01/package`.
 
-All three ordinary tests and the all-five publication passed; strict target
+At that checkpoint, all three ordinary tests and the all-five publication passed; strict target
 Clippy passed. Seven mutation controls reject changed intrinsic programs,
 topology, socket membership, source spans/identity, catalog choices and erased
 archived jewel membership. The publication preserves all 110 queries, exact
@@ -48,9 +48,19 @@ rebuilds all eighteen artifacts byte-for-byte. One existing owner and seven
 declaration inventories close. Original05's selected passive owners still
 incomplete drop from thirteen to twelve; no input issue retires.
 
-No full-build result or newly admitted external provider is claimed. The
-canonical release still has no evaluation bundle and all five complete-build
-gates remain unavailable. Run the ordinary proof with
-`cargo test --test owned_empty_passive_socket_intrinsics`; the ignored publication
-uses `POE_OPTIMIZER_TEST_EMPTY_PASSIVE_SOCKET_PRIOR` and
-`POE_OPTIMIZER_TEST_EMPTY_PASSIVE_SOCKET_OUTPUT` with an unused output directory.
+The old root test target and its exclusive staged-publication function are now
+retired. The maintained Authoring release target retains all three ordinary
+source/transition laws and their seven mutation controls. It also checks the
+current release's exact Passive `1b48`, Socket `320e`, mapping and intrinsic
+support-source domain, and freshly imports Original05 to preserve its selected
+socket and occupied sibling presets. These tests use tracked archives and the
+source manifest; they need no historical `runs/` directory, PoB checkout or Lua
+execution. Run them with
+`cargo test -p poe-optimizer-authoring --test release socket_support`.
+
+The shared historical source helper remains because the Mana-radius source
+proof still uses its authenticated archive checks. It has no publication entry
+point. Current publication uses the [maintained source build](../migration-source/README.md).
+See the [socket source-domain scope](../socket-support-domains/README.md) for the
+new domain declaration. Neither proof supplies external jewel coverage or a
+complete-build result.

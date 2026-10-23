@@ -28,12 +28,14 @@ Boolean Skill Stats and one Sniper producer, retaining Partial coverage.
 Support-source checks now include declared potential outputs even when no Action
 is queried. Gem domain proof tests and exact saved-selection finalization are
 part of the maintained release harness; the replaced Gem publisher is removed.
-The existing metadata component now declares 326 additional intrinsic source
+The existing metadata component now declares 335 additional intrinsic source
 domains: eight Sniper/minion owners, the Ascendancy and two roots, four pure
-UsagePolicy projections, all 293 ordinary attribute-choice passives, and eighteen
-reviewed numeric minion passives. Unchanged Original05 selects 22 of those
-attribute-choice nodes and all eighteen numeric minion nodes. No IDs or numerical
-coverage are added.
+UsagePolicy projections, all 293 ordinary attribute-choice passives, eighteen
+reviewed numeric minion passives, seven class-dependent passives, one Socket and
+Gigantic. Unchanged Original05 selects 22 of those attribute-choice nodes, all
+eighteen numeric minion nodes and three of the last nine owners. Its selected
+passive source domains now cover 45 of 57 owners; the twelve numerically Partial
+owners remain separate review work. No IDs or numerical coverage are added.
 The root/ascendancy proof laws now run in the maintained release harness; their
 five replaced test/helper files and historical publishers are removed.
 The obsolete Count publisher and its exclusive staging helpers are also removed;
@@ -41,6 +43,11 @@ shared authored and native Count laws remain until their consumers migrate.
 Four minion-passive publishers and their exclusive helpers are now removed after
 transferring source, topology and receiving laws into the maintained release
 target. The shared CLI harness retains Bidding and its independent coverage.
+The Socket publisher and both Gigantic publishers are also removed after source
+and behavioral transfer. The shared Socket evidence helper remains for Mana-radius
+checks; Gigantic's shared Boolean/native tests remain. Class-view source and
+component laws now use the maintained harness, while its one whole-plan CLI law
+awaits actual current execution declarations.
 Continue independent harness retirement while completing the current release's
 execution declarations. Do not add a new provenance API
 for dormant support flags.
@@ -55,7 +62,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; current checkpoint adds eighteen minion passive domains and transfers their maintained proof laws |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; current checkpoint adds seven class views, Socket and Gigantic domains with maintained proof laws |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -63,9 +70,9 @@ silently become a second supported implementation.
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
-| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 69 Stats, one Sniper initial-type program and 326 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,312 source domains (1,283 Known, 29 Unmapped). Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
+| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 69 Stats, one Sniper initial-type program and 335 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,321 source domains (1,292 Known, 29 Unmapped). Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 18:55 UTC on October 23, `45c9a1a6` run `40005441317` remained pending. Earlier `96e5533e` run `39962517895` had seventeen of eighteen created jobs passing and one running, with no failures; Windows CLI-1 remained running (about 5h07m elapsed). Windows CLI-2 completed successfully at 18:32 UTC; both PoB jobs and Windows CLI-0/3 had also passed. Baselines `a7069aa1` and `ae90ec82` completed all twenty jobs successfully. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
+| CI | At 19:11 UTC on October 23, `8b6cd0a4` run `40008281569` remained pending; it superseded the pending `45c9a1a6` run. Earlier `96e5533e` run `39962517895` had seventeen of eighteen created jobs passing and one running, with no failures; Windows CLI-1 remained in its two-profile test step. Windows CLI-2 completed successfully at 18:32 UTC; both PoB jobs and Windows CLI-0/3 had also passed. Baselines `a7069aa1` and `ae90ec82` completed all twenty jobs successfully. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First reproduce the allocation predecessor using the
@@ -76,14 +83,14 @@ Successful publication prints the checkpoint identity to
 stderr and checkpoint receipt JSON to stdout. Bootstrap reproduces the fixed first-allocation
 source revision only; later builds must preserve its ledger as a checked
 predecessor. Current runtime input identity:
-`a50330b621d340cb7ac47d0948280bc1cec65cc45bd02d92b9fa58cceeda0286`.
-The 2,787 declared source files use 5,789,331 encoded and 58,659,582 decoded
+`8a24f656ad4aecb42051b7ffa118bb78539e47b8429e1ff6cac193d53957f246`.
+The 2,787 declared source files use 5,789,368 encoded and 58,661,796 decoded
 bytes, within the existing 64 MiB bounds. The 183,544-byte root manifest and
 expanded rule bytes also fit current limits without increases.
 Metadata JSON remains temporary; gzip is not the compact runtime format.
 The CLI still reports the 80% decoded-size warning; compact-format work remains
 required before expanding content. The production command rebuilt the tracked
-source into `runs/minion-support-domains-successor-01` with the expected input identity,
+source into `runs/selected-passive-domains-successor-01` with the expected input identity,
 17 constituent artifacts and all 227 provenance rows.
 
 Historical input
@@ -91,7 +98,7 @@ Historical input
 and its receipt remain independent regression evidence. Original rule IR lives
 only in Authoring's `tests/fixtures/retained-rules.json.gz`, outside production
 inputs. Actual-source graph checks plus restoration of just historical program
-members, with only the exact 69-Stat/one-program/326-domain delta removed through
+members, with only the exact 69-Stat/one-program/335-domain delta removed through
 maintained content constructors, prove all historical metadata/provenance and artifact bytes
 are preserved. `runs/dsl-conversion-02/conversion-report.json` records local
 conversion evidence; no `runs/` file or one-off conversion tool is needed by a
@@ -1537,8 +1544,9 @@ insufficient; do not add a second Engine traversal or a new game model.
 
 The next blocker is the composed support-source census and execution input
 authority, not more type facts. Current metadata covers 966 Gem, 19 Reward, five
-UsagePolicy, three root/Ascendancy, 293 attribute-choice, eighteen numeric minion
-passive and eight intrinsic Skill/Actor/slot domains; all 23 selected
+UsagePolicy, three root/Ascendancy, 293 attribute-choice, eighteen numeric minion,
+seven class-view, one Socket, one Gigantic and eight intrinsic Skill/Actor/slot
+domains; all 23 selected
 Original05 physical Gems are covered. Gem
 coverage and an empty Sniper assignment order do not certify the composed build.
 Audit the unchanged normalized draft's Class/Ascendancy/implicit roots, selected
@@ -1774,7 +1782,7 @@ Authoring/Host and scoped formatting also pass. Logs:
 results and optional-test limits above remain unchanged. All nine protected
 incoming-critical files retain their recorded hashes.
 
-**Numeric minion source-domain checkpoint:** explicit domains now
+**Numeric minion source-domain checkpoint (`8b6cd0a4`):** explicit domains
 cover **18** additional selected Complete
 owners: two Minion Damage, four Damage/Life, two pure Life, six Command Cooldown,
 three Command Damage and Growing Swarm. These are the exact already-reviewed
@@ -1820,45 +1828,103 @@ missing Area receiving observation remains explicitly absent. These are componen
 checks; they do not imply a complete original Action or build, and no source
 interpreter is added.
 
-Next, Gigantic, class view `4739`, and
-Socket `7960` need their separate proofs; all twelve Partial selected owners and
-other actor/equipment/encounter obligations remain independent. The combined
-legacy closure CLI also contains Bidding work, while pure Life and Command
-Damage helpers have live native callers; audit and transfer useful laws before
-removing individual publishers rather than deleting the whole target.
-The next coherent batch is nine definitions: the seven already-authored
-class-view owners plus the Socket and Gigantic. The class-view source/owner
-pairs are `1755/0c76`, `18845/0ce6`, `22314/0dd6`, `41965/13c0`,
-`4739/1585`, `51184/1694`, and `60230/1951`. Verify every admitted Witch view
-and default full-list replacement, not only Original05's selected default.
-Preserve the later Count representation for `51184` using the current DSL and
-Count-stage evidence instead of reviving its historical Integer body. This
-family contributes only one new selected owner; the other two are Socket
-`7960/1b48` and Gigantic `46365/1532` with its Boolean cutover intact.
-Reuse `passive-views/{policy,statistics}.json`, complete tree records and
-`PassiveSpec.lua:1483-1492`; test missing class and unchanged Sorceress default.
-Transfer the four useful `owned_passive_views_cli` laws, but retain the generic
-Import compiler while attribute/reference callers still use it. Socket evidence
-must preserve declaration `320e`, topology and occupied sibling presets; its
-helper remains shared by Mana-radius tests, so retire only its obsolete publisher.
-Gigantic's explicit `ModParser.lua:4742-4744` FLAG constructor and separate -25
-reservation-efficiency source both need proof. Preserve Boolean `3307`, exact
-allocation provenance, unordered Any, its receiver and both conditional 1.2
-benefits. Its contribution-query membership stays Partial. Following/Benefits
-publishers can retire after transfer; the shared flags helper remains needed by
-Sniper item attack and duplicate/unknown/stage controls.
 The four removed exclusive helpers are `owned_plain_minion_owner_closure`,
 `owned_plain_minion_life_passives`, `owned_command_cooldown` and
 `owned_growing_swarm` under `tests/support`; their useful ordinary laws now run
 against the maintained release. The Bidding law/publisher remains in
 `owned_plain_minion_owner_closure_cli` with its shared preservation harness.
 Pure Life and Command Damage retain three/eight optional native laws and shared
-helpers; the Command evidence helper also has PoB and Action consumers. Socket
-evidence is shared with Mana-radius work, and Gigantic with Sniper item attack.
-After that, `passive-structural-inventories` already distinguishes six fully
-accounted intrinsic sources among the twelve numerically Partial selected
-owners (source nodes `13289`, `19318`, `32705`, `35560`, `45333`, `62210`).
-Review them independently without promoting numerical closure. The other six
+helpers; the Command evidence helper also has PoB and Action consumers.
+
+**Class-view, Socket and Gigantic checkpoint:** nine existing owners now have
+explicit source domains, bringing selected passive coverage to **45/57** and the
+complete source inventory to **1,321** (1,292 Known, 29 Unmapped). All twelve
+Partial selected owners and other actor/equipment/encounter obligations remain
+independent. Numerical coverage and the five selected input obligations are
+unchanged.
+The nine definitions are the seven already-authored class-view owners plus the
+Socket and Gigantic. The class-view source/owner
+pairs are `1755/0c76`, `18845/0ce6`, `22314/0dd6`, `41965/13c0`,
+`4739/1585`, `51184/1694`, and `60230/1951`. The proof checks every admitted
+Witch view and default full-list replacement, not only Original05's selected
+default. The later Count representation for `51184` remains intact, using the
+current DSL and Count-stage evidence rather than its historical Integer body. This
+family contributes only one new selected owner; the other two are Socket
+`7960/1b48` and Gigantic `46365/1532` with its Boolean cutover intact.
+The tests reuse `passive-views/{policy,statistics}.json`, complete tree records
+and `PassiveSpec.lua:1483-1494`, and preserve missing-class refusal and unchanged
+Sorceress default. Source, component and normalization laws have moved from
+`owned_passive_views_cli`; retain its whole-plan law until the actual current
+checked evaluation and readiness declarations exist. The current release has no
+evaluation bundle, and the historical receiver fixture uses a different operation
+version. Do not
+coerce that version or invent readiness authority to force retirement. The
+retained law protects disabled sources, exact Actor identity and Partial
+membership; replacing it is explicit R2/R4 work. Keep only its needed fixture
+helpers and retain the generic Import compiler while attribute/reference callers
+still use it. Socket evidence preserves declaration `320e`, topology and occupied
+sibling presets. Its obsolete root target and exclusive staging function are
+removed; the shared `read`/`check_source` helper remains for Mana-radius tests.
+Gigantic's proof authenticates the explicit `ModParser.lua:4742-4744` FLAG
+constructor and separate -25 reservation-efficiency source. Boolean `3307`, exact
+allocation provenance, unordered Any, its receiver and both conditional 1.2
+benefits remain. Its contribution-query membership stays Partial. Following and
+Benefits publishers and their exclusive helpers are removed (four files); the
+shared flags helper remains needed by Sniper item attack and
+duplicate/unknown/stage controls.
+The unchanged atomic authoring command publishes the pinned input as checkpoint
+`82094577145558d4135030fccb3187eb35b001d90f26e18344ca7c621e391308`.
+Checked predecessor reload checkpoint
+`8dee436eb51058f3e2f5158f4443f5eaf716d13e02ed32ae5fe0aa76b6b637f0`
+reproduces all eighteen runtime files. Names, schema and registry remain
+byte-identical to the fixed canonical genesis. The metadata delta adds nine
+domains and preserves all nine existing programs (seven class programs, no
+Socket programs and two Gigantic programs). Publication logs:
+`runs/selected-passive-domains-successor.log` and
+`runs/selected-passive-domains-reload.log`.
+All **306 affected Authoring/Host tests pass**: 166 library, eight CLI, 121
+maintained-release and eleven Host checks, with no ignored cases. The first run
+passed 305 and exposed one stale test expectation: the current V2 saved-path
+proof already admits node `4739` with ordinary access and shared loadout scope.
+The corrected test requires those exact facts and retains the independent five
+pending obligations and unchanged draft digest. Production behavior was not
+changed. The final 121-test release run passes after a 3m02s rebuild (18.28s test
+execution); unaffected library/CLI/Host checks retain their first-run results.
+Strict all-target Authoring/Host Clippy passes. Logs:
+`runs/selected-passive-domains-tests.log`,
+`runs/selected-passive-domains-tests-final.log` and
+`runs/selected-passive-domains-clippy-final.log`.
+The two affected retained CLI targets pass another **eight tests** (seven
+Mana-radius and one whole-plan class-view test); the existing optional source
+acquisition utility remains ignored. Their optimized rebuild took 1m01s, and
+strict targeted Clippy also passes. Logs:
+`runs/selected-passive-retirement-tests.log` and
+`runs/selected-passive-retirement-clippy.log`.
+Together this is **314 passing affected checks**, with one explicitly optional
+utility ignored. Scoped formatting, diff checks and text-encoding checks pass.
+All nine protected incoming-critical files retain their recorded hashes.
+Socket evidence remains shared with Mana-radius work, and Gigantic with Sniper
+item attack. No local generated output is a required CI input.
+Next, review the six intrinsic sources distinguished by
+`passive-structural-inventories` among the twelve numerically Partial selected
+owners: `13289/0b34`, `19318/0d0f`, `32705/10d4`, `35560/11c2`,
+`45333/14d8`, `62210/19ec`. The existing checker proves direct structural
+inventories, not support-source domains. Its archived material supports a narrow
+follow-up through existing APIs: authenticate all seven source-stat records,
+including four parser remainders, generated stat IDs for the four scalar owners,
+complete executed node literals from the existing `tree.lua.gz`, and the full
+constructor/replacement boundary with explicit support-factory contrasts.
+Preserve positive Barya chains `32d3 -> 32d2 -> 0322` and
+`32d5 -> 32d4 -> 032c`, plus both current raw-supply programs (level one and exact
+grant activation). Parent source declarations cannot certify generated Skill,
+Actor, output or descendant domains. All six numerical owners and presently
+Partial parameter/choice/output/socket inventories stay Partial. Empty parser
+output never proves absence. No new IDs, formulas or public model are needed.
+Transfer the structural target and its CLI publisher's identity, remainder,
+unknown-field, positive-chain, excluded-candidate census and unchanged-schema
+controls to the maintained harness before deleting those two targets and their
+two exclusive helpers; shared publication helpers and source archives remain.
+The other six
 remain unresolved: Djinn command nodes `10561` / `23265`, and buff-grant nodes
 `14686` / `26926` / `53324` / `53795`. Version-aligned BuffDefinitions and
 BuffTemplates payloads are absent from that evidence; empty parser output or
@@ -2246,6 +2312,11 @@ copying source-language accidents into the native model.
    they are not top-level tests. Current-release whole-plan tests additionally need
    authored evaluation/readiness declarations (see the R2 blocker above); retain
    Cleric's existing whole-plan/parallel regression until that replacement passes.
+   The remaining class-view CLI whole-plan law has the same blocker: preserve
+   disabled-source, exact Actor and Partial-membership controls until they run
+   against actual current evaluation/readiness declarations, then remove its
+   obsolete receiver staging. Do not rewrite operation versions or manufacture
+   readiness authority to make a fixture load.
    Also relocate `owned_item_observations::check_export`
    (the `pob` feature) to maintained offline export tests: it checks extractor
    output, authenticated catalog/evidence and no-clobber behavior. Default-profile

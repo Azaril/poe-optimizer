@@ -6,6 +6,10 @@ typed Flag/Any at the same identities. The table and publication figures below
 describe this earlier checkpoint, not a retained runtime compatibility path.
 Current numerical checks use the joined Sniper graph; see the
 [implementation plan](../../../../../docs/implementation.md).
+The exclusive Following publisher tests and helper have been retired. Their
+useful source, topology, Boolean successor and receiving laws now run against
+the maintained release in the [intrinsic-domain packet](../gigantic-support-domains/README.md).
+The shared Boolean helper and joined Sniper native tests remain independent.
 
 This packet extends the exact `pob-3887ae68-minion-life-passives-v1` predecessor
 (`ee4cc6c44202f2174129e12e782a02cd65c5a993c6ccffc87e779460fb7be09f`). It
@@ -36,29 +40,27 @@ Action-owner or support-demand changes.
 default Source02 report preserves the full typed-key source graph, including the
 mixed numeric/string reservation modifier table, all parser returns and warm/
 fresh JIT checks. The original physical damage Source02 reports bind JIT on/off,
-fresh/repeat/warm Original05, removal of Gigantic, and CALCS display scopes. The
-publication helper authenticates report bytes, original build bytes, source
-manifest/files and exact projections before applying the ordinary V5 migration
-and passive refinement. These source graphs are offline test evidence, not the
+fresh/repeat/warm Original05, removal of Gigantic, and CALCS display scopes.
+The retained packet binds original build bytes, source manifest/files and exact
+projections. Maintained checks use these captures without replaying the obsolete
+V5 publication chain. These source graphs are offline test evidence, not the
 native runtime format.
 
 At this historical checkpoint, Life/damage numerical factors and delivery of
 reservation efficiency remained subsequent work. Individual factors are now
 published and joined; final reservation delivery remains open. The reservation
-consumer is Action-owned; the [ownership proposal](../../../../../docs/owned-resource-obligations-proposal.md)
-is pending. The source MAIN and CALCS
+consumer migration follows the accepted [Skill-owned obligations design](../../../../../docs/owned-resource-obligations-proposal.md).
+The source MAIN and CALCS
 combat frames include Gigantic's numerical benefits, while CALCS buffed and
 unbuffed scopes retain its flag without those benefits. That is a reference
 calculation/display-scope distinction, not evidence for adding a native game
 "in combat" condition. No parent Action, query or usage entry is fabricated to
 make a consumer reachable. No whole-build parity is claimed.
 
-`tests/support/owned_gigantic_following.rs` provides the bounded publication and
-evidence gate. `tests/owned_gigantic_following.rs` retains authored-data and
-historical publication checks. Its old native entry points and helper were
-removed after useful checks moved to `tests/owned_sniper_item_attack.rs`. Generated
-packages and full source reports remain ignored under `runs/`; publication/test
-results are recorded at the implementation checkpoint.
+The former `tests/owned_gigantic_following.rs` and its exclusive helper are
+removed after transfer to the maintained release harness. Historical packages
+and full source reports remain ignored under `runs/`; current ordinary evidence
+checks do not require them. The results below describe the historical checkpoint.
 
 Publication01 passes in 29.60 seconds, preserving all five unchanged originals
 and their 110 queries, with eighteen files rebuilt byte-identically. The five

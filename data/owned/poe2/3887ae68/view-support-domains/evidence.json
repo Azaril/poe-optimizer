@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "files": [
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "archive": "data/owned/poe2/3887ae68/empty-passive-socket-intrinsics/tree.lua.gz",
+      "archive_bytes": 388551,
+      "archive_sha256": "150e3945838287aa50ada2f2ef998fb50c84471b38a5e4f17e4eb06b34553acb",
+      "bytes": 2620112,
+      "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.json",
+      "archive": "data/owned/poe2/3887ae68/passive-structural-inventories/sources/src_TreeData_0_5_tree.json.gz",
+      "archive_bytes": 339380,
+      "archive_sha256": "58cf71ca3225802aac41fe04cb15df1ba66eb9afbff722adbf7495bcec0f3af5",
+      "bytes": 2049036,
+      "sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95"
+    },
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "archive": "data/owned/poe2/3887ae68/passive-structural-inventories/sources/src_Classes_PassiveTree.lua.gz",
+      "archive_bytes": 8179,
+      "archive_sha256": "f772cd60df379afff18e8f2a1003b426b39f7c774851bf89f75e5e0a9078706f",
+      "bytes": 31232,
+      "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "archive": "data/owned/poe2/3887ae68/passive-structural-inventories/sources/src_Classes_PassiveSpec.lua.gz",
+      "archive_bytes": 22792,
+      "archive_sha256": "8b797c17e938efbf73b95f0a57ea197e81be37510b54a04ea25d8a400612c55e",
+      "bytes": 95117,
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_ModParser.lua.gz",
+      "archive_bytes": 105049,
+      "archive_sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    }
+  ],
+  "scope": "Intrinsic support-origin absence for exactly seven reviewed physical class-view nodes, covering their whole default and Witch lists. Other views, external jewel overrides, inherited supports and numerical completeness are separate.",
+  "spans": [
+    {
+      "role": "tree-constructor",
+      "path": "src/Classes/PassiveTree.lua",
+      "first": 59,
+      "last": 446,
+      "sha256": "866e8425cc3761339524a84b4e154ad602e47a484c48fa2091d52944b5f3d4ef"
+    },
+    {
+      "role": "process-stats",
+      "path": "src/Classes/PassiveTree.lua",
+      "first": 448,
+      "last": 525,
+      "sha256": "dbaafdae063379e3bf6ab19145438034c947fb48ccf7e64aee80de67893e5dae"
+    },
+    {
+      "role": "process-node",
+      "path": "src/Classes/PassiveTree.lua",
+      "first": 528,
+      "last": 595,
+      "sha256": "6f6455002c649c14e227ba9e78a4046010b5447e851e0804d0dfb14bcd66d03a"
+    },
+    {
+      "role": "class-view-dispatch",
+      "path": "src/Classes/PassiveSpec.lua",
+      "first": 1483,
+      "last": 1494,
+      "sha256": "8b047072e563e026be3a4c0aba5fa50823485251763e6d6a9892c9123ba52cb8"
+    },
+    {
+      "role": "applied-override-and-external-boundary",
+      "path": "src/Classes/PassiveSpec.lua",
+      "first": 1570,
+      "last": 1578,
+      "sha256": "28c3f6de307c0974dc98ebed1f1a39420d1d99c7533fb830638ed0f38e477be5"
+    },
+    {
+      "role": "replace-node",
+      "path": "src/Classes/PassiveSpec.lua",
+      "first": 2047,
+      "last": 2063,
+      "sha256": "f474626ea133f7c51cf11f6709b33b94f0456cefd6581de3f0a208853046151f"
+    },
+    {
+      "role": "modifier-forms",
+      "path": "src/Modules/ModParser.lua",
+      "first": 62,
+      "last": 158,
+      "sha256": "f06078159c4b2afb48204eb7c8f1d430c0c124578844af4edd189f9ad409ae43"
+    },
+    {
+      "role": "intelligence-name",
+      "path": "src/Modules/ModParser.lua",
+      "first": 160,
+      "last": 171,
+      "sha256": "7d08e35deb6ecfcec046d70587415c8b28a3d01d8a007a932f10902be8ea08eb"
+    },
+    {
+      "role": "damage-names",
+      "path": "src/Modules/ModParser.lua",
+      "first": 707,
+      "last": 714,
+      "sha256": "c2c3b77316271c6da054f46c36ee51704b507665d520e5e9cea2880f6cbaa55e"
+    },
+    {
+      "role": "spell-flag",
+      "path": "src/Modules/ModParser.lua",
+      "first": 1044,
+      "last": 1054,
+      "sha256": "0b873a670e008df88265620fd3efba447f44af3722b5b3f511ac085de537dab9"
+    },
+    {
+      "role": "minion-prefix",
+      "path": "src/Modules/ModParser.lua",
+      "first": 1229,
+      "last": 1231,
+      "sha256": "aa412d81c0df7f7a2bd386c2549f38fee12c49ebf1415046a8e67fb027c1299c"
+    },
+    {
+      "role": "modifier-scan",
+      "path": "src/Modules/ModParser.lua",
+      "first": 6592,
+      "last": 6614,
+      "sha256": "01cd01f7b8168ad6a0113e03f231f23cf4223ae5e88e11260712cabc49bd480e"
+    },
+    {
+      "role": "modifier-parser",
+      "path": "src/Modules/ModParser.lua",
+      "first": 6619,
+      "last": 7036,
+      "sha256": "66d190725037c09aaf374cd3c66a966b8cf9c91c4fb517a970d4f33b7a30da74"
+    },
+    {
+      "role": "modifier-cache",
+      "path": "src/Modules/ModParser.lua",
+      "first": 7399,
+      "last": 7423,
+      "sha256": "23825fbab050880185d08feadbd4f359b40482a2a63564f7367efb8691e5020f"
+    },
+    {
+      "role": "extra-support-contrast",
+      "path": "src/Modules/ModParser.lua",
+      "first": 2219,
+      "last": 2253,
+      "sha256": "11ede92472d7dec6e85b0af4ff9c52a1da07d1a204a7d7e8339221d43872b962"
+    },
+    {
+      "role": "linked-support-contrast",
+      "path": "src/Modules/ModParser.lua",
+      "first": 3650,
+      "last": 3659,
+      "sha256": "4285cfd4639797c208b9d0872bc9324aefd23eefda1bf1b5332767f8b6f0893b"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/tree/tree-catalog.json",
+      "bytes": 1676797,
+      "sha256": "37db1255f28d05f67a6d81dfe286bcc698a9811e907c67d29cf640d9c28e5557"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/current/mapping.json",
+      "bytes": 3165465,
+      "sha256": "3b627b9e7195ba18a44f83a73aff8fbffc238162ccfc273992fc129179cdb1a4"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/current/tree-normalization.json",
+      "bytes": 1618228,
+      "sha256": "6384b05d546ea38bb48227594755d3bcaa66eeff42fad9ea8727f022786a5be1"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/attribute-stages/count-bindings.json",
+      "bytes": 3100,
+      "sha256": "4b6501509beebe49e0da197f657f57df4ac86341e1f7f04e84a87990c9e7bc71"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/attribute-stages/count-programs.json",
+      "bytes": 4789632,
+      "sha256": "d228211a0e8328f8628313b148de144698f5e0cf7b8d718e16afd7b129bfdded"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/passive-views/policy.json",
+      "bytes": 28549,
+      "sha256": "c1d368db29b6bb14834e78520e8e27ff483f15e0a7e39666d6d3bb99749554d6"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/passive-views/statistics.json",
+      "bytes": 2515,
+      "sha256": "ebc7eb124d533707949417674f5f0811ae385aeb92c87d79f601ae82fd19ae43"
+    }
+  ],
+  "nodes": [
+    {
+      "key": "1755",
+      "first": 26346,
+      "last": 26375,
+      "sha256": "c0e3c61d03d512849d01e7b6e51489b165d7f1c64543c64803e2879a8d168c76"
+    },
+    {
+      "key": "18845",
+      "first": 56097,
+      "last": 56126,
+      "sha256": "fb0caf7f00843242d32feb212c07f3ddca019774398989d1595b488a112ba798"
+    },
+    {
+      "key": "22314",
+      "first": 61467,
+      "last": 61500,
+      "sha256": "d01b969495eae123dece200b27378335d0951ad1c8f8db6b091e24a8e2d3e97b"
+    },
+    {
+      "key": "41965",
+      "first": 95679,
+      "last": 95708,
+      "sha256": "9590a03a200effb5dfa552c12d11ed0c9a821d233315a5c88f88d0efa99d1cdd"
+    },
+    {
+      "key": "4739",
+      "first": 31783,
+      "last": 31812,
+      "sha256": "de1d430d5d2c936f53fd82bd9b8db6aaba2077a16f804895b270cd5c21fdad7e"
+    },
+    {
+      "key": "51184",
+      "first": 112291,
+      "last": 112331,
+      "sha256": "f8b363f10bb554658463a88f12c9da2ea835433c76990b55a151d15ce04e796c"
+    },
+    {
+      "key": "60230",
+      "first": 128439,
+      "last": 128480,
+      "sha256": "9027b216f17050d62415a1aa6ea5326e59189a5d4fd531d411d97f75cf69a63d"
+    }
+  ]
+}

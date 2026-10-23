@@ -20,6 +20,10 @@ mod engine_fixtures;
 mod fixture;
 #[path = "release/gem_support_domains.rs"]
 mod gem_support_domains;
+#[path = "release/gigantic_support_domains.rs"]
+mod gigantic_support_domains;
+#[path = "release/gigantic_support_source.rs"]
+mod gigantic_support_source;
 #[path = "release/initial_skill_types.rs"]
 mod initial_skill_types;
 #[path = "release/item_metadata.rs"]
@@ -40,10 +44,18 @@ mod root_support_domains;
 mod scalar_attributes;
 #[path = "release/sniper_support_domains.rs"]
 mod sniper_support_domains;
+#[path = "release/socket_support_domains.rs"]
+mod socket_support_domains;
+#[path = "release/socket_support_source.rs"]
+mod socket_support_source;
 #[path = "release/source_dependencies.rs"]
 mod source_dependencies;
 #[path = "release/usage_support_domains.rs"]
 mod usage_support_domains;
+#[path = "release/view_support_domains.rs"]
+mod view_support_domains;
+#[path = "release/view_support_source.rs"]
+mod view_support_source;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{
@@ -1699,7 +1711,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     let current_artifacts: BTreeMap<_, _> = release.artifacts().collect();
 
     // Historical IR remains a test reference only. Authenticate the exact new
-    // producer, 69 Boolean channels and 326 support-source domains before
+    // producer, 69 Boolean channels and 335 support-source domains before
     // reconstructing old commitments through maintained APIs.
     let retained = fs::read(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"),
@@ -1833,6 +1845,9 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         .chain(usage_support_domains::declarations())
         .chain(attribute_support_domains::declarations())
         .chain(minion_support_domains::declarations())
+        .chain(view_support_domains::declarations())
+        .chain(socket_support_domains::declarations())
+        .chain(gigantic_support_domains::declarations())
         .collect();
     assert_eq!(domains.len(), prior_domains.len() + additions.len());
     for added in &additions {

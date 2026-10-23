@@ -1,17 +1,11 @@
 //! One complete intrinsic socket definition; external jewel providers stay open.
-#[path = "owned_release_migration_preservation.rs"]
-mod preservation;
 use flate2::read::GzDecoder;
-use poe_optimizer_core::{owned_content::*, owned_definitions::*, owned_rules::*, owned_schema::*};
-use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
-use poe_optimizer_import::{
-    owned_mapping::MappingEntry,
-    owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
-    owned_successor::{
-        CatalogAppend, CatalogItemPolicyMode, PassiveDeclarationRefinement, SuccessorBundleInput,
-        TreePolicyTransitionInput, transition_owned_catalog_with_tree_refinement_compact,
-    },
+use poe_optimizer_core::{
+    owned_content::OwnedContentDigest,
+    owned_rules::DefinitionRules,
+    owned_schema::{DefinitionDescriptor, SchemaState, SchemaSubject},
 };
+use poe_optimizer_import::owned_mapping::MappingEntry;
 use serde::{Deserialize, de::DeserializeOwned};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -37,9 +31,6 @@ pub fn data() -> PathBuf {
 }
 pub fn read<T: DeserializeOwned>(name: &str) -> T {
     serde_json::from_slice(&fs::read(data().join(name)).unwrap()).unwrap()
-}
-fn key(s: &str) -> OwnedDefinitionKey {
-    s.parse().unwrap()
 }
 fn hash(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
@@ -344,122 +335,4 @@ pub fn check_authored() {
     }
     check_transition(&read("closure.json"));
     check_source(&read("source-evidence.json"));
-}
-
-pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
-    check_authored();
-    let d: Dependencies = read("dependencies.json");
-    let c: Closure = read("closure.json");
-    assert_eq!(prior.receipt().input, d.before);
-    assert!(prior.evaluation().is_none());
-    assert!(prior.input().recipe.schema.definitions.contains(&d.socket));
-    assert_eq!(d.mappings.len(), 1);
-    for row in &d.mappings {
-        assert_eq!(
-            prior
-                .input()
-                .mapping
-                .entries
-                .iter()
-                .filter(|r| *r == row)
-                .count(),
-            1
-        );
-    }
-    let mut recipe = prior.input().recipe.clone();
-    let node = recipe
-        .schema
-        .definitions
-        .iter_mut()
-        .find(|v| v.address() == d.definition.address())
-        .unwrap();
-    assert_eq!(*node, d.definition);
-    *node = c.definition.clone();
-    let owner = recipe
-        .rules
-        .owners
-        .iter_mut()
-        .find(|v| v.owner == d.owner.owner)
-        .unwrap();
-    assert_eq!(*owner, d.owner);
-    *owner = c.owner;
-    recipe.schema.release = key("pob-3887ae68-empty-passive-socket-intrinsics-v1");
-    let schema =
-        OwnedDefinitionSchemaPackage::new(recipe.schema.clone(), Default::default()).unwrap();
-    recipe.rules.definitions = schema.identity().clone();
-    recipe.routing.definitions = schema.identity().clone();
-    let DefinitionDescriptor::PassiveNode(node) = c.definition else {
-        panic!()
-    };
-    let refined = transition_owned_catalog_with_tree_refinement_compact(
-        SuccessorBundleInput {
-            schema_version: 1,
-            prior: prior.input().recipe.clone(),
-            successor: recipe,
-            mapping: prior.input().mapping.clone(),
-            roles: prior.input().roles.clone(),
-            normalization: prior.input().normalization.clone(),
-            rewards: prior.input().rewards.clone(),
-            query_sets: prior.input().query_sets.clone(),
-            items: prior.input().items.clone(),
-            item_source: prior.input().item_source.clone(),
-        },
-        CatalogAppend {
-            mappings: vec![],
-            source: prior.input().mapping.source.clone(),
-            item_policies: CatalogItemPolicyMode::RebindPrior,
-        },
-        TreePolicyTransitionInput::RebindPrior {
-            prior: Box::new(prior.input().tree.clone().unwrap()),
-        },
-        PassiveDeclarationRefinement {
-            schema_version: 1,
-            before: prior.assembled().schema().identity().clone(),
-            after: schema.identity().clone(),
-            nodes: vec![node.id],
-        },
-        Default::default(),
-    )
-    .unwrap();
-    let mut input = prior.input().clone();
-    input.recipe = refined.recipe().clone();
-    input.mapping = refined.mapping().input().clone();
-    input.roles = refined.roles().input().clone();
-    input.normalization = refined.normalization().clone();
-    input.rewards = refined.rewards().input().clone();
-    input.items = refined.items().input().clone();
-    input.item_source = refined.item_source().input().clone();
-    input.tree = refined.tree().map(|p| p.input().clone());
-    input.query_sets = refined.query_sets().to_vec();
-    input.provenance.push(OwnedReleaseProvenance {
-        kind: key(KIND),
-        prior_input: d.before,
-        authoring_input: digest_owned(KIND, &FILES.map(read::<Value>), 2 * 1024 * 1024).unwrap(),
-    });
-    let next = assemble_owned_release(input, Default::default()).unwrap();
-    let mut inverse = next.input().recipe.clone();
-    *inverse
-        .schema
-        .definitions
-        .iter_mut()
-        .find(|v| v.address() == d.definition.address())
-        .unwrap() = d.definition.clone();
-    *inverse
-        .rules
-        .owners
-        .iter_mut()
-        .find(|v| v.owner == d.owner.owner)
-        .unwrap() = d.owner.clone();
-    inverse.schema.release = prior.input().recipe.schema.release.clone();
-    inverse.rules.definitions = prior.input().recipe.rules.definitions.clone();
-    inverse.routing.definitions = prior.input().recipe.routing.definitions.clone();
-    assert_eq!(
-        inverse,
-        prior.input().recipe,
-        "only intrinsic owner and seven declaration closures"
-    );
-    preservation::assert_import_rebindings_only(prior, &next);
-    assert_eq!(next.receipt().query_rows, 110);
-    assert!(next.evaluation().is_none());
-    next
 }

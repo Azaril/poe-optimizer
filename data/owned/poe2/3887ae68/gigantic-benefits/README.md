@@ -7,6 +7,10 @@ artifact formats need offline rebuilding, not a compatibility parser. Current
 releases have no live `330a` alias or duplicate contribution. Damage `330b` remains
 unchanged. The [Boolean successor](../gigantic-flags/README.md) and joined Sniper
 graph provide current validation; the publication figures below are historical.
+The exclusive Benefits publisher tests/helper have been retired after useful
+source and conditional-factor laws moved to the maintained Authoring release
+harness. See the [intrinsic-domain packet](../gigantic-support-domains/README.md).
+The shared Boolean helper and joined Sniper native tests are retained.
 
 This packet extends `pob-3887ae68-gigantic-following-v1` without closing any
 additional owner or contributor inventory. It adds two reusable Actor channels:
@@ -32,16 +36,15 @@ of PoB's composed More aggregation and rounding. The old finite Product fixture
 has been removed. Useful individual-factor checks now run in the joined Sniper
 graph; generic Product tests do not establish game-specific final grouping.
 
-The ordinary V5 migration appends the program while preserving its existing
-owner's coverage. Publication authenticates the exact predecessor and source
-evidence, reconstructs the prior recipe by removing only these additions, and
-checks import dependency rebindings and the five preserved originals. Generated
-packages/reports remain under ignored `runs/`. Validation results are recorded
-in the implementation checkpoint after the publication and native tests run.
+The historical V5 migration appended the program while preserving its existing
+owner's coverage. Its payload remains immutable evidence; current authoring uses
+the maintained DSL and checkpoint workflow. Source captures and current-program
+laws run without replaying this predecessor chain or opening ignored `runs/`
+reports.
 
 Final Life/Damage equations and contributor closure, delivery to other minion
 profiles, and final reservation delivery and ownership remain open. Reservation
-ownership follows the pending resource-obligation design decision. This packet
+ownership follows the accepted Skill-owned resource-obligation design. This packet
 makes no whole-build parity claim.
 
 ## Checked publication

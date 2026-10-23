@@ -1,29 +1,23 @@
-//! Public offline passive view conversion; component evidence is not full-build parity.
+//! Retained isolated whole-plan receiver law. Seven-view source/component and
+//! Original05 normalization laws now live in Authoring view_support_domains.
+//! This predecessor fixture remains until a current checked readiness bundle
+//! permits equivalent disabled/exact-actor/Partial execution without coercion.
 use poe_optimizer_core::{
-    build_identity::*,
-    owned_build::*,
-    owned_definitions::*,
-    owned_draft::{DraftAllocationAccess, DraftLimits, decode_draft},
-    owned_routing::*,
-    owned_rules::*,
+    build_identity::*, owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*,
     owned_schema::*,
 };
 use poe_optimizer_data::{
     owned_routing::{OwnedActionRouting, RoutingLimits},
     owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits, SchemaPackageInput},
 };
-use poe_optimizer_engine::{
-    owned_plan::*,
-    owned_rules::{CompiledRulePackage, EffectDisposition, RuleFact},
-};
+use poe_optimizer_engine::{owned_plan::*, owned_rules::CompiledRulePackage};
 use poe_optimizer_import::{
-    owned_passive_views::{ViewContribution, ViewRecipePolicy},
+    owned_passive_views::ViewRecipePolicy,
     owned_recipe::{StagedOwnedRecipe, assemble_owned_recipe},
     owned_tree_policy::{TreeNormalizationPackageInput, TreeTokenRole},
 };
-use serde_json::{Value, json};
+use serde_json::Value;
 use std::{
-    collections::BTreeMap,
     fs,
     path::{Path, PathBuf},
     process::{Command, Output},
@@ -38,21 +32,6 @@ fn data() -> PathBuf {
 }
 fn read(path: impl AsRef<Path>) -> Value {
     serde_json::from_slice(&fs::read(path).unwrap()).unwrap()
-}
-fn write(path: impl AsRef<Path>, v: &impl serde::Serialize) {
-    fs::write(path, serde_json::to_vec(v).unwrap()).unwrap();
-}
-fn files(path: &Path) -> BTreeMap<String, Vec<u8>> {
-    fs::read_dir(path)
-        .unwrap()
-        .map(|e| {
-            let e = e.unwrap();
-            (
-                e.file_name().into_string().unwrap(),
-                fs::read(e.path()).unwrap(),
-            )
-        })
-        .collect()
 }
 fn success(output: Output) -> Value {
     assert!(
@@ -131,17 +110,6 @@ impl Fixture {
             out,
         )
     }
-    fn reject(&self, label: &str, expected: &str) {
-        let out = self.temp.path().join(label);
-        let result = self.run(&self.prior, &out);
-        assert!(!result.status.success());
-        assert!(
-            String::from_utf8_lossy(&result.stderr).contains(expected),
-            "{}",
-            String::from_utf8_lossy(&result.stderr)
-        );
-        assert!(!out.exists());
-    }
 }
 fn node(tree: &TreeNormalizationPackageInput, token: &str) -> PassiveNodeDefId {
     let TreeTokenRole::Allocation { node, .. } = &tree
@@ -156,295 +124,11 @@ fn node(tree: &TreeNormalizationPackageInput, token: &str) -> PassiveNodeDefId {
     };
     node.clone()
 }
-fn effects(
-    recipe: &StagedOwnedRecipe,
-    node: &PassiveNodeDefId,
-    class: &ClassDefId,
-) -> Vec<ViewContribution> {
-    let compiled =
-        CompiledRulePackage::compile(recipe.rules().input(), recipe.schema(), Default::default())
-            .unwrap();
-    let owner = SchemaSubject::Definition(node.address());
-    let program = &recipe
-        .rules()
-        .input()
-        .owners
-        .iter()
-        .find(|r| r.owner == owner)
-        .unwrap()
-        .programs
-        .members[0];
-    let facts = program
-        .reads
-        .iter()
-        .map(|r| {
-            let RuleReadSource::CharacterClassIs { class: expected } = &r.source else {
-                panic!("current persisted views are exact class predicates")
-            };
-            RuleFact {
-                read: r.id.clone(),
-                value: ParameterValue::Boolean(expected == class),
-            }
-        })
-        .collect::<Vec<_>>();
-    let report = compiled
-        .evaluate(
-            &owner,
-            &program.id,
-            &facts,
-            recipe.schema(),
-            &mut compiled.new_scratch(),
-        )
-        .unwrap();
-    report
-        .effects
-        .into_iter()
-        .filter_map(|e| match e.disposition {
-            EffectDisposition::Inactive => None,
-            EffectDisposition::Applied { value } => {
-                let RuleEffectKind::Contribute {
-                    stat,
-                    contribution,
-                    entity,
-                    ..
-                } = e.effect
-                else {
-                    panic!("only declared contributions")
-                };
-                assert_eq!(entity, RuleEntity::Player);
-                Some(ViewContribution {
-                    stat,
-                    contribution,
-                    value,
-                })
-            }
-            other => panic!("supplied exact class did not produce a supported effect: {other:?}"),
-        })
-        .collect()
-}
 fn quantity(v: &ParameterValue) -> f64 {
     let ParameterValue::Quantity(v) = v else {
         panic!("quantity")
     };
     v.value()
-}
-
-#[test]
-fn seven_persisted_view_nodes_replace_whole_lists_and_publish_idempotently() {
-    let f = Fixture::new();
-    let before = files(&f.prior);
-    let output = f.temp.path().join("views");
-    let report = success(f.run(&f.prior, &output));
-    assert_eq!(report["views"]["converted_nodes"], 7);
-    assert_eq!(report["views"]["refined_nodes"], 7);
-    assert_eq!(report["views"]["added_receiver_owners"], 2);
-    assert_eq!(report["views"]["added_receivers"], 2);
-    assert_eq!(report["publication"]["query_rows"], 110);
-    assert_eq!(
-        report["publication"]["whole_build_parity"],
-        "not_established"
-    );
-    assert_eq!(report["publication"]["source_execution"], false);
-    assert_eq!(report["publication"], read(output.join("transition.json")));
-    let old = read(f.prior.join("registry.json"));
-    let next = read(output.join("registry.json"));
-    assert_eq!(old["last_issued"], 7472);
-    assert_eq!(next["last_issued"], 7476);
-    let old_entries = old["entries"].as_array().unwrap();
-    assert!(next["entries"].as_array().unwrap()[..old_entries.len()] == *old_entries);
-    assert_eq!(
-        read(output.join("rules.json"))["operations_version"],
-        "owned-domain-operations-v7"
-    );
-    let recipe = assemble_owned_recipe(
-        serde_json::from_value(read(output.join("recipe.json"))).unwrap(),
-        Default::default(),
-    )
-    .unwrap();
-    let policy: ViewRecipePolicy = serde_json::from_value(read(&f.policy)).unwrap();
-    let tree: TreeNormalizationPackageInput =
-        serde_json::from_value(read(output.join("tree-normalization.json"))).unwrap();
-    let witch = &tree
-        .content
-        .classes
-        .iter()
-        .find(|c| c.key == "1")
-        .unwrap()
-        .class;
-    let sorceress = &tree
-        .content
-        .classes
-        .iter()
-        .find(|c| c.key == "7")
-        .unwrap()
-        .class;
-    for row in &policy.nodes {
-        assert_eq!(
-            effects(&recipe, &node(&tree, &row.node), sorceress),
-            row.default.contributions
-        );
-        assert_eq!(
-            effects(&recipe, &node(&tree, &row.node), witch),
-            row.views[0].effects.contributions
-        );
-    }
-    // Independent semantic checks catch accidental default-plus-view composition.
-    let elemental = effects(&recipe, &node(&tree, "22314"), sorceress);
-    let replaced = effects(&recipe, &node(&tree, "22314"), witch);
-    assert_eq!(elemental.len(), 1);
-    assert_eq!(quantity(&elemental[0].value), 8.0);
-    assert_eq!(replaced.len(), 2);
-    assert!(replaced.iter().all(|c| quantity(&c.value) == 8.0));
-    assert!(replaced.iter().all(|c| c.stat != elemental[0].stat));
-    let default = effects(&recipe, &node(&tree, "51184"), sorceress);
-    let replaced = effects(&recipe, &node(&tree, "51184"), witch);
-    assert_eq!(default.len(), 2);
-    assert_eq!(replaced.len(), 3);
-    assert_eq!(quantity(&default[0].value), 20.0);
-    assert_eq!(quantity(&replaced[0].value), 16.0);
-    assert_eq!(quantity(&replaced[1].value), 16.0);
-    assert_eq!(default[1], replaced[2]);
-    assert!(matches!(&default[1].value,ParameterValue::Integer(v) if v.get()==10));
-    assert_eq!(
-        read(output.join("tree-normalization.json"))["content"],
-        read(f.prior.join("tree-normalization.json"))["content"]
-    );
-    for i in 1..=5 {
-        let file = format!("queries-original-{i:02}.json");
-        assert_eq!(fs::read(output.join(&file)).unwrap(), before[&file]);
-    }
-    let rerun = f.temp.path().join("rerun");
-    let again = success(f.run(&output, &rerun));
-    assert_eq!(again["views"]["refined_nodes"], 0);
-    assert_eq!(again["views"]["added_receiver_owners"], 0);
-    assert_eq!(again["views"]["added_receivers"], 0);
-    assert!(again["publication"].get("schema_refinement").is_none());
-    for (name, bytes) in files(&output) {
-        if name != "transition.json" {
-            assert!(
-                bytes == fs::read(rerun.join(&name)).unwrap(),
-                "rerun changed {name}"
-            );
-        }
-    }
-    assert!(before == files(&f.prior), "prior bundle changed");
-    let occupied = f.temp.path().join("occupied");
-    fs::create_dir(&occupied).unwrap();
-    fs::write(occupied.join("caller-file"), b"preserve").unwrap();
-    assert!(!f.run(&f.prior, &occupied).status.success());
-    assert_eq!(fs::read(occupied.join("caller-file")).unwrap(), b"preserve");
-    assert_eq!(fs::read_dir(&occupied).unwrap().count(), 1);
-}
-
-#[test]
-fn policy_catalog_and_input_bounds_reject_without_publishing() {
-    let f = Fixture::new();
-    let original = read(&f.policy);
-    let mut wrong = original.clone();
-    wrong["nodes"][0]["default"]["expected_stats"] = json!(["different source"]);
-    write(&f.policy, &wrong);
-    f.reject("wrong-text", "full stat list");
-    let mut duplicate = original.clone();
-    let row = duplicate["nodes"][0].clone();
-    duplicate["nodes"].as_array_mut().unwrap().push(row);
-    write(&f.policy, &duplicate);
-    f.reject("duplicate", "duplicate policy node");
-    write(&f.policy, &original);
-    let catalog = read(&f.catalog);
-    let mut changed = catalog.clone();
-    changed["nodes"].as_array_mut().unwrap().pop();
-    write(&f.catalog, &changed);
-    f.reject("changed-catalog", "catalog differs");
-    write(&f.catalog, &catalog);
-    fs::File::create(&f.policy)
-        .unwrap()
-        .set_len(64 * 1024 * 1024 + 1)
-        .unwrap();
-    f.reject("oversized", "input byte limit");
-}
-
-#[test]
-fn original_five_sorceress_passive_has_default_component_and_pending_access() {
-    let f = Fixture::new();
-    let output = f.temp.path().join("views");
-    success(f.run(&f.prior, &output));
-    let normalized = f.temp.path().join("original-five");
-    let mut cmd = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"));
-    cmd.current_dir(f.temp.path())
-        .arg("normalize-owned")
-        .arg(root().join("tests/fixtures/builds/breadth-20260908/build-05.xml"));
-    for (flag, file) in [
-        ("--policy", "normalization.json"),
-        ("--registry", "registry.json"),
-        ("--definitions", "schema.json"),
-        ("--mapping", "mapping.json"),
-        ("--roles", "roles.json"),
-        ("--rewards", "rewards.json"),
-        ("--items", "items.json"),
-        ("--item-source", "item-source.json"),
-        ("--tree-policy", "tree-normalization.json"),
-    ] {
-        cmd.arg(flag).arg(output.join(file));
-    }
-    cmd.arg("--queries")
-        .arg(output.join("queries-original-05.json"))
-        .arg("--output")
-        .arg(&normalized);
-    let report = success(cmd.output().unwrap());
-    assert_eq!(report["normalization_status"], "pending");
-    assert_eq!(report["verification"]["calculation"], "not_run");
-    let draft = decode_draft(
-        &fs::read(normalized.join("draft.json")).unwrap(),
-        DraftLimits::default(),
-    )
-    .unwrap();
-    let tree: TreeNormalizationPackageInput =
-        serde_json::from_value(read(output.join("tree-normalization.json"))).unwrap();
-    let target = node(&tree, "4739");
-    // Original 05's activeSpec is 3; all saved specs remain independent presets.
-    let selected = &draft.input().allocation_presets.members[2]
-        .allocations
-        .members;
-    let allocation = draft
-        .input()
-        .allocations
-        .members
-        .iter()
-        .find(|a| selected.contains(&a.id) && a.node.to_resolved() == Some(target.clone()))
-        .unwrap();
-    assert!(matches!(
-        allocation.access,
-        DraftAllocationAccess::Pending(_)
-    ));
-    let class = draft.input().character_presets.members[2]
-        .class
-        .to_resolved()
-        .unwrap();
-    assert_eq!(
-        class,
-        tree.content
-            .classes
-            .iter()
-            .find(|c| c.key == "7")
-            .unwrap()
-            .class
-    );
-    let recipe = assemble_owned_recipe(
-        serde_json::from_value(read(output.join("recipe.json"))).unwrap(),
-        Default::default(),
-    )
-    .unwrap();
-    let component = effects(&recipe, &target, &class);
-    assert_eq!(component.len(), 1);
-    assert_eq!(quantity(&component[0].value), 10.0);
-    assert_eq!(
-        draft.input().query_presets.members[0]
-            .queries
-            .requests
-            .members
-            .len(),
-        22
-    );
 }
 
 fn key(s: &str) -> OwnedDefinitionKey {

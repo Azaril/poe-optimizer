@@ -1,51 +1,41 @@
-# Class-dependent passive effect data
+# Historical class-dependent passive policy
 
-The Rust `compile-owned-passive-views` command converts explicitly reviewed complete
-stat lists into owned rules. `policy.json` supplies source selectors, expected lists,
-numeric effects and receiver programs. These seven physical nodes cover the views in
-the original builds' saved specifications, with additional elemental-to-spell/minion
-replacement contrasts. The other view-bearing nodes remain unconverted.
+`policy.json` and `statistics.json` retain the reviewed source lists and original
+numeric/receiver declarations for seven physical class-view nodes. They are fixed
+historical evidence. Production programs now come from the maintained KDL/DSL
+release, and the seven intrinsic support domains are authenticated by
+[the class-view source packet](../view-support-domains/README.md).
 
-The rule compiler selects a matching class first, then primary ascendancy, then the
-default list. It replaces the entire list. Native execution reads the authored character
-through typed v7 predicates; source names and node keys are offline conversion inputs.
-All seven reviewed views select Witch. The selected Sorceress in original05 must retain
-node 4739's default 10% increased Spell Damage.
+The source compiler selects a matching class first, then primary ascendancy, then
+the default list, replacing the complete list. All seven reviewed overrides are
+Witch views. Original05's selected Sorceress retains node 4739's default 10%
+increased Spell Damage. Other switchable nodes are outside this packet.
 
-| Owned stat number | Meaning |
+| Owned stat number | Retained meaning |
 | --- | --- |
-| 7473 | Increased spell damage contributions, percentage points |
-| 7474 | Increased elemental damage contributions, percentage points |
-| 7475 | Increased damage granted by the player to owned minions; contribution bucket and summed player property |
-| 7476 | Granted modifier received by the declared Skeletal Sniper actor, percentage points |
+| 7473 | Spell Damage Increase contributions in percentage points |
+| 7474 | Elemental Damage Increase contributions in percentage points |
+| 7475 | Player contribution bucket and summed property granted to owned minions |
+| 7476 | Property received by the exact declared Skeletal Sniper actor slot |
 
-Intelligence contributions reuse 7472. These four new IDs append to the attribute
-compiler's 7472-entry successor; they cannot be allocated from the older 7469-entry tree
-bundle. Stat definitions, values, affected nodes and receiver targets are data, not Rust
-skill/build dispatch.
+The historical policy used Integer Intelligence stat 7472. Current node 51184
+uses Count through both established attribute passes, with inputs 331d and 3320
+(hexadecimal) and unit 295a. The maintained tests authenticate that transition
+from `attribute-stages/count-bindings.json` and `count-programs.json` and execute
+both complete class branches; they do not reintroduce the old Integer recipe.
 
-Two stat-owned receivers make the minion property explicit: a Player receiver sums
-7475's Increase contributions, and an exact Sniper actor-slot receiver reads that Player
-property into 7476. It does not create minions, bypass grant activation, add this bonus to
-player spell damage, or calculate total minion DPS. Local modifiers, other minion slots,
-auras/allies/Offerings and full action damage remain separate rules. Normal whole-request
-and contributor-completeness checks still apply.
+Maintained Authoring `view_support_source` / `view_support_domains` tests now own
+the seven-node source proof, complete-list replacement, missing-class and receiver
+input behavior, current Count channels, and Original05's already-proven ordinary
+access with five separate pending finalization obligations.
+Three old CLI tests have retired. `tests/owned_passive_views_cli.rs` retains only
+the useful isolated whole-plan receiver test and its necessary predecessor fixture:
+exact Sniper versus active unrelated actor, disabled Sniper retaining the Player
+grant, and Partial contributor coverage propagating unresolved results. Moving
+that final law requires the actual maintained checked evaluation/readiness bundle;
+no production completeness is inferred from the isolated fixture.
 
-After generating `runs/owned-attributes-package` using
-[the attribute command](../attributes/README.md), run from the repository root:
-
-```powershell
-$viewData = 'data/owned/poe2/3887ae68'
-./target/debug/poe-optimizer.exe compile-owned-passive-views runs/owned-attributes-package `
-  --catalog "$viewData/tree/tree-catalog.json" `
-  --policy "$viewData/passive-views/policy.json" `
-  --statistics "$viewData/passive-views/statistics.json" `
-  --output runs/owned-passive-views-package
-```
-
-The destination must be new. The shared checked publisher preserves the ledger prefix,
-physical nodes, topology, slots and all import/query policies. Only reviewed declaration
-closures and previously unresolved programs are replaced. Additional/changed source views,
-unlocks, ports or conflicting rules/receivers reject; an unchanged rerun reuses all IDs.
-The result uses operation set v7; earlier v6 artifacts remain accepted unchanged by the
-native compiler. Full original-build completion remains 0/5.
+The generic `compile_owned_passive_views` Import compiler, its focused rejection
+and bound tests, and existing external callers remain available. Generic Host
+publication tests retain atomicity/no-clobber checks. This data does not create
+minions, bypass activation, establish total minion DPS, or complete Original05.

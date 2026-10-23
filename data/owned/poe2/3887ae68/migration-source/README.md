@@ -45,7 +45,7 @@ node renaming, retains read/operand/effect semantics and order, checks exact
 owner membership, and compiles the complete reconstructed rule package with the
 existing Engine. Non-program metadata and all incomplete-coverage declarations
 must remain unchanged except for the explicitly admitted 69 Stat declarations,
-one Sniper initial-type program and 326 intrinsic support-domain declarations.
+one Sniper initial-type program and 335 intrinsic support-domain declarations.
 The release test removes exactly that delta,
 restores historical program members and uses checked content constructors to bind
 the original dependencies. Every reconstructed historical artifact length/hash
@@ -73,14 +73,20 @@ rule owners and five partial routing outputs. The first declarations add Sniper'
 initial own/minion type facts and explicit minion-context presence through generic
 Skill Boolean Stats. See [evidence and limits](../initial-skill-types/README.md).
 Eight existing Skill, Actor and declared-slot owners, three root/Ascendancy
-owners, four UsagePolicies, 293 ordinary attribute-choice passives and eighteen
-reviewed numeric minion passives now have intrinsic support-source domains,
-bringing the total to 1,312 (1,283 Known, 29 Unmapped).
+owners, four UsagePolicies, 293 ordinary attribute-choice passives, eighteen
+reviewed numeric minion passives, seven class-view passives, one intrinsic socket
+and one Boolean-flag passive now have intrinsic support-source domains,
+bringing the total to 1,321 (1,292 Known, 29 Unmapped).
 See [source evidence and boundaries](../sniper-support-domains/README.md).
 The [attribute-choice proof](../attribute-support-domains/README.md) includes
 every option and retains the current six Count contribution channels.
 The [numeric minion proof](../minion-support-domains/README.md) preserves the
 eighteen owners' 26 programs, including paired effects and conditional receivers.
+The [class-view](../view-support-domains/README.md),
+[socket](../socket-support-domains/README.md) and
+[flag](../gigantic-support-domains/README.md) proofs keep alternate branches,
+external socket providers and incomplete contribution-query membership distinct
+from intrinsic source classification.
 Inherited supports remain present, external origins remain independently checked,
 and all numerical Partial coverage stays unchanged. No new names or IDs are
 allocated by this metadata update.
@@ -103,10 +109,10 @@ serve as production names.
 
 ## Checked source inventory
 
-Current input: `a50330b621d340cb7ac47d0948280bc1cec65cc45bd02d92b9fa58cceeda0286`.
+Current input: `8a24f656ad4aecb42051b7ffa118bb78539e47b8429e1ff6cac193d53957f246`.
 The 103 packets reference 2,562 distinct complete rule sources, preserving all
 8,213 occurrences. Their local name files use 5,011 distinct exact addresses;
-the declaration ledger adds 69 names. The 2,787 declared inputs occupy 5,789,331
-encoded and 58,659,582 decoded bytes; the root manifest is 183,544 bytes.
+the declaration ledger adds 69 names. The 2,787 declared inputs occupy 5,789,368
+encoded and 58,661,796 decoded bytes; the root manifest is 183,544 bytes.
 All fit the existing default limits. The maintained Authoring tests check actual
 source graphs, historical artifacts and the new initial-type projection.
