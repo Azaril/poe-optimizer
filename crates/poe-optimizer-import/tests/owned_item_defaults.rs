@@ -445,7 +445,7 @@ fn independently_authored_alias_suppresses_a_default_for_the_same_slot() {
 #[test]
 fn production_normalization_preserves_default_provenance_and_partial_closure() {
     use poe_optimizer_core::owned_draft::DraftListCompletion;
-    use poe_optimizer_import::{owned_mapping::*, owned_reward_policy::*, owned_skill_catalog::*};
+    use poe_optimizer_import::{owned_mapping::*, owned_reward_policy::*, owned_skill_roles::*};
     let mut a = fixture();
     // Rebind this directly authored fixture after adding the template's input slots.
     let mut mapping = a.mapping.input().clone();

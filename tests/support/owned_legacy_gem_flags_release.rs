@@ -9,7 +9,7 @@ use poe_optimizer_core::{
 use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
     decode_build,
-    owned_normalize::{GemQualityPolicy, NormalizationPolicy},
+    owned_normalize::{GemQualityPolicy, NamedQuerySet, NormalizationPolicy},
     owned_recipe::OwnedRecipeInput,
     owned_recipe_extension::{OwnedRecipeExtension, extend_owned_recipe},
     owned_release::{
@@ -17,7 +17,6 @@ use poe_optimizer_import::{
         assemble_owned_release,
     },
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
-    owned_successor::NamedQuerySet,
 };
 use serde_json::Value;
 use sha2::{Digest, Sha256};

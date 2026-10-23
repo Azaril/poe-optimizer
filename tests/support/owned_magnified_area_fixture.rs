@@ -127,7 +127,7 @@ impl World {
                 .unwrap();
             assert_eq!(
                 association.primary,
-                poe_optimizer_import::owned_skill_catalog::OwnedPrimarySkill::Known(skill.clone())
+                poe_optimizer_import::owned_skill_roles::OwnedPrimarySkill::Known(skill.clone())
             );
             for address in [gem.address(), skill.address()] {
                 let actual = endpoint

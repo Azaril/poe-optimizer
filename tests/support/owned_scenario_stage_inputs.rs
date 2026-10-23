@@ -16,7 +16,7 @@ use poe_optimizer_import::{
         OwnedReleaseContractMigration, OwnedReleaseMigrationInput, compile_owned_release_migration,
     },
     owned_reward_policy::*,
-    owned_skill_catalog::*,
+    owned_skill_roles::*,
     owned_source::*,
     owned_successor::{SuccessorBundleInput, transition_owned_normalization_with_tree_compact},
     owned_value::{DecimalSyntax, ValueCodecInput, ValueCodecKind, WhitespacePolicy},

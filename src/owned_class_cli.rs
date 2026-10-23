@@ -1,5 +1,8 @@
 //! Offline class-base source conversion and checked owned-bundle publication.
-use super::owned_tree_cli::{invalid, load_checked_bundle, read};
+use super::{
+    owned_io::{invalid, read},
+    owned_tree_cli::load_checked_bundle,
+};
 use poe_optimizer_import::{
     owned_class_bases::{ClassBaseRecipeLimits, ClassBaseRecipePolicy, compile_owned_class_bases},
     owned_successor::{

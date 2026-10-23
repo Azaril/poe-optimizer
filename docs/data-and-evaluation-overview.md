@@ -163,9 +163,9 @@ Optional `expected_input` asserts equality with the assembled release-input
 digest. It is an exact reproduction check, not a coverage certificate. Both CLI
 hosts call the same `poe-optimizer-host` publication implementation, which writes
 and syncs staged files before a no-clobber directory rename on Windows/Linux.
-Host contains no game, Import or Authoring dependencies. The native CLI still
-loads releases by reassembling authoring inputs; extracting its immutable loader
-remains required before runtime cutover.
+Host contains no game, Import or Authoring dependencies. The native CLI loads
+published releases through the shared checked artifact reader. It no longer
+calls publication assembly from metric or source-action loading.
 
 The prerequisite validation split is implemented. Registry decoding returns an
 immutable `OwnedIdRegistrySnapshot`; offline allocation resumes explicitly from
@@ -174,8 +174,20 @@ routing and the Engine-checked executable, including its stored-source identity.
 Publication staging wraps it, while evaluator-artifact validation uses the checked
 recipe directly. Metric release loading now shares these handles instead of
 cloning packages and compiling the rules again. Standalone artifact loading uses
-the same Engine compiler. Release loading still reconstructs and checks the
-canonical publication; removing that reconstruction is the next migration step.
+the same Engine compiler. `CheckedOwnedRelease` validates the complete component
+graph and retains its immutable packages. The reader streams canonical values
+against the supplied bytes, including the recipe manifest and release receipt;
+rehashing a forged claim or noncanonical artifact does not make it valid. Ordered
+query commitments and aggregate byte/work limits remain checked. The raw file
+buffers are released after loading. Offline publication and revision commands
+explicitly reconstruct or stage data when requested.
+
+Runtime role DTOs, indexes and validators now live in `owned_skill_roles`; offline
+catalog generation depends on them in one direction. Offline code still resides
+in Import. The maintained allocator/publication core must move into Authoring;
+obsolete transformation chains must be retired after preserving their useful tests.
+This checkpoint removes runtime reassembly. Legacy Data/Engine feature removal and
+the planned compact package remain separate migration work.
 
 The immutable pre-migration IR corpus lives only in Authoring's
 [`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz),

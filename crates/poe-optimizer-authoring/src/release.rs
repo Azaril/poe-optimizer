@@ -10,13 +10,13 @@ use poe_optimizer_core::{
     owned_content::OwnedContentDigest, owned_definitions::OwnedDefinitionKey,
 };
 use poe_optimizer_import::{
+    owned_normalize::NamedQuerySet,
     owned_recipe::{OWNED_RECIPE_VERSION, OwnedRecipeInput},
     owned_release::{
         OWNED_EVALUATION_RELEASE_VERSION, OWNED_RELEASE_VERSION, OwnedReleaseError,
         OwnedReleaseInput, OwnedReleaseLimits, StagedOwnedRelease, assemble_owned_release,
     },
     owned_release_evaluation::{OwnedReleaseEvaluationInput, OwnedReleaseSupportInput},
-    owned_successor::NamedQuerySet,
 };
 use serde::de::DeserializeOwned;
 use std::{

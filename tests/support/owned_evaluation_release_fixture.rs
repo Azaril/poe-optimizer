@@ -21,7 +21,7 @@ use poe_optimizer_engine::{owned_plan::*, owned_rules::CompiledRulePackage};
 use poe_optimizer_import::{
     owned_item_lines::*, owned_item_source::*, owned_mapping::*, owned_normalize::*,
     owned_recipe::*, owned_release::*, owned_release_evaluation::*, owned_reward_policy::*,
-    owned_skill_catalog::*, owned_value::*, owned_value_policy::*,
+    owned_skill_roles::*, owned_value::*, owned_value_policy::*,
 };
 use serde::{Serialize, de::DeserializeOwned};
 use serde_json::Value;

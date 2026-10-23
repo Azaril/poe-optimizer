@@ -3,7 +3,7 @@ use player::key;
 use poe_optimizer_core::{owned_build::DeclaredSlot, owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::*;
 use poe_optimizer_import::{
-    owned_mapping::*, owned_skill_catalog::*, owned_source_actions::*, owned_value_policy::*,
+    owned_mapping::*, owned_skill_roles::*, owned_source_actions::*, owned_value_policy::*,
 };
 
 fn declarations() -> DeclaredSlots {

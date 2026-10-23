@@ -10,7 +10,7 @@ use poe_optimizer_import::{
     owned_mapping::*,
     owned_normalize::*,
     owned_reward_policy::*,
-    owned_skill_catalog::*,
+    owned_skill_roles::*,
     owned_source::*,
     owned_source_actions::*,
     owned_value::*,
@@ -486,7 +486,7 @@ impl Fixture {
         roles.mapping = *f.base.mapping.identity();
         roles.roles.push(OwnedGemRoleRow {
             construction:
-                poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
+                poe_optimizer_import::owned_skill_roles::OwnedGemSourceConstruction::Unavailable,
             gem: gem.clone(),
             primary: OwnedPrimarySkill::Known(primary.clone()),
             role: OwnedGemRole::Known(AuthoredGemRole::SkillUse),

@@ -2,7 +2,7 @@
 //! target separately exercises real normalizer receipt production; these tests
 //! preserve the actual private Builder/sidecar links while tampering snapshots.
 use super::*;
-use crate::owned_skill_catalog::{
+use crate::owned_skill_roles::{
     ObservedGemSourceConstruction, OwnedIndexedSourceEffectReference, OwnedMissingSourceEffect,
     OwnedMissingSourceEffectKind, OwnedSourceEffectReference, OwnedSourceEffectResolution,
 };

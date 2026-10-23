@@ -5,7 +5,7 @@ use poe_optimizer_core::{owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::*;
 use poe_optimizer_import::{
     build_instance::ImportedBuildInstance, owned_mapping::*, owned_normalize::*,
-    owned_skill_catalog::*, owned_source_actions::*, owned_value::*,
+    owned_skill_roles::*, owned_source_actions::*, owned_value::*,
 };
 
 pub struct Fixture {

@@ -1,5 +1,8 @@
 //! Pure Rust offline conversion of a finite intrinsic-attack catalog.
-use super::owned_tree_cli::{invalid, load_checked_bundle, read};
+use super::{
+    owned_io::{invalid, read},
+    owned_tree_cli::load_checked_bundle,
+};
 use poe_optimizer_import::{
     owned_intrinsic_attack::{
         IntrinsicAttackLimits, IntrinsicAttackPolicy, compile_owned_intrinsic_attack,

@@ -21,11 +21,10 @@ use poe_optimizer_import::{
     decode_build,
     owned_normalize::{
         ImportActionTarget, ImportActorTarget, ImportQueryTarget, ImportQueryTemplate,
-        NormalizationLimits,
+        NamedQuerySet, NormalizationLimits,
     },
     owned_release::{OWNED_RELEASE_VERSION, OwnedReleaseInput},
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
-    owned_successor::NamedQuerySet,
 };
 use serde_json::Value;
 use std::{

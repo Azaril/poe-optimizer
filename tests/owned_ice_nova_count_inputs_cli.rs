@@ -19,7 +19,7 @@ use poe_optimizer_import::{
         GemInventoryPolicy, configuration_disposition_dependencies, usage_inputs_identity,
     },
     owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
-    owned_skill_catalog::OwnedGemRoleRow,
+    owned_skill_roles::OwnedGemRoleRow,
     owned_successor::{SuccessorBundleInput, transition_owned_normalization_with_tree_compact},
 };
 use serde::Serialize;

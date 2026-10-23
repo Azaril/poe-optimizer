@@ -1,21 +1,18 @@
-//! Filesystem host for independently checked, immutable owned data releases.
-use poe_optimizer_core::owned_definitions::OwnedDefinitionKey;
+//! Offline release assembly, explicit migrations and atomic publication.
+use super::{
+    owned_io::{invalid, read_release_input as read},
+    owned_release_loader::load_release,
+};
 use poe_optimizer_import::{
-    owned_recipe::{OWNED_RECIPE_VERSION, OwnedRecipeInput},
     owned_release::{
-        OWNED_EVALUATION_RELEASE_VERSION, OWNED_RELEASE_VERSION, OwnedReleaseInput,
-        OwnedReleaseLimits, OwnedReleaseReceipt, StagedOwnedRelease, assemble_owned_release,
-        decode_owned_release,
+        OWNED_RELEASE_VERSION, OwnedReleaseInput, OwnedReleaseLimits, StagedOwnedRelease,
+        assemble_owned_release, decode_owned_release, stage_checked_owned_release,
     },
-    owned_release_evaluation::{OwnedReleaseEvaluationInput, OwnedReleaseSupportInput},
     owned_release_migration::{OwnedReleaseMigrationInput, compile_owned_release_migration},
     owned_release_revision::{OwnedReleaseRevisionInput, compile_owned_release_revision},
-    owned_successor::{NamedQuerySet, SuccessorBindings, SuccessorBundleLimits},
+    owned_successor::{SuccessorBindings, SuccessorBundleLimits},
 };
-use serde::de::DeserializeOwned;
-use sha2::{Digest, Sha256};
 use std::{
-    collections::{BTreeMap, BTreeSet},
     error::Error,
     fs,
     io::{self, Write},
@@ -37,234 +34,7 @@ pub(crate) struct Args {
     output: PathBuf,
 }
 
-const REQUIRED: [&str; 11] = [
-    "registry.json",
-    "schema.json",
-    "rules.json",
-    "routing.json",
-    "manifest.json",
-    "mapping.json",
-    "roles.json",
-    "normalization.json",
-    "rewards.json",
-    "items.json",
-    "item-source.json",
-];
 type Result<T> = std::result::Result<T, Box<dyn Error>>;
-use super::owned_tree_cli::invalid;
-
-fn query_name(name: &str) -> Option<&str> {
-    let label = name.strip_prefix("queries-")?.strip_suffix(".json")?;
-    (!label.is_empty()
-        && label.len() <= 64
-        && label
-            .bytes()
-            .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'-' || b == b'_'))
-    .then_some(label)
-}
-
-fn read(path: &Path, remaining: &mut usize, maximum: usize) -> Result<Vec<u8>> {
-    if !fs::symlink_metadata(path)?.file_type().is_file() {
-        return Err(invalid("release input must be a regular file"));
-    }
-    let mut bounded = (*remaining).min(maximum);
-    let bytes = super::owned_tree_cli::read(path, &mut bounded)?;
-    *remaining -= bytes.len();
-    Ok(bytes)
-}
-
-fn decode<T: DeserializeOwned>(files: &BTreeMap<String, Vec<u8>>, name: &str) -> Result<T> {
-    Ok(serde_json::from_slice(files.get(name).ok_or_else(
-        || invalid(format!("missing release artifact: {name}")),
-    )?)?)
-}
-
-pub(crate) fn load_release(
-    root: &Path,
-    remaining: &mut usize,
-    limits: OwnedReleaseLimits,
-) -> Result<StagedOwnedRelease> {
-    let receipt_bytes = read(
-        &root.join("release.json"),
-        remaining,
-        limits.max_artifact_bytes,
-    )?;
-    let receipt: OwnedReleaseReceipt = serde_json::from_slice(&receipt_bytes)?;
-    let mut evaluation_names = BTreeSet::new();
-    if let Some(evaluation) = &receipt.evaluation {
-        evaluation_names.insert("metrics.json");
-        if let Some(support) = &evaluation.support {
-            evaluation_names.extend([
-                "support-stages.json",
-                "support-preparation.json",
-                "support-inputs.json",
-                "support-receiving.json",
-            ]);
-            if support.outputs.is_some() {
-                evaluation_names.insert("support-outputs.json");
-            }
-        }
-    }
-    let valid_version = matches!(
-        (receipt.schema_version, receipt.evaluation.is_some()),
-        (OWNED_RELEASE_VERSION, false) | (OWNED_EVALUATION_RELEASE_VERSION, true)
-    );
-    let max_artifacts = REQUIRED.len() + limits.max_query_sets + 1 + evaluation_names.len();
-    if !valid_version
-        || receipt.document_kind != "owned_data_release"
-        || receipt.artifacts.len() > max_artifacts
-        || receipt.query_sets > limits.max_query_sets
-        || receipt.query_rows > limits.max_queries
-        || receipt.provenance.len() > limits.max_provenance_entries
-    {
-        return Err(invalid("unsupported or oversized release receipt"));
-    }
-    // Validate every basename and the entire inventory before reading any listed
-    // path. In particular, no relative path, symlink or extra directory is data.
-    let mut names = BTreeSet::new();
-    let mut total = 0usize;
-    for row in &receipt.artifacts {
-        if !(REQUIRED.contains(&row.file.as_str())
-            || row.file == "tree-normalization.json"
-            || evaluation_names.contains(row.file.as_str())
-            || query_name(&row.file).is_some())
-            || !names.insert(row.file.as_str())
-            || row.bytes > limits.max_artifact_bytes
-            || row.sha256.len() != 64
-            || !row
-                .sha256
-                .bytes()
-                .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
-        {
-            return Err(invalid("invalid release artifact inventory"));
-        }
-        total = total
-            .checked_add(row.bytes)
-            .ok_or_else(|| invalid("release artifact byte overflow"))?;
-    }
-    if total > *remaining
-        || REQUIRED.iter().any(|name| !names.contains(name))
-        || evaluation_names.iter().any(|name| !names.contains(name))
-        || names.contains("tree-normalization.json") != receipt.tree.is_some()
-        || names
-            .iter()
-            .filter(|name| query_name(name).is_some())
-            .count()
-            != receipt.query_sets
-    {
-        return Err(invalid(
-            "incomplete or oversized release artifact inventory",
-        ));
-    }
-    let mut entries = 0usize;
-    for entry in fs::read_dir(root)? {
-        entries += 1;
-        if entries > max_artifacts + 1 {
-            return Err(invalid("release directory entry limit"));
-        }
-        let entry = entry?;
-        let name = entry.file_name();
-        if !entry.file_type()?.is_file()
-            || !name
-                .to_str()
-                .is_some_and(|name| name == "release.json" || names.contains(name))
-        {
-            return Err(invalid(
-                "release directory has an unlisted or non-file artifact",
-            ));
-        }
-    }
-    if entries != names.len() + 1 {
-        return Err(invalid("release directory omitted an artifact"));
-    }
-    let mut files = BTreeMap::new();
-    for row in &receipt.artifacts {
-        let bytes = read(&root.join(&row.file), remaining, limits.max_artifact_bytes)?;
-        if bytes.len() != row.bytes || format!("{:x}", Sha256::digest(&bytes)) != row.sha256 {
-            return Err(invalid(format!(
-                "release artifact hash/size differs: {}",
-                row.file
-            )));
-        }
-        files.insert(row.file.clone(), bytes);
-    }
-    // The receipt's ordered inventory retains authored query-set order. Query
-    // rows likewise remain ordered; map iteration would lose this commitment.
-    let query_sets = receipt
-        .artifacts
-        .iter()
-        .filter_map(|row| {
-            query_name(&row.file).map(|name| {
-                Ok(NamedQuerySet {
-                    name: OwnedDefinitionKey::new(name)?,
-                    queries: decode(&files, &row.file)?,
-                })
-            })
-        })
-        .collect::<Result<Vec<_>>>()?;
-    let staged = assemble_owned_release(
-        OwnedReleaseInput {
-            schema_version: receipt.schema_version,
-            recipe: OwnedRecipeInput {
-                schema_version: OWNED_RECIPE_VERSION,
-                registry: decode(&files, "registry.json")?,
-                schema: decode(&files, "schema.json")?,
-                rules: decode(&files, "rules.json")?,
-                routing: decode(&files, "routing.json")?,
-            },
-            mapping: decode(&files, "mapping.json")?,
-            roles: decode(&files, "roles.json")?,
-            normalization: decode(&files, "normalization.json")?,
-            rewards: decode(&files, "rewards.json")?,
-            items: decode(&files, "items.json")?,
-            item_source: decode(&files, "item-source.json")?,
-            tree: receipt
-                .tree
-                .map(|_| decode(&files, "tree-normalization.json"))
-                .transpose()?,
-            evaluation: receipt
-                .evaluation
-                .as_ref()
-                .map(|evaluation| {
-                    Ok::<_, Box<dyn Error>>(OwnedReleaseEvaluationInput {
-                        metrics: decode(&files, "metrics.json")?,
-                        support: evaluation
-                            .support
-                            .as_ref()
-                            .map(|support| {
-                                Ok::<_, Box<dyn Error>>(OwnedReleaseSupportInput {
-                                    stages: decode(&files, "support-stages.json")?,
-                                    preparation: decode(&files, "support-preparation.json")?,
-                                    inputs: decode(&files, "support-inputs.json")?,
-                                    receiving: decode(&files, "support-receiving.json")?,
-                                    outputs: support
-                                        .outputs
-                                        .map(|_| decode(&files, "support-outputs.json"))
-                                        .transpose()?,
-                                })
-                            })
-                            .transpose()?,
-                    })
-                })
-                .transpose()?,
-            query_sets,
-            provenance: receipt.provenance,
-        },
-        limits,
-    )?;
-    files.insert("release.json".into(), receipt_bytes);
-    if staged.artifacts().count() != files.len() {
-        return Err(invalid("release assembly artifact count differs"));
-    }
-    for (name, bytes) in staged.artifacts() {
-        if files.get(name).map(Vec::as_slice) != Some(bytes) {
-            return Err(invalid(format!(
-                "release assembly artifact differs: {name}"
-            )));
-        }
-    }
-    Ok(staged)
-}
 
 fn load_successor(
     root: &Path,
@@ -319,7 +89,9 @@ pub(crate) fn run(args: Args) -> Result<()> {
         // Presence selects the release parser even if its receipt is malformed.
         // Never fall back to legacy parsing after a release validation failure.
         match fs::symlink_metadata(args.input.join("release.json")) {
-            Ok(_) => load_release(&args.input, &mut remaining, limits)?,
+            Ok(_) => {
+                stage_checked_owned_release(load_release(&args.input, &mut remaining, limits)?)?
+            }
             Err(e) if e.kind() == io::ErrorKind::NotFound => {
                 load_successor(&args.input, &mut remaining, limits)?
             }

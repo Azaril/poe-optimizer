@@ -5,7 +5,7 @@ use poe_optimizer_core::{owned_content::digest_owned, owned_definitions::*, owne
 use poe_optimizer_data::skill_identities::SkillIdentityCatalog;
 use poe_optimizer_import::{
     owned_gem_catalog::*, owned_mapping::*, owned_normalize::*, owned_recipe::*,
-    owned_skill_catalog::*, owned_value::*, owned_value_policy::*,
+    owned_skill_roles::*, owned_value::*, owned_value_policy::*,
 };
 use std::{fs, path::PathBuf};
 

@@ -128,7 +128,7 @@ fn commitment(policy: &NormalizationPolicy) -> Option<OwnedContentDigest> {
 fn assert_rebound(
     prior: &StagedOwnedRelease,
     actual: &NormalizationPolicy,
-    roles: &poe_optimizer_import::owned_skill_catalog::OwnedSkillRoleIndex,
+    roles: &poe_optimizer_import::owned_skill_roles::OwnedSkillRoleIndex,
 ) {
     assert_ne!(roles.identity(), prior.roles().identity());
     let mut expected = prior.input().normalization.clone();

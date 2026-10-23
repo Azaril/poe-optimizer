@@ -4,7 +4,7 @@ use poe_optimizer_import::{
     owned_catalog_recipe::{CatalogRecipeLimits, extend_owned_catalog_recipe},
     owned_mapping::{MappingPackageInput, SourcePin},
     owned_recipe::OwnedRecipeInput,
-    owned_skill_catalog::SkillCatalogPolicy,
+    owned_skill_roles::SkillCatalogPolicy,
 };
 use serde::de::DeserializeOwned;
 use std::{

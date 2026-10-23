@@ -523,7 +523,7 @@ fn normalized_fixture(
         owned_mapping::*,
         owned_normalize::*,
         owned_reward_policy::*,
-        owned_skill_catalog::*,
+        owned_skill_roles::*,
         owned_source::*,
         owned_value::*,
         owned_value_policy::*,

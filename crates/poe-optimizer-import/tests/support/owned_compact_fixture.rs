@@ -1,6 +1,8 @@
 //! Shared finite inputs for successor packaging tests; never runtime build defaults.
 use poe_optimizer_core::owned_definitions::OwnedDefinitionKey;
-use poe_optimizer_import::{owned_successor::*, owned_tree_policy::*};
+use poe_optimizer_import::{
+    owned_normalize::NamedQuerySet, owned_successor::*, owned_tree_policy::*,
+};
 use serde::de::DeserializeOwned;
 use std::{fs, path::Path};
 fn load<T: DeserializeOwned>(root: &Path, name: &str) -> T {

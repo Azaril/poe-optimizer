@@ -11,7 +11,7 @@ use crate::{
         NormalizationLimits, validate_gem_input_policy,
     },
     owned_recipe::{OwnedRecipeError, StagedOwnedRecipe, assemble_owned_recipe},
-    owned_skill_catalog::{
+    owned_skill_roles::{
         AbsentFromTreePolicy, AbsentSupportPolicy, OwnedGemMaterialization, OwnedGemRole,
         OwnedPrimarySkill, OwnedSkillRoleIndex,
     },

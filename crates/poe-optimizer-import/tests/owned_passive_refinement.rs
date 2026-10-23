@@ -5,6 +5,7 @@ use poe_optimizer_core::{
 };
 use poe_optimizer_data::owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits};
 use poe_optimizer_import::{
+    owned_normalize::NamedQuerySet,
     owned_recipe::{OWNED_RECIPE_VERSION, OwnedRecipeInput},
     owned_successor::*,
     owned_tree_policy::TreeNormalizationPackageInput,

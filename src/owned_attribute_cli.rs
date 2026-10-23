@@ -1,5 +1,8 @@
 //! Shared offline passive recipe publication from caller-supplied definitions and policy.
-use super::owned_tree_cli::{invalid, load_checked_bundle, read};
+use super::{
+    owned_io::{invalid, read},
+    owned_tree_cli::load_checked_bundle,
+};
 use poe_optimizer_core::{
     owned_content::digest_owned,
     owned_definitions::StatDefId,

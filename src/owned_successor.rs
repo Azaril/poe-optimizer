@@ -1,8 +1,8 @@
 //! Host-only explicit successor publication; no source checkout or evaluation.
 use poe_optimizer_core::owned_definitions::OwnedDefinitionKey;
+use poe_optimizer_import::owned_normalize::NamedQuerySet;
 use poe_optimizer_import::owned_successor::{
-    NamedQuerySet, OWNED_SUCCESSOR_VERSION, SuccessorBundleInput, SuccessorBundleLimits,
-    transition_owned_bundle,
+    OWNED_SUCCESSOR_VERSION, SuccessorBundleInput, SuccessorBundleLimits, transition_owned_bundle,
 };
 use serde::de::DeserializeOwned;
 use std::{

@@ -1,11 +1,11 @@
 //! Shared checked V1 release fixtures; no caller-specific semantic rewrites.
 use poe_optimizer_core::owned_definitions::OwnedDefinitionKey;
 use poe_optimizer_import::{
+    owned_normalize::NamedQuerySet,
     owned_recipe::OwnedRecipeInput,
     owned_release::{
         OwnedReleaseInput, OwnedReleaseReceipt, StagedOwnedRelease, assemble_owned_release,
     },
-    owned_successor::NamedQuerySet,
 };
 use serde::de::DeserializeOwned;
 use serde_json::Value;

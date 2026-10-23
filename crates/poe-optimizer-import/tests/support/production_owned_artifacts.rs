@@ -5,7 +5,7 @@ use poe_optimizer_data::{
 };
 use poe_optimizer_import::{
     owned_item_lines::*, owned_item_source::*, owned_mapping::*, owned_normalize::*,
-    owned_reward_policy::*, owned_skill_catalog::*,
+    owned_reward_policy::*, owned_skill_roles::*,
 };
 use serde::de::DeserializeOwned;
 use std::{fs::File, io::Read, path::Path};

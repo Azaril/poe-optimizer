@@ -5,7 +5,7 @@ use crate::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
         assemble_owned_recipe,
     },
-    owned_skill_catalog::OwnedSkillRoleIndex,
+    owned_skill_roles::OwnedSkillRoleIndex,
     owned_successor::{GemSchemaRefinement, SuccessorBundleError, validate_gem_schema_refinement},
 };
 use poe_optimizer_core::{

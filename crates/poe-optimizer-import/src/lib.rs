@@ -49,6 +49,7 @@ pub mod owned_release_migration;
 pub mod owned_release_revision;
 pub mod owned_reward_policy;
 pub mod owned_skill_catalog;
+pub mod owned_skill_roles;
 pub mod owned_source;
 pub mod owned_source_actions;
 pub mod owned_successor;

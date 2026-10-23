@@ -75,7 +75,7 @@ fn correction(prior: &StagedOwnedRelease) -> OwnedReleaseRevisionInput {
 fn payload_inventory_alone_rebinds_roles_and_preserves_source_and_classifications() {
     use poe_optimizer_import::{
         owned_normalize::PayloadInventoryPolicy,
-        owned_skill_catalog::{OwnedGemMaterialization, OwnedGemRole, OwnedPrimarySkill},
+        owned_skill_roles::{OwnedGemMaterialization, OwnedGemRole, OwnedPrimarySkill},
         owned_tree_policy::{OwnedTreeNormalizationPolicy, TreePolicyLimits},
     };
     let original = prior();

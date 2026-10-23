@@ -1,9 +1,12 @@
 //! Checked offline schema knowledge and normalization policy publications.
-use super::owned_tree_cli::{invalid, load_checked_bundle, read};
+use super::{
+    owned_io::{invalid, read},
+    owned_tree_cli::load_checked_bundle,
+};
 use poe_optimizer_import::{
     owned_gem_schema::{GemSchemaMigrationInput, GemSchemaMigrationLimits, stage_owned_gem_schema},
     owned_normalize::NormalizationPolicy,
-    owned_skill_catalog::OwnedSkillRoleIndex,
+    owned_skill_roles::OwnedSkillRoleIndex,
     owned_successor::{
         CatalogAppend, CatalogItemPolicyMode, SuccessorBundleLimits, TreePolicyTransitionInput,
         transition_owned_catalog_with_gem_refinement_compact,

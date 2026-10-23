@@ -22,7 +22,7 @@ use poe_optimizer_import::{
     },
     owned_normalize::NormalizationPolicy,
     owned_recipe::assemble_owned_recipe,
-    owned_skill_catalog::{
+    owned_skill_roles::{
         OwnedGemMaterialization, OwnedGemRole, OwnedPrimarySkill, OwnedSkillRoleIndex,
     },
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},

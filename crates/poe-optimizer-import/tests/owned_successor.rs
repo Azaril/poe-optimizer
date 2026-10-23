@@ -12,7 +12,8 @@ use poe_optimizer_core::{
 };
 use poe_optimizer_data::owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits};
 use poe_optimizer_import::{
-    owned_normalize::GemQualityPolicy, owned_skill_catalog::OwnedGemMaterialization,
+    owned_normalize::{GemQualityPolicy, NamedQuerySet},
+    owned_skill_roles::OwnedGemMaterialization,
     owned_successor::*,
 };
 use serde::de::DeserializeOwned;
@@ -67,7 +68,7 @@ fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain()
             usage_inputs_identity,
         },
         owned_recipe::assemble_owned_recipe,
-        owned_skill_catalog::OwnedSkillRoleIndex,
+        owned_skill_roles::OwnedSkillRoleIndex,
     };
     let mut input = input();
     let prior = assemble_owned_recipe(input.prior.clone(), Default::default()).unwrap();
@@ -172,7 +173,7 @@ fn support_inventory_rebinds_reviewed_roles_without_repairing_stale_source_autho
     use poe_optimizer_core::owned_content::digest_owned;
     use poe_optimizer_import::{
         owned_mapping::OwnedMappingIndex, owned_normalize::SupportOriginOrderPolicy,
-        owned_recipe::assemble_owned_recipe, owned_skill_catalog::OwnedSkillRoleIndex,
+        owned_recipe::assemble_owned_recipe, owned_skill_roles::OwnedSkillRoleIndex,
     };
     let (mut input, changed_source) = catalog_input();
     let prior = assemble_owned_recipe(input.prior.clone(), Default::default()).unwrap();
@@ -1882,7 +1883,7 @@ fn nonphysical_support_inventory_rebinds_roles_and_preserves_exact_source_declar
     use poe_optimizer_core::owned_content::digest_owned;
     use poe_optimizer_import::{
         owned_mapping::OwnedMappingIndex, owned_normalize::SupportOriginOrderPolicy,
-        owned_recipe::assemble_owned_recipe, owned_skill_catalog::OwnedSkillRoleIndex,
+        owned_recipe::assemble_owned_recipe, owned_skill_roles::OwnedSkillRoleIndex,
     };
     let (mut input, changed_source) = catalog_input();
     let prior = assemble_owned_recipe(input.prior.clone(), Default::default()).unwrap();

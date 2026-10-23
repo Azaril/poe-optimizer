@@ -21,7 +21,7 @@ use poe_optimizer_import::{
         SourceDisposition, SourceOwnedOrigin,
     },
     owned_reward_policy::{OwnedRewardPolicy, RewardPolicyLimits},
-    owned_skill_catalog::{OwnedSkillRoleIndex, SkillCatalogLimits},
+    owned_skill_roles::{OwnedSkillRoleIndex, SkillCatalogLimits},
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
 };
 

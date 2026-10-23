@@ -13,7 +13,7 @@ use crate::{
         ImportActionTarget, ImportActorTarget, ImportDirectSkillUseLocator, ImportProviderTarget,
         ImportQueryTarget, ImportSkillUseLocator,
     },
-    owned_skill_catalog::*,
+    owned_skill_roles::*,
     owned_source::{SourceAttributeRef, SourceProjectEvidence},
     owned_value::{ValueCodecKind, WhitespacePolicy},
     owned_value_policy::*,

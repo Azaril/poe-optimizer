@@ -230,13 +230,13 @@ struct MetricArtifacts {
 fn load_release_artifacts(path: &Path, input: &Path) -> Result<MetricArtifacts, Box<dyn Error>> {
     let limits = OwnedReleaseLimits::default();
     let mut remaining = limits.max_input_bytes;
-    let release = crate::owned_release_cli::load_release(path, &mut remaining, limits)?;
+    let release = crate::owned_release_loader::load_release(path, &mut remaining, limits)?;
     let evaluation = release.evaluation().ok_or(
         "release does not contain evaluation artifacts; supply an explicit evaluation release",
     )?;
     // Share the checked packages and executable already validated during loading.
     // Candidate plans receive their own scratch; immutable compilation is reused.
-    let recipe = release.assembled().checked();
+    let recipe = release.recipe();
     let definitions = Arc::clone(recipe.schema());
     let stored_rules = Arc::clone(recipe.rules());
     let rules = Arc::clone(recipe.compiled_rules());

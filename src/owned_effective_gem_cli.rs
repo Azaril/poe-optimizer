@@ -26,13 +26,13 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let schema_limits = OwnedSchemaLimits::default();
     let mut remaining = schema_limits.max_wire_bytes;
     let schema = decode_schema_package(
-        &super::owned_tree_cli::read(&args.definitions, &mut remaining)?,
+        &super::owned_io::read(&args.definitions, &mut remaining)?,
         schema_limits,
     )?;
     let limits = EffectiveGemRecipeLimits::default();
     let mut remaining = limits.max_policy_bytes;
     let input: EffectiveGemRecipeInput =
-        serde_json::from_slice(&super::owned_tree_cli::read(&args.input, &mut remaining)?)?;
+        serde_json::from_slice(&super::owned_io::read(&args.input, &mut remaining)?)?;
     let compiled = compile_effective_gem_recipe(&input, &schema, limits)?;
     let programs = serde_json::to_vec(&compiled)?;
     let report = serde_json::to_vec_pretty(&serde_json::json!({

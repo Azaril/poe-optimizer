@@ -13,7 +13,7 @@ use poe_optimizer_import::{
         normalize_fresh,
     },
     owned_reward_policy::{RewardPolicyLimits, decode_reward_policy},
-    owned_skill_catalog::{OwnedSkillRoleIndex, OwnedSkillRolePackageInput, SkillCatalogLimits},
+    owned_skill_roles::{OwnedSkillRoleIndex, OwnedSkillRolePackageInput, SkillCatalogLimits},
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
     owned_tree_policy::{TreePolicyLimits, decode_tree_policy},
 };

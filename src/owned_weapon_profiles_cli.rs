@@ -1,5 +1,8 @@
 //! Shared checked host for finite raw weapon and defensive equipment profiles.
-use super::owned_tree_cli::{invalid, load_checked_bundle, read};
+use super::{
+    owned_io::{invalid, read},
+    owned_tree_cli::load_checked_bundle,
+};
 use poe_optimizer_import::{
     owned_defence_profiles::{
         DefenceProfileLimits, DefenceProfilePolicy, compile_owned_defence_profiles,

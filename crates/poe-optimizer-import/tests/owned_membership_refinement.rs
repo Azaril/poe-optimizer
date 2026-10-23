@@ -6,7 +6,10 @@ use poe_optimizer_core::{
     owned_build::DeclaredSlot, owned_content::digest_owned, owned_definitions::*, owned_schema::*,
 };
 use poe_optimizer_data::owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits};
-use poe_optimizer_import::{owned_mapping::OwnedIdRegistry, owned_recipe::*, owned_successor::*};
+use poe_optimizer_import::{
+    owned_mapping::OwnedIdRegistry, owned_normalize::NamedQuerySet, owned_recipe::*,
+    owned_successor::*,
+};
 use serde::de::DeserializeOwned;
 use std::{fs, path::PathBuf};
 

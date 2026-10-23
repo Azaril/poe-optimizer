@@ -1,5 +1,8 @@
 //! Offline finite base-template conversion; no source checkout in the native host.
-use super::owned_tree_cli::{invalid, load_checked_bundle, read};
+use super::{
+    owned_io::{invalid, read},
+    owned_tree_cli::load_checked_bundle,
+};
 use poe_optimizer_import::{
     owned_item_bases::{ItemBaseLimits, ItemBasePolicy, compile_owned_item_bases},
     owned_successor::{

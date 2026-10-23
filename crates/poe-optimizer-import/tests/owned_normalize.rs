@@ -13,7 +13,7 @@ use poe_optimizer_import::{
     owned_mapping::*,
     owned_normalize::*,
     owned_reward_policy::*,
-    owned_skill_catalog::*,
+    owned_skill_roles::*,
     owned_source::*,
     owned_value::*,
     owned_value_policy::*,
@@ -97,7 +97,7 @@ fn artifacts(mapped: bool) -> Artifacts {
                 },
             });
             role_rows.push(OwnedGemRoleRow {
-                construction: poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
+                construction: poe_optimizer_import::owned_skill_roles::OwnedGemSourceConstruction::Unavailable,
                 gem,
                 primary: OwnedPrimarySkill::Known(skill),
                 role: OwnedGemRole::Known(role),
@@ -253,7 +253,7 @@ fn add_active_sibling(artifacts: &mut Artifacts, materialization: OwnedGemMateri
     roles.compilation.skill_count += 1;
     roles.roles.push(OwnedGemRoleRow {
         construction:
-            poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
+            poe_optimizer_import::owned_skill_roles::OwnedGemSourceConstruction::Unavailable,
         gem,
         primary: OwnedPrimarySkill::Known(skill),
         role: OwnedGemRole::Known(AuthoredGemRole::SkillUse),
@@ -1197,7 +1197,7 @@ fn ambiguous_gem_mapping_retains_bound_candidates_without_inventing_a_physical_o
     role_input.compilation.gem_count += 1;
     role_input.roles.push(OwnedGemRoleRow {
         construction:
-            poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
+            poe_optimizer_import::owned_skill_roles::OwnedGemSourceConstruction::Unavailable,
         gem: new_gem,
         primary: OwnedPrimarySkill::Unmapped {
             issue: key("primary-unknown"),

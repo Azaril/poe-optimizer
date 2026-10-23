@@ -2,7 +2,7 @@
 use poe_optimizer_core::owned_build::ParameterValue;
 use poe_optimizer_data::skill_identities::{SkillIdentityCatalog, SkillIdentityData};
 use poe_optimizer_import::{
-    owned_catalog_recipe::*, owned_mapping::*, owned_recipe::*, owned_skill_catalog::*,
+    owned_catalog_recipe::*, owned_mapping::*, owned_recipe::*, owned_skill_roles::*,
 };
 use serde::de::DeserializeOwned;
 use std::path::{Path, PathBuf};

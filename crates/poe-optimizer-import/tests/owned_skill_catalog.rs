@@ -1,7 +1,7 @@
 //! Injected identity facts only: no bundled snapshot, source VM or game runtime.
 use poe_optimizer_core::{owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::{owned_schema::*, skill_identities::*};
-use poe_optimizer_import::{owned_mapping::*, owned_skill_catalog::*};
+use poe_optimizer_import::{owned_mapping::*, owned_skill_catalog::*, owned_skill_roles::*};
 use std::collections::BTreeMap;
 
 fn key(value: &str) -> OwnedDefinitionKey {

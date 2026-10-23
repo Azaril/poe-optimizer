@@ -1,5 +1,8 @@
 //! Native offline actor conversion with explicitly schema-bound targets.
-use super::owned_tree_cli::{invalid, load_checked_bundle, read};
+use super::{
+    owned_io::{invalid, read},
+    owned_tree_cli::load_checked_bundle,
+};
 use poe_optimizer_import::{
     owned_actor_baseline_recipe::{
         ActorBaselinePolicy, ActorBaselineRecipeLimits, compile_owned_actor_baselines,

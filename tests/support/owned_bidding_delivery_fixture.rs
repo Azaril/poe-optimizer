@@ -368,7 +368,7 @@ impl World {
                 .iter()
                 .find(|r| r.gem == p.gem)
                 .unwrap();
-            let poe_optimizer_import::owned_skill_catalog::OwnedPrimarySkill::Known(primary) =
+            let poe_optimizer_import::owned_skill_roles::OwnedPrimarySkill::Known(primary) =
                 &association.primary
             else {
                 panic!("exact imported primary association")

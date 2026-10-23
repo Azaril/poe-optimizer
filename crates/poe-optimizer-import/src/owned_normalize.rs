@@ -10,7 +10,7 @@ use crate::{
     owned_item_source::*,
     owned_mapping::*,
     owned_reward_policy::*,
-    owned_skill_catalog::*,
+    owned_skill_roles::*,
     owned_source::*,
     owned_tree_policy::{OwnedTreeNormalizationPolicy, TreePolicyError},
     owned_value::ValueCodecKind,
@@ -156,6 +156,15 @@ pub struct ImportQueryTemplate {
     pub metric: ExternalSelector,
     pub target: ImportQueryTarget,
 }
+
+/// Independent ordered query lists. Names are publication labels, not game IDs.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct NamedQuerySet {
+    pub name: OwnedDefinitionKey,
+    pub queries: Vec<ImportQueryTemplate>,
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(
     tag = "kind",

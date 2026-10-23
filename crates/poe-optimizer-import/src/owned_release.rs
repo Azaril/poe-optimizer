@@ -1,8 +1,8 @@
-//! Standalone offline assembly of an explicitly authored owned data release.
+//! Checked owned data releases, with separate consumption and publication paths.
 //!
-//! All dependency bindings must already be exact. This module never repairs
-//! bindings, compares a predecessor, executes a source backend or establishes
-//! numerical coverage. Monotonic successor contracts remain independent.
+//! Both paths use the same constituent validation. The runtime artifact reader
+//! never invokes offline assembly. Bindings must already be exact; no path repairs
+//! them, runs a source backend or establishes numerical coverage.
 use crate::{
     owned_item_lines::{ItemLineError, ItemLineLimits, ItemLinePolicyInput, OwnedItemLinePolicy},
     owned_item_source::{
@@ -10,7 +10,7 @@ use crate::{
     },
     owned_mapping::{MappingPackageInput, OwnedMappingError, OwnedMappingIndex, SourcePin},
     owned_normalize::{
-        NormalizationError, NormalizationLimits, NormalizationPolicy,
+        NamedQuerySet, NormalizationError, NormalizationLimits, NormalizationPolicy,
         validate_configuration_reward_inventory, validate_item_modifier_membership,
         validate_item_parameter_inputs, validate_normalization_inputs,
         validate_normalization_queries, validate_passive_socket_placement,
@@ -18,20 +18,19 @@ use crate::{
     },
     owned_recipe::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
-        assemble_owned_recipe,
+        stage_checked_recipe,
     },
     owned_release_evaluation::{
-        OwnedReleaseEvaluationError, OwnedReleaseEvaluationInput, OwnedReleaseEvaluationLimits,
-        OwnedReleaseEvaluationReceipt, StagedOwnedReleaseEvaluation,
+        CheckedOwnedReleaseEvaluation, OwnedReleaseEvaluationError, OwnedReleaseEvaluationInput,
+        OwnedReleaseEvaluationLimits, OwnedReleaseEvaluationReceipt,
     },
     owned_reward_policy::{
         OwnedRewardPolicy, RewardPolicyError, RewardPolicyInput, RewardPolicyLimits,
         RewardRuleOutput,
     },
-    owned_skill_catalog::{
+    owned_skill_roles::{
         OwnedSkillRoleIndex, OwnedSkillRolePackageInput, SkillCatalogError, SkillCatalogLimits,
     },
-    owned_successor::NamedQuerySet,
     owned_tree_policy::{
         OwnedTreeNormalizationPolicy, TreeNormalizationPackageInput, TreePolicyError,
         TreePolicyLimits,
@@ -49,6 +48,12 @@ use std::{
     collections::{BTreeMap, BTreeSet},
     io,
 };
+
+mod checked;
+mod loader;
+pub use checked::CheckedOwnedRelease;
+use checked::ReleaseView;
+pub use loader::load_owned_release_artifacts;
 
 pub const OWNED_RELEASE_VERSION: u32 = 1;
 pub const OWNED_EVALUATION_RELEASE_VERSION: u32 = 2;
@@ -260,14 +265,7 @@ struct Artifact {
 pub struct StagedOwnedRelease {
     input: OwnedReleaseInput,
     assembled: StagedOwnedRecipe,
-    mapping: OwnedMappingIndex,
-    roles: OwnedSkillRoleIndex,
-    rewards: OwnedRewardPolicy,
-    items: OwnedItemLinePolicy,
-    item_source: ItemSourceLayoutPolicy,
-    tree: Option<OwnedTreeNormalizationPolicy>,
-    evaluation: Option<StagedOwnedReleaseEvaluation>,
-    receipt: OwnedReleaseReceipt,
+    checked: CheckedOwnedRelease,
     extra: Vec<Artifact>,
 }
 impl StagedOwnedRelease {
@@ -280,34 +278,34 @@ impl StagedOwnedRelease {
         &self.assembled
     }
     pub fn mapping(&self) -> &OwnedMappingIndex {
-        &self.mapping
+        self.checked.mapping()
     }
     pub fn roles(&self) -> &OwnedSkillRoleIndex {
-        &self.roles
+        self.checked.roles()
     }
     pub fn normalization(&self) -> &NormalizationPolicy {
         &self.input.normalization
     }
     pub fn rewards(&self) -> &OwnedRewardPolicy {
-        &self.rewards
+        self.checked.rewards()
     }
     pub fn items(&self) -> &OwnedItemLinePolicy {
-        &self.items
+        self.checked.items()
     }
     pub fn item_source(&self) -> &ItemSourceLayoutPolicy {
-        &self.item_source
+        self.checked.item_source()
     }
     pub fn tree(&self) -> Option<&OwnedTreeNormalizationPolicy> {
-        self.tree.as_ref()
+        self.checked.tree()
     }
-    pub fn evaluation(&self) -> Option<&StagedOwnedReleaseEvaluation> {
-        self.evaluation.as_ref()
+    pub fn evaluation(&self) -> Option<&CheckedOwnedReleaseEvaluation> {
+        self.checked.evaluation()
     }
     pub fn query_sets(&self) -> &[NamedQuerySet] {
         &self.input.query_sets
     }
     pub fn receipt(&self) -> &OwnedReleaseReceipt {
-        &self.receipt
+        self.checked.receipt()
     }
     pub fn artifacts(&self) -> impl Iterator<Item = (&str, &[u8])> {
         self.assembled
@@ -362,6 +360,10 @@ fn serialized_size<T: Serialize>(value: &T, maximum: usize, name: &'static str) 
 }
 
 pub(crate) fn preflight(input: &OwnedReleaseInput, limits: OwnedReleaseLimits) -> Result<usize> {
+    preflight_view(&input.into(), limits)
+}
+
+fn preflight_view(input: &ReleaseView<'_>, limits: OwnedReleaseLimits) -> Result<usize> {
     let mut left = limits.max_validation_entries;
     let recipe = &input.recipe;
     for count in [
@@ -515,7 +517,7 @@ pub(crate) fn preflight(input: &OwnedReleaseInput, limits: OwnedReleaseLimits) -
     let mut names = BTreeSet::new();
     let mut rows = limits.max_queries;
     let mut commitment_left = limits.max_query_commitment_bytes;
-    for set in &input.query_sets {
+    for set in input.query_sets {
         let name = set.name.as_str();
         if name.is_empty()
             || name.len() > 64
@@ -605,147 +607,25 @@ pub fn decode_owned_release(
 }
 
 pub fn assemble_owned_release(
-    mut input: OwnedReleaseInput,
+    input: OwnedReleaseInput,
     limits: OwnedReleaseLimits,
 ) -> Result<StagedOwnedRelease> {
-    limits.validate()?;
-    let domain = match (input.schema_version, input.evaluation.is_some()) {
-        (OWNED_RELEASE_VERSION, false) => "owned-data-release-input-v1",
-        (OWNED_EVALUATION_RELEASE_VERSION, true) => "owned-data-release-input-v2",
-        (OWNED_RELEASE_VERSION, true) => {
-            return Err(OwnedReleaseError::Invalid(
-                "version 1 cannot contain evaluation artifacts",
-            ));
-        }
-        (OWNED_EVALUATION_RELEASE_VERSION, false) => {
-            return Err(OwnedReleaseError::Invalid(
-                "version 2 requires evaluation artifacts",
-            ));
-        }
-        (version, _) => return Err(OwnedReleaseError::Version(version)),
-    };
-    // Nested preparation predicates are depth-bounded before serde recursively
-    // visits them. The aggregate counter includes all ordinary release entries.
-    let query_policy_bytes = preflight(&input, limits)?;
-    // Bound the entire typed input before constructor clones or indexing. This
-    // initial digest is only a resource check; the receipt commits canonical data.
-    digest_owned(domain, &input, limits.max_input_bytes)?;
-    let mut assembled = assemble_owned_recipe(input.recipe.clone(), limits.recipe)?;
-    let canonical_recipe = OwnedRecipeInput {
-        schema_version: input.recipe.schema_version,
-        registry: assembled.registry().input().clone(),
-        schema: assembled.schema().input().clone(),
-        rules: assembled.rules().input().clone(),
-        routing: assembled.routing().input().clone(),
-    };
-    if input.recipe != canonical_recipe {
-        assembled = assemble_owned_recipe(canonical_recipe.clone(), limits.recipe)?;
-    }
-    input.recipe = canonical_recipe;
-    let mapping = OwnedMappingIndex::new(
-        input.mapping.clone(),
-        assembled.registry(),
-        assembled.schema(),
-        limits.catalog.mapping,
-    )?;
-    let roles = OwnedSkillRoleIndex::new(
-        input.roles.clone(),
-        &mapping,
-        assembled.schema(),
-        limits.catalog,
-    )?;
-    validate_normalization_inputs(
-        &input.normalization,
-        &mapping,
-        assembled.schema(),
-        &[],
-        limits.normalization,
-    )?;
-    validate_role_bound_normalization(
-        &input.normalization,
-        assembled.schema(),
-        &roles,
-        &mapping,
-        limits.normalization,
-    )?;
-    let normalization = digest_owned(
-        "owned-normalization-policy-v3",
-        &input.normalization,
-        limits.normalization.max_policy_bytes,
-    )?;
-    let rewards = OwnedRewardPolicy::new(
-        input.rewards.clone(),
-        &mapping,
-        assembled.schema(),
-        limits.rewards,
-    )?;
-    validate_configuration_reward_inventory(
-        &input.normalization,
-        &mapping,
-        &rewards,
-        limits.normalization,
-    )?;
-    let items = OwnedItemLinePolicy::new(input.items.clone(), assembled.schema(), limits.items)?;
-    let item_source = ItemSourceLayoutPolicy::new(
-        input.item_source.clone(),
-        &items,
-        assembled.schema(),
-        limits.item_source,
-    )?;
-    validate_item_modifier_membership(
-        &input.normalization,
-        assembled.schema(),
-        &items,
-        &item_source,
-        limits.normalization,
-    )?;
-    validate_item_parameter_inputs(
-        &input.normalization,
-        assembled.schema(),
-        &items,
-        &item_source,
-        limits.normalization,
-    )?;
-    let tree = input
-        .tree
-        .as_ref()
-        .map(|value| {
-            OwnedTreeNormalizationPolicy::new(
-                value.clone(),
-                assembled.registry(),
-                assembled.schema(),
-                &mapping,
-                &input.normalization,
-                limits.tree,
-            )
-        })
-        .transpose()?;
-    validate_passive_socket_placement(
-        &input.normalization,
-        assembled.schema(),
-        &mapping,
-        &items,
-        &item_source,
-        tree.as_ref(),
-        limits.normalization,
-    )?;
-    let evaluation = input
-        .evaluation
-        .take()
-        .map(|value| {
-            StagedOwnedReleaseEvaluation::assemble(value, assembled.checked(), limits.evaluation)
-        })
-        .transpose()?;
-    let source = source_union(&mapping, &roles, &item_source, tree.as_ref())?;
-    // Canonicalization changes ordering only, never an incoming dependency binding.
-    input.mapping = mapping.input().clone();
-    input.roles = roles.input().clone();
-    input.rewards = rewards.input().clone();
-    input.items = items.input().clone();
-    input.item_source = item_source.input().clone();
-    input.tree = tree.as_ref().map(|value| value.input().clone());
-    input.evaluation = evaluation.as_ref().map(|value| value.input().clone());
-    let input_digest = digest_owned(domain, &input, limits.max_input_bytes)?;
+    stage_checked_owned_release(CheckedOwnedRelease::check((&input).into(), limits)?)
+}
+
+/// Offline publication of a validated release; evaluation uses the checked
+/// packages directly and never calls this artifact-producing operation.
+pub fn stage_checked_owned_release(mut checked: CheckedOwnedRelease) -> Result<StagedOwnedRelease> {
+    let limits = checked.limits;
+    let input = OwnedReleaseInput::from_checked(&checked);
+    let assembled = stage_checked_recipe(checked.recipe().clone(), limits.recipe)?;
+    let mapping = checked.mapping();
+    let roles = checked.roles();
+    let rewards = checked.rewards();
+    let items = checked.items();
+    let item_source = checked.item_source();
+    let tree = checked.tree();
+    let evaluation = checked.evaluation();
     let mut extra = vec![];
     let mut left = limits.max_output_bytes;
     for artifact in assembled.artifacts() {
@@ -862,36 +742,7 @@ pub fn assemble_owned_release(
             }
         }
     }
-    let mut receipt = OwnedReleaseReceipt {
-        schema_version: input.schema_version,
-        document_kind: "owned_data_release".into(),
-        input: input_digest,
-        registry: assembled.registry().identity()?,
-        definitions: assembled.schema().identity().clone(),
-        rules: *assembled.rules().identity(),
-        compiled_rules: assembled.manifest().compiled_rules,
-        routing: *assembled.routing().identity(),
-        mapping: *mapping.identity(),
-        roles: *roles.identity(),
-        normalization,
-        rewards: *rewards.identity(),
-        items: *items.identity(),
-        item_source: *item_source.identity(),
-        tree: tree.as_ref().map(|value| *value.identity()),
-        evaluation: evaluation
-            .as_ref()
-            .map(StagedOwnedReleaseEvaluation::receipt),
-        source,
-        provenance: input.provenance.clone(),
-        query_sets: input.query_sets.len(),
-        query_rows: input
-            .query_sets
-            .iter()
-            .map(|value| value.queries.len())
-            .sum(),
-        query_policy_bytes,
-        artifacts: vec![],
-    };
+    let mut receipt = checked.receipt().clone();
     receipt.artifacts = assembled
         .artifacts()
         .iter()
@@ -914,17 +765,11 @@ pub fn assemble_owned_release(
         "release.json".into(),
         &receipt,
     )?;
+    checked.receipt = receipt;
     Ok(StagedOwnedRelease {
         input,
         assembled,
-        mapping,
-        roles,
-        rewards,
-        items,
-        item_source,
-        tree,
-        evaluation,
-        receipt,
+        checked,
         extra,
     })
 }

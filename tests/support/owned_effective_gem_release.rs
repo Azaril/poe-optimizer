@@ -13,13 +13,12 @@ use poe_optimizer_import::{
     owned_effective_gem_recipe::*,
     owned_item_lines::OwnedItemLinePolicy,
     owned_mapping::{OwnedIdRegistry, OwnedMappingIndex},
-    owned_normalize::GemQualityPolicy,
+    owned_normalize::{GemQualityPolicy, NamedQuerySet},
     owned_recipe::{OwnedRecipeInput, assemble_owned_recipe},
     owned_release::{
         OwnedReleaseInput, OwnedReleaseProvenance, OwnedReleaseReceipt, StagedOwnedRelease,
         assemble_owned_release,
     },
-    owned_successor::NamedQuerySet,
     owned_tree_policy::OwnedTreeNormalizationPolicy,
 };
 use serde::Deserialize;

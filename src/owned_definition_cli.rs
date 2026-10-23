@@ -1,5 +1,5 @@
 //! Shared host-side registry appends with explicit per-command definition kinds.
-use super::owned_tree_cli::invalid;
+use super::owned_io::invalid;
 use poe_optimizer_core::{
     owned_definitions::{
         CapabilityDefinition, ItemTemplateDefinition, StatDefinition, UnitDefinition,

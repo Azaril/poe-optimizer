@@ -1,4 +1,4 @@
-//! Offline packaging of immutable evaluator artifacts. Validation establishes
+//! Checked immutable evaluator artifacts. Validation establishes
 //! exact dependencies, not active contributors or numerical build coverage.
 use crate::owned_recipe::CheckedOwnedRecipe;
 use poe_optimizer_core::{
@@ -107,26 +107,26 @@ pub enum OwnedReleaseEvaluationError {
 
 /// Borrowed typed packages are reusable without another filesystem read. Their
 /// private constructors already checked every exact package identity.
-pub struct StagedOwnedReleaseEvaluation {
+pub struct CheckedOwnedReleaseEvaluation {
     input: OwnedReleaseEvaluationInput,
     metrics: OwnedMetricMapping,
-    support: Option<StagedOwnedReleaseSupport>,
+    support: Option<CheckedOwnedReleaseSupport>,
 }
-pub struct StagedOwnedReleaseSupport {
+pub struct CheckedOwnedReleaseSupport {
     stages: OwnedEvaluationStages,
     preparation: OwnedSupportPreparation,
     inputs: OwnedSupportInputBindings,
     receiving: OwnedSupportReceiving,
     outputs: Option<OwnedSupportOutputBindings>,
 }
-impl StagedOwnedReleaseEvaluation {
+impl CheckedOwnedReleaseEvaluation {
     pub fn input(&self) -> &OwnedReleaseEvaluationInput {
         &self.input
     }
     pub fn metrics(&self) -> &OwnedMetricMapping {
         &self.metrics
     }
-    pub fn support(&self) -> Option<&StagedOwnedReleaseSupport> {
+    pub fn support(&self) -> Option<&CheckedOwnedReleaseSupport> {
         self.support.as_ref()
     }
     pub fn receipt(&self) -> OwnedReleaseEvaluationReceipt {
@@ -144,7 +144,7 @@ impl StagedOwnedReleaseEvaluation {
                 }),
         }
     }
-    pub(crate) fn assemble(
+    pub(crate) fn new(
         input: OwnedReleaseEvaluationInput,
         recipe: &CheckedOwnedRecipe,
         limits: OwnedReleaseEvaluationLimits,
@@ -202,7 +202,7 @@ impl StagedOwnedReleaseEvaluation {
                         )
                     })
                     .transpose()?;
-                Ok::<_, OwnedReleaseEvaluationError>(StagedOwnedReleaseSupport {
+                Ok::<_, OwnedReleaseEvaluationError>(CheckedOwnedReleaseSupport {
                     stages,
                     preparation,
                     inputs,
@@ -214,7 +214,7 @@ impl StagedOwnedReleaseEvaluation {
         // Canonicalize only after all supplied dependency identities validated.
         let input = OwnedReleaseEvaluationInput {
             metrics: metrics.input().clone(),
-            support: support.as_ref().map(StagedOwnedReleaseSupport::input),
+            support: support.as_ref().map(CheckedOwnedReleaseSupport::input),
         };
         Ok(Self {
             input,
@@ -223,7 +223,7 @@ impl StagedOwnedReleaseEvaluation {
         })
     }
 }
-impl StagedOwnedReleaseSupport {
+impl CheckedOwnedReleaseSupport {
     pub fn stages(&self) -> &OwnedEvaluationStages {
         &self.stages
     }

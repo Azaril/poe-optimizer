@@ -12,7 +12,7 @@ use crate::{
     },
     owned_normalize::{
         ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemQualityPolicy,
-        ImportQueryTemplate, ItemParameterInputsPolicy, NormalizationError, NormalizationLimits,
+        ItemParameterInputsPolicy, NamedQuerySet, NormalizationError, NormalizationLimits,
         NormalizationPolicy, PassiveSocketMembershipPolicy, equipment_membership_identity,
         rebind_configuration_dispositions, rebind_direct_skill_inputs, rebind_gem_inventory,
         rebind_generated_skill_inputs, rebind_payload_inventory_roles, rebind_skill_inventory,
@@ -30,7 +30,7 @@ use crate::{
         OwnedRewardPolicy, RewardPolicyError, RewardPolicyInput, RewardPolicyLimits,
         RewardRuleOutput,
     },
-    owned_skill_catalog::{
+    owned_skill_roles::{
         OwnedSkillRoleIndex, OwnedSkillRolePackageInput, SkillCatalogError, SkillCatalogLimits,
     },
     owned_tree_policy::{
@@ -41,7 +41,7 @@ use crate::{
 use poe_optimizer_core::{
     data::DataIdentity,
     owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},
-    owned_definitions::{AscendancyDefId, ClassDefId, OwnedDefinitionKey, PassiveNodeDefId},
+    owned_definitions::{AscendancyDefId, ClassDefId, PassiveNodeDefId},
     owned_schema::{
         DeclaredSlots, DefinitionAddress, DefinitionDescriptor, DefinitionSchemaIndex,
         SchemaClosure, SchemaLookup, SchemaState,
@@ -275,14 +275,6 @@ fn close_declarations(descriptor: &mut DefinitionDescriptor) -> Result<()> {
         *closure = SchemaClosure::Complete;
     }
     Ok(())
-}
-
-/// Independent ordered query lists. Names are publication labels, not game IDs.
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct NamedQuerySet {
-    pub name: OwnedDefinitionKey,
-    pub queries: Vec<ImportQueryTemplate>,
 }
 
 /// All bindings are explicit. Mapping, roles, normalization and rewards must

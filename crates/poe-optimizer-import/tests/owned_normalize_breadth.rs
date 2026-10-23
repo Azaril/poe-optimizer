@@ -20,7 +20,7 @@ use poe_optimizer_import::{
     owned_mapping::*,
     owned_normalize::*,
     owned_reference_projection::*,
-    owned_skill_catalog::OwnedGemMaterialization,
+    owned_skill_roles::OwnedGemMaterialization,
     owned_source::*,
 };
 use serde::Deserialize;

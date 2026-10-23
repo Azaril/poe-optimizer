@@ -9,7 +9,7 @@ use poe_optimizer_core::{
     owned_definitions::{GameVersionNamespace, OwnedDefinitionKey},
     owned_routing::ActionRoutingInput,
     owned_rules::RulePackageInput,
-    owned_schema::{SchemaClosure, SchemaSubject},
+    owned_schema::SchemaSubject,
 };
 use poe_optimizer_data::{
     owned_routing::{OwnedActionRouting, RoutingError, RoutingLimits, encode_action_routing},
@@ -36,6 +36,41 @@ pub struct OwnedRecipeInput {
     pub schema: SchemaPackageInput,
     pub rules: RulePackageInput,
     pub routing: ActionRoutingInput,
+}
+
+/// Borrowed wire view in exactly the field order of `OwnedRecipeInput`.
+/// A checked recipe supplies canonical constituents; an input view preserves its
+/// supplied ordering until those constituents pass their existing constructors.
+#[derive(Clone, Copy, Debug, Serialize)]
+pub(crate) struct OwnedRecipeView<'a> {
+    pub(crate) schema_version: u32,
+    pub(crate) registry: &'a RegistryInput,
+    pub(crate) schema: &'a SchemaPackageInput,
+    pub(crate) rules: &'a RulePackageInput,
+    pub(crate) routing: &'a ActionRoutingInput,
+}
+impl<'a> From<&'a OwnedRecipeInput> for OwnedRecipeView<'a> {
+    fn from(input: &'a OwnedRecipeInput) -> Self {
+        Self {
+            schema_version: input.schema_version,
+            registry: &input.registry,
+            schema: &input.schema,
+            rules: &input.rules,
+            routing: &input.routing,
+        }
+    }
+}
+impl OwnedRecipeView<'_> {
+    /// Explicitly own the borrowed constituents for an existing typed constructor.
+    pub(crate) fn to_input(self) -> OwnedRecipeInput {
+        OwnedRecipeInput {
+            schema_version: self.schema_version,
+            registry: self.registry.clone(),
+            schema: self.schema.clone(),
+            rules: self.rules.clone(),
+            routing: self.routing.clone(),
+        }
+    }
 }
 
 /// Constituent constructors retain independent aggregate resource budgets. This
@@ -123,7 +158,8 @@ pub struct RecipeArtifactManifest {
 pub struct OwnedRecipeManifest {
     pub schema_version: u32,
     pub document_kind: &'static str,
-    /// Digest of the supplied typed recipe, before constituent canonicalization.
+    /// Recipe commitment selected by validation. Standalone assembly retains the
+    /// supplied typed input; a complete release commits canonical constituents.
     pub recipe: OwnedContentDigest,
     pub namespace: GameVersionNamespace,
     pub registry: OwnedContentDigest,
@@ -204,6 +240,16 @@ pub fn assemble_owned_recipe(
     limits: OwnedRecipeLimits,
 ) -> Result<StagedOwnedRecipe, OwnedRecipeError> {
     let checked = CheckedOwnedRecipe::new(input, limits)?;
+    stage_checked_recipe(checked, limits)
+}
+
+/// Encode already checked constituents without compiling the executable again.
+/// The checked recipe carries constructor validation; these limits bound staging.
+pub(crate) fn stage_checked_recipe(
+    checked: CheckedOwnedRecipe,
+    limits: OwnedRecipeLimits,
+) -> Result<StagedOwnedRecipe, OwnedRecipeError> {
+    limits.validate()?;
     let registry = checked.registry();
     let schema = checked.schema().as_ref();
     let rules = checked.rules().as_ref();
@@ -240,34 +286,8 @@ pub fn assemble_owned_recipe(
         "routing.json",
         encode_action_routing(routing, limits.routing)?,
     )?;
-    let manifest = OwnedRecipeManifest {
-        schema_version: 1,
-        document_kind: "owned_recipe_manifest",
-        recipe: checked.input_identity(),
-        namespace: schema.input().namespace.clone(),
-        registry: registry.identity()?,
-        definitions: schema.identity().clone(),
-        rules: *rules.identity(),
-        compiled_rules: checked.compiled_rules().identity(),
-        routing: *routing.identity(),
-        operations_version: rules.input().operations_version.clone(),
-        rule_semantics_version: rules.input().semantics_version.clone(),
-        partial_rule_owners: rules
-            .input()
-            .owners
-            .iter()
-            .filter(|v| matches!(v.programs.closure, SchemaClosure::Partial { .. }))
-            .count(),
-        partial_route_outputs: routing
-            .input()
-            .outputs
-            .iter()
-            .filter(|v| matches!(v.routes.closure, SchemaClosure::Partial { .. }))
-            .count(),
-        coverage: "declarations_preserved_not_certified",
-        calculation: "not_run",
-        whole_build_parity: "not_established",
-        artifacts: artifacts
+    let manifest = checked.manifest(
+        artifacts
             .iter()
             .map(|a| RecipeArtifactManifest {
                 file: a.name,
@@ -275,7 +295,7 @@ pub fn assemble_owned_recipe(
                 sha256: format!("{:x}", Sha256::digest(&a.bytes)),
             })
             .collect(),
-    };
+    )?;
     push_artifact(
         &mut artifacts,
         &mut used,

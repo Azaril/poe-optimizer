@@ -17,7 +17,7 @@ use poe_optimizer_import::{
     owned_recipe_extension::{OwnedRecipeExtension, SchemaExtensionEntry, extend_owned_recipe},
     owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
     owned_release_revision::{OwnedReleaseRevisionInput, compile_owned_release_revision},
-    owned_skill_catalog::OwnedSkillRoleIndex,
+    owned_skill_roles::OwnedSkillRoleIndex,
     owned_tree_policy::OwnedTreeNormalizationPolicy,
 };
 use serde::{Deserialize, de::DeserializeOwned};

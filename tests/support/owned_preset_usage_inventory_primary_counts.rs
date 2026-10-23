@@ -13,7 +13,7 @@ use poe_optimizer_import::{
         NormalizationPolicy, PrimarySkillUsageInput, UsageInputPolicy, UsageInventoryPolicy,
     },
     owned_release::StagedOwnedRelease,
-    owned_skill_catalog::OwnedGemRoleRow,
+    owned_skill_roles::OwnedGemRoleRow,
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
 };
 use serde::{Deserialize, Serialize};

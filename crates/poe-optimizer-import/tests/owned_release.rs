@@ -12,11 +12,11 @@ use poe_optimizer_import::{
     owned_gem_schema::{GemSchemaMigrationInput, stage_owned_gem_schema},
     owned_item_lines::OwnedItemLinePolicy,
     owned_mapping::OwnedMappingIndex,
-    owned_normalize::{GemInputPolicy, GemQualityPolicy, ImportQueryTemplate},
+    owned_normalize::{GemInputPolicy, GemQualityPolicy, ImportQueryTemplate, NamedQuerySet},
     owned_recipe::{OwnedRecipeInput, assemble_owned_recipe},
     owned_release::*,
     owned_release_evaluation::OwnedReleaseEvaluationInput,
-    owned_skill_catalog::OwnedSkillRoleIndex,
+    owned_skill_roles::OwnedSkillRoleIndex,
     owned_successor::*,
     owned_tree_policy::OwnedTreeNormalizationPolicy,
 };
@@ -69,6 +69,416 @@ fn files(release: &StagedOwnedRelease) -> BTreeMap<String, Vec<u8>> {
         .artifacts()
         .map(|(name, bytes)| (name.to_string(), bytes.to_vec()))
         .collect()
+}
+
+fn runtime_fixture() -> &'static (
+    BTreeMap<String, Vec<u8>>,
+    poe_optimizer_import::owned_recipe::OwnedRecipeManifest,
+) {
+    static FIXTURE: OnceLock<(
+        BTreeMap<String, Vec<u8>>,
+        poe_optimizer_import::owned_recipe::OwnedRecipeManifest,
+    )> = OnceLock::new();
+    FIXTURE.get_or_init(|| {
+        let release = stage(input());
+        (files(&release), release.assembled().manifest().clone())
+    })
+}
+
+// Tamper with canonical typed bytes and refresh their enclosing hash. A stale
+// outer hash must not make a semantic/canonicality test pass accidentally.
+fn replace_artifact(files: &mut BTreeMap<String, Vec<u8>>, name: &str, bytes: Vec<u8>) {
+    assert_ne!(files[name], bytes, "mutation must change {name}");
+    if name != "release.json" {
+        let mut receipt: OwnedReleaseReceipt =
+            serde_json::from_slice(&files["release.json"]).unwrap();
+        let row = receipt
+            .artifacts
+            .iter_mut()
+            .find(|row| row.file == name)
+            .unwrap();
+        row.bytes = bytes.len();
+        row.sha256 = format!("{:x}", Sha256::digest(&bytes));
+        files.insert("release.json".into(), serde_json::to_vec(&receipt).unwrap());
+    }
+    files.insert(name.into(), bytes);
+}
+
+fn replace_recipe_artifact(files: &mut BTreeMap<String, Vec<u8>>, name: &str, bytes: Vec<u8>) {
+    let mut manifest = runtime_fixture().1.clone();
+    let row = manifest
+        .artifacts
+        .iter_mut()
+        .find(|row| row.file == name)
+        .unwrap();
+    row.bytes = bytes.len();
+    row.sha256 = format!("{:x}", Sha256::digest(&bytes));
+    replace_artifact(files, name, bytes);
+    replace_artifact(
+        files,
+        "manifest.json",
+        serde_json::to_vec(&manifest).unwrap(),
+    );
+}
+
+fn rejects_runtime_files(files: &BTreeMap<String, Vec<u8>>, case: &str) {
+    // Independently verify every advertised hash before testing the reader.
+    // release.json commits itself through its rebuilt claims, not a self-hash.
+    let receipt: OwnedReleaseReceipt = serde_json::from_slice(&files["release.json"]).unwrap();
+    for row in &receipt.artifacts {
+        assert_eq!(row.bytes, files[&row.file].len(), "{case}: {}", row.file);
+        assert_eq!(
+            row.sha256,
+            format!("{:x}", Sha256::digest(&files[&row.file])),
+            "{case}: {}",
+            row.file
+        );
+    }
+    assert!(
+        load_owned_release_artifacts(files, Default::default()).is_err(),
+        "{case}"
+    );
+}
+
+#[test]
+fn runtime_reader_preserves_complete_release_and_authored_query_order() {
+    let checked = load_owned_release_artifacts(&runtime_fixture().0, Default::default()).unwrap();
+    let supplied = input();
+    assert_eq!(
+        checked.recipe().registry().input(),
+        &supplied.recipe.registry
+    );
+    assert_eq!(checked.recipe().schema().input(), &supplied.recipe.schema);
+    assert_eq!(checked.recipe().rules().input(), &supplied.recipe.rules);
+    assert_eq!(checked.recipe().routing().input(), &supplied.recipe.routing);
+    assert_eq!(checked.mapping().input(), &supplied.mapping);
+    assert_eq!(checked.roles().input(), &supplied.roles);
+    assert_eq!(checked.normalization(), &supplied.normalization);
+    assert_eq!(checked.rewards().input(), &supplied.rewards);
+    assert_eq!(checked.items().input(), &supplied.items);
+    assert_eq!(checked.item_source().input(), &supplied.item_source);
+    assert_eq!(
+        checked.tree().unwrap().input(),
+        supplied.tree.as_ref().unwrap()
+    );
+    assert_eq!(checked.query_sets(), supplied.query_sets);
+    assert!(checked.evaluation().is_none());
+    assert_eq!(
+        checked.recipe().compiled_rules().identity(),
+        checked.receipt().compiled_rules
+    );
+
+    let mut reordered = supplied;
+    reordered.query_sets.reverse();
+    for set in &mut reordered.query_sets {
+        set.queries.reverse();
+    }
+    assert_ne!(reordered.query_sets, checked.query_sets());
+    let published = stage(reordered.clone());
+    let loaded = load_owned_release_artifacts(&files(&published), Default::default()).unwrap();
+    assert_eq!(loaded.query_sets(), reordered.query_sets);
+    assert_eq!(loaded.receipt(), published.receipt());
+    assert_ne!(loaded.receipt().input, checked.receipt().input);
+}
+
+#[test]
+fn runtime_reader_rejects_rehashed_recipe_manifest_claims() {
+    for case in 0..9 {
+        let mut emitted = runtime_fixture().0.clone();
+        let mut manifest = runtime_fixture().1.clone();
+        match case {
+            0 => manifest.recipe = other_digest(),
+            1 => manifest.compiled_rules = other_digest(),
+            2 => manifest.partial_rule_owners += 1,
+            3 => manifest.partial_route_outputs += 1,
+            4 => manifest.coverage = "certified",
+            5 => manifest.calculation = "run",
+            6 => manifest.whole_build_parity = "established",
+            7 => manifest.artifacts[0].sha256 = "0".repeat(64),
+            _ => manifest.artifacts.swap(0, 1),
+        }
+        replace_artifact(
+            &mut emitted,
+            "manifest.json",
+            serde_json::to_vec(&manifest).unwrap(),
+        );
+        rejects_runtime_files(&emitted, &format!("recipe manifest case {case}"));
+    }
+}
+
+#[test]
+fn runtime_reader_rejects_constructor_sortable_constituents_with_fresh_hashes() {
+    use poe_optimizer_data::owned_schema::SchemaPackageInput;
+    use poe_optimizer_import::owned_mapping::{
+        MappingPackageInput, OwnedIdRegistrySnapshot, RegistryInput,
+    };
+    let checked = load_owned_release_artifacts(&runtime_fixture().0, Default::default()).unwrap();
+
+    let mut emitted = runtime_fixture().0.clone();
+    let mut registry: RegistryInput = serde_json::from_slice(&emitted["registry.json"]).unwrap();
+    assert!(registry.entries.len() > 1);
+    registry.entries.reverse();
+    assert_eq!(
+        OwnedIdRegistrySnapshot::new(registry.clone(), Default::default())
+            .unwrap()
+            .input(),
+        checked.recipe().registry().input()
+    );
+    replace_recipe_artifact(
+        &mut emitted,
+        "registry.json",
+        serde_json::to_vec(&registry).unwrap(),
+    );
+    rejects_runtime_files(&emitted, "sortable registry history");
+
+    let mut emitted = runtime_fixture().0.clone();
+    let mut schema: SchemaPackageInput = serde_json::from_slice(&emitted["schema.json"]).unwrap();
+    assert!(schema.definitions.len() > 1);
+    schema.definitions.reverse();
+    assert_eq!(
+        OwnedDefinitionSchemaPackage::new(schema.clone(), Default::default())
+            .unwrap()
+            .input(),
+        checked.recipe().schema().input()
+    );
+    replace_recipe_artifact(
+        &mut emitted,
+        "schema.json",
+        serde_json::to_vec(&schema).unwrap(),
+    );
+    rejects_runtime_files(&emitted, "sortable schema definitions");
+
+    let mut emitted = runtime_fixture().0.clone();
+    let mut mapping: MappingPackageInput =
+        serde_json::from_slice(&emitted["mapping.json"]).unwrap();
+    assert!(mapping.entries.len() > 1);
+    mapping.entries.reverse();
+    assert_eq!(
+        OwnedMappingIndex::new(
+            mapping.clone(),
+            checked.recipe().registry(),
+            checked.recipe().schema().as_ref(),
+            Default::default()
+        )
+        .unwrap()
+        .input(),
+        checked.mapping().input()
+    );
+    replace_artifact(
+        &mut emitted,
+        "mapping.json",
+        serde_json::to_vec(&mapping).unwrap(),
+    );
+    rejects_runtime_files(&emitted, "sortable mapping entries");
+}
+
+#[test]
+fn runtime_reader_rebuilds_receipt_claims_and_fixed_artifact_order() {
+    for case in 0..9 {
+        let mut emitted = runtime_fixture().0.clone();
+        let mut receipt: OwnedReleaseReceipt =
+            serde_json::from_slice(&emitted["release.json"]).unwrap();
+        match case {
+            0 => receipt.compiled_rules = other_digest(),
+            1 => receipt.query_rows += 1,
+            2 => receipt.query_policy_bytes += 1,
+            3 => receipt.source.files[0].sha256 = "0".repeat(64),
+            4 => receipt.provenance.push(OwnedReleaseProvenance {
+                kind: key("undeclared-authoring"),
+                prior_input: other_digest(),
+                authoring_input: other_digest(),
+            }),
+            5 => receipt.artifacts.swap(0, 1),
+            6 => {
+                assert!(receipt.source.files.len() > 1);
+                receipt.source.files.reverse();
+            }
+            7 => receipt.input = other_digest(),
+            _ => receipt.normalization = other_digest(),
+        }
+        replace_artifact(
+            &mut emitted,
+            "release.json",
+            serde_json::to_vec(&receipt).unwrap(),
+        );
+        rejects_runtime_files(&emitted, &format!("receipt case {case}"));
+    }
+}
+
+#[test]
+fn runtime_reader_rejects_query_reordering_without_a_new_input_commitment() {
+    let mut emitted = runtime_fixture().0.clone();
+    let set = input()
+        .query_sets
+        .into_iter()
+        .find(|set| set.queries.len() > 1)
+        .unwrap();
+    let name = format!("queries-{}.json", set.name.as_str());
+    let mut queries = set.queries;
+    queries.reverse();
+    replace_artifact(&mut emitted, &name, serde_json::to_vec(&queries).unwrap());
+    rejects_runtime_files(&emitted, "query rows changed under stale release digest");
+
+    let mut emitted = runtime_fixture().0.clone();
+    let mut receipt: OwnedReleaseReceipt =
+        serde_json::from_slice(&emitted["release.json"]).unwrap();
+    let query_positions = receipt
+        .artifacts
+        .iter()
+        .enumerate()
+        .filter_map(|(index, row)| row.file.starts_with("queries-").then_some(index))
+        .collect::<Vec<_>>();
+    assert!(query_positions.len() > 1);
+    receipt
+        .artifacts
+        .swap(query_positions[0], query_positions[1]);
+    replace_artifact(
+        &mut emitted,
+        "release.json",
+        serde_json::to_vec(&receipt).unwrap(),
+    );
+    rejects_runtime_files(&emitted, "query sets changed under stale release digest");
+}
+
+#[test]
+fn runtime_reader_requires_strict_fields_and_canonical_bytes() {
+    for name in ["release.json", "registry.json", "manifest.json"] {
+        for case in 0..4 {
+            let mut emitted = runtime_fixture().0.clone();
+            let original = String::from_utf8(emitted[name].clone()).unwrap();
+            let value: serde_json::Value = serde_json::from_str(&original).unwrap();
+            let version = &value["schema_version"];
+            let changed = match case {
+                0 => format!(" {original}"),
+                1 => original.replacen('{', &format!("{{\"schema_version\":{version},"), 1),
+                2 => original.replacen('{', "{\"assume_valid\":true,", 1),
+                _ => original.replacen(&format!("\"schema_version\":{version},"), "", 1),
+            };
+            if name == "registry.json" {
+                replace_recipe_artifact(&mut emitted, name, changed.into_bytes());
+            } else {
+                replace_artifact(&mut emitted, name, changed.into_bytes());
+            }
+            // Deliberately malformed receipt fields cannot use the typed receipt
+            // helper, which must itself reject duplicate/unknown/missing fields.
+            assert!(
+                load_owned_release_artifacts(&emitted, Default::default()).is_err(),
+                "{name} case {case}"
+            );
+        }
+    }
+    for extension in ["\"provenance\":[],", "\"evaluation\":null,"] {
+        let mut emitted = runtime_fixture().0.clone();
+        let original = String::from_utf8(emitted["release.json"].clone()).unwrap();
+        let changed = original.replacen('{', &format!("{{{extension}"), 1);
+        replace_artifact(&mut emitted, "release.json", changed.into_bytes());
+        rejects_runtime_files(
+            &emitted,
+            "explicit empty/null field is not canonical omission",
+        );
+    }
+}
+
+#[test]
+fn runtime_reader_enforces_aggregate_bytes_and_cumulative_query_work() {
+    let emitted = &runtime_fixture().0;
+    let receipt: OwnedReleaseReceipt = serde_json::from_slice(&emitted["release.json"]).unwrap();
+    let total: usize = emitted.values().map(Vec::len).sum();
+    let largest = emitted.values().map(Vec::len).max().unwrap();
+    let recipe_bytes: usize = [
+        "registry.json",
+        "schema.json",
+        "rules.json",
+        "routing.json",
+        "manifest.json",
+    ]
+    .into_iter()
+    .map(|name| emitted[name].len())
+    .sum();
+    assert!(total > largest);
+    let exact = OwnedReleaseLimits {
+        max_input_bytes: total,
+        max_output_bytes: total,
+        max_artifact_bytes: largest,
+        max_query_sets: receipt.query_sets,
+        max_queries: receipt.query_rows,
+        max_query_commitment_bytes: receipt.query_policy_bytes,
+        ..Default::default()
+    };
+    load_owned_release_artifacts(emitted, exact).unwrap();
+    for (label, limits) in [
+        (
+            "aggregate input",
+            OwnedReleaseLimits {
+                max_input_bytes: total - 1,
+                ..exact
+            },
+        ),
+        (
+            "aggregate output",
+            OwnedReleaseLimits {
+                max_output_bytes: total - 1,
+                ..exact
+            },
+        ),
+        (
+            "individual artifact",
+            OwnedReleaseLimits {
+                max_artifact_bytes: largest - 1,
+                ..exact
+            },
+        ),
+        (
+            "query sets",
+            OwnedReleaseLimits {
+                max_query_sets: receipt.query_sets - 1,
+                ..exact
+            },
+        ),
+        (
+            "cumulative query rows",
+            OwnedReleaseLimits {
+                max_queries: receipt.query_rows - 1,
+                ..exact
+            },
+        ),
+        (
+            "cumulative policy commitments",
+            OwnedReleaseLimits {
+                max_query_commitment_bytes: receipt.query_policy_bytes - 1,
+                ..exact
+            },
+        ),
+    ] {
+        assert!(
+            load_owned_release_artifacts(emitted, limits).is_err(),
+            "{label}"
+        );
+    }
+    let supplied = input();
+    let independent_counts = [
+        supplied.recipe.registry.entries.len(),
+        supplied.recipe.schema.definitions.len(),
+        supplied.recipe.schema.slots.len(),
+        supplied.mapping.entries.len(),
+    ];
+    let largest_collection = *independent_counts.iter().max().unwrap();
+    assert!(independent_counts.into_iter().sum::<usize>() > largest_collection);
+    assert!(matches!(
+        load_owned_release_artifacts(
+            emitted,
+            OwnedReleaseLimits {
+                max_validation_entries: largest_collection,
+                ..Default::default()
+            }
+        ),
+        Err(OwnedReleaseError::Limit("validation entries"))
+    ));
+    let mut limits = OwnedReleaseLimits::default();
+    limits.recipe.max_output_bytes = recipe_bytes;
+    load_owned_release_artifacts(emitted, limits).unwrap();
+    limits.recipe.max_output_bytes -= 1;
+    assert!(load_owned_release_artifacts(emitted, limits).is_err());
 }
 
 #[test]
@@ -169,7 +579,7 @@ fn legacy_wire_layout_and_input_digest_are_unchanged_when_evaluation_is_omitted(
         schema_version: u32,
         recipe: &'a OwnedRecipeInput,
         mapping: &'a poe_optimizer_import::owned_mapping::MappingPackageInput,
-        roles: &'a poe_optimizer_import::owned_skill_catalog::OwnedSkillRolePackageInput,
+        roles: &'a poe_optimizer_import::owned_skill_roles::OwnedSkillRolePackageInput,
         normalization: &'a poe_optimizer_import::owned_normalize::NormalizationPolicy,
         rewards: &'a poe_optimizer_import::owned_reward_policy::RewardPolicyInput,
         items: &'a poe_optimizer_import::owned_item_lines::ItemLinePolicyInput,
@@ -261,6 +671,13 @@ fn explicit_v2_metric_only_release_commits_its_own_identity_and_artifact() {
         serde_json::to_vec(evaluation.metrics().input()).unwrap()
     );
     assert!(!emitted.contains_key("support-stages.json"));
+    let loaded = load_owned_release_artifacts(&emitted, Default::default()).unwrap();
+    assert_eq!(loaded.receipt(), staged.receipt());
+    assert_eq!(
+        loaded.evaluation().unwrap().metrics().input(),
+        evaluation.metrics().input()
+    );
+    assert!(loaded.evaluation().unwrap().support().is_none());
     let decoded = decode_owned_release(
         &serde_json::to_vec(staged.input()).unwrap(),
         Default::default(),
@@ -458,6 +875,12 @@ fn optional_tree_is_explicit_and_cannot_retain_a_foreign_normalization_commitmen
     assert!(without.tree().is_none());
     assert!(without.receipt().tree.is_none());
     assert!(!files(&without).contains_key("tree-normalization.json"));
+    assert!(
+        load_owned_release_artifacts(&files(&without), Default::default())
+            .unwrap()
+            .tree()
+            .is_none()
+    );
     let bytes = serde_json::to_vec(&supplied).unwrap();
     assert!(
         serde_json::from_slice::<serde_json::Value>(&bytes)
@@ -628,6 +1051,13 @@ fn declared_authoring_provenance_is_committed_bounded_and_does_not_change_game_d
     }];
     let new = stage(declared.clone());
     assert_eq!(new.receipt().provenance, declared.provenance);
+    assert_eq!(
+        load_owned_release_artifacts(&files(&new), Default::default())
+            .unwrap()
+            .receipt()
+            .provenance,
+        declared.provenance
+    );
     assert_ne!(old.receipt().input, new.receipt().input);
     assert_eq!(old.receipt().definitions, new.receipt().definitions);
     assert_eq!(old.query_sets(), new.query_sets());

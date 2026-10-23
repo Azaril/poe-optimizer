@@ -5,7 +5,7 @@ use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_draft::*, o
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_import::{
     owned_mapping::*, owned_normalize::*, owned_reward_policy::OwnedRewardPolicy,
-    owned_skill_catalog::*, owned_source_actions::SourceActionCorrespondenceInput,
+    owned_skill_roles::*, owned_source_actions::SourceActionCorrespondenceInput,
 };
 use serde_json::{Value, json};
 
@@ -94,7 +94,7 @@ fn fixture() -> Fixture {
         });
         roles.roles.push(OwnedGemRoleRow {
             construction:
-                poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
+                poe_optimizer_import::owned_skill_roles::OwnedGemSourceConstruction::Unavailable,
             gem,
             primary: OwnedPrimarySkill::Known(effect),
             role: OwnedGemRole::Known(role),

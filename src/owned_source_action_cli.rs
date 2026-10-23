@@ -1,5 +1,5 @@
 //! Filesystem host for source-to-owned action correspondence, without evaluation.
-use super::owned_tree_cli::{invalid, read};
+use super::owned_io::{invalid, read};
 use poe_optimizer_core::build_identity::BuildLineage;
 use poe_optimizer_import::{
     MAX_XML_BYTES,
@@ -36,7 +36,8 @@ pub(crate) struct Args {
 pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let release_limits = OwnedReleaseLimits::default();
     let mut left = release_limits.max_input_bytes;
-    let release = super::owned_release_cli::load_release(&args.release, &mut left, release_limits)?;
+    let release =
+        super::owned_release_loader::load_release(&args.release, &mut left, release_limits)?;
     let limits = SourceActionLimits::default();
     let mut left = limits.max_wire_bytes;
     // Decode strict DTOs directly; a Value intermediary would hide duplicate keys.
@@ -48,7 +49,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     );
     let correspondence = SourceActionCorrespondence::new(
         input,
-        release.assembled().schema(),
+        release.recipe().schema().as_ref(),
         release.roles(),
         release.mapping(),
         limits,

@@ -51,13 +51,14 @@ Dependency closure, linked features and shipped contents are CI assertions.
 The current naming-allocation library temporarily depends from Authoring to
 Import so it can reuse the single existing `OwnedIdRegistry` allocator. This
 also pulls Import's legacy features into the offline authoring tool; it is not
-the final dependency boundary. Import must not depend on Authoring. Completing
-R1 requires separating immutable registry and role data needed at runtime from
-offline allocation/compilation, and replacing the runtime release loader's
-current reassembly through the authoring pipeline. The production release builder
-also reuses that existing typed assembler through Import until this extraction is
-complete. Moving allocation wrappers or the filesystem publisher alone does not
-complete that extraction.
+the final dependency boundary. Import must not depend on Authoring.
+Immutable registry and role loading are now separate from offline allocation and
+catalog generation. Runtime release loading checks artifacts directly; it does
+not invoke the authoring assembler. The production release builder still reuses
+that assembler through Import. R1 must move the maintained allocator and publication
+core into Authoring, retire obsolete transformation/compiler commands after
+preserving their useful behavioral tests, and retain acquisition DTOs in neutral
+contracts. These module boundaries alone do not complete the dependency extraction.
 
 Registry readers receive `OwnedIdRegistrySnapshot`: checked canonical history,
 identity and lookup without allocation or retirement methods. Offline
@@ -70,9 +71,26 @@ registry and shared schema, stored rules, routing and compiled rules. Executable
 rules retain their stored-source identity. Publication staging wraps these checked
 components with manifests and encoded artifacts; evaluation validation needs only
 the checked components. Consumers share the retained executable and use private
-execution scratch. This boundary is implemented, but the current release loader
-still rebuilds publication artifacts. Moving the assembler into Authoring must
-wait until release consumption no longer calls it.
+execution scratch.
+
+`CheckedOwnedRelease` applies the same complete constituent validation to offline
+inputs and loaded artifacts. Its runtime reader retains checked packages, not
+publication buffers. It verifies the exact inventory, hashes, canonical ordering,
+cross-package bindings, source union, coverage declarations and aggregate limits.
+Canonical serialization is compared directly with supplied byte slices; it does
+not allocate another publication. Borrowed typed views preserve input commitments
+without reconstructing a complete authoring input. Explicit revision/publication
+commands may reconstruct such an input or stage artifacts; metric and source-action
+consumers do neither. There is no fallback reader or alternate validator.
+
+Runtime skill-role contracts and validators live in `owned_skill_roles`.
+`owned_skill_catalog` imports those contracts for offline generation; runtime role
+loading has no dependency on catalog generation. Receipt data retains its original
+source-pin subset semantics when a catalog predates later registry additions.
+Ordered query DTOs belong to normalization, and immutable evaluation packages are
+named for checked storage. CLI filesystem loading and bounded I/O are separate
+from publication commands. The host and in-memory reader share one closed
+artifact-inventory validator before the host opens declared paths.
 
 ```mermaid
 flowchart LR

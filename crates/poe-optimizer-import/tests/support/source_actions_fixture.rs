@@ -2,7 +2,7 @@ use poe_optimizer_core::{owned_build::DeclaredSlot, owned_definitions::*, owned_
 use poe_optimizer_data::owned_schema::*;
 use poe_optimizer_import::{
     build_instance::ImportedBuildInstance, owned_mapping::*,
-    owned_normalize::ImportSkillUseLocator, owned_skill_catalog::*, owned_source_actions::*,
+    owned_normalize::ImportSkillUseLocator, owned_skill_roles::*, owned_source_actions::*,
     owned_value::*, owned_value_policy::*,
 };
 
@@ -225,7 +225,7 @@ impl Fixture {
                     skill_count: 1,
                 },
                 roles: vec![OwnedGemRoleRow {
-                    construction: poe_optimizer_import::owned_skill_catalog::OwnedGemSourceConstruction::Unavailable,
+                    construction: poe_optimizer_import::owned_skill_roles::OwnedGemSourceConstruction::Unavailable,
                     gem: gem.clone(),
                     primary: OwnedPrimarySkill::Known(primary.clone()),
                     role: OwnedGemRole::Known(AuthoredGemRole::SkillUse),

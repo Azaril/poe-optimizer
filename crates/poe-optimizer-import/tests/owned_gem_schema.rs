@@ -5,7 +5,7 @@ use poe_optimizer_core::{
 };
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_import::{
-    owned_gem_schema::*, owned_mapping::OwnedMappingIndex, owned_recipe::*, owned_skill_catalog::*,
+    owned_gem_schema::*, owned_mapping::OwnedMappingIndex, owned_recipe::*, owned_skill_roles::*,
     owned_successor::*,
 };
 use std::path::PathBuf;

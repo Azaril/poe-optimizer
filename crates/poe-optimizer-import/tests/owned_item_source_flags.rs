@@ -82,7 +82,7 @@ fn fixture() -> Artifacts {
     let mut roles = a.roles.input().clone();
     roles.mapping = *a.mapping.identity();
     roles.definitions = a.schema.identity().clone();
-    a.roles = poe_optimizer_import::owned_skill_catalog::OwnedSkillRoleIndex::new(
+    a.roles = poe_optimizer_import::owned_skill_roles::OwnedSkillRoleIndex::new(
         roles,
         &a.mapping,
         &a.schema,

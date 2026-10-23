@@ -1,7 +1,7 @@
 //! Same-pin identity extension from injected data; no source VM or game defaults.
 use poe_optimizer_core::{owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::{owned_schema::*, skill_identities::*};
-use poe_optimizer_import::{owned_mapping::*, owned_skill_catalog::*};
+use poe_optimizer_import::{owned_mapping::*, owned_skill_catalog::*, owned_skill_roles::*};
 use std::collections::BTreeMap;
 fn key(value: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(value).unwrap()

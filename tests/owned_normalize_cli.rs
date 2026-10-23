@@ -20,7 +20,7 @@ use poe_optimizer_import::{
         GemQualityPolicy, ImportQueryTarget, ImportQueryTemplate, NormalizationPolicy,
     },
     owned_reward_policy::*,
-    owned_skill_catalog::*,
+    owned_skill_roles::*,
     owned_value::*,
     owned_value_policy::*,
 };

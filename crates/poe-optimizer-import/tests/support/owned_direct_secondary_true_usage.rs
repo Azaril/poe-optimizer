@@ -4,7 +4,7 @@ use poe_optimizer_core::{owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_import::{
     owned_mapping::*, owned_reward_policy::OwnedRewardPolicy,
-    owned_skill_catalog::OwnedSkillRoleIndex,
+    owned_skill_roles::OwnedSkillRoleIndex,
 };
 
 fn configured() -> Fixture {

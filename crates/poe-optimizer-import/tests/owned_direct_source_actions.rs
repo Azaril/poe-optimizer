@@ -14,7 +14,7 @@ use poe_optimizer_core::{
 };
 use poe_optimizer_import::{
     build_instance::ImportedBuildInstance, decode_build, owned_mapping::*, owned_normalize::*,
-    owned_skill_catalog::*, owned_source::SourceProjectEvidence, owned_source_actions::*,
+    owned_skill_roles::*, owned_source::SourceProjectEvidence, owned_source_actions::*,
 };
 
 fn source(text: &str) -> ImportedBuildInstance {

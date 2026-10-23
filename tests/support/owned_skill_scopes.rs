@@ -8,11 +8,11 @@ use poe_optimizer_core::{
 };
 use poe_optimizer_import::{
     owned_mapping::{OwnedMappingIndex, SourceComponent},
-    owned_normalize::{NormalizationPolicy, SkillScopePolicy},
+    owned_normalize::{NamedQuerySet, NormalizationPolicy, SkillScopePolicy},
     owned_recipe::{OwnedRecipeInput, assemble_owned_recipe},
     owned_successor::{
-        CatalogAppend, CatalogItemPolicyMode, NamedQuerySet, OWNED_SUCCESSOR_VERSION,
-        SuccessorBundleInput, SuccessorBundleLimits, TreePolicyTransitionInput,
+        CatalogAppend, CatalogItemPolicyMode, OWNED_SUCCESSOR_VERSION, SuccessorBundleInput,
+        SuccessorBundleLimits, TreePolicyTransitionInput,
         transition_owned_catalog_with_tree_compact,
     },
     owned_tree_policy::{OwnedTreeNormalizationPolicy, TreeNormalizationPackageInput},

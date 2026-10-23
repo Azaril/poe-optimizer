@@ -1,7 +1,7 @@
 //! Generalized input-port refinement preserves complete immutable endpoints.
 use poe_optimizer_core::{owned_content::digest_owned, owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits};
-use poe_optimizer_import::owned_successor::*;
+use poe_optimizer_import::{owned_normalize::NamedQuerySet, owned_successor::*};
 use serde::de::DeserializeOwned;
 use std::{fs, path::PathBuf};
 

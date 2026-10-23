@@ -3,7 +3,7 @@ use super::{Result, SuccessorBindings, SuccessorBundleError, SuccessorBundleLimi
 use crate::{
     owned_mapping::{OwnedMappingIndex, SourcePin},
     owned_recipe::StagedOwnedRecipe,
-    owned_skill_catalog::{
+    owned_skill_roles::{
         OwnedGemMaterialization, OwnedGemRole, OwnedPrimarySkill, OwnedSkillRoleIndex,
     },
 };

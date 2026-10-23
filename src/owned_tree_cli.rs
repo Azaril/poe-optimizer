@@ -1,7 +1,9 @@
 //! Offline tree compiler host; one checked bundle and one publication transaction.
+use super::owned_io::{invalid, read};
 use poe_optimizer_core::{
     owned_content::OwnedContentDigest, owned_definitions::OwnedDefinitionKey,
 };
+use poe_optimizer_import::owned_normalize::NamedQuerySet;
 use poe_optimizer_import::{
     owned_item_lines::{ItemLinePolicyInput, OwnedItemLinePolicy},
     owned_item_source::{ItemSourceLayoutPolicy, ItemSourceLayoutPolicyInput},
@@ -10,9 +12,9 @@ use poe_optimizer_import::{
         OWNED_RECIPE_VERSION, OwnedRecipeInput, StagedOwnedRecipe, assemble_owned_recipe,
     },
     owned_release::OwnedReleaseLimits,
-    owned_skill_catalog::{OwnedSkillRoleIndex, OwnedSkillRolePackageInput},
+    owned_skill_roles::{OwnedSkillRoleIndex, OwnedSkillRolePackageInput},
     owned_successor::{
-        CatalogAppend, CatalogItemPolicyMode, NamedQuerySet, OWNED_COMPACT_SUCCESSOR_VERSION,
+        CatalogAppend, CatalogItemPolicyMode, OWNED_COMPACT_SUCCESSOR_VERSION,
         OWNED_SUCCESSOR_VERSION, SchemaDeclarationRefinement, StagedSuccessorBundle,
         SuccessorBindings, SuccessorBundleInput, SuccessorBundleLimits, TreePolicyTransitionInput,
         transition_owned_catalog_with_tree,
@@ -31,8 +33,7 @@ use sha2::{Digest, Sha256};
 use std::{
     collections::BTreeMap,
     error::Error,
-    fs::File,
-    io::{self, Read, Write},
+    io::{self, Write},
     path::{Path, PathBuf},
 };
 
@@ -109,19 +110,6 @@ const REQUIRED: &[&str] = &[
     "items.json",
     "item-source.json",
 ];
-pub(crate) fn invalid(message: impl Into<String>) -> Box<dyn Error> {
-    io::Error::new(io::ErrorKind::InvalidData, message.into()).into()
-}
-pub(crate) fn read(path: &Path, left: &mut usize) -> Result<Vec<u8>, Box<dyn Error>> {
-    let mut bytes = Vec::new();
-    File::open(path)?
-        .take(*left as u64 + 1)
-        .read_to_end(&mut bytes)?;
-    *left = left
-        .checked_sub(bytes.len())
-        .ok_or_else(|| invalid("aggregate tree/bundle input byte limit"))?;
-    Ok(bytes)
-}
 fn query_name(name: &str) -> Option<&str> {
     let label = name.strip_prefix("queries-")?.strip_suffix(".json")?;
     (!label.is_empty()
@@ -283,7 +271,7 @@ pub(crate) fn load_checked_bundle(
         Ok(_) => {
             // Every actual release artifact/receipt is checked. No historical
             // successor manifest or compatibility assertion is fabricated.
-            let release = super::owned_release_cli::load_release(
+            let release = super::owned_release_loader::load_release(
                 root,
                 remaining,
                 OwnedReleaseLimits {
@@ -307,7 +295,8 @@ pub(crate) fn load_checked_bundle(
                     "legacy successor compilers cannot preserve evaluation artifacts; author a complete new evaluation release",
                 ));
             }
-            let input = release.input();
+            let input =
+                poe_optimizer_import::owned_release::OwnedReleaseInput::from_checked(&release);
             let receipt = release.receipt();
             let base = assemble_owned_recipe(input.recipe.clone(), limits.recipe)?;
             let mapping = OwnedMappingIndex::new(

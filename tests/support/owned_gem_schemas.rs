@@ -14,7 +14,7 @@ use poe_optimizer_import::{
     owned_mapping::OwnedMappingIndex,
     owned_normalize::NormalizationPolicy,
     owned_recipe::{StagedOwnedRecipe, assemble_owned_recipe},
-    owned_skill_catalog::{
+    owned_skill_roles::{
         OwnedGemMaterialization, OwnedGemRole, OwnedGemRoleRow, OwnedPrimarySkill,
         OwnedSkillRoleIndex,
     },

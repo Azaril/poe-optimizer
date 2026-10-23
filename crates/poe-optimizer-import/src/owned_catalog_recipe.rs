@@ -1,5 +1,5 @@
 //! Explicit offline catalog extension. Runtime loaders still reject stale bindings.
-use crate::{owned_mapping::*, owned_recipe::*, owned_skill_catalog::*};
+use crate::{owned_mapping::*, owned_recipe::*, owned_skill_catalog::*, owned_skill_roles::*};
 use poe_optimizer_core::{
     data::DataIdentity,
     owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},

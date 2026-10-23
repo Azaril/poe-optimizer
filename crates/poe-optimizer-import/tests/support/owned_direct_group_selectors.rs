@@ -2,7 +2,7 @@
 //! Synthetic constructor facts model primary plus Command; no native Command
 //! implementation, support eligibility or complete-build claim is made here.
 use super::*;
-use poe_optimizer_import::owned_skill_catalog::*;
+use poe_optimizer_import::owned_skill_roles::*;
 
 fn refresh(f: &mut Fixture, roles: OwnedSkillRolePackageInput) {
     let a = &mut f.base.base;

@@ -1,5 +1,5 @@
 //! Offline numeric recipe compilation; host I/O does not interpret game effects.
-use super::owned_tree_cli::{load_checked_bundle, read};
+use super::{owned_io::read, owned_tree_cli::load_checked_bundle};
 use poe_optimizer_import::{
     owned_modifier_value_recipe::{
         ModifierValuePolicy, ModifierValueRecipeLimits, compile_owned_modifier_values,

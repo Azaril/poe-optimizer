@@ -10,10 +10,8 @@ use poe_optimizer_import::{
     owned_catalog_recipe::{StagedCatalogRecipe, extend_owned_catalog_recipe},
     owned_normalize::NormalizationLimits,
     owned_release::StagedOwnedRelease,
-    owned_skill_catalog::{
-        OwnedReversePrimaryCensus, OwnedSkillRoleIndex, SkillCatalogError,
-        verify_owned_skill_catalog_reproduction,
-    },
+    owned_skill_catalog::verify_owned_skill_catalog_reproduction,
+    owned_skill_roles::{OwnedReversePrimaryCensus, OwnedSkillRoleIndex, SkillCatalogError},
 };
 use serde::Serialize;
 use serde_json::{Value, json};

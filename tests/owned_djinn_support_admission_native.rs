@@ -20,7 +20,7 @@ use poe_optimizer_import::{
     owned_mapping::{
         ExternalOwnerSelector, ExternalSelector, MappingBasis, MappingOutcome, SourceComponent,
     },
-    owned_skill_catalog::{OwnedGemMaterialization, OwnedGemRole, OwnedPrimarySkill},
+    owned_skill_roles::{OwnedGemMaterialization, OwnedGemRole, OwnedPrimarySkill},
 };
 use rayon::prelude::*;
 use serde::de::DeserializeOwned;

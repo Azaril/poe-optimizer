@@ -18,7 +18,7 @@ use crate::{
         StagedOwnedRelease, assemble_owned_release, preflight,
     },
     owned_reward_policy::OwnedRewardPolicy,
-    owned_skill_catalog::OwnedSkillRoleIndex,
+    owned_skill_roles::OwnedSkillRoleIndex,
     owned_tree_policy::OwnedTreeNormalizationPolicy,
 };
 use poe_optimizer_core::{
