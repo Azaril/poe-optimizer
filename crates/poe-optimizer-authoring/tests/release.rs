@@ -14,6 +14,8 @@ mod defence_components;
 mod engine_fixtures;
 #[path = "../../../tests/support/owned_evaluation_release_fixture.rs"]
 mod fixture;
+#[path = "release/initial_skill_types.rs"]
+mod initial_skill_types;
 #[path = "release/item_metadata.rs"]
 mod item_metadata;
 #[path = "release/local_scaling.rs"]
@@ -1667,7 +1669,7 @@ fn expected_identity_and_actual_metric_authority_are_checked_after_decode() {
 }
 
 #[test]
-fn tracked_dsl_release_preserves_every_historical_constituent_except_program_representation() {
+fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_initial_type_additions() {
     let root = tracked_root();
     let source = tracked_sources();
     let reference_bytes = fs::read(root.join("reference-release.json")).unwrap();
@@ -1680,8 +1682,9 @@ fn tracked_dsl_release_preserves_every_historical_constituent_except_program_rep
     assert_ne!(release.receipt().input, reference.input);
     let current_artifacts: BTreeMap<_, _> = release.artifacts().collect();
 
-    // Historical IR is a test reference only. Restore just program members so
-    // the old receipt independently authenticates all current non-program state.
+    // Historical IR remains a test reference only. The sole admitted addition
+    // is one Skill producer and its 69 named Boolean channels. Authenticate that
+    // exact delta before reconstructing old commitments through maintained APIs.
     let retained = fs::read(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"),
     )
@@ -1704,7 +1707,102 @@ fn tracked_dsl_release_preserves_every_historical_constituent_except_program_rep
         rule_reference.sha256
     );
     let historical: RulePackageInput = serde_json::from_slice(&bytes).unwrap();
+    fn bootstrap<T: serde::de::DeserializeOwned>(source: &Sources, path: &str) -> T {
+        let encoded = &source
+            .files
+            .iter()
+            .find(|(name, _)| name == path)
+            .unwrap()
+            .1;
+        let mut bytes = Vec::new();
+        GzDecoder::new(encoded.as_slice())
+            .take(ReleaseBuildLimits::default().max_decoded_bytes as u64 + 1)
+            .read_to_end(&mut bytes)
+            .unwrap();
+        assert!(bytes.len() <= ReleaseBuildLimits::default().max_decoded_bytes);
+        serde_json::from_slice(&bytes).unwrap()
+    }
+    let old_schema = OwnedDefinitionSchemaPackage::new(
+        bootstrap(source, "bootstrap/schema.json.gz"),
+        Default::default(),
+    )
+    .unwrap();
+    let old_registry = poe_optimizer_import::owned_mapping::OwnedIdRegistrySnapshot::new(
+        bootstrap(source, "bootstrap/registry.json.gz"),
+        Default::default(),
+    )
+    .unwrap();
+    let allocation = actual.name_allocation();
+    assert!(
+        allocation.predecessor().is_none(),
+        "this is the fixed first allocation genesis"
+    );
+    assert_eq!(
+        allocation
+            .names()
+            .input()
+            .bindings
+            .iter()
+            .map(|binding| binding.name.clone())
+            .collect::<BTreeSet<_>>(),
+        initial_skill_types::stat_names()
+    );
+    let additions: Vec<_> = allocation
+        .names()
+        .input()
+        .bindings
+        .iter()
+        .map(|binding| binding.target.clone())
+        .collect();
+    assert_eq!(additions.len(), 69);
+    let mut prior_schema = release.input().recipe.schema.clone();
+    let before_count = prior_schema.definitions.len();
+    prior_schema
+        .definitions
+        .retain(|row| !additions.contains(&SchemaSubject::Definition(row.address())));
+    assert_eq!(before_count - prior_schema.definitions.len(), 69);
+    assert_eq!(
+        &prior_schema,
+        old_schema.input(),
+        "all existing definitions, slots and metadata"
+    );
+    old_registry
+        .validate_successor(allocation.names().registry().snapshot())
+        .unwrap();
+    let current_registry = allocation.names().registry().input();
+    let previous = old_registry.input();
+    assert_eq!(
+        &current_registry.entries[..previous.entries.len()],
+        previous.entries.as_slice()
+    );
+    assert_eq!(
+        current_registry.entries[previous.entries.len()..]
+            .iter()
+            .map(|row| row.target.clone())
+            .collect::<Vec<_>>(),
+        additions
+    );
+    assert_eq!(current_registry.entries.len(), previous.entries.len() + 69);
+    let parts = poe_optimizer_import::owned_release::check_release_source_dependencies(
+        release.input(),
+        Default::default(),
+    )
+    .unwrap()
+    .into_parts()
+    .unwrap();
     let mut restored = release.input().clone();
+    restored.recipe.rules = parts.rules.into_input(&old_schema);
+    let admitted_owner = initial_skill_types::owner();
+    let mut removed = 0;
+    for row in &mut restored.recipe.rules.owners {
+        row.programs.members.retain(|program| {
+            let admitted =
+                row.owner == admitted_owner && program.id.as_str() == initial_skill_types::PROGRAM;
+            removed += usize::from(admitted);
+            !admitted
+        });
+    }
+    assert_eq!(removed, 1, "exact admitted producer address");
     assert_eq!(restored.recipe.rules.owners.len(), historical.owners.len());
     for (current, original) in restored
         .recipe
@@ -1738,6 +1836,27 @@ fn tracked_dsl_release_preserves_every_historical_constituent_except_program_rep
         restored.recipe.rules, historical,
         "all non-program rule metadata"
     );
+    restored.recipe.registry = old_registry.input().clone();
+    restored.recipe.schema = prior_schema;
+    restored.recipe.routing = poe_optimizer_data::owned_routing::OwnedActionRouting::bind_new(
+        parts.routing,
+        &old_schema,
+        Default::default(),
+    )
+    .unwrap()
+    .input()
+    .clone();
+    let imported = parts
+        .imports
+        .into_input(&old_registry, &old_schema, Default::default())
+        .unwrap();
+    restored.mapping = imported.mapping;
+    restored.roles = imported.roles;
+    restored.normalization = imported.normalization;
+    restored.rewards = imported.rewards;
+    restored.items = imported.items;
+    restored.item_source = imported.item_source;
+    restored.tree = imported.tree;
     let restored = assemble_owned_release(restored, Default::default()).unwrap();
     assert_eq!(restored.receipt(), &reference);
     let artifacts: BTreeMap<_, _> = restored.artifacts().collect();
@@ -1760,18 +1879,18 @@ fn tracked_dsl_release_preserves_every_historical_constituent_except_program_rep
             "{} digest",
             row.file
         );
-        if matches!(row.file.as_str(), "rules.json" | "manifest.json") {
-            assert_ne!(
-                current_artifacts[row.file.as_str()],
-                bytes,
-                "new representation: {}",
-                row.file
-            );
-        } else {
+        if row.file.starts_with("queries-") {
             assert_eq!(
                 current_artifacts[row.file.as_str()],
                 bytes,
-                "unchanged constituent: {}",
+                "unchanged query content: {}",
+                row.file
+            );
+        } else {
+            assert_ne!(
+                current_artifacts[row.file.as_str()],
+                bytes,
+                "new declaration/dependency binding: {}",
                 row.file
             );
         }

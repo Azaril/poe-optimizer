@@ -5,8 +5,16 @@ It lists every input explicitly, relative to this directory. Build into a fresh
 output directory with:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output rebuilt-release
 ```
+
+This bootstrap command reproduces the first 69-name allocation genesis at its
+fixed source revision. Later source builds must use that checked checkpoint with
+`--predecessor` and `--expected-predecessor`; do not bootstrap evolving sources.
+The output contains `checkpoint.json`, `names.json` and `runtime/`. Runtime
+consumers receive `rebuilt-release/runtime`. The canonical source revision and
+checkpoint digest are recorded outside this compiled inventory after the source
+commit; local `runs/` outputs are only verification evidence.
 
 Rule programs live in the declared `.rule` files. KDL packets bind each program
 to its exact definition or declared slot and preserve membership order. The
@@ -20,9 +28,8 @@ coverage inventories, tables, receivers, queries, applications and bindings.
 It has **no program members**. The builder rejects embedded programs, including
 when no packets are declared. A DSL error cannot select another execution path.
 The remaining compressed JSON constituents are temporary R1/R2 metadata inputs,
-not the final compact runtime pack. No local predecessor, historical staging
-helper, migration generator, PoB checkout or network operation is needed to
-build this tracked source.
+not the final compact runtime pack. Reproducing the fixed genesis needs no local
+predecessor, historical staging helper, migration generator or PoB checkout.
 
 ## Independent migration evidence
 
@@ -36,10 +43,12 @@ actual tracked aliases, packets and DSL. Its independent comparator permits
 node renaming, retains read/operand/effect semantics and order, checks exact
 owner membership, and compiles the complete reconstructed rule package with the
 existing Engine. Non-program metadata and all incomplete-coverage declarations
-must remain unchanged. The release test restores only historical program members
-and requires every historical artifact length/hash and receipt byte to match.
-The actual DSL release has a new rule/input identity because its node names differ.
-All unrelated emitted constituents retain their historical bytes.
+must remain unchanged except for the explicitly admitted 69 Stat declarations
+and one Sniper initial-type program. The release test removes exactly that delta,
+restores historical program members and uses checked content constructors to bind
+the original dependencies. Every reconstructed historical artifact length/hash
+and receipt byte must match. New schema/registry identities change dependent
+artifact bindings; unchanged query payloads remain byte-exact.
 
 Historical reference identity (not the current DSL input):
 
@@ -50,16 +59,18 @@ Historical reference identity (not the current DSL input):
 
 ## Preserved scope and limitations
 
-The release retains 13,264 active allocations, 9,391 schema definitions and
-3,873 slots. Rules retain 6,550 owners, 8,212 program occurrences, 18 integer
+The release has 13,333 active allocations, 9,460 schema definitions and
+3,873 slots. Rules have 6,550 owners, 8,213 program occurrences, 18 integer
 tables, 59 receivers, 114 contribution queries, one effect application and one
 existing-Actor binding. The five named query sets retain their original order
 and 22 queries each. The 227 provenance rows are unchanged metadata, not
 instructions to replay historical migrations.
 
 There is no evaluation bundle. The derived manifest still reports 5,827 partial
-rule owners and five partial routing outputs. This representation migration
-adds no whole-build coverage or numerical parity, retires no mechanic gap and
+rule owners and five partial routing outputs. The first declarations add Sniper's
+initial own/minion type facts and explicit minion-context presence through generic
+Skill Boolean Stats. See [evidence and limits](../initial-skill-types/README.md).
+This adds no whole-build coverage or numerical parity and
 does not make an incomplete build executable. The first complete unchanged
 build remains gated on the remaining data/runtime migration and actual blockers.
 
@@ -78,10 +89,10 @@ serve as production names.
 
 ## Checked source inventory
 
-Current input: `d5f7086228a1fe2bfbc7fcdde033fd62741e719aa3af188fc5f3686b33b02406`.
-The 103 packets reference 2,561 distinct complete rule sources, preserving all
-8,212 occurrences. Their local name files use 5,011 distinct exact addresses.
-The 2,784 declared inputs occupy 5,772,456 encoded and 58,564,599 decoded bytes;
-expanded rule text is 4,572,462 bytes and the root manifest is 183,380 bytes.
-All fit the existing default limits. Authoring's 179 tests pass, including the
-actual-source graph and historical artifact gates; none are ignored.
+Current input: `802bf2eccbdf83814dbb34f0745a2006c75ec4fdcd80e4ee8fc80e053852cdcb`.
+The 103 packets reference 2,562 distinct complete rule sources, preserving all
+8,213 occurrences. Their local name files use 5,011 distinct exact addresses;
+the declaration ledger adds 69 names. The 2,787 declared inputs occupy 5,786,698
+encoded and 58,578,841 decoded bytes; the root manifest is 183,544 bytes.
+All fit the existing default limits. The maintained Authoring tests check actual
+source graphs, historical artifacts and the new initial-type projection.

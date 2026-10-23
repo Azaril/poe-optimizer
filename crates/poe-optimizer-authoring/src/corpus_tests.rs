@@ -446,8 +446,25 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
     .unwrap();
     let schema = release.release().assembled().schema();
     let actual = &release.release().input().recipe.rules;
-    let original = retained_rules();
+    let mut original = retained_rules();
+    // This gate preserves archived program graphs and metadata. The separately
+    // tested declaration addition changes only this derived schema binding.
+    original.definitions = schema.identity().clone();
     drop(CompiledRulePackage::compile(&original, schema, Default::default()).unwrap());
+    let additions_source = "rules/initial-skill-types/skeletal-sniper.rule";
+    let additions_id = OwnedDefinitionKey::new("initial-skill-types").unwrap();
+    let owner_symbols = load_names(
+        std::str::from_utf8(&owned["names/group-000.kdl"]).unwrap(),
+        schema,
+        NamesLimits::default(),
+    )
+    .unwrap();
+    let additions_owner = SchemaSubject::Definition(
+        owner_symbols
+            .definition("skill.sniper_skill")
+            .unwrap()
+            .clone(),
+    );
 
     // The public release parser validates the manifest. Its existing flat KDL
     // decoder also exposes the actual packet/name pairing to this test without
@@ -480,6 +497,7 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
     }
     let mut expected = after.clone();
     let mut occurrences = 0;
+    let mut additions = 0;
     for (group, owners) in original.owners.chunks(64).enumerate() {
         let owners: Vec<_> = owners
             .iter()
@@ -499,12 +517,28 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
             NamesLimits::default(),
         )
         .unwrap();
-        let packet = parse_packet(
+        let mut packet = parse_packet(
             std::str::from_utf8(&owned[&path]).unwrap(),
             &symbols,
             ManifestLimits::default(),
         )
         .unwrap();
+        // Admit exactly the new producer covered by the maintained behavioral
+        // suite. Do not weaken historical placement to a subset/count check.
+        for append in &mut packet.appends {
+            append.programs.retain(|member| {
+                if member.id != additions_id && member.source != additions_source {
+                    return true;
+                }
+                assert_eq!(append.owner, additions_owner);
+                assert_eq!(member.id, additions_id);
+                assert_eq!(member.source, additions_source);
+                assert!(declared_sources.contains(additions_source));
+                used_sources.insert(additions_source.to_owned());
+                additions += 1;
+                false
+            });
+        }
         assert_eq!(
             packet.appends.len(),
             owners.len(),
@@ -603,8 +637,22 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
         after, expected,
         "exact independently assembled owner/program placement"
     );
+    assert_eq!(additions, 1, "exact reviewed new producer membership");
+    let mut preserved = actual.clone();
+    let mut removed = 0;
+    for owner in &mut preserved.owners {
+        owner.programs.members.retain(|program| {
+            if owner.owner == additions_owner && program.id == additions_id {
+                removed += 1;
+                false
+            } else {
+                true
+            }
+        });
+    }
+    assert_eq!(removed, 1);
     assert_eq!(
-        actual, &expected,
+        preserved, expected,
         "production composition preserves every graph and metadata field"
     );
     drop(CompiledRulePackage::compile(actual, schema, Default::default()).unwrap());

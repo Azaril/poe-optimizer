@@ -35,6 +35,10 @@ loss. No mutable head is introduced by this implementation.
 
 ## Current commands and layout
 
+The bootstrap command illustrates starting a new history. For the maintained
+production history, run it only against the fixed genesis source described below;
+use the predecessor form for evolving source.
+
 ```powershell
 cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output first-checkpoint
 $checkpointIdentity = "<checkpoint identity printed by the previous build>"
@@ -64,6 +68,44 @@ source commitments, and returns the staged receipt, ledger and runtime artifacts
 checks bounded canonical receipts and names, and revalidates the complete runtime.
 The runtime registry is the only registry snapshot: `NamesInput.registry` must
 equal its identity. The ledger identity is a separate commitment.
+
+## Canonical first-allocation genesis
+
+The first production declaration slice establishes one genesis checkpoint
+containing its 69 allocated Skill Stats. The earlier empty-ledger checkpoint is
+verification evidence, not that genesis. Record the exact Git source revision,
+manifest path and expected checkpoint identity in a maintained reference outside
+the compiled manifest's source inventory. Record those values after the validated
+content commit, in a follow-up reference/documentation commit; the manifest must
+not refer to its own future Git commit or checkpoint identity. The exact reference
+is pending validation and publication of the first declaration slice.
+
+A clean clone reproduces genesis by obtaining that fixed source revision and
+running the maintained compiler with explicit `--bootstrap` against its manifest.
+Check the resulting checkpoint identity against the reference, then pass the
+artifacts through the normal checked checkpoint loader. The referenced source
+revision supplies data; it does not select a historical compiler or migration
+helper. CI must make that exact revision available even when its initial checkout
+is shallow. No pre-existing `runs/` output or machine-local ledger is required.
+
+Current source builds use the fully checked reproduced genesis as their explicit
+predecessor. Never bootstrap the evolving source to reconstruct its allocation
+history, and never substitute the earlier empty ledger: either would permit
+earlier-sorting additions to change assigned IDs. Rebuilding identical source with
+genesis as predecessor can preserve runtime and name identities while changing the
+checkpoint identity, because the receipt now records that predecessor. Reproducing
+the genesis receipt itself still requires the pinned source and its original
+explicit bootstrap operation.
+
+This source reference is a bounded bridge to R3 distribution. Before a second
+allocation generation needs a new canonical predecessor, archive or distribute
+one full, checked immutable checkpoint snapshot through R3. Do not extend this
+recipe into recursive historical source builds, retain a growing chain of duplicate
+working-tree snapshots, or introduce a separate names-ledger importer. The next
+build must be able to load its allocation predecessor directly. If compiler or
+artifact formats change, deliberately regenerate or migrate the canonical snapshot
+and its reference; do not add compatibility compilers or fallback loaders to keep
+the genesis recipe alive. Mutable-head promotion remains a separate deferred task.
 
 ## Considered alternative: explicit source-ledger allocation
 
@@ -112,5 +154,7 @@ final checked recipe. Sealed runtime fields are rejected in those source files;
 inherited content must come from the actual fully checked evaluation owner.
 Atomic nested publication, checked explicit-predecessor loading and allocating CLI
 integration are implemented. Mutable-head promotion is separate future work.
-This compiler checkpoint does not add production gameplay declarations or complete
-the first original build.
+That compiler checkpoint did not add production gameplay declarations or complete
+the first original build. The subsequent first-genesis slice adds the initial
+Skill type declarations described above, while retaining Partial rule coverage
+and the same incomplete-build admission result.

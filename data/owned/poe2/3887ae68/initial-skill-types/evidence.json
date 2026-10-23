@@ -1,0 +1,577 @@
+{
+  "schema_version": 1,
+  "scope": "Initial source-type projection for Skeletal Sniper into the reviewed 34-symbol support-preparation vocabulary; other skill rows are projection and absence controls only.",
+  "source_commit": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "source_hash_encoding": "UTF-8 with CRLF normalized to LF",
+  "source_files": [
+    {
+      "path": "src/Data/Global.lua",
+      "normalized_lf_sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/Skills/act_dex.lua",
+      "normalized_lf_sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "normalized_lf_sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "normalized_lf_sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "normalized_lf_sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "normalized_lf_sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "normalized_lf_sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    }
+  ],
+  "vocabulary_sources": [
+    {
+      "path": "data/owned/poe2/3887ae68/djinn-support-preparation/preparation.json",
+      "sha256": "d5b33ae67650c921c026549bc4304d261f6c8bbf664f6b625d4e3ce52122682c"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/djinn-support-preparation/bindings.json",
+      "sha256": "40f327d90fc1c22f82bb3567e7eba28315cdffe434742e14b457e0765b3375f9"
+    }
+  ],
+  "vocabulary": [
+    {
+      "key": "area",
+      "source_id": 8,
+      "source_name": "Area",
+      "support_type": "type.area"
+    },
+    {
+      "key": "attack",
+      "source_id": 1,
+      "source_name": "Attack",
+      "support_type": "type.attack"
+    },
+    {
+      "key": "attack_in_place",
+      "source_id": 83,
+      "source_name": "AttackInPlace",
+      "support_type": "type.attack-in-place"
+    },
+    {
+      "key": "buff",
+      "source_id": 5,
+      "source_name": "Buff",
+      "support_type": "type.buff"
+    },
+    {
+      "key": "cannot_chain",
+      "source_id": 162,
+      "source_name": "CannotChain",
+      "support_type": "type.cannot-chain"
+    },
+    {
+      "key": "channel",
+      "source_id": 48,
+      "source_name": "Channel",
+      "support_type": "type.channel"
+    },
+    {
+      "key": "cold",
+      "source_id": 29,
+      "source_name": "Cold",
+      "support_type": "type.cold"
+    },
+    {
+      "key": "commandable_minion",
+      "source_id": 183,
+      "source_name": "CommandableMinion",
+      "support_type": "type.commandable-minion"
+    },
+    {
+      "key": "commands_minions",
+      "source_id": 129,
+      "source_name": "CommandsMinions",
+      "support_type": "type.commands-minions"
+    },
+    {
+      "key": "cooldown",
+      "source_id": 91,
+      "source_name": "Cooldown",
+      "support_type": "type.cooldown"
+    },
+    {
+      "key": "creates_ground_effect",
+      "source_id": 167,
+      "source_name": "CreatesGroundEffect",
+      "support_type": "type.creates-ground-effect"
+    },
+    {
+      "key": "creates_minion",
+      "source_id": 77,
+      "source_name": "CreatesMinion",
+      "support_type": "type.creates-minion"
+    },
+    {
+      "key": "crossbow_ammo_skill",
+      "source_id": 117,
+      "source_name": "CrossbowAmmoSkill",
+      "support_type": "type.crossbow-ammo-skill"
+    },
+    {
+      "key": "damage",
+      "source_id": 7,
+      "source_name": "Damage",
+      "support_type": "type.damage"
+    },
+    {
+      "key": "duration",
+      "source_id": 9,
+      "source_name": "Duration",
+      "support_type": "type.duration"
+    },
+    {
+      "key": "fixed_cast_time",
+      "source_id": 106,
+      "source_name": "FixedCastTime",
+      "support_type": "type.fixed-cast-time"
+    },
+    {
+      "key": "gains_stages",
+      "source_id": 186,
+      "source_name": "GainsStages",
+      "support_type": "type.gains-stages"
+    },
+    {
+      "key": "ground_targeted_projectile",
+      "source_id": 192,
+      "source_name": "GroundTargetedProjectile",
+      "support_type": "type.ground-targeted-projectile"
+    },
+    {
+      "key": "has_reservation",
+      "source_id": 12,
+      "source_name": "HasReservation",
+      "support_type": "type.has-reservation"
+    },
+    {
+      "key": "inbuilt_trigger",
+      "source_id": 50,
+      "source_name": "InbuiltTrigger",
+      "support_type": "type.inbuilt-trigger"
+    },
+    {
+      "key": "instant",
+      "source_id": 64,
+      "source_name": "Instant",
+      "support_type": "type.instant"
+    },
+    {
+      "key": "minion",
+      "source_id": 6,
+      "source_name": "Minion",
+      "support_type": "type.minion"
+    },
+    {
+      "key": "minions_are_undamagable",
+      "source_id": 214,
+      "source_name": "MinionsAreUndamagable",
+      "support_type": "type.minions-are-undamagable"
+    },
+    {
+      "key": "minions_can_explode",
+      "source_id": 18,
+      "source_name": "MinionsCanExplode",
+      "support_type": "type.minions-can-explode"
+    },
+    {
+      "key": "no_attack_or_cast_time",
+      "source_id": 218,
+      "source_name": "NoAttackOrCastTime",
+      "support_type": "type.no-attack-or-cast-time"
+    },
+    {
+      "key": "persistent",
+      "source_id": 140,
+      "source_name": "Persistent",
+      "support_type": "type.persistent"
+    },
+    {
+      "key": "physical",
+      "source_id": 27,
+      "source_name": "Physical",
+      "support_type": "type.physical"
+    },
+    {
+      "key": "projectile",
+      "source_id": 3,
+      "source_name": "Projectile",
+      "support_type": "type.projectile"
+    },
+    {
+      "key": "reserve_in_all_sets",
+      "source_id": 233,
+      "source_name": "ReserveInAllSets",
+      "support_type": "type.reserve-in-all-sets"
+    },
+    {
+      "key": "spell",
+      "source_id": 2,
+      "source_name": "Spell",
+      "support_type": "type.spell"
+    },
+    {
+      "key": "triggerable",
+      "source_id": 31,
+      "source_name": "Triggerable",
+      "support_type": "type.triggerable"
+    },
+    {
+      "key": "triggered",
+      "source_id": 37,
+      "source_name": "Triggered",
+      "support_type": "type.triggered"
+    },
+    {
+      "key": "usable_while_moving",
+      "source_id": 141,
+      "source_name": "UsableWhileMoving",
+      "support_type": "type.usable-while-moving"
+    },
+    {
+      "key": "usable_while_shapeshifted",
+      "source_id": 121,
+      "source_name": "UsableWhileShapeshifted",
+      "support_type": "type.usable-while-shapeshifted"
+    }
+  ],
+  "production": {
+    "source_skill": "SummonSkeletalSnipersPlayer",
+    "owner_alias": "skill.sniper_skill",
+    "program": "initial-skill-types",
+    "context": "skill",
+    "declarations": "migration-source/declarations/initial-skill-types.kdl",
+    "names": "migration-source/names/initial-skill-types.kdl",
+    "source": "migration-source/rules/initial-skill-types/skeletal-sniper.rule",
+    "own_stat_prefix": "stat.initial_skill_type.",
+    "minion_stat_prefix": "stat.initial_minion_type.",
+    "minion_presence_stat": "stat.initial_minion_types_present"
+  },
+  "skills": [
+    {
+      "source_skill": "SummonSkeletalSnipersPlayer",
+      "source_file": "src/Data/Skills/act_int.lua",
+      "source_line": 18677,
+      "role": "maintained_producer",
+      "own": {
+        "present": true,
+        "raw": [
+          "Minion",
+          "MinionsCanExplode",
+          "CreatesMinion",
+          "CreatesUndeadMinion",
+          "CreatesSkeletonMinion",
+          "HasReservation",
+          "Persistent",
+          "MultipleReservation",
+          "Physical",
+          "Chaos",
+          "Fire",
+          "CommandableMinion"
+        ],
+        "projected": [
+          "commandable_minion",
+          "creates_minion",
+          "has_reservation",
+          "minion",
+          "minions_can_explode",
+          "persistent",
+          "physical"
+        ],
+        "excluded": [
+          "CreatesUndeadMinion",
+          "CreatesSkeletonMinion",
+          "MultipleReservation",
+          "Chaos",
+          "Fire"
+        ],
+        "source_line": 18686,
+        "declaration": "skillTypes = { [SkillType.Minion] = true, [SkillType.MinionsCanExplode] = true, [SkillType.CreatesMinion] = true, [SkillType.CreatesUndeadMinion] = true, [SkillType.CreatesSkeletonMinion] = true, [SkillType.HasReservation] = true, [SkillType.Persistent] = true, [SkillType.MultipleReservation] = true, [SkillType.Physical] = true, [SkillType.Chaos] = true, [SkillType.Fire] = true, [SkillType.CommandableMinion] = true, },"
+      },
+      "minion": {
+        "present": true,
+        "raw": [
+          "Attack",
+          "Projectile",
+          "Duration",
+          "Area",
+          "CreatesGroundEffect"
+        ],
+        "projected": [
+          "area",
+          "attack",
+          "creates_ground_effect",
+          "duration",
+          "projectile"
+        ],
+        "excluded": [],
+        "source_line": 18687,
+        "declaration": "minionSkillTypes = { [SkillType.Attack] = true, [SkillType.Projectile] = true, [SkillType.Duration] = true, [SkillType.Area] = true, [SkillType.CreatesGroundEffect] = true, },"
+      }
+    },
+    {
+      "source_skill": "TwisterPlayer",
+      "source_file": "src/Data/Skills/act_dex.lua",
+      "source_line": 10032,
+      "role": "projection_control",
+      "own": {
+        "present": true,
+        "raw": [
+          "Attack",
+          "Area",
+          "Duration",
+          "Spear",
+          "Projectile",
+          "Barrageable",
+          "UsableWhileMoving",
+          "RangedAttack",
+          "CannotTerrainChain",
+          "Wind",
+          "InteractsWithElementalGround",
+          "MirageArcherCanUse"
+        ],
+        "projected": [
+          "area",
+          "attack",
+          "duration",
+          "projectile",
+          "usable_while_moving"
+        ],
+        "excluded": [
+          "Spear",
+          "Barrageable",
+          "RangedAttack",
+          "CannotTerrainChain",
+          "Wind",
+          "InteractsWithElementalGround",
+          "MirageArcherCanUse"
+        ],
+        "source_line": 10038,
+        "declaration": "skillTypes = { [SkillType.Attack] = true, [SkillType.Area] = true, [SkillType.Duration] = true, [SkillType.Spear] = true, [SkillType.Projectile] = true, [SkillType.Barrageable] = true, [SkillType.UsableWhileMoving] = true, [SkillType.RangedAttack] = true, [SkillType.CannotTerrainChain] = true, [SkillType.Wind] = true, [SkillType.InteractsWithElementalGround] = true, [SkillType.MirageArcherCanUse] = true, },"
+      },
+      "minion": {
+        "present": false,
+        "raw": [],
+        "projected": [],
+        "excluded": []
+      }
+    },
+    {
+      "source_skill": "SummonSkeletalClericsPlayer",
+      "source_file": "src/Data/Skills/act_int.lua",
+      "source_line": 18295,
+      "role": "projection_control",
+      "own": {
+        "present": true,
+        "raw": [
+          "Minion",
+          "MinionsCanExplode",
+          "CreatesMinion",
+          "CreatesUndeadMinion",
+          "CreatesSkeletonMinion",
+          "HasReservation",
+          "Persistent",
+          "MultipleReservation"
+        ],
+        "projected": [
+          "creates_minion",
+          "has_reservation",
+          "minion",
+          "minions_can_explode",
+          "persistent"
+        ],
+        "excluded": [
+          "CreatesUndeadMinion",
+          "CreatesSkeletonMinion",
+          "MultipleReservation"
+        ],
+        "source_line": 18304,
+        "declaration": "skillTypes = { [SkillType.Minion] = true, [SkillType.MinionsCanExplode] = true, [SkillType.CreatesMinion] = true, [SkillType.CreatesUndeadMinion] = true, [SkillType.CreatesSkeletonMinion] = true, [SkillType.HasReservation] = true, [SkillType.Persistent] = true, [SkillType.MultipleReservation] = true, },"
+      },
+      "minion": {
+        "present": true,
+        "raw": [
+          "Spell",
+          "Cooldown"
+        ],
+        "projected": [
+          "cooldown",
+          "spell"
+        ],
+        "excluded": [],
+        "source_line": 18305,
+        "declaration": "minionSkillTypes = { [SkillType.Spell] = true, [SkillType.Cooldown] = true, },"
+      }
+    },
+    {
+      "source_skill": "HealSkeletonClericMinion",
+      "source_file": "src/Data/Skills/minion.lua",
+      "source_line": 671,
+      "role": "projection_control",
+      "own": {
+        "present": true,
+        "raw": [
+          "Buff",
+          "Duration",
+          "Spell",
+          "AttackInPlace"
+        ],
+        "projected": [
+          "attack_in_place",
+          "buff",
+          "duration",
+          "spell"
+        ],
+        "excluded": [],
+        "source_line": 675,
+        "declaration": "skillTypes = { [SkillType.Buff] = true, [SkillType.Duration] = true, [SkillType.Spell] = true, [SkillType.AttackInPlace] = true, },"
+      },
+      "minion": {
+        "present": false,
+        "raw": [],
+        "projected": [],
+        "excluded": []
+      }
+    },
+    {
+      "source_skill": "SummonSandDjinnPlayer",
+      "source_file": "src/Data/Skills/other.lua",
+      "source_line": 9822,
+      "role": "projection_control",
+      "own": {
+        "present": true,
+        "raw": [
+          "Minion",
+          "CreatesMinion",
+          "Physical",
+          "Persistent",
+          "HasReservation",
+          "MinionsAreUndamagable",
+          "CommandableMinion",
+          "ReserveInAllSets"
+        ],
+        "projected": [
+          "commandable_minion",
+          "creates_minion",
+          "has_reservation",
+          "minion",
+          "minions_are_undamagable",
+          "persistent",
+          "physical",
+          "reserve_in_all_sets"
+        ],
+        "excluded": [],
+        "source_line": 9832,
+        "declaration": "skillTypes = { [SkillType.Minion] = true, [SkillType.CreatesMinion] = true, [SkillType.Physical] = true, [SkillType.Persistent] = true, [SkillType.HasReservation] = true, [SkillType.MinionsAreUndamagable] = true, [SkillType.CommandableMinion] = true, [SkillType.ReserveInAllSets] = true, },"
+      },
+      "minion": {
+        "present": true,
+        "raw": [
+          "Spell",
+          "Damage",
+          "Area",
+          "Physical",
+          "Projectile",
+          "Channel",
+          "Cooldown",
+          "GainsStages"
+        ],
+        "projected": [
+          "area",
+          "channel",
+          "cooldown",
+          "damage",
+          "gains_stages",
+          "physical",
+          "projectile",
+          "spell"
+        ],
+        "excluded": [],
+        "source_line": 9833,
+        "declaration": "minionSkillTypes = { [SkillType.Spell] = true, [SkillType.Damage] = true, [SkillType.Area] = true, [SkillType.Physical] = true, [SkillType.Projectile] = true, [SkillType.Channel] = true, [SkillType.Cooldown] = true, [SkillType.GainsStages] = true, },"
+      }
+    },
+    {
+      "source_skill": "SummonWaterDjinnPlayer",
+      "source_file": "src/Data/Skills/other.lua",
+      "source_line": 12310,
+      "role": "projection_control",
+      "own": {
+        "present": true,
+        "raw": [
+          "Minion",
+          "CreatesMinion",
+          "Cold",
+          "Persistent",
+          "HasReservation",
+          "MinionsAreUndamagable",
+          "CommandableMinion",
+          "ReserveInAllSets"
+        ],
+        "projected": [
+          "cold",
+          "commandable_minion",
+          "creates_minion",
+          "has_reservation",
+          "minion",
+          "minions_are_undamagable",
+          "persistent",
+          "reserve_in_all_sets"
+        ],
+        "excluded": [],
+        "source_line": 12320,
+        "declaration": "skillTypes = { [SkillType.Minion] = true, [SkillType.CreatesMinion] = true, [SkillType.Cold] = true, [SkillType.Persistent] = true, [SkillType.HasReservation] = true, [SkillType.MinionsAreUndamagable] = true, [SkillType.CommandableMinion] = true, [SkillType.ReserveInAllSets] = true, },"
+      },
+      "minion": {
+        "present": true,
+        "raw": [
+          "Spell",
+          "Damage",
+          "Cold",
+          "Area",
+          "Cooldown",
+          "Duration",
+          "Buff",
+          "CreatesGroundEffect"
+        ],
+        "projected": [
+          "area",
+          "buff",
+          "cold",
+          "cooldown",
+          "creates_ground_effect",
+          "damage",
+          "duration",
+          "spell"
+        ],
+        "excluded": [],
+        "source_line": 12321,
+        "declaration": "minionSkillTypes = { [SkillType.Spell] = true, [SkillType.Damage] = true, [SkillType.Cold] = true, [SkillType.Area] = true, [SkillType.Cooldown] = true, [SkillType.Duration] = true, [SkillType.Buff] = true, [SkillType.CreatesGroundEffect] = true, },"
+      }
+    }
+  ],
+  "semantics": {
+    "projection": "A type key is true exactly when its reviewed source_name occurs in the raw source set. Excluded names remain evidence and do not create additional vocabulary members.",
+    "minion_absence": "present=false represents an absent minionSkillTypes field. It is distinct from present=true with all membership values false and from an unavailable presence producer.",
+    "initial_scope": "These facts are copied from the source definition before support-added types. They do not replace prepared types, summoner context, readiness declarations, or effective support inputs.",
+    "coverage": "Only the Skeletal Sniper owner receives this maintained producer. Control rows do not establish producer coverage for other definitions."
+  }
+}

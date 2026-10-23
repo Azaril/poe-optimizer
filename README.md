@@ -104,7 +104,7 @@ Optional `stat-declarations "definitions.kdl" names="declaration-names.kdl"`
 entries in a release manifest stage typed Stats through the stable name allocator
 before packet lowering; declaration aliases stay separate from packet aliases.
 
-Start an authoring checkpoint in a new directory with:
+Reproduce the fixed first-allocation source revision into a new directory with:
 
 ```powershell
 cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output rebuilt-checkpoint
@@ -119,6 +119,14 @@ identity on stderr. Use that identity to continue allocation history explicitly:
 $checkpointIdentity = "<checkpoint identity printed by the previous build>"
 cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor rebuilt-checkpoint --expected-predecessor $checkpointIdentity --output next-checkpoint
 ```
+
+The first declaration checkpoint contains 69 generic Skill Boolean Stats and
+Sniper's initial-type producer. The plan records its checkpoint digest; pin its
+Git source revision immediately after the source commit, outside the compiled
+inventory. Use that fixed genesis as the
+checked predecessor for later source builds; do not bootstrap evolving sources.
+Before another allocation generation requires a newer predecessor, the plan
+requires distributing a complete checked snapshot rather than replaying history.
 
 Choose `--bootstrap` only to start a new history. A predecessor is fully checked,
 and its names remain reserved even when the next build declares no new Stats.

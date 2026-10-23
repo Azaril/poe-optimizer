@@ -23,8 +23,10 @@ the replaced evaluation source format; complete final validation remains mandato
 Authored and runtime evaluation share one aggregate preflight traversal.
 Atomic authoring checkpoint publication now integrates declarations with the CLI,
 using an explicit bootstrap or checked immutable predecessor and one persisted
-name ledger. Continue independent harness retirement while completing the
-current release's real execution declarations. Do not add a new provenance API
+name ledger. Initial skill-type declarations now use that path: 69 generic
+Boolean Skill Stats and one Sniper producer, retaining Partial coverage.
+Continue independent harness retirement while completing the current release's
+execution declarations. Do not add a new provenance API
 for dormant support flags.
 
 Checkpoint triage follows the owner's October 23 clarification: complete the
@@ -37,7 +39,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; current checkpoint adds atomic authoring publication |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; current checkpoint adds the first production declarations |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -45,24 +47,26 @@ silently become a second supported implementation.
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
-| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Node renaming changes rule/input identity; other emitted constituents remain byte-exact. No local predecessor needed; evaluation bundle still absent |
+| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. First production declarations add 69 Stats and one Sniper initial-type program. Historical restoration admits only that exact delta. Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 15:24:38 UTC on October 23, `96e5533e` run `39962517895` had nine of eighteen created jobs passing and nine running, with no failures. `f5e5f49d` run `39966836052` was cancelled before any job started; `15d93996` run `39975266725` was pending. Baselines `a7069aa1` and `ae90ec82` completed all twenty jobs successfully. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
+| CI | At 15:59:48 UTC on October 23, `509f2008` run `39979772636` remained pending with no created jobs or failures. The earlier 15:24:38 snapshot of `96e5533e` run `39962517895` had nine of eighteen created jobs passing and nine running, with no failures. `f5e5f49d` run `39966836052` was cancelled before any job started. Baselines `a7069aa1` and `ae90ec82` completed all twenty jobs successfully. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output rebuilt-release`
 with a fresh output directory; runtime consumers use `rebuilt-release/runtime`.
 Resume allocation with `--predecessor <checkpoint> --expected-predecessor <identity>`
 instead of `--bootstrap`. Successful publication prints the checkpoint identity to
-stderr and receipt JSON to stdout. Current runtime input identity:
-`d5f7086228a1fe2bfbc7fcdde033fd62741e719aa3af188fc5f3686b33b02406`.
-The 2,784 declared source files use 5,772,456 encoded and 58,564,599 decoded
-bytes, within the existing 64 MiB bounds. The 183,380-byte root manifest and
-4,572,462 expanded rule bytes also fit current limits without increases.
+stderr and receipt JSON to stdout. Bootstrap reproduces the fixed first-allocation
+source revision only; later builds must preserve its ledger as a checked
+predecessor. Current runtime input identity:
+`802bf2eccbdf83814dbb34f0745a2006c75ec4fdcd80e4ee8fc80e053852cdcb`.
+The 2,787 declared source files use 5,786,698 encoded and 58,578,841 decoded
+bytes, within the existing 64 MiB bounds. The 183,544-byte root manifest and
+expanded rule bytes also fit current limits without increases.
 Metadata JSON remains temporary; gzip is not the compact runtime format.
 The CLI still reports the 80% decoded-size warning; compact-format work remains
 required before expanding content. The production command rebuilt the tracked
-source into `runs/owned-authoring-dsl-release-01` with the expected input identity,
+source into `runs/initial-skill-types-genesis-01` with the expected input identity,
 17 constituent artifacts and all 227 provenance rows.
 
 Historical input
@@ -70,8 +74,9 @@ Historical input
 and its receipt remain independent regression evidence. Original rule IR lives
 only in Authoring's `tests/fixtures/retained-rules.json.gz`, outside production
 inputs. Actual-source graph checks plus restoration of just historical program
-members prove all non-program metadata/provenance and unrelated artifact bytes
-are unchanged. `runs/dsl-conversion-02/conversion-report.json` records local
+members, with only the exact 69-Stat/one-program delta removed through maintained
+content constructors, prove all historical metadata/provenance and artifact bytes
+are preserved. `runs/dsl-conversion-02/conversion-report.json` records local
 conversion evidence; no `runs/` file or one-off conversion tool is needed by a
 normal source build or CI.
 
@@ -959,12 +964,12 @@ them. The historical `owned_release_revision::rebind_release_dependencies` assum
 a checked predecessor and rejects evaluation artifacts. Do not call it on raw
 decoded source or recreate a second repair list. Shared bootstrap/import semantic
 validation against the actual original registry and schema is now implemented
-(checkpoint below). Next construct final dependencies through maintained Authoring
-after declaration allocation, then validate the complete release. Preserve the
+(checkpoint below). Maintained Authoring now constructs final dependencies
+after declaration allocation, then validates the complete release. Preserve the
 malformed incoming commitment and late-failure checks.
 Retire the old transformation caller when its useful tests and binding logic have
 moved; none of this may silently grant missing gameplay coverage.
-Then author initial-type producers for Original05 Sniper first: pinned
+The initial-type producer for Original05 Sniper now follows the pinned
 `Data/Skills/act_int.lua:18677` declares twelve own types and five minion types.
 Use `support-release/evidence.json` raw Twister/Cleric/Heal memberships and
 `djinn-support-preparation/source-vectors.json` initial definitions for independent
@@ -978,17 +983,23 @@ component control may establish present-empty versus absent semantics if the
 pinned natural examples contain no empty context. These remain reusable Skill
 Stats and definition-owned DSL producers, with no build-name dispatch.
 
-The bounded next slice uses that existing 34-type projection: 34 own-membership
+The implemented first declaration slice uses that existing 34-type projection: 34 own-membership
 Stats, 34 minion-membership Stats and one explicit minion-context presence Stat.
 All 69 are generic Boolean Skill Stats; seven own and five minion memberships
-are positive for this definition. Add declaration/name/rule sources and append
+are positive for this definition. Declaration/name/rule sources append
 the producer to `skill.sniper_skill` in group-000 using declaration overlays,
-without predicted IDs or Rust mechanics. Keep raw excluded names in evidence and
-owner coverage Partial. Independent controls distinguish own Attack=false from
-minion Attack=true, own Physical=true from minion Physical=false, repeated exact
-Skill recipients and an unavailable missing producer. Establish the maintained
-clean-clone checkpoint/source reference before production IDs depend on this
-history; the local checkpoint replay outputs are evidence only.
+without predicted IDs or Rust mechanics. Raw excluded names remain in evidence and
+owner coverage remains Partial. Independent controls distinguish own Attack=false from
+minion Attack=true and own Physical=true from minion Physical=false. Exact repeated
+Skill recipients and missing-producer plan controls belong with the upcoming actual
+execution bundle; the current slice does not construct a parallel fixture bundle.
+Pin the validated first
+source revision and checkpoint digest in a follow-up reference commit, outside
+the compiled inventory, to avoid self-reference. Reproduce only that fixed genesis
+with the maintained compiler, verify/load it normally, then use it as predecessor.
+Before a second allocation generation needs a new predecessor, R3 must distribute
+one complete checked snapshot. Do not grow a historical source-replay chain;
+local checkpoint outputs are evidence only.
 
 The smallest current producer needs no level, quality, count or support-result
 read. Existing group-100/group-101 programs already produce prepared level/quality
@@ -1390,6 +1401,81 @@ identity remains `d5f7086228a1fe2bfbc7fcdde033fd62741e719aa3af188fc5f3686b33b024
 Both local outputs are verification evidence, not required production inputs or
 a new canonical distribution mechanism. Current build completeness stays **0/5**.
 
+**Initial-type declaration checkpoint:** the maintained source now declares 69
+Boolean Skill Stats and one definition-owned Sniper program, with 34 own-type
+memberships, 34 minion-type memberships and explicit minion-context presence.
+Sniper emits seven own positives, five minion positives and present=true; all
+other projected memberships are explicitly false. Five excluded raw own types
+remain in reviewed evidence. The finite preparation vocabulary is not the game's
+complete type universe. There is no new Rust mechanic or dispatch by skill name.
+
+The first non-empty persisted ledger belongs to this declaration source, not the earlier
+empty-ledger publication. The full CLI build produced genesis identity
+`e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109`, name identity
+`dabf9a92dffb7e9ec36ee587e1dd377bc9aaffa096373c32062ac4428dadabd2`, and runtime
+input `802bf2eccbdf83814dbb34f0745a2006c75ec4fdcd80e4ee8fc80e053852cdcb`.
+Replaying through the ordinary checked predecessor loader produced checkpoint
+`d15cabc5774b85149fa98d7672257e8b9188fa586c9fee8c598cdf732d8c4622`; the ledger
+and all eighteen runtime files are byte-identical. Source text has LF bytes on
+all 2,771 inventoried KDL/rule paths, including the manifest. Git attributes retain
+those bytes across platforms. Pin the source Git revision in the immediately
+following reference commit to avoid a self-referential source commitment.
+
+Validation covers real declaration types/ownership and Sniper facts, reused rule
+scratch, six independently specified projection controls, and absent versus
+present-empty minion contexts.
+Absent context emits no invented minion-membership values. Historical gates admit
+only the exact 69 schema additions and one program, preserve every original
+registry entry, owner/program position, graph and metadata field, and reconstruct
+the archived receipt with maintained content constructors. The production owner
+remains Partial; the release has no execution bundle and remains **0/5** complete.
+
+Final validation: **245 tests pass**, none ignored (166 Authoring library, eight
+CLI, 60 release and 11 Host tests), including the unchanged five-original gate.
+The last optimized rebuild took 2m36s; the release tests took 18.07 seconds.
+Strict all-target Authoring/Host Clippy passes. Logs:
+`runs/initial-skill-types-tests-verified.log` and
+`runs/initial-skill-types-clippy.log`. Scoped formatting, diff checks and all nine
+protected incoming-critical hashes are checked before publication. Early failures
+were confined to the new fixture: type mismatches, omitted required empty
+inventories and the invalid occurrence setup described below; no production
+validator or coverage requirement was weakened.
+
+An attempted isolated occurrence test exposed its invalid Direct selection of a
+non-directly-selectable physical skill and missing readiness. The public effect
+plan alone cannot accept current readiness stages; the preparation/support plan
+owns that contract. Keep this slice at the public compiled-rule boundary instead
+of inventing another support bundle or downgrading the operations contract. Add
+exact occurrence, missing-producer and worker-reuse controls when the maintained
+execution bundle is authored. Historical whole-plan fixtures retain those laws
+until then.
+
+The next blocker is the composed support-source census and execution input
+authority, not more type facts. Current metadata covers 966 Gem, 19 Reward and one
+UsagePolicy domains; all 23 selected Original05 physical Gems are covered. Gem
+coverage and an empty Sniper assignment order do not certify the composed build.
+Audit the unchanged normalized draft's Class/Ascendancy/implicit roots, selected
+equipment and exact modifiers, skills, passives, rewards, granted descendants,
+Actor/slot owners, shared Actor rules, Encounter, UsagePolicy and ActionOutput
+owners through the existing occurrence traversal. Author existing
+`SupportDiscoveryInput` rows only where the entire admitted source domain proves
+`AuthoredAssignmentsOnly`; numerical owners remain Partial. Preserve unknown and
+positive extra/linked support factories as Unmapped. A selected positive factory
+would require an authority/model discussion, not a false absence declaration.
+No new public model is needed for the reviewed-absence tranche. Transfer the
+disabled-source, duplicate-equipment, loadout and determinism laws, then retire
+the replaced historical discovery publisher while retaining source evidence.
+
+Inherited summoner context already uses `ReceivingSkill { summoner_path }` and
+the exact parent's prepared types; do not add another structural read for it.
+Assigned targets still need explicit summoner presence. Keep shared support
+prohibition separate from saved occurrence `noSupports`: review the exporter’s
+Boolean source field, winning definition and later factories before authoring
+false. Then construct the actual program/stage/readiness/receiving/metric
+inventory. Do not copy the old complete-empty fixture census. R1 publication-core
+extraction, R3 compact packaging and R4 legacy removal remain gates before the
+first unchanged build is complete.
+
 Historical CI performance observation, 05:07 UTC on October 23: four CLI
 two-feature-profile test steps and Windows PoB tests had run for about 163 minutes.
 Those jobs subsequently passed as part of the completed twenty-job run. Each CLI step compiles and
@@ -1588,7 +1674,7 @@ These are retained obligations, not extra competing phases.
 | Repository/release hygiene | R0-R4 dependency boundaries, deduplicated tests/artifacts/docs, one MSRV policy and locked workspace dependencies; batch Windows formatting by package while workspace-wide `cargo fmt --all` exceeds the process command-line limit (OS error 206); R6 release packaging, dependency audit and measured release-profile tuning |
 | Repeated offline recipe validation | During R1 publication-core extraction, reuse the final checked recipe between authored evaluation construction and full assembly while retaining all shared aggregate and dependency checks; measure before broader performance work. No native candidate path is affected |
 | Mutable authoring-head promotion | Deferred until a shared mutable head is introduced; the first approved checkpoint publisher uses an explicit immutable predecessor. Implement actual stored-predecessor CAS/concurrency control and interruption tests before exposing head promotion; read-compare-rename alone is insufficient |
-| Canonical allocation-history distribution | R2 before production declarations depend on newly allocated IDs: retain a reproducible, clean-clone-accessible checkpoint/source reference and verify its identity. Local `runs/` publications are evidence only, never required predecessors. Choose one maintained storage/distribution route; do not silently rebootstrap or add a second ledger importer |
+| Canonical allocation-history distribution | R2 first-generation bridge: pin this 69-name genesis source Git revision + checkpoint digest outside the compiled inventory and verify clean-clone reproduction with the maintained compiler/loader. Before a second allocation generation needs a new predecessor, R3 must archive/distribute one full checked snapshot. No historical source-replay chain, silent rebootstrap, machine-local dependency or second ledger importer |
 
 ## Review finding coverage
 
@@ -1666,8 +1752,13 @@ copying source-language accidents into the native model.
    retention even with zero declarations, runtime/ledger cross-binding, bounded
    closed inventories and atomic no-clobber publication. Mutable-head promotion
    remains deferred; do not add another publication layout or allocation command.
-   Author real initial-type facts for Sniper using its
-   pinned source evidence. No structural-read decision blocks that slice.
+   Sniper's real initial-type facts are now authored from pinned source evidence.
+   Next complete canonical first-genesis publication and the composed Original05
+   support-source audit above, followed by execution inputs: explicit shared
+   support-prohibition authority and assigned-target summoner presence, then
+   program classification, freezing, readiness, receiving and metrics. Inherited
+   summoner context already uses the exact-parent receiving relation. A missing
+   source value is not an inferred false.
    In parallel, continue independent behavioral transfers.
    Complete the actual execution declarations needed to replace historical
    whole-plan fixtures, **retire obsolete

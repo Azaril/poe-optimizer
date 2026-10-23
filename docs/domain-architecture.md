@@ -539,6 +539,27 @@ overlays only currently declared names onto each packet's own symbol scope;
 persisted reserved names do not become executable merely by existing in history.
 No separate allocation command or runtime-only authoring publication path exists.
 
+The first production declarations expose initial skill-type facts as generic
+Boolean Stats on exact Skill occurrences. Own-skill and minion memberships have
+separate channels, with explicit minion-context presence. An absent context does
+not manufacture false membership values; an unknown presence remains unavailable.
+The current 34-type projection is a preparation contract, not the complete game
+type vocabulary. Acquisition evidence retains excluded raw types so widening that
+contract is deliberate. Definition-owned rules supply these facts through the
+same checked IR and occurrence plan as other mechanics. No skill-name dispatch or
+special native evaluator is introduced, and adding a fact does not certify the
+owner's remaining programs or complete-build coverage.
+
+Canonical allocation history must be available from a clean clone. The bounded
+first-generation bridge pins an immutable Git source revision and expected
+checkpoint digest outside the compiled inventory. Reproduce that fixed genesis,
+verify and load it through the ordinary checkpoint reader, then use it as the
+predecessor for current source builds. Never bootstrap evolving current sources
+to recover IDs. Before a second allocation generation needs a new predecessor,
+R3 must provide an archived/distributed complete checked snapshot; do not grow a
+chain of historical source rebuilds. Source-format cutovers regenerate the
+canonical checkpoint deliberately instead of retaining compatibility readers.
+
 Rule source composition uses `rule-packet "family/packet.kdl"
 names="family/names.kdl"` and explicit `rule-source "rules/example.rule"`
 declarations in that same manifest. Packet memberships resolve only to declared
@@ -581,9 +602,11 @@ The conversion passes its preservation gates; detailed validation belongs in the
 retained only in Authoring's
 [`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz).
 Its historical receipt
-authenticates the archived bytes. Tests restore only the archived program members
-into a copy of the new composition and call the existing assembler directly to
-check preservation of every other artifact and provenance field.
+authenticates the archived bytes. Tests remove only the exact admitted 69-Stat and
+one-program addition, restore the archived program members, and reconstruct the
+original dependency bindings with maintained content constructors. The existing
+assembler then checks every historical artifact and provenance field. A separate
+corpus gate preserves original graph semantics and owner/program placement.
 
 This representation change adds no evaluation bundle or numerical coverage;
 0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust
