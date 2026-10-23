@@ -1,17 +1,17 @@
 # Support target facts from definitions and exact occurrences
 
-Status: investigated on 2026-10-22. Structural read authority remains a deferred
-proposal; it is not a prerequisite for the current support corpus. An earlier
+Status: private unused-input repair implemented on 2026-10-22. Structural read
+authority remains a deferred proposal; it is not a prerequisite for the current support corpus. An earlier
 review prompt asked about that extension before the demand audit below finished.
 
 The maintained release has support level/quality preparation rules, but no
 production producers for the target facts required by `SupportInputBindingsInput`.
 This prevents a complete evaluation bundle. Completing stage classifications alone
-cannot fix it. The first repair is to stop demanding unused optional predicates,
-then author the facts current supports actually consume. This proposal retains one
+cannot fix it. Computed preparation now preserves unknown unused predicates;
+next author the facts current supports actually consume. This proposal retains one
 native rule and occurrence model.
 
-## Immediate finding: unused inputs are demanded
+## Repaired finding: unused inputs were demanded
 
 No pinned PoB2 skill definition sets `supportGemsOnly=true`. Its only Lua mentions
 are the generic CalcTools check, exporter plumbing and export database schema.
@@ -21,17 +21,18 @@ every row explicitly declares `gems_only=false`, `from_item=false` and
 
 `owned_supports.rs` already consults `has_gem`, `from_item` and `is_player_actor`
 only when the selected support requires them. In contrast,
-`owned_plan/supports/inputs.rs::read_target` demands all three first. Repair this
-mismatch under the existing conditional semantics: preserve unknown unused facts,
-and keep a consuming support unresolved when its required fact is unavailable.
+`owned_plan/supports/inputs.rs::read_target` previously demanded all three first.
+The repaired private adapter preserves unknown unused facts under the existing
+conditional semantics, and keeps a consuming support unresolved when its required
+fact is unavailable.
 `cannot_be_supported` remains universally consulted and needs real authority.
 Preserve errors/work limits and meaningful causes when a fact is actually consumed.
-Add computed-plan cases for both unused and required missing facts; the lower-level
-preparation tests alone do not cover the current defect.
+Computed-plan cases cover both unused and required missing facts; the lower-level
+preparation tests alone did not cover this defect.
 
-The bounded repair can remain private to the two computed drivers. Retain up to
+The bounded repair remains private to the two computed drivers. It retains up to
 four existing `UnavailableInput { key, cause }` values alongside the target, and
-pass unknown Boolean facts through the existing three-valued preparation policy.
+passes unknown Boolean facts through the existing three-valued preparation policy.
 If its result is an applicability gap, use its exact `origin_index` and support
 definition to select the relevant saved cause in a stable order. An unused flag
 must not mask a required flag's cause. If no saved input explains the gap, retain
@@ -40,14 +41,18 @@ change type/summoner, owner-coverage, schema, authority or freeze-stage validati
 Charge bounded origin lookup and diagnostic work. Share this adapter between
 `owned_plan/supports.rs` and `owned_plan/support_effects.rs`.
 
-Extend the existing `owned_computed_supports`, `owned_support_delivery` and
-`owned_support_inherited_delivery` suites. Cover missing unused versus consumed
+The existing `owned_computed_supports`, `owned_support_delivery` and
+`owned_support_inherited_delivery` suites now cover missing unused versus consumed
 flags; a conclusive rejection despite an unknown conditional fact; two missing
 flags where only the second matters; exact child versus parent failure identity;
 effective-input failure precedence; exact/one-short budgets; and same-scratch
 failure-to-success replay. Preserve `from_item && is_support`, rather than testing
-item origin alone. A union of flags named by selected definitions would still be
-too eager when another predicate conclusively rejects the candidate.
+item origin alone. Two-definition replacement controls additionally distinguish a
+retained position from its original support index: restoring only the replacement's
+required flag recovers preparation and inherited delivery while the replaced
+definition's unused flag stays unknown. A union of flags named by selected
+definitions would still be too eager when another predicate conclusively rejects
+the candidate.
 
 ## Recommended ownership
 
@@ -104,12 +109,18 @@ Missing evidence remains unavailable; physical Gem identity stays unchanged.
 
 ## Implementation and acceptance
 
-1. Fix the unconditional demand for unused predicates and cover it at the computed
-   plan boundary, without supplying false defaults or weakening required evidence.
+1. Implemented: remove the unconditional demand for unused predicates and cover it
+   at the computed plan boundary, without false defaults or weakened evidence.
+   Final validation and the next resume point are recorded in the implementation plan.
 2. Record initial definition types from pinned declarations. Existing independent
    seeds include `support-release/evidence.json` (Twister, Cleric, Heal) and
    `djinn-support-preparation/source-vectors.json`; final observed types cannot
-   substitute for initial types.
+   substitute for initial types. Prioritize Sniper's pinned `act_int.lua:18677`
+   declaration. First add typed Boolean-Stat declarations to the maintained KDL
+   authoring path: packets currently append programs only, and the bootstrap schema
+   has no initial-type channels. Reuse transactional named allocation and checked
+   schema construction. Do not add another publisher or infer false prohibitions
+   from missing Lua fields.
 3. If needed and after approval, specify the minimal structural predicates and authority checks
    needed by direct and generated occurrences. Bind them through the existing DSL
    and checked IR; do not add a separate interpreter or importer-only behavior.

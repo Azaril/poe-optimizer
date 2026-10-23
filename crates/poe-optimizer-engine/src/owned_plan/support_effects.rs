@@ -552,7 +552,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                     );
                     continue;
                 }
-                let mut target = match if step.assigned {
+                let (mut target, target_failures) = match if step.assigned {
                     inputs.target_inputs(&step.target, scratch, work)?
                 } else {
                     inputs.receiver_inputs(&step.target, scratch, work)?
@@ -613,6 +613,21 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                         reason,
                         origin_index,
                     } => {
+                        if reason == SupportPreparationGap::Applicability
+                            && let Some(index) = origin_index
+                        {
+                            charge(work, 1)?;
+                            let origin = selected.origins().get(index).ok_or_else(|| {
+                                invalid("support applicability gap has no selected origin")
+                            })?;
+                            if let Some(failure) = target_failures.applicability_failure(
+                                &self.preparation,
+                                &origin.gem,
+                                work,
+                            )? {
+                                return Ok(unavailable(failure.cause, Some(failure.key)));
+                            }
+                        }
                         return Ok(SupportAttempt::PreparationUnresolved {
                             target: step.target.clone(),
                             reason,

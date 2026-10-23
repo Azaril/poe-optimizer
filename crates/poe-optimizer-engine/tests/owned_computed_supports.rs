@@ -2,13 +2,19 @@
 #[allow(dead_code)]
 use crate::engine_fixtures::computed_support as support;
 use poe_optimizer_core::{
-    owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*, owned_stages::*,
+    owned_build::*,
+    owned_definitions::*,
+    owned_rules::*,
+    owned_schema::*,
+    owned_stages::*,
+    owned_supports::{SupportPreparationDefinition, SupportPreparationInput},
 };
 use poe_optimizer_data::{
     owned_rules::{OwnedRulePackage, RuleStorageLimits},
     owned_schema::OwnedDefinitionSchemaPackage,
     owned_stages::{OwnedEvaluationStages, StageStorageLimits},
     owned_support_inputs::{OwnedSupportInputBindings, SupportInputStorageLimits},
+    owned_supports::{OwnedSupportPreparation, SupportStorageLimits},
 };
 use poe_optimizer_engine::{owned_plan::*, owned_rules::*, owned_supports::*};
 use std::sync::Arc;
@@ -146,6 +152,90 @@ fn finish(
         PlanLimits::default(),
         SupportPreparationLimits::default(),
     )
+}
+
+fn target_facts(f: &mut Fixture) -> &mut RuleProgram {
+    f.owner_mut(&subject(def::<SkillDefinition>("ability")))
+        .programs
+        .members
+        .iter_mut()
+        .find(|program| program.id == key("target-facts"))
+        .unwrap()
+}
+
+fn without_target_flags(f: &mut Fixture, names: &[&str]) {
+    target_facts(f)
+        .effects
+        .retain(|effect| !names.contains(&effect.id.as_str()));
+}
+
+fn with_support_policy(
+    f: &Fixture,
+    edit: impl FnOnce(&mut SupportPreparationDefinition),
+) -> OwnedSupportPreparationPlan<OwnedDefinitionSchemaPackage> {
+    with_preparation(f, |preparation| {
+        let SchemaState::Known(definition) = &mut preparation.supports[0].preparation else {
+            panic!("known fixture support")
+        };
+        edit(definition);
+    })
+}
+
+fn with_preparation(
+    f: &Fixture,
+    edit: impl FnOnce(&mut SupportPreparationInput),
+) -> OwnedSupportPreparationPlan<OwnedDefinitionSchemaPackage> {
+    let mut args = compile_inputs(f, target(30, "first"));
+    let rules = stored(f, &args);
+    let mut preparation = args.preparation.input().clone();
+    edit(&mut preparation);
+    args.preparation = Arc::new(
+        OwnedSupportPreparation::new(
+            preparation,
+            args.definitions.as_ref(),
+            &rules,
+            SupportStorageLimits::default(),
+        )
+        .unwrap(),
+    );
+    let mut inputs = args.inputs.input().clone();
+    inputs.preparation = *args.preparation.identity();
+    args.inputs = Arc::new(
+        OwnedSupportInputBindings::new(
+            inputs,
+            args.definitions.as_ref(),
+            &rules,
+            &args.preparation,
+            &args.stages,
+            SupportInputStorageLimits::default(),
+        )
+        .unwrap(),
+    );
+    finish(args).unwrap()
+}
+
+fn missing_target_flag(report: &ComputedSupportReport, name: &str) {
+    let ComputedSupportOutcome::Unavailable {
+        cause,
+        input: Some(input),
+    } = &report.outcome
+    else {
+        panic!("expected missing {name}: {report:?}")
+    };
+    assert!(matches!(
+        cause,
+        EffectValue::Unresolved {
+            reason: PlanGapReason::MissingProducer,
+            ..
+        }
+    ));
+    assert_eq!(
+        **input,
+        PlanValueKey::Stat {
+            entity: ConcreteEntity::Skill(Box::new(target(30, "first"))),
+            stat: def(name),
+        }
+    );
 }
 
 #[test]
@@ -476,6 +566,184 @@ fn missing_target_fact_is_not_treated_as_false_and_names_its_skill() {
             stat: def("cannot-support")
         }
     );
+}
+
+#[test]
+fn optional_target_flags_are_demanded_only_by_consuming_supports() {
+    for flag in ["has-gem", "from-item", "is-player"] {
+        let mut f = generated_fixture();
+        without_target_flags(&mut f, &[flag]);
+        let unused = compile(&f, target(30, "first"));
+        let required = with_support_policy(&f, |definition| match flag {
+            "has-gem" => definition.gems_only = true,
+            "from-item" => definition.from_item = true,
+            "is-player" => definition.is_trigger = true,
+            _ => unreachable!(),
+        });
+        let mut scratch = unused.new_scratch();
+        let expected = unused.evaluate(&mut scratch).unwrap();
+        let selected = &prepared(&expected).selected;
+        assert_eq!(selected.len(), 1);
+        assert_eq!(selected[0].assignment, occurrence(61));
+        assert!(selected[0].applicable);
+        missing_target_flag(&required.evaluate(&mut scratch).unwrap(), flag);
+        assert_eq!(unused.evaluate(&mut scratch).unwrap(), expected);
+    }
+}
+
+#[test]
+fn replacement_support_reports_its_own_required_flag() {
+    let mut f = generated_fixture();
+    let mut replacement = f
+        .schema
+        .definitions
+        .iter()
+        .find(|definition| matches!(definition, DefinitionDescriptor::Gem(entry) if entry.id == def::<GemDefinition>("support")))
+        .unwrap()
+        .clone();
+    let DefinitionDescriptor::Gem(entry) = &mut replacement else {
+        unreachable!()
+    };
+    entry.id = def("replacement");
+    f.schema.definitions.push(replacement);
+    let mut owner = f
+        .owner_mut(&subject(def::<GemDefinition>("support")))
+        .clone();
+    owner.owner = subject(def::<GemDefinition>("replacement"));
+    f.owners.push(owner);
+    f.build
+        .gems
+        .iter_mut()
+        .find(|gem| gem.id == occurrence(51))
+        .unwrap()
+        .definition = def("replacement");
+
+    let policy = |preparation: &mut SupportPreparationInput| {
+        preparation.effects.push(key("replacement-effect"));
+        let mut replacement = preparation.supports[0].clone();
+        replacement.gem = def("replacement");
+        let SchemaState::Known(definition) = &mut replacement.preparation else {
+            unreachable!()
+        };
+        definition.effect = key("replacement-effect");
+        definition.plus_version_of = Some(key("support-effect"));
+        definition.from_item = true;
+        let SchemaState::Known(definition) = &mut preparation.supports[0].preparation else {
+            unreachable!()
+        };
+        definition.gems_only = true;
+        preparation.supports.push(replacement);
+    };
+    without_target_flags(&mut f, &["has-gem"]);
+    let complete = with_preparation(&f, policy);
+    let mut scratch = complete.new_scratch();
+    let expected = complete.evaluate(&mut scratch).unwrap();
+    let selected = &prepared(&expected).selected;
+    assert_eq!(selected.len(), 1);
+    assert_eq!(selected[0].origin_index, 1);
+    assert_eq!(selected[0].position, 0);
+    assert_eq!(selected[0].assignment, occurrence(61));
+    assert!(selected[0].applicable);
+
+    without_target_flags(&mut f, &["from-item"]);
+    let missing = with_preparation(&f, policy);
+    missing_target_flag(&missing.evaluate(&mut scratch).unwrap(), "from-item");
+    assert_eq!(complete.evaluate(&mut scratch).unwrap(), expected);
+}
+
+#[test]
+fn target_failure_diagnostics_skip_unused_flags_and_preserve_effective_input_precedence() {
+    let mut f = generated_fixture();
+    without_target_flags(&mut f, &["has-gem", "from-item"]);
+    let plan = with_support_policy(&f, |definition| definition.from_item = true);
+    missing_target_flag(
+        &plan.evaluate(&mut plan.new_scratch()).unwrap(),
+        "from-item",
+    );
+
+    origin(&mut f)
+        .effects
+        .retain(|effect| effect.id != key("level"));
+    let plan = with_support_policy(&f, |definition| definition.from_item = true);
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    let ComputedSupportOutcome::Unavailable {
+        cause,
+        input: Some(input),
+    } = report.outcome
+    else {
+        panic!("{report:?}")
+    };
+    assert!(matches!(
+        cause,
+        EffectValue::Unresolved {
+            reason: PlanGapReason::MissingProducer,
+            ..
+        }
+    ));
+    assert_eq!(
+        *input,
+        PlanValueKey::Stat {
+            entity: ConcreteEntity::SupportOrigin(SupportOrigin::Assignment(occurrence(61))),
+            stat: def("effective-level"),
+        }
+    );
+}
+
+#[test]
+fn conclusive_rejection_and_non_support_item_origins_do_not_demand_irrelevant_flags() {
+    let mut f = generated_fixture();
+    without_target_flags(&mut f, &["has-gem"]);
+    target_facts(&mut f)
+        .nodes
+        .iter_mut()
+        .find(|node| node.id == key("spell"))
+        .unwrap()
+        .expression = RuleExpression::Literal {
+        value: ParameterValue::Boolean(false),
+    };
+    let plan = with_support_policy(&f, |definition| definition.gems_only = true);
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert!(!prepared(&report).selected[0].applicable);
+
+    let mut f = generated_fixture();
+    without_target_flags(&mut f, &["from-item"]);
+    let plan = with_support_policy(&f, |definition| {
+        definition.from_item = true;
+        definition.is_support = false;
+    });
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert!(prepared(&report).selected[0].applicable);
+}
+
+#[test]
+fn unknown_unused_flags_preserve_exact_work_boundaries_and_failed_attempt_isolation() {
+    let mut f = generated_fixture();
+    without_target_flags(&mut f, &["has-gem", "from-item", "is-player"]);
+    let unused = compile(&f, target(30, "first"));
+    let required = with_support_policy(&f, |definition| definition.is_trigger = true);
+    let mut scratch = unused.new_scratch();
+    for plan in [&unused, &required] {
+        let maximum = PlanLimits::default().max_work;
+        let mut work = maximum;
+        let expected = plan.evaluate_with_budget(&mut scratch, &mut work).unwrap();
+        let cost = maximum - work;
+        assert!(cost > 0);
+        let mut exact = cost;
+        assert_eq!(
+            plan.evaluate_with_budget(&mut scratch, &mut exact).unwrap(),
+            expected
+        );
+        assert_eq!(exact, 0);
+        let mut short = cost - 1;
+        assert!(matches!(
+            plan.evaluate_with_budget(&mut scratch, &mut short),
+            Err(PlanError::Limit("work"))
+        ));
+        assert_eq!(short, 0);
+        assert_eq!(plan.evaluate(&mut scratch).unwrap(), expected);
+    }
+    let report = unused.evaluate(&mut scratch).unwrap();
+    assert!(prepared(&report).selected[0].applicable);
 }
 
 #[test]

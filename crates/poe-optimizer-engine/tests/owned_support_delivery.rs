@@ -152,6 +152,106 @@ fn native_false_applicability_is_a_boolean_producer_and_delivery_is_inactive() {
 }
 
 #[test]
+fn unused_missing_assigned_flags_preserve_delivery_and_exact_budget_scratch_reuse() {
+    let mut f = source_fixture();
+    let facts = f
+        .owner_mut(&subject(def::<SkillDefinition>("ability")))
+        .programs
+        .members
+        .iter_mut()
+        .find(|program| program.id == key("target-facts"))
+        .unwrap();
+    for name in ["has-gem", "from-item", "is-player"] {
+        let before = facts.effects.len();
+        facts.effects.retain(|effect| effect.id != key(name));
+        assert_eq!(facts.effects.len() + 1, before);
+    }
+    let plan = compile(&f);
+    let mut scratch = plan.new_scratch();
+    let mut work = PlanLimits::default().max_work;
+    let expected = plan.evaluate_with_budget(&mut scratch, &mut work).unwrap();
+    let used = PlanLimits::default().max_work - work;
+    assert!(used > 0);
+    let effects = evaluated(&expected);
+    let apps: BTreeSet<_> = effects.effects.iter().filter_map(application).collect();
+    assert_eq!(apps.len(), 9);
+    for app in apps {
+        assert_eq!(app.prepared.position, 0);
+        assert!(
+            [61, 63, 65]
+                .into_iter()
+                .any(|id| app.prepared.origin == SupportOrigin::Assignment(occurrence(id)))
+        );
+        let value = effects
+            .values
+            .iter()
+            .find(|value| {
+                value.key
+                    == PlanValueKey::SupportApplicability {
+                        application: Box::new(app.clone()),
+                    }
+            })
+            .unwrap();
+        assert_eq!(
+            value.value,
+            EffectValue::Known {
+                value: ParameterValue::Boolean(true)
+            }
+        );
+        let delivery = effects
+            .effects
+            .iter()
+            .find(|effect| {
+                application(effect) == Some(app)
+                    && effect.key.invocation.program.as_str().ends_with("deliver")
+            })
+            .unwrap();
+        let expected = if app.prepared.target == target(31, "first") {
+            25
+        } else {
+            16
+        };
+        assert_eq!(delivery.value, known(expected));
+        if let SupportReceiverKey::Action(action) = &app.receiver {
+            assert_eq!(
+                final_value(effects, &ConcreteEntity::Action(action.clone())),
+                &known(expected)
+            );
+        }
+    }
+    assert_eq!(
+        final_value(effects, &ConcreteEntity::Actor(child_actor(30))),
+        &known(32)
+    );
+    assert_eq!(
+        final_value(effects, &ConcreteEntity::Actor(child_actor(31))),
+        &known(25)
+    );
+
+    let mut fresh = plan.new_scratch();
+    for scratch in [&mut scratch, &mut fresh] {
+        let mut exact = used;
+        assert_eq!(
+            plan.evaluate_with_budget(scratch, &mut exact).unwrap(),
+            expected
+        );
+        assert_eq!(exact, 0);
+        let mut short = used - 1;
+        assert!(matches!(
+            plan.evaluate_with_budget(scratch, &mut short),
+            Err(PlanError::Limit("work"))
+        ));
+        assert_eq!(short, 0);
+        let mut recovered = PlanLimits::default().max_work;
+        assert_eq!(
+            plan.evaluate_with_budget(scratch, &mut recovered).unwrap(),
+            expected
+        );
+        assert_eq!(recovered, work);
+    }
+}
+
+#[test]
 fn missing_or_partial_inventory_keeps_the_whole_attempt_unavailable() {
     for mode in 0..5 {
         let mut f = source_fixture();

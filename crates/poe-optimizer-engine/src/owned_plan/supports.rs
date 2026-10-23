@@ -203,15 +203,16 @@ impl<I: DefinitionSchemaIndex> OwnedSupportPreparationPlan<I> {
             });
         }
         let input_context = ComputedSupportInputs::new(&self.plan, &self.inputs, self.limits);
-        let target = match input_context.target_inputs(&self.target, scratch, work)? {
-            Ok(target) => target,
-            Err(failure) => {
-                return Ok(ComputedSupportOutcome::Unavailable {
-                    cause: failure.cause,
-                    input: Some(failure.key),
-                });
-            }
-        };
+        let (target, target_failures) =
+            match input_context.target_inputs(&self.target, scratch, work)? {
+                Ok(target) => target,
+                Err(failure) => {
+                    return Ok(ComputedSupportOutcome::Unavailable {
+                        cause: failure.cause,
+                        input: Some(failure.key),
+                    });
+                }
+            };
         let mut values = Vec::new();
         let mut failures = BTreeMap::new();
         let rows = &self.plan.request.build().input().supports;
@@ -270,6 +271,44 @@ impl<I: DefinitionSchemaIndex> OwnedSupportPreparationPlan<I> {
             crate::owned_supports::SupportPreparationError::Limit(name) => PlanError::Limit(name),
             _ => PlanError::Invalid(error.to_string()),
         })?;
+        // The policy reports the exact ordered origin whose applicability is
+        // unknown. Recover only that definition's consumed target-input cause.
+        if let SupportPreparationOutcome::Unresolved {
+            reason: SupportPreparationGap::Applicability,
+            origin_index: Some(index),
+        } = &outcome
+        {
+            let build = self.plan.request.build().input();
+            let orders = build
+                .authored_support_order
+                .as_ref()
+                .ok_or_else(|| invalid("support applicability gap has no authored order"))?;
+            charge(work, orders.len().saturating_mul(depth + 1))?;
+            let id = orders
+                .iter()
+                .find(|row| row.target == self.target)
+                .and_then(|row| row.assignments.get(*index))
+                .ok_or_else(|| invalid("support applicability gap has no ordered origin"))?;
+            charge(work, rows.len())?;
+            let assignment = rows
+                .iter()
+                .find(|row| row.id == *id)
+                .ok_or_else(|| invalid("support applicability gap has no assignment"))?;
+            charge(work, build.gems.len())?;
+            let gem = build
+                .gems
+                .iter()
+                .find(|gem| gem.id == assignment.support)
+                .ok_or_else(|| invalid("support applicability gap has no physical Gem"))?;
+            if let Some(failure) =
+                target_failures.applicability_failure(&self.preparation, &gem.definition, work)?
+            {
+                return Ok(ComputedSupportOutcome::Unavailable {
+                    cause: failure.cause,
+                    input: Some(failure.key),
+                });
+            }
+        }
         // Preserve upstream failure provenance when the policy actually demands
         // effective level/quality. Unneeded scalar failures cannot pick a winner.
         if let SupportPreparationOutcome::Unresolved {

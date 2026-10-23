@@ -597,6 +597,18 @@ production predicates remain unavailable. PoB object presence is not by itself a
 native gameplay definition. Preparation must require a conditional eligibility
 fact only when a selected support consumes it; missing unused facts stay unknown,
 without blocking otherwise supported work or becoming false defaults.
+The computed preparation and delivery drivers preserve bounded unavailable-input
+causes until the existing applicability policy determines whether they matter.
+Diagnostics use the exact originating support definition, including after ordered
+replacement; a retained position is not an origin identity. Hard errors, work
+limits, complete type inventories and source/stage authority retain their existing
+checks. This adapter does not add a second policy or new public source-read API.
+Initial type memberships belong to definition data, expressed through typed Stat
+declarations and rule producers in the maintained authoring source. Their symbols
+use the same transactional allocator as other definitions before program lowering.
+Complete membership in a declared vocabulary may establish negative type facts;
+absence of an unrelated source field does not establish a false prohibition.
+Provider-specific restrictions stay attached to their exact occurrence.
 
 ### Command-line parsing
 

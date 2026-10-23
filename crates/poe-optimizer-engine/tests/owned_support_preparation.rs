@@ -607,6 +607,7 @@ fn origin_flags_and_missing_target_facts_are_not_inferred_from_names() {
     let pkg = package(vec![("one", support.clone())]);
     assert!(!result(&pkg, &[origin(1, "one", 1, 0.0)], &target).selected[0].applicable);
     support.is_support = false;
+    target.from_item = None;
     let pkg = package(vec![("one", support.clone())]);
     assert!(result(&pkg, &[origin(1, "one", 1, 0.0)], &target).selected[0].applicable);
     support.is_trigger = true;

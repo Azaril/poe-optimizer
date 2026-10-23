@@ -13,14 +13,14 @@ adjustments below. Historical checkpoints remain in Git and
 **Next work is the DSL/data/runtime migration, before further mechanic content.**
 The first complete unchanged build must use the new format and sole native path.
 Legacy deletion is a gate before that milestone, not work deferred until five builds.
-The next bounded code change is the computed-support unused-input repair described
-under R2. Continue independent harness retirement while completing the current
+The computed-support unused-input repair under R2 is implemented. Continue
+independent harness retirement while completing the current
 release's real execution declarations; do not add a new provenance API for dormant
 support flags.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; current checkpoint transfers independent behavioral laws onto the maintained DSL release |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; current checkpoint repairs unused computed-support input demand |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -30,7 +30,7 @@ support flags.
 | DSL / KDL / binary pack | Every retained program now comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Exact graph/placement and historical non-program preservation gates pass; named-registry filesystem CAS, broader declarations and binary pack remain pending |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Node renaming changes rule/input identity; other emitted constituents remain byte-exact. No local predecessor needed; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 02:19 UTC on October 23 (October 22 EDT), baseline `ae90ec82` run `39857163789` had 17 successful jobs and Windows CLI shard 0 running, with no failures. `a6dc1991` run `39884621206` remained pending with no jobs. Pending main runs coalesce; each checkpoint needs its own hosted result. No green suite claim |
+| CI | At 02:45:44 UTC on October 23 (October 22 EDT), baseline `ae90ec82` run `39857163789` had completed successfully with all twenty jobs passing (finished 02:23:26 UTC). `a7069aa1` run `39889225006` had five successful jobs, thirteen running, no failures. Each checkpoint needs its own hosted result; baseline success does not certify later commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release`
@@ -820,8 +820,8 @@ Source-property programs require explicit early roles, relation bindings and the
 participating owner membership; they cannot simply be parked in Execution.
 Existing fragments do not establish this for the whole retained corpus. Complete
 the stage/readiness declarations under the existing model without claiming
-numerical coverage. Repair the separate unused-predicate demand bug below before
-adding source-predicate authority that current supports do not require. Preserve
+numerical coverage. The separate unused-predicate demand bug below is now repaired;
+do not add source-predicate authority that current supports do not require. Preserve
 the existing Cleric whole-plan/parallel regression and its optional local reproducer
 until authored declarations make the current-release replacement runnable. Do not
 lower operation versions, narrow the current package, mark everything Execution,
@@ -841,19 +841,65 @@ completion. Preserve unavailable results for remaining mechanic coverage.
 The deeper target-fact audit found no existing production Skill-type or origin
 predicates. Definition-owned initial types fit existing rules. More immediately,
 all 17 retained preparation rows (13 distinct supports) have `gems_only=false`,
-`from_item=false` and `is_trigger=false`, yet computed-plan input gathering demands
-the three corresponding target flags unconditionally. The lower-level evaluator
-already consults them conditionally. Repair this demand mismatch with computed-plan
-tests: retain unknown unused facts, required-fact failures, limits and meaningful
-failure causes. `cannot_be_supported` still needs authoritative producers.
+`from_item=false` and `is_trigger=false`, yet computed-plan input gathering demanded
+the three corresponding target flags unconditionally before this checkpoint. The
+computed drivers now match the lower-level evaluator's conditional policy. Unknown
+unused facts, required-fact failures, limits and meaningful failure causes are
+preserved. `cannot_be_supported` still needs authoritative producers.
 No pinned PoB2 skill definition sets `supportGemsOnly=true`; do not block this
 milestone on hypothetical Gem-only support semantics.
-The bounded implementation is a shared private adapter retaining at most four
+The implemented bounded repair is a shared private adapter retaining at most four
 existing unavailable-input causes while the existing preparation policy decides
-applicability. Map an actual applicability gap back through its exact origin to
-the relevant saved cause; preserve hard errors and budget accounting. Extend the
-existing computed-support and direct/inherited-delivery tests listed in the
-investigation. No public model change is required for this repair.
+applicability. It maps an actual applicability gap back through its exact origin
+to the relevant saved cause, preserving hard errors and budget accounting. The
+existing computed-support and direct/inherited-delivery suites cover the
+investigation's failure and recovery cases. Replacement tests use two distinct
+definitions linked by the existing upgraded-support relationship:
+origin 1 replaces origin 0 at retained position 0, and only the replacement's
+required flag explains the failure. Restoring that producer recovers preparation
+and delivery while the replaced support's flag stays unknown. No public model or
+production data changed; this does not complete any original build.
+The first replacement fixtures incorrectly gave one effect two conflicting
+definitions and were rejected by the existing validator. The corrected fixtures
+use distinct effects and `plus_version_of`; production validation is unchanged.
+Final Engine validation with `--no-default-features --lib --test owned` passes
+**778 tests** (73 library and 705 owned integration), with the 15 existing optional
+reference tests ignored. Clippy with `--no-default-features --all-targets -- -D warnings`,
+formatting and diff checks pass. Independent review found no
+production defect. The existing Windows LNK4098 linker warning remains; it did not
+prevent linking or execution. Logs: `runs/support-input-demand-native-tests-final.log`
+and `runs/support-input-demand-native-clippy-final.log`. The nine pre-existing
+untracked incoming-critical files still match their saved backup hashes and are
+excluded from this checkpoint. Release source/input identity and the **0/5**
+complete-original count are unchanged.
+
+**Next bounded authoring prerequisite:** `packet.rs` currently appends programs;
+its names must already exist in the schema decoded by `release.rs`. The tracked
+bootstrap has only three Boolean Stats targeting Skill (Offering activation,
+Frost Bomb requested global effect and participation), with none for initial
+types, minion-context presence or support prohibition. Add maintained typed
+Boolean-Stat declarations to KDL/Authoring, using transactional named allocation
+before program lowering and the existing schema/rule validators. This is the
+planned broader-declaration work, not a new evaluator ownership model. Do not
+predict IDs, hand-edit compressed schema bytes or create another publication tool.
+Use the existing generic Stat schema with Boolean as its first needed declaration;
+do not introduce a support-specific definition format. Rebuild and validate every
+affected constituent commitment through the maintained release assembler.
+Then author initial-type producers for Original05 Sniper first: pinned
+`Data/Skills/act_int.lua:18677` declares twelve own types and five minion types.
+Use `support-release/evidence.json` raw Twister/Cleric/Heal memberships and
+`djinn-support-preparation/source-vectors.json` initial definitions for independent
+breadth controls; final observed types are not initial data.
+
+Keep support prohibition as a separate evidence/ownership task. The current Djinn
+snapshots omit nil `cannotBeSupported`; omission does not establish a native false
+producer, and occurrence-specific `noSupports` must not prohibit the shared Skill.
+Acceptance for the declaration/type slice includes positive and negative membership
+within the declared vocabulary, absent versus present-empty minion context,
+repeated occurrences and unchanged partial-owner coverage. Source census, stages
+and receiving remain separate bundle prerequisites. Disjoint retirement may move
+the scalar-family and Actor-attribute component laws into the cached release
+harness while this authoring work proceeds.
 
 The [support target facts investigation](owned-support-target-facts-proposal.md)
 also records a deferred recommendation for narrow structural source reads, which
@@ -1066,11 +1112,13 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. Next **repair computed support's unused-input
-   demand under the existing policy**, following the R2 investigation and focused
-   test matrix. No structural-read decision blocks that repair. In parallel,
-   continue independent behavioral transfers. Then complete the actual execution
-   declarations needed to replace historical whole-plan fixtures, **retire obsolete
+1. Read this plan and Git status. The computed-support unused-input repair is now
+   implemented. Next **add typed Boolean-Stat declarations through the existing
+   KDL/allocator path, then author real initial-type facts for Sniper**, following
+   the R2 prerequisite and evidence inventory above. No structural-read decision
+   blocks that slice. In parallel, continue independent behavioral transfers.
+   Complete the actual execution declarations needed to replace historical
+   whole-plan fixtures, **retire obsolete
    transformation paths and move the maintained publication core into Authoring**.
    Do not blindly relocate
    the historical builder closure. The maintained `release.rs::build_release`

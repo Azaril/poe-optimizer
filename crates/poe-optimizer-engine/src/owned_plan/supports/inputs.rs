@@ -10,6 +10,46 @@ pub(in crate::owned_plan) struct UnavailableInput {
 pub(in crate::owned_plan) type InputResult<T> =
     Result<std::result::Result<T, Box<UnavailableInput>>>;
 
+/// Unknown flags retain their exact causes until applicability determines
+/// whether they matter. This storage is bounded independently of support count.
+#[derive(Default)]
+pub(in crate::owned_plan) struct TargetInputFailures {
+    cannot_be_supported: Option<Box<UnavailableInput>>,
+    has_gem: Option<Box<UnavailableInput>>,
+    from_item: Option<Box<UnavailableInput>>,
+    is_player_actor: Option<Box<UnavailableInput>>,
+}
+impl TargetInputFailures {
+    /// Call only for an applicability gap on the reported exact origin. Type
+    /// inputs remain complete; an unused flag cannot explain that gap.
+    pub(in crate::owned_plan) fn applicability_failure(
+        self,
+        preparation: &OwnedSupportPreparation,
+        gem: &GemDefId,
+        work: &mut usize,
+    ) -> Result<Option<Box<UnavailableInput>>> {
+        charge(work, preparation.input().supports.len().saturating_add(1))?;
+        let Some(SchemaState::Known(definition)) = preparation.preparation_for(gem) else {
+            return Err(invalid("support applicability gap has no known definition"));
+        };
+        charge(work, 4)?;
+        for (used, failure) in [
+            (true, self.cannot_be_supported),
+            (definition.gems_only, self.has_gem),
+            (
+                definition.from_item && definition.is_support,
+                self.from_item,
+            ),
+            (definition.is_trigger, self.is_player_actor),
+        ] {
+            if used && failure.is_some() {
+                return Ok(failure);
+            }
+        }
+        Ok(None)
+    }
+}
+
 pub(in crate::owned_plan) struct ComputedSupportInputs<'a, I> {
     plan: &'a OwnedEffectPlan<I>,
     inputs: &'a OwnedSupportInputBindings,
@@ -104,6 +144,24 @@ impl<'a, I: DefinitionSchemaIndex> ComputedSupportInputs<'a, I> {
         }
         Ok(Ok(DeclaredSet::complete(members)))
     }
+    fn optional_boolean(
+        &self,
+        target: &SkillTarget,
+        scratch: &OwnedPlanScratch,
+        work: &mut usize,
+        stat: &StatDefId,
+        failure: &mut Option<Box<UnavailableInput>>,
+    ) -> Result<Option<bool>> {
+        // Only unavailable values become unknown facts. Hard errors, including
+        // type mismatches and exhausted work, retain their ordinary propagation.
+        match self.boolean(target, scratch, work, stat)? {
+            Ok(value) => Ok(Some(value)),
+            Err(cause) => {
+                *failure = Some(cause);
+                Ok(None)
+            }
+        }
+    }
     fn optional_types(
         &self,
         target: &SkillTarget,
@@ -124,7 +182,7 @@ impl<'a, I: DefinitionSchemaIndex> ComputedSupportInputs<'a, I> {
         target: &SkillTarget,
         scratch: &OwnedPlanScratch,
         work: &mut usize,
-    ) -> InputResult<SupportPreparationTarget> {
+    ) -> InputResult<(SupportPreparationTarget, TargetInputFailures)> {
         self.read_target(target, true, scratch, work)
     }
 
@@ -136,7 +194,7 @@ impl<'a, I: DefinitionSchemaIndex> ComputedSupportInputs<'a, I> {
         target: &SkillTarget,
         scratch: &OwnedPlanScratch,
         work: &mut usize,
-    ) -> InputResult<SupportPreparationTarget> {
+    ) -> InputResult<(SupportPreparationTarget, TargetInputFailures)> {
         self.read_target(target, false, scratch, work)
     }
 
@@ -146,7 +204,7 @@ impl<'a, I: DefinitionSchemaIndex> ComputedSupportInputs<'a, I> {
         read_summoner: bool,
         scratch: &OwnedPlanScratch,
         work: &mut usize,
-    ) -> InputResult<SupportPreparationTarget> {
+    ) -> InputResult<(SupportPreparationTarget, TargetInputFailures)> {
         macro_rules! known {
             ($v:expr) => {
                 match $v? {
@@ -180,30 +238,43 @@ impl<'a, I: DefinitionSchemaIndex> ComputedSupportInputs<'a, I> {
         } else {
             None
         };
-        Ok(Ok(SupportPreparationTarget {
-            target: target.clone(),
-            enabled: Some(true),
-            types,
-            summoner,
-            cannot_be_supported: Some(known!(self.boolean(
-                target,
-                scratch,
-                work,
-                &input.cannot_be_supported
-            ))),
-            has_gem: Some(known!(self.boolean(target, scratch, work, &input.has_gem))),
-            from_item: Some(known!(self.boolean(
-                target,
-                scratch,
-                work,
-                &input.from_item
-            ))),
-            is_player_actor: Some(known!(self.boolean(
-                target,
-                scratch,
-                work,
-                &input.is_player_actor
-            ))),
-        }))
+        let mut failures = TargetInputFailures::default();
+        Ok(Ok((
+            SupportPreparationTarget {
+                target: target.clone(),
+                enabled: Some(true),
+                types,
+                summoner,
+                cannot_be_supported: self.optional_boolean(
+                    target,
+                    scratch,
+                    work,
+                    &input.cannot_be_supported,
+                    &mut failures.cannot_be_supported,
+                )?,
+                has_gem: self.optional_boolean(
+                    target,
+                    scratch,
+                    work,
+                    &input.has_gem,
+                    &mut failures.has_gem,
+                )?,
+                from_item: self.optional_boolean(
+                    target,
+                    scratch,
+                    work,
+                    &input.from_item,
+                    &mut failures.from_item,
+                )?,
+                is_player_actor: self.optional_boolean(
+                    target,
+                    scratch,
+                    work,
+                    &input.is_player_actor,
+                    &mut failures.is_player_actor,
+                )?,
+            },
+            failures,
+        )))
     }
 }

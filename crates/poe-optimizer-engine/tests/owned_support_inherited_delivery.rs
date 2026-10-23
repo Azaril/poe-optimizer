@@ -231,6 +231,192 @@ fn applicability(report: &OwnedEffectsReport, application: &SupportApplicationKe
     *value
 }
 
+fn missing_child_flags(f: &mut Fixture) {
+    let facts = f
+        .owner_mut(&subject(def::<SkillDefinition>("nested-ability")))
+        .programs
+        .members
+        .iter_mut()
+        .find(|program| program.id == key("target-facts"))
+        .unwrap();
+    for name in ["has-gem", "from-item", "is-player"] {
+        let before = facts.effects.len();
+        facts.effects.retain(|effect| effect.id != key(name));
+        assert_eq!(facts.effects.len() + 1, before);
+    }
+}
+
+fn require_flag(preparation: &mut SupportPreparationInput, name: &str) {
+    let SchemaState::Known(support) = &mut preparation.supports[0].preparation else {
+        unreachable!()
+    };
+    match name {
+        "has-gem" => support.gems_only = true,
+        "from-item" => support.from_item = true,
+        "is-player" => support.is_trigger = true,
+        _ => unreachable!(),
+    }
+}
+
+fn assert_child_delivery(report: &SupportEffectsReport, child_applies: bool) {
+    let effects = evaluated(report);
+    let apps: BTreeSet<_> = effects.effects.iter().filter_map(application).collect();
+    assert_eq!(apps.len(), 9);
+    for app in apps {
+        assert!(
+            [61, 63, 65]
+                .into_iter()
+                .any(|id| app.prepared.origin == SupportOrigin::Assignment(occurrence(id)))
+        );
+        assert_eq!(app.prepared.position, 0);
+        let amount = if app.prepared.target == target(31, "first") {
+            25
+        } else {
+            16
+        };
+        let delivery = effects
+            .effects
+            .iter()
+            .find(|effect| {
+                application(effect) == Some(app)
+                    && effect.key.invocation.program.as_str().ends_with("deliver")
+            })
+            .unwrap();
+        match &app.receiver {
+            SupportReceiverKey::Actor(_) => {
+                assert!(applicability(effects, app));
+                assert_eq!(delivery.value, known(amount));
+            }
+            SupportReceiverKey::Skill(_) => panic!("fixture declares Actor/Action endpoints only"),
+            SupportReceiverKey::Action(action) => {
+                check_child_action(action);
+                assert_eq!(applicability(effects, app), child_applies);
+                assert_eq!(
+                    delivery.value,
+                    if child_applies {
+                        known(amount)
+                    } else {
+                        EffectValue::Inactive
+                    }
+                );
+                assert_eq!(
+                    final_value(effects, &ConcreteEntity::Action(action.clone())),
+                    &known(if child_applies { amount } else { 0 })
+                );
+            }
+        }
+    }
+    assert_eq!(
+        final_value(effects, &ConcreteEntity::Actor(child_actor(30))),
+        &known(32)
+    );
+    assert_eq!(
+        final_value(effects, &ConcreteEntity::Actor(child_actor(31))),
+        &known(25)
+    );
+}
+
+#[test]
+fn unused_missing_child_flags_preserve_inherited_admission_and_origin_scalars() {
+    let mut f = source_fixture();
+    add_child(&mut f, false);
+    missing_child_flags(&mut f);
+    let plan = compile_args(inputs(&f, |receiving| child_receivers(receiving, true)));
+    let mut scratch = plan.new_scratch();
+    let expected = plan.evaluate(&mut scratch).unwrap();
+    assert_child_delivery(&expected, true);
+    assert_eq!(plan.evaluate(&mut scratch).unwrap(), expected);
+    assert_eq!(plan.evaluate(&mut plan.new_scratch()).unwrap(), expected);
+}
+
+#[test]
+fn consumed_missing_child_flag_preserves_exact_target_stat_and_cause() {
+    let mut f = source_fixture();
+    flag(parent_facts(&mut f), "has-gem", true);
+    flag(parent_facts(&mut f), "is-player", true);
+    add_child(&mut f, true);
+    missing_child_flags(&mut f);
+    // Keep one assigned target so the exact failing child is independent of
+    // traversal order among unrelated generated skills.
+    f.build
+        .supports
+        .retain(|support| support.target == target(30, "first"));
+    f.build
+        .authored_support_order
+        .as_mut()
+        .unwrap()
+        .retain(|order| order.target == target(30, "first"));
+    let baseline = compile_args(inputs(&f, |receiving| child_receivers(receiving, true)));
+    let mut scratch = baseline.new_scratch();
+    let expected = baseline.evaluate(&mut scratch).unwrap();
+    assert_eq!(
+        evaluated(&expected)
+            .effects
+            .iter()
+            .filter_map(application)
+            .collect::<BTreeSet<_>>()
+            .len(),
+        3
+    );
+    let SkillTarget::Generated(parent) = target(30, "first") else {
+        unreachable!()
+    };
+    let mut provider = parent.provider;
+    provider.grant_path.push(DeclaredSlot {
+        declaration: SlotOwnerDefId::Actor(def("family")),
+        slot: def("first"),
+    });
+    let child = SkillTarget::Generated(Box::new(GeneratedSkillKey {
+        provider,
+        slot: child_supply(),
+    }));
+    assert_ne!(child, target(30, "first"));
+    for name in ["has-gem", "from-item", "is-player"] {
+        let plan = compile_args(inputs_with_preparation(
+            &f,
+            |preparation| require_flag(preparation, name),
+            |receiving| child_receivers(receiving, true),
+        ));
+        let report = plan.evaluate(&mut scratch).unwrap();
+        assert_eq!(
+            report.outcome,
+            SupportEffectsOutcome::Unavailable {
+                cause: EffectValue::Unresolved {
+                    reason: PlanGapReason::MissingProducer,
+                    read: None,
+                },
+                input: Some(Box::new(PlanValueKey::Stat {
+                    entity: ConcreteEntity::Skill(Box::new(child.clone())),
+                    stat: def(name),
+                })),
+            },
+            "required child flag {name}"
+        );
+        assert_eq!(report, plan.evaluate(&mut plan.new_scratch()).unwrap());
+        assert_eq!(baseline.evaluate(&mut scratch).unwrap(), expected);
+    }
+}
+
+#[test]
+fn known_child_type_rejection_with_missing_conditional_flags_keeps_delivery_inactive() {
+    let mut f = source_fixture();
+    flag(parent_facts(&mut f), "has-gem", true);
+    flag(parent_facts(&mut f), "is-player", true);
+    add_child(&mut f, true);
+    missing_child_flags(&mut f);
+    for name in ["has-gem", "from-item", "is-player"] {
+        let plan = compile_args(inputs_with_preparation(
+            &f,
+            |preparation| require_flag(preparation, name),
+            // Without explicit summoner inheritance the child's known false
+            // spell type conclusively rejects each support despite its flag.
+            |receiving| child_receivers(receiving, false),
+        ));
+        let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        assert_child_delivery(&report, false);
+    }
+}
+
 #[test]
 fn rejected_parent_does_not_gate_child_or_recompute_origin_scalars() {
     let mut f = source_fixture();
@@ -449,6 +635,110 @@ fn multi_inputs(
                 .collect();
         },
     )
+}
+
+#[test]
+fn replacement_origin_controls_missing_flag_diagnostics_and_retained_delivery() {
+    for missing_from_item in [true, false] {
+        let mut f = source_fixture();
+        add_child(&mut f, false);
+        let names = ["policy-a", "policy-b"];
+        distinct_supports(&mut f, &names);
+        assert_eq!(
+            f.build.authored_support_order.as_ref().unwrap()[0].assignments,
+            vec![occurrence(60), occurrence(61)]
+        );
+        let facts = parent_facts(&mut f);
+        for name in ["has-gem", "from-item"] {
+            if name == "from-item" && !missing_from_item {
+                continue;
+            }
+            let before = facts.effects.len();
+            facts.effects.retain(|effect| effect.id != key(name));
+            assert_eq!(facts.effects.len() + 1, before);
+        }
+        let plan = compile_args(multi_inputs(
+            &f,
+            &names,
+            |preparation| {
+                for entry in &mut preparation.supports {
+                    let SchemaState::Known(support) = &mut entry.preparation else {
+                        unreachable!()
+                    };
+                    support.gems_only = entry.gem == def::<GemDefinition>("policy-a");
+                    support.from_item = entry.gem == def::<GemDefinition>("policy-b");
+                    support.plus_version_of =
+                        (entry.gem == def::<GemDefinition>("policy-b")).then(|| key("policy-a"));
+                }
+            },
+            true,
+        ));
+        let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        if missing_from_item {
+            // B is A's declared plus version: ordered origin 1 replaces origin
+            // 0 at retained position 0. Only B's consumed flag explains the gap.
+            assert_eq!(
+                report.outcome,
+                SupportEffectsOutcome::Unavailable {
+                    cause: EffectValue::Unresolved {
+                        reason: PlanGapReason::MissingProducer,
+                        read: None,
+                    },
+                    input: Some(Box::new(PlanValueKey::Stat {
+                        entity: ConcreteEntity::Skill(Box::new(target(30, "first"))),
+                        stat: def("from-item"),
+                    })),
+                }
+            );
+            continue;
+        }
+
+        // A's has-gem remains missing. Restoring only B's from-item producer
+        // must allow the same retained origin to reach every declared receiver.
+        let effects = evaluated(&report);
+        let apps: BTreeSet<_> = effects.effects.iter().filter_map(application).collect();
+        assert_eq!(apps.len(), 3);
+        assert_eq!(
+            apps.iter()
+                .filter(|app| matches!(app.receiver, SupportReceiverKey::Actor(_)))
+                .count(),
+            1
+        );
+        for app in apps {
+            assert_eq!(
+                app.prepared.origin,
+                SupportOrigin::Assignment(occurrence(61))
+            );
+            assert_eq!(app.prepared.target, target(30, "first"));
+            assert_eq!(app.prepared.position, 0);
+            assert!(applicability(effects, app));
+            let delivery = effects
+                .effects
+                .iter()
+                .find(|effect| {
+                    application(effect) == Some(app)
+                        && effect.key.invocation.program.as_str().ends_with("deliver")
+                })
+                .unwrap();
+            assert_eq!(delivery.value, known(16));
+            match &app.receiver {
+                SupportReceiverKey::Actor(actor) => assert_eq!(
+                    final_value(effects, &ConcreteEntity::Actor(actor.clone())),
+                    &known(16)
+                ),
+                SupportReceiverKey::Action(action) => {
+                    check_child_action(action);
+                    assert_eq!(
+                        final_value(effects, &ConcreteEntity::Action(action.clone())),
+                        &known(16)
+                    );
+                }
+                SupportReceiverKey::Skill(_) => {
+                    panic!("fixture declares Actor/Action endpoints only")
+                }
+            }
+        }
+    }
 }
 
 #[test]
