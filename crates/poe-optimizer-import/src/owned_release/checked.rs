@@ -62,12 +62,31 @@ pub struct CheckedOwnedRelease {
 
 impl CheckedOwnedRelease {
     pub(crate) fn check(input: ReleaseView<'_>, limits: OwnedReleaseLimits) -> Result<Self> {
+        Self::check_inner(input, limits, None)
+    }
+
+    pub(super) fn check_with_recipe(
+        input: ReleaseView<'_>,
+        limits: OwnedReleaseLimits,
+        recipe: CheckedOwnedRecipe,
+    ) -> Result<Self> {
+        Self::check_inner(input, limits, Some(recipe))
+    }
+
+    fn check_inner(
+        input: ReleaseView<'_>,
+        limits: OwnedReleaseLimits,
+        recipe: Option<CheckedOwnedRecipe>,
+    ) -> Result<Self> {
         limits.validate()?;
         let domain = input_domain(input.schema_version, input.evaluation.is_some())?;
         let query_policy_bytes = preflight_view(&input, limits)?;
         // Bound nested data before constituent clones or indexes are allocated.
         digest_owned(domain, &input, limits.max_input_bytes)?;
-        let mut recipe = CheckedOwnedRecipe::new(input.recipe.to_input(), limits.recipe)?;
+        let mut recipe = match recipe {
+            Some(recipe) => recipe.check_for_input(input.recipe, limits.recipe)?,
+            None => CheckedOwnedRecipe::new(input.recipe.to_input(), limits.recipe)?,
+        };
         recipe.canonicalize_input_identity(limits.recipe.max_wire_bytes)?;
         let CheckedImportConstituents {
             mapping,

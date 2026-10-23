@@ -1,6 +1,7 @@
 //! Release packaging commits evaluator data; it never certifies real-build parity.
 mod aggregate;
 mod content;
+mod reuse;
 
 #[allow(dead_code)]
 use crate::evaluation_release_fixture as fixture;

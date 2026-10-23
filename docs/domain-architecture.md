@@ -72,6 +72,12 @@ rules retain their stored-source identity. Publication staging wraps these check
 components with manifests and encoded artifacts; evaluation validation needs only
 the checked components. Consumers share the retained executable and use private
 execution scratch.
+Offline assembly may consume an existing checked recipe only when its exact input
+commitment matches. Construction limits are private validation metadata: identical
+limits permit sharing the compiled handle; changed limits invoke the ordinary
+constructor under the requested bounds. Complete release preflight, dependency
+and artifact checks still run. This does not create a serialized validation token
+or change runtime loading.
 
 `CheckedOwnedRelease` applies the same complete constituent validation to offline
 inputs and loaded artifacts. Its runtime reader retains checked packages, not
@@ -351,13 +357,13 @@ excluded from the projected `SymbolRegistry`. Projection still checks active
 targets against the actual schema; allocation grants neither schema membership
 nor read/effect authority. The Engine remains the complete package checker.
 
-This staged API does not yet provide filesystem compare-and-swap or a KDL
-allocation command. The new release-directory builder is a separate operation;
-it does not commit a named-allocation transaction. Named publication must still
-authenticate the stored predecessor and commit registry and names together. The
-existing raw-alias `load_names` path currently remains separate. Checked
-per-packet declaration overlays can be integrated into the in-memory compiler
-before resolving filesystem publication.
+The checkpoint CLI integrates staged KDL declarations with release construction.
+It authenticates an explicit immutable predecessor, then publishes the successor
+ledger and validated runtime directory together with one atomic no-replace rename.
+Raw-alias `load_names` remains a lookup operation, not an allocation history.
+Per-packet declaration overlays keep unrelated aliases local. Mutable-head
+promotion and its stored-predecessor compare-and-swap remain future work; ordinary
+checkpoint publication creates a new immutable destination.
 
 The owner approved atomic authoring checkpoints on October 23, as described in the
 [authoring checkpoint proposal](owned-authoring-checkpoint-proposal.md). The runtime
@@ -463,9 +469,8 @@ growth; do not union unrelated packet scopes or project every persisted name.
 Construct final rule-shell and routing bindings from their authenticated original
 inputs before packet application. Return the successor names and predecessor
 identity only after complete release validation and the expected-input check pass.
-The current CLI does not accept allocating declarations while its publisher could
-discard that ledger. The returned allocation result is immutable and commits no
-filesystem state. Rule source content constructs a raw package for lowering;
+The library returns an immutable allocation result; the CLI commits it only
+through the atomic checkpoint publisher. Rule source content constructs a raw package for lowering;
 routing content preserves its existing semantic version and uses the single
 validator against the final schema. Final assembly still validates complete rule
 semantics and the newly constructed evaluation graph.
@@ -476,8 +481,8 @@ Preflight declaration counts, target memberships, registry/symbol growth, schema
 entry growth and encoded bytes before cloning the baseline schema. Stored entries
 and semantic-link validation work have separate counters under their common
 ceiling; adding ordinary Stats must not consume the latter counter. Final schema
-construction remains mandatory after preflight. This compiler seam is currently
-library-only; release publication must first resolve the workflow above.
+construction remains mandatory after preflight. The checkpoint CLI uses this
+same compiler seam; there is no separate allocation-only publication path.
 
 Program membership uses explicit definition/slot owners and injected source
 labels. A source label is not an instruction to open a file. Program IDs are
@@ -620,7 +625,7 @@ retained only in Authoring's
 [`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz).
 Its historical receipt
 authenticates the archived bytes. Tests remove only the exact admitted 69-Stat,
-one-program and 349 support-domain additions, restore the archived program
+one-program and 350 support-domain additions, restore the archived program
 members, and reconstruct the original dependency bindings with maintained content
 constructors. The existing
 assembler then checks every historical artifact and provenance field. A separate
@@ -659,6 +664,18 @@ Class-local certification includes the complete class record and its attribute
 and unarmed initialization boundaries. Referenced start nodes and Ascendancies
 retain their own authority, as do equipped weapons and foreign modifiers that
 replace unarmed values. A Class declaration cannot certify these related owners.
+Shared Actor source proofs cover their complete intrinsic initialization and
+generic modifier constructors. Foreign configuration, equipment, passive and skill
+merges retain their own authority. Source classification neither completes the
+Actor's numerical rules nor substitutes a UI fallback for an authored occurrence.
+Configuration source accounting must enumerate repeated custom-modifier blocks
+and legacy fields separately from typed Encounter inputs. Proving constructor
+absence or literal emptiness can close that source family; disabled, overwritten
+or unparsable nonempty text does not prove absence. Until an explicit owned model
+can retain dormant custom text and activation, such text remains unresolved.
+Preserve normal-load migration and headless fallback as separate external source
+behaviors. No source receipt can certify an Encounter's intrinsic domain without
+also checking every admitted typed consumer.
 
 This representation change adds no evaluation bundle or numerical coverage;
 0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust

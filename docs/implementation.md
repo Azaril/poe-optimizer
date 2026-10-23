@@ -28,11 +28,11 @@ Boolean Skill Stats and one Sniper producer, retaining Partial coverage.
 Support-source checks now include declared potential outputs even when no Action
 is queried. Gem domain proof tests and exact saved-selection finalization are
 part of the maintained release harness; the replaced Gem publisher is removed.
-The existing metadata component now declares 349 additional intrinsic source
+The existing metadata component now declares 350 additional intrinsic source
 domains: eight Sniper/minion owners, the Ascendancy and two roots, four pure
 UsagePolicy projections, all 293 ordinary attribute-choice passives, eighteen
 reviewed numeric minion passives, seven class-dependent passives, one Socket,
-Gigantic, six structurally reviewed passive owners and all eight Classes.
+Gigantic, six structurally reviewed passive owners, all eight Classes and the shared Player Actor.
 Unchanged Original05 selects
 22 of those attribute-choice nodes, all eighteen numeric minion nodes, three of
 the class/Socket/Gigantic owners and all six structural owners. Its selected
@@ -69,7 +69,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; current checkpoint adds eight Class domains without numerical closure |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; current checkpoint adds shared Player source coverage and reuses checked recipes during evaluation-bearing authoring |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -77,9 +77,9 @@ silently become a second supported implementation.
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
-| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 69 Stats, one Sniper initial-type program and 349 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,335 source domains (1,306 Known, 29 Unmapped). Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
+| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 69 Stats, one Sniper initial-type program and 350 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,336 source domains (1,307 Known, 29 Unmapped). Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 19:48 UTC on October 23, `0658ac0f` run `40014288399` was pending behind running `d490eb54` run `40011474882`. Earlier `96e5533e` run `39962517895` completed successfully: its final Windows CLI-1 job passed both feature profiles at 19:37 UTC after 5h50m. No timeout or test failure occurred. Baselines `a7069aa1` and `ae90ec82` also passed. Main-branch serialization preserves the running revision and coalesces pending revisions; previous success does not certify newer commits |
+| CI | At 20:21 UTC on October 23, `f58054a8` run `40016031239` was pending behind running `d490eb54` run `40011474882` (seven jobs successful, eleven running, none failed). The intermediate `0658ac0f` pending run was coalesced. Earlier `96e5533e` run `39962517895` completed successfully: its final Windows CLI-1 job passed both feature profiles at 19:37 UTC after 5h50m. No timeout or test failure occurred. Baselines `a7069aa1` and `ae90ec82` also passed. Main-branch serialization preserves the running revision and coalesces pending revisions; previous success does not certify newer commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First reproduce the allocation predecessor using the
@@ -90,14 +90,14 @@ Successful publication prints the checkpoint identity to
 stderr and checkpoint receipt JSON to stdout. Bootstrap reproduces the fixed first-allocation
 source revision only; later builds must preserve its ledger as a checked
 predecessor. Current runtime input identity:
-`615c66506ee4421ab03b1eef95486d8fa532755846168bb7738cee3c97e8d26e`.
-The 2,787 declared source files use 5,789,428 encoded and 58,665,128 decoded
+`3ede2f3da137c16ccf3a3d3cbb914f9b1a65db717d86edd339346ccdbdd22d43`.
+The 2,787 declared source files use 5,789,442 encoded and 58,665,360 decoded
 bytes, within the existing 64 MiB bounds. The 183,544-byte root manifest and
 expanded rule bytes also fit current limits without increases.
 Metadata JSON remains temporary; gzip is not the compact runtime format.
 The CLI still reports the 80% decoded-size warning; compact-format work remains
 required before expanding content. The production command rebuilt the tracked
-source into `runs/class-support-domains-successor-01` with the expected input identity,
+source into `runs/player-support-domains-successor-01` with the expected input identity,
 17 constituent artifacts and all 227 provenance rows.
 
 Historical input
@@ -105,7 +105,7 @@ Historical input
 and its receipt remain independent regression evidence. Original rule IR lives
 only in Authoring's `tests/fixtures/retained-rules.json.gz`, outside production
 inputs. Actual-source graph checks plus restoration of just historical program
-members, with only the exact 69-Stat/one-program/349-domain delta removed through
+members, with only the exact 69-Stat/one-program/350-domain delta removed through
 maintained content constructors, prove all historical metadata/provenance and artifact bytes
 are preserved. `runs/dsl-conversion-02/conversion-report.json` records local
 conversion evidence; no `runs/` file or one-off conversion tool is needed by a
@@ -803,14 +803,31 @@ snapshot bookkeeping and seven remaining Import compiler families allocate IDs.
 Full-release publication still has historical revision/migration consumers;
 recipe publication has more than twenty compiler callers. Retire those chains
 before moving their authority, and keep immutable runtime checking shared.
-The next bounded cleanup is checked-recipe reuse: Authoring compiles the final
-recipe for evaluation bindings, then full-release assembly compiles it again.
-Pass that exact checked handle through the same complete-release validation,
-preserving identity, aggregate bounds, Import and artifact checks. Prove identical
-publication/rejection behavior; this does not itself remove the Import dependency.
-Later extraction can isolate `owned_release/{source,import_content,recipe_source_content}`
-and `owned_release_evaluation/content` without exporting historical normalization
-repair helpers. This follows the accepted R1 design and adds no alternate assembler.
+Checked-recipe reuse is implemented and validated in the current checkpoint.
+Authoring passes the exact recipe used for evaluation bindings into
+the same complete-release validator. Its input commitment must match; identical
+private construction limits reuse the executable, while changed limits use the
+ordinary constructor. Aggregate bounds, Import/evaluation bindings, publication
+budgets and runtime loading remain checked. Seven new Import laws cover exact Arc
+reuse, identical artifacts, canonicalization, wrong inputs, changed/tightened
+budgets and stale dependencies. The change removes duplicate compilation only
+when authored evaluation is present; the current production metadata release has
+no evaluation bundle and gains no performance claim from it. This does not itself
+remove the Import dependency or relocate the allocator.
+The next narrow extraction is `owned_release_evaluation/content`: Authoring is
+its only production consumer. First move the shared borrowed semantic view and
+sole aggregate traversal into neutral Data ownership, using existing Core DTOs
+and explicit depth/work limits. Both authored and runtime adapters must retain
+that one accounting implementation. Then replace checked evaluation's
+`into_authored_content` dependency with consuming access to its actual checked
+Data packages, and move the authored types, binding functions and seven content
+laws into Authoring. Keep runtime inputs, receipts, checked containers and loader
+validation in Import; do not copy a validator or add an Import -> Authoring edge.
+The later `owned_release/{source,import_content,recipe_source_content}` cut shares
+private source-prefix validation, dependency bookkeeping and normalization
+construction. Move it as an audited cluster after its callers are ready, rather
+than exporting repair helpers or relocating types alone. This follows the
+accepted R1 design and adds no alternate assembler.
 Alongside the DSL work, parse external XML once through a bounded checked boundary
 and pass the parsed document to projections. Type item fields and split parsing
 stages. This parser cleanup is required by R4, but does not block R2 unless a
@@ -2008,7 +2025,7 @@ useful laws have moved to the maintained harness.
 Reward-domain proof/replay transfer is another R4 candidate; retain its generic
 complete-numeric admission and missing/restored/Unmapped receiving controls.
 
-**Class source-domain checkpoint: all eight Class definitions `0a1e`–`0a25`, including
+**Class source-domain checkpoint (`f58054a8`): all eight Class definitions `0a1e`–`0a25`, including
 Original05's Sorceress `0a23`.** Full authority already exists in retained tree
 JSON/Lua, `PassiveTree.lua:59–446`, `Data.lua:626–636`, `Misc.lua:159` and
 `CalcSetup.lua:827–835,1852–1886`. Four maintained source tests authenticate all
@@ -2044,22 +2061,61 @@ formatting, diff checks and eleven UTF-8 file checks pass. All nine protected
 incoming-critical hashes remain unchanged. Complete builds remain 0/5, selected
 input obligations remain five, and selected passive source coverage remains 51/57.
 
-**Next source tranche: shared Player Actor `332a`.** Authenticate the complete
-`CalcSetup.lua:26–114,829–899` initializers and full environment constructor,
+**Shared Player source-domain checkpoint: Actor `332a`.**
+Four maintained source tests authenticate complete
+`CalcSetup.lua:26–114,829–899` initializers and the full environment constructor,
 distinguishing foreign config/party/cache merges, items, tree and selected skills.
-The reviewed intrinsic constructors create numeric/Boolean modifiers, not support
-origins. Preserve all nine current programs and Partial coverage. Existing
-`configuration-distance-inputs/ModStore.lua.gz` authenticates NewMod; archive only
-the missing full `src/Modules/ModTools.lua` createMod wrapper. Its verified upstream
-LF bytes are 9,130 with SHA-256
-`1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246`;
-the Windows vendor checkout has CRLF and must not be archived without verification.
-This is an evidence-artifact gap, not missing mechanics. Preserve Level/config
-obligations and do not use the UI's empty-support melee fallback as native coverage.
-Transfer the old Player ownership target's one ordinary source law and four
-ignored native laws (all-class one-Player ownership, original values, refusal and
-fresh/reused/Rayon determinism) before deleting its exclusive helper. These laws
-may need real execution declarations; a source declaration alone does not replace them.
+The complete 148-call intrinsic census has 99 BASE, 24 FLAG, 20 INC and five MORE
+modifiers, with no LIST constructor. The separate Class attribute loop remains
+Class-owned. Ten full archives, 27 exact spans and five semantic artifacts support
+the proof. Existing `configuration-distance-inputs/ModStore.lua.gz` authenticates
+NewMod; the new full `ModTools.lua.gz` authenticates createMod without adding a Lua
+parser or evaluator. Its verified upstream LF bytes are 9,130 with SHA-256
+`1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246`.
+The Windows vendor checkout has CRLF; the archive was accepted only after its
+canonical LF bytes matched the existing upstream commitment.
+
+Four maintained domain/component tests preserve all nine programs and numerical
+Partial coverage, the one class-independent Player binding, ten independent Life
+observations, fresh/reused scratch and missing/type-invalid inputs. Public
+ExistingActor validation still rejects missing, empty, duplicate or unowned
+bindings. Original05 remains level 92, Class `0a23`, with five input obligations.
+There are now 1,336 source domains (1,307 Known, 29 Unmapped); selected passive
+source coverage remains 51/57. Level/config obligations and foreign sources
+remain independently blocking; the UI's empty-support melee fallback grants no
+native coverage.
+
+No old Player helper is deleted at this checkpoint. Its four ignored native laws
+still need actual current execution declarations: once-per-Player origin,
+old-to-new target/value equivalence, all-Class level observations, missing/partial
+application refusal and Rayon identity. Component replay does not replace those
+whole-plan laws. The ordinary source check also remains with its live publication
+utility until useful coverage can transfer without reviving the old chain.
+
+The newly built CLI publishes checkpoint
+`fc9080862e7c589f7f53c994f56ae181bfba278dc4df7260fa32b0c677c8d3f8`;
+checked predecessor replay publishes
+`53e1c02a15b98d199aa6500221f9d5635c68b9d3dda2880853724cfa3261d826`.
+All eighteen runtime files replay identically. The ledger, schema and registry
+still match the fixed genesis exactly. Publication logs are
+`runs/player-support-domains-successor.log` and
+`runs/player-support-domains-reload.log`. The decoded-size warning remains;
+neither the source limit nor any validation gate was relaxed.
+
+Combined Import/Authoring/Host validation passes **2,073 tests**: Authoring's
+166 library, eight CLI and 147 release checks; eleven Host checks; and Import's
+248 library, 205 raw/legacy, 886 owned and 402 normalization checks. One existing
+normalization configuration-inventory check remains ignored because it requires
+an authenticated published current package; no new test is ignored. All eight
+new Player tests and seven recipe-reuse laws pass. The optimized affected build
+took 18m03s; this is compilation cost across these crates, not an evaluator
+throughput measurement. The maintained release suite ran in 19.00s. Evidence:
+`runs/player-and-recipe-reuse-tests.log` and the matching Cargo timing report.
+Strict all-target Clippy passes for the three crates
+(`runs/player-and-recipe-reuse-clippy.log`). Scoped formatting, diff checks and
+twenty UTF-8 file checks pass. All nine protected incoming-critical hashes remain
+unchanged. Complete builds remain 0/5 and selected input obligations remain
+123/137/127/144/5; this checkpoint adds no whole-build coverage.
 
 Encounter `31d1` remains a separate blocker. Its current Partial numerical
 programs cannot prove source absence. Encounter
@@ -2074,6 +2130,31 @@ factory, which is only a finite witness. Two selected passive grants remain
 unparsed: Kelari's Deception (`ModCache.lua:7962`) and Navira's Fracturing
 (`ModCache.lua:8105`). Their missing passive-grant authority remains a tracked blocker;
 do not infer support absence from the parser returning no modifiers.
+
+The next Encounter slice is Import-side accounting for the complete custom-modifier
+source family, within the accepted configuration-accounting design. Original05's
+ConfigSet 1 contains neither a custom block nor a legacy `customMods` field;
+authenticate constructor absence rather than infer it from an empty parsed result.
+The present scalar-only controls and inventory retirement cannot account for
+repeated custom blocks. Extend the existing scoped receipts, SourceProjectEvidence
+and atomic retirement path to enumerate every ConfigSet and exact occurrence.
+First admit only constructor absence and literally empty sources. Any nonempty
+block or legacy value remains Pending, including disabled, overwritten or
+whitespace-only text, as do malformed/duplicate/unknown fields and incomplete
+accounting. Bounds must refuse the whole update atomically.
+
+Authenticate normal `ConfigTab` loading as well as headless execution: normal
+Load conditionally migrates legacy text when the block list is absent, empty or
+one empty block, then clears the legacy input; BuildModList has a separate fallback
+when no enabled nonempty block supplies text. Do not conflate those paths. Current
+SourceOnly accounting cannot retain a nonblocking dormant text obligation, and
+native Scenario inputs have no editable custom-text owner. Supporting dormant
+editable custom modifiers later needs an explicit ownership decision; actual
+custom support factories also need source provenance beyond authored assignments.
+Neither is necessary for this strict-empty slice. Before declaring Encounter
+source coverage, independently prove that every admitted typed Encounter/config
+consumer is source-free. Do not add a native conditional domain-certificate model
+or revive the historical actor-modifier importer for this work.
 
 Inherited summoner context already uses `ReceivingSkill { summoner_path }` and
 the exact parent's prepared types; do not add another structural read for it.
@@ -2283,7 +2364,7 @@ These are retained obligations, not extra competing phases.
 | UI autocomplete | Bounded query/index over loaded named definitions; no database/ORM milestone |
 | PoB updates | One pin manifest, offline extraction and selective differential tests, stable semantic anchors and a pin-bump runbook; no automatic network/source work in cargo build |
 | Repository/release hygiene | R0-R4 dependency boundaries, deduplicated tests/artifacts/docs, one MSRV policy and locked workspace dependencies; batch Windows formatting by package while workspace-wide `cargo fmt --all` exceeds the process command-line limit (OS error 206); R6 release packaging, dependency audit and measured release-profile tuning |
-| Repeated offline recipe validation | During R1 publication-core extraction, reuse the final checked recipe between authored evaluation construction and full assembly while retaining all shared aggregate and dependency checks; measure before broader performance work. No native candidate path is affected |
+| Repeated offline recipe validation | Exact-input, same-limit reuse is implemented and validated for evaluation-bearing authoring. Keep all shared aggregate and dependency checks. The current metadata-only release has no evaluation bundle and gets no performance claim; measure actual evaluation-bearing builds before broader optimization |
 | Mutable authoring-head promotion | Deferred until a shared mutable head is introduced; the first approved checkpoint publisher uses an explicit immutable predecessor. Implement actual stored-predecessor CAS/concurrency control and interruption tests before exposing head promotion; read-compare-rename alone is insufficient |
 | Canonical allocation-history distribution | R2 first-generation bridge implemented: canonical reference pins source `caca40a5` + checkpoint digest outside the compiled inventory; fresh source-archive reproduction and normal checked loading pass. Before a second allocation generation needs a new predecessor, R3 must archive/distribute one full checked snapshot. No historical source-replay chain, silent rebootstrap, machine-local dependency or second ledger importer |
 
@@ -2371,6 +2452,11 @@ copying source-language accidents into the native model.
    program classification, freezing, readiness, receiving and metrics. Inherited
    summoner context already uses the exact-parent receiving relation. A missing
    source value is not an inferred false.
+   Shared Player source coverage is now declared. The next Encounter slice is the
+   strict-empty custom-source accounting adapter described above; nonempty text
+   remains Pending, even disabled. Independently prove all admitted typed Encounter
+   consumers before declaring its intrinsic domain. The six remaining passive
+   source gaps still require the recorded version-aligned grant/buff authority.
    In parallel, continue independent behavioral transfers.
    Complete the actual execution declarations needed to replace historical
    whole-plan fixtures, **retire obsolete
@@ -2381,6 +2467,9 @@ copying source-language accidents into the native model.
    assembler. Production Authoring does not use succession, revision/migration or
    catalog-family transformation chains. Named allocation is the other maintained
    mutable dependency. These are the roots for the next dependency cut.
+   Exact checked-recipe reuse is now implemented. Start the next narrow module
+   cut with evaluation content and its shared budget traversal as specified in R1;
+   keep runtime checked owners and avoid exposing historical repair APIs.
 
    Preserve still-relevant behavioral assertions in the declarative release/DSL
    harness, then delete the historical succession, recipe extension/membership

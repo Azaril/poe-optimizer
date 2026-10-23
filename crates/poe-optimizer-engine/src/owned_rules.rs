@@ -21,7 +21,7 @@ mod prepared_tests;
 #[cfg(test)]
 use crate::engine_fixtures::rules as test_fixture;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct RuleLimits {
     pub max_transform_targets: usize,
     pub max_receivers: usize,

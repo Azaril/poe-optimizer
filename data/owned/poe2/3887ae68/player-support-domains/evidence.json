@@ -1,0 +1,1052 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "scope": "Shared Player Actor332a intrinsic constructors only. Class attributes, supplied modifiers, cached aggregate databases and UI fallback skills keep separate authority. Nine current programs and numerical Partial coverage are unchanged.",
+  "files": [
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_CalcSetup.lua.gz",
+      "archive_bytes": 21399,
+      "archive_sha256": "cdefa2fbbb4a15befdc728fd549902f4032c1cdf0b52c3070dc356f0a45e718f",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_Data.lua.gz",
+      "archive_bytes": 10604,
+      "archive_sha256": "73c2915afcc9bb90d972cd99d6aa690812ca8c2a1edd31eda7b67bd47a322af8",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Misc.lua.gz",
+      "archive_bytes": 8259,
+      "archive_sha256": "bdc486e956dfde075166d88c612d2c527df2543567ae39da56e7f48090ec50c1",
+      "bytes": 24010,
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+      "archive_bytes": 7158,
+      "archive_sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Modules/ModTools.lua",
+      "archive": "data/owned/poe2/3887ae68/player-support-domains/ModTools.lua.gz",
+      "archive_bytes": 2806,
+      "archive_sha256": "74782a360e84ac9f468190e49215b5349ad8594d93302a7ed7870d46f7f42d69",
+      "bytes": 9130,
+      "sha256": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "archive": "data/owned/poe2/3887ae68/life-base-domain/ModDB.lua.gz",
+      "archive_bytes": 2575,
+      "archive_sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_ModParser.lua.gz",
+      "archive_bytes": 105049,
+      "archive_sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_CalcActiveSkill.lua.gz",
+      "archive_bytes": 10868,
+      "archive_sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+      "archive_bytes": 34408,
+      "archive_sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-campaign-progression/ConfigTab.lua.gz",
+      "archive_bytes": 9976,
+      "archive_sha256": "8749d4b7771265efb21319ffbf79791f02eb4c1bd04c63557311a00a98fb26a1",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    }
+  ],
+  "spans": [
+    {
+      "role": "common-initializer",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 26,
+      "last": 114,
+      "sha256": "6c77648550fb529b4a0f857ed5057d87896bf0fa14e49aeb34cf37fef2d7caa4"
+    },
+    {
+      "role": "player-initializer",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 829,
+      "last": 899,
+      "sha256": "617957f829c548fa1ee974af7724afbe9536cd012650bcd052beebff8b682491"
+    },
+    {
+      "role": "environment-constructor",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 717,
+      "last": 2309,
+      "sha256": "37675e19acc72f0d62b67987ea4445a1250d312c09b1f2d1bdba43bede02e9c8"
+    },
+    {
+      "role": "actor-construction",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 717,
+      "last": 790,
+      "sha256": "a2a5698e2864500fd8cf707cffc85fa0ec521a42c04654d0e72f804338363cb8"
+    },
+    {
+      "role": "class-and-life-boundary",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 828,
+      "last": 837,
+      "sha256": "2f61fb608dc1bac11d78bd4f5131cbe7a99ed5dd6b964d967e5b5d35c5e0fb13"
+    },
+    {
+      "role": "foreign-config-party-cache",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 902,
+      "last": 919,
+      "sha256": "de8c276e79275cd6b98e1234b416dc246f0ce84d1b29d96b430fcb54b40b41e4"
+    },
+    {
+      "role": "foreign-item-merge",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1604,
+      "last": 1605,
+      "sha256": "eae00e8f290344721aeb58a620db9361e023fd3ecc59911e9fddb363c9dcf20e"
+    },
+    {
+      "role": "foreign-tree-merge",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1635,
+      "last": 1638,
+      "sha256": "dbef23429515d44088bbde2120d144c62b7700aacd5abaf95bbc335741f3cad4"
+    },
+    {
+      "role": "foreign-weapons",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1852,
+      "last": 1886,
+      "sha256": "f07347b080249c6c04eb47316a27651d91dced9e496c96f202a9c4883dba4a4d"
+    },
+    {
+      "role": "external-support-consumers",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1898,
+      "last": 1955,
+      "sha256": "18a242a2d62003772332eefa421c249d288b5781efbe72bdfe8a684c794ddeaa"
+    },
+    {
+      "role": "linked-support-consumers",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 2078,
+      "last": 2097,
+      "sha256": "7a0e92a50256cb587b81b9df1de4dc7142a91ed6bf7fb85ace96e4f3827066f7"
+    },
+    {
+      "role": "foreign-group-property",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 2128,
+      "last": 2139,
+      "sha256": "a6197728cd6df5e3a26f81019cd0a2ed71360b802df8cf878d02a887094374c8"
+    },
+    {
+      "role": "ui-fallback-skill",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 2196,
+      "last": 2209,
+      "sha256": "4e6063a4d49482d4c29dae9bd51b64f71b100c4ab1c5e3fb1b967d9de8cacd1e"
+    },
+    {
+      "role": "modstore-constructor",
+      "path": "src/Classes/ModStore.lua",
+      "first": 65,
+      "last": 71,
+      "sha256": "7598b8ede8016fad9d83e716cd13f3a78a5dbd63000fecf73ce467179d47ea9d"
+    },
+    {
+      "role": "newmod-wrapper",
+      "path": "src/Classes/ModStore.lua",
+      "first": 142,
+      "last": 144,
+      "sha256": "1fb9f0be659a3a3442c0c212b68027aa482c004336adf5a4fa17ada6b1764b76"
+    },
+    {
+      "role": "newmod-alias",
+      "path": "src/Classes/ModStore.lua",
+      "first": 18,
+      "last": 18,
+      "sha256": "0dc68c9d6797cb55a26cdd935c6448477da36d2da92c691ee8971cebc87939cc"
+    },
+    {
+      "role": "create-modifier",
+      "path": "src/Modules/ModTools.lua",
+      "first": 57,
+      "last": 91,
+      "sha256": "d7f2dd60eac9f06c7418437c1f70441cb05374c796c561e51535f9fc9d128b5e"
+    },
+    {
+      "role": "moddb-constructor",
+      "path": "src/Classes/ModDB.lua",
+      "first": 25,
+      "last": 29,
+      "sha256": "0f54ebe2bdfed48a96f94ab63813e83009bb1bbc431c4e9781c24aedea73d9dd"
+    },
+    {
+      "role": "moddb-add",
+      "path": "src/Classes/ModDB.lua",
+      "first": 31,
+      "last": 37,
+      "sha256": "90d148a1763c8e12e98d9ced3ba6edc5fcec72768b0901faed1b1f2532ccedaa"
+    },
+    {
+      "role": "moddb-add-list",
+      "path": "src/Classes/ModDB.lua",
+      "first": 113,
+      "last": 122,
+      "sha256": "9f620a6deb14773c64e01b9ca6e1b11dabd304bb377f3c36a92d7532a8350cb8"
+    },
+    {
+      "role": "active-skill-constructor",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 144,
+      "last": 234,
+      "sha256": "215482b85ed4bfab7be529873181e240d0f2b11cee6c6cf0007f007c00e7fd16"
+    },
+    {
+      "role": "misc-data-import",
+      "path": "src/Modules/Data.lua",
+      "first": 112,
+      "last": 118,
+      "sha256": "2572927df62b60bb4f982cc19e1d76c8b1f530662934d80124bc643e212d87a5"
+    },
+    {
+      "role": "character-constants",
+      "path": "src/Data/Misc.lua",
+      "first": 144,
+      "last": 245,
+      "sha256": "db3765d338d45f70713aa654be1a853b8d0115dc0953c1144d7ba979c487280e"
+    },
+    {
+      "role": "extra-support-contrast",
+      "path": "src/Modules/ModParser.lua",
+      "first": 2219,
+      "last": 2253,
+      "sha256": "11ede92472d7dec6e85b0af4ff9c52a1da07d1a204a7d7e8339221d43872b962"
+    },
+    {
+      "role": "linked-support-contrast",
+      "path": "src/Modules/ModParser.lua",
+      "first": 3650,
+      "last": 3659,
+      "sha256": "4285cfd4639797c208b9d0872bc9324aefd23eefda1bf1b5332767f8b6f0893b"
+    },
+    {
+      "role": "foreign-custom-modifiers",
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1200,
+      "last": 1241,
+      "sha256": "264dfce761b2e91ebed8bf0f75795454bfb69158764d08390c17ff12886ec60e"
+    },
+    {
+      "role": "foreign-disabled-weapons",
+      "path": "src/Modules/CalcPerform.lua",
+      "first": 3224,
+      "last": 3237,
+      "sha256": "d0adef6053a35854a58f150bbc1c17bde13feeb6d878cfd250edb3304bcf1ea9"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/player-rule-ownership/ownership.json",
+      "bytes": 230984,
+      "sha256": "ce910ff446ff33b60fc37869e42d3c4393d86d34a38c32163e093b26441279b9"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-rule-ownership/bindings.json",
+      "bytes": 3305,
+      "sha256": "fae0bed9195c839f76581d4582db3619a35c302ce98aa9b86ee7798c443168ed"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-rule-ownership/source-vectors.json",
+      "bytes": 3914,
+      "sha256": "123f13f27de1c4c9ce48e09f1079614cd9da720f97a6a69b9c2a6c80aa7c3ef7"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-intrinsic-life/source-vectors.json",
+      "bytes": 237312,
+      "sha256": "4bddcee4321c60a3aa296b6fcc936c79f5407db885ffa3750aeda330262d9b4e"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/player-intrinsic-life/bindings.json",
+      "bytes": 3334,
+      "sha256": "8fb3bf578750aaadd5f99e465d07ce1fc8a313809e9803a559858f21353a9460"
+    }
+  ],
+  "intrinsic_modifiers": [
+    {
+      "line": 27,
+      "name": "FireResistMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 28,
+      "name": "ColdResistMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 29,
+      "name": "LightningResistMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 30,
+      "name": "ChaosResistMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 31,
+      "name": "TotemFireResistMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 32,
+      "name": "TotemColdResistMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 33,
+      "name": "TotemLightningResistMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 34,
+      "name": "TotemChaosResistMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 35,
+      "name": "BaseBlockChanceMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 36,
+      "name": "BaseSpellBlockChanceMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 37,
+      "name": "SpellDodgeChanceMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 38,
+      "name": "ChargeDuration",
+      "kind": "BASE"
+    },
+    {
+      "line": 39,
+      "name": "PowerChargesMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 40,
+      "name": "FrenzyChargesMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 41,
+      "name": "EnduranceChargesMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 42,
+      "name": "MaximumRage",
+      "kind": "BASE"
+    },
+    {
+      "line": 43,
+      "name": "SiphoningChargesMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 44,
+      "name": "ChallengerChargesMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 45,
+      "name": "BlitzChargesMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 46,
+      "name": "InspirationChargesMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 47,
+      "name": "CrabBarriersMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 48,
+      "name": "BrutalChargesMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 49,
+      "name": "AbsorptionChargesMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 50,
+      "name": "AfflictionChargesMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 51,
+      "name": "BloodChargesMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 52,
+      "name": "MaxLifeLeechRate",
+      "kind": "BASE"
+    },
+    {
+      "line": 53,
+      "name": "MaxManaLeechRate",
+      "kind": "BASE"
+    },
+    {
+      "line": 54,
+      "name": "ImpaleStacksMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 55,
+      "name": "IgniteStacksMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 56,
+      "name": "BleedStacksMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 57,
+      "name": "PoisonStacksMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 58,
+      "name": "MaxEnergyShieldLeechRate",
+      "kind": "BASE"
+    },
+    {
+      "line": 59,
+      "name": "MaxLifeLeechInstance",
+      "kind": "BASE"
+    },
+    {
+      "line": 60,
+      "name": "MaxManaLeechInstance",
+      "kind": "BASE"
+    },
+    {
+      "line": 61,
+      "name": "MaxEnergyShieldLeechInstance",
+      "kind": "BASE"
+    },
+    {
+      "line": 62,
+      "name": "TrapThrowingTime",
+      "kind": "BASE"
+    },
+    {
+      "line": 63,
+      "name": "MineLayingTime",
+      "kind": "BASE"
+    },
+    {
+      "line": 64,
+      "name": "WarcryCastTime",
+      "kind": "BASE"
+    },
+    {
+      "line": 65,
+      "name": "TotemPlacementTime",
+      "kind": "BASE"
+    },
+    {
+      "line": 66,
+      "name": "BallistaPlacementTime",
+      "kind": "BASE"
+    },
+    {
+      "line": 67,
+      "name": "ShockStacksMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 68,
+      "name": "ChillStacksMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 69,
+      "name": "ScorchStacksMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 70,
+      "name": "MovementSpeed",
+      "kind": "INC"
+    },
+    {
+      "line": 71,
+      "name": "Evasion",
+      "kind": "INC"
+    },
+    {
+      "line": 72,
+      "name": "MovementSpeed",
+      "kind": "INC"
+    },
+    {
+      "line": 73,
+      "name": "AilmentThreshold",
+      "kind": "BASE"
+    },
+    {
+      "line": 74,
+      "name": "PoiseThreshold",
+      "kind": "BASE"
+    },
+    {
+      "line": 75,
+      "name": "DamageTaken",
+      "kind": "INC"
+    },
+    {
+      "line": 76,
+      "name": "DamageTaken",
+      "kind": "INC"
+    },
+    {
+      "line": 77,
+      "name": "Damage",
+      "kind": "INC"
+    },
+    {
+      "line": 78,
+      "name": "Damage",
+      "kind": "INC"
+    },
+    {
+      "line": 79,
+      "name": "DamageTaken",
+      "kind": "INC"
+    },
+    {
+      "line": 80,
+      "name": "DamageTaken",
+      "kind": "INC"
+    },
+    {
+      "line": 81,
+      "name": "Damage",
+      "kind": "MORE"
+    },
+    {
+      "line": 82,
+      "name": "DamageGainAsRandom",
+      "kind": "BASE"
+    },
+    {
+      "line": 83,
+      "name": "Condition:Burning",
+      "kind": "FLAG"
+    },
+    {
+      "line": 84,
+      "name": "Condition:Poisoned",
+      "kind": "FLAG"
+    },
+    {
+      "line": 85,
+      "name": "ShockBase",
+      "kind": "BASE"
+    },
+    {
+      "line": 86,
+      "name": "ChillBase",
+      "kind": "BASE"
+    },
+    {
+      "line": 87,
+      "name": "Blind",
+      "kind": "FLAG"
+    },
+    {
+      "line": 88,
+      "name": "Chill",
+      "kind": "FLAG"
+    },
+    {
+      "line": 89,
+      "name": "Freeze",
+      "kind": "FLAG"
+    },
+    {
+      "line": 90,
+      "name": "Fortify",
+      "kind": "FLAG"
+    },
+    {
+      "line": 91,
+      "name": "Fortified",
+      "kind": "FLAG"
+    },
+    {
+      "line": 92,
+      "name": "Fanaticism",
+      "kind": "FLAG"
+    },
+    {
+      "line": 93,
+      "name": "Onslaught",
+      "kind": "FLAG"
+    },
+    {
+      "line": 94,
+      "name": "UnholyMight",
+      "kind": "FLAG"
+    },
+    {
+      "line": 95,
+      "name": "ChaoticMight",
+      "kind": "FLAG"
+    },
+    {
+      "line": 96,
+      "name": "Adrenaline",
+      "kind": "FLAG"
+    },
+    {
+      "line": 97,
+      "name": "LesserMassiveShrine",
+      "kind": "FLAG"
+    },
+    {
+      "line": 98,
+      "name": "LesserBrutalShrine",
+      "kind": "FLAG"
+    },
+    {
+      "line": 99,
+      "name": "DiamondShrine",
+      "kind": "FLAG"
+    },
+    {
+      "line": 100,
+      "name": "MassiveShrine",
+      "kind": "FLAG"
+    },
+    {
+      "line": 101,
+      "name": "AlchemistsGenius",
+      "kind": "FLAG"
+    },
+    {
+      "line": 102,
+      "name": "LuckyHits",
+      "kind": "FLAG"
+    },
+    {
+      "line": 103,
+      "name": "HeavyStunBuildup",
+      "kind": "MORE"
+    },
+    {
+      "line": 104,
+      "name": "ColdCannotHeavyStun",
+      "kind": "FLAG"
+    },
+    {
+      "line": 105,
+      "name": "Convergence",
+      "kind": "FLAG"
+    },
+    {
+      "line": 106,
+      "name": "PhysicalDamageReduction",
+      "kind": "BASE"
+    },
+    {
+      "line": 107,
+      "name": "CritChanceCap",
+      "kind": "BASE"
+    },
+    {
+      "line": 108,
+      "name": "PresenceRadius",
+      "kind": "BASE"
+    },
+    {
+      "line": 109,
+      "name": "SurroundedRadius",
+      "kind": "BASE"
+    },
+    {
+      "line": 110,
+      "name": "SurroundedMinimum",
+      "kind": "BASE"
+    },
+    {
+      "line": 836,
+      "name": "Life",
+      "kind": "BASE"
+    },
+    {
+      "line": 837,
+      "name": "Mana",
+      "kind": "BASE"
+    },
+    {
+      "line": 838,
+      "name": "ManaRegen",
+      "kind": "BASE"
+    },
+    {
+      "line": 839,
+      "name": "WardRegenPercent",
+      "kind": "BASE"
+    },
+    {
+      "line": 840,
+      "name": "Spirit",
+      "kind": "BASE"
+    },
+    {
+      "line": 841,
+      "name": "Devotion",
+      "kind": "BASE"
+    },
+    {
+      "line": 842,
+      "name": "Tribute",
+      "kind": "BASE"
+    },
+    {
+      "line": 843,
+      "name": "Evasion",
+      "kind": "BASE"
+    },
+    {
+      "line": 844,
+      "name": "Accuracy",
+      "kind": "BASE"
+    },
+    {
+      "line": 845,
+      "name": "CritMultiplier",
+      "kind": "BASE"
+    },
+    {
+      "line": 846,
+      "name": "DotMultiplier",
+      "kind": "BASE"
+    },
+    {
+      "line": 847,
+      "name": "FireResist",
+      "kind": "BASE"
+    },
+    {
+      "line": 848,
+      "name": "ColdResist",
+      "kind": "BASE"
+    },
+    {
+      "line": 849,
+      "name": "LightningResist",
+      "kind": "BASE"
+    },
+    {
+      "line": 850,
+      "name": "ChaosResist",
+      "kind": "BASE"
+    },
+    {
+      "line": 851,
+      "name": "TotemFireResist",
+      "kind": "BASE"
+    },
+    {
+      "line": 852,
+      "name": "TotemColdResist",
+      "kind": "BASE"
+    },
+    {
+      "line": 853,
+      "name": "TotemLightningResist",
+      "kind": "BASE"
+    },
+    {
+      "line": 854,
+      "name": "TotemChaosResist",
+      "kind": "BASE"
+    },
+    {
+      "line": 855,
+      "name": "MaximumFortification",
+      "kind": "BASE"
+    },
+    {
+      "line": 856,
+      "name": "MaximumValour",
+      "kind": "BASE"
+    },
+    {
+      "line": 857,
+      "name": "SoulEaterMax",
+      "kind": "BASE"
+    },
+    {
+      "line": 858,
+      "name": "Multiplier:IntensityLimit",
+      "kind": "BASE"
+    },
+    {
+      "line": 859,
+      "name": "Multiplier:DemonFlameMaximum",
+      "kind": "BASE"
+    },
+    {
+      "line": 860,
+      "name": "Damage",
+      "kind": "INC"
+    },
+    {
+      "line": 861,
+      "name": "MovementSpeed",
+      "kind": "INC"
+    },
+    {
+      "line": 862,
+      "name": "Speed",
+      "kind": "INC"
+    },
+    {
+      "line": 863,
+      "name": "Speed",
+      "kind": "INC"
+    },
+    {
+      "line": 864,
+      "name": "ActiveTrapLimit",
+      "kind": "BASE"
+    },
+    {
+      "line": 865,
+      "name": "ActiveMineLimit",
+      "kind": "BASE"
+    },
+    {
+      "line": 866,
+      "name": "MineThrowCount",
+      "kind": "BASE"
+    },
+    {
+      "line": 867,
+      "name": "TrapThrowCount",
+      "kind": "BASE"
+    },
+    {
+      "line": 868,
+      "name": "ActiveBrandLimit",
+      "kind": "BASE"
+    },
+    {
+      "line": 869,
+      "name": "EnemyCurseLimit",
+      "kind": "BASE"
+    },
+    {
+      "line": 870,
+      "name": "EnemyMarkLimit",
+      "kind": "BASE"
+    },
+    {
+      "line": 871,
+      "name": "SocketedCursesHexLimitValue",
+      "kind": "BASE"
+    },
+    {
+      "line": 872,
+      "name": "ProjectileCount",
+      "kind": "BASE"
+    },
+    {
+      "line": 873,
+      "name": "PhysicalHeavyStunBuildup",
+      "kind": "MORE"
+    },
+    {
+      "line": 874,
+      "name": "EnemyHeavyStunBuildup",
+      "kind": "MORE"
+    },
+    {
+      "line": 875,
+      "name": "AilmentMagnitude",
+      "kind": "MORE"
+    },
+    {
+      "line": 876,
+      "name": "Condition:BloodStance",
+      "kind": "FLAG"
+    },
+    {
+      "line": 877,
+      "name": "Condition:PrideMinEffect",
+      "kind": "FLAG"
+    },
+    {
+      "line": 878,
+      "name": "MovementSpeed",
+      "kind": "INC"
+    },
+    {
+      "line": 879,
+      "name": "Condition:CanSprint",
+      "kind": "FLAG"
+    },
+    {
+      "line": 880,
+      "name": "PerBrutalTripleDamageChance",
+      "kind": "BASE"
+    },
+    {
+      "line": 881,
+      "name": "PerAfflictionAilmentDamage",
+      "kind": "BASE"
+    },
+    {
+      "line": 882,
+      "name": "PerAfflictionNonDamageEffect",
+      "kind": "BASE"
+    },
+    {
+      "line": 883,
+      "name": "PerAbsorptionElementalEnergyShieldRecoup",
+      "kind": "BASE"
+    },
+    {
+      "line": 884,
+      "name": "CharmLimit",
+      "kind": "BASE"
+    },
+    {
+      "line": 885,
+      "name": "ManaDegenPercent",
+      "kind": "BASE"
+    },
+    {
+      "line": 886,
+      "name": "LifeDegenPercent",
+      "kind": "BASE"
+    },
+    {
+      "line": 887,
+      "name": "WeaponSwapSpeed",
+      "kind": "BASE"
+    },
+    {
+      "line": 888,
+      "name": "Speed",
+      "kind": "INC"
+    },
+    {
+      "line": 889,
+      "name": "Speed",
+      "kind": "INC"
+    },
+    {
+      "line": 890,
+      "name": "MovementSpeed",
+      "kind": "INC"
+    },
+    {
+      "line": 891,
+      "name": "DeflectEffect",
+      "kind": "INC"
+    },
+    {
+      "line": 892,
+      "name": "Evasion",
+      "kind": "INC"
+    },
+    {
+      "line": 893,
+      "name": "SkillSlots",
+      "kind": "BASE"
+    },
+    {
+      "line": 894,
+      "name": "MaxLineageCount",
+      "kind": "BASE"
+    },
+    {
+      "line": 895,
+      "name": "Multiplier:AncestralBoostEffect",
+      "kind": "BASE"
+    },
+    {
+      "line": 896,
+      "name": "AncestralBoostMoreDamage",
+      "kind": "BASE"
+    },
+    {
+      "line": 897,
+      "name": "AncestralBoostAreaOfEffect",
+      "kind": "INC"
+    },
+    {
+      "line": 898,
+      "name": "AdditionalStrikeTarget",
+      "kind": "BASE"
+    },
+    {
+      "line": 899,
+      "name": "Condition:Empowered",
+      "kind": "FLAG"
+    }
+  ]
+}

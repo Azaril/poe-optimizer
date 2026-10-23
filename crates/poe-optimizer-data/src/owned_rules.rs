@@ -58,7 +58,7 @@ pub fn validate_contribution_queries<I: DefinitionSchemaIndex>(
     Ok(usage)
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct RuleStorageLimits {
     pub max_ordered_queries: usize,
     pub max_ordered_groups: usize,

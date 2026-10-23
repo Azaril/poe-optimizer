@@ -76,7 +76,7 @@ impl OwnedRecipeView<'_> {
 
 /// Constituent constructors retain independent aggregate resource budgets. This
 /// wrapper also bounds total input/output bytes and indexed registry checks.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct OwnedRecipeLimits {
     pub max_wire_bytes: usize,
     pub max_output_bytes: usize,
@@ -131,6 +131,8 @@ pub enum OwnedRecipeError {
     Limit(&'static str),
     #[error("recipe registry and schema namespaces disagree")]
     Namespace,
+    #[error("checked recipe does not match the supplied recipe input")]
+    InputMismatch,
     #[error("schema address is not active in the supplied registry: {0:?}")]
     Unregistered(Box<SchemaSubject>),
     #[error(transparent)]

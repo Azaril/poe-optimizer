@@ -45,7 +45,7 @@ node renaming, retains read/operand/effect semantics and order, checks exact
 owner membership, and compiles the complete reconstructed rule package with the
 existing Engine. Non-program metadata and all incomplete-coverage declarations
 must remain unchanged except for the explicitly admitted 69 Stat declarations,
-one Sniper initial-type program and 349 intrinsic support-domain declarations.
+one Sniper initial-type program and 350 intrinsic support-domain declarations.
 The release test removes exactly that delta,
 restores historical program members and uses checked content constructors to bind
 the original dependencies. Every reconstructed historical artifact length/hash
@@ -75,9 +75,9 @@ Skill Boolean Stats. See [evidence and limits](../initial-skill-types/README.md)
 Eight existing Skill, Actor and declared-slot owners, three root/Ascendancy
 owners, four UsagePolicies, 293 ordinary attribute-choice passives, eighteen
 reviewed numeric minion passives, seven class-view passives, one intrinsic socket,
-one Boolean-flag passive, six structurally reviewed passives and all eight Classes now have intrinsic
-support-source domains,
-bringing the total to 1,335 (1,306 Known, 29 Unmapped).
+one Boolean-flag passive, six structurally reviewed passives, all eight Classes
+and the shared Player Actor now have intrinsic support-source domains,
+bringing the total to 1,336 (1,307 Known, 29 Unmapped).
 See [source evidence and boundaries](../sniper-support-domains/README.md).
 The [attribute-choice proof](../attribute-support-domains/README.md) includes
 every option and retains the current six Count contribution channels.
@@ -96,6 +96,10 @@ The [Class proof](../class-support-domains/README.md) covers all eight mapped
 classes, their base attributes and unarmed defaults. Start nodes, Ascendancies
 and foreign weapon modifiers retain separate ownership; all sixteen numerical
 programs remain Partial.
+The [shared Player proof](../player-support-domains/README.md) covers its intrinsic
+initializer and generic modifier constructors. Foreign sources and the nine
+Partial numerical programs remain independently accountable; the UI fallback
+action supplies no native coverage.
 Inherited supports remain present, external origins remain independently checked,
 and all numerical Partial coverage stays unchanged. No new names or IDs are
 allocated by this metadata update.
@@ -118,10 +122,10 @@ serve as production names.
 
 ## Checked source inventory
 
-Current input: `615c66506ee4421ab03b1eef95486d8fa532755846168bb7738cee3c97e8d26e`.
+Current input: `3ede2f3da137c16ccf3a3d3cbb914f9b1a65db717d86edd339346ccdbdd22d43`.
 The 103 packets reference 2,562 distinct complete rule sources, preserving all
 8,213 occurrences. Their local name files use 5,011 distinct exact addresses;
-the declaration ledger adds 69 names. The 2,787 declared inputs occupy 5,789,428
-encoded and 58,665,128 decoded bytes; the root manifest is 183,544 bytes.
+the declaration ledger adds 69 names. The 2,787 declared inputs occupy 5,789,442
+encoded and 58,665,360 decoded bytes; the root manifest is 183,544 bytes.
 All fit the existing default limits. The maintained Authoring tests check actual
 source graphs, historical artifacts and the new initial-type projection.

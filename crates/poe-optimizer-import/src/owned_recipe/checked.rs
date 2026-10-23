@@ -79,6 +79,7 @@ pub(crate) fn validate_definition_space(
 #[derive(Clone, Debug)]
 pub struct CheckedOwnedRecipe {
     input_identity: OwnedContentDigest,
+    construction_limits: OwnedRecipeLimits,
     registry: OwnedIdRegistrySnapshot,
     schema: Arc<OwnedDefinitionSchemaPackage>,
     rules: Arc<OwnedRulePackage>,
@@ -101,6 +102,7 @@ impl CheckedOwnedRecipe {
         let compiled_rules = CompiledRulePackage::compile_stored(&rules, &schema, limits.compile)?;
         Ok(Self {
             input_identity,
+            construction_limits: limits,
             registry,
             schema: Arc::new(schema),
             rules: Arc::new(rules),
@@ -128,6 +130,24 @@ impl CheckedOwnedRecipe {
     }
     pub fn compiled_rules(&self) -> &Arc<CompiledRulePackage> {
         &self.compiled_rules
+    }
+
+    /// Reuse only the exact supplied input under the limits that checked it.
+    /// A different budget runs the ordinary constructor again, including compiler
+    /// work limits. No caller-supplied claim can widen the retained authority.
+    pub(crate) fn check_for_input(
+        self,
+        input: OwnedRecipeView<'_>,
+        limits: OwnedRecipeLimits,
+    ) -> Result<Self, OwnedRecipeError> {
+        if check_recipe_input(input, limits)? != self.input_identity {
+            return Err(OwnedRecipeError::InputMismatch);
+        }
+        if limits == self.construction_limits {
+            Ok(self)
+        } else {
+            Self::new(input.to_input(), limits)
+        }
     }
 
     pub(crate) fn view(&self) -> OwnedRecipeView<'_> {

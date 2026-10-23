@@ -19,7 +19,7 @@ use poe_optimizer_import::{
     owned_release::{
         OWNED_EVALUATION_RELEASE_VERSION, OWNED_RELEASE_VERSION, OwnedReleaseError,
         OwnedReleaseInput, OwnedReleaseLimits, StagedOwnedRelease, assemble_owned_release,
-        check_release_source_dependencies,
+        assemble_owned_release_with_checked_recipe, check_release_source_dependencies,
     },
     owned_release_evaluation::{OwnedReleaseEvaluationContent, OwnedReleaseSupportContent},
 };
@@ -788,14 +788,16 @@ pub fn build_release(
     input.items = imports.items;
     input.item_source = imports.item_source;
     input.tree = imports.tree;
-    if let Some(content) = evaluation {
+    let decoded_bytes = decoder.decoded_bytes;
+    let release = if let Some(content) = evaluation {
         let recipe = CheckedOwnedRecipe::new(input.recipe.clone(), limits.release.recipe)
             .map_err(OwnedReleaseError::Recipe)?;
         input.evaluation = Some(content.into_input(&recipe, limits.release)?);
         input.schema_version = OWNED_EVALUATION_RELEASE_VERSION;
-    }
-    let decoded_bytes = decoder.decoded_bytes;
-    let release = assemble_owned_release(input, limits.release)?;
+        assemble_owned_release_with_checked_recipe(input, recipe, limits.release)?
+    } else {
+        assemble_owned_release(input, limits.release)?
+    };
     if manifest
         .expected_input
         .is_some_and(|expected| expected != release.receipt().input)

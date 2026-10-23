@@ -26,7 +26,7 @@ pub enum ActionRoutingContent {
     },
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct RoutingLimits {
     pub max_outputs: usize,
     pub max_routes: usize,

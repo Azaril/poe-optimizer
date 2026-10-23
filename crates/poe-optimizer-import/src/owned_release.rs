@@ -17,8 +17,8 @@ use crate::{
         validate_role_bound_normalization,
     },
     owned_recipe::{
-        OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
-        stage_checked_recipe,
+        CheckedOwnedRecipe, OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits,
+        StagedOwnedRecipe, stage_checked_recipe,
     },
     owned_release_evaluation::{
         CheckedOwnedReleaseEvaluation, OwnedReleaseEvaluationError, OwnedReleaseEvaluationInput,
@@ -618,6 +618,21 @@ pub fn assemble_owned_release(
     limits: OwnedReleaseLimits,
 ) -> Result<StagedOwnedRelease> {
     stage_checked_owned_release(CheckedOwnedRelease::check((&input).into(), limits)?)
+}
+
+/// Assemble with a recipe already checked while constructing authored evaluation
+/// dependencies. Complete release validation still runs, and the recipe must
+/// match this exact input. Different recipe limits invoke its ordinary constructor.
+pub fn assemble_owned_release_with_checked_recipe(
+    input: OwnedReleaseInput,
+    recipe: CheckedOwnedRecipe,
+    limits: OwnedReleaseLimits,
+) -> Result<StagedOwnedRelease> {
+    stage_checked_owned_release(CheckedOwnedRelease::check_with_recipe(
+        (&input).into(),
+        limits,
+        recipe,
+    )?)
 }
 
 /// Offline publication of a validated release; evaluation uses the checked

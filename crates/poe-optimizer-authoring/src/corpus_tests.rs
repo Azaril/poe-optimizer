@@ -845,6 +845,19 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
             domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
         });
     }
+    let player = SchemaSubject::Definition(DefinitionAddress::Actor(ActorDefId::new(
+        ns.clone(),
+        key("332a"),
+    )));
+    let mut player_owners = original.owners.iter().filter(|owner| owner.owner == player);
+    let player_owner = player_owners.next().unwrap();
+    assert!(player_owners.next().is_none());
+    assert!(!player_owner.programs.is_complete());
+    assert_eq!(player_owner.programs.members.len(), 9);
+    expected_domains.push(SupportSourceDomainDeclaration {
+        owner: player,
+        domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+    });
     let domains = &mut preserved.support_discovery.as_mut().unwrap().providers;
     let prior_domains = &expected.support_discovery.as_ref().unwrap().providers;
     assert_eq!(domains.len(), prior_domains.len() + expected_domains.len());
