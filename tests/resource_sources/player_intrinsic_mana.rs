@@ -1,22 +1,11 @@
 //! Intrinsic Mana parity and checked release publication; no final pool claim.
-#[path = "support/owned_empty_support_domain.rs"]
-mod empty_support;
-#[path = "support/owned_player_intrinsic_mana.rs"]
+#[allow(unused_imports)]
+use super::{empty_support, migration_preservation, preservation, publication, release, selected};
+#[path = "../support/owned_player_intrinsic_mana.rs"]
 mod family;
-#[path = "support/owned_release_migration_preservation.rs"]
-mod migration_preservation;
 #[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_support_delivery_publication.rs"]
-mod publication;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[allow(dead_code)]
-#[path = "support/owned_plan_replay.rs"]
+#[path = "../support/owned_plan_replay.rs"]
 mod replay;
-#[path = "support/owned_selected_request.rs"]
-mod selected;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;
 use poe_optimizer_import::owned_recipe::OwnedRecipeInput;

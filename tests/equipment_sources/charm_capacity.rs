@@ -1,23 +1,15 @@
+#[allow(unused_imports)]
+use super::{preservation, publication, release, selected};
 #[allow(dead_code)]
-#[path = "support/owned_charm_capacity.rs"]
+#[path = "../support/owned_charm_capacity.rs"]
 mod packet;
 use poe_optimizer_core::{owned_rules::*, owned_schema::*};
 use poe_optimizer_import::owned_recipe::{OwnedRecipeInput, assemble_owned_recipe};
 use serde_json::Value;
 use std::{fs, path::PathBuf};
 
-#[allow(dead_code)]
-#[path = "support/owned_release_migration_preservation.rs"]
-mod migration_preservation;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_support_delivery_publication.rs"]
-mod publication;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[path = "support/owned_selected_request.rs"]
-mod selected;
+#[allow(unused_imports)]
+use super::migration_preservation;
 
 #[test]
 fn authenticated_capacity_packet_keeps_exact_local_and_player_ownership() {
@@ -125,7 +117,7 @@ fn exact_recipe_transition_rejects_drift_preserves_inverse_and_compiles() {
 
 // Source metadata only: the independent native delivery tests remain unchanged.
 #[allow(dead_code)] // stage is also consumed by the explicit shared publication gate.
-#[path = "support/owned_charm_scalability.rs"]
+#[path = "../support/owned_charm_scalability.rs"]
 mod scalability;
 
 #[test]

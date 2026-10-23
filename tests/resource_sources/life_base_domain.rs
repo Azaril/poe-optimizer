@@ -1,16 +1,9 @@
 //! The bounded union uses actual contribution bodies, never source zero inference.
+#[allow(unused_imports)]
+use super::{preservation, publication, release, selected};
 #[allow(dead_code)]
-#[path = "support/owned_life_base_domain.rs"]
+#[path = "../support/owned_life_base_domain.rs"]
 mod family;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_support_delivery_publication.rs"]
-mod publication;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[path = "support/owned_selected_request.rs"]
-mod selected;
 use poe_optimizer_core::{
     owned_build::ParameterValue,
     owned_definitions::{BoundedInteger, FiniteQuantity},

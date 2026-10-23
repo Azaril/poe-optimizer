@@ -1,18 +1,9 @@
 //! Authenticated final Life arithmetic; whole-build admission stays open.
+#[allow(unused_imports)]
+use super::{migration_preservation, preservation, publication, release, selected};
 #[allow(dead_code)]
-#[path = "support/owned_player_life_pool.rs"]
+#[path = "../support/owned_player_life_pool.rs"]
 mod family;
-#[path = "support/owned_release_migration_preservation.rs"]
-mod migration_preservation;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_support_delivery_publication.rs"]
-mod publication;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[path = "support/owned_selected_request.rs"]
-mod selected;
 use serde_json::json;
 use std::path::PathBuf;
 

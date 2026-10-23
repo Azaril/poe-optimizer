@@ -1,21 +1,15 @@
 //! Global Energy Shield inputs; complete source inventory and coverage stay explicit.
-#[path = "support/owned_global_energy_shield_inputs.rs"]
+#[allow(unused_imports)]
+use super::{migration_preservation, preservation, release, selected};
+#[path = "../support/owned_global_energy_shield_inputs.rs"]
 mod family;
-#[path = "support/owned_identity_correspondence.rs"]
-mod identity;
-#[path = "support/owned_global_energy_shield_native.rs"]
+#[allow(unused_imports)]
+use super::identity;
+#[path = "../support/owned_global_energy_shield_native.rs"]
 mod native;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_global_energy_shield_probes.rs"]
+#[path = "../support/owned_global_energy_shield_probes.rs"]
 mod probes;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[allow(dead_code)]
-#[path = "support/owned_selected_request.rs"]
-mod selected;
-#[path = "support/owned_global_energy_shield_validation.rs"]
+#[path = "../support/owned_global_energy_shield_validation.rs"]
 mod validation;
 
 use serde_json::{Value, json};

@@ -54,6 +54,17 @@ ignored publication entry points are preserved, with three identical preservatio
 laws registered once. Shared helper APIs and their other callers remain intact.
 This removes redundant compilation units without retiring the still-live
 publication assertions or claiming those ignored utilities have run.
+The audited 24 resource/equipment roots now share two suites with their distinct
+ordinary and ignored laws retained. The three identical preservation laws run
+once per suite; 28 repeated evasion registrations are also removed after proving
+identical effective bindings. Distinct family laws remain, and shared helpers
+register once without duplicate-module lint allowances. The one external Player
+ownership consumer retains its existing tests through the shared parent binding.
+The obsolete intrinsic CLI publication target is deleted after moving its useful
+optional exporter/digest/no-clobber law into acquisition. Maintained class/source
+and declaration laws already own its semantic proofs. Its shared predecessor and
+three live item/weapon/extension callers remain until their own migration; this
+does not yet remove that production compiler.
 
 Atomic authoring checkpoints replace the old flat authoring CLI output contract
 and its optional caller-assembled declaration context. All CLI builds now preserve

@@ -1,18 +1,8 @@
 //! Scalability metadata reconciliation, without widening item admission.
-#[path = "support/owned_flat_life_scalability.rs"]
+#[allow(unused_imports)]
+use super::{migration_preservation, preservation, publication, release, selected};
+#[path = "../support/owned_flat_life_scalability.rs"]
 mod family;
-#[allow(dead_code)]
-#[path = "support/owned_release_migration_preservation.rs"]
-mod migration_preservation;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_support_delivery_publication.rs"]
-mod publication;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[path = "support/owned_selected_request.rs"]
-mod selected;
 use serde_json::{Value, json};
 use std::path::PathBuf;
 

@@ -596,6 +596,14 @@ to recover IDs. Before a second allocation generation needs a new predecessor,
 R3 must provide an archived/distributed complete checked snapshot; do not grow a
 chain of historical source rebuilds. Source-format cutovers regenerate the
 canonical checkpoint deliberately instead of retaining compatibility readers.
+The checkpoint reader validates a full snapshot without following its recorded
+predecessor digest. `poe-author release verify CHECKPOINT_DIRECTORY --expected DIGEST`
+uses that same reader, validates runtime and ledger together and reports their
+checked identities without writing. It needs neither authored source files nor
+ancestor checkpoints. Standard archive transport may wrap this exact directory;
+transport is not a second semantic format, a source-reproduction proof or the
+compact runtime representation. Keep a durable checkpoint reference independent
+of CI artifact retention before advancing allocation history.
 
 Rule source composition uses `rule-packet "family/packet.kdl"
 names="family/names.kdl"` and explicit `rule-source "rules/example.rule"`

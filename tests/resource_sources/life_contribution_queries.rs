@@ -1,16 +1,9 @@
 //! Publish canonical Life query membership through the current owned release path.
+#[allow(unused_imports)]
+use super::{preservation, publication, release, selected};
 #[allow(dead_code)]
-#[path = "support/owned_life_contribution_queries.rs"]
+#[path = "../support/owned_life_contribution_queries.rs"]
 mod family;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_support_delivery_publication.rs"]
-mod publication;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[path = "support/owned_selected_request.rs"]
-mod selected;
 use serde_json::json;
 use std::path::PathBuf;
 

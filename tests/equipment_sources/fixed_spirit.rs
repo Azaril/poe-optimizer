@@ -1,19 +1,13 @@
 //! Fixed Spirit source admission; existing native mechanics and coverage remain.
-#[path = "support/owned_fixed_spirit.rs"]
+#[allow(unused_imports)]
+use super::{migration_preservation, preservation, release, selected};
+#[path = "../support/owned_fixed_spirit.rs"]
 mod family;
-#[path = "support/owned_identity_correspondence.rs"]
-mod identity;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_fixed_spirit_probes.rs"]
+#[allow(unused_imports)]
+use super::identity;
+#[path = "../support/owned_fixed_spirit_probes.rs"]
 mod probes;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[allow(dead_code)]
-#[path = "support/owned_selected_request.rs"]
-mod selected;
-#[path = "support/owned_fixed_spirit_validation.rs"]
+#[path = "../support/owned_fixed_spirit_validation.rs"]
 mod validation;
 
 use serde_json::{Value, json};

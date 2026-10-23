@@ -2,9 +2,7 @@
 //! Implicit passives, ascendancies, items, skills and external effects are excluded
 //! here. Actual class Partial owners remain production authority; no final Life
 //! reducer or incoming-contributor completeness is authored by this fixture.
-#[path = "owned_empty_support_domain.rs"]
-pub(super) mod empty_support;
-use super::{family, release};
+use super::{empty_support, family, release};
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*,
 };

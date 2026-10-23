@@ -15,7 +15,7 @@ use std::{
 #[derive(Parser)]
 #[command(
     name = "poe-author",
-    about = "Offline release construction and syntax only rule formatting",
+    about = "Offline release construction, verification and syntax only rule formatting",
     after_help = "Input files and existing output directories are never overwritten."
 )]
 struct Cli {
@@ -41,7 +41,7 @@ enum Command {
     /// Work with rule source programs
     #[command(subcommand)]
     Rule(RuleCommand),
-    /// Construct releases from checked final constituents
+    /// Build or verify immutable authoring checkpoints
     #[command(subcommand)]
     Release(release_cli::Command),
 }

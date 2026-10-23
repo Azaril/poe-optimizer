@@ -1,8 +1,6 @@
 //! Actual derived receiver with finite final-input producers; no native final
 //! Strength/flag calculation or real contributor completeness is implied.
-#[path = "owned_empty_support_domain.rs"]
-mod empty_support;
-use super::{family, release};
+use super::{empty_support, family, release};
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*,
 };

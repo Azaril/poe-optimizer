@@ -20,6 +20,18 @@ use std::{
 pub(super) enum Command {
     /// Compile and atomically publish a name ledger and runtime release together
     Build(BuildCommand),
+    /// Validate a complete checkpoint without source files or earlier checkpoints
+    Verify(VerifyCommand),
+}
+
+#[derive(Args)]
+pub(super) struct VerifyCommand {
+    /// Complete immutable checkpoint directory, including names and runtime
+    #[arg(value_name = "CHECKPOINT_DIRECTORY")]
+    checkpoint: PathBuf,
+    /// Exact expected checkpoint identity obtained independently of this directory
+    #[arg(long, value_name = "DIGEST")]
+    expected: OwnedContentDigest,
 }
 
 #[derive(Args)]
@@ -74,7 +86,35 @@ fn read(path: &Path, maximum: usize) -> Result<Vec<u8>, String> {
 }
 
 pub(super) fn run(command: Command) -> Result<ExitCode, String> {
-    let Command::Build(command) = command;
+    match command {
+        Command::Build(command) => build(command),
+        Command::Verify(command) => verify(command),
+    }
+}
+
+fn verify(command: VerifyCommand) -> Result<ExitCode, String> {
+    let checkpoint = load_checkpoint(
+        &command.checkpoint,
+        command.expected,
+        CheckpointLimits::default(),
+    )?;
+    let receipt = checkpoint.receipt();
+    let report = serde_json::json!({
+        "checkpoint": checkpoint.identity(),
+        "names": receipt.names.identity,
+        "runtime_input": receipt.runtime.input,
+        "runtime_registry": receipt.runtime.registry,
+    });
+    let mut stdout = io::stdout().lock();
+    serde_json::to_writer(&mut stdout, &report)
+        .map_err(|e| format!("cannot write checkpoint verification: {e}"))?;
+    stdout
+        .write_all(b"\n")
+        .map_err(|e| format!("cannot write checkpoint verification: {e}"))?;
+    Ok(ExitCode::SUCCESS)
+}
+
+fn build(command: BuildCommand) -> Result<ExitCode, String> {
     let checkpoint_limits = CheckpointLimits::default();
     let limits = checkpoint_limits.build;
     let predecessor = command
@@ -229,7 +269,7 @@ fn load_checkpoint(
     let receipt: AuthoringCheckpointReceipt = serde_json::from_slice(&checkpoint)
         .map_err(|e| format!("invalid checkpoint receipt: {e}"))?;
     if receipt.identity(limits).map_err(|e| e.to_string())? != expected {
-        return Err("expected predecessor checkpoint identity differs".into());
+        return Err("expected checkpoint identity differs".into());
     }
     let mut left = limits
         .max_checkpoint_bytes

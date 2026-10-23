@@ -51,6 +51,21 @@ checkpoint identity on stderr after successful publication. The output contains
 only `checkpoint.json`, `names.json`, and `runtime/`; runtime consumers receive the
 last directory. A failed predecessor load never falls back to bootstrap.
 
+To validate a transported checkpoint independently of its sources and ancestors:
+
+```powershell
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release verify first-checkpoint --expected $checkpointIdentity
+```
+
+Supply the expected identity of the directory being verified from a maintained
+reference. The command uses the same bounded loader as `release build` and emits
+compact JSON containing `checkpoint`, `names`, `runtime_input` and
+`runtime_registry` only after full validation. It writes no files. A valid receipt
+alone is insufficient: the exact ledger and complete runtime inventory are required.
+This verifies a snapshot, not its source reproducibility or any build's coverage.
+An archive may transport the unchanged directory; durable distribution remains an
+R3 requirement before a second allocation generation needs a new predecessor.
+
 An optional `stat-declarations "definitions.kdl" names="declaration-names.kdl"`
 manifest record uses the existing bounded source decoder, KDL declaration parser
 and typed name loader. Declaration lookup aliases remain local; packets receive

@@ -16,8 +16,7 @@ use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use std::{fs, path::PathBuf};
 
-#[path = "owned_crown_declarations_evidence.rs"]
-mod evidence;
+use super::declaration_evidence as evidence;
 
 const KIND: &str = "source-bound-crown-intrinsic-declarations";
 const DOMAIN: &str = "owned-crown-intrinsic-declarations-v1";

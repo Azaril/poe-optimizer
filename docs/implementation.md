@@ -16,7 +16,7 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 The computed-support unused-input repair, immutable typed Stat declaration compiler,
 original-source dependency validation and complete Import content construction
 under R2 are implemented. Typed Stat staging uses explicit persisted names and
-packet-local symbols in the same compiler. The current checkpoint constructs
+packet-local symbols in the same compiler. Authoring constructs
 evaluation packages from authored content against the final checked recipe,
 alongside rule/routing and Import dependencies. Runtime headers are rejected in
 the replaced evaluation source format; complete final validation remains mandatory.
@@ -27,10 +27,16 @@ from Import. The configuration-accounting adapter for strictly empty custom
 sources is implemented behind explicit census authority; production activation
 still requires its source proof. Validation passes after repairing two invalid
 new test fixtures; the complete affected normalization suite was rerun.
-This checkpoint moves Import/rule authored content and its reconstruction
+The preceding checkpoint moved Import/rule authored content and its reconstruction
 into Authoring, while Import retains exact source validation and checked owners.
 Six root CLI configuration test targets now share one suite. Both changes are
 implemented and validated; no production data or completeness is changed.
+The current checkpoint consolidates the audited 24 resource/equipment targets into
+two suites, retires the redundant intrinsic publication target after preserving
+its useful acquisition law, and exposes read-only complete-checkpoint verification.
+Both CLI feature profiles and strict Clippy pass, alongside the complete Authoring
+suite and retained Import intrinsic laws. Production mechanics and completeness
+are unchanged.
 The delivery driver also has a validated private repair: exact receiving
 effects, source memberships, summoner dependencies and prepared outputs determine
 applicability preparation. An unused selection container no longer needs invented
@@ -85,7 +91,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; current checkpoint moves Import/rule content to Authoring, consolidates configuration tests and repairs unused container preparation |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; current checkpoint verifies transported snapshots, consolidates resource/equipment suites and retires the redundant intrinsic publication target |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -95,7 +101,7 @@ silently become a second supported implementation.
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 69 Stats, one Sniper initial-type program and 350 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,336 source domains (1,307 Known, 29 Unmapped). Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | On October 23, `cc694b76` run `40026008563` is pending behind running `d490eb54` run `40011474882`; the latest public job check found thirteen successful, five running and none failed. Intermediate pending runs, including `eda3612b`, were coalesced. Earlier `96e5533e` run `39962517895` completed successfully: its final Windows CLI-1 job passed both feature profiles at 19:37 UTC after 5h50m. No timeout or test failure occurred. Baselines `a7069aa1` and `ae90ec82` also passed. Main-branch serialization preserves the running revision and coalesces pending revisions; previous success does not certify newer commits |
+| CI | At the October 23 pre-push verification, `d9b905d2` run `40034141134` is pending behind running `d490eb54` run `40011474882`; the latest public job check found seventeen successful, one running and none failed. Intermediate pending runs, including `eda3612b`, were coalesced. Earlier `96e5533e` run `39962517895` completed successfully: its final Windows CLI-1 job passed both feature profiles at 19:37 UTC after 5h50m. No timeout or test failure occurred. Baselines `a7069aa1` and `ae90ec82` also passed. Main-branch serialization preserves the running revision and coalesces pending revisions; previous success does not certify newer commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First reproduce the allocation predecessor using the
@@ -670,7 +676,7 @@ Plans and metadata are recorded in `runs/configuration-suite-shard-plans.json` a
 `runs/configuration-suite-clean-metadata.json`. Removing five binaries per profile
 is not a measured speed-up against the stale old binaries.
 
-Next R0 cohort, read-only audit on October 23: 24 resource/equipment roots share
+Current R0 cohort, implemented on October 23: 24 resource/equipment roots share
 the same `selected`, `release` and `preservation` bindings; 22 also share the same
 publication helper. Their 80-file closure has 210 module occurrences and no
 protected files or process-global setup. The ten resource roots are
@@ -685,13 +691,49 @@ The fourteen equipment/defence roots are `owned_item_evasion_property`,
 `owned_fine_belt_modifiers`, `owned_global_energy_shield_inputs`,
 `owned_local_defence_composition`, `owned_cold_item_delivery`,
 `owned_fixed_spirit` and `owned_charm_capacity`. Keep conflicting `family`,
-`native`, `validation` and `probes` aliases child-local. The current source has
-181 ordinary and 51 ignored registrations; registering the three identical
-preservation laws once yields 112 ordinary plus 51 ignored in one suite, or 115
-plus 51 in two suites. Native helper laws and ignored cases are distinct and must
-remain. Choose the split using measured build/execution cost; compare bodies,
-environment names, both compiled profile inventories and dynamic shard coverage.
-This is a follow-up audit, not implemented consolidation or a speed-up claim.
+`native`, `validation` and `probes` aliases child-local. The two new suites are
+`resource_sources` (26 ordinary/19 ignored) and `equipment_sources` (61/32).
+The original source registered 181 ordinary and 51 ignored cases. The same three
+preservation laws now run once per suite. Strict Clippy then exposed additional
+repeated helper modules; the repair also removes 28 registrations of identical
+evasion laws after proving their complete effective parent bindings equal. Every
+distinct native law and all 51 ignored utilities remain. Two
+suites preserve coherent domains and two independently shardable compilation
+units; there is no measured speed-up claim. Independent review matched all 24
+normalized child bodies to their pre-edit hashes, resolved every module path and
+confirmed unchanged environment names and no process-global mutation. Before
+the helper repair, both compiled profiles passed: optional-PoB had 118 passing
+tests including three acquisition laws, and native-only had 116 including its help
+exclusion law; both retained exactly 51 existing ignored utilities. Builds took 7m53s and 8m00s.
+Equipment execution took 11.84s/12.36s, resources 0.31s in each, and acquisition
+3.94s/0.28s. Logs: `runs/resource-equipment-acquisition-all-features-tests.log`
+and `runs/resource-equipment-acquisition-native-tests.log`.
+
+The final shared layout has no duplicate module registrations: 32 resource and
+57 equipment modules. Six narrow shared-helper prelude changes supply their
+dependencies from parents; their bodies and source assertions are unchanged.
+Crown and Leggings keep explicit distinct witnesses and equivalent root/hash
+helpers. The one external consumer, `owned_player_rule_ownership`, retains four
+ordinary and nine ignored tests. Both agents independently reviewed the repairs;
+no duplicate-module lint allowance is added. Strict Clippy passes for Authoring
+and all four affected CLI targets. Final profile reruns pass: all-features has
+94 passing tests and native-only has 92, each with 60 existing ignored utilities
+(including the external Player ownership target's nine). Builds took 10m01s and
+10m12s. Equipment execution took 6.76s/6.84s, resources 0.30s each, acquisition
+0.96s/0.32s and Player ownership 0.01s each. These final runs validate the shared
+helper repair; the earlier runs above describe its predecessor layout. Logs:
+`runs/resource-equipment-shared-all-features-tests.log`,
+`runs/resource-equipment-shared-native-tests.log` and
+`runs/resource-equipment-shared-final-clippy.log`.
+
+Current clean-checkout metadata has 250 runnable CLI targets, selected exactly
+once across four shards (64/62/62/62) in both feature profiles, plus one separately
+accounted Cargo build-script dependency. Both new suites are selected once and
+all 25 retired roots are absent. The two protected untracked root tests are
+excluded only from this clean-checkout simulation. Plans and metadata are in
+`runs/resource-equipment-shard-plans.json` and
+`runs/resource-equipment-clean-metadata.json`. This inventory is not a CI speed-up
+measurement.
 
 **In progress.** Inventory test targets and live consumers; select the
 minimum retained semantic fixture set from the current release and all five raw
@@ -978,20 +1020,47 @@ retiring its historical compiler/migration callers. The aggregate normalization
 content builder remains a shared offline seam; do not export every child helper
 or move that historical compiler closure wholesale. This source-content cut adds
 neither a parallel assembler nor another obsolete publisher to preserve.
-The next bounded retirement is `tests/owned_intrinsic_cli.rs`: its 32 unarmed
+The current bounded retirement removes `tests/owned_intrinsic_cli.rs`: its 32 unarmed
 numerical/channel/unit/Partial laws and nine-row source/exclusion laws already run
 in maintained `release/class_support_domains.rs` and `class_support_source.rs`.
-First move its optional-PoB `optional_export_reproduces_checked_catalog_without_runtime_ui`
-law to `tests/owned_acquisition_cli.rs`, retaining the exact catalog/digest, nine
-exported Classes and second-run no-clobber checks. Then remove the redundant
-two-test ordinary publication chain. Compiler-negative cases remain independently
+Its optional-PoB `optional_export_reproduces_checked_catalog_without_runtime_ui`
+law now lives in `tests/owned_acquisition_cli.rs`, retaining the exact catalog/digest,
+nine exported Classes and full-directory second-run no-clobber checks. The redundant
+two-test ordinary publication chain is removed. Compiler-negative cases remain independently
 covered by Import's `owned_intrinsic_attack` tests. Keep the shared intrinsic
 predecessor until `owned_item_bases_cli`, `owned_weapon_profiles_cli` and
 `owned_extension_cli` move; those live callers still block deleting its production
 compiler. The Class compiler also retains eight Import unit laws. Moving the
 allocator/publication implementation prematurely would still create cycles through
-the seven allocator families and release revision/migration. This audit is recorded
-work, not completed retirement.
+the seven allocator families and release revision/migration. Historical descriptor
+ordering, intermediate operation versions and Pending-all counts are intentionally
+retired; maintained named declarations instead require permutation-stable allocation.
+This does not retire the production intrinsic compiler while those three callers
+remain. All nine retained Import intrinsic laws pass (9m04s compilation / 3.47s
+execution; `runs/intrinsic-retirement-import-tests.log`). Maintained Authoring
+class/source and checkpoint laws pass in the complete 334-test package run.
+
+Next bounded R1 retirement, audited October 23: transfer the finite item-base law
+from `owned_item_bases_cli` into the maintained Authoring release harness, covering
+all 1,756 catalog/policy identities, exact capability true/false, target ownership
+and Partial numerical coverage (337 profile tables / 1,419 absent). Move its
+optional exporter unchanged to acquisition, then delete that root. Follow with
+the 337 weapon profiles and all 14 field/default/omission/presence/unit laws;
+transfer that exporter and remove its root too. These whole-catalog laws are not
+yet maintained Authoring tests: current graph-equivalence and synthetic Import
+checks support transfer, but cannot substitute for it. Do not preserve obsolete
+registry endpoints, all-allocations-Pending or all-items-unresolved assertions.
+
+After those two leaf retirements, `owned_extension_cli` still consumes the shared
+intrinsic predecessor and intrinsic/item/weapon compiler commands; its defence
+helper is also the remaining test-side defence compiler caller. Preserve its
+Cleric whole-plan/parallel evidence until current execution declarations replace
+the historical readiness fixture. `extend_owned_recipe` also serves membership,
+modifier-value and Actor-baseline compilers. Optional source exporters still use
+catalog DTOs and profile duplicate-field decoding; do not delete whole modules
+with those live consumers. No maintained Authoring caller uses those old
+transformation APIs.
+
 Alongside the DSL work, parse external XML once through a bounded checked boundary
 and pass the parsed document to projections. Type item fields and split parsing
 stages. This parser cleanup is required by R4, but does not block R2 unless a
@@ -2501,6 +2570,84 @@ per-mechanic test binary. Fresh generation equals the checked-in canonical outpu
 
 ### R3 — One native library evaluator and efficient runtime data
 
+Checkpoint transport uses the existing complete directory, not another ledger
+format. The checked loader already validates the full runtime and ledger without
+following predecessor digests or loading old source. The new thin CLI command
+`poe-author release verify CHECKPOINT_DIRECTORY --expected DIGEST` exposes that
+same bounded loader and reports identities only after complete validation. It
+writes nothing and does not establish source reproducibility or build readiness.
+A standard archive may distribute these exact files; before the next allocation,
+publish a durable digest-addressed snapshot and verify it after clean extraction.
+The read-only verifier is implemented; durable publication remains outstanding.
+The complete Authoring target set passes: 168 library, eight CLI and 158 release
+tests, including source-free transport of a second allocation generation,
+continued allocation, wrong identity, corrupted artifacts and extra-file refusal.
+Compilation took 6m24s and the release suite 18.45s
+(`runs/checkpoint-verifier-authoring-tests.log`). The built command also verified
+the actual pinned genesis `e89ae92a...` and current reload `53e1c02a...`, reporting
+the expected ledger `dabf9a92...`, registry `003d28c7...` and their respective
+runtime inputs. Compact reports are in `runs/checkpoint-verifier-genesis.json`
+and `runs/checkpoint-verifier-current.json`; these are checks of real artifacts,
+not inferred identities or a claim of durable distribution.
+
+Measured current runtime inventory: 18 files / 66,073,441 bytes, leaving only
+1,035,423 bytes below the 64 MiB aggregate cap. Root checkpoint/name files add
+452,231 bytes. Transport compression does not reduce decoded limits or resident
+memory. Complete canonical compaction before expanding content; do not raise the
+cap or call a compressed JSON archive the binary runtime implementation.
+
+Next concrete format slice: Data-owned canonical schema storage. The current
+`schema.json` alone is 32,199,840 bytes. Core `DefId<K>` repeats namespace/kind/key;
+`SchemaPackageInput` already supplies an authoritative namespace. Implement an
+explicit typed schema wire projection with namespace hoisted once, kind checks
+and exact slot owners. Preserve arbitrary valid keys; do not assume allocator
+`def.<hex>` spelling or derive identity from descriptor order. Do not change global
+Core serde behavior, use ambient namespace state or rewrite arbitrary JSON fields.
+Keep qualified internal references until the separate indexed runtime cutover.
+
+Change Data's schema codec, Authoring's schema decoder and Import's schema decode/
+canonical comparison together. `stage_checked_recipe` already uses the schema
+encoder. Regenerate the maintained schema source and canonical predecessor at
+cutover, deleting the replaced wire reader without an autodetection fallback.
+Schema identity currently hashes the artifact bytes: first make the accepted
+semantic/artifact identity split explicit. A bounded streaming hash of canonical
+typed meaning can preserve semantic identity without retaining the expanded wire
+buffer. Charge reference count/nesting/expanded reconstruction before namespace
+clones so compact input cannot evade work/memory limits. Verify the full current
+schema, indices, units, slot ownership, Partial/Unmapped and absent/empty states,
+plus wrong-kind/local-reference/foreign-namespace and exact/one-short controls.
+This implementation contract needs no change to gameplay ownership or validation.
+The current schema has 163,507 identical namespace fields occupying 9,483,406
+bytes before commas (`runs/schema-namespace-inventory.json`). This is a lexical
+inventory supporting the first cut, not a measured codec size or memory saving.
+
+The cutover audit identifies these additional live boundaries:
+
+- `src/owned_tree_cli.rs` compact-successor loading is another standalone schema
+  reader. Migrate or retire it with the codec. Shared release, canonical-admission,
+  effective-gem and raw-gem test loaders also reconstruct schemas directly.
+- Regenerate all three live artifact groups: maintained
+  `migration-source/bootstrap/schema.json.gz`, `current/schema.json`, and
+  `import/compiled/schema.json`, together with their package commitments. Migrate
+  Authoring's `Sources::with_evaluation_content` and corpus/bootstrap fixture
+  decoding. Preserve protected work while updating actual consumers.
+- The maintained historical-restoration test currently requires original receipt
+  and artifact bytes. Retain its authenticated historical evidence and complete
+  semantic comparisons, but assert new encoding commitments separately. Do not
+  retain an old encoder or silently relabel new bytes as historical evidence.
+- Data/CLI schema laws and Import release, compact-successor, passive-refinement
+  and configuration-inventory fixtures need the new codec. Begin every wire
+  refusal test with an accepted new-format baseline so wrong-kind, duplicate/
+  missing-field, version, order and exact-limit controls cannot pass merely
+  because an obsolete format was rejected.
+
+Full R1 compiler retirement is not a prerequisite for this bounded cutover:
+typed `SchemaPackageInput` fixtures and compiler algorithms can remain, and the
+shared recipe encoder already centralizes publication. Nested historical
+recipe/release inputs and descriptor/evidence fragments are semantic authoring
+inputs, never an alternate runtime schema decoder. Retire their obsolete command
+contracts under R1/R4 without adding format autodetection or a compatibility path.
+
 Pack checked rules/definitions into bounded binary runtime data with package-local
 interned IDs and compact values. Benchmark a straightforward serializer such as
 postcard against rkyv before selecting the codec; validation and portability are
@@ -2737,10 +2884,13 @@ copying source-language accidents into the native model.
    Exact checked-recipe reuse, evaluation-content extraction and Import/rule
    content extraction are implemented. Runtime source validation and actual
    checked owners remain in Import; do not expose historical repair APIs.
-   Next transfer the intrinsic CLI exporter/no-clobber law to acquisition and
-   remove its duplicate publication target, then migrate the three still-live
-   intrinsic-predecessor consumers identified in R1. In disjoint files, the audited
-   24-root resource/equipment cohort is the next R0 consolidation candidate.
+   The intrinsic CLI exporter/no-clobber law now lives in acquisition and its
+   duplicate publication target is removed. Next migrate the three still-live
+   intrinsic-predecessor consumers identified in R1. The audited 24-root
+   resource/equipment cohort now forms two verified suites. Reassess compilation
+   and live consumers before choosing another R0 cohort. In R3, the new standalone checkpoint
+   verifier reuses the existing loader; durable snapshot distribution and
+   canonical/runtime compaction remain required before content expansion.
 
    Preserve still-relevant behavioral assertions in the declarative release/DSL
    harness, then delete the historical succession, recipe extension/membership

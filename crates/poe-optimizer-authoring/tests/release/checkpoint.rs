@@ -73,6 +73,147 @@ fn predecessor_cli(
         .unwrap()
 }
 
+fn verify_cli(path: &Path, identity: OwnedContentDigest) -> Output {
+    Command::new(env!("CARGO_BIN_EXE_poe-author"))
+        .current_dir(path.parent().unwrap())
+        .args(["release", "verify", "--expected"])
+        .arg(identity.to_string())
+        .arg(path)
+        .output()
+        .unwrap()
+}
+
+fn write_checkpoint(path: &Path, checkpoint: &StagedAuthoringCheckpoint) {
+    fs::create_dir(path).unwrap();
+    fs::create_dir(path.join("runtime")).unwrap();
+    for (name, bytes) in checkpoint.root_artifacts() {
+        fs::write(path.join(name), bytes).unwrap();
+    }
+    for (name, bytes) in checkpoint.built().release().artifacts() {
+        fs::write(path.join("runtime").join(name), bytes).unwrap();
+    }
+}
+
+#[test]
+fn transported_checkpoint_verifies_and_continues_without_its_sources_or_ancestors() {
+    let (dsl, _) = declarations::baseline(false);
+    let first = build(&dsl.source, CheckpointBase::Bootstrap);
+    let first_checked = load(&first);
+    let mut source = dsl.source.clone();
+    source.replace_plain(declarations::DECLARATIONS, source.text(declarations::DECLARATIONS)
+        .replace(" stat \"z_declaration_flag\"", " stat \"a_earlier_flag\" type=\"boolean\" { target \"action\"; }\n stat \"z_declaration_flag\""));
+    let second = build(&source, CheckpointBase::Predecessor(&first_checked));
+    let second_checked = load(&second);
+    for binding in &first_checked.names().input().bindings {
+        assert!(second_checked.names().input().bindings.contains(binding));
+    }
+    assert_eq!(
+        second_checked.names().input().bindings.len(),
+        first_checked.names().input().bindings.len() + 1
+    );
+
+    // Only the current complete artifact directory is transported. Neither
+    // generation's source nor the ancestor checkpoint is on this filesystem.
+    let temp = tempfile::tempdir().unwrap();
+    let transported = temp.path().join("-checkpoint λ");
+    write_checkpoint(&transported, &second);
+    assert_eq!(fs::read_dir(temp.path()).unwrap().count(), 1);
+    let before = checkpoint_files(&transported);
+    let verified = verify_cli(&transported, second.identity());
+    assert_eq!(
+        verified.status.code(),
+        Some(0),
+        "{}",
+        String::from_utf8_lossy(&verified.stderr)
+    );
+    assert!(verified.stderr.is_empty());
+    let report: serde_json::Value = serde_json::from_slice(&verified.stdout).unwrap();
+    assert_eq!(
+        report,
+        serde_json::json!({
+            "checkpoint": second.identity(),
+            "names": second.receipt().names.identity,
+            "runtime_input": second.receipt().runtime.input,
+            "runtime_registry": second.receipt().runtime.registry,
+        })
+    );
+    assert_eq!(checkpoint_files(&transported), before);
+    assert_eq!(fs::read_dir(temp.path()).unwrap().count(), 1);
+
+    // A new generation needs only its own sources and the transported snapshot.
+    let manifest = write_source(&temp.path().join("current sources"), &source);
+    let next = temp.path().join("next");
+    let result = predecessor_cli(&manifest, &next, &transported, second.identity());
+    assert_eq!(
+        result.status.code(),
+        Some(0),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    assert_eq!(
+        fs::read(next.join("names.json")).unwrap(),
+        before["names.json"]
+    );
+    assert_eq!(
+        directory_files(&next.join("runtime")),
+        directory_files(&transported.join("runtime"))
+    );
+    assert_eq!(checkpoint_files(&transported), before);
+}
+
+#[test]
+fn checkpoint_verification_rejects_wrong_identity_corruption_and_extra_files_without_writing() {
+    let (dsl, _) = declarations::baseline(false);
+    let staged = build(&dsl.source, CheckpointBase::Bootstrap);
+    let temp = tempfile::tempdir().unwrap();
+    let path = temp.path().join("checkpoint");
+    write_checkpoint(&path, &staged);
+    let before = checkpoint_files(&path);
+    let assert_rejected = |identity| {
+        let snapshot = || {
+            let mut contents = directory_files(&path.join("runtime"))
+                .into_iter()
+                .map(|(name, bytes)| (format!("runtime/{name}"), bytes))
+                .collect::<BTreeMap<_, _>>();
+            for entry in fs::read_dir(&path).unwrap() {
+                let entry = entry.unwrap();
+                if entry.file_type().unwrap().is_file() {
+                    contents.insert(
+                        entry.file_name().into_string().unwrap(),
+                        fs::read(entry.path()).unwrap(),
+                    );
+                }
+            }
+            contents
+        };
+        let contents = snapshot();
+        let entries = directory_entries(&path);
+        let result = verify_cli(&path, identity);
+        assert_eq!(result.status.code(), Some(2));
+        assert!(result.stdout.is_empty());
+        assert!(!result.stderr.is_empty());
+        assert_eq!(snapshot(), contents);
+        assert_eq!(directory_entries(&path), entries);
+        assert_eq!(fs::read_dir(temp.path()).unwrap().count(), 1);
+    };
+    assert_rejected("0".repeat(64).parse().unwrap());
+    for name in ["checkpoint.json", "names.json", "runtime/schema.json"] {
+        assert!(
+            before.contains_key(name),
+            "test must corrupt an existing artifact: {name}"
+        );
+        fs::write(path.join(name), b"{}").unwrap();
+        assert_rejected(staged.identity());
+        fs::write(path.join(name), &before[name]).unwrap();
+    }
+    for name in ["unexpected.txt", "runtime/unexpected.txt"] {
+        fs::write(path.join(name), b"unexpected").unwrap();
+        assert_rejected(staged.identity());
+        fs::remove_file(path.join(name)).unwrap();
+    }
+    assert_eq!(checkpoint_files(&path), before);
+}
+
 #[test]
 fn checkpoint_commits_exact_sources_and_replays_persisted_allocation_history() {
     let (dsl, _) = declarations::baseline(false);

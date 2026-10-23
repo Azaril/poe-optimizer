@@ -1,19 +1,12 @@
 //! Published finite ordinary cold contribution; no final resistance claim.
-#[path = "support/owned_cold_item_delivery.rs"]
+#[allow(unused_imports)]
+use super::{preservation, publication, release, selected};
+#[path = "../support/owned_cold_item_delivery.rs"]
 mod family;
-#[path = "support/owned_release_migration_preservation.rs"]
-mod migration_preservation;
-#[path = "support/owned_cold_item_delivery_native.rs"]
+#[allow(unused_imports)]
+use super::migration_preservation;
+#[path = "../support/owned_cold_item_delivery_native.rs"]
 mod native;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_support_delivery_publication.rs"]
-mod publication;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[path = "support/owned_selected_request.rs"]
-mod selected;
 use serde_json::json;
 use std::path::PathBuf;
 

@@ -1,7 +1,6 @@
 //! One additional source grammar for the existing Spirit modifier. Structural
 //! item membership is not affix legality, and no numerical owner is completed.
-#[path = "owned_release_migration_preservation.rs"]
-mod migration_preservation;
+use super::migration_preservation;
 
 use poe_optimizer_core::{
     owned_build::DeclaredSlot,

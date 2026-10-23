@@ -1,5 +1,6 @@
 //! One shared Player owner; intrinsic component coverage is not final Life.
-use reference_native::empty_support;
+#[path = "support/owned_empty_support_domain.rs"]
+mod empty_support;
 #[allow(dead_code)]
 #[path = "support/owned_player_intrinsic_life.rs"]
 mod family;

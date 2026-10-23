@@ -1,7 +1,6 @@
 //! Global Energy Shield inputs reuse ordinary scalar programs and the existing
 //! Actor contribution channel. Local item Energy Shield remains a separate family.
-#[path = "owned_release_migration_preservation.rs"]
-mod migration_preservation;
+use super::migration_preservation;
 
 use poe_optimizer_core::{
     data::DataIdentity,

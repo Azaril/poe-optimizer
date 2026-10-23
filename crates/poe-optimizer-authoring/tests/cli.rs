@@ -136,6 +136,7 @@ fn help_is_available_at_each_command_level_without_running_the_command() {
         (vec!["release", "build", "--help"], "--bootstrap"),
         (vec!["release", "build", "--help"], "--predecessor"),
         (vec!["release", "build", "--help"], "--expected-predecessor"),
+        (vec!["release", "verify", "--help"], "--expected"),
     ] {
         let output = run(&text_args(&args), b"");
         assert_eq!(output.status.code(), Some(0), "{args:?}");
@@ -176,6 +177,16 @@ fn argument_errors_stop_before_opening_inputs_or_publishing_outputs() {
             "twice",
         ],
         vec!["release", "build", "--unknown"],
+        vec!["release", "verify"],
+        vec!["release", "verify", "missing-checkpoint"],
+        vec![
+            "release",
+            "verify",
+            "missing-checkpoint",
+            "--expected",
+            "bad",
+        ],
+        vec!["release", "verify", "--unknown"],
     ] {
         let output = run(&text_args(&args), b"");
         assert_eq!(output.status.code(), Some(2), "{args:?}");

@@ -1,12 +1,10 @@
 //! Actual Fine Belt source admission; independent physical/static gaps remain open.
-#[path = "support/owned_fine_belt_modifiers.rs"]
+#[allow(unused_imports)]
+use super::{preservation, publication, release, selected};
+#[path = "../support/owned_fine_belt_modifiers.rs"]
 mod family;
-#[path = "support/owned_identity_correspondence.rs"]
-mod identity;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[path = "support/owned_selected_request.rs"]
-mod selected;
+#[allow(unused_imports)]
+use super::identity;
 
 use poe_optimizer_core::owned_schema::{DefinitionDescriptor, SchemaClosure, SchemaState};
 use poe_optimizer_import::owned_recipe_extension::SchemaExtensionEntry;
@@ -1255,13 +1253,8 @@ fn current_charm_admission_census_and_boundaries_do_not_certify_final_scaling() 
 }
 // Current-release publication uses the same all-original preservation gate as
 // other owned data additions. No legacy extension/successor path is involved.
-#[path = "support/owned_release_migration_preservation.rs"]
-mod migration_preservation;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_support_delivery_publication.rs"]
-mod publication;
+#[allow(unused_imports)]
+use super::migration_preservation;
 
 fn stage_flask_charge_delivery(
     prior: &poe_optimizer_import::owned_release::StagedOwnedRelease,

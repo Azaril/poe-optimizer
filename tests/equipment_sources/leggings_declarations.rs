@@ -1,17 +1,10 @@
 //! Five intrinsic Leggings declaration inventories; socket and rule coverage stay open.
-#[path = "support/owned_leggings_declarations.rs"]
+#[allow(unused_imports)]
+use super::{declaration_evidence, preservation, publication, release, selected};
+#[path = "../support/owned_leggings_declarations.rs"]
 mod family;
-#[path = "support/owned_release_migration_preservation.rs"]
-mod migration_preservation;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_support_delivery_publication.rs"]
-mod publication;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[path = "support/owned_selected_request.rs"]
-mod selected;
+#[allow(unused_imports)]
+use super::migration_preservation;
 
 use serde_json::json;
 use std::path::PathBuf;
