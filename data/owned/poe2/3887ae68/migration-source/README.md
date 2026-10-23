@@ -44,8 +44,9 @@ actual tracked aliases, packets and DSL. Its independent comparator permits
 node renaming, retains read/operand/effect semantics and order, checks exact
 owner membership, and compiles the complete reconstructed rule package with the
 existing Engine. Non-program metadata and all incomplete-coverage declarations
-must remain unchanged except for the explicitly admitted 69 Stat declarations
-and one Sniper initial-type program. The release test removes exactly that delta,
+must remain unchanged except for the explicitly admitted 69 Stat declarations,
+one Sniper initial-type program and eight intrinsic support-domain declarations.
+The release test removes exactly that delta,
 restores historical program members and uses checked content constructors to bind
 the original dependencies. Every reconstructed historical artifact length/hash
 and receipt byte must match. New schema/registry identities change dependent
@@ -71,6 +72,12 @@ There is no evaluation bundle. The derived manifest still reports 5,827 partial
 rule owners and five partial routing outputs. The first declarations add Sniper's
 initial own/minion type facts and explicit minion-context presence through generic
 Skill Boolean Stats. See [evidence and limits](../initial-skill-types/README.md).
+Eight existing Skill, Actor and declared-slot owners now have reviewed intrinsic
+support-source domains, bringing the total to 994 (965 Known, 29 Unmapped).
+See [source evidence and boundaries](../sniper-support-domains/README.md).
+Inherited supports remain present, external origins remain independently checked,
+and all numerical Partial coverage stays unchanged. No new names or IDs are
+allocated by this metadata update.
 This adds no whole-build coverage or numerical parity and
 does not make an incomplete build executable. The first complete unchanged
 build remains gated on the remaining data/runtime migration and actual blockers.
@@ -90,10 +97,10 @@ serve as production names.
 
 ## Checked source inventory
 
-Current input: `802bf2eccbdf83814dbb34f0745a2006c75ec4fdcd80e4ee8fc80e053852cdcb`.
+Current input: `5d775ac595055683ae0e868f2415c389a835480b76118ab66d21d48d373e9b65`.
 The 103 packets reference 2,562 distinct complete rule sources, preserving all
 8,213 occurrences. Their local name files use 5,011 distinct exact addresses;
-the declaration ledger adds 69 names. The 2,787 declared inputs occupy 5,786,698
-encoded and 58,578,841 decoded bytes; the root manifest is 183,544 bytes.
+the declaration ledger adds 69 names. The 2,787 declared inputs occupy 5,784,210
+encoded and 58,581,358 decoded bytes; the root manifest is 183,544 bytes.
 All fit the existing default limits. The maintained Authoring tests check actual
 source graphs, historical artifacts and the new initial-type projection.

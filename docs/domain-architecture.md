@@ -177,6 +177,14 @@ no synthetic output. Source-domain completeness is separate from numerical rule
 completeness: proving that an owner introduces no additional supports cannot
 close its unimplemented calculations.
 
+A no-additional-origin declaration is specific to its exact definition or
+declared slot across the admitted input domain. Inherited support candidates
+remain present; inheritance and compatibility filtering create no new source
+authority. Evidence must cover the complete intrinsic constructors, with positive
+extra/linked-source controls. Foreign modifiers and dynamically supplied
+descendants keep their own coverage obligations. Source text is offline evidence,
+not a second parser or evaluator in the native path.
+
 Effects have exact source, recipient, activation and stacking declarations.
 Collect source properties once at the permitted source and apply them to eligible
 recipients. Post-stacking application groups are explicit producers in the same
@@ -535,7 +543,7 @@ without new declarations preserves reserved names and the predecessor registry.
 The receipt binds the predecessor, canonical ledger, runtime receipt and exact
 encoded manifest/source inventory. Comments or transport changes can change this
 authoring identity without changing runtime behavior. Digests alone confer no
-semantic authority. The CLI emits receipt JSON on stdout and the checkpoint
+semantic authority. The CLI emits checkpoint receipt JSON on stdout and the checkpoint
 identity on stderr. This selects an immutable predecessor; it does not advance a
 mutable head or claim compare-and-swap. A future head requires real concurrency
 control against its stored predecessor.
@@ -611,9 +619,10 @@ The conversion passes its preservation gates; detailed validation belongs in the
 retained only in Authoring's
 [`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz).
 Its historical receipt
-authenticates the archived bytes. Tests remove only the exact admitted 69-Stat and
-one-program addition, restore the archived program members, and reconstruct the
-original dependency bindings with maintained content constructors. The existing
+authenticates the archived bytes. Tests remove only the exact admitted 69-Stat,
+one-program and eight support-domain additions, restore the archived program
+members, and reconstruct the original dependency bindings with maintained content
+constructors. The existing
 assembler then checks every historical artifact and provenance field. A separate
 corpus gate preserves original graph semantics and owner/program placement.
 

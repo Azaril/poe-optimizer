@@ -651,6 +651,54 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
         });
     }
     assert_eq!(removed, 1);
+    // Independently pin the sole admitted metadata delta. All prior rows and
+    // every other metadata field still undergo whole-package equality below.
+    let ns = schema.namespace();
+    let key = |suffix| OwnedDefinitionKey::new(format!("def.000000000000{suffix}")).unwrap();
+    let skill = |suffix| SkillDefId::new(ns.clone(), key(suffix));
+    let output = |owner, suffix| {
+        SchemaSubject::Slot(SlotAddress::ActionOutput(DeclaredSlot {
+            declaration: SlotOwnerDefId::Skill(skill(owner)),
+            slot: ActionOutputDefId::new(ns.clone(), key(suffix)),
+        }))
+    };
+    let expected_domains: Vec<_> = [
+        SchemaSubject::Definition(DefinitionAddress::Skill(skill("0012"))),
+        SchemaSubject::Slot(SlotAddress::Actor(DeclaredSlot {
+            declaration: SlotOwnerDefId::Skill(skill("0012")),
+            slot: ActorSlotDefId::new(ns.clone(), key("001f")),
+        })),
+        SchemaSubject::Definition(DefinitionAddress::Actor(ActorDefId::new(
+            ns.clone(),
+            key("3091"),
+        ))),
+        SchemaSubject::Definition(DefinitionAddress::Skill(skill("0021"))),
+        output("0021", "0022"),
+        SchemaSubject::Definition(DefinitionAddress::Skill(skill("0024"))),
+        output("0024", "0025"),
+        output("0012", "0015"),
+    ]
+    .into_iter()
+    .map(|owner| SupportSourceDomainDeclaration {
+        owner,
+        domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+    })
+    .collect();
+    let domains = &mut preserved.support_discovery.as_mut().unwrap().providers;
+    let prior_domains = &expected.support_discovery.as_ref().unwrap().providers;
+    assert_eq!(domains.len(), prior_domains.len() + expected_domains.len());
+    for added in &expected_domains {
+        assert!(prior_domains.iter().all(|row| row.owner != added.owner));
+        // Runtime domain order is canonical rather than append order.
+        let positions: Vec<_> = domains
+            .iter()
+            .enumerate()
+            .filter_map(|(index, row)| (row.owner == added.owner).then_some(index))
+            .collect();
+        assert_eq!(positions.len(), 1);
+        assert_eq!(domains.remove(positions[0]), *added);
+    }
+    assert_eq!(domains, prior_domains);
     assert_eq!(
         preserved, expected,
         "production composition preserves every graph and metadata field"

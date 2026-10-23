@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "scope": "Intrinsic support-origin absence on the eight exact Sniper Skill, Actor and output owners. Inherited candidates, external factories, eligibility, missing active Command and numerical coverage remain separate.",
+  "files": [
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "archive": "data/owned/poe2/3887ae68/mana-supplier-sources/CalcSetup.lua.gz",
+      "archive_bytes": 21347,
+      "archive_sha256": "6cf68ffe3f750e1b0670c54f4152fa2cbd88db2c1092d16c7541f773582a708c",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcActiveSkill.lua.gz",
+      "archive_bytes": 10868,
+      "archive_sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Data.lua.gz",
+      "archive_bytes": 10599,
+      "archive_sha256": "38cd62af46c9f291240d5a33f20779bd101766d9f62b2165b929737380586c46",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_ModParser.lua.gz",
+      "archive_bytes": 105049,
+      "archive_sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "archive": "data/owned/poe2/3887ae68/self-flat-minion-store/Minions.lua.gz",
+      "archive_bytes": 4752,
+      "archive_sha256": "7abe2ddb8b83894af28484642a7fed90cc5367d8dda2bbb57e54f0f03650aa59",
+      "bytes": 46701,
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "archive": "data/owned/poe2/3887ae68/self-flat-minion-store/act_int.lua.gz",
+      "archive_bytes": 141617,
+      "archive_sha256": "076f9caf8f271b4faf456497f254b69d6cab0c7864f15b9f63dd3ba475df39ac",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "archive": "data/owned/poe2/3887ae68/self-flat-action-factories/minion.lua.gz",
+      "archive_bytes": 13323,
+      "archive_sha256": "d9230f161fc09142f4e79e0e30d65a7dbff0b6c079caf6472e4324841b8c58ae",
+      "bytes": 103080,
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Data_SkillStatMap.lua.gz",
+      "archive_bytes": 17343,
+      "archive_sha256": "9e98975b399de8e883e327e448440c1e55f2da586026bf6e1da19ee697f4f43d",
+      "bytes": 111112,
+      "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+    }
+  ],
+  "spans": [
+    {
+      "role": "summoner-definition",
+      "path": "src/Data/Skills/act_int.lua",
+      "first": 18677,
+      "last": 18799,
+      "sha256": "fb834997a7c392e6a8e1a190ecd1f864b7537562611f2237dd650e12d54de192"
+    },
+    {
+      "role": "population-definition",
+      "path": "src/Data/Minions.lua",
+      "first": 83,
+      "last": 120,
+      "sha256": "1bf24486a005cc4aee087a27eb606d2539e298b65748b91b48b245a9dffde8e1"
+    },
+    {
+      "role": "basic-attack-definition",
+      "path": "src/Data/Skills/minion.lua",
+      "first": 116,
+      "last": 154,
+      "sha256": "73c3be0a7ad4d912b44cf50897dbf73e1b0186a29ddfebbee5354d30eeee75c4"
+    },
+    {
+      "role": "gas-arrow-definition",
+      "path": "src/Data/Skills/minion.lua",
+      "first": 155,
+      "last": 264,
+      "sha256": "e8e926b960b8a196502f63dbf074e6400e2c5928811b7152bf36f87cd59782d3"
+    },
+    {
+      "role": "active-skill-constructor",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 144,
+      "last": 234,
+      "sha256": "215482b85ed4bfab7be529873181e240d0f2b11cee6c6cf0007f007c00e7fd16"
+    },
+    {
+      "role": "minion-skill-constructor",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 1116,
+      "last": 1185,
+      "sha256": "08a9e2cb4a396a93e5e49bae40dd8394ef23e93e160017585340f9b17b77b5ce"
+    },
+    {
+      "role": "support-effect-constructor",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 630,
+      "last": 666,
+      "sha256": "a219c7630202290c1e85f809799e7cc6f75a94ac760d244405db908cf85d3a4d"
+    },
+    {
+      "role": "support-candidate-construction",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1897,
+      "last": 1976,
+      "sha256": "7c21c396e158a81e5a63c4af8740f30b5b60156e01fcc8a861e55c7661ce399d"
+    },
+    {
+      "role": "active-skill-candidate-transfer",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 2052,
+      "last": 2105,
+      "sha256": "48689ffc3385c79de315333bfc91f36aefe83b3236543d2743ce5dfb403ca00f"
+    },
+    {
+      "role": "skill-loader",
+      "path": "src/Modules/Data.lua",
+      "first": 910,
+      "last": 966,
+      "sha256": "86dc27a5772c5b9a26bea1c76a1776dd1cd8bdfa55ef65050d020afe84086ddd"
+    },
+    {
+      "role": "skill-mod-postprocessing",
+      "path": "src/Modules/Data.lua",
+      "first": 72,
+      "last": 98,
+      "sha256": "dc4e2b95e84d4cc160d94828c52db882fe826ed3481cbc9623f3841656c29631"
+    },
+    {
+      "role": "extra-support-factory",
+      "path": "src/Modules/ModParser.lua",
+      "first": 2219,
+      "last": 2253,
+      "sha256": "11ede92472d7dec6e85b0af4ff9c52a1da07d1a204a7d7e8339221d43872b962"
+    },
+    {
+      "role": "linked-support-factory",
+      "path": "src/Modules/ModParser.lua",
+      "first": 3650,
+      "last": 3659,
+      "sha256": "4285cfd4639797c208b9d0872bc9324aefd23eefda1bf1b5332767f8b6f0893b"
+    },
+    {
+      "role": "stat-duration",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 11,
+      "last": 14,
+      "sha256": "e39b79d562b5c0d3108eae3d692364018f781d457b3d3fc6a800356976cd197a"
+    },
+    {
+      "role": "stat-radius",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 632,
+      "last": 634,
+      "sha256": "4934c16e84e9b8344044fefb5ec8a71a72a1c7bdd9fe1fd8e5408785306c1e3e"
+    },
+    {
+      "role": "stat-secondary-radius",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 635,
+      "last": 637,
+      "sha256": "86e211fe2fa0685703c30dfd543292cb1af9afd059bafda455b278392b2005ec"
+    },
+    {
+      "role": "stat-fire-damage",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 833,
+      "last": 835,
+      "sha256": "d802fffa79a2579bed4f36f061830909e748da23c34f7bdf4176228bb765f5c5"
+    },
+    {
+      "role": "stat-physical-to-fire",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 1190,
+      "last": 1192,
+      "sha256": "8915cc46ede5da2c2f845110052acafd5b6f6f7731436429139822eba4235590"
+    },
+    {
+      "role": "stat-poison-chance",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 1318,
+      "last": 1321,
+      "sha256": "98524364879d2059f6fee99a100d53e6f1d4bfa523f7e2fe14e3d6ea04afb2d7"
+    },
+    {
+      "role": "stat-arrow",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 1796,
+      "last": 1798,
+      "sha256": "e4a137ec6338d717e0e35d7e1d7b7fcca6d54967a90e6a41299b86c20105d09a"
+    },
+    {
+      "role": "stat-minion-damage",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 2626,
+      "last": 2628,
+      "sha256": "3568bc4adb6f9c94b9899e67235c176df6f48eebd17fec150a6efb04c4b12d11"
+    },
+    {
+      "role": "stat-commandable",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 2681,
+      "last": 2683,
+      "sha256": "a587374f47fe71be04572c53dd3f687ef103d1866f838fa0f3fa521cc5957916"
+    },
+    {
+      "role": "stat-reviving",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 2690,
+      "last": 2692,
+      "sha256": "f6faeb1f7eb770970f5be4766d146513a2778a6b78b92dfaf408398d23409fea"
+    },
+    {
+      "role": "stat-revive-time",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 2693,
+      "last": 2696,
+      "sha256": "a40e914142d6a8e4039c5e8a71bf86d15c3ea6ee8972fa306e166993ee9535bb"
+    },
+    {
+      "role": "stat-umbral-well",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 2986,
+      "last": 2988,
+      "sha256": "e8aa349559bab35292b171d90bd78f9304ee10ee5112ce7b9c4d3399252b5630"
+    },
+    {
+      "role": "skill-mod-constructors",
+      "path": "src/Modules/Data.lua",
+      "first": 56,
+      "last": 71,
+      "sha256": "d93a8a1011b44dd06bb8e2b89e847b670a52258d3aad27b97c2469ef88d08d38"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/actor-ability-supply/bindings.json",
+      "bytes": 7597,
+      "sha256": "c084b7d025c98e72eaa372b809cfd73216166c6e5527ed6fe906303f6e0ce62f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+      "bytes": 2247063,
+      "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/empty-payload-inventory/source-records.json",
+      "bytes": 1123296,
+      "sha256": "805c5266f5e8c8acebf0bf85ca9cb55760e564110b91ccb13c715de1c10b0609"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/gem-support-domains/export-classifications.json",
+      "bytes": 3749,
+      "sha256": "50c94b4c8db9a1e1a406d8cfbaeb815ee0f9c72982955c1356992d33d8cad2bd"
+    }
+  ]
+}

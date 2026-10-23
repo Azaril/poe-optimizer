@@ -28,6 +28,8 @@ mod normalization_content;
 mod originals;
 #[path = "release/scalar_attributes.rs"]
 mod scalar_attributes;
+#[path = "release/sniper_support_domains.rs"]
+mod sniper_support_domains;
 #[path = "release/source_dependencies.rs"]
 mod source_dependencies;
 
@@ -1671,7 +1673,7 @@ fn expected_identity_and_actual_metric_authority_are_checked_after_decode() {
 }
 
 #[test]
-fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_initial_type_additions() {
+fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions() {
     let root = tracked_root();
     let source = tracked_sources();
     let reference_bytes = fs::read(root.join("reference-release.json")).unwrap();
@@ -1684,9 +1686,9 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_initial_ty
     assert_ne!(release.receipt().input, reference.input);
     let current_artifacts: BTreeMap<_, _> = release.artifacts().collect();
 
-    // Historical IR remains a test reference only. The sole admitted addition
-    // is one Skill producer and its 69 named Boolean channels. Authenticate that
-    // exact delta before reconstructing old commitments through maintained APIs.
+    // Historical IR remains a test reference only. Authenticate the exact new
+    // producer, 69 Boolean channels and eight support-source domains before
+    // reconstructing old commitments through maintained APIs.
     let retained = fs::read(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"),
     )
@@ -1737,7 +1739,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_initial_ty
     let allocation = actual.name_allocation();
     assert!(
         allocation.predecessor().is_none(),
-        "this is the fixed first allocation genesis"
+        "the content-test fixture bootstraps its ledger; CLI publication uses a checked predecessor"
     );
     assert_eq!(
         allocation
@@ -1805,6 +1807,29 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_initial_ty
         });
     }
     assert_eq!(removed, 1, "exact admitted producer address");
+    let domains = &mut restored
+        .recipe
+        .rules
+        .support_discovery
+        .as_mut()
+        .unwrap()
+        .providers;
+    let prior_domains = &historical.support_discovery.as_ref().unwrap().providers;
+    let additions = sniper_support_domains::declarations();
+    assert_eq!(domains.len(), prior_domains.len() + additions.len());
+    for added in &additions {
+        assert!(prior_domains.iter().all(|row| row.owner != added.owner));
+        // The checker canonically sorts source domains by typed subject.
+        // Remove only each exact reviewed row, independent of authoring order.
+        let positions: Vec<_> = domains
+            .iter()
+            .enumerate()
+            .filter_map(|(index, row)| (row.owner == added.owner).then_some(index))
+            .collect();
+        assert_eq!(positions.len(), 1);
+        assert_eq!(domains.remove(positions[0]), *added);
+    }
+    assert_eq!(domains, prior_domains);
     assert_eq!(restored.recipe.rules.owners.len(), historical.owners.len());
     for (current, original) in restored
         .recipe
