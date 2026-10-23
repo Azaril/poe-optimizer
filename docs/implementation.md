@@ -27,6 +27,16 @@ from Import. The configuration-accounting adapter for strictly empty custom
 sources is implemented behind explicit census authority; production activation
 still requires its source proof. Validation passes after repairing two invalid
 new test fixtures; the complete affected normalization suite was rerun.
+This checkpoint moves Import/rule authored content and its reconstruction
+into Authoring, while Import retains exact source validation and checked owners.
+Six root CLI configuration test targets now share one suite. Both changes are
+implemented and validated; no production data or completeness is changed.
+The delivery driver also has a validated private repair: exact receiving
+effects, source memberships, summoner dependencies and prepared outputs determine
+applicability preparation. An unused selection container no longer needs invented
+target facts. The baseline test reproduced its exact missing-producer failure;
+selection activation, raw inputs, source completeness and explicit consumers stay
+checked. This neither adds mechanic coverage nor changes the public data model.
 Atomic authoring checkpoint publication now integrates declarations with the CLI,
 using an explicit bootstrap or checked immutable predecessor and one persisted
 name ledger. Initial skill-type declarations now use that path: 69 generic
@@ -75,7 +85,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; current checkpoint moves evaluation content to Authoring and adds explicit strict-empty custom-source accounting |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; current checkpoint moves Import/rule content to Authoring, consolidates configuration tests and repairs unused container preparation |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -85,7 +95,7 @@ silently become a second supported implementation.
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 69 Stats, one Sniper initial-type program and 350 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,336 source domains (1,307 Known, 29 Unmapped). Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 20:59 UTC on October 23, `eda3612b` run `40020042084` was pending behind running `d490eb54` run `40011474882` (eight jobs successful, ten running, none failed). The intermediate `0658ac0f` and `f58054a8` pending runs were coalesced. Earlier `96e5533e` run `39962517895` completed successfully: its final Windows CLI-1 job passed both feature profiles at 19:37 UTC after 5h50m. No timeout or test failure occurred. Baselines `a7069aa1` and `ae90ec82` also passed. Main-branch serialization preserves the running revision and coalesces pending revisions; previous success does not certify newer commits |
+| CI | On October 23, `cc694b76` run `40026008563` is pending behind running `d490eb54` run `40011474882`; the latest public job check found thirteen successful, five running and none failed. Intermediate pending runs, including `eda3612b`, were coalesced. Earlier `96e5533e` run `39962517895` completed successfully: its final Windows CLI-1 job passed both feature profiles at 19:37 UTC after 5h50m. No timeout or test failure occurred. Baselines `a7069aa1` and `ae90ec82` also passed. Main-branch serialization preserves the running revision and coalesces pending revisions; previous success does not certify newer commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First reproduce the allocation predecessor using the
@@ -632,20 +642,56 @@ The current sorted partition shifts when targets disappear, so validate the
 resulting workload on both feature profiles; do not mask cost by removing checks
 or raising the timeout. This is R0 verification work, not a current test failure.
 
-Next bounded consolidation: combine the six root CLI configuration targets
+Implemented and validated: the six root CLI configuration targets
 `owned_configuration_default_inputs`, `owned_configuration_default_publications`,
 `owned_configuration_distance_inputs`, `owned_configuration_distance_publication`,
 `owned_configuration_player_withered_input` and
-`owned_configuration_player_withered_publication` into one suite. Retain the nine
-ordinary source laws and all five distinct ignored publication entry points.
+`owned_configuration_player_withered_publication` now form one
+`configuration_sources` suite. The nine ordinary source laws and all five distinct
+ignored publication entry points are retained.
 The three preservation-helper tests have identical local synthetic fixtures and
 the same `crate::selected` binding in all publication roots; retain each once.
-Keep `configuration_sources`, `configuration_stage` and `selected` at the new
+Shared modules `configuration_sources`, `configuration_stage` and `selected` stay at the new
 root, with shared helper APIs and other callers intact. Static inspection found
 six copies of the default-source/stage chain, three of publication/preservation
-helpers and two of each family input helper. Acceptance is both CLI feature
-profiles, an explicit test/ignore inventory, dynamic shard coverage and measured
-compilation time. Removing five binaries per profile is not yet a measured saving.
+helpers and two of each family input helper. The new suite registers 12 ordinary
+tests and five ignored utilities. Saved old bodies and a recursive current-source
+module inventory establish preservation; old local binaries predate the three
+preservation laws and are not an authoritative before-count. Both CLI feature
+profiles pass all twelve ordinary tests with exactly five existing utilities
+ignored. The all-features build took 9m58s and the no-default-features build 7m17s;
+execution took 2.30s and 2.17s respectively. Logs:
+`runs/configuration-suite-all-features-tests.log` and
+`runs/configuration-suite-no-default-tests.log`. Clean-checkout metadata has 273
+CLI targets, selected exactly once by the dynamic four-shard plan (69/68/68/68),
+with the new target once and all six replaced targets absent. The two protected
+untracked root tests were excluded only from that clean-checkout simulation.
+Plans and metadata are recorded in `runs/configuration-suite-shard-plans.json` and
+`runs/configuration-suite-clean-metadata.json`. Removing five binaries per profile
+is not a measured speed-up against the stale old binaries.
+
+Next R0 cohort, read-only audit on October 23: 24 resource/equipment roots share
+the same `selected`, `release` and `preservation` bindings; 22 also share the same
+publication helper. Their 80-file closure has 210 module occurrences and no
+protected files or process-global setup. The ten resource roots are
+`owned_flat_life_routing`, `owned_flat_life_scalability`, `owned_life_base_domain`,
+`owned_life_contribution_queries`, `owned_life_equipment_domain`,
+`owned_player_life_pool`, `owned_player_intrinsic_life`,
+`owned_player_intrinsic_mana`, `owned_player_spirit_pool` and `owned_strength_life`.
+The fourteen equipment/defence roots are `owned_item_evasion_property`,
+`owned_player_evasion_equipment`, `owned_player_evasion_final`,
+`owned_player_evasion_override`, `owned_leggings_declarations`,
+`owned_leggings_placement`, `owned_crown_declarations`, `owned_solar_declarations`,
+`owned_fine_belt_modifiers`, `owned_global_energy_shield_inputs`,
+`owned_local_defence_composition`, `owned_cold_item_delivery`,
+`owned_fixed_spirit` and `owned_charm_capacity`. Keep conflicting `family`,
+`native`, `validation` and `probes` aliases child-local. The current source has
+181 ordinary and 51 ignored registrations; registering the three identical
+preservation laws once yields 112 ordinary plus 51 ignored in one suite, or 115
+plus 51 in two suites. Native helper laws and ignored cases are distinct and must
+remain. Choose the split using measured build/execution cost; compare bodies,
+environment names, both compiled profile inventories and dynamic shard coverage.
+This is a follow-up audit, not implemented consolidation or a speed-up claim.
 
 **In progress.** Inventory test targets and live consumers; select the
 minimum retained semantic fixture set from the current release and all five raw
@@ -885,24 +931,67 @@ All 18 runtime files match the previous Player-domain publication and each other
 the ledger, registry and schema also match the canonical genesis. Source sizes,
 runtime input identity and the existing decoded-size warning are unchanged.
 
-**Next R1 checkpoint:** move `owned_release/{import_content,recipe_source_content}`
-and their authored dependency reconstruction into Authoring. The sole production
-caller is the maintained `release.rs` builder; no historical publisher calls
-these two modules. Keep `source.rs`'s exact source-prefix validator in Import,
-sharing existing preflight, input-domain, recipe/definition, Import constituent
-and source-union checks with runtime loading. Expose consuming access only to the
-actual constituent packages of `CheckedImportSource`. Its checked normalization
-owner retains private construction; expose its consuming content conversion,
-without raw dependency repair. Preserve the bounded original rule payload until
-the whole checked source is consumed; keep rule-header projection private in
-Authoring.
+**Import/rule content extraction (implemented and validated):** Authoring's
+`source_content` module now owns the two former Import content modules and the
+adapter from a complete `CheckedImportSource`. The maintained `release.rs` builder
+is its production consumer. Import retains `source.rs` and the existing preflight,
+input-domain, recipe/definition, constituent and source-union validators. Its
+consumed parts contain actual checked packages and the bounded original rule
+payload, including the original envelope. Private Authoring projection removes
+that envelope only after consuming the whole checked source; separated raw parts
+cannot reconstruct the private source owner. Checked normalization construction
+also remains private. Its consuming content conversion and aggregate constructor
+are exposed narrowly; child conversion helpers stay private. The existing limit
+validator is shared unchanged to preserve error and pre-hash debit order.
 
-Update six source-dependency laws, six normalization-content laws, source-budget
-and maintained-release restoration callers; move the two rule-content laws into
-Authoring. Import's five aggregate laws remain. Delete the two replaced content
-modules and their re-exports; there is no additional obsolete publisher to delete
-in this slice. Do not export the shared private validators or add a parallel
-assembler. Allocator/publication-core separation still remains after this cut.
+The two superseded Import modules and their re-exports are deleted. Two rule-content
+laws moved intact into Authoring; its existing six source-dependency and six
+normalization-content laws are updated, with one additional law for the consumed
+original rule envelope and final malformed-rule refusal. Source-budget/restoration
+callers use the same consuming adapter. Import's five aggregate laws remain.
+Independent review and scoped formatting pass; no final validator, metadata,
+production identity or coverage is changed. Initial Clippy exposed the remaining
+private aggregate-normalization entry points; the narrow visibility repair changes
+no validation bodies and introduces no warning suppression.
+The affected Import/Authoring/Host all-target run passes 2,080 tests, with one
+existing normalization fixture-generation utility ignored: Authoring 168 library,
+eight CLI and 156 release tests; Host eleven; Import 246 library, 205 legacy/raw,
+879 owned and 407 normalization tests. Optimized compilation took 17m19s; the
+maintained release suite took 18.40s. Strict Clippy passes after the visibility
+repair. Logs: `runs/source-content-extraction-tests.log` and
+`runs/source-content-extraction-clippy-final.log`. This batch used the already
+built pre-repair Engine; the private delivery repair has its own subsequent
+Engine/profile validation rather than inheriting this result.
+
+The rebuilt CLI publishes `runs/source-content-extraction-successor-01` with the
+same `fc9080862e7c589f7f53c994f56ae181bfba278dc4df7260fa32b0c677c8d3f8`
+checkpoint, then accepts it as the exact checked predecessor for
+`runs/source-content-extraction-reload-01`, reproducing
+`53e1c02a15b98d199aa6500221f9d5635c68b9d3dda2880853724cfa3261d826`.
+All 18 runtime files, ledger files and checkpoint receipts match the prior
+evaluation-extraction publications. Ledger, schema and registry also match the
+canonical genesis. The decoded-size warning is unchanged. This is an actual CLI
+publication/reload check, not an identity inferred solely from unit fixtures.
+
+**Next R1 checkpoint:** continue separating allocator/publication authority after
+retiring its historical compiler/migration callers. The aggregate normalization
+content builder remains a shared offline seam; do not export every child helper
+or move that historical compiler closure wholesale. This source-content cut adds
+neither a parallel assembler nor another obsolete publisher to preserve.
+The next bounded retirement is `tests/owned_intrinsic_cli.rs`: its 32 unarmed
+numerical/channel/unit/Partial laws and nine-row source/exclusion laws already run
+in maintained `release/class_support_domains.rs` and `class_support_source.rs`.
+First move its optional-PoB `optional_export_reproduces_checked_catalog_without_runtime_ui`
+law to `tests/owned_acquisition_cli.rs`, retaining the exact catalog/digest, nine
+exported Classes and second-run no-clobber checks. Then remove the redundant
+two-test ordinary publication chain. Compiler-negative cases remain independently
+covered by Import's `owned_intrinsic_attack` tests. Keep the shared intrinsic
+predecessor until `owned_item_bases_cli`, `owned_weapon_profiles_cli` and
+`owned_extension_cli` move; those live callers still block deleting its production
+compiler. The Class compiler also retains eight Import unit laws. Moving the
+allocator/publication implementation prematurely would still create cycles through
+the seven allocator families and release revision/migration. This audit is recorded
+work, not completed retirement.
 Alongside the DSL work, parse external XML once through a bounded checked boundary
 and pass the parsed document to projections. Type item fields and split parsing
 stages. This parser cleanup is required by R4, but does not block R2 unless a
@@ -2270,21 +2359,69 @@ ten pure typed programs alone do not establish complete source coverage.
 Checkpoint triage: keep this validated adapter inactive until its source proof can
 ship with substantive configuration-census work. Do not spend a separate
 publication/CI cycle merely adding the Partial empty-family row. The next R2
-execution prerequisite is actual support-target authority for the selected skill:
-the universal support prohibition and explicit assigned-target summoner presence.
-The current 69 initial-type Stats do not supply these facts. Review the winning
-Skill constructor/exporter and later factories, preserving exact occurrence and
-provider authority; do not alias a type Stat or infer false from an absent Lua
-field. This enables real support-input/stage/readiness construction while the
-independent R1 authored-content extraction proceeds.
-Both facts require new stable Stat identities: existing activation, usage and
-participation channels are not aliases for them. Stage against the checked
-genesis ledger and distribute the resulting complete immutable checkpoint with
-that allocation change, satisfying the R3 history gate instead of extending
-historical source replay. Definition prohibition can use existing Boolean rules.
-Summoner authority still requires its independent source proof; allocating the
-Stat does not prove absence. If that proof needs the deferred structural read
-contract, bring that concrete change back for design review before implementing it.
+execution work is actual support-target authority and demand, not neutral facts
+on every selection container. The audit found that delivery inserted
+an `AssignedSkill` preparation for every support selection owner even when only
+its declared effects are consumed. Original05's physical Sniper Gem is a container
+for Summon and Command; the current type producer belongs to the supplied Skill.
+Do not copy one effect's types or summoner context onto that container.
+
+A baseline regression reproduced the exact missing container producer. The bounded
+private demand repair is implemented and validated in both Engine feature profiles. Preserve
+all explicit receiver/source-effect admissions, exact summoner prerequisites,
+prepared-output consumers and standalone assigned-target requests. Raw source
+inputs, effective-level/quality selection, source-property aggregation, activation,
+selection-order validation and completeness checks remain mandatory even when a
+container needs no applicability preparation. The output binder must merge a newly
+demanded assigned row with existing child admissions, not replace them.
+The first default Engine run passed the baseline regression and 710 other tests,
+with fifteen existing optional reference cases ignored; one new control failed
+because its physical-source fixture did not authorize a summoner relationship.
+The test-only repair reuses the valid inherited-output fixture to prove independent
+summoner-only and output-only root demand. Production receiving validation is
+unchanged.
+The complete default-profile rerun passes 712 Engine and 269 Data owned tests;
+the native-only run passes the same suites plus 73 Engine and two Data library
+tests. Both profiles retain fifteen existing ignored optional reference cases.
+No new ignores or production validation relaxations were added. Post-repair
+compilation took 3m12s for default and 5m23s for native-only; Engine execution took
+11.90s and 12.19s. Logs: `runs/unused-container-admission-before.log`,
+`runs/unused-container-admission-default-tests.log`,
+`runs/unused-container-admission-default-final.log` and
+`runs/unused-container-admission-native-tests.log`. The actual baseline failure,
+initial invalid-control failure and final passing runs remain separate evidence.
+Independent review confirms that selection maps/scheduling remain subsets of the
+existing occurrence gates capped by `max_providers`; actual admission contexts
+have their separate `max_owner_bindings` bound. Output insertion preserves child
+contexts and charges their shift. No extra structural read or public format was
+introduced.
+
+Final strict all-target Clippy passes for Engine, Data, Import, Authoring and Host;
+the explicit all-features CLI configuration target also passes strict Clippy.
+Logs: `runs/source-content-and-demand-final-clippy.log` and
+`runs/configuration-suite-final-clippy.log`. All 24 changed/new Rust files pass
+scoped formatting, all 28 extant checkpoint files decode as strict UTF-8, and the
+nine protected incoming-critical files retain their saved hashes. No root CLI
+all-target command included the protected draft tests.
+
+The primary receiving effect already has an explicit `summoner_path: null` in
+the retained exact source relation. Its support-preparation context does not need
+a new Actor read; Skill rules cannot currently read `RuleEntity::Actor`, and that
+permission must not be widened as a shortcut. Genuine assigned demands still
+need their own authority. If a required case needs the deferred structural read
+contract, bring that concrete change back for design review.
+
+Definition prohibition can use existing Boolean rules, with a new stable Stat
+identity: activation, usage, participation and the 69 type channels are not aliases.
+The source proof is the pinned Boolean exporter/database contract, complete Sniper
+definition, unchanged loader/effect construction and actual admission consumer;
+explicitly prohibited Abyssal Apparition is a positive control. This is not generic
+Lua absence-to-false. Retain an archive of the manifest-pinned `Export/spec.lua`
+when assembling the proof packet; the other source archives already exist.
+Stage the declaration against the checked genesis ledger and distribute the
+resulting complete immutable checkpoint with the allocation change, satisfying
+the R3 history gate instead of extending historical source replay. Reassess any
+additional summoner Stat from the remaining real consumers after this demand repair.
 
 Inherited summoner context already uses `ReceivingSkill { summoner_path }` and
 the exact parent's prepared types; do not add another structural read for it.
@@ -2578,7 +2715,7 @@ copying source-language accidents into the native model.
    Canonical first-genesis reproduction is verified and its reference published.
    Next complete the composed Original05 support-source audit above, followed by
    execution inputs: explicit shared
-   support-prohibition authority and assigned-target summoner presence, then
+   support-prohibition authority and any genuinely demanded assigned-target facts, then
    program classification, freezing, readiness, receiving and metrics. Inherited
    summoner context already uses the exact-parent receiving relation. A missing
    source value is not an inferred false.
@@ -2597,10 +2734,13 @@ copying source-language accidents into the native model.
    assembler. Production Authoring does not use succession, revision/migration or
    catalog-family transformation chains. Named allocation is the other maintained
    mutable dependency. These are the roots for the next dependency cut.
-   Exact checked-recipe reuse and evaluation-content extraction are implemented.
-   The next narrow module cut moves Import/rule authored content into Authoring,
-   as specified in R1; keep runtime source validation and checked owners in Import
-   and avoid exposing historical repair APIs.
+   Exact checked-recipe reuse, evaluation-content extraction and Import/rule
+   content extraction are implemented. Runtime source validation and actual
+   checked owners remain in Import; do not expose historical repair APIs.
+   Next transfer the intrinsic CLI exporter/no-clobber law to acquisition and
+   remove its duplicate publication target, then migrate the three still-live
+   intrinsic-predecessor consumers identified in R1. In disjoint files, the audited
+   24-root resource/equipment cohort is the next R0 consolidation candidate.
 
    Preserve still-relevant behavioral assertions in the declarative release/DSL
    harness, then delete the historical succession, recipe extension/membership

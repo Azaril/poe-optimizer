@@ -2,8 +2,8 @@
 //! release validation remains mandatory and no source evidence becomes a default.
 use super::{fixture, metric_report, tracked_release};
 use poe_optimizer_authoring::{
-    NamedIdRegistry, StatDeclaration, StatDeclarations, StatValueDeclaration, lower_program,
-    parse_program, stage_stat_declarations,
+    ImportSourceContent, ImportSourceInput, NamedIdRegistry, ReleaseSourceParts, StatDeclaration,
+    StatDeclarations, StatValueDeclaration, lower_program, parse_program, stage_stat_declarations,
 };
 use poe_optimizer_core::{
     owned_build::ParameterValue,
@@ -21,9 +21,8 @@ use poe_optimizer_import::{
         GeneratedSkillInputContent, NormalizationContent, PayloadInventoryContent,
     },
     owned_release::{
-        ImportSourceContent, ImportSourceInput, OwnedReleaseError, OwnedReleaseInput,
-        OwnedReleaseLimits, StagedOwnedRelease, assemble_owned_release,
-        check_release_source_dependencies,
+        OwnedReleaseError, OwnedReleaseInput, OwnedReleaseLimits, StagedOwnedRelease,
+        assemble_owned_release, check_release_source_dependencies,
     },
     owned_source_actions::SourceActionCorrespondenceContent,
 };
@@ -41,7 +40,7 @@ fn content(
         checked.registry().identity().unwrap(),
         input.mapping.registry
     );
-    let parts = checked.into_parts().unwrap();
+    let parts = ReleaseSourceParts::from_checked(checked).unwrap();
     (parts.registry, parts.schema, parts.imports)
 }
 
@@ -305,10 +304,10 @@ fn authored_content_and_final_validation_honor_separate_resource_limits() {
     let mut exact_limits = OwnedReleaseLimits::default();
     exact_limits.normalization.max_policy_bytes = raw_bytes;
     assemble_owned_release(baseline.clone(), exact_limits).unwrap();
-    let parts = check_release_source_dependencies(baseline, exact_limits)
-        .unwrap()
-        .into_parts()
-        .unwrap();
+    let parts = ReleaseSourceParts::from_checked(
+        check_release_source_dependencies(baseline, exact_limits).unwrap(),
+    )
+    .unwrap();
     let imported = parts
         .imports
         .into_input(&parts.registry, &parts.schema, exact_limits)

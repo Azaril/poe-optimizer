@@ -7,13 +7,15 @@ use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 /// Own the exact policy only after every constituent-dependent check succeeds.
 /// Construction stays private to this module's validation pipeline; retaining
 /// the policy and its digest grants no rule or complete-build coverage.
-pub(super) struct CheckedNormalizationPolicy {
+pub struct CheckedNormalizationPolicy {
     input: NormalizationPolicy,
     identity: OwnedContentDigest,
 }
 
 impl CheckedNormalizationPolicy {
-    pub(super) fn into_authored_content(self) -> crate::owned_normalize::NormalizationContent {
+    /// Consume the policy admitted by the shared constituent validator. A raw
+    /// policy cannot construct this owner or discard its dependency commitments.
+    pub fn into_authored_content(self) -> crate::owned_normalize::NormalizationContent {
         crate::owned_normalize::NormalizationContent::from_checked(self.input)
     }
 

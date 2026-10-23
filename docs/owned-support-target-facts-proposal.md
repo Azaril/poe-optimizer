@@ -3,6 +3,8 @@
 Status: private unused-input repair implemented on 2026-10-22. Structural read
 authority remains a deferred proposal; it is not a prerequisite for the current support corpus. An earlier
 review prompt asked about that extension before the demand audit below finished.
+The October 23 delivery-demand repair is implemented and validated in both Engine
+feature profiles before adding further target inputs. It introduces no new read authority.
 
 The maintained release has support level/quality preparation rules, but no
 production producers for the target facts required by `SupportInputBindingsInput`.
@@ -53,6 +55,48 @@ required flag recovers preparation and inherited delivery while the replaced
 definition's unused flag stays unknown. A union of flags named by selected
 definitions would still be too eager when another predicate conclusively rejects
 the candidate.
+
+## Delivery demand audit, October 23
+
+The delivery driver currently inserts an assigned-target admission for every
+selection root before adding actual receiving/source-effect admissions. A physical
+Gem container can therefore require target facts even when every consumer names
+one of its generated effects. The retained Sniper source has distinct Summon and
+Command effects; its primary exact receiving relation explicitly supplies no
+inherited support-preparation context. Definition types for that effect cannot
+be copied onto its container to satisfy an extra preparation request.
+
+The existing source-property fixture reproduces this by removing only its
+unused container summoner-presence producer. The baseline ran one Engine test
+and failed with `MissingProducer` on that exact authored container's
+`summoner-present` Stat (`runs/unused-container-admission-before.log`); this is
+not a zero-test or synthetic admission result. Raw source inputs, source-property
+aggregation, generated membership, readiness and completeness must remain intact.
+The repair retains explicit assigned-target/OwnerSkill consumers, exact
+summoner dependencies, prepared outputs and standalone preparation requests.
+Build demand from declared consumers, never from a support currently evaluating
+false. Adding output demand preserves already bound child admissions.
+Selection activation and source checks remain scheduled independently of
+applicability demand. The final default run passes 712 Engine and 269 Data owned
+tests; native-only also passes 73 Engine and two Data library tests. Both retain
+fifteen existing ignored optional reference cases. An initially invalid new
+physical-source/summoner control was repaired using the existing valid inherited
+fixture, without relaxing production validation. Its two branches independently
+prove output-only and summoner-only root demand and exact missing-fact failures.
+
+The complete Sniper prohibition proof can use the pinned Boolean exporter
+(`Export/Scripts/skills.lua:433–435`, database schema `Export/spec.lua:24771–24776`),
+the winning definition (`act_int.lua:18677–18799`), loader and exact effect
+construction, and `CalcTools.lua:108–111`. Explicitly prohibited Abyssal Apparition
+provides a positive control. This proves the meaning of the encoded declaration;
+it does not import general Lua truthiness into native rules. Archive the database
+schema before publishing that evidence packet. Occurrence-specific `noSupports`
+continues to suppress exact candidate lists and must remain separate.
+
+Skill rules cannot use `RuleEntity::Actor` under current compiler permissions.
+Existing exact receiving/summoner relationships should supply their context;
+widening Actor reads requires the deferred design decision only when a real
+remaining consumer requires it.
 
 ## Recommended ownership
 

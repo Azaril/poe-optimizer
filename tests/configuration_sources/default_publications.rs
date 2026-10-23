@@ -1,23 +1,6 @@
 //! Explicit all-five publications through one shared preservation harness.
-#[allow(dead_code)]
-#[path = "support/owned_configuration_enemy_critical_chance_inputs.rs"]
-mod chance;
-#[path = "support/owned_configuration_default_sources.rs"]
-mod configuration_sources;
-#[allow(dead_code)]
-#[path = "support/owned_configuration_default_stage.rs"]
-mod configuration_stage;
-#[allow(dead_code)]
-#[path = "support/owned_configuration_enemy_critical_damage_inputs.rs"]
-mod damage;
-#[allow(dead_code)]
-#[path = "support/owned_configuration_enemy_speed_inputs.rs"]
-mod interval;
-#[path = "support/owned_configuration_default_publication.rs"]
-mod publication;
-#[allow(dead_code)]
-#[path = "support/owned_selected_request.rs"]
-mod selected;
+use super::{chance, damage, interval, publication};
+
 #[test]
 #[ignore = "requires authenticated prior package and fresh output directory; no source runtime"]
 fn publish_configured_enemy_interval_preserving_all_five_originals() {

@@ -307,154 +307,252 @@ fn direct_and_inherited_contexts_for_one_skill_cannot_publish_a_shared_stat() {
 
 #[test]
 fn inherited_outputs_keep_child_types_parent_selection_and_explicit_summoner_context() {
-    let mut f = source_fixture();
-    let parent = SkillTarget::Authored(occurrence(30));
-    let child = target(30, "first");
-    // The parent's own frozen facts and its support scalar preparation differ
-    // deliberately from the generated receiving skill's initial facts.
-    let mut parent_facts = f
-        .owner_mut(&subject(def::<SkillDefinition>("ability")))
-        .programs
-        .members
-        .iter()
-        .find(|p| p.id == key("target-facts"))
-        .unwrap()
-        .clone();
-    parent_facts.id = key("parent-target-facts");
-    parent_facts.reads.clear();
-    parent_facts
-        .nodes
-        .iter_mut()
-        .find(|n| n.id == key("base"))
-        .unwrap()
-        .expression = RuleExpression::Literal {
-        value: delivery::integer(77),
-    };
-    f.owner_mut(&fixture::summoner_owner())
-        .programs
-        .members
-        .push(parent_facts);
-    f.owner_mut(&subject(def::<SkillDefinition>("ability")))
-        .programs
-        .members
-        .iter_mut()
-        .find(|p| p.id == key("target-facts"))
-        .unwrap()
-        .nodes
-        .iter_mut()
-        .find(|n| n.id == key("spell"))
-        .unwrap()
-        .expression = RuleExpression::Literal {
-        value: ParameterValue::Boolean(false),
-    };
-    for assignment in &mut f.build.supports {
-        if assignment.target == child {
-            assignment.target = parent.clone();
-        }
-    }
-    for sequence in f.build.authored_support_order.as_mut().unwrap() {
-        if sequence.target == child {
-            sequence.target = parent.clone();
-        }
-    }
-    let (args, outputs) = inputs_with(
-        &f,
-        |_| {},
-        |_| {},
-        |_| {},
-        |receiving| {
-            receiving.targets.push(SupportTargetReceivingRoles {
-                owner: SupportTargetDefinition::Gem(def("summoner")),
-                roles: DeclaredSet::complete(vec![SupportReceivingRoleBinding {
-                    role: key("action"),
-                    endpoints: DeclaredSet::complete(vec![SupportReceiverEndpoint::Action {
-                        path: vec![
-                            fixture::child_grant(),
-                            DeclaredSlot {
-                                declaration: SlotOwnerDefId::Actor(def("family")),
-                                slot: def("first"),
-                            },
-                        ],
-                        output: delivery::output(),
-                        selection: SupportActionSelection::AllDeclared,
-                        admission: SupportAdmissionContext::ReceivingSkill {
-                            summoner_path: Some(vec![]),
-                        },
-                    }]),
-                }]),
-            });
-        },
-    );
-    let plan = OwnedSupportEffectPlan::compile_with_outputs(
-        args,
-        outputs,
-        PlanLimits::default(),
-        SupportPreparationLimits::default(),
-    )
-    .unwrap();
-    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
-    let effects = delivery::evaluated(&report);
-    assert_eq!(type_value(effects, &parent, "spell"), &boolean(true));
-    assert_eq!(type_value(effects, &child, "spell"), &boolean(false));
-    assert_eq!(type_value(effects, &child, "duration"), &boolean(false));
-    assert_eq!(
-        type_value(effects, &child, "prepared-spell"),
-        &boolean(false)
-    );
-    assert_eq!(
-        type_value(effects, &child, "prepared-duration"),
-        &boolean(true)
-    );
-    let exports: Vec<_> = effects
-        .effects
-        .iter()
-        .filter_map(|effect| {
-            let RuleOrigin::SupportPreparation { context } = &effect.key.invocation.origin else {
-                return None;
-            };
-            (context.target == child).then_some(context)
-        })
-        .collect();
-    assert_eq!(exports.len(), 2);
-    for context in exports {
-        assert_eq!(context.selection, parent);
-        assert_eq!(context.summoner, Some(parent.clone()));
-    }
-    let action = action(30, "first");
-    let application = effects
-        .effects
-        .iter()
-        .find(|effect| {
-            effect.key.invocation.program == key("action-deliver")
-                && delivery::application(effect).is_some_and(|key| {
-                    key.receiver == SupportReceiverKey::Action(Box::new(action.clone()))
-                })
-        })
-        .unwrap();
-    let application_key = delivery::application(application).unwrap();
-    assert_eq!(application_key.prepared.target, parent);
-    assert_eq!(
-        application_key.prepared.origin,
-        SupportOrigin::Assignment(occurrence(61))
-    );
-    assert_eq!(
-        application.value,
-        delivery::known(81),
-        "raw level2 plus parent-computed effective79; never recompute from child base12"
-    );
-    let downstream = PlanValueKey::Stat {
-        entity: ConcreteEntity::Action(Box::new(action)),
-        stat: def("prepared-result"),
-    };
-    assert_eq!(
-        effects
-            .values
+    for with_summoner in [false, true] {
+        let mut f = source_fixture();
+        let parent = SkillTarget::Authored(occurrence(30));
+        let child = target(30, "first");
+        // The parent's own frozen facts and its support scalar preparation differ
+        // deliberately from the generated receiving skill's initial facts.
+        let mut parent_facts = f
+            .owner_mut(&subject(def::<SkillDefinition>("ability")))
+            .programs
+            .members
             .iter()
-            .find(|row| row.key == downstream)
+            .find(|p| p.id == key("target-facts"))
             .unwrap()
-            .value,
-        delivery::known(81)
-    );
+            .clone();
+        parent_facts.id = key("parent-target-facts");
+        parent_facts.reads.clear();
+        parent_facts
+            .nodes
+            .iter_mut()
+            .find(|n| n.id == key("base"))
+            .unwrap()
+            .expression = RuleExpression::Literal {
+            value: delivery::integer(77),
+        };
+        f.owner_mut(&fixture::summoner_owner())
+            .programs
+            .members
+            .push(parent_facts);
+        if !with_summoner {
+            f.owner_mut(&fixture::summoner_owner())
+                .programs
+                .members
+                .push(RuleProgram {
+                    id: key("parent-output-consumer"),
+                    context: RuleEntityKind::Skill,
+                    reads: vec![RuleRead {
+                        id: key("prepared"),
+                        value_type: ComputedValueType::Boolean,
+                        source: RuleReadSource::Stat {
+                            entity: RuleEntity::Skill,
+                            stat: def("prepared-duration"),
+                        },
+                    }],
+                    nodes: vec![fixture::read_node("prepared", "prepared")],
+                    effects: vec![fixture::effect(
+                        "require",
+                        RuleEffectKind::Requirement {
+                            satisfied: key("prepared"),
+                            code: key("parent-output-consumer"),
+                        },
+                    )],
+                });
+        }
+        f.owner_mut(&subject(def::<SkillDefinition>("ability")))
+            .programs
+            .members
+            .iter_mut()
+            .find(|p| p.id == key("target-facts"))
+            .unwrap()
+            .nodes
+            .iter_mut()
+            .find(|n| n.id == key("spell"))
+            .unwrap()
+            .expression = RuleExpression::Literal {
+            value: ParameterValue::Boolean(false),
+        };
+        for assignment in &mut f.build.supports {
+            if assignment.target == child {
+                assignment.target = parent.clone();
+            }
+        }
+        for sequence in f.build.authored_support_order.as_mut().unwrap() {
+            if sequence.target == child {
+                sequence.target = parent.clone();
+            }
+        }
+        f.build
+            .authored_support_order
+            .as_mut()
+            .unwrap()
+            .push(AuthoredSupportOrder {
+                target: SkillTarget::Authored(occurrence(31)),
+                assignments: vec![],
+            });
+        let bindings = |f: &Fixture| {
+            inputs_with(
+                f,
+                |_| {},
+                |_| {},
+                |stages| {
+                    for row in &mut stages.programs.members {
+                        if row.program == key("parent-output-consumer") {
+                            row.stage = key("final");
+                        }
+                    }
+                },
+                |receiving| {
+                    receiving.targets.push(SupportTargetReceivingRoles {
+                        owner: SupportTargetDefinition::Gem(def("summoner")),
+                        roles: DeclaredSet::complete(vec![SupportReceivingRoleBinding {
+                            role: key("action"),
+                            endpoints: DeclaredSet::complete(vec![
+                                SupportReceiverEndpoint::Action {
+                                    path: vec![
+                                        fixture::child_grant(),
+                                        DeclaredSlot {
+                                            declaration: SlotOwnerDefId::Actor(def("family")),
+                                            slot: def("first"),
+                                        },
+                                    ],
+                                    output: delivery::output(),
+                                    selection: SupportActionSelection::AllDeclared,
+                                    admission: SupportAdmissionContext::ReceivingSkill {
+                                        summoner_path: with_summoner.then(Vec::new),
+                                    },
+                                },
+                            ]),
+                        }]),
+                    });
+                },
+            )
+        };
+        let (args, outputs) = bindings(&f);
+        let plan = OwnedSupportEffectPlan::compile_with_outputs(
+            args,
+            outputs,
+            PlanLimits::default(),
+            SupportPreparationLimits::default(),
+        )
+        .unwrap();
+        let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        let effects = delivery::evaluated(&report);
+        assert_eq!(type_value(effects, &parent, "spell"), &boolean(true));
+        if !with_summoner {
+            assert_eq!(
+                type_value(effects, &parent, "prepared-duration"),
+                &boolean(true)
+            );
+        } else {
+            assert!(
+                !effects.effects.iter().any(|effect| matches!(
+                    &effect.key.invocation.origin,
+                    RuleOrigin::SupportPreparation { context } if context.target == parent
+                )),
+                "the summoner-only branch has no consumed root output"
+            );
+        }
+        assert_eq!(type_value(effects, &child, "spell"), &boolean(false));
+        assert_eq!(type_value(effects, &child, "duration"), &boolean(false));
+        assert_eq!(
+            type_value(effects, &child, "prepared-spell"),
+            &boolean(false)
+        );
+        assert_eq!(
+            type_value(effects, &child, "prepared-duration"),
+            &boolean(with_summoner)
+        );
+        let exports: Vec<_> = effects
+            .effects
+            .iter()
+            .filter_map(|effect| {
+                let RuleOrigin::SupportPreparation { context } = &effect.key.invocation.origin
+                else {
+                    return None;
+                };
+                (context.target == child).then_some(context)
+            })
+            .collect();
+        assert_eq!(exports.len(), 2);
+        for context in exports {
+            assert_eq!(context.selection, parent);
+            assert_eq!(context.summoner, with_summoner.then(|| parent.clone()));
+        }
+        let action = action(30, "first");
+        let application = effects
+            .effects
+            .iter()
+            .find(|effect| {
+                effect.key.invocation.program == key("action-deliver")
+                    && delivery::application(effect).is_some_and(|key| {
+                        key.receiver == SupportReceiverKey::Action(Box::new(action.clone()))
+                    })
+            })
+            .unwrap();
+        let application_key = delivery::application(application).unwrap();
+        assert_eq!(application_key.prepared.target, parent);
+        assert_eq!(
+            application_key.prepared.origin,
+            SupportOrigin::Assignment(occurrence(61))
+        );
+        assert_eq!(
+            application.value,
+            if with_summoner {
+                delivery::known(81)
+            } else {
+                EffectValue::Inactive
+            },
+            "raw level2 plus parent-computed effective79; never recompute from child base12"
+        );
+        let downstream = PlanValueKey::Stat {
+            entity: ConcreteEntity::Action(Box::new(action)),
+            stat: def("prepared-result"),
+        };
+        assert_eq!(
+            effects
+                .values
+                .iter()
+                .find(|row| row.key == downstream)
+                .unwrap()
+                .value,
+            delivery::known(if with_summoner { 81 } else { 0 })
+        );
+        // Each branch has one independent root demand: the consumed output
+        // without inheritance, or the child's explicit summoner relation
+        // without a root output consumer. Both require the root's facts.
+        f.owner_mut(&fixture::summoner_owner())
+            .programs
+            .members
+            .iter_mut()
+            .find(|program| program.id == key("parent-target-facts"))
+            .unwrap()
+            .effects
+            .retain(|effect| effect.id != key("summoner-present"));
+        let (args, outputs) = bindings(&f);
+        let plan = OwnedSupportEffectPlan::compile_with_outputs(
+            args,
+            outputs,
+            PlanLimits::default(),
+            SupportPreparationLimits::default(),
+        )
+        .unwrap();
+        let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        assert_eq!(
+            report.outcome,
+            SupportEffectsOutcome::Unavailable {
+                cause: EffectValue::Unresolved {
+                    reason: PlanGapReason::MissingProducer,
+                    read: None,
+                },
+                input: Some(Box::new(PlanValueKey::Stat {
+                    entity: ConcreteEntity::Skill(Box::new(parent)),
+                    stat: def("summoner-present"),
+                })),
+            }
+        );
+    }
 }
 
 #[test]

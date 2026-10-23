@@ -1,11 +1,13 @@
 //! Original dependency seals are checked before source composition. That check
 //! is not a certificate for executable rules or evaluation artifacts.
 use super::{DslRelease, ReleaseBuildError, fixture, tracked_release};
+use poe_optimizer_authoring::ReleaseSourceParts;
 use poe_optimizer_core::{
     owned_content::{OwnedContentDigest, digest_owned},
     owned_definitions::{GameVersionNamespace, OwnedDefinitionKey},
     owned_schema::{DefinitionAddress, SchemaSubject},
 };
+use poe_optimizer_data::owned_rules::OwnedRulePackage;
 use poe_optimizer_import::{
     owned_mapping::OwnedIdRegistry,
     owned_recipe::OwnedRecipeError,
@@ -59,6 +61,45 @@ fn original_dependency_seals_and_source_pins_cannot_be_repaired_by_source_checki
         );
         assert_eq!(serde_json::to_vec(&bad).unwrap(), before);
     }
+}
+
+#[test]
+fn consuming_source_parts_preserves_original_envelopes_without_admitting_rules() {
+    let mut input = fixture().input.clone();
+    let owner = input
+        .recipe
+        .rules
+        .owners
+        .iter_mut()
+        .find(|owner| !owner.programs.members.is_empty())
+        .unwrap();
+    owner
+        .programs
+        .members
+        .push(owner.programs.members[0].clone());
+    let original = serde_json::to_vec(&input).unwrap();
+    let parts = check_release_source_dependencies(&input, Default::default())
+        .unwrap()
+        .into_parts();
+    // The Import boundary returns the exact envelope it authenticated, including
+    // an intentionally invalid program payload. It performs no authoring repair.
+    assert_eq!(parts.rules, input.recipe.rules);
+    assert_eq!(
+        parts.routing.input().definitions,
+        input.recipe.routing.definitions
+    );
+    assert_eq!(parts.mapping.input().registry, input.mapping.registry);
+    assert_eq!(parts.mapping.input().definitions, input.mapping.definitions);
+    assert!(OwnedRulePackage::new(parts.rules, &parts.schema, Default::default()).is_err());
+
+    let authored = ReleaseSourceParts::from_checked(
+        check_release_source_dependencies(&input, Default::default()).unwrap(),
+    )
+    .unwrap();
+    let reconstructed = authored.rules.into_input(&authored.schema);
+    assert_eq!(reconstructed, input.recipe.rules);
+    assert!(OwnedRulePackage::new(reconstructed, &authored.schema, Default::default()).is_err());
+    assert_eq!(serde_json::to_vec(&input).unwrap(), original);
 }
 
 #[test]

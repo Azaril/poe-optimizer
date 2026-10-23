@@ -85,7 +85,9 @@ pub struct NormalizationContent {
     pub source_presentation: Option<SourcePresentationPolicy>,
 }
 
-pub(crate) struct NormalizationContentDependencies<'a, I> {
+/// Dependencies for constructing raw authored policy inputs. This aggregate is
+/// not a checked normalization owner; complete release validation remains required.
+pub struct NormalizationContentDependencies<'a, I> {
     pub definitions: &'a I,
     pub mappings: &'a OwnedMappingIndex,
     pub roles: &'a OwnedSkillRoleIndex,
@@ -182,7 +184,7 @@ impl NormalizationContent {
 
     /// Construct one raw policy in dependency order. Complete release checking
     /// still owns all membership, semantic, coverage and work-limit validation.
-    pub(crate) fn into_input<I: DefinitionSchemaIndex>(
+    pub fn into_input<I: DefinitionSchemaIndex>(
         self,
         dependencies: NormalizationContentDependencies<'_, I>,
         limits: NormalizationLimits,

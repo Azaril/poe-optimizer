@@ -74,8 +74,8 @@ mod view_support_source;
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{
     BuiltRelease, OwnedReleaseEvaluationContent, ReleaseAllocationBase, ReleaseBuildError,
-    ReleaseBuildLimits, ReleaseSource, SourceEncoding, SymbolRegistry, build_release, load_names,
-    lower_program, parse_program, parse_release_manifest, raise_program,
+    ReleaseBuildLimits, ReleaseSource, ReleaseSourceParts, SourceEncoding, SymbolRegistry,
+    build_release, load_names, lower_program, parse_program, parse_release_manifest, raise_program,
 };
 use poe_optimizer_core::{
     owned_build::ParameterValue,
@@ -1824,12 +1824,13 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         additions
     );
     assert_eq!(current_registry.entries.len(), previous.entries.len() + 69);
-    let parts = poe_optimizer_import::owned_release::check_release_source_dependencies(
-        release.input(),
-        Default::default(),
+    let parts = ReleaseSourceParts::from_checked(
+        poe_optimizer_import::owned_release::check_release_source_dependencies(
+            release.input(),
+            Default::default(),
+        )
+        .unwrap(),
     )
-    .unwrap()
-    .into_parts()
     .unwrap();
     let mut restored = release.input().clone();
     restored.recipe.rules = parts.rules.into_input(&old_schema);

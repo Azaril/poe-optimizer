@@ -1,13 +1,5 @@
 //! Offline source proof; no new PoB execution or native effect implementation.
-#[allow(dead_code)]
-#[path = "support/owned_configuration_default_sources.rs"]
-mod configuration_sources;
-#[allow(dead_code)]
-#[path = "support/owned_configuration_default_stage.rs"]
-mod configuration_stage;
-#[allow(dead_code)]
-#[path = "support/owned_configuration_player_withered_input.rs"]
-mod withered;
+use super::withered;
 use serde_json::json;
 
 #[test]

@@ -7,7 +7,8 @@
 //! evaluation. Publication happens only after complete assembly succeeds.
 use crate::{
     DeclarationError, DeclarationLimits, ManifestError, ManifestLimits, NamedIdRegistry,
-    OwnedReleaseEvaluationContent, OwnedReleaseSupportContent, manifest_parse::parse_document,
+    OwnedReleaseEvaluationContent, OwnedReleaseSupportContent, ReleaseSourceParts,
+    manifest_parse::parse_document,
 };
 use poe_optimizer_core::{
     owned_content::OwnedContentDigest, owned_definitions::OwnedDefinitionKey,
@@ -748,7 +749,10 @@ pub fn build_release(
             return Err(OwnedReleaseError::Limit("validation entries").into());
         }
     }
-    let source = check_release_source_dependencies(&input, source_limits)?.into_parts()?;
+    let source = ReleaseSourceParts::from_checked(check_release_source_dependencies(
+        &input,
+        source_limits,
+    )?)?;
     let (staged, predecessor) = declarations::stage(
         manifest,
         &decoder,

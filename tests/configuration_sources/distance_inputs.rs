@@ -1,13 +1,5 @@
 //! Offline data and retained original-source proof; no Lua execution.
-#[allow(dead_code)]
-#[path = "support/owned_configuration_default_sources.rs"]
-mod configuration_sources;
-#[allow(dead_code)]
-#[path = "support/owned_configuration_default_stage.rs"]
-mod configuration_stage;
-#[allow(dead_code)]
-#[path = "support/owned_configuration_distance_inputs.rs"]
-mod distance;
+use super::distance;
 use serde_json::json;
 
 #[test]

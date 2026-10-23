@@ -1,17 +1,4 @@
-#[allow(dead_code)]
-#[path = "support/owned_configuration_default_sources.rs"]
-mod configuration_sources;
-#[allow(dead_code)]
-#[path = "support/owned_configuration_default_stage.rs"]
-mod configuration_stage;
-#[path = "support/owned_configuration_default_publication.rs"]
-mod publication;
-#[allow(dead_code)]
-#[path = "support/owned_selected_request.rs"]
-mod selected;
-#[allow(dead_code)]
-#[path = "support/owned_configuration_player_withered_input.rs"]
-mod withered;
+use super::{publication, withered};
 
 #[test]
 #[ignore = "requires authenticated prior and fresh output; no source VM"]

@@ -1,15 +1,25 @@
 //! Offline content construction; runtime readers still require exact bindings.
-use super::*;
-use crate::{
-    owned_item_lines::ItemLinePolicyContent,
-    owned_item_source::ItemSourceLayoutContent,
-    owned_mapping::{MappingContent, OwnedIdRegistrySnapshot},
-    owned_normalize::{NormalizationContent, NormalizationContentDependencies},
-    owned_reward_policy::RewardPolicyContent,
-    owned_skill_roles::SkillRoleContent,
-    owned_tree_policy::TreeNormalizationContent,
-};
+use poe_optimizer_core::owned_content::digest_owned;
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
+use poe_optimizer_import::{
+    owned_item_lines::{ItemLinePolicyContent, ItemLinePolicyInput, OwnedItemLinePolicy},
+    owned_item_source::{
+        ItemSourceLayoutContent, ItemSourceLayoutPolicy, ItemSourceLayoutPolicyInput,
+    },
+    owned_mapping::{
+        MappingContent, MappingPackageInput, OwnedIdRegistrySnapshot, OwnedMappingIndex,
+    },
+    owned_normalize::{
+        NormalizationContent, NormalizationContentDependencies, NormalizationPolicy,
+    },
+    owned_release::{OwnedReleaseError, OwnedReleaseLimits},
+    owned_reward_policy::{OwnedRewardPolicy, RewardPolicyContent, RewardPolicyInput},
+    owned_skill_roles::{OwnedSkillRoleIndex, OwnedSkillRolePackageInput, SkillRoleContent},
+    owned_tree_policy::{
+        OwnedTreeNormalizationPolicy, TreeNormalizationContent, TreeNormalizationPackageInput,
+    },
+};
+use serde::{Deserialize, Serialize};
 
 /// Authored Import declarations. Historical evidence is retained; current
 /// dependency commitments are constructed from the supplied checked packages.
@@ -40,27 +50,6 @@ pub struct ImportSourceInput {
 }
 
 impl ImportSourceContent {
-    pub(super) fn from_checked(input: constituents::CheckedImportConstituents) -> Result<Self> {
-        let constituents::CheckedImportConstituents {
-            mapping,
-            roles,
-            normalization,
-            rewards,
-            items,
-            item_source,
-            tree,
-        } = input;
-        Ok(Self {
-            mapping: mapping.into_authored_content(),
-            roles: roles.into_authored_content(),
-            normalization: normalization.into_authored_content(),
-            rewards: rewards.into_authored_content(),
-            items: items.into_authored_content()?,
-            item_source: item_source.into_authored_content()?,
-            tree: tree.map(OwnedTreeNormalizationPolicy::into_authored_content),
-        })
-    }
-
     /// Construct the connected Import dependency graph in one order. This does
     /// not accept sealed runtime inputs, rewrite historical evidence, or touch
     /// evaluation data. Callers still owe ordinary final release validation.
@@ -69,7 +58,7 @@ impl ImportSourceContent {
         registry: &OwnedIdRegistrySnapshot,
         schema: &OwnedDefinitionSchemaPackage,
         limits: OwnedReleaseLimits,
-    ) -> Result<ImportSourceInput> {
+    ) -> Result<ImportSourceInput, OwnedReleaseError> {
         limits.validate()?;
         limits.normalization.validate()?;
         digest_owned(

@@ -51,16 +51,15 @@ use std::{
 
 mod checked;
 mod constituents;
-mod import_content;
 mod loader;
-mod recipe_source_content;
 mod source;
 pub use checked::CheckedOwnedRelease;
 use checked::ReleaseView;
-pub use import_content::{ImportSourceContent, ImportSourceInput};
+pub use constituents::CheckedNormalizationPolicy;
 pub use loader::load_owned_release_artifacts;
-pub use recipe_source_content::RuleSourceContent;
-pub use source::{CheckedImportSource, ReleaseSourceParts, check_release_source_dependencies};
+pub use source::{
+    CheckedImportSource, CheckedImportSourceParts, check_release_source_dependencies,
+};
 
 pub const OWNED_RELEASE_VERSION: u32 = 1;
 pub const OWNED_EVALUATION_RELEASE_VERSION: u32 = 2;

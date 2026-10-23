@@ -103,13 +103,17 @@ impl BoundSupportOutputs {
                     .ok_or(PlanError::Limit("support admission contexts"))?;
                 charge(work, 6 * target_copy_work(&target))?;
                 assignments.entry(target.clone()).or_default();
-                admissions.insert(
-                    target.clone(),
-                    vec![AdmissionStep {
+                let rows = admissions.entry(target.clone()).or_default();
+                charge(work, rows.len())?;
+                // A demanded root output can join a selection whose exact
+                // child effects already need admission. Keep those contexts.
+                rows.insert(
+                    0,
+                    AdmissionStep {
                         target: target.clone(),
                         assigned: true,
                         summoner: None,
-                    }],
+                    },
                 );
                 SupportPreparationContextKey {
                     selection: target.clone(),

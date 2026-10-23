@@ -9,6 +9,16 @@ use poe_optimizer_engine::owned_plan::*;
 use rayon::prelude::*;
 use std::collections::BTreeSet;
 
+fn remove_container_admission_facts(f: &mut Fixture) {
+    let facts = readiness::program_mut(f, readiness::physical_owner(), "target-facts-source");
+    facts.effects.retain(|effect| effect.id == key("base"));
+    assert_eq!(
+        facts.effects.len(),
+        1,
+        "retain the actual raw-input producer"
+    );
+}
+
 #[test]
 fn physical_sources_preserve_producer_inputs_and_share_properties_across_action_variants() {
     let f = fixture();
@@ -73,6 +83,83 @@ fn physical_sources_preserve_producer_inputs_and_share_properties_across_action_
 }
 
 #[test]
+fn physical_source_admission_does_not_require_an_unused_container_summoner_fact() {
+    let mut f = fixture();
+    let facts = readiness::program_mut(&mut f, readiness::physical_owner(), "target-facts-source");
+    let effects_before = facts.effects.len();
+    facts
+        .effects
+        .retain(|effect| effect.id != key("summoner-present"));
+    assert_eq!(facts.effects.len() + 1, effects_before);
+
+    // This physical source owns raw inputs and the selected support sequence.
+    // Its declared generated effect has its own explicit no-summoner admission;
+    // the container is not an additional mechanical effect.
+    let plan = compile(&f).expect("complete source and exact effect relationship");
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    let report = evaluated(&report);
+    for (id, final_value) in [(30, 33), (31, 42)] {
+        assert_eq!(
+            value(report, &final_key(id)),
+            &EffectValue::Known {
+                value: base::integer(final_value)
+            }
+        );
+        assert_eq!(
+            value(report, &count_key(id)),
+            &EffectValue::Known {
+                value: base::integer(1)
+            }
+        );
+    }
+    let properties: Vec<_> = report
+        .effects
+        .iter()
+        .filter(|row| row.key.invocation.program == key("source-supported"))
+        .collect();
+    assert_eq!(properties.len(), 2);
+    for property in properties {
+        assert_eq!(
+            property.value,
+            EffectValue::Known {
+                value: base::integer(2)
+            },
+            "source aggregation still reads the actual support Gem"
+        );
+        assert!(matches!(
+            &property.key.invocation.origin,
+            RuleOrigin::SourceProperty { owner: source, position: Some(0), .. }
+                if [owner(30), owner(31)].contains(source.as_ref())
+        ));
+    }
+}
+
+#[test]
+fn exact_effect_facts_remain_required_without_container_admission() {
+    let mut f = fixture();
+    remove_container_admission_facts(&mut f);
+    readiness::program_mut(&mut f, readiness::summon_owner(), "target-facts-summon")
+        .effects
+        .retain(|effect| effect.id != key("cannot-support"));
+    let plan = compile(&f).unwrap();
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert_eq!(
+        report.outcome,
+        SupportEffectsOutcome::Unavailable {
+            cause: EffectValue::Unresolved {
+                reason: PlanGapReason::MissingProducer,
+                read: None,
+            },
+            input: Some(Box::new(PlanValueKey::Stat {
+                entity: ConcreteEntity::Skill(Box::new(member(30))),
+                stat: def("cannot-support"),
+            })),
+        },
+        "the exact effect's required facts remain mandatory"
+    );
+}
+
+#[test]
 fn no_assignments_or_queries_still_execute_nonzero_external_source_properties() {
     let mut f = fixture();
     without_supports(&mut f);
@@ -116,7 +203,7 @@ fn no_assignments_or_queries_still_execute_nonzero_external_source_properties() 
 
 #[test]
 fn direct_sources_keep_authored_raw_inputs_and_derive_a_distinct_final_stat() {
-    let f = direct_fixture();
+    let mut f = direct_fixture();
     let original = f.build.skills[0].parameters.clone();
     let plan = readiness::compile_inputs(direct_inputs(&f).unwrap()).unwrap();
     let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
@@ -148,6 +235,30 @@ fn direct_sources_keep_authored_raw_inputs_and_derive_a_distinct_final_stat() {
             .iter()
             .any(|row| matches!(row.key, PlanValueKey::SkillParameter { .. })),
         "Direct final values do not create self-projection parameters"
+    );
+
+    readiness::program_mut(
+        &mut f,
+        subject(def::<poe_optimizer_core::owned_definitions::SkillDefinition>("skill")),
+        "target-facts-direct",
+    )
+    .effects
+    .retain(|effect| effect.id != key("summoner-present"));
+    let plan = readiness::compile_inputs(direct_inputs(&f).unwrap()).unwrap();
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert_eq!(
+        report.outcome,
+        SupportEffectsOutcome::Unavailable {
+            cause: EffectValue::Unresolved {
+                reason: PlanGapReason::MissingProducer,
+                read: None,
+            },
+            input: Some(Box::new(PlanValueKey::Stat {
+                entity: ConcreteEntity::Skill(Box::new(owner(32))),
+                stat: def("summoner-present"),
+            })),
+        },
+        "OwnerSkill explicitly requires the assigned source's own admission"
     );
 }
 
@@ -363,9 +474,12 @@ fn measure(plan: &Effects, scratch: &mut OwnedPlanScratch) -> (SupportEffectsRep
 
 #[test]
 fn one_decreasing_budget_covers_source_census_properties_and_assembly_and_recovers() {
-    let plan = compile(&fixture()).unwrap();
+    let mut f = fixture();
+    remove_container_admission_facts(&mut f);
+    let plan = compile(&f).unwrap();
     let mut scratch = plan.new_scratch();
     let (expected, used) = measure(&plan, &mut scratch);
+    evaluated(&expected);
     assert!(used > 1);
     let mut remaining = used * 2;
     for after in [used, 0] {
@@ -387,8 +501,10 @@ fn one_decreasing_budget_covers_source_census_properties_and_assembly_and_recove
 
 #[test]
 fn source_copies_and_changed_inputs_survive_a_b_a_and_private_rayon_reuse() {
-    let a = fixture();
+    let mut a = fixture();
     let mut b = fixture();
+    remove_container_admission_facts(&mut a);
+    remove_container_admission_facts(&mut b);
     b.build.character.level = 23;
     b.build
         .gems
@@ -406,6 +522,9 @@ fn source_copies_and_changed_inputs_survive_a_b_a_and_private_rayon_reuse() {
     let expected = plans
         .each_ref()
         .map(|plan| measure(plan, &mut plan.new_scratch()));
+    for (report, _) in &expected {
+        evaluated(report);
+    }
     assert_ne!(plans[0].identity(), plans[1].identity());
     for (id, number) in [(30, 39), (31, 45)] {
         assert_eq!(
@@ -451,7 +570,8 @@ fn source_copies_and_changed_inputs_survive_a_b_a_and_private_rayon_reuse() {
 
 #[test]
 fn repeated_selected_positions_count_twice_but_admission_by_two_effects_does_not() {
-    let f = family_fixture();
+    let mut f = family_fixture();
+    remove_container_admission_facts(&mut f);
     let plan = readiness::compile_inputs(family_inputs(&f).unwrap()).unwrap();
     let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
     let report = evaluated(&report);

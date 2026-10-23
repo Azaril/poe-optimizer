@@ -84,8 +84,7 @@ pub use configuration_reward_inventory::{
     ConfigurationRewardControl, ConfigurationRewardInventoryContent,
     ConfigurationRewardInventoryPolicy,
 };
-pub use content::NormalizationContent;
-pub(crate) use content::NormalizationContentDependencies;
+pub use content::{NormalizationContent, NormalizationContentDependencies};
 pub(crate) use direct_skill_inputs::rebind as rebind_direct_skill_inputs;
 pub use direct_skill_inputs::{
     DirectSkillInputContent, DirectSkillInputDisposition, DirectSkillInputDispositionContent,
@@ -370,7 +369,9 @@ impl Default for NormalizationLimits {
     }
 }
 impl NormalizationLimits {
-    pub(crate) fn validate(self) -> Result<()> {
+    /// Check the declared ceilings before authored-content hashing or conversion.
+    /// Valid limits confer no authority to normalize or admit a policy.
+    pub fn validate(self) -> Result<()> {
         let hard = Self::default();
         for (name, value, max) in [
             ("work", self.max_work, hard.max_work),

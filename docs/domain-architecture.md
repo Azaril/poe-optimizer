@@ -420,6 +420,15 @@ Neither content construction nor source-prefix validation certifies complete
 release execution or coverage. Filesystem declaration publication uses the atomic
 checkpoint boundary below; source extraction never includes evaluation inputs or overwrites their
 unvalidated commitments.
+Authoring owns the Import/rule content DTOs and reconstruction adapter. Import's
+source checker retains the bounded original rule payload, including its checked
+envelope, alongside actual checked routing and Import packages. Consuming that
+owner returns those packages without rewriting them. Only the Authoring adapter
+projects the rule envelope into authored content, and it accepts the complete
+checked source rather than independently supplied raw parts. Checked normalization
+construction stays private; its consuming conversion and aggregate raw-input
+builder preserve the existing validators and limits. No compatibility re-export
+or second source checker is retained.
 Aggregate evaluation preflight accounts for readiness, receiving preparation,
 source properties and their nested lists before digesting or cloning. Partial gap
 lists are bounded even when later semantic validation rejects them; generated and
@@ -850,6 +859,14 @@ Diagnostics use the exact originating support definition, including after ordere
 replacement; a retained position is not an origin identity. Hard errors, work
 limits, complete type inventories and source/stage authority retain their existing
 checks. This adapter does not add a second policy or new public source-read API.
+Delivery prepares applicability for declared receiving effects, complete
+source-effect memberships, exact summoner dependencies and requested prepared
+outputs. Owning an ordered support selection does not itself make its physical
+container an applicability consumer. Every selection still retains its activation,
+raw-input, source-order and coverage checks. Demand is determined by declared
+consumers, never by a support currently evaluating false. Adding a prepared output
+must preserve existing child contexts; standalone target preparation continues to
+require the target it explicitly requests.
 Initial type memberships belong to definition data, expressed through typed Stat
 declarations and rule producers in the maintained authoring source. Their symbols
 use the same transactional allocator as other definitions before program lowering.

@@ -40,6 +40,20 @@ maintained Authoring harness, while runtime aggregate and stale-binding tests
 remain in Import. Consuming checked package parts replaces the runtime container's
 offline-content API, with no compatibility re-export. The rest of the publication
 core and allocator still require the R1 extraction described in the plan.
+Import/rule content DTOs and their reconstruction have also moved into Authoring.
+Both superseded Import modules and their re-exports are deleted. The retained
+source-prefix validator returns actual checked leaves and the original bounded
+rule envelope; Authoring alone owns its content projection. The two rule-content
+laws moved intact, while original-source and runtime refusal checks remain.
+The aggregate normalization content builder is a temporary shared seam until its
+remaining offline reconstruction moves; child conversion helpers stay private.
+
+The six default/distance/Withered CLI test roots now share one
+`configuration_sources` target. Nine ordinary source laws and five distinct
+ignored publication entry points are preserved, with three identical preservation
+laws registered once. Shared helper APIs and their other callers remain intact.
+This removes redundant compilation units without retiring the still-live
+publication assertions or claiming those ignored utilities have run.
 
 Atomic authoring checkpoints replace the old flat authoring CLI output contract
 and its optional caller-assembled declaration context. All CLI builds now preserve

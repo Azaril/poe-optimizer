@@ -24,6 +24,7 @@ mod parser;
 mod program;
 mod raise;
 mod release;
+mod source_content;
 mod symbols;
 
 pub use allocation::{
@@ -75,6 +76,9 @@ pub use release::{
     BuiltRelease, ReleaseAllocationBase, ReleaseBuildError, ReleaseBuildLimits, ReleaseManifest,
     ReleaseNameAllocation, ReleaseSource, ReleaseSourceSpec, SourceEncoding, build_release,
     parse_release_manifest,
+};
+pub use source_content::{
+    ImportSourceContent, ImportSourceInput, ReleaseSourceParts, RuleSourceContent,
 };
 pub use symbols::{SymbolError, SymbolErrorKind, SymbolLimits, SymbolRegistry};
 

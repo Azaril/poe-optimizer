@@ -4,7 +4,7 @@ use super::compile::{
     RetainedApplication, SupportSuffix, SymbolicBindings,
 };
 use super::graph::ExecutionGraphView;
-use super::support_outputs::{BoundSupportOutputs, PreparedTypeOutput};
+use super::support_outputs::{BoundSupportOutputs, PreparedTypeOutput, target_copy_work};
 use super::support_source_properties::SourcePropertyAttempt;
 use super::*;
 use crate::owned_supports::*;
@@ -260,8 +260,16 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                 &mut work,
             )?;
         }
-        charge(&mut work, admissions.values().map(Vec::len).sum())?;
-        let targets: BTreeSet<_> = admissions.values().flatten().map(|s| &s.target).collect();
+        charge(
+            &mut work,
+            assignments.len() + admissions.values().map(Vec::len).sum::<usize>(),
+        )?;
+        // Selection still depends on its owner's activation even when that
+        // container is not itself a mechanical effect needing admission.
+        let targets: BTreeSet<_> = assignments
+            .keys()
+            .chain(admissions.values().flatten().map(|s| &s.target))
+            .collect();
         let (schedule, classified) =
             supports::preparation_schedule(&plan, &stages, &inputs, targets, &mut work)?;
         charge(&mut work, schedule.len())?;
@@ -824,50 +832,33 @@ fn admission_orders(
     let mut rows: BTreeMap<SkillTarget, BTreeMap<SkillTarget, AdmissionStep>> = BTreeMap::new();
     let mut total = 0usize;
     for assigned in assignments.keys() {
-        charge(work, 1)?;
-        total = total
-            .checked_add(1)
-            .filter(|count| *count <= limits.max_owner_bindings)
-            .ok_or(PlanError::Limit("support admission contexts"))?;
-        rows.entry(assigned.clone()).or_default().insert(
-            assigned.clone(),
-            AdmissionStep {
-                target: assigned.clone(),
-                assigned: true,
-                summoner: None,
-            },
-        );
+        charge(work, target_copy_work(assigned) + 1)?;
+        if rows.len() >= limits.max_owner_bindings {
+            return Err(PlanError::Limit("support admission contexts"));
+        }
+        // A selection owner identifies the ordered supports and raw inputs. Its
+        // applicability is required only by an actual effect, summoner or output.
+        rows.insert(assigned.clone(), BTreeMap::new());
     }
     for template in templates.values() {
         charge(work, 1)?;
-        let BoundSupportAdmission::ReceivingSkill { target, summoner } =
-            &template.context.admission
-        else {
-            continue;
+        let (target, summoner, assigned) = match &template.context.admission {
+            BoundSupportAdmission::AssignedSkill { target } => (target, None, true),
+            BoundSupportAdmission::ReceivingSkill { target, summoner } => {
+                (target, summoner.as_ref(), false)
+            }
         };
         let contexts = rows
             .get_mut(&template.target)
             .ok_or_else(|| invalid("receiving template has no assignment target"))?;
-        if let Some(previous) = contexts.get(target) {
-            if previous.assigned || previous.summoner != *summoner {
-                return Err(invalid(
-                    "receiving target has competing admission relationships",
-                ));
-            }
-        } else {
-            total = total
-                .checked_add(1)
-                .filter(|count| *count <= limits.max_owner_bindings)
-                .ok_or(PlanError::Limit("support admission contexts"))?;
-            contexts.insert(
-                target.clone(),
-                AdmissionStep {
-                    target: target.clone(),
-                    assigned: false,
-                    summoner: summoner.clone(),
-                },
-            );
+        if assigned != (target == &template.target) {
+            return Err(invalid(
+                "receiving target has competing admission relationships",
+            ));
         }
+        demand_admission(
+            contexts, target, assigned, summoner, &mut total, limits, work,
+        )?;
     }
     for relation in &source_properties.relations {
         charge(work, relation.effects.len() + 1)?;
@@ -878,36 +869,37 @@ fn admission_orders(
             let (target, summoner, assigned) = match effect {
                 BoundSupportAdmission::AssignedSkill { target } => (target, None, true),
                 BoundSupportAdmission::ReceivingSkill { target, summoner } => {
-                    (target, summoner.clone(), false)
+                    (target, summoner.as_ref(), false)
                 }
             };
-            if assigned && target != &relation.owner {
+            if assigned != (target == &relation.owner) {
                 return Err(invalid("source relation has a foreign assigned admission"));
             }
-            if let Some(previous) = contexts.get(target) {
-                if previous.assigned != assigned || previous.summoner != summoner {
-                    return Err(invalid(
-                        "source effects have competing admission relationships",
-                    ));
-                }
-            } else {
-                total = total
-                    .checked_add(1)
-                    .filter(|count| *count <= limits.max_owner_bindings)
-                    .ok_or(PlanError::Limit("support admission contexts"))?;
-                contexts.insert(
-                    target.clone(),
-                    AdmissionStep {
-                        target: target.clone(),
-                        assigned,
-                        summoner,
-                    },
-                );
-            }
+            demand_admission(
+                contexts, target, assigned, summoner, &mut total, limits, work,
+            )?;
         }
     }
     let mut result = BTreeMap::new();
     for (assigned, mut contexts) in rows {
+        charge(work, contexts.len())?;
+        if contexts
+            .values()
+            .any(|step| step.summoner.as_ref() == Some(&assigned))
+        {
+            // An explicit root summoner consumes the root's prepared types even
+            // without a direct receiver. Other ancestors need their own exact
+            // admission relationship; the ordering below still rejects gaps.
+            demand_admission(
+                &mut contexts,
+                &assigned,
+                true,
+                None,
+                &mut total,
+                limits,
+                work,
+            )?;
+        }
         let mut ordered = Vec::new();
         let mut available = BTreeSet::new();
         while !contexts.is_empty() {
@@ -923,4 +915,40 @@ fn admission_orders(
         result.insert(assigned, ordered);
     }
     Ok(result)
+}
+
+fn demand_admission(
+    contexts: &mut BTreeMap<SkillTarget, AdmissionStep>,
+    target: &SkillTarget,
+    assigned: bool,
+    summoner: Option<&SkillTarget>,
+    total: &mut usize,
+    limits: PlanLimits,
+    work: &mut usize,
+) -> Result<()> {
+    if let Some(previous) = contexts.get(target) {
+        if previous.assigned != assigned || previous.summoner.as_ref() != summoner {
+            return Err(invalid(
+                "support target has competing admission relationships",
+            ));
+        }
+        return Ok(());
+    }
+    *total = total
+        .checked_add(1)
+        .filter(|count| *count <= limits.max_owner_bindings)
+        .ok_or(PlanError::Limit("support admission contexts"))?;
+    charge(
+        work,
+        2 * target_copy_work(target) + summoner.map_or(0, target_copy_work),
+    )?;
+    contexts.insert(
+        target.clone(),
+        AdmissionStep {
+            target: target.clone(),
+            assigned,
+            summoner: summoner.cloned(),
+        },
+    );
+    Ok(())
 }
