@@ -796,6 +796,33 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
             domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
         });
     }
+    // These intrinsic domains have separate full-source proofs. Their unchanged
+    // Partial numerical owners do not prove absence. Both existing generated
+    // skill suppliers remain present alongside four as-yet empty owners.
+    for (suffix, programs) in [
+        ("0b34", 1),
+        ("0d0f", 0),
+        ("10d4", 1),
+        ("11c2", 0),
+        ("14d8", 0),
+        ("19ec", 0),
+    ] {
+        let subject = SchemaSubject::Definition(DefinitionAddress::PassiveNode(
+            PassiveNodeDefId::new(ns.clone(), key(suffix)),
+        ));
+        let mut matches = original
+            .owners
+            .iter()
+            .filter(|owner| owner.owner == subject);
+        let owner = matches.next().unwrap();
+        assert!(matches.next().is_none());
+        assert!(!owner.programs.is_complete());
+        assert_eq!(owner.programs.members.len(), programs);
+        expected_domains.push(SupportSourceDomainDeclaration {
+            owner: subject,
+            domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+        });
+    }
     let domains = &mut preserved.support_discovery.as_mut().unwrap().providers;
     let prior_domains = &expected.support_discovery.as_ref().unwrap().providers;
     assert_eq!(domains.len(), prior_domains.len() + expected_domains.len());

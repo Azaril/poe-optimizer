@@ -1,10 +1,12 @@
 # Intrinsic passive structural inventories
 
-This offline review changes 18 direct inventory closures on six existing
+This historical offline review changed 18 direct inventory closures on six existing
 passive definitions. It adds no definitions, members, numerical rules, source
-domains or runtime branches. The predecessor is input
+domains or runtime branches. The predecessor was input
 `35d446c73be3aa977d55a49174aaf4656e27a38ebaeaab354e86cd7f9f36b5a5`.
-The migration uses the current schema-7, migration-5, operations-28 contract.
+The retained migration used the then-current schema-7, migration-5,
+operations-28 contract. It is evidence of the reviewed delta, not the current
+publication workflow.
 
 | Source node | Existing owned definition | Reviewed direct declarations |
 | --- | --- | --- |
@@ -24,10 +26,10 @@ are implemented.
 
 `dependencies.json` retains exact predecessor descriptors, rule owners,
 positive-chain slots, descendant Skills and all six unresolved descriptors.
-`migration.json` only replaces the six definitions. The Rust checker restores
+`migration.json` only replaced the six definitions. The retained proof restores
 the three closures on each replacement and requires exact descriptor equality.
-The whole-release publisher separately authenticates the actual predecessor
-and preserves every other schema and recipe field.
+The historical whole-release publisher separately authenticated the actual
+predecessor and preserved every other schema and recipe field.
 
 `evidence.json` joins all twelve candidate nodes to the complete retained
 tree, selected bindings, parsed recipes and source identities. Nine bounded
@@ -68,3 +70,17 @@ Mutation controls reject altered source identities, missing or crossed Barya
 references, omitted stat meanings, unreviewed intrinsic fields or grant
 factories, unrelated closure changes, and omission or false completion of
 unresolved candidates.
+
+The two old root test targets and their exclusive helpers are retired after
+transferring the useful source, identity, semantic, census, structural-delta and
+positive-chain laws to the maintained Authoring release target. The retained
+archives and evidence remain inputs to ordinary offline proof tests; the
+upstream license remains alongside the archived sources.
+Current publication uses the [maintained KDL source workflow](../migration-source/README.md).
+The [current source-domain proof](../structural-support-domains/README.md) adds
+the six intrinsic support-source declarations independently. It does not extend
+this historical packet's numerical or descendant claims. Run the maintained
+checks with `cargo test -p poe-optimizer-authoring --test release structural_support`.
+The six source tests retain the identity, semantic, structural and unresolved
+census controls; four current-release tests retain the exact three-closure
+inverse, both positive Barya chains and unchanged saved Original05 input status.

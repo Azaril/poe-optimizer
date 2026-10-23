@@ -620,7 +620,7 @@ retained only in Authoring's
 [`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz).
 Its historical receipt
 authenticates the archived bytes. Tests remove only the exact admitted 69-Stat,
-one-program and 335 support-domain additions, restore the archived program
+one-program and 341 support-domain additions, restore the archived program
 members, and reconstruct the original dependency bindings with maintained content
 constructors. The existing
 assembler then checks every historical artifact and provenance field. A separate
@@ -649,6 +649,12 @@ Intrinsic source absence does not close a contribution-query membership or the
 separate provider inventory of an occupied socket. Flag mechanics retain typed
 Boolean contributions and their checked reduction independently of source-domain
 classification.
+An intrinsic support domain can be known while numerical programs remain
+Partial and a definition has positive Skill grants. Preserve those exact grant
+and supply relationships; the generated Skill and its Actor/output descendants
+are independently checked sources. Structural completeness in one facet cannot
+close another. Unparsed modifier text requires independently reviewed semantics,
+not an empty-list inference.
 
 This representation change adds no evaluation bundle or numerical coverage;
 0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust
