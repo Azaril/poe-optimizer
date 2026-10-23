@@ -578,6 +578,26 @@ bounded malformed inputs, deterministic execution, units/ownership, real mechani
 vectors and full-build parity. Preserve independent fixtures when deleting their
 old scaffolding. No new receipt type is justified solely by a refactor.
 
+Behavioral tests build the maintained declared release once and share its checked
+packages, with per-execution scratch. Arithmetic fixtures supply independent
+inputs/expected values; data-mutation tests edit declared DSL and must invalidate
+the prior commitment. Original-build fixtures consume unchanged external builds
+and current normalization policies, preserving unresolved coverage and exact
+occurrence provenance. Actor/skill isolation and parallel determinism checks run
+as ordinary tests without a manually published predecessor. These component laws
+do not substitute for complete-build parity. Keep optional upstream acquisition
+authentication beside the offline exporter tests when retiring historical chains.
+
+Support admission must distinguish definition-owned eligibility data from facts
+of an exact composed occurrence. Actor identity, supplying source and summoner
+relationships cannot be asserted by imported usage preferences. The
+[support target facts proposal](owned-support-target-facts-proposal.md) records the
+remaining structural-read decision; until approved and implemented, missing
+production predicates remain unavailable. PoB object presence is not by itself a
+native gameplay definition. Preparation must require a conditional eligibility
+fact only when a selected support consumes it; missing unused facts stay unknown,
+without blocking otherwise supported work or becoming false defaults.
+
 ### Command-line parsing
 
 `clap` is the project standard for all Rust command-line entry points, including

@@ -1,9 +1,15 @@
 //! Final constituent composition uses the existing release and Engine checks.
+#[path = "release/arithmetic.rs"]
+mod arithmetic;
 #[allow(dead_code, unused_imports)]
 #[path = "../../poe-optimizer-engine/tests/support/owned_fixtures.rs"]
 mod engine_fixtures;
 #[path = "../../../tests/support/owned_evaluation_release_fixture.rs"]
 mod fixture;
+#[path = "release/local_scaling.rs"]
+mod local_scaling;
+#[path = "release/originals.rs"]
+mod originals;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{
@@ -48,6 +54,51 @@ use std::{
 fn fixture() -> &'static fixture::Fixture {
     static FIXTURE: OnceLock<fixture::Fixture> = OnceLock::new();
     FIXTURE.get_or_init(fixture::fixture)
+}
+
+fn tracked_root() -> std::path::PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR")).join("../../data/owned/poe2/3887ae68/migration-source")
+}
+
+fn tracked_sources() -> &'static Sources {
+    static SOURCES: OnceLock<Sources> = OnceLock::new();
+    SOURCES.get_or_init(|| {
+        let root = tracked_root();
+        let text = fs::read_to_string(root.join("release.kdl")).unwrap();
+        let limits = ReleaseBuildLimits::default();
+        let manifest = parse_release_manifest(&text, limits).unwrap();
+        let mut decoded_bytes = 0;
+        let files = manifest
+            .sources()
+            .iter()
+            .map(|spec| {
+                let bytes = fs::read(root.join(spec.path())).unwrap();
+                decoded_bytes += match spec.encoding() {
+                    SourceEncoding::Plain => bytes.len(),
+                    SourceEncoding::Gzip => {
+                        let mut decoded = Vec::new();
+                        GzDecoder::new(bytes.as_slice())
+                            .take(limits.max_decoded_bytes as u64 + 1)
+                            .read_to_end(&mut decoded)
+                            .unwrap();
+                        assert!(decoded.len() <= limits.max_decoded_bytes);
+                        decoded.len()
+                    }
+                };
+                (spec.path().to_owned(), bytes)
+            })
+            .collect();
+        Sources {
+            manifest: text,
+            files,
+            decoded_bytes,
+        }
+    })
+}
+
+fn tracked_release() -> &'static BuiltRelease {
+    static RELEASE: OnceLock<BuiltRelease> = OnceLock::new();
+    RELEASE.get_or_init(|| tracked_sources().build(Default::default()).unwrap())
 }
 
 fn gzip(bytes: &[u8]) -> Vec<u8> {
@@ -1451,27 +1502,13 @@ fn expected_identity_and_actual_metric_authority_are_checked_after_decode() {
 
 #[test]
 fn tracked_dsl_release_preserves_every_historical_constituent_except_program_representation() {
-    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../data/owned/poe2/3887ae68/migration-source");
-    let text = fs::read_to_string(root.join("release.kdl")).unwrap();
+    let root = tracked_root();
+    let source = tracked_sources();
     let reference_bytes = fs::read(root.join("reference-release.json")).unwrap();
     let reference: OwnedReleaseReceipt = serde_json::from_slice(&reference_bytes).unwrap();
-    let manifest = parse_release_manifest(&text, Default::default()).unwrap();
-    let owned: Vec<_> = manifest
-        .sources()
-        .iter()
-        .map(|spec| {
-            (
-                spec.path().to_owned(),
-                fs::read(root.join(spec.path())).unwrap(),
-            )
-        })
-        .collect();
-    let sources: Vec<_> = owned
-        .iter()
-        .map(|(path, bytes)| ReleaseSource { path, bytes })
-        .collect();
-    let actual = build_release(&manifest, &sources, Default::default()).unwrap();
+    let manifest = parse_release_manifest(&source.manifest, Default::default()).unwrap();
+    let owned = &source.files;
+    let actual = tracked_release();
     let release = actual.release();
     assert_eq!(manifest.expected_input(), Some(release.receipt().input));
     assert_ne!(release.receipt().input, reference.input);
@@ -1574,7 +1611,7 @@ fn tracked_dsl_release_preserves_every_historical_constituent_except_program_rep
         }
     }
     let mut decoded_bytes = 0;
-    for (spec, (_, encoded)) in manifest.sources().iter().zip(&owned) {
+    for (spec, (_, encoded)) in manifest.sources().iter().zip(owned) {
         match spec.encoding() {
             SourceEncoding::Plain => decoded_bytes += encoded.len(),
             SourceEncoding::Gzip => {
