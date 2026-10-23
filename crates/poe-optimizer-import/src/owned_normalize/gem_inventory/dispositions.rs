@@ -3,8 +3,8 @@
 //! remains Pending and no computed usage record is manufactured.
 use super::*;
 use crate::owned_source_actions::{
-    SourceActionCorrespondence, SourceActionCorrespondenceInput, SourceActionLimits,
-    SourceActionRequest,
+    SourceActionCorrespondence, SourceActionCorrespondenceContent, SourceActionCorrespondenceInput,
+    SourceActionLimits, SourceActionRequest,
 };
 
 pub(super) const GROUP_ATTRIBUTES: &[&str] = &[
@@ -24,6 +24,44 @@ pub struct PrimaryGemInputDisposition {
     pub reference_action: SourceActionCorrespondenceInput,
     pub deferred_usage: Vec<DeferredGemUsageInput>,
 }
+
+/// Authored disposition and source correspondence, without package seals.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct PrimaryGemInputDispositionContent {
+    pub physical: PhysicalGemInputInventory,
+    pub reference_action: SourceActionCorrespondenceContent,
+    pub deferred_usage: Vec<DeferredGemUsageInput>,
+}
+
+impl PrimaryGemInputDispositionContent {
+    pub(super) fn from_checked(input: PrimaryGemInputDisposition) -> Self {
+        let PrimaryGemInputDisposition {
+            physical,
+            reference_action,
+            deferred_usage,
+        } = input;
+        Self {
+            physical,
+            reference_action: SourceActionCorrespondenceContent::from_checked(reference_action),
+            deferred_usage,
+        }
+    }
+
+    /// Construct an input only; the aggregate validates the resulting disposition.
+    pub(super) fn into_input<I: DefinitionSchemaIndex>(
+        self,
+        definitions: &I,
+        roles: &OwnedSkillRoleIndex,
+    ) -> PrimaryGemInputDisposition {
+        PrimaryGemInputDisposition {
+            physical: self.physical,
+            reference_action: self.reference_action.into_input(definitions, roles),
+            deferred_usage: self.deferred_usage,
+        }
+    }
+}
+
 use super::super::skill_input_disposition::{
     CheckedSourceReference, CompiledDeferredUsage, account_reference, attach_pending_usage,
     unique_link,

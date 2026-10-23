@@ -643,8 +643,20 @@ pub fn build_release(
     // Authenticate original dependencies before any source program is lowered.
     // This checks no executable rules or evaluation artifacts; complete assembly
     // below remains mandatory after composition against this exact schema.
-    let schema = check_release_source_dependencies(&input, limits.release)?;
+    let (registry, schema, authored_imports) =
+        check_release_source_dependencies(&input, limits.release)?.into_parts()?;
     rules::compose(manifest, &decoder, &schema, &mut input.recipe.rules, limits)?;
+    // Content was captured from the original checked owners before composition.
+    // Construct current dependencies; evaluation inputs retain their supplied
+    // commitments and must independently pass complete assembly below.
+    let imports = authored_imports.into_input(&registry, &schema, limits.release)?;
+    input.mapping = imports.mapping;
+    input.roles = imports.roles;
+    input.normalization = imports.normalization;
+    input.rewards = imports.rewards;
+    input.items = imports.items;
+    input.item_source = imports.item_source;
+    input.tree = imports.tree;
     let decoded_bytes = decoder.decoded_bytes;
     let release = assemble_owned_release(input, limits.release)?;
     if manifest

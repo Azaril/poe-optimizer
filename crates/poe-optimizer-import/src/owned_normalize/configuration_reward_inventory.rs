@@ -21,6 +21,48 @@ pub enum ConfigurationRewardInventoryPolicy {
     },
 }
 
+/// Authored reward-control census and its historical source pin, without a
+/// current reward-policy commitment.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ConfigurationRewardInventoryContent {
+    PobFreshGeneratedControlsV1 {
+        mapping_source: OwnedContentDigest,
+        controls: Vec<ConfigurationRewardControl>,
+    },
+}
+
+impl ConfigurationRewardInventoryContent {
+    /// Only the checked aggregate owner may discard dependency commitments.
+    pub(super) fn from_checked(input: ConfigurationRewardInventoryPolicy) -> Self {
+        let ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 {
+            mapping_source,
+            reward_policy: _,
+            controls,
+        } = input;
+        Self::PobFreshGeneratedControlsV1 {
+            mapping_source,
+            controls,
+        }
+    }
+
+    /// Constructs raw input for the existing shared semantic validators.
+    pub(super) fn into_input(
+        self,
+        rewards: &OwnedRewardPolicy,
+    ) -> ConfigurationRewardInventoryPolicy {
+        let Self::PobFreshGeneratedControlsV1 {
+            mapping_source,
+            controls,
+        } = self;
+        ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 {
+            mapping_source,
+            reward_policy: *rewards.identity(),
+            controls,
+        }
+    }
+}
+
 pub(super) struct CompiledConfigurationRewardInventory<'p> {
     controls: BTreeMap<&'p str, Vec<&'p ValueSelector>>,
     work: usize,

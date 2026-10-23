@@ -25,7 +25,7 @@ Item-metadata preamble laws now run against the same cached release; the old
 `metadata_only` and original-build/publication assertions still have live consumers.
 
 Maintained Authoring does not use the historical release revision/migration
-compilers. Construct normalization content in the maintained source builder;
+compilers. Normalization content construction now runs in the maintained source builder;
 do not retrofit those old compilers with the new content APIs. Transfer their
 remaining relevant laws, then delete their dependency-repair helpers and callers.
 

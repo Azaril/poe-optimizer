@@ -29,6 +29,83 @@ pub enum PassiveSocketMembershipPolicy {
     },
 }
 
+/// Authored passive-socket grammar and source evidence, without current package
+/// commitments. Tree content is bound separately to avoid a normalization cycle.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum PassiveSocketMembershipContent {
+    PobExplicitEmptySpecSocketsV1 {},
+    PobOrdinarySharedSpecSocketsV2 {
+        mapping_source: OwnedContentDigest,
+        source_bases: Vec<OrdinaryPassiveJewelBase>,
+        bindings: Vec<OrdinaryPassiveSocketBinding>,
+    },
+}
+
+impl PassiveSocketMembershipContent {
+    /// Only the checked aggregate owner may discard dependency commitments.
+    pub(super) fn from_checked(input: PassiveSocketMembershipPolicy) -> Self {
+        match input {
+            PassiveSocketMembershipPolicy::PobExplicitEmptySpecSocketsV1 {} => {
+                Self::PobExplicitEmptySpecSocketsV1 {}
+            }
+            PassiveSocketMembershipPolicy::PobOrdinarySharedSpecSocketsV2 {
+                definitions: _,
+                mapping: _,
+                mapping_source,
+                item_lines: _,
+                item_source: _,
+                equipment: _,
+                tree_content: _,
+                source_bases,
+                bindings,
+            } => Self::PobOrdinarySharedSpecSocketsV2 {
+                mapping_source,
+                source_bases,
+                bindings,
+            },
+        }
+    }
+
+    /// The aggregate supplies identities of its constructed equipment policy
+    /// and supplied Tree content, never the Tree package's back-reference.
+    /// This raw result still requires the existing final semantic validators.
+    pub(super) fn into_input<I: DefinitionSchemaIndex>(
+        self,
+        definitions: &I,
+        mappings: &OwnedMappingIndex,
+        items: &OwnedItemLinePolicy,
+        item_source: &ItemSourceLayoutPolicy,
+        equipment: Option<OwnedContentDigest>,
+        tree_content: Option<OwnedContentDigest>,
+    ) -> Result<PassiveSocketMembershipPolicy> {
+        Ok(match self {
+            Self::PobExplicitEmptySpecSocketsV1 {} => {
+                PassiveSocketMembershipPolicy::PobExplicitEmptySpecSocketsV1 {}
+            }
+            Self::PobOrdinarySharedSpecSocketsV2 {
+                mapping_source,
+                source_bases,
+                bindings,
+            } => PassiveSocketMembershipPolicy::PobOrdinarySharedSpecSocketsV2 {
+                definitions: definitions.identity().clone(),
+                mapping: *mappings.identity(),
+                mapping_source,
+                item_lines: *items.identity(),
+                item_source: *item_source.identity(),
+                equipment: equipment.ok_or(NormalizationError::Policy(
+                    "passive sockets require equipment membership",
+                ))?,
+                tree_content: tree_content.ok_or(NormalizationError::Policy(
+                    "passive sockets require tree content",
+                ))?,
+                source_bases,
+                bindings,
+            },
+        })
+    }
+}
+
 pub(super) const SPEC_ATTRIBUTES: &[&str] = &[
     "title",
     "treeVersion",

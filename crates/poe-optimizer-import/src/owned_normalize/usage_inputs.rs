@@ -53,6 +53,75 @@ impl UsageInputPolicy {
     }
 }
 
+/// Authored usage projections and source evidence, without dependency seals.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum UsageInputContent {
+    PobOccurrenceUsageV3 {
+        source: SourcePin,
+        catalog: OwnedContentDigest,
+        physical: Vec<PrimarySkillUsageInput>,
+        occurrences: Vec<OccurrenceUsageRule>,
+        scenario: Vec<ConfigurationUsageIntentInput>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        inventory: Option<UsageInventoryPolicy>,
+    },
+}
+
+impl UsageInputContent {
+    /// The aggregate extracts content only from its checked normalization owner.
+    pub(super) fn from_checked(input: UsageInputPolicy) -> Self {
+        let UsageInputPolicy::PobOccurrenceUsageV3 {
+            definitions: _,
+            source,
+            roles: _,
+            catalog,
+            scalar_inputs: _,
+            physical,
+            occurrences,
+            scenario,
+            inventory,
+        } = input;
+        Self::PobOccurrenceUsageV3 {
+            source,
+            catalog,
+            physical,
+            occurrences,
+            scenario,
+            inventory,
+        }
+    }
+
+    /// The aggregate computes the scalar commitment from constructed prerequisites.
+    /// This input still requires the existing shared semantic validators.
+    pub(super) fn into_input<I: DefinitionSchemaIndex>(
+        self,
+        definitions: &I,
+        roles: &OwnedSkillRoleIndex,
+        scalar_inputs: OwnedContentDigest,
+    ) -> UsageInputPolicy {
+        let Self::PobOccurrenceUsageV3 {
+            source,
+            catalog,
+            physical,
+            occurrences,
+            scenario,
+            inventory,
+        } = self;
+        UsageInputPolicy::PobOccurrenceUsageV3 {
+            definitions: definitions.identity().clone(),
+            source,
+            roles: *roles.identity(),
+            catalog,
+            scalar_inputs,
+            physical,
+            occurrences,
+            scenario,
+            inventory,
+        }
+    }
+}
+
 /// An exact physical primary target and its independent typed usage selections.
 /// Empty group attributes deliberately declare no parent source frame; group
 /// reads or guards require named attributes. Inventory proof is separate.
@@ -163,9 +232,17 @@ pub fn usage_inputs_identity(
     policy: &NormalizationPolicy,
     limits: NormalizationLimits,
 ) -> Result<OwnedContentDigest> {
+    usage_policy_identity(&policy.usage_inputs, limits)
+}
+
+/// Commit the actual constructed optional prerequisite without a policy shell.
+pub(super) fn usage_policy_identity(
+    input: &Option<UsageInputPolicy>,
+    limits: NormalizationLimits,
+) -> Result<OwnedContentDigest> {
     Ok(digest_owned(
         "owned-usage-inputs-v1",
-        &policy.usage_inputs,
+        input,
         limits.max_policy_bytes.min(MAX_NORMALIZATION_POLICY_BYTES),
     )?)
 }

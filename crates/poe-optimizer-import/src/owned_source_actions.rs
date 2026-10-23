@@ -4,8 +4,11 @@
 //! usage, numerical coverage or a complete input inventory. Its returned target
 //! still passes through ordinary normalization and Core binding. MAIN and CALCS
 //! exist only here, as names of independent saved source reference settings.
+mod content;
 mod minion;
 mod resolve;
+
+pub use content::SourceActionCorrespondenceContent;
 
 use crate::{
     owned_mapping::*,

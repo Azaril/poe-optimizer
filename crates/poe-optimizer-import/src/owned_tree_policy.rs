@@ -397,6 +397,12 @@ pub struct OwnedTreeNormalizationPolicy {
     wire_bytes: usize,
 }
 impl OwnedTreeNormalizationPolicy {
+    /// Consume checked source declarations without copying or retaining current
+    /// registry, schema, mapping or normalization commitments.
+    pub fn into_authored_content(self) -> TreeNormalizationContent {
+        self.input.content
+    }
+
     pub fn bind_new<I: DefinitionSchemaIndex>(
         content: TreeNormalizationContent,
         registry: &OwnedIdRegistrySnapshot,

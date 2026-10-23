@@ -130,6 +130,67 @@ pub struct ConfigurationDispositionPolicy {
     pub inventory: Option<ConfigurationInventoryPolicy>,
 }
 
+/// Authored responsibilities and historical evidence, without current adapter
+/// commitments. The optional census and its evidence identity remain unchanged.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ConfigurationDispositionContent {
+    pub mapping_source: OwnedContentDigest,
+    pub catalogue_evidence: OwnedContentDigest,
+    pub constructor_evidence: OwnedContentDigest,
+    pub rules: Vec<ConfigurationDispositionRule>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub inventory: Option<ConfigurationInventoryPolicy>,
+}
+
+impl ConfigurationDispositionContent {
+    /// Only the checked aggregate owner may discard dependency commitments.
+    pub(super) fn from_checked(input: ConfigurationDispositionPolicy) -> Self {
+        let ConfigurationDispositionPolicy {
+            mapping_source,
+            catalogue_evidence,
+            constructor_evidence,
+            dependencies: _,
+            rules,
+            inventory,
+        } = input;
+        Self {
+            mapping_source,
+            catalogue_evidence,
+            constructor_evidence,
+            rules,
+            inventory,
+        }
+    }
+
+    /// Constructs raw input for the existing shared semantic validators.
+    pub(super) fn into_input(
+        self,
+        prerequisites: ConfigurationDispositionPrerequisites<'_>,
+        rewards: &OwnedRewardPolicy,
+        limits: NormalizationLimits,
+    ) -> Result<ConfigurationDispositionPolicy> {
+        Ok(ConfigurationDispositionPolicy {
+            mapping_source: self.mapping_source,
+            catalogue_evidence: self.catalogue_evidence,
+            constructor_evidence: self.constructor_evidence,
+            dependencies: dependencies_from_prerequisites(prerequisites, rewards, limits)?,
+            rules: self.rules,
+            inventory: self.inventory,
+        })
+    }
+}
+
+/// Borrow the actual constructed optional adapters before the aggregate policy
+/// exists. Absence is committed exactly as by the existing public helper.
+pub(super) struct ConfigurationDispositionPrerequisites<'a> {
+    pub(super) encounter: &'a Option<EncounterPolicy>,
+    pub(super) enemy_level: &'a Option<EnemyLevelPolicy>,
+    pub(super) scalar_inputs: &'a Option<ConfigurationInputsPolicy>,
+    pub(super) reward_inventory: &'a Option<ConfigurationRewardInventoryPolicy>,
+    pub(super) usage_inputs: &'a Option<UsageInputPolicy>,
+}
+
 fn component<T: Serialize>(
     value: &Option<T>,
     limits: NormalizationLimits,
@@ -149,12 +210,33 @@ pub fn configuration_disposition_dependencies(
     rewards: &OwnedRewardPolicy,
     limits: NormalizationLimits,
 ) -> Result<ConfigurationDispositionDependencies> {
+    dependencies_from_prerequisites(
+        ConfigurationDispositionPrerequisites {
+            encounter: &policy.encounter,
+            enemy_level: &policy.enemy_level,
+            scalar_inputs: &policy.configuration_inputs,
+            reward_inventory: &policy.configuration_reward_inventory,
+            usage_inputs: &policy.usage_inputs,
+        },
+        rewards,
+        limits,
+    )
+}
+
+pub(super) fn dependencies_from_prerequisites(
+    prerequisites: ConfigurationDispositionPrerequisites<'_>,
+    rewards: &OwnedRewardPolicy,
+    limits: NormalizationLimits,
+) -> Result<ConfigurationDispositionDependencies> {
     Ok(ConfigurationDispositionDependencies {
-        encounter: component(&policy.encounter, limits)?,
-        enemy_level: component(&policy.enemy_level, limits)?,
-        scalar_inputs: component(&policy.configuration_inputs, limits)?,
-        reward_inventory: component(&policy.configuration_reward_inventory, limits)?,
-        usage_inputs: usage_inputs_identity(policy, limits)?,
+        encounter: component(prerequisites.encounter, limits)?,
+        enemy_level: component(prerequisites.enemy_level, limits)?,
+        scalar_inputs: component(prerequisites.scalar_inputs, limits)?,
+        reward_inventory: component(prerequisites.reward_inventory, limits)?,
+        usage_inputs: super::usage_inputs::usage_policy_identity(
+            prerequisites.usage_inputs,
+            limits,
+        )?,
         rewards: *rewards.identity(),
     })
 }

@@ -13,6 +13,10 @@ pub(super) struct CheckedNormalizationPolicy {
 }
 
 impl CheckedNormalizationPolicy {
+    pub(super) fn into_authored_content(self) -> crate::owned_normalize::NormalizationContent {
+        crate::owned_normalize::NormalizationContent::from_checked(self.input)
+    }
+
     pub(super) fn input(&self) -> &NormalizationPolicy {
         &self.input
     }

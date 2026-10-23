@@ -19,6 +19,57 @@ pub enum GeneratedSkillInputPolicy {
     },
 }
 
+/// Generated input interpretation retaining its original source evidence.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum GeneratedSkillInputContent {
+    PobSavedGeneratedInputsV1 {
+        source: SourcePin,
+        catalog: OwnedContentDigest,
+        rows: Vec<GeneratedSkillInputRule>,
+    },
+}
+
+impl GeneratedSkillInputContent {
+    /// Only the enclosing checked normalization owner may extract inherited content.
+    pub(crate) fn from_checked(input: GeneratedSkillInputPolicy) -> Self {
+        match input {
+            GeneratedSkillInputPolicy::PobSavedGeneratedInputsV1 {
+                definitions: _,
+                source,
+                roles: _,
+                catalog,
+                rows,
+            } => Self::PobSavedGeneratedInputsV1 {
+                source,
+                catalog,
+                rows,
+            },
+        }
+    }
+
+    /// Construct a raw policy; ordinary normalization validation remains required.
+    pub(crate) fn into_input<I: DefinitionSchemaIndex>(
+        self,
+        definitions: &I,
+        roles: &OwnedSkillRoleIndex,
+    ) -> GeneratedSkillInputPolicy {
+        match self {
+            Self::PobSavedGeneratedInputsV1 {
+                source,
+                catalog,
+                rows,
+            } => GeneratedSkillInputPolicy::PobSavedGeneratedInputsV1 {
+                definitions: definitions.identity().clone(),
+                source,
+                roles: *roles.identity(),
+                catalog,
+                rows,
+            },
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct GeneratedSkillInputRule {

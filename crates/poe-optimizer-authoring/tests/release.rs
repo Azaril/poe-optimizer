@@ -14,6 +14,8 @@ mod fixture;
 mod item_metadata;
 #[path = "release/local_scaling.rs"]
 mod local_scaling;
+#[path = "release/normalization_content.rs"]
+mod normalization_content;
 #[path = "release/originals.rs"]
 mod originals;
 #[path = "release/scalar_attributes.rs"]
@@ -62,8 +64,37 @@ use std::{
 };
 
 fn fixture() -> &'static fixture::Fixture {
+    use poe_optimizer_import::owned_item_source::{
+        ItemSourceDialect, OWNED_ITEM_SOURCE_CATEGORY_POLICY_VERSION,
+        OWNED_ITEM_SOURCE_POLICY_VERSION,
+    };
+
     static FIXTURE: OnceLock<fixture::Fixture> = OnceLock::new();
-    FIXTURE.get_or_init(fixture::fixture)
+    FIXTURE.get_or_init(|| {
+        let mut fixture = fixture::fixture();
+        assert!(fixture.input.items.rules.is_empty());
+        let source = &mut fixture.input.item_source;
+        assert_eq!(source.schema_version, OWNED_ITEM_SOURCE_POLICY_VERSION);
+        assert!(matches!(
+            &source.dialect,
+            ItemSourceDialect::PobExportedSingleTextV1
+        ));
+        assert!(source.property_bindings.is_empty());
+        assert!(source.template_defaults.is_empty());
+        assert!(source.rule_layouts.is_empty());
+        assert!(source.template_layouts.is_empty());
+        // This local fixture authors an empty current dialect. The shared
+        // fixture's numerical request and expected formulas are unchanged.
+        source.schema_version = OWNED_ITEM_SOURCE_CATEGORY_POLICY_VERSION;
+        source.dialect = ItemSourceDialect::PobExportedSingleTextCategoriesV1 {
+            flag_bindings: vec![],
+            metadata_rules: vec![],
+            single_modifier_conditions: vec![],
+            preamble_observations: vec![],
+            category_bindings: vec![],
+        };
+        fixture
+    })
 }
 
 fn tracked_root() -> std::path::PathBuf {

@@ -33,6 +33,7 @@ mod character_reward_inventory;
 mod configuration_dispositions;
 mod configuration_inputs;
 mod configuration_reward_inventory;
+mod content;
 mod direct_skill_inputs;
 mod empty_character_runes;
 mod encounter;
@@ -68,10 +69,10 @@ pub use character_reward_inventory::CharacterRewardInventoryPolicy;
 pub(crate) use configuration_dispositions::rebind as rebind_configuration_dispositions;
 pub use configuration_dispositions::{
     ConfigurationAdapterControl, ConfigurationCensusClosure, ConfigurationDestination,
-    ConfigurationDispositionDependencies, ConfigurationDispositionPolicy,
-    ConfigurationDispositionRule, ConfigurationInventoryControl, ConfigurationInventoryDisposition,
-    ConfigurationInventoryPolicy, ConfigurationResponsibility, ConfigurationSourceCensus,
-    ConfigurationSourceState, configuration_disposition_dependencies,
+    ConfigurationDispositionContent, ConfigurationDispositionDependencies,
+    ConfigurationDispositionPolicy, ConfigurationDispositionRule, ConfigurationInventoryControl,
+    ConfigurationInventoryDisposition, ConfigurationInventoryPolicy, ConfigurationResponsibility,
+    ConfigurationSourceCensus, ConfigurationSourceState, configuration_disposition_dependencies,
     configuration_inventory_census_identity,
 };
 pub use configuration_inputs::{
@@ -80,51 +81,65 @@ pub use configuration_inputs::{
 };
 pub(crate) use configuration_reward_inventory::validate_configuration_reward_inventory;
 pub use configuration_reward_inventory::{
-    ConfigurationRewardControl, ConfigurationRewardInventoryPolicy,
+    ConfigurationRewardControl, ConfigurationRewardInventoryContent,
+    ConfigurationRewardInventoryPolicy,
 };
+pub use content::NormalizationContent;
+pub(crate) use content::NormalizationContentDependencies;
 pub(crate) use direct_skill_inputs::rebind as rebind_direct_skill_inputs;
 pub use direct_skill_inputs::{
-    DirectSkillInputDisposition, DirectSkillInputPolicy, DirectSkillInputRule,
-    DirectSkillParameterInput, DirectSupportTargetPolicy,
+    DirectSkillInputContent, DirectSkillInputDisposition, DirectSkillInputDispositionContent,
+    DirectSkillInputPolicy, DirectSkillInputRule, DirectSkillParameterInput,
+    DirectSupportTargetContent, DirectSupportTargetPolicy,
 };
 pub use empty_character_runes::EmptyCharacterRuneSelections;
 pub use encounter::EncounterPolicy;
 pub use enemy_level::EnemyLevelPolicy;
 pub use equipment_membership::{
-    EquipmentAugmentBase, EquipmentMembershipPolicy, equipment_membership_identity,
+    EquipmentAugmentBase, EquipmentMembershipContent, EquipmentMembershipPolicy,
+    equipment_membership_identity,
 };
-pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
+pub use gem_inputs::{
+    GemInputContent, GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput,
+};
 pub(crate) use gem_inventory::rebind as rebind_gem_inventory;
 pub use gem_inventory::{
-    DeferredGemUsageField, DeferredGemUsageInput, GemInventoryPolicy, PhysicalGemInputInventory,
-    PrimaryGemInputDisposition, PrimarySkillGemInventory, gem_inventory_scalar_inputs_identity,
+    DeferredGemUsageField, DeferredGemUsageInput, GemInventoryContent, GemInventoryPolicy,
+    PhysicalGemInputInventory, PrimaryGemInputDisposition, PrimaryGemInputDispositionContent,
+    PrimarySkillGemInventory, gem_inventory_scalar_inputs_identity,
 };
 pub(crate) use generated_skill_inputs::rebind as rebind_generated_skill_inputs;
 pub use generated_skill_inputs::{
-    GeneratedItemNameLine, GeneratedSkillInputField, GeneratedSkillInputPolicy,
-    GeneratedSkillInputProvider, GeneratedSkillInputRule, GeneratedSkillParameterInput,
-    GeneratedSkillProviderLevel,
+    GeneratedItemNameLine, GeneratedSkillInputContent, GeneratedSkillInputField,
+    GeneratedSkillInputPolicy, GeneratedSkillInputProvider, GeneratedSkillInputRule,
+    GeneratedSkillParameterInput, GeneratedSkillProviderLevel,
 };
 pub use imported_item_construction::{
     ImportedHeaderCardinality, ImportedHeaderValue, ImportedItemConstructionProfile,
     ImportedItemHeader, ImportedItemHeaderField,
 };
 pub use item_modifier_membership::{
-    ItemModifierMembershipPolicy, OrdinaryBaseMembers, OrdinaryImplicitExplicitBase,
-    OrdinaryImplicitExplicitMembers, OrdinaryMemberCensusBase, OrdinaryMemberGeneration,
-    OrdinarySingletonBase,
+    ItemModifierMembershipContent, ItemModifierMembershipPolicy, OrdinaryBaseMembers,
+    OrdinaryImplicitExplicitBase, OrdinaryImplicitExplicitMembers, OrdinaryMemberCensusBase,
+    OrdinaryMemberGeneration, OrdinarySingletonBase,
 };
 pub use item_parameter_inputs::{
     ItemParameterHeaderInput, ItemParameterInputEvidence, ItemParameterInputOrigin,
-    ItemParameterInputsPolicy, OrdinaryItemConstruction, OrdinaryItemDerivedObservation,
-    OrdinaryItemDerivedObservationKind, OrdinaryItemParameterInputs,
+    ItemParameterInputsContent, ItemParameterInputsPolicy, OrdinaryItemConstruction,
+    OrdinaryItemDerivedObservation, OrdinaryItemDerivedObservationKind,
+    OrdinaryItemParameterInputs,
 };
 pub use items::{NormalizedItemLine, NormalizedItemText};
 pub use ordinary_passive_sockets::{OrdinaryPassiveJewelBase, OrdinaryPassiveSocketBinding};
-pub use passive_socket_membership::PassiveSocketMembershipPolicy;
-pub use payload_inventory::PayloadInventoryPolicy;
+pub use passive_socket_membership::{
+    PassiveSocketMembershipContent, PassiveSocketMembershipPolicy,
+};
 pub(crate) use payload_inventory::rebind_roles as rebind_payload_inventory_roles;
-pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
+pub use payload_inventory::{PayloadInventoryContent, PayloadInventoryPolicy};
+pub use quality::{
+    GemQualityAttributesContent, GemQualityContent, GemQualityKindRule, GemQualityPolicy,
+    GemQualityPolicyInput,
+};
 pub use query_targets::{
     ImportActionTarget, ImportActorTarget, ImportDirectSkillUseLocator, ImportProviderTarget,
     ImportSkillUseLocator,
@@ -133,19 +148,20 @@ pub use scope::SkillScopePolicy;
 pub use skill_input_disposition::{DeferredSourceUsageField, DeferredSourceUsageInput};
 pub(crate) use skill_inventory::rebind as rebind_skill_inventory;
 pub use skill_inventory::{
-    GeneratedSkillGroupInventory, GeneratedSkillGroupSource, SkillInventoryPolicy,
-    direct_skill_inputs_identity,
+    GeneratedSkillGroupInventory, GeneratedSkillGroupSource, SkillInventoryContent,
+    SkillInventoryPolicy, direct_skill_inputs_identity,
 };
 pub use source_presentation::SourcePresentationPolicy;
 pub(crate) use support_inventory::rebind_roles as rebind_support_inventory_roles;
-pub use support_order::SupportOriginOrderPolicy;
+pub use support_order::{SupportOriginOrderContent, SupportOriginOrderPolicy};
 pub(crate) use usage_inputs::rebind as rebind_usage_inputs;
 pub use usage_inputs::{
     ConfigurationNumericSelection, ConfigurationUsageIntentInput, ConfigurationUsageParameterInput,
     OccurrenceUsagePolicy, OccurrenceUsageRule, OccurrenceUsageTarget, PrimarySkillUsageInput,
-    UsageFallbackAdmission, UsageGroupCompanion, UsageInputPolicy, UsageInventoryDestination,
-    UsageInventoryField, UsageInventoryFieldSelector, UsageInventoryPolicy, UsageInventoryRow,
-    UsageInventorySource, UsageParameterInput, UsageValueSource, usage_inputs_identity,
+    UsageFallbackAdmission, UsageGroupCompanion, UsageInputContent, UsageInputPolicy,
+    UsageInventoryDestination, UsageInventoryField, UsageInventoryFieldSelector,
+    UsageInventoryPolicy, UsageInventoryRow, UsageInventorySource, UsageParameterInput,
+    UsageValueSource, usage_inputs_identity,
 };
 
 /// The caller supplies desired measurements. There is no built-in metric list.
@@ -351,6 +367,21 @@ impl Default for NormalizationLimits {
             // ceiling and independently bound source work and inventory rows.
             max_policy_bytes: MAX_NORMALIZATION_POLICY_BYTES,
         }
+    }
+}
+impl NormalizationLimits {
+    pub(crate) fn validate(self) -> Result<()> {
+        let hard = Self::default();
+        for (name, value, max) in [
+            ("work", self.max_work, hard.max_work),
+            ("origin links", self.max_origin_links, hard.max_origin_links),
+            ("policy bytes", self.max_policy_bytes, hard.max_policy_bytes),
+        ] {
+            if value == 0 || value > max {
+                return Err(NormalizationError::InvalidLimit(name));
+            }
+        }
+        Ok(())
     }
 }
 #[derive(Debug, thiserror::Error)]
@@ -764,24 +795,7 @@ fn validate_policy(
     policy: &NormalizationPolicy,
     limits: NormalizationLimits,
 ) -> Result<[ValueRecipe; 4]> {
-    let hard = NormalizationLimits::default();
-    for (name, value, max) in [
-        ("work", limits.max_work, hard.max_work),
-        (
-            "origin links",
-            limits.max_origin_links,
-            hard.max_origin_links,
-        ),
-        (
-            "policy bytes",
-            limits.max_policy_bytes,
-            hard.max_policy_bytes,
-        ),
-    ] {
-        if value == 0 || value > max {
-            return Err(NormalizationError::InvalidLimit(name));
-        }
-    }
+    limits.validate()?;
     digest_owned(
         "owned-normalization-policy-v3",
         policy,

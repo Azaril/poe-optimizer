@@ -339,8 +339,9 @@ This staged API does not yet provide filesystem compare-and-swap or a KDL
 allocation command. The new release-directory builder is a separate operation;
 it does not commit a named-allocation transaction. Named publication must still
 authenticate the stored predecessor and commit registry and names together. The
-existing raw-alias `load_names` path remains separate until that command is
-implemented.
+existing raw-alias `load_names` path currently remains separate. Checked
+per-packet declaration overlays can be integrated into the in-memory compiler
+before resolving filesystem publication.
 
 The concrete publication workflow is under review in the
 [authoring checkpoint proposal](owned-authoring-checkpoint-proposal.md). The runtime
@@ -355,8 +356,9 @@ The maintained source builder now checks the original dependency space before
 lowering any DSL: registry/schema membership, the rule header and routing seals,
 Import constituent bindings, nested normalization policies and consistent source
 pins. It shares those validators with the runtime reader. Whole-input and recipe
-budgets precede constituent cloning. The result is only the checked source schema;
-it grants no permission to rewrite dependencies and is not a checked release.
+budgets precede constituent cloning. The result retains the checked registry,
+schema and Import packages. Consuming it extracts content from those actual owners;
+it grants no permission to discard seals from another input and is not a checked release.
 Program-free source metadata cannot satisfy executable queries until lowering
 supplies their programs. Complete rule and evaluation-artifact validation therefore
 remains mandatory at final assembly. Constructing new dependencies after declaration
@@ -376,17 +378,38 @@ The shared constituent pipeline retains normalization as one private checked own
 the exact immutable policy plus its existing digest. It constructs that owner only
 after all dependent checks, including passive-socket placement, succeed. Runtime
 hashing, receipts and public policy access use this same storage. This adds no
-standalone validator, public authority or wire format; subsequent content extraction
-must consume this checked storage rather than strip seals from arbitrary input.
+standalone validator, public authority or wire format. Content extraction consumes
+this storage rather than stripping seals from arbitrary input.
 
-This is a component construction seam. Normalization's nested commitments and
-evaluation content still require owner-local construction before the maintained
-release compiler can publish a declaration append. Neither component success nor
-source-prefix validation certifies complete release execution or coverage.
+One authored normalization aggregate now reconstructs nested dependencies in their
+existing modules. It preserves source evidence, variants, absence and explicit-null
+restrictions, and bounds authored bytes before conversion allocates row vectors.
+Absent optional content stays omitted, so removing dependency bindings does not
+inflate a sparse policy beyond its existing byte budget.
+Shared scalar, usage and configuration commitment helpers operate on real constructed
+prerequisites. Passive sockets bind Tree content before the final Tree package binds
+the complete normalization policy; there is no dependency cycle.
+
+The maintained compiler uses this construction on every build. Its resulting
+`ImportSourceInput` is raw data: existing full release validation remains mandatory
+before publication or evaluation. Runtime readers still reject stale bindings.
+Neither content construction nor source-prefix validation certifies complete
+release execution or coverage. Evaluation content construction and declaration
+publication integration remain separate work; source extraction never includes
+evaluation inputs or overwrites their unvalidated commitments.
 Aggregate evaluation preflight accounts for readiness, receiving preparation,
 source properties and their nested lists before digesting or cloning. Partial gap
 lists are bounded even when later semantic validation rejects them; generated and
 summoner source paths retain independent depth checks under the shared work budget.
+
+Authored evaluation construction must follow the existing checked package graph:
+recipe to Metrics, Stages and Preparation; Stages/Preparation to Inputs; those
+packages to Receiving; all prerequisites to optional Outputs. Extract inherited
+content only from fully checked evaluation owners, or author fresh semantic
+declarations explicitly. Reuse the shared bounded traversal before hashing or
+copying and retain final release assembly. New dependency bindings grant no
+coverage: partial source inventories remain blocking, and absent support/outputs
+retain their existing meaning.
 
 Typed Stat declarations use that same staged allocation and existing Data schema.
 The offline KDL `definitions` document names a game/version namespace and each
@@ -396,6 +419,18 @@ it never modifies the supplied predecessor or overwrites an existing descriptor.
 Saved allocation names can be replayed against the unchanged baseline schema,
 while an already installed definition remains a conflict. Input aliases that
 overlap persisted names must agree on the exact typed address.
+
+Production integration must accept an explicit persisted ledger that is a checked
+successor of the immutable bootstrap registry, rather than require registry
+identity equality or recreate an empty ledger. Reserved names may lack bootstrap
+descriptors until staging. Keep packet aliases local and overlay only the current
+declarations, with exact-address agreement for collisions and bounded unique symbol
+growth; do not union unrelated packet scopes or project every persisted name.
+Construct final rule-shell and routing bindings from their authenticated original
+inputs before packet application. Return the successor names and predecessor
+identity only after complete release validation and the expected-input check pass.
+The current CLI must not accept allocating declarations while its publisher could
+discard that ledger. These in-memory integration steps remain work in progress.
 
 These declarations grant no producer, read or write authority and do not close
 partial coverage. Programs still pass through the sole lowerer and Engine checker.

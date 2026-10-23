@@ -5,7 +5,10 @@ mod dispositions;
 pub(super) use dispositions::PendingDisposition;
 #[cfg(test)]
 pub(super) use dispositions::tests::with_usage_inventory_destination;
-pub use dispositions::{DeferredGemUsageField, DeferredGemUsageInput, PrimaryGemInputDisposition};
+pub use dispositions::{
+    DeferredGemUsageField, DeferredGemUsageInput, PrimaryGemInputDisposition,
+    PrimaryGemInputDispositionContent,
+};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
@@ -20,6 +23,75 @@ pub enum GemInventoryPolicy {
         primary_skills: Vec<PrimarySkillGemInventory>,
         primary_dispositions: Vec<PrimaryGemInputDisposition>,
     },
+}
+
+/// Physical inventory declarations and catalog evidence, without dependency seals.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum GemInventoryContent {
+    PobFreshPhysicalV3 {
+        catalog: OwnedContentDigest,
+        supports: Vec<PhysicalGemInputInventory>,
+        primary_skills: Vec<PrimarySkillGemInventory>,
+        primary_dispositions: Vec<PrimaryGemInputDispositionContent>,
+    },
+}
+
+impl GemInventoryContent {
+    /// The aggregate extracts content only from its checked normalization owner.
+    pub(super) fn from_checked(input: GemInventoryPolicy) -> Self {
+        let GemInventoryPolicy::PobFreshPhysicalV3 {
+            definitions: _,
+            roles: _,
+            catalog,
+            scalar_inputs: _,
+            usage_inputs: _,
+            supports,
+            primary_skills,
+            primary_dispositions,
+        } = input;
+        Self::PobFreshPhysicalV3 {
+            catalog,
+            supports,
+            primary_skills,
+            primary_dispositions: primary_dispositions
+                .into_iter()
+                .map(PrimaryGemInputDispositionContent::from_checked)
+                .collect(),
+        }
+    }
+
+    /// Bind real scalar and usage prerequisites. Missing prerequisite behavior
+    /// remains enforced by the aggregate's shared semantic validators.
+    pub(super) fn into_input<I: DefinitionSchemaIndex>(
+        self,
+        definitions: &I,
+        roles: &OwnedSkillRoleIndex,
+        scalar_inputs: OwnedContentDigest,
+        usage: &Option<UsageInputPolicy>,
+        limits: NormalizationLimits,
+    ) -> Result<GemInventoryPolicy> {
+        let Self::PobFreshPhysicalV3 {
+            catalog,
+            supports,
+            primary_skills,
+            primary_dispositions,
+        } = self;
+        let usage_inputs = usage_inputs::usage_policy_identity(usage, limits)?;
+        Ok(GemInventoryPolicy::PobFreshPhysicalV3 {
+            definitions: definitions.identity().clone(),
+            roles: *roles.identity(),
+            catalog,
+            scalar_inputs,
+            usage_inputs,
+            supports,
+            primary_skills,
+            primary_dispositions: primary_dispositions
+                .into_iter()
+                .map(|row| row.into_input(definitions, roles))
+                .collect(),
+        })
+    }
 }
 
 /// Physical identity and intrinsic slots, reviewed against the authenticated
@@ -49,14 +121,14 @@ pub struct PrimarySkillGemInventory {
 }
 
 #[derive(Serialize)]
-struct ScalarInputs<'a> {
-    gem_inputs: &'a Option<GemInputPolicy>,
-    gem_level: &'a ValueRecipeInput,
-    gem_quality: &'a GemQualityPolicy,
-    gem_enabled: &'a ValueRecipeInput,
-    group_enabled: &'a ValueRecipeInput,
-    manual_skill_sources: &'a [SourceComponent],
-    generated_support_prefixes: &'a [String],
+pub(super) struct ScalarInputs<'a> {
+    pub(super) gem_inputs: &'a Option<GemInputPolicy>,
+    pub(super) gem_level: &'a ValueRecipeInput,
+    pub(super) gem_quality: &'a GemQualityPolicy,
+    pub(super) gem_enabled: &'a ValueRecipeInput,
+    pub(super) group_enabled: &'a ValueRecipeInput,
+    pub(super) manual_skill_sources: &'a [SourceComponent],
+    pub(super) generated_support_prefixes: &'a [String],
 }
 
 /// Exact acyclic commitment to the existing converters and physical admission.
@@ -65,9 +137,8 @@ pub fn gem_inventory_scalar_inputs_identity(
     policy: &NormalizationPolicy,
     limits: NormalizationLimits,
 ) -> Result<OwnedContentDigest> {
-    Ok(digest_owned(
-        "owned-gem-inventory-scalar-inputs-v1",
-        &ScalarInputs {
+    scalar_inputs_identity(
+        ScalarInputs {
             gem_inputs: &policy.gem_inputs,
             gem_level: &policy.gem_level,
             gem_quality: &policy.gem_quality,
@@ -76,6 +147,19 @@ pub fn gem_inventory_scalar_inputs_identity(
             manual_skill_sources: &policy.manual_skill_sources,
             generated_support_prefixes: &policy.generated_support_prefixes,
         },
+        limits,
+    )
+}
+
+/// Hash the aggregate's real constructed prerequisites, with the same wire shape
+/// and byte bound as the public complete-policy helper.
+pub(super) fn scalar_inputs_identity(
+    input: ScalarInputs<'_>,
+    limits: NormalizationLimits,
+) -> Result<OwnedContentDigest> {
+    Ok(digest_owned(
+        "owned-gem-inventory-scalar-inputs-v1",
+        &input,
         limits.max_policy_bytes.min(MAX_NORMALIZATION_POLICY_BYTES),
     )?)
 }

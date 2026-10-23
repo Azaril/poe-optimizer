@@ -12,6 +12,54 @@ pub enum SkillInventoryPolicy {
     },
 }
 
+/// Authored-root census with original source evidence, without derived seals.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum SkillInventoryContent {
+    PobFreshAuthoredRootsV1 {
+        mapping_source: OwnedContentDigest,
+        generated_groups: Vec<GeneratedSkillGroupInventory>,
+    },
+}
+
+impl SkillInventoryContent {
+    /// The aggregate extracts content only from its checked normalization owner.
+    pub(super) fn from_checked(input: SkillInventoryPolicy) -> Self {
+        let SkillInventoryPolicy::PobFreshAuthoredRootsV1 {
+            mapping_source,
+            roles: _,
+            direct_inputs: _,
+            generated_groups,
+        } = input;
+        Self::PobFreshAuthoredRootsV1 {
+            mapping_source,
+            generated_groups,
+        }
+    }
+
+    /// Bind the already constructed Direct policy; absence remains absence.
+    /// The result is an input for shared validation, never a census certificate.
+    pub(super) fn into_input(
+        self,
+        roles: &OwnedSkillRoleIndex,
+        direct: Option<&DirectSkillInputPolicy>,
+        limits: NormalizationLimits,
+    ) -> Result<SkillInventoryPolicy> {
+        let Self::PobFreshAuthoredRootsV1 {
+            mapping_source,
+            generated_groups,
+        } = self;
+        Ok(SkillInventoryPolicy::PobFreshAuthoredRootsV1 {
+            mapping_source,
+            roles: *roles.identity(),
+            direct_inputs: direct
+                .map(|input| direct_skill_inputs_identity(input, limits))
+                .transpose()?,
+            generated_groups,
+        })
+    }
+}
+
 /// Source-owned generated representations, not an assertion of a live provider.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]

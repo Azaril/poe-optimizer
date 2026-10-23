@@ -21,6 +21,70 @@ pub struct GemQualityPolicyInput {
     /// Missing is an explicit reviewed default-kind rule, not a wildcard.
     pub kinds: Vec<GemQualityKindRule>,
 }
+
+/// Authored quality interpretation without a supplied definition binding.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum GemQualityContent {
+    Unconverted,
+    Attributes(Box<GemQualityAttributesContent>),
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct GemQualityAttributesContent {
+    pub amount: ValueRecipeInput,
+    pub kind_attribute: String,
+    pub kinds: Vec<GemQualityKindRule>,
+}
+
+impl GemQualityContent {
+    /// Only the enclosing checked normalization owner may extract inherited content.
+    pub(crate) fn from_checked(input: GemQualityPolicy) -> Self {
+        match input {
+            GemQualityPolicy::Unconverted => Self::Unconverted,
+            GemQualityPolicy::Attributes(input) => {
+                let GemQualityPolicyInput {
+                    definitions: _,
+                    amount,
+                    kind_attribute,
+                    kinds,
+                } = *input;
+                Self::Attributes(Box::new(GemQualityAttributesContent {
+                    amount,
+                    kind_attribute,
+                    kinds,
+                }))
+            }
+        }
+    }
+
+    /// Construct a raw policy; ordinary normalization validation remains required.
+    pub(crate) fn into_input<I: DefinitionSchemaIndex>(self, definitions: &I) -> GemQualityPolicy {
+        match self {
+            Self::Unconverted => GemQualityPolicy::Unconverted,
+            Self::Attributes(content) => {
+                let GemQualityAttributesContent {
+                    amount,
+                    kind_attribute,
+                    kinds,
+                } = *content;
+                GemQualityPolicy::Attributes(Box::new(GemQualityPolicyInput {
+                    definitions: definitions.identity().clone(),
+                    amount,
+                    kind_attribute,
+                    kinds,
+                }))
+            }
+        }
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct GemQualityKindRule {

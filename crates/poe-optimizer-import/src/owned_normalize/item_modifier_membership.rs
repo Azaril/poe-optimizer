@@ -34,6 +34,118 @@ pub enum ItemModifierMembershipPolicy {
     },
 }
 
+/// Authored physical-member inventories, without current dependency commitments.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ItemModifierMembershipContent {
+    PobFreshOrdinarySingletonV1 {
+        templates: Vec<OrdinarySingletonBase>,
+        modifier_rules: Vec<OwnedDefinitionKey>,
+    },
+    PobFreshOrdinaryImplicitExplicitV2 {
+        templates: Vec<OrdinarySingletonBase>,
+        modifier_rules: Vec<OwnedDefinitionKey>,
+        paired_templates: Vec<OrdinaryImplicitExplicitBase>,
+    },
+    PobFreshOrdinaryMemberCensusV3 {
+        templates: Vec<OrdinarySingletonBase>,
+        modifier_rules: Vec<OwnedDefinitionKey>,
+        paired_templates: Vec<OrdinaryImplicitExplicitBase>,
+        census_templates: Vec<OrdinaryMemberCensusBase>,
+    },
+}
+
+impl ItemModifierMembershipContent {
+    /// Only the checked aggregate owner may discard dependency commitments.
+    pub(super) fn from_checked(input: ItemModifierMembershipPolicy) -> Self {
+        match input {
+            ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
+                definitions: _,
+                item_lines: _,
+                item_source: _,
+                templates,
+                modifier_rules,
+            } => Self::PobFreshOrdinarySingletonV1 {
+                templates,
+                modifier_rules,
+            },
+            ItemModifierMembershipPolicy::PobFreshOrdinaryImplicitExplicitV2 {
+                definitions: _,
+                item_lines: _,
+                item_source: _,
+                templates,
+                modifier_rules,
+                paired_templates,
+            } => Self::PobFreshOrdinaryImplicitExplicitV2 {
+                templates,
+                modifier_rules,
+                paired_templates,
+            },
+            ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 {
+                definitions: _,
+                item_lines: _,
+                item_source: _,
+                templates,
+                modifier_rules,
+                paired_templates,
+                census_templates,
+            } => Self::PobFreshOrdinaryMemberCensusV3 {
+                templates,
+                modifier_rules,
+                paired_templates,
+                census_templates,
+            },
+        }
+    }
+
+    /// Constructs raw input for the existing shared semantic validators.
+    pub(super) fn into_input<I: DefinitionSchemaIndex>(
+        self,
+        definitions: &I,
+        items: &OwnedItemLinePolicy,
+        item_source: &ItemSourceLayoutPolicy,
+    ) -> ItemModifierMembershipPolicy {
+        match self {
+            Self::PobFreshOrdinarySingletonV1 {
+                templates,
+                modifier_rules,
+            } => ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
+                definitions: definitions.identity().clone(),
+                item_lines: *items.identity(),
+                item_source: *item_source.identity(),
+                templates,
+                modifier_rules,
+            },
+            Self::PobFreshOrdinaryImplicitExplicitV2 {
+                templates,
+                modifier_rules,
+                paired_templates,
+            } => ItemModifierMembershipPolicy::PobFreshOrdinaryImplicitExplicitV2 {
+                definitions: definitions.identity().clone(),
+                item_lines: *items.identity(),
+                item_source: *item_source.identity(),
+                templates,
+                modifier_rules,
+                paired_templates,
+            },
+            Self::PobFreshOrdinaryMemberCensusV3 {
+                templates,
+                modifier_rules,
+                paired_templates,
+                census_templates,
+            } => ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 {
+                definitions: definitions.identity().clone(),
+                item_lines: *items.identity(),
+                item_source: *item_source.identity(),
+                templates,
+                modifier_rules,
+                paired_templates,
+                census_templates,
+            },
+        }
+    }
+}
+
 impl ItemModifierMembershipPolicy {
     pub(crate) fn bindings_mut(
         &mut self,

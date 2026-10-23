@@ -82,6 +82,33 @@ pub struct GemInputPolicy {
     pub definitions: DataIdentity,
     pub gems: Vec<GemInputRule>,
 }
+
+/// Intrinsic Gem input recipes, independent of the current schema commitment.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct GemInputContent {
+    pub gems: Vec<GemInputRule>,
+}
+
+impl GemInputContent {
+    /// Only the enclosing checked normalization owner may extract inherited content.
+    pub(crate) fn from_checked(input: GemInputPolicy) -> Self {
+        let GemInputPolicy {
+            definitions: _,
+            gems,
+        } = input;
+        Self { gems }
+    }
+
+    /// Construct a raw policy; ordinary normalization validation remains required.
+    pub(crate) fn into_input<I: DefinitionSchemaIndex>(self, definitions: &I) -> GemInputPolicy {
+        GemInputPolicy {
+            definitions: definitions.identity().clone(),
+            gems: self.gems,
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct GemInputRule {

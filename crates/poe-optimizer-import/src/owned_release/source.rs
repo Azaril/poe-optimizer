@@ -1,7 +1,7 @@
 //! Check the original source dependency space before authoring changes it.
 use super::{
-    OwnedReleaseInput, OwnedReleaseLimits, ReleaseView, Result, checked::input_domain,
-    constituents::CheckedImportConstituents, preflight_view, source_union,
+    ImportSourceContent, OwnedReleaseInput, OwnedReleaseLimits, ReleaseView, Result,
+    checked::input_domain, constituents::CheckedImportConstituents, preflight_view, source_union,
 };
 use crate::{
     owned_mapping::OwnedIdRegistrySnapshot,
@@ -13,6 +13,39 @@ use poe_optimizer_data::{
     owned_schema::OwnedDefinitionSchemaPackage,
 };
 
+/// Original source dependencies checked independently of executable programs.
+/// Private storage cannot be forged from a raw runtime policy or deserialized.
+pub struct CheckedImportSource {
+    registry: OwnedIdRegistrySnapshot,
+    schema: OwnedDefinitionSchemaPackage,
+    imports: CheckedImportConstituents,
+}
+
+impl CheckedImportSource {
+    pub fn registry(&self) -> &OwnedIdRegistrySnapshot {
+        &self.registry
+    }
+    pub fn schema(&self) -> &OwnedDefinitionSchemaPackage {
+        &self.schema
+    }
+
+    /// Consume the actual checked owners before changing the dependency space.
+    /// Evaluation inputs are deliberately absent: this checker never certified them.
+    pub fn into_parts(
+        self,
+    ) -> Result<(
+        OwnedIdRegistrySnapshot,
+        OwnedDefinitionSchemaPackage,
+        ImportSourceContent,
+    )> {
+        Ok((
+            self.registry,
+            self.schema,
+            ImportSourceContent::from_checked(self.imports)?,
+        ))
+    }
+}
+
 /// Validate source definitions, routing and Import dependencies against the
 /// registry and schema supplied by this exact input, without changing bindings.
 ///
@@ -21,12 +54,13 @@ use poe_optimizer_data::{
 /// namespace and definition binding are checked here. Full rule semantics and
 /// evaluation-artifact dependencies remain mandatory final-release checks.
 ///
-/// The result is only a checked definition schema, never a checked release,
-/// executable package or certificate authorizing later dependency rewriting.
+/// The result owns checked Import dependencies, never a checked release or
+/// executable package. Content extraction consumes these exact owners; it grants
+/// no authority to discard seals from another supplied artifact.
 pub fn check_release_source_dependencies(
     input: &OwnedReleaseInput,
     limits: OwnedReleaseLimits,
-) -> Result<OwnedDefinitionSchemaPackage> {
+) -> Result<CheckedImportSource> {
     limits.validate()?;
     let view = ReleaseView::from(input);
     let domain = input_domain(view.schema_version, view.evaluation.is_some())?;
@@ -64,5 +98,9 @@ pub fn check_release_source_dependencies(
         &imported.item_source,
         imported.tree.as_ref(),
     )?;
-    Ok(schema)
+    Ok(CheckedImportSource {
+        registry,
+        schema,
+        imports: imported,
+    })
 }

@@ -43,6 +43,132 @@ pub enum EquipmentMembershipPolicy {
     },
 }
 
+/// Authored membership grammar and historical source evidence, without current
+/// definition or item-policy commitments.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum EquipmentMembershipContent {
+    PobOrdinaryItemSetsV1 {
+        templates: Vec<EquipmentAugmentBase>,
+        source_base_names: Vec<String>,
+        loader_jewel_fallback_titles: Vec<String>,
+    },
+    PobOrdinaryAndImportedItemSetsV2 {
+        templates: Vec<EquipmentAugmentBase>,
+        source_base_names: Vec<String>,
+        loader_jewel_fallback_titles: Vec<String>,
+        imported_profiles: Vec<ImportedItemConstructionProfile>,
+    },
+    PobOrdinaryImportedAndEmptyCharacterRunesV3 {
+        templates: Vec<EquipmentAugmentBase>,
+        source_base_names: Vec<String>,
+        loader_jewel_fallback_titles: Vec<String>,
+        imported_profiles: Vec<ImportedItemConstructionProfile>,
+        /// Its mapping-source pin is historical evidence, not a current seal.
+        empty_character_runes: EmptyCharacterRuneSelections,
+    },
+}
+
+impl EquipmentMembershipContent {
+    /// Only the checked aggregate owner may discard dependency commitments.
+    pub(super) fn from_checked(input: EquipmentMembershipPolicy) -> Self {
+        match input {
+            EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 {
+                definitions: _,
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+            } => Self::PobOrdinaryItemSetsV1 {
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+            },
+            EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+                definitions: _,
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                item_lines: _,
+                item_source: _,
+                imported_profiles,
+            } => Self::PobOrdinaryAndImportedItemSetsV2 {
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                imported_profiles,
+            },
+            EquipmentMembershipPolicy::PobOrdinaryImportedAndEmptyCharacterRunesV3 {
+                definitions: _,
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                item_lines: _,
+                item_source: _,
+                imported_profiles,
+                empty_character_runes,
+            } => Self::PobOrdinaryImportedAndEmptyCharacterRunesV3 {
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                imported_profiles,
+                empty_character_runes,
+            },
+        }
+    }
+
+    /// Constructs raw input; the existing final validators still establish all
+    /// source, schema and item-policy authority.
+    pub(super) fn into_input<I: DefinitionSchemaIndex>(
+        self,
+        definitions: &I,
+        items: &OwnedItemLinePolicy,
+        item_source: &ItemSourceLayoutPolicy,
+    ) -> EquipmentMembershipPolicy {
+        match self {
+            Self::PobOrdinaryItemSetsV1 {
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+            } => EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 {
+                definitions: definitions.identity().clone(),
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+            },
+            Self::PobOrdinaryAndImportedItemSetsV2 {
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                imported_profiles,
+            } => EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+                definitions: definitions.identity().clone(),
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                item_lines: *items.identity(),
+                item_source: *item_source.identity(),
+                imported_profiles,
+            },
+            Self::PobOrdinaryImportedAndEmptyCharacterRunesV3 {
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                imported_profiles,
+                empty_character_runes,
+            } => EquipmentMembershipPolicy::PobOrdinaryImportedAndEmptyCharacterRunesV3 {
+                definitions: definitions.identity().clone(),
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                item_lines: *items.identity(),
+                item_source: *item_source.identity(),
+                imported_profiles,
+                empty_character_runes,
+            },
+        }
+    }
+}
+
 impl EquipmentMembershipPolicy {
     pub(crate) fn definitions_mut(&mut self) -> &mut DataIdentity {
         match self {

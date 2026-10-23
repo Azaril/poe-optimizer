@@ -15,6 +15,44 @@ pub enum ItemParameterInputsPolicy {
         templates: Vec<OrdinaryItemParameterInputs>,
     },
 }
+/// Authored physical-input rules, without current dependency commitments.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ItemParameterInputsContent {
+    PobFreshOrdinaryInputsV1 {
+        templates: Vec<OrdinaryItemParameterInputs>,
+    },
+}
+
+impl ItemParameterInputsContent {
+    /// Only the checked aggregate owner may discard dependency commitments.
+    pub(super) fn from_checked(input: ItemParameterInputsPolicy) -> Self {
+        let ItemParameterInputsPolicy::PobFreshOrdinaryInputsV1 {
+            definitions: _,
+            item_lines: _,
+            item_source: _,
+            templates,
+        } = input;
+        Self::PobFreshOrdinaryInputsV1 { templates }
+    }
+
+    /// Constructs raw input for the existing shared semantic validators.
+    pub(super) fn into_input<I: DefinitionSchemaIndex>(
+        self,
+        definitions: &I,
+        items: &OwnedItemLinePolicy,
+        item_source: &ItemSourceLayoutPolicy,
+    ) -> ItemParameterInputsPolicy {
+        let Self::PobFreshOrdinaryInputsV1 { templates } = self;
+        ItemParameterInputsPolicy::PobFreshOrdinaryInputsV1 {
+            definitions: definitions.identity().clone(),
+            item_lines: *items.identity(),
+            item_source: *item_source.identity(),
+            templates,
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct OrdinaryItemParameterInputs {

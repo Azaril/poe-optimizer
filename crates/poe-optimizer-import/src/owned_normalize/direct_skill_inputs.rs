@@ -1,6 +1,7 @@
 //! Reviewed manual occurrences with typed authored Skill inputs. Catalog role
 //! correspondence alone never proves a Direct occurrence or a complete inventory.
 use super::*;
+use crate::owned_source_actions::SourceActionCorrespondenceContent;
 mod dispositions;
 pub use dispositions::DirectSkillInputDisposition;
 pub(super) use dispositions::PendingDirectDisposition;
@@ -23,12 +24,164 @@ pub enum DirectSkillInputPolicy {
     },
 }
 
+/// Manual source interpretation without current schema or role bindings.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum DirectSkillInputContent {
+    PobManualDirectSkillV2 {
+        source: SourcePin,
+        catalog: OwnedContentDigest,
+        manual_sources: Vec<SourceComponent>,
+        group_attributes: Vec<String>,
+        skills: Vec<DirectSkillInputRule>,
+        dispositions: Vec<DirectSkillInputDispositionContent>,
+    },
+}
+
+/// The saved-field disposition keeps its exact action content and usage obligations.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct DirectSkillInputDispositionContent {
+    pub skill: SkillDefId,
+    pub reference_action: SourceActionCorrespondenceContent,
+    pub deferred_usage: Vec<DeferredSourceUsageInput>,
+    pub inert_fields: Vec<GemInputGuard>,
+    pub group_guards: Vec<GemInputGuard>,
+}
+
+impl DirectSkillInputDispositionContent {
+    fn from_checked(input: DirectSkillInputDisposition) -> Self {
+        let DirectSkillInputDisposition {
+            skill,
+            reference_action,
+            deferred_usage,
+            inert_fields,
+            group_guards,
+        } = input;
+        Self {
+            skill,
+            reference_action: SourceActionCorrespondenceContent::from_checked(reference_action),
+            deferred_usage,
+            inert_fields,
+            group_guards,
+        }
+    }
+
+    fn into_input<I: DefinitionSchemaIndex>(
+        self,
+        definitions: &I,
+        roles: &OwnedSkillRoleIndex,
+    ) -> DirectSkillInputDisposition {
+        DirectSkillInputDisposition {
+            skill: self.skill,
+            reference_action: self.reference_action.into_input(definitions, roles),
+            deferred_usage: self.deferred_usage,
+            inert_fields: self.inert_fields,
+            group_guards: self.group_guards,
+        }
+    }
+}
+
+impl DirectSkillInputContent {
+    /// Only the enclosing checked normalization owner may extract inherited content.
+    pub(crate) fn from_checked(input: DirectSkillInputPolicy) -> Self {
+        match input {
+            DirectSkillInputPolicy::PobManualDirectSkillV2 {
+                definitions: _,
+                source,
+                roles: _,
+                catalog,
+                manual_sources,
+                group_attributes,
+                skills,
+                dispositions,
+            } => Self::PobManualDirectSkillV2 {
+                source,
+                catalog,
+                manual_sources,
+                group_attributes,
+                skills,
+                dispositions: dispositions
+                    .into_iter()
+                    .map(DirectSkillInputDispositionContent::from_checked)
+                    .collect(),
+            },
+        }
+    }
+
+    /// Construct a raw policy; ordinary normalization validation remains required.
+    pub(crate) fn into_input<I: DefinitionSchemaIndex>(
+        self,
+        definitions: &I,
+        roles: &OwnedSkillRoleIndex,
+    ) -> DirectSkillInputPolicy {
+        match self {
+            Self::PobManualDirectSkillV2 {
+                source,
+                catalog,
+                manual_sources,
+                group_attributes,
+                skills,
+                dispositions,
+            } => DirectSkillInputPolicy::PobManualDirectSkillV2 {
+                definitions: definitions.identity().clone(),
+                source,
+                roles: *roles.identity(),
+                catalog,
+                manual_sources,
+                group_attributes,
+                skills,
+                dispositions: dispositions
+                    .into_iter()
+                    .map(|row| row.into_input(definitions, roles))
+                    .collect(),
+            },
+        }
+    }
+}
+
 /// Exact assignment-to-source correspondence, independent of support admission,
 /// effect receiving, activation and numerical completeness.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum DirectSupportTargetPolicy {
     PobManualSingleDirectRootV1 { direct_inputs: OwnedContentDigest },
+}
+
+/// Explicit target authority whose dependency is constructed from final Direct inputs.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum DirectSupportTargetContent {
+    PobManualSingleDirectRootV1 {},
+}
+
+impl DirectSupportTargetContent {
+    /// Only the enclosing checked normalization owner may extract inherited content.
+    pub(crate) fn from_checked(input: DirectSupportTargetPolicy) -> Self {
+        match input {
+            DirectSupportTargetPolicy::PobManualSingleDirectRootV1 { direct_inputs: _ } => {
+                Self::PobManualSingleDirectRootV1 {}
+            }
+        }
+    }
+
+    /// Construct a raw policy; this does not establish the Direct source's validity.
+    pub(crate) fn into_input(
+        self,
+        direct: Option<&DirectSkillInputPolicy>,
+        limits: NormalizationLimits,
+    ) -> Result<DirectSupportTargetPolicy> {
+        match self {
+            Self::PobManualSingleDirectRootV1 {} => {
+                let Some(direct) = direct else {
+                    return invalid("Direct support targets require source authority");
+                };
+                Ok(DirectSupportTargetPolicy::PobManualSingleDirectRootV1 {
+                    direct_inputs: direct_skill_inputs_identity(direct, limits)?,
+                })
+            }
+        }
+    }
 }
 
 pub(super) fn present_support_targets<'de, D: serde::Deserializer<'de>>(

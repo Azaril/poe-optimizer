@@ -23,6 +23,62 @@ pub enum SupportOriginOrderPolicy {
     },
 }
 
+/// Authored ordering and source evidence, without a role-package commitment.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum SupportOriginOrderContent {
+    SavedManualGroupOrder {},
+    SavedManualGroupOrderWithPhysicalInventoryV2 {
+        mapping_source: OwnedContentDigest,
+    },
+    SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+        mapping_source: OwnedContentDigest,
+        nonphysical_skill_ids: Vec<String>,
+    },
+}
+
+impl SupportOriginOrderContent {
+    /// The aggregate extracts content only from its checked normalization owner.
+    pub(super) fn from_checked(input: SupportOriginOrderPolicy) -> Self {
+        match input {
+            SupportOriginOrderPolicy::SavedManualGroupOrder {} => Self::SavedManualGroupOrder {},
+            SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 {
+                mapping_source,
+                roles: _,
+            } => Self::SavedManualGroupOrderWithPhysicalInventoryV2 { mapping_source },
+            SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+                mapping_source,
+                roles: _,
+                nonphysical_skill_ids,
+            } => Self::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+                mapping_source,
+                nonphysical_skill_ids,
+            },
+        }
+    }
+
+    /// Construct an input; the aggregate still runs the shared policy checks.
+    pub(super) fn into_input(self, roles: &OwnedSkillRoleIndex) -> SupportOriginOrderPolicy {
+        match self {
+            Self::SavedManualGroupOrder {} => SupportOriginOrderPolicy::SavedManualGroupOrder {},
+            Self::SavedManualGroupOrderWithPhysicalInventoryV2 { mapping_source } => {
+                SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 {
+                    mapping_source,
+                    roles: *roles.identity(),
+                }
+            }
+            Self::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+                mapping_source,
+                nonphysical_skill_ids,
+            } => SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+                mapping_source,
+                roles: *roles.identity(),
+                nonphysical_skill_ids,
+            },
+        }
+    }
+}
+
 pub(super) fn initialize(
     b: &mut Builder<'_, '_>,
     source: SourceOccurrenceId,

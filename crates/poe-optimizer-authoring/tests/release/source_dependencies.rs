@@ -29,8 +29,8 @@ fn shell(input: &OwnedReleaseInput) -> OwnedReleaseInput {
 #[test]
 fn original_dependency_seals_and_source_pins_cannot_be_repaired_by_source_checking() {
     let input = shell(&fixture().input);
-    let schema = check_release_source_dependencies(&input, Default::default()).unwrap();
-    assert_eq!(schema.identity(), &input.recipe.rules.definitions);
+    let source = check_release_source_dependencies(&input, Default::default()).unwrap();
+    assert_eq!(source.schema().identity(), &input.recipe.rules.definitions);
     let mutations: &[fn(&mut OwnedReleaseInput)] = &[
         |v| v.recipe.schema.release = OwnedDefinitionKey::new("changed-schema").unwrap(),
         |v| v.recipe.rules.definitions.content_sha256 = "1".repeat(64),

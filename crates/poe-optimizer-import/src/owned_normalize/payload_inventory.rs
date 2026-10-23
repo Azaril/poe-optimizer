@@ -13,6 +13,49 @@ pub enum PayloadInventoryPolicy {
     },
 }
 
+/// Authored payload census and source evidence, without a role-package seal.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum PayloadInventoryContent {
+    SavedGroupsWithoutAuthoredContainersV1 {
+        mapping_source: OwnedContentDigest,
+        non_container_gems: Vec<GemDefId>,
+        nonphysical_non_container_skill_ids: Vec<String>,
+    },
+}
+
+impl PayloadInventoryContent {
+    /// The aggregate extracts content only from its checked normalization owner.
+    pub(super) fn from_checked(input: PayloadInventoryPolicy) -> Self {
+        let PayloadInventoryPolicy::SavedGroupsWithoutAuthoredContainersV1 {
+            mapping_source,
+            roles: _,
+            non_container_gems,
+            nonphysical_non_container_skill_ids,
+        } = input;
+        Self::SavedGroupsWithoutAuthoredContainersV1 {
+            mapping_source,
+            non_container_gems,
+            nonphysical_non_container_skill_ids,
+        }
+    }
+
+    /// Construct an input; the aggregate still runs the shared policy checks.
+    pub(super) fn into_input(self, roles: &OwnedSkillRoleIndex) -> PayloadInventoryPolicy {
+        let Self::SavedGroupsWithoutAuthoredContainersV1 {
+            mapping_source,
+            non_container_gems,
+            nonphysical_non_container_skill_ids,
+        } = self;
+        PayloadInventoryPolicy::SavedGroupsWithoutAuthoredContainersV1 {
+            mapping_source,
+            roles: *roles.identity(),
+            non_container_gems,
+            nonphysical_non_container_skill_ids,
+        }
+    }
+}
+
 pub(super) struct CompiledPayloadInventory<'p> {
     gems: BTreeSet<&'p GemDefId>,
     nonphysical: BTreeSet<&'p str>,

@@ -59,7 +59,9 @@ Neither publication workflow supplies missing gameplay facts, promotes partial
 coverage, or establishes a complete original build.
 
 Implementation checkpoint, 2026-10-23: the shared original-source dependency check
-is implemented and used before DSL lowering. It returns only a checked schema;
-final rule/evaluation validation remains mandatory. This completes the incoming
-validation prerequisite, not dependency construction after allocation or either
-proposed filesystem workflow. The publication decision remains open.
+is implemented and used before DSL lowering. It now retains the checked source
+registry/schema and Import owners for consuming content extraction. The maintained
+builder constructs Import dependencies from that content, including normalization
+and Tree, then performs mandatory final rule/evaluation validation. Declaration
+staging integration and evaluation-content construction remain separate from
+either proposed filesystem workflow. The publication decision remains open.
