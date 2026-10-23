@@ -4,7 +4,7 @@ use poe_optimizer_core::{
     build_identity::BuildLineage,
     owned_build::{ActorKey, MetricTarget, ProviderKey, ProviderRoot},
     owned_definitions::MetricDefId,
-    owned_draft::{DraftAuthoredSkillSource, DraftMetricTarget},
+    owned_draft::{DraftAuthoredSkillSource, DraftFinalization, DraftMetricTarget},
 };
 use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
@@ -18,6 +18,9 @@ use poe_optimizer_import::{
 use serde::Deserialize;
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, fs, path::Path};
+
+#[path = "originals/selection.rs"]
+mod selection;
 
 // Only source identity and ordered query identities are consumed. Recorded PoB
 // values and historical implementation metadata are not native answers.
@@ -307,6 +310,84 @@ fn tracked_release_preserves_five_originals_metric_identities_and_exact_action_o
         );
         let input = normalized.draft().input();
         assert_eq!(input.query_presets.members.len(), 1);
+        let saved_selection = selection::saved(&evidence, &normalized);
+        let proof = normalized
+            .draft()
+            .prove_intent(
+                recipe.schema().as_ref(),
+                Default::default(),
+                Default::default(),
+            )
+            .unwrap();
+        let checked = normalized
+            .draft()
+            .finalize_selection_checked(
+                recipe.schema().as_ref(),
+                saved_selection,
+                &proof,
+                Default::default(),
+                Default::default(),
+            )
+            .unwrap();
+        assert_eq!(checked.draft_digest(), normalized.sidecar().draft);
+        let DraftFinalization::Pending {
+            selection: actual_selection,
+            issues,
+            queries,
+            ..
+        } = checked.finalization()
+        else {
+            panic!(
+                "original {} must retain its selected input obligations",
+                index + 1
+            )
+        };
+        assert_eq!(**actual_selection, saved_selection);
+        assert_eq!(queries, &input.query_presets.members[0].queries);
+        assert_eq!(
+            issues.len(),
+            [123, 137, 127, 144, 5][index],
+            "selected input obligations for original {}: {issues:#?}",
+            index + 1
+        );
+        if index == 4 {
+            let obligations: Vec<_> = issues
+                .iter()
+                .map(|issue| (issue.code.as_str(), issue.path.as_str()))
+                .collect();
+            assert_eq!(
+                obligations,
+                [
+                    (
+                        "usage-preferences-not-converted",
+                        "skill_presets.members[2].intent.usage.completion",
+                    ),
+                    (
+                        "configuration-roles-not-converted",
+                        "choice_presets.members[0].choices.completion",
+                    ),
+                    (
+                        "external-assumptions-not-converted",
+                        "scenario_presets.members[0].scenario.assumptions.completion",
+                    ),
+                    (
+                        "usage-not-converted",
+                        "scenario_presets.members[0].scenario.usage.completion",
+                    ),
+                    (
+                        "scenario-usage-intents-not-converted",
+                        "scenario_presets.members[0].scenario.usage_intents.completion",
+                    ),
+                ],
+                "Original05 keeps every actual selected input obligation"
+            );
+        }
+        assert_eq!(normalized.draft(), replay.draft(), "selection is read-only");
+        assert_eq!(
+            serde_json::to_vec(normalized.sidecar()).unwrap(),
+            serde_json::to_vec(replay.sidecar()).unwrap(),
+            "selection preserves source provenance"
+        );
         let requests = &input.query_presets.members[0].queries.requests.members;
         assert_eq!(
             (

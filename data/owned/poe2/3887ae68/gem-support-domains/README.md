@@ -1,7 +1,7 @@
 # Gem support-source domains
 
 This packet supplies the Gem-definition part of composed support discovery.
-The existing recipe extension contains **966 explicit declarations: 937 Known
+The maintained release contains **966 explicit declarations: 937 Known
 and 29 Unmapped**. It adds no evaluator code, programs, definitions, tables or
 runtime source-language fields. Item, modifier, passive, Actor, Skill and other
 selected owners retain their separate coverage requirements.
@@ -13,9 +13,10 @@ records primary, declared additional and actually constructed effects, including
 their support classification. The existing typed `../import/skill-identities.json`
 catalog distinguishes additional effects from stat-set metadata; both sources
 must agree on every reference, identity and support classification. Bindings map
-exact source identities to owned Gem definitions. Publication authenticates the retained independent JIT reports,
-rechecks every binding against the current mapping, and pins the source consumers.
-It does not start a new PoB process or use observed empty modifier buckets as
+exact source identities to owned Gem definitions. The maintained Authoring
+release tests authenticate the retained source evidence, recheck every binding
+against the current mapping, and pin the source consumers. They do not start a
+new PoB process or use observed empty modifier buckets as
 absence evidence.
 
 At the pinned revision, `Data.lua` constructs primary and additional Gem effect
@@ -71,9 +72,9 @@ an independently classified missing effect were a support.
 
 The generated template has SHA-256
 `5aa4cf3055ed80696c227e8fda28332afddc935ee9f6dc31caedede9833c73f2`
-and Git blob `11782d377e29b384ac5b1f8669450d9195295e8f` at the pinned revision.
-This `.txt` file is outside the Lua manifest. Publication reads its exact Git
-object, verifies bytes/hash and every duplicate occurrence, and authenticates
+and historical Git blob `11782d377e29b384ac5b1f8669450d9195295e8f` at the pinned revision.
+This `.txt` file is outside the Lua manifest. Maintained tests authenticate its
+normalized source bytes with SHA-256, verify every duplicate occurrence, and authenticate
 the generator through the existing manifest. No new extractor, Lua interpreter,
 runtime fallback, source-manifest revision or compatibility format is introduced.
 
@@ -96,31 +97,31 @@ alone supplies this packet's narrow authority.
 
 ## Validation and reproduction
 
-`owned_gem_support_domains` validates the entire catalog and tests extra support,
-missing/malformed evidence, unresolved references, duplicate effects, typed
-reference categories across all 111 affected Gems, export classification corruption,
-missing proof, duplicate occurrences and display ordering. Its publication test uses the shared release assembler and preservation
-checks. The whole-input inverse permits only the explicit domain declarations
-and their provenance receipt; schema, rule bodies, inputs, selections and queries
-are unchanged. Rule and compiled identities change.
-
-Set `POE_OPTIMIZER_TEST_GEM_SUPPORT_DOMAINS_PRIOR` to the checked predecessor and
-`POE_OPTIMIZER_TEST_GEM_SUPPORT_DOMAINS_OUTPUT` to a fresh directory, then run:
+The maintained `poe-optimizer-authoring` release target validates the complete
+catalog directly against the release built from `migration-source/release.kdl`.
+Its seven `gem_support_domains` checks retain the additional-support and
+missing-evidence refusals, all 111 stat-set distinctions, eight reviewed missing
+runtime effects, malformed categories, duplicate effects and export occurrences,
+and display-order independence. Every source binding must match the current
+release mapping; all 966 current Gem declarations must match the independently
+derived source domains exactly. Other provider kinds retain separate evidence
+and are not classified by this test.
 
 ```text
-cargo test --locked -p poe-optimizer-cli --no-default-features --test owned_gem_support_domains publish_gem_domains_preserving_all_five_originals -- --ignored --exact
+cargo test --locked -p poe-optimizer-authoring --test release gem_support_domains
 ```
 
-Publication `runs/owned-gem-support-domains-publication-03` replaces the prior
-development endpoint and passes in 21.08s, including byte-identical rebuilding
-and fresh before/after imports of all five
-originals. Selected input counts remain 107/117/109/123/4, with all 110 queries.
-The source catalog/proof files stay in offline authoring; only owned declarations
-enter `rules.json`. Complete native builds remain **0/5**.
+These offline evidence tests require the pinned PoB submodule checkout. They
+read normalized source bytes and the generated export template, check their
+reviewed SHA-256 commitments, and verify every retained block occurrence. They
+run no Git subprocess, Lua host or PoB evaluator. The normal maintained release
+build itself does not read the submodule. The old ignored publication command
+and its predecessor-stage helper have been removed; no local `runs/` artifact is
+required. The original JIT reports remain historical validation evidence, not a
+portable test prerequisite or a new parity claim.
 
-All 76 joined Sniper checks pass against the current successor in 37.83s, and
-strict Clippy passes for the integration target. The seven common native
-discovery-gate checks passed at the preceding checkpoint; runtime code is unchanged.
-These retain disabled/provider-change/refusal and fresh/reused/Rayon controls.
-The native source gate still prevents these partial game domains from certifying
-a complete build.
+`extension.json` and its authoring receipt remain immutable source evidence for
+the migrated declarations; they are not a second publication path. Current
+release construction, full original-build import checks and retirement of the
+remaining historical helpers are covered by the maintained release target and
+implementation plan. Complete native builds remain **0/5**.

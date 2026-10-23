@@ -168,6 +168,14 @@ stricter execution readiness. Supports may affect final level/quality, so suppor
 preparation cannot require those final values first. Discover all eligible
 support sources from the composed build; presets hold authored assignments/order.
 An equipment/tree change triggers fresh applicability and completeness checks.
+The source census includes every actually declared potential ActionOutput on the
+selected loadout, including outputs with no requested metric and descendants of
+disabled skills. Disabled participation does not prove absence of a source;
+unselected weapon loadouts do not contribute to the selected build. An incomplete
+output inventory remains a coverage gap, while a complete empty inventory creates
+no synthetic output. Source-domain completeness is separate from numerical rule
+completeness: proving that an owner introduces no additional supports cannot
+close its unimplemented calculations.
 
 Effects have exact source, recipient, activation and stacking declarations.
 Collect source properties once at the permitted source and apply them to eligible

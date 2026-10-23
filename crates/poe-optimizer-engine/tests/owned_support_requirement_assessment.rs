@@ -58,6 +58,15 @@ fn support_plan(f: &supported::Fixture, accepted: bool) -> supported::Plan {
 }
 
 fn support_plan_for(f: &supported::Fixture, accepted: bool, program_name: &str) -> supported::Plan {
+    support_plan_for_with_rules(f, accepted, program_name, |_| {})
+}
+
+fn support_plan_for_with_rules(
+    f: &supported::Fixture,
+    accepted: bool,
+    program_name: &str,
+    edit_rules: impl FnOnce(&mut RulePackageInput),
+) -> supported::Plan {
     supported::compile_with(
         f,
         |rules| {
@@ -80,6 +89,7 @@ fn support_plan_for(f: &supported::Fixture, accepted: bool, program_name: &str) 
             program
                 .effects
                 .push(requirement("delivery-requirement", "accepted", None));
+            edit_rules(rules);
         },
         |_| {},
         |_| {},
@@ -313,22 +323,45 @@ fn missing_or_partial_supplied_output_programs_remain_incomplete_without_queries
             if empty_queries {
                 f.queries.requests.clear();
             }
+            // Retain the known source domain while the base fixture constructs
+            // its checked stages; neither case has numerical output programs.
+            f.owner_mut(&subject).programs.members.clear();
             let reason = if missing {
-                f.owners.retain(|row| row.owner != subject);
                 PlanGapReason::MissingPrograms
             } else {
-                let owner = f.owner_mut(&subject);
-                owner.programs.members.clear();
-                owner.programs.closure = SchemaClosure::Partial {
-                    gaps: vec![SchemaGap {
-                        subject: subject.clone(),
-                        facet: SchemaFacet::GameRules,
-                        code: supported::key("unreviewed-exposed-output"),
-                    }],
-                };
                 PlanGapReason::PartialPrograms
             };
-            let plan = support_plan(&f, true);
+            let plan = support_plan_for_with_rules(&f, true, "actor-deliver", |rules| {
+                let domain = rules
+                    .support_discovery
+                    .as_ref()
+                    .unwrap()
+                    .providers
+                    .iter()
+                    .find(|row| row.owner == subject)
+                    .unwrap();
+                assert_eq!(
+                    domain.domain,
+                    SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly)
+                );
+                if missing {
+                    rules.owners.retain(|row| row.owner != subject);
+                } else {
+                    rules
+                        .owners
+                        .iter_mut()
+                        .find(|row| row.owner == subject)
+                        .unwrap()
+                        .programs
+                        .closure = SchemaClosure::Partial {
+                        gaps: vec![SchemaGap {
+                            subject: subject.clone(),
+                            facet: SchemaFacet::GameRules,
+                            code: supported::key("unreviewed-exposed-output"),
+                        }],
+                    };
+                }
+            });
             let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
             assert!(matches!(report.support, SupportMetricStatus::Evaluated));
             assert!(

@@ -189,6 +189,8 @@ impl Fixture {
                         SchemaSubject::Definition(def::<ClassDefinition>("class").address()),
                         subject(false),
                         subject(true),
+                        SchemaSubject::Slot(ActionOutputDefId::address(&output(false))),
+                        SchemaSubject::Slot(ActionOutputDefId::address(&output(true))),
                     ]
                     .into_iter()
                     .map(|owner| SupportSourceDomainDeclaration {

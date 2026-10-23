@@ -14,6 +14,8 @@ mod defence_components;
 mod engine_fixtures;
 #[path = "../../../tests/support/owned_evaluation_release_fixture.rs"]
 mod fixture;
+#[path = "release/gem_support_domains.rs"]
+mod gem_support_domains;
 #[path = "release/initial_skill_types.rs"]
 mod initial_skill_types;
 #[path = "release/item_metadata.rs"]

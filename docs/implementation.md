@@ -25,6 +25,9 @@ Atomic authoring checkpoint publication now integrates declarations with the CLI
 using an explicit bootstrap or checked immutable predecessor and one persisted
 name ledger. Initial skill-type declarations now use that path: 69 generic
 Boolean Skill Stats and one Sniper producer, retaining Partial coverage.
+Support-source checks now include declared potential outputs even when no Action
+is queried. Gem domain proof tests and exact saved-selection finalization are
+part of the maintained release harness; the replaced Gem publisher is removed.
 Continue independent harness retirement while completing the current release's
 execution declarations. Do not add a new provenance API
 for dormant support flags.
@@ -39,7 +42,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; current checkpoint pins and verifies their canonical source reference |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; current checkpoint repairs potential-output support coverage and transfers source/selection proofs |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -49,7 +52,7 @@ silently become a second supported implementation.
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. First production declarations add 69 Stats and one Sniper initial-type program. Historical restoration admits only that exact delta. Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 15:59:48 UTC on October 23, `509f2008` run `39979772636` remained pending with no created jobs or failures. The earlier 15:24:38 snapshot of `96e5533e` run `39962517895` had nine of eighteen created jobs passing and nine running, with no failures. `f5e5f49d` run `39966836052` was cancelled before any job started. Baselines `a7069aa1` and `ae90ec82` completed all twenty jobs successfully. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
+| CI | At 16:58:06 UTC on October 23, `b815f0c5` run `39986661210` remained pending with no created jobs. Earlier `96e5533e` run `39962517895` had fourteen of eighteen created jobs passing and four running, with no failures; Ubuntu PoB and Windows CLI-3 had passed. The remaining jobs were Windows CLI-0/1/2 and Windows PoB. Baselines `a7069aa1` and `ae90ec82` completed all twenty jobs successfully. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First reproduce the allocation predecessor using the
@@ -1457,6 +1460,68 @@ exact occurrence, missing-producer and worker-reuse controls when the maintained
 execution bundle is authored. Historical whole-plan fixtures retain those laws
 until then.
 
+**Composed support census checkpoint:** the structural traversal
+already collected potential ActionOutput requirement owners, but support-domain
+checks occurred only when an Action was requested or otherwise registered. Those
+checks now run on the existing bounded structural traversal, with exact provider
+paths and existing loadout eligibility. Disabled sources and descendants remain
+covered; purely off-loadout providers remain excluded. Partial output inventories
+retain ordinary coverage gaps as well as requirement gaps.
+This repairs the accepted composed-build contract without a new model or another
+discovery pass. Tests cover queried/unqueried outputs, known/missing/Unmapped
+domains, complete-empty versus incomplete inventories, exact disabled descendants,
+loadout switching and unchanged Partial numerical programs.
+
+The maintained Authoring release target now runs the seven Gem support-domain
+proof checks. It compares every one of the 966 current declarations against pinned
+source evidence, preserves the 937 Known / 29 Unmapped split, and validates the
+111 stat-set distinctions plus all eight missing-effect classifications and their
+nine export occurrences. Source-proof tests read the pinned submodule; normal
+release construction does not. The replaced ignored publication command and
+helper are removed, including their local `runs/` and JIT report prerequisites.
+The same maintained target now resolves each original's actual saved item/skill/
+configuration/tree selectors through typed source links and performs checked
+selected finalization. It must retain **123/137/127/144/5** input obligations;
+selection may not mutate the draft, erase provenance or manufacture a ready build.
+Original05's five selected obligations are skill-preset usage preferences,
+configuration-role accounting, external assumptions, Scenario usage and Scenario
+usage intents. Their exact diagnostic codes and owner paths are pinned in the
+same test. Support-source coverage and remaining numerical/legality work are
+additional gates, not represented by that count.
+
+Validation: **1,579 distinct tests pass** across Authoring, Host and Engine; the
+15 existing optional oracle cases remain ignored. The final affected-target run
+passes 1,151 tests (166 Authoring library, 67 release, 197 Engine library, 710
+native integration and 11 Host); the unchanged CLI/allocation/reference targets
+passed another 428 in the preceding full run. Logs:
+`runs/support-census-tests-final.log` and `runs/support-census-tests.log`.
+The earlier full run exposed three fixtures that accidentally coupled source
+domains to numerical program membership. They now declare synthetic output
+source domains explicitly and retain missing/Partial numerical-owner assertions;
+no production validator or requirement assertion was weakened. The final
+optimized rebuild took 6m25s; the initial broader build took 13m37s, including
+retained legacy targets. Do not repeat unaffected legacy suites for fixture-only
+edits. Strict all-target Clippy passes for the selected packages, and a separate
+Engine library check with legacy genuinely disabled passes
+(`runs/support-census-clippy-final.log`, `runs/support-census-native-clippy.log`).
+The combined package command still enables legacy transitively through Import;
+it is not evidence that R1 dependency extraction is finished. Scoped formatting,
+diff checks and all nine protected incoming-critical file hashes pass. Runtime
+data, source-release identity, canonical genesis and **0/5** completion are
+unchanged.
+
+Found during peer review: the existing Core resolver returns DisabledProvider
+before checking the source's own or ancestral loadout scope, including a disabled
+support's target. This repair preserves existing eligibility; it fixes output
+coverage without claiming that combined disabled/off-loadout case is correct.
+Before loadout optimization, derive scope eligibility independently of enabled
+state within the existing authored dependency traversal. Add the full
+enabled/disabled × active/off-loadout matrix, disabled supports targeting authored
+and generated skills, descendants and contained equipment, with missing/Unmapped
+domains. Preserve authored required-input checks and structural requirement/usage
+census even for inactive sources. Reordering only the two local conditions is
+insufficient; do not add a second Engine traversal or a new game model.
+
 The next blocker is the composed support-source census and execution input
 authority, not more type facts. Current metadata covers 966 Gem, 19 Reward and one
 UsagePolicy domains; all 23 selected Original05 physical Gems are covered. Gem
@@ -1472,6 +1537,50 @@ would require an authority/model discussion, not a false absence declaration.
 No new public model is needed for the reviewed-absence tranche. Transfer the
 disabled-source, duplicate-equipment, loadout and determinism laws, then retire
 the replaced historical discovery publisher while retaining source evidence.
+
+The smallest coherent next source-data tranche has eight existing subjects:
+Sniper Skill `0012`, its ActorSlot `001f` and ActionOutput `0015`; supplied Actor
+`3091`; BasicAttack Skill `0021` / output `0022`; and GasArrow Skill `0024` /
+output `0025` (all existing `def.000000000000....` identities in
+`owned-mechanics-v1`, with exact declaration owners retained). Review their full
+constructors rather than the selected build's empty support list:
+`act_int.lua:18677–18799`, `Minions.lua:83–121`, `minion.lua:116–264`,
+`CalcSetup.lua:1898–1975,2053–2103` and
+`CalcActiveSkill.lua:144–234,1116–1165` at the pinned source. Child construction
+inherits the parent's existing support list; no additional-origin authority
+follows from inheritance. Preserve nonempty inherited-list controls and explicit
+positive ExtraSupport/LinkedSupport contrasts (`ModParser.lua:2220–2253,3650–3658`,
+`ModCache.lua:9410`). Foreign modifiers/descendants remain independently checked,
+and the missing Player Command definition stays unresolved. No new ID allocation
+is needed for these existing owners.
+
+Author these eight rows in the existing
+`migration-source/bootstrap/rules.json.gz` support-discovery component; the
+current manifest already loads it. Expected totals are 994 domains (965 Known,
+29 Unmapped), with the existing 986 rows untouched. Use the existing pinned
+complete Lua archives only as offline proof: `self-flat-minion-store/{Minions,
+act_int}.lua.gz`, `self-flat-action-factories/minion.lua.gz`,
+`configuration-distance-inputs/CalcActiveSkill.lua.gz` and
+`mana-supplier-sources/CalcSetup.lua.gz`. Keep the proof in the maintained
+Authoring release target, without another parser or historical publisher.
+Historical restoration must authenticate and remove only those eight exact rows
+before retaining every original metadata/artifact equality check. Build the
+changed release using the fixed checked genesis predecessor and update the
+manifest's expected input identity; schema and name ledger must stay byte-identical.
+Do not repin the canonical genesis. The test helper may bootstrap its source
+fixture for content checks, but must no longer describe changed current content
+as the fixed first genesis. This tranche retires no selected input obligation and
+admits no complete build.
+
+Follow with separate finite constructor proofs for class/ascendancy roots,
+Class, shared Actor, Encounter and the remaining UsagePolicy owners. Existing
+root/ascendancy evidence is reusable, but source rows cannot be blanket-certified
+from one selected request. The unchanged Original05 uses item set 2, skill set 4
+and passive spec 3; the audit found no selected positive extra/linked support
+factory, which is only a finite witness. Two selected passive grants remain
+unparsed: Kelari's Deception (`ModCache.lua:7962`) and Navira's Fracturing
+(`ModCache.lua:8105`). Their missing mechanics/authority remain tracked blockers;
+do not infer support absence from the parser returning no modifiers.
 
 Inherited summoner context already uses `ReceivingSkill { summoner_path }` and
 the exact parent's prepared types; do not add another structural read for it.
@@ -1669,6 +1778,8 @@ These are retained obligations, not extra competing phases.
 | Generic Actors, exact source/recipient contributions and typed unknowns | Preserve through R2-R4; player, supplied units and scenario enemy use one Actor model with explicit role permissions |
 | Generated preset raw inputs and usage; scenario intent | Preserve exact provider applicability, dormant vs unresolved, single-writer slots, preparation vs participation; test in migration and finish actual R5 blockers |
 | Support-generated skills and physical selector/supply separation | Existing proposals remain unapproved where explicitly marked; reassess against the new model before adding authority, not another parallel graph |
+| Disabled sources on unselected loadouts | Existing resolver precedence can wrongly require their support domains. Fix scope eligibility across authored dependencies before loadout optimization (or earlier if it blocks R5); retain disabled selected-source coverage, required-input checks and structural requirements. Cover the enabled/scope matrix and support-target/container ancestry without a second Engine traversal |
+| Windows test runtime-library linkage | The support-census validation emitted LNK4098 from the Lua-linked Engine `legacy` and `owned` test binaries. Resolve the linkage for oracle binaries retained through R4; do not suppress all linker diagnostics. No warning was emitted by strict Clippy, and native production gained no Lua dependency |
 | Resource obligations | Accepted Skill-owned payer/resource model remains required; amount-channel signature proposal still needs a concrete decision if R5 requires it |
 | Separate socket configurations | Accepted but incomplete; finish when needed for the first build or R6 equipment search; keep rolls/configurations/physical copies separate |
 | Scoped numerical coverage / computed source selection | Pending, not implied by DSL approval; unknown reach stays blocking. Ask only when a concrete required case needs a public contract change |

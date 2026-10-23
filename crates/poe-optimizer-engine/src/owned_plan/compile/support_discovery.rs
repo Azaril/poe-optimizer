@@ -44,17 +44,31 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         Ok(())
     }
 
-    fn requirement_outputs(
+    /// Potential output owners can supply supports even without an Action query.
+    /// Keep the source census on the structural traversal, before activation.
+    fn structural_outputs(
         &mut self,
         provider: &ProviderKey,
         outputs: &DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
+        support_coverage: bool,
     ) -> Result<()> {
         if !outputs.is_complete() {
             self.requirement_gap(Some(provider), None, PlanGapReason::PartialDeclarations)?;
+            if support_coverage {
+                self.gap(
+                    Some(provider.clone()),
+                    None,
+                    PlanGapReason::PartialDeclarations,
+                )?;
+            }
         }
         charge(&mut self.work, outputs.members.len())?;
         for output in &outputs.members {
-            self.requirement_owner(SchemaSubject::Slot(ActionOutputDefId::address(output)))?;
+            let subject = SchemaSubject::Slot(ActionOutputDefId::address(output));
+            self.requirement_owner(subject.clone())?;
+            if support_coverage {
+                self.check_support_domain(&subject, Some(provider))?;
+            }
         }
         self.requirement_output_coverage(provider, &outputs.members)
     }
@@ -63,12 +77,13 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         &mut self,
         provider: &ProviderKey,
         skill: &SkillDefId,
+        support_coverage: bool,
     ) -> Result<()> {
         let subject = SchemaSubject::Definition(skill.address());
         self.requirement_owner(subject.clone())?;
         match self.index.definition(skill) {
             SchemaLookup::Known(schema) => {
-                self.requirement_outputs(provider, &schema.declarations.outputs)
+                self.structural_outputs(provider, &schema.declarations.outputs, support_coverage)
             }
             _ => self.requirement_gap(
                 Some(provider),
@@ -86,6 +101,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         exposure: &ProviderExposure<'_>,
         pending: &mut BTreeSet<ProviderKey>,
         inactive: bool,
+        support_coverage: bool,
     ) -> Result<()> {
         let mut declarations = vec![];
         match exposure {
@@ -116,7 +132,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 if let Some(skills) = skills {
                     charge(&mut self.work, skills.members.len())?;
                     for skill in &skills.members {
-                        self.requirement_potential_skill(key, skill)?;
+                        self.requirement_potential_skill(key, skill, support_coverage)?;
                     }
                     if !skills.is_complete() {
                         self.usage_census_gap(Some(key), None, PlanGapReason::PartialDeclarations)?;
@@ -149,7 +165,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 ..
             } => {
                 self.requirement_owner(owner_subject(owner))?;
-                self.requirement_outputs(key, outputs)?;
+                self.structural_outputs(key, outputs, support_coverage)?;
                 if inactive {
                     self.check_support_domain(&owner_subject(owner), Some(key))?;
                 }
@@ -164,9 +180,9 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 self.requirement_owner(SchemaSubject::Slot(ActorSlotDefId::address(&actor.slot)))?;
                 charge(&mut self.work, schema.skills.members.len())?;
                 for skill in &schema.skills.members {
-                    self.requirement_potential_skill(key, skill)?;
+                    self.requirement_potential_skill(key, skill, support_coverage)?;
                 }
-                self.requirement_outputs(key, &schema.outputs)?;
+                self.structural_outputs(key, &schema.outputs, support_coverage)?;
                 if !schema.skills.is_complete() {
                     self.usage_census_gap(Some(key), None, PlanGapReason::PartialDeclarations)?;
                 }
@@ -201,7 +217,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
             }
         }
         for d in declarations {
-            self.requirement_outputs(key, &d.outputs)?;
+            self.structural_outputs(key, &d.outputs, support_coverage)?;
             if !d.grants.is_complete() || !d.actors.is_complete() || !d.skill_grants.is_complete() {
                 self.usage_census_gap(Some(key), None, PlanGapReason::PartialDeclarations)?;
                 if inactive {

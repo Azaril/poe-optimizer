@@ -1084,6 +1084,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 provider.exposure(),
                 &mut pending,
                 inactive_support_coverage,
+                !inactive || inactive_support_coverage,
             )?;
             if inactive {
                 self.inactive_providers.insert(key);
