@@ -1,7 +1,7 @@
 //! Rarity qualifier direction stays separate from magnitude; Chaos uses signed values.
 use super::{
     scalar_families::{
-        assert_qualified_raw, assert_raw, attribute, check_scalar_numeric, check_scalar_originals,
+        assert_qualified_raw, assert_raw, attribute, check_scalar_originals,
         check_scalar_publication, check_scalar_structure, modifier_id, recipe,
     },
     support::{data, json},
@@ -345,50 +345,6 @@ pub fn check_rarity_chaos(cwd: &Path, prior: &Path) -> PathBuf {
             check_structure(&before, &after, bindings);
             check_policies(prior, output);
             let families = bindings["families"].as_array().unwrap();
-            for family in families {
-                let rarity = family["family"] == "item-rarity";
-                let selected = std::slice::from_ref(family);
-                check_scalar_numeric(
-                    &after,
-                    selected,
-                    &bindings["scalar_unit"],
-                    &bindings["effective_stat"],
-                    &[
-                        (0.0, 1.0, 1.0, 0.0),
-                        (10.0, 1.0, 1.0, 10.0),
-                        (10.0, 2.0, 1.5, 30.0),
-                        (10.49, 1.0, 1.0, 10.0),
-                        (10.5, 1.0, 1.0, 11.0),
-                        (3.0, 1.0, 1.2, 3.0),
-                    ],
-                    if rarity { Some(false) } else { None },
-                );
-                if rarity {
-                    check_scalar_numeric(
-                        &after,
-                        selected,
-                        &bindings["scalar_unit"],
-                        &bindings["effective_stat"],
-                        &[
-                            (0.0, 1.0, 1.0, 0.0),
-                            (10.0, 1.0, 1.0, -10.0),
-                            (10.0, 2.0, 1.5, -30.0),
-                            (10.5, 1.0, 1.0, -11.0),
-                            (3.0, 1.0, 1.2, -3.0),
-                        ],
-                        Some(true),
-                    );
-                } else {
-                    check_scalar_numeric(
-                        &after,
-                        selected,
-                        &bindings["scalar_unit"],
-                        &bindings["effective_stat"],
-                        &[(-10.0, 2.0, 1.5, -28.0), (-10.5, 1.0, 1.0, -11.0)],
-                        None,
-                    );
-                }
-            }
             let checked = assemble_owned_recipe(after, Default::default()).unwrap();
             let lines = OwnedItemLinePolicy::new(
                 serde_json::from_value(json(output.join("items.json"))).unwrap(),

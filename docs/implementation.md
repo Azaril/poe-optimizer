@@ -13,24 +13,25 @@ adjustments below. Historical checkpoints remain in Git and
 **Next work is the DSL/data/runtime migration, before further mechanic content.**
 The first complete unchanged build must use the new format and sole native path.
 Legacy deletion is a gate before that milestone, not work deferred until five builds.
-The computed-support unused-input repair under R2 is implemented. Continue
-independent harness retirement while completing the current
-release's real execution declarations; do not add a new provenance API for dormant
-support flags.
+The computed-support unused-input repair and immutable typed Stat declaration
+compiler under R2 are implemented. Continue independent harness retirement while
+integrating declarations with maintained release publication and completing the
+current release's real execution declarations. Do not add a new provenance API
+for dormant support flags.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; current checkpoint repairs unused computed-support input demand |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; current checkpoint adds typed Stat declaration staging and transfers scalar/Actor attribute laws |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
-| Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation and production release command. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Move the maintained publication core and retire obsolete transformation chains |
+| Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation, typed Stat declaration staging and production release command. Declaration publication integration remains pending. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Move the maintained publication core and retire obsolete transformation chains |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader and shared complete-release validation implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Offline module/command relocation remains |
-| DSL / KDL / binary pack | Every retained program now comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Exact graph/placement and historical non-program preservation gates pass; named-registry filesystem CAS, broader declarations and binary pack remain pending |
+| DSL / KDL / binary pack | Every retained program now comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Exact graph/placement and historical non-program preservation gates pass; named-registry filesystem CAS, declaration publication/remaining descriptor kinds and binary pack remain pending |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Node renaming changes rule/input identity; other emitted constituents remain byte-exact. No local predecessor needed; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 02:45:44 UTC on October 23 (October 22 EDT), baseline `ae90ec82` run `39857163789` had completed successfully with all twenty jobs passing (finished 02:23:26 UTC). `a7069aa1` run `39889225006` had five successful jobs, thirteen running, no failures. Each checkpoint needs its own hosted result; baseline success does not certify later commits |
+| CI | At 03:25:30 UTC on October 23 (October 22 EDT), baseline `ae90ec82` run `39857163789` had completed successfully with all twenty jobs passing (finished 02:23:26 UTC). `a7069aa1` run `39889225006` had eight successful jobs, ten running, no failures; `1a88f37c` run `39891765286` was pending. Each checkpoint needs its own hosted result; baseline success does not certify later commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release`
@@ -873,18 +874,59 @@ untracked incoming-critical files still match their saved backup hashes and are
 excluded from this checkpoint. Release source/input identity and the **0/5**
 complete-original count are unchanged.
 
-**Next bounded authoring prerequisite:** `packet.rs` currently appends programs;
+**Typed Stat declaration checkpoint:** `packet.rs` currently appends programs;
 its names must already exist in the schema decoded by `release.rs`. The tracked
 bootstrap has only three Boolean Stats targeting Skill (Offering activation,
 Frost Bomb requested global effect and participation), with none for initial
-types, minion-context presence or support prohibition. Add maintained typed
-Boolean-Stat declarations to KDL/Authoring, using transactional named allocation
-before program lowering and the existing schema/rule validators. This is the
-planned broader-declaration work, not a new evaluator ownership model. Do not
+types, minion-context presence or support prohibition. Authoring now has maintained
+KDL Stat declarations for all four existing value kinds and all seven existing
+target kinds, using transactional named allocation before program lowering and
+the existing schema/rule validators. This is the planned broader-declaration
+work, not a new evaluator ownership model. Do not
 predict IDs, hand-edit compressed schema bytes or create another publication tool.
-Use the existing generic Stat schema with Boolean as its first needed declaration;
-do not introduce a support-specific definition format. Rebuild and validate every
-affected constituent commitment through the maintained release assembler.
+The generic Stat schema remains the sole descriptor model; Boolean is the first
+production need. The compiler stages names, schema and symbols immutably, refuses
+existing descriptor replacement, checks active base identities and overlapping
+alias agreement, and preserves all coverage/authority checks. Eight focused tests
+cover syntax, persisted allocation replay, earlier-sorting additions, conflicts,
+exact budgets, transactional failure and ordinary Engine execution with true,
+false and missing inputs. This is a library seam, not yet release-command wiring.
+Rebuild and validate every affected constituent commitment through maintained
+Authoring before claiming that production data uses these declarations.
+The Data package exposes cached budget validation and a stored-entry growth
+preflight. New Stat descriptors and target memberships are charged before
+allocation; semantic-link checks retain their independent ceiling. Existing
+schema construction and encoded-byte validation remain mandatory. Review caught
+the initially late entry check; the Actor-template regression now proves exact
+growth capacity, one-over/overflow refusal and an already-invalid baseline.
+
+Final validation passes **250 native Data tests** and **195 Windows Authoring
+tests** (162 library, seven CLI and 26 release), with none ignored. Logs:
+`runs/stat-declarations-data-tests-final.log` and
+`runs/stat-declarations-authoring-tests-final.log`. The first Authoring run
+correctly rejected a new fixture whose declared names did not match its DSL
+references; that fixture is corrected without changing name resolution. The
+final optimized Authoring compilation still took **10m25s**; suite consolidation
+has not removed the remaining compilation cost. Production source/input identity,
+partial coverage and the **0/5** complete-original count remain unchanged.
+
+Publication integration has two newly verified prerequisites. `NamedIdRegistry`
+is not wired to persisted release state, and the closed runtime directory cannot
+accept an extra authoring ledger. The [authoring checkpoint proposal](owned-authoring-checkpoint-proposal.md)
+asks for the offline workflow choice: atomic authoring checkpoint with a separate
+runtime directory (recommended), or explicit source-ledger allocation before
+read-only release builds. This decision does not block the immutable declaration
+compiler or independent test retirement; do not wire the CLI before it is resolved.
+
+The final assembler validates existing commitments rather than reconstructing
+them. The historical `owned_release_revision::rebind_release_dependencies` assumes
+a checked predecessor and rejects evaluation artifacts. Do not call it on raw
+decoded source or recreate a second repair list. Extract/reuse the shared semantic
+validation for bootstrap/import constituents against the actual base registry and
+schema, then construct final dependencies through maintained Authoring and validate
+the complete release. Cover malformed incoming commitments and late failures.
+Retire the old transformation caller when its useful tests and binding logic have
+moved; none of this may silently grant missing gameplay coverage.
 Then author initial-type producers for Original05 Sniper first: pinned
 `Data/Skills/act_int.lua:18677` declares twelve own types and five minion types.
 Use `support-release/evidence.json` raw Twister/Cleric/Heal memberships and
@@ -897,9 +939,40 @@ producer, and occurrence-specific `noSupports` must not prohibit the shared Skil
 Acceptance for the declaration/type slice includes positive and negative membership
 within the declared vocabulary, absent versus present-empty minion context,
 repeated occurrences and unchanged partial-owner coverage. Source census, stages
-and receiving remain separate bundle prerequisites. Disjoint retirement may move
-the scalar-family and Actor-attribute component laws into the cached release
-harness while this authoring work proceeds.
+and receiving remain separate bundle prerequisites.
+
+**Scalar/attribute harness transfer completed:** the cached Authoring release suite now
+checks 21 scalar families and four Actor attribute families, preserving independent
+values, exact units/recipients, signed rounding, missing inputs, bounds/overflow,
+scratch recovery and parallel workers. Current Actor attributes contribute to
+both first- and second-pass Count channels after checked integer quantization;
+the older single-Integer receiver expectation no longer describes the maintained
+model. The new expected channels agree with `attribute-stages/COUNT-CUTOVER.md`.
+The first transfer run exposed that obsolete expectation; the corrected tests
+pass without changing production rules or relaxing validation.
+
+Removed `check_scalar_numeric`, `check_components`, their private helpers and
+exact callers from the five historical scalar/attribute publication helpers after
+the replacements passed. Retained outer publication/import/schema/closure/wire
+checks, four separate defence-family numeric checks and Cleric whole-plan checks
+remain explicit retirement work. The historical chain has not been deleted or
+rerun in full at this checkpoint; its affected target is compiled/linted below.
+
+Native-only all-target lint exposed two Data examples that imported legacy APIs
+without declaring that feature requirement. `seal_package` and
+`profile_allocations` now declare `required-features = ["legacy"]`; native-only
+lint passes and both examples still pass strict lint with their default feature.
+This corrects the existing feature boundary, not the R4 removal of those tools,
+the legacy default or implementation-source fingerprints.
+Strict Clippy passes for Authoring all targets, native-only Data all targets,
+both retained Data examples and `poe-optimizer-cli --test owned_extension_cli`.
+Logs: `runs/stat-declarations-authoring-clippy-final.log`,
+`runs/stat-declarations-data-clippy-final.log`,
+`runs/stat-declarations-legacy-examples-clippy.log` and
+`runs/current-release-scalar-retirement-clippy.log`. Formatting and scoped diff
+checks pass. Independent reviews found no remaining blocker in declaration
+staging or transferred laws. The nine pre-existing incoming-critical files remain
+unchanged and excluded from this checkpoint.
 
 The [support target facts investigation](owned-support-target-facts-proposal.md)
 also records a deferred recommendation for narrow structural source reads, which
@@ -1112,11 +1185,13 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. The computed-support unused-input repair is now
-   implemented. Next **add typed Boolean-Stat declarations through the existing
-   KDL/allocator path, then author real initial-type facts for Sniper**, following
-   the R2 prerequisite and evidence inventory above. No structural-read decision
-   blocks that slice. In parallel, continue independent behavioral transfers.
+1. Read this plan and Git status. The computed-support unused-input repair and
+   immutable typed Stat declaration compiler are implemented. Next **resolve the
+   offline publication workflow, validate bootstrap commitments and integrate
+   declarations into the maintained release compiler**, following the R2
+   prerequisite above. Then author real initial-type facts for Sniper using its
+   pinned source evidence. No structural-read decision blocks that slice.
+   In parallel, continue independent behavioral transfers.
    Complete the actual execution declarations needed to replace historical
    whole-plan fixtures, **retire obsolete
    transformation paths and move the maintained publication core into Authoring**.
@@ -1141,15 +1216,15 @@ These are retained obligations, not extra competing phases.
    provenance now share its cached tracked release.
    Continue in this same `release` target; do not create another builder harness.
 
-   Transfer the remaining nested laws in three coherent groups:
-   - Numeric components: `owned_scalar_families::check_scalar_numeric` and
-     `owned_actor_attributes::check_components`. Reuse checked recipe/compiled
-     handles and semantic bindings; preserve units, exact channels, lazy branches,
-     negative rounding, overflow, missing facts and independent/reused scratch.
-     Local-scaling and elemental-channel numeric laws are now transferred. Their
-     remaining outer canonical property-slot and wire-budget checks still need
-     transfer before deleting those publication helpers. Discard old
-     program/owner/target-growth counts.
+   Finish the remaining transfers in three coherent groups:
+   - Numeric components: scalar families, Actor attributes, local scaling and
+     elemental-channel laws now use the cached release harness; their replaced
+     numeric helpers/calls are deleted. Transfer the four separate defence-family
+     numeric cases and remaining outer canonical property-slot, import and
+     wire-budget checks before deleting their publication helpers. Preserve
+     units, exact channels, lazy branches, negative rounding, overflow, missing
+     facts and independent/reused scratch. Discard old program/owner/target-growth
+     counts.
    - Item attribution: grammar/source cases in `owned_canonical_admission`,
      `owned_item_layouts`, `owned_item_metadata`, `owned_source_conditions`,
      `owned_source_role_migration` and `owned_item_quality_inputs`. Use current

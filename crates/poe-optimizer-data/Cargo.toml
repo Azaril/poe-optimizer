@@ -15,6 +15,14 @@ name = "legacy"
 path = "tests/legacy.rs"
 required-features = ["legacy"]
 
+[[example]]
+name = "seal_package"
+required-features = ["legacy"]
+
+[[example]]
+name = "profile_allocations"
+required-features = ["legacy"]
+
 [features]
 # Transitional callers retain the old source-shaped package explicitly.
 default = ["legacy"]

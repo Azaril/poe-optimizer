@@ -10,6 +10,7 @@
 mod allocation;
 mod ast;
 mod bindings;
+mod declarations;
 mod diagnostic;
 mod format;
 mod lexer;
@@ -34,6 +35,11 @@ pub use ast::{
 pub use bindings::{
     BindingError, BindingErrorKind, BindingKind, BindingLimits, ExpressionBindings, UnitBinding,
     ValueBinding,
+};
+pub use declarations::{
+    DeclarationError, DeclarationErrorKind, DeclarationLimits, StagedStatDeclarations,
+    StatDeclaration, StatDeclarations, StatValueDeclaration, parse_stat_declarations,
+    stage_stat_declarations,
 };
 pub use diagnostic::{Diagnostic, DiagnosticCode, LimitKind};
 pub use format::{FormatLimits, format_program};
@@ -103,6 +109,9 @@ mod packet_tests;
 
 #[cfg(test)]
 mod allocation_tests;
+
+#[cfg(test)]
+mod declaration_tests;
 
 #[cfg(test)]
 mod corpus_tests;

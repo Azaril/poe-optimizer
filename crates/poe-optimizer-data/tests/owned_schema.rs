@@ -1288,6 +1288,21 @@ fn reused_actor_templates_charge_each_potential_ability_check() {
         max_collection_entries: largest_collection,
         max_wire_bytes: bytes.len(),
     };
+    // Stored-entry growth must not reduce the separate semantic-link budget.
+    // This baseline already uses that whole budget, but has spare stored rows.
+    let remaining_entries = actor_link_checks - entries;
+    package
+        .validate_entry_growth(remaining_entries, exact)
+        .unwrap();
+    for additional in [remaining_entries + 1, usize::MAX] {
+        assert!(matches!(
+            package.validate_entry_growth(additional, exact),
+            Err(SchemaPackageError::Invalid {
+                kind: SchemaPackageErrorKind::LimitExceeded,
+                ..
+            })
+        ));
+    }
     let constructed = OwnedDefinitionSchemaPackage::new(raw.clone(), exact).unwrap();
     let decoded = decode_schema_package(&bytes, exact).unwrap();
     assert_eq!(constructed.identity(), package.identity());
@@ -1299,6 +1314,7 @@ fn reused_actor_templates_charge_each_potential_ability_check() {
             max_entries,
             ..exact
         };
+        assert!(package.validate_entry_growth(0, below).is_err());
         for result in [
             OwnedDefinitionSchemaPackage::new(raw.clone(), below),
             decode_schema_package(&bytes, below),

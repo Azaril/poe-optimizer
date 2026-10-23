@@ -1,7 +1,7 @@
 //! Canonical defence magnitudes precede local/global projection and item completion.
 use super::{
     scalar_families::{
-        assert_qualified_raw, assert_raw, attribute, check_scalar_numeric, check_scalar_originals,
+        assert_qualified_raw, assert_raw, attribute, check_scalar_originals,
         check_scalar_publication, check_scalar_structure, modifier_id, recipe,
     },
     support::{data, json},
@@ -650,72 +650,6 @@ fn check_policies(prior: &Path, output: &Path, bindings: &Value) {
     );
 }
 
-fn check_numeric(after: &OwnedRecipeInput, bindings: &Value) {
-    for (increase, percentage) in [(false, false), (false, true), (true, true)] {
-        let specs = specifications();
-        let selected: Vec<_> = specs
-            .iter()
-            .filter(|spec| {
-                !legacy(spec) && spec.increase == increase && spec.percentage == percentage
-            })
-            .map(|spec| family(bindings, spec).clone())
-            .collect();
-        assert_eq!(
-            selected.len(),
-            if increase {
-                9
-            } else if percentage {
-                1
-            } else {
-                5
-            }
-        );
-        let unit = &selected[0]["unit"];
-        let stat = &selected[0]["output"];
-        check_scalar_numeric(
-            after,
-            &selected,
-            unit,
-            stat,
-            &[
-                (0.0, 1.0, 1.0, 0.0),
-                (10.0, 1.0, 1.0, 10.0),
-                (10.0, 2.0, 1.5, 30.0),
-                (10.49, 1.0, 1.0, 10.0),
-                (10.5, 1.0, 1.0, 11.0),
-                (3.0, 1.0, 1.2, 3.0),
-                (10.0, 1.0, 1.0, 10.0),
-            ],
-            increase.then_some(false),
-        );
-        if increase {
-            check_scalar_numeric(
-                after,
-                &selected,
-                unit,
-                stat,
-                &[
-                    (0.0, 1.0, 1.0, 0.0),
-                    (10.0, 1.0, 1.0, -10.0),
-                    (10.0, 2.0, 1.5, -30.0),
-                    (10.5, 1.0, 1.0, -11.0),
-                    (3.0, 1.0, 1.2, -3.0),
-                ],
-                Some(true),
-            );
-        } else {
-            check_scalar_numeric(
-                after,
-                &selected,
-                unit,
-                stat,
-                &[(-10.0, 2.0, 1.5, -28.0), (-10.5, 1.0, 1.0, -11.0)],
-                None,
-            );
-        }
-    }
-}
-
 fn numeric_fact(program: &RuleProgram, name: &str, amount: f64) -> RuleFact {
     let read = program
         .reads
@@ -1271,7 +1205,6 @@ pub fn check_item_defence_inputs(cwd: &Path, prior: &Path) -> PathBuf {
             let after = recipe(output);
             check_structure(&before, &after, bindings);
             check_policies(prior, output, bindings);
-            check_numeric(&after, bindings);
             check_legacy_numeric(&after, bindings);
             let checked = assemble_owned_recipe(after, Default::default()).unwrap();
             let lines = OwnedItemLinePolicy::new(

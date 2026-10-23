@@ -10,6 +10,8 @@ mod fixture;
 mod local_scaling;
 #[path = "release/originals.rs"]
 mod originals;
+#[path = "release/scalar_attributes.rs"]
+mod scalar_attributes;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{

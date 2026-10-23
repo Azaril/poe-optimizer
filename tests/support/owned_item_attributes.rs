@@ -1,8 +1,8 @@
 //! Attribute inputs retain distinct owners and Count units without claiming Actor coverage.
 use super::{
     scalar_families::{
-        assert_raw, attribute, check_scalar_numeric, check_scalar_originals,
-        check_scalar_publication, check_scalar_structure, modifier_id, recipe,
+        assert_raw, attribute, check_scalar_originals, check_scalar_publication,
+        check_scalar_structure, modifier_id, recipe,
     },
     support::{data, json},
 };
@@ -212,23 +212,6 @@ pub fn check_item_attributes(cwd: &Path, prior: &Path) -> PathBuf {
             let patch = json(data().join("item-attribute-inputs/membership-patch.json"));
             check_structure(&before, &after, bindings, &patch);
             let families = bindings["families"].as_array().unwrap();
-            check_scalar_numeric(
-                &after,
-                families,
-                &bindings["attribute_unit"],
-                &bindings["attribute_stat"],
-                &[
-                    (0.0, 1.0, 1.0, 0.0),
-                    (10.0, 1.0, 1.0, 10.0),
-                    (10.0, 2.0, 1.5, 30.0),
-                    (-10.0, 2.0, 1.5, -28.0),
-                    (10.49, 1.0, 1.0, 10.0),
-                    (10.5, 1.0, 1.0, 11.0),
-                    (-10.5, 1.0, 1.0, -11.0),
-                    (3.0, 1.0, 1.2, 3.0),
-                ],
-                None,
-            );
             let checked = assemble_owned_recipe(after, Default::default()).unwrap();
             let lines = OwnedItemLinePolicy::new(
                 serde_json::from_value(json(output.join("items.json"))).unwrap(),

@@ -342,6 +342,33 @@ authenticate the stored predecessor and commit registry and names together. The
 existing raw-alias `load_names` path remains separate until that command is
 implemented.
 
+The concrete publication workflow is under review in the
+[authoring checkpoint proposal](owned-authoring-checkpoint-proposal.md). The runtime
+directory has a closed artifact inventory; authoring state cannot be added as an
+unlisted file. Stable allocation must persist the registry-bound name ledger, not
+recreate it from an empty history on every build. Source compilation must validate
+bootstrap commitments before constructing final dependency bindings; runtime
+validation must never repair corrupt input. Reuse shared semantic checks and
+one maintained compiler path while retiring the historical revision machinery.
+
+Typed Stat declarations use that same staged allocation and existing Data schema.
+The offline KDL `definitions` document names a game/version namespace and each
+Stat's value type and allowed entity targets. Quantity units resolve through the
+injected symbol registry. Staging returns new names, schema and symbols together;
+it never modifies the supplied predecessor or overwrites an existing descriptor.
+Saved allocation names can be replayed against the unchanged baseline schema,
+while an already installed definition remains a conflict. Input aliases that
+overlap persisted names must agree on the exact typed address.
+
+These declarations grant no producer, read or write authority and do not close
+partial coverage. Programs still pass through the sole lowerer and Engine checker.
+Preflight declaration counts, target memberships, registry/symbol growth, schema
+entry growth and encoded bytes before cloning the baseline schema. Stored entries
+and semantic-link validation work have separate counters under their common
+ceiling; adding ordinary Stats must not consume the latter counter. Final schema
+construction remains mandatory after preflight. This compiler seam is currently
+library-only; release publication must first resolve the workflow above.
+
 Program membership uses explicit definition/slot owners and injected source
 labels. A source label is not an instruction to open a file. Program IDs are
 owner-local; reuse across distinct owners is allowed, but two aliases to one

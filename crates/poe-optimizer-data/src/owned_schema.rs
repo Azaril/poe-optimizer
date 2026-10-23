@@ -182,6 +182,38 @@ impl OwnedDefinitionSchemaPackage {
     pub fn identity(&self) -> &DataIdentity {
         &self.identity
     }
+    /// Check tighter consumer budgets using the validated resource counts and
+    /// canonical length, without cloning or serializing the schema again.
+    pub fn validate_limits(&self, limits: OwnedSchemaLimits) -> Result {
+        limits.validate()?;
+        if self.resources.entries > limits.max_entries
+            || self.resources.semantic_link_checks > limits.max_entries
+            || self.resources.largest_collection > limits.max_collection_entries
+        {
+            return invalid("package", SchemaPackageErrorKind::LimitExceeded);
+        }
+        if self.canonical_bytes.len() > limits.max_wire_bytes {
+            return Err(SchemaPackageError::TooLarge {
+                maximum: limits.max_wire_bytes,
+            });
+        }
+        Ok(())
+    }
+    /// Reserve additional stored entries before extending this schema. This
+    /// does not reserve semantic-link work, collection length or encoded bytes;
+    /// callers must still validate the completed schema through `new`.
+    pub fn validate_entry_growth(&self, additional: usize, limits: OwnedSchemaLimits) -> Result {
+        self.validate_limits(limits)?;
+        if self
+            .resources
+            .entries
+            .checked_add(additional)
+            .is_none_or(|total| total > limits.max_entries)
+        {
+            return invalid("package", SchemaPackageErrorKind::LimitExceeded);
+        }
+        Ok(())
+    }
 }
 impl DefinitionSchemaIndex for OwnedDefinitionSchemaPackage {
     fn identity(&self) -> &DataIdentity {
@@ -216,18 +248,7 @@ pub fn encode_schema_package(
     package: &OwnedDefinitionSchemaPackage,
     limits: OwnedSchemaLimits,
 ) -> Result<Vec<u8>> {
-    limits.validate()?;
-    if package.resources.entries > limits.max_entries
-        || package.resources.semantic_link_checks > limits.max_entries
-        || package.resources.largest_collection > limits.max_collection_entries
-    {
-        return invalid("package", SchemaPackageErrorKind::LimitExceeded);
-    }
-    if package.canonical_bytes.len() > limits.max_wire_bytes {
-        return Err(SchemaPackageError::TooLarge {
-            maximum: limits.max_wire_bytes,
-        });
-    }
+    package.validate_limits(limits)?;
     Ok(package.canonical_bytes.clone())
 }
 
