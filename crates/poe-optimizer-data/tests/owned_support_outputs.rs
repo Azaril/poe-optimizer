@@ -409,3 +409,91 @@ fn storage_limits_apply_before_growth_and_on_decode_encode_and_reuse() {
         ));
     }
 }
+
+#[test]
+fn authored_output_channels_roundtrip_under_exact_storage_limits() {
+    let f = Fixture::new();
+    let checked = f.build(f.input.clone()).unwrap();
+    let wire = encode_support_output_bindings(&checked, Default::default()).unwrap();
+    let expected = checked.input().clone();
+    let identity = *checked.identity();
+    let used = checked.resources();
+    let content = checked.into_authored_content();
+    let exact = SupportOutputStorageLimits {
+        max_entries: used.entries,
+        max_work: used.work,
+        max_wire_bytes: wire.len(),
+    };
+    let rebound =
+        OwnedSupportOutputBindings::bind_new(content.clone(), &f.dependencies(), exact).unwrap();
+    assert_eq!(rebound.input(), &expected);
+    assert_eq!(*rebound.identity(), identity);
+    assert_eq!(rebound.resources(), used);
+    assert_eq!(
+        encode_support_output_bindings(&rebound, exact).unwrap(),
+        wire
+    );
+    for limits in [
+        SupportOutputStorageLimits {
+            max_entries: used.entries - 1,
+            ..exact
+        },
+        SupportOutputStorageLimits {
+            max_work: used.work - 1,
+            ..exact
+        },
+        SupportOutputStorageLimits {
+            max_wire_bytes: wire.len() - 1,
+            ..exact
+        },
+    ] {
+        assert!(
+            OwnedSupportOutputBindings::bind_new(content.clone(), &f.dependencies(), limits)
+                .is_err()
+        );
+    }
+    let value = serde_json::to_value(&content).unwrap();
+    for field in [
+        "schema_version",
+        "namespace",
+        "definitions",
+        "rules",
+        "preparation",
+        "inputs",
+        "receiving",
+        "stages",
+    ] {
+        assert!(value.get(field).is_none());
+        let mut sealed = value.clone();
+        sealed[field] = serde_json::Value::Null;
+        assert!(serde_json::from_value::<SupportOutputBindingsContent>(sealed).is_err());
+    }
+}
+
+#[test]
+fn authored_output_channels_bind_current_dependencies_without_accepting_stale_artifacts() {
+    let f = Fixture::new();
+    let content = f.build(f.input.clone()).unwrap().into_authored_content();
+    let next = Fixture::with(|rules| rules.release = key("next-rules"), |_| {});
+    assert_ne!(f.rules.identity(), next.rules.identity());
+    assert!(matches!(
+        next.build(f.input.clone()),
+        Err(SupportOutputStorageError::Binding)
+    ));
+    let rebound = OwnedSupportOutputBindings::bind_new(
+        content.clone(),
+        &next.dependencies(),
+        Default::default(),
+    )
+    .unwrap();
+    rebound.verify_bindings(&next.dependencies()).unwrap();
+    assert_eq!(rebound.into_authored_content(), content);
+    let mut invalid = content;
+    invalid.output_stage = next.inputs.input().preparation_stage.clone();
+    assert!(matches!(
+        OwnedSupportOutputBindings::bind_new(invalid, &next.dependencies(), Default::default()),
+        Err(SupportOutputStorageError::Invalid(
+            "output stage must strictly follow preparation stage"
+        ))
+    ));
+}

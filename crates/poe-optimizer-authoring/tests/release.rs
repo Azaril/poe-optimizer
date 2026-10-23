@@ -37,23 +37,18 @@ use poe_optimizer_core::{
     owned_rules::{RuleExpression, RuleNode, RulePackageInput, RuleProgram},
     owned_schema::{DefinitionSchemaIndex, SchemaSubject},
 };
-use poe_optimizer_data::{
-    owned_routing::OwnedActionRouting,
-    owned_rules::OwnedRulePackage,
-    owned_schema::OwnedDefinitionSchemaPackage,
-    owned_stages::OwnedEvaluationStages,
-    owned_support_inputs::OwnedSupportInputBindings,
-    owned_support_outputs::{OwnedSupportOutputBindings, SupportOutputDependencies},
-    owned_support_receiving::OwnedSupportReceiving,
-    owned_supports::OwnedSupportPreparation,
-};
+use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_engine::{
     owned_plan::{OwnedSupportEffectPlan, OwnedSupportMetricPlan, SupportEffectPlanInputs},
     owned_rules::CompiledRulePackage,
 };
-use poe_optimizer_import::owned_release::{
-    OWNED_RELEASE_VERSION, OwnedReleaseError, OwnedReleaseInput, OwnedReleaseReceipt,
-    StagedOwnedRelease, assemble_owned_release,
+use poe_optimizer_import::{
+    owned_recipe::CheckedOwnedRecipe,
+    owned_release::{
+        OWNED_RELEASE_VERSION, OwnedReleaseError, OwnedReleaseInput, OwnedReleaseReceipt,
+        StagedOwnedRelease, assemble_owned_release, load_owned_release_artifacts,
+    },
+    owned_release_evaluation::OwnedReleaseEvaluationContent,
 };
 use sha2::{Digest, Sha256};
 use std::{
@@ -160,6 +155,15 @@ struct Sources {
 }
 impl Sources {
     fn new(input: &OwnedReleaseInput, compressed: bool) -> Self {
+        let evaluation = authored_evaluation(input);
+        Self::with_evaluation_content(input, evaluation.as_ref(), compressed)
+    }
+
+    fn with_evaluation_content(
+        input: &OwnedReleaseInput,
+        evaluation: Option<&OwnedReleaseEvaluationContent>,
+        compressed: bool,
+    ) -> Self {
         let mut components: Vec<(&str, Vec<u8>)> = Vec::new();
         macro_rules! component {
             ($name:literal, $value:expr) => {
@@ -179,7 +183,7 @@ impl Sources {
         if let Some(tree) = &input.tree {
             component!("tree-normalization", tree);
         }
-        if let Some(evaluation) = &input.evaluation {
+        if let Some(evaluation) = evaluation {
             component!("metrics", &evaluation.metrics);
             if let Some(support) = &evaluation.support {
                 component!("support-stages", &support.stages);
@@ -414,84 +418,15 @@ fn fixture_names(schema: &OwnedDefinitionSchemaPackage) -> (String, SymbolRegist
     (text, symbols)
 }
 
-// Alpha-renaming changes the rule artifact identity. Author all dependent test
-// headers against that exact expected package before invoking the release seam.
-// Production composition must neither repair stale headers nor infer authority.
-fn bind_evaluation_to_rules(input: &mut OwnedReleaseInput, schema: &OwnedDefinitionSchemaPackage) {
-    let rules =
-        OwnedRulePackage::new(input.recipe.rules.clone(), schema, Default::default()).unwrap();
-    let routing =
-        OwnedActionRouting::new(input.recipe.routing.clone(), schema, Default::default()).unwrap();
-    let Some(support) = input
-        .evaluation
-        .as_mut()
-        .and_then(|evaluation| evaluation.support.as_mut())
-    else {
-        return;
-    };
-    support.stages.rules = *rules.identity();
-    let stages = OwnedEvaluationStages::new(
-        support.stages.clone(),
-        schema,
-        &rules,
-        &routing,
-        Default::default(),
-    )
-    .unwrap();
-    support.preparation.rules = *rules.identity();
-    let preparation = OwnedSupportPreparation::new(
-        support.preparation.clone(),
-        schema,
-        &rules,
-        Default::default(),
-    )
-    .unwrap();
-    support.inputs.rules = *rules.identity();
-    support.inputs.preparation = *preparation.identity();
-    support.inputs.stages = *stages.identity();
-    let inputs = OwnedSupportInputBindings::new(
-        support.inputs.clone(),
-        schema,
-        &rules,
-        &preparation,
-        &stages,
-        Default::default(),
-    )
-    .unwrap();
-    support.receiving.rules = *rules.identity();
-    support.receiving.preparation = *preparation.identity();
-    support.receiving.inputs = *inputs.identity();
-    support.receiving.stages = *stages.identity();
-    let receiving = OwnedSupportReceiving::new(
-        support.receiving.clone(),
-        schema,
-        &rules,
-        &preparation,
-        &inputs,
-        &stages,
-        Default::default(),
-    )
-    .unwrap();
-    if let Some(outputs) = &mut support.outputs {
-        outputs.rules = *rules.identity();
-        outputs.preparation = *preparation.identity();
-        outputs.inputs = *inputs.identity();
-        outputs.receiving = *receiving.identity();
-        outputs.stages = *stages.identity();
-        OwnedSupportOutputBindings::new(
-            outputs.clone(),
-            &SupportOutputDependencies {
-                definitions: schema,
-                rules: &rules,
-                preparation: &preparation,
-                inputs: &inputs,
-                receiving: &receiving,
-                stages: &stages,
-            },
-            Default::default(),
-        )
-        .unwrap();
-    }
+// The source payload can only be extracted from actual checked owners. Loading
+// the assembled artifacts also exercises the public reader used by consumers.
+fn authored_evaluation(input: &OwnedReleaseInput) -> Option<OwnedReleaseEvaluationContent> {
+    input.evaluation.as_ref()?;
+    let staged = assemble_owned_release(input.clone(), Default::default()).unwrap();
+    load_owned_release_artifacts(&files(&staged), Default::default())
+        .unwrap()
+        .into_evaluation()
+        .map(|checked| checked.into_authored_content())
 }
 
 struct DslRelease {
@@ -504,6 +439,14 @@ struct DslRelease {
 
 impl DslRelease {
     fn new(input: &OwnedReleaseInput, compressed_components: bool) -> Self {
+        Self::with_evaluation_content(input, authored_evaluation(input), compressed_components)
+    }
+
+    fn with_evaluation_content(
+        input: &OwnedReleaseInput,
+        evaluation: Option<OwnedReleaseEvaluationContent>,
+        compressed_components: bool,
+    ) -> Self {
         let schema =
             OwnedDefinitionSchemaPackage::new(input.recipe.schema.clone(), Default::default())
                 .unwrap();
@@ -559,12 +502,20 @@ impl DslRelease {
             packet.push_str(" }\n}\n");
             packet_texts.push((format!("rules/packet-{index}.kdl"), packet));
         }
-        bind_evaluation_to_rules(&mut expected, &schema);
+        expected.evaluation = evaluation.as_ref().map(|content| {
+            let recipe =
+                CheckedOwnedRecipe::new(expected.recipe.clone(), Default::default()).unwrap();
+            content
+                .clone()
+                .into_input(&recipe, Default::default())
+                .unwrap()
+        });
         let mut metadata = expected.clone();
         for owner in &mut metadata.recipe.rules.owners {
             owner.programs.members.clear();
         }
-        let mut source = Sources::new(&metadata, compressed_components);
+        let mut source =
+            Sources::with_evaluation_content(&metadata, evaluation.as_ref(), compressed_components);
         let components = source.files.len();
         source.add_plain("rules/names.kdl", names);
         let mut packets = Vec::new();
@@ -880,7 +831,7 @@ fn release_packets_preserve_duplicate_membership_and_source_header_rejections() 
 }
 
 #[test]
-fn composed_rules_require_current_evaluation_headers_and_expected_release_identity() {
+fn composed_rules_reject_sealed_evaluation_sources_and_require_expected_release_identity() {
     let dsl = DslRelease::new(&fixture().input, false);
     let expected = assemble_owned_release(dsl.expected.clone(), Default::default()).unwrap();
     let mut bound = dsl.source.clone();
@@ -901,16 +852,9 @@ fn composed_rules_require_current_evaluation_headers_and_expected_release_identi
         "assembled input identity differs from expected_input",
     );
 
-    let mut stale = dsl.source;
-    let original_stages = &fixture()
-        .input
-        .evaluation
-        .as_ref()
-        .unwrap()
-        .support
-        .as_ref()
-        .unwrap()
-        .stages;
+    let original = fixture().input.evaluation.as_ref().unwrap();
+    let support = original.support.as_ref().unwrap();
+    let original_stages = &support.stages;
     assert_ne!(
         original_stages.rules,
         dsl.expected
@@ -923,21 +867,131 @@ fn composed_rules_require_current_evaluation_headers_and_expected_release_identi
             .stages
             .rules
     );
-    stale.replace_plain(
-        "support-stages.json",
-        serde_json::to_string(original_stages).unwrap(),
-    );
+    for (path, sealed) in [
+        (
+            "metrics.json",
+            serde_json::to_string(&original.metrics).unwrap(),
+        ),
+        (
+            "support-stages.json",
+            serde_json::to_string(&support.stages).unwrap(),
+        ),
+        (
+            "support-preparation.json",
+            serde_json::to_string(&support.preparation).unwrap(),
+        ),
+        (
+            "support-inputs.json",
+            serde_json::to_string(&support.inputs).unwrap(),
+        ),
+        (
+            "support-receiving.json",
+            serde_json::to_string(&support.receiving).unwrap(),
+        ),
+        (
+            "support-outputs.json",
+            serde_json::to_string(support.outputs.as_ref().unwrap()).unwrap(),
+        ),
+    ] {
+        let mut stale = dsl.source.clone();
+        stale.replace_plain(path, sealed);
+        assert!(
+            matches!(
+                stale.build(Default::default()),
+                Err(ReleaseBuildError::Json { path: actual, .. }) if actual == path
+            ),
+            "sealed source {path}"
+        );
+    }
+}
+
+#[test]
+fn authored_evaluation_reserves_the_source_validation_budget_before_source_checks() {
+    use poe_optimizer_import::owned_release::check_release_source_dependencies;
+
+    let dsl = DslRelease::new(&fixture().input, false);
+    let evaluation = authored_evaluation(&fixture().input).unwrap();
+    let limits = ReleaseBuildLimits::default();
+    let mut remaining = limits.release.max_validation_entries;
+    evaluation
+        .charge_validation_entries(limits.release, &mut remaining)
+        .unwrap();
+    let evaluation_entries = limits.release.max_validation_entries - remaining;
+    assert!(evaluation_entries > 0);
+
+    let mut shell = dsl.expected.clone();
+    shell.schema_version = OWNED_RELEASE_VERSION;
+    shell.evaluation = None;
+    for owner in &mut shell.recipe.rules.owners {
+        owner.programs.members.clear();
+    }
+    let source_check = |max_validation_entries| {
+        check_release_source_dependencies(
+            &shell,
+            poe_optimizer_import::owned_release::OwnedReleaseLimits {
+                max_validation_entries,
+                ..limits.release
+            },
+        )
+    };
+    // Calibrate the source-only prefix independently of the builder's aggregate
+    // charge. Only the budget changes; every original dependency remains valid.
+    let (mut low, mut high) = (1, limits.release.max_validation_entries);
+    while low < high {
+        let middle = low + (high - low) / 2;
+        match source_check(middle) {
+            Ok(_) => high = middle,
+            Err(OwnedReleaseError::Limit("validation entries")) => low = middle + 1,
+            Err(error) => panic!("unexpected source check: {error}"),
+        }
+    }
+    let source_entries = low;
+    assert!(source_entries > 1);
+    source_check(source_entries).unwrap();
     assert!(matches!(
-        stale.build(Default::default()),
-        Err(ReleaseBuildError::Assembly(OwnedReleaseError::Evaluation(
-            _
+        source_check(source_entries - 1),
+        Err(OwnedReleaseError::Limit("validation entries"))
+    ));
+
+    // A stale original rule header is rejected after aggregate preflight. At
+    // one-short budget the earlier failure proves the evaluation reservation
+    // already constrained source checking, before any final assembly can run.
+    let mut source = dsl.source;
+    let mut rules: RulePackageInput = serde_json::from_str(source.text("rules.json")).unwrap();
+    rules.definitions.content_sha256 = "1".repeat(64);
+    source.replace_plain("rules.json", serde_json::to_string(&rules).unwrap());
+    let with_budget = |max_validation_entries| ReleaseBuildLimits {
+        release: poe_optimizer_import::owned_release::OwnedReleaseLimits {
+            max_validation_entries,
+            ..limits.release
+        },
+        ..limits
+    };
+    assert!(matches!(
+        source.build(with_budget(source_entries + evaluation_entries)),
+        Err(ReleaseBuildError::Assembly(OwnedReleaseError::Recipe(
+            poe_optimizer_import::owned_recipe::OwnedRecipeError::Rules(
+                poe_optimizer_data::owned_rules::RuleStorageError::Binding
+            )
         )))
     ));
+    for budget in [source_entries + evaluation_entries - 1, evaluation_entries] {
+        assert!(
+            matches!(
+                source.build(with_budget(budget)),
+                Err(ReleaseBuildError::Assembly(OwnedReleaseError::Limit(
+                    "validation entries"
+                )))
+            ),
+            "combined budget {budget}"
+        );
+    }
 }
 
 #[test]
 fn shared_rule_sources_charge_each_occurrence_without_coalescing_distinct_bodies() {
     let mut input = fixture().input.clone();
+    let mut evaluation = authored_evaluation(&input).unwrap();
     let candidates: Vec<_> = input
         .recipe
         .rules
@@ -975,16 +1029,7 @@ fn shared_rule_sources_charge_each_occurrence_without_coalescing_distinct_bodies
     };
     for index in [first, second] {
         let owner = &input.recipe.rules.owners[index];
-        let stages = &mut input
-            .evaluation
-            .as_mut()
-            .unwrap()
-            .support
-            .as_mut()
-            .unwrap()
-            .stages
-            .programs
-            .members;
+        let stages = &mut evaluation.support.as_mut().unwrap().stages.programs.members;
         let placement = stages
             .iter()
             .find(|row| row.owner == owner.owner && row.program == owner.programs.members[0].id)
@@ -1004,7 +1049,7 @@ fn shared_rule_sources_charge_each_occurrence_without_coalescing_distinct_bodies
             .members
             .push(literal("distinct-marker", index == first));
     }
-    let fixture = DslRelease::new(&input, false);
+    let fixture = DslRelease::with_evaluation_content(&input, Some(evaluation), false);
     let source_bodies: Vec<_> = fixture
         .source
         .files
@@ -1393,8 +1438,15 @@ fn constituent_json_is_strict_and_reports_its_source() {
                 .iter_mut()
                 .find(|(path, _)| path == target)
                 .unwrap();
-            let mut json =
-                serde_json::to_vec(&fixture().input.evaluation.as_ref().unwrap().metrics).unwrap();
+            let mut json = if compressed {
+                let mut json = Vec::new();
+                GzDecoder::new(bytes.as_slice())
+                    .read_to_end(&mut json)
+                    .unwrap();
+                json
+            } else {
+                bytes.clone()
+            };
             json.extend_from_slice(suffix);
             *bytes = if compressed { gzip(&json) } else { json };
             match source.build(Default::default()) {
@@ -1537,16 +1589,15 @@ fn expected_identity_and_actual_metric_authority_are_checked_after_decode() {
         "assembled input identity differs from expected_input",
     );
 
-    let mut input = fixture().input.clone();
-    let metrics = &mut input.evaluation.as_mut().unwrap().metrics;
+    let mut source = DslRelease::new(&fixture().input, false).source;
+    let mut metrics: poe_optimizer_data::owned_metrics::MetricMappingContent =
+        serde_json::from_str(source.text("metrics.json")).unwrap();
     metrics.bindings[0].metric = DefId::new(
-        metrics.namespace.clone(),
+        fixture().input.recipe.schema.namespace.clone(),
         OwnedDefinitionKey::new("missing-metric").unwrap(),
     );
-    match DslRelease::new(&input, false)
-        .source
-        .build(Default::default())
-    {
+    source.replace_plain("metrics.json", serde_json::to_string(&metrics).unwrap());
+    match source.build(Default::default()) {
         Err(ReleaseBuildError::Assembly(OwnedReleaseError::Evaluation(_))) => {}
         Err(other) => panic!("unexpected error: {other}"),
         Ok(_) => panic!("an unregistered metric bypassed the existing checker"),

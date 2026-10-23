@@ -5,10 +5,20 @@ use poe_optimizer_core::{
     owned_metrics::*,
     owned_schema::*,
 };
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
 const DOMAIN: &str = "owned-metric-mapping-v1";
+
+/// Authored relationships without dependency seals. Constructing a checked
+/// mapping still requires every metric, role, Stat and unit to validate.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct MetricMappingContent {
+    pub release: OwnedDefinitionKey,
+    pub bindings: Vec<MetricStatBinding>,
+}
+
 #[derive(Clone, Copy, Debug)]
 pub struct MetricMappingLimits {
     pub max_bindings: usize,
@@ -181,6 +191,37 @@ pub struct OwnedMetricMapping {
     resources: MetricMappingUse,
 }
 impl OwnedMetricMapping {
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: MetricMappingContent,
+        index: &I,
+        limits: MetricMappingLimits,
+    ) -> Result<Self, MetricMappingError> {
+        limits.validate()?;
+        if content.bindings.len() > limits.max_bindings {
+            return Err(MetricMappingError::Limit("bindings"));
+        }
+        Self::new(
+            MetricMappingInput {
+                schema_version: OWNED_METRIC_MAPPING_VERSION,
+                namespace: index.namespace().clone(),
+                release: content.release,
+                definitions: index.identity().clone(),
+                bindings: content.bindings,
+            },
+            index,
+            limits,
+        )
+    }
+
+    /// Consuming a checked owner preserves its semantic rows without treating
+    /// caller-supplied dependency seals as repairable authoring content.
+    pub fn into_authored_content(self) -> MetricMappingContent {
+        MetricMappingContent {
+            release: self.input.release,
+            bindings: self.input.bindings,
+        }
+    }
+
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: MetricMappingInput,
         index: &I,

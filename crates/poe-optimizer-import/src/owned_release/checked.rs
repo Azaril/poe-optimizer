@@ -173,6 +173,11 @@ impl CheckedOwnedRelease {
     pub fn evaluation(&self) -> Option<&CheckedOwnedReleaseEvaluation> {
         self.evaluation.as_ref()
     }
+    /// Consume this checked release to author its evaluation declarations again.
+    /// Only the actual validated owner can surrender its runtime bindings.
+    pub fn into_evaluation(self) -> Option<CheckedOwnedReleaseEvaluation> {
+        self.evaluation
+    }
     pub fn query_sets(&self) -> &[NamedQuerySet] {
         &self.query_sets
     }

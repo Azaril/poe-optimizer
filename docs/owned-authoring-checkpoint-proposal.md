@@ -1,6 +1,6 @@
 # Persisting named allocation with a compiled release
 
-Status: proposed, 2026-10-22. This decides the offline publication workflow;
+Status: accepted by the owner, 2026-10-23. This decides the offline publication workflow;
 it does not change the native build, schema, rule or evaluation model.
 
 The current release builder publishes a closed runtime directory. Runtime loading
@@ -10,7 +10,7 @@ New declarations need stable names across later compilations. Recreating an empt
 ledger on each build would let a newly added, earlier-sorting name shift existing
 identities. Ordinary alias files do not preserve allocation history.
 
-## Recommended workflow
+## Accepted workflow
 
 Publish one immutable **authoring checkpoint** containing the registry-bound name
 ledger and a separate runtime-release directory. Construct and validate the whole
@@ -30,7 +30,7 @@ Its cost is an explicit authoring output layout and head-promotion operation.
 The host needs a checked nested publication primitive; the existing basename-only
 artifact publisher must not be bypassed with unchecked paths.
 
-## Alternative: explicit source-ledger allocation
+## Considered alternative: explicit source-ledger allocation
 
 Use a separate command to allocate and atomically update one registry/name ledger
 beside the authoring sources. Release builds only read that ledger and fail if a
@@ -39,6 +39,8 @@ makes ordinary builds read-only. It adds an allocation step before compilation;
 the allocation command must define how much semantic validation precedes a ledger
 commit, and failed later compilation can leave reserved but unused identities.
 Both workflows can preserve stable IDs and deterministic reproduction.
+The owner selected atomic authoring checkpoints; do not implement the separate
+allocation command as another supported path.
 
 ## Shared requirements and separate implementation work
 
@@ -65,5 +67,10 @@ the bounded rule payload with its checked original header. The maintained compil
 stages declarations from explicit persisted names, reconstructs rule/routing and
 Import dependencies, then performs mandatory final rule/evaluation validation.
 Successful in-memory results retain successor names and their expected predecessor;
-the CLI still accepts no allocating declaration context. Evaluation-content
-construction remains separate work. The publication decision remains open.
+the CLI still accepts no allocating declaration context. The compiler also
+constructs evaluation dependencies from explicit authored content against the
+final checked recipe. Sealed runtime fields are rejected in those source files;
+inherited content must come from the actual fully checked evaluation owner.
+The workflow is approved; atomic nested publication, loading the explicit ledger
+predecessor and CLI integration remain implementation work. Include packet/source
+context in declaration diagnostics before exposing allocating CLI inputs.

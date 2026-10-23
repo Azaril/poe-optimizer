@@ -16,13 +16,13 @@ use poe_optimizer_core::{
 use poe_optimizer_data::owned_routing::OwnedActionRouting;
 use poe_optimizer_import::{
     owned_normalize::NamedQuerySet,
-    owned_recipe::{OWNED_RECIPE_VERSION, OwnedRecipeInput},
+    owned_recipe::{CheckedOwnedRecipe, OWNED_RECIPE_VERSION, OwnedRecipeInput},
     owned_release::{
         OWNED_EVALUATION_RELEASE_VERSION, OWNED_RELEASE_VERSION, OwnedReleaseError,
         OwnedReleaseInput, OwnedReleaseLimits, StagedOwnedRelease, assemble_owned_release,
         check_release_source_dependencies,
     },
-    owned_release_evaluation::{OwnedReleaseEvaluationInput, OwnedReleaseSupportInput},
+    owned_release_evaluation::{OwnedReleaseEvaluationContent, OwnedReleaseSupportContent},
 };
 use serde::de::DeserializeOwned;
 use std::{
@@ -632,10 +632,10 @@ pub fn build_release(
     }
     let decoder = Decoder::new(manifest, supplied, limits.max_decoded_bytes)?;
     let evaluation = if manifest.components.contains_key(&Component::Metrics) {
-        Some(OwnedReleaseEvaluationInput {
+        Some(OwnedReleaseEvaluationContent {
             metrics: decoder.required(Component::Metrics)?,
             support: if manifest.components.contains_key(&Component::Stages) {
-                Some(OwnedReleaseSupportInput {
+                Some(OwnedReleaseSupportContent {
                     stages: decoder.required(Component::Stages)?,
                     preparation: decoder.required(Component::Preparation)?,
                     inputs: decoder.required(Component::Inputs)?,
@@ -650,11 +650,7 @@ pub fn build_release(
         None
     };
     let mut input = OwnedReleaseInput {
-        schema_version: if evaluation.is_some() {
-            OWNED_EVALUATION_RELEASE_VERSION
-        } else {
-            OWNED_RELEASE_VERSION
-        },
+        schema_version: OWNED_RELEASE_VERSION,
         recipe: OwnedRecipeInput {
             schema_version: OWNED_RECIPE_VERSION,
             registry: decoder.required(Component::Registry)?,
@@ -669,7 +665,7 @@ pub fn build_release(
         items: decoder.required(Component::Items)?,
         item_source: decoder.required(Component::ItemSource)?,
         tree: decoder.optional(Component::Tree)?,
-        evaluation,
+        evaluation: None,
         query_sets: manifest
             .queries
             .iter()
@@ -685,7 +681,15 @@ pub fn build_release(
     // Authenticate original dependencies before any source program is lowered.
     // This checks no executable rules or evaluation artifacts; complete assembly
     // below remains mandatory after composition against this exact schema.
-    let source = check_release_source_dependencies(&input, limits.release)?.into_parts()?;
+    let mut source_limits = limits.release;
+    if let Some(content) = &evaluation {
+        content
+            .charge_validation_entries(limits.release, &mut source_limits.max_validation_entries)?;
+        if source_limits.max_validation_entries == 0 {
+            return Err(OwnedReleaseError::Limit("validation entries").into());
+        }
+    }
+    let source = check_release_source_dependencies(&input, source_limits)?.into_parts()?;
     let staged = declarations
         .map(|context| {
             context
@@ -728,8 +732,7 @@ pub fn build_release(
         limits,
     )?;
     // Content was captured from the original checked owners before composition.
-    // Construct current dependencies; evaluation inputs retain their supplied
-    // commitments and must independently pass complete assembly below.
+    // Construct current dependencies; complete assembly remains mandatory below.
     let imports = source
         .imports
         .into_input(registry, schema, limits.release)?;
@@ -740,6 +743,12 @@ pub fn build_release(
     input.items = imports.items;
     input.item_source = imports.item_source;
     input.tree = imports.tree;
+    if let Some(content) = evaluation {
+        let recipe = CheckedOwnedRecipe::new(input.recipe.clone(), limits.release.recipe)
+            .map_err(OwnedReleaseError::Recipe)?;
+        input.evaluation = Some(content.into_input(&recipe, limits.release)?);
+        input.schema_version = OWNED_EVALUATION_RELEASE_VERSION;
+    }
     let decoded_bytes = decoder.decoded_bytes;
     let release = assemble_owned_release(input, limits.release)?;
     if manifest

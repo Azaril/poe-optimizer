@@ -316,6 +316,26 @@ fn source_v3_is_canonical_bound_and_preserves_legacy_wire() {
 }
 
 #[test]
+fn authored_receiving_v3_preserves_source_relations_and_requires_their_contract() {
+    let f = fixture();
+    let content = assert_authored_receiving_roundtrip(&f);
+    assert_eq!(content.contract, SupportReceivingContract::V3);
+    assert!(content.source_properties.is_some());
+    let mut missing = content.clone();
+    missing.source_properties = None;
+    let mut downgraded = content;
+    downgraded.contract = SupportReceivingContract::V2;
+    for invalid in [missing, downgraded] {
+        assert!(matches!(
+            bind_authored_receiving(&f, invalid, Default::default()),
+            Err(SupportReceivingStorageError::Invalid(
+                "source properties require receiving V3, operations V18 and stages V3"
+            ))
+        ));
+    }
+}
+
+#[test]
 fn source_receiving_v3_accepts_bound_v4_stages_without_gaining_ordinary_property_authority() {
     let mut f = fixture();
     let old = f.build(f.input.clone()).unwrap();

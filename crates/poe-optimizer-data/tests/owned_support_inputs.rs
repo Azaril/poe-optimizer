@@ -613,3 +613,116 @@ fn tighter_aggregate_work_and_wire_budgets_apply_to_new_decode_and_encode() {
         Err(SupportInputStorageError::Limit("entries"))
     ));
 }
+
+#[test]
+fn authored_input_channels_roundtrip_under_exact_storage_limits() {
+    let f = Fixture::new();
+    let checked = f.build(f.input.clone()).unwrap();
+    let wire = encode_support_input_bindings(&checked, Default::default()).unwrap();
+    let expected = checked.input().clone();
+    let identity = *checked.identity();
+    let used = checked.resources();
+    let content = checked.into_authored_content();
+    let exact = SupportInputStorageLimits {
+        max_entries: used.entries,
+        max_work: used.work,
+        max_wire_bytes: wire.len(),
+    };
+    let bind = |content, limits| {
+        OwnedSupportInputBindings::bind_new(
+            content,
+            &f.schema,
+            &f.rules,
+            &f.preparation,
+            &f.stages,
+            limits,
+        )
+    };
+    let rebound = bind(content.clone(), exact).unwrap();
+    assert_eq!(rebound.input(), &expected);
+    assert_eq!(*rebound.identity(), identity);
+    assert_eq!(rebound.resources(), used);
+    assert_eq!(
+        encode_support_input_bindings(&rebound, exact).unwrap(),
+        wire
+    );
+    for limits in [
+        SupportInputStorageLimits {
+            max_entries: used.entries - 1,
+            ..exact
+        },
+        SupportInputStorageLimits {
+            max_work: used.work - 1,
+            ..exact
+        },
+        SupportInputStorageLimits {
+            max_wire_bytes: wire.len() - 1,
+            ..exact
+        },
+    ] {
+        assert!(bind(content.clone(), limits).is_err());
+    }
+    let value = serde_json::to_value(&content).unwrap();
+    for field in [
+        "schema_version",
+        "namespace",
+        "definitions",
+        "rules",
+        "preparation",
+        "stages",
+    ] {
+        assert!(value.get(field).is_none());
+        let mut sealed = value.clone();
+        sealed[field] = serde_json::Value::Null;
+        assert!(serde_json::from_value::<SupportInputBindingsContent>(sealed).is_err());
+    }
+    let mut missing = value;
+    missing["target"].as_object_mut().unwrap().remove("has_gem");
+    assert!(serde_json::from_value::<SupportInputBindingsContent>(missing).is_err());
+}
+
+#[test]
+fn authored_input_channels_bind_current_preparation_but_stale_raw_and_wrong_types_fail() {
+    let f = Fixture::new();
+    let content = f.build(f.input.clone()).unwrap().into_authored_content();
+    let mut changed = f.preparation.input().clone();
+    changed.release = key("new-preparation");
+    let changed =
+        OwnedSupportPreparation::new(changed, &f.schema, &f.rules, Default::default()).unwrap();
+    assert_ne!(changed.identity(), f.preparation.identity());
+    assert!(matches!(
+        OwnedSupportInputBindings::new(
+            f.input.clone(),
+            &f.schema,
+            &f.rules,
+            &changed,
+            &f.stages,
+            Default::default(),
+        ),
+        Err(SupportInputStorageError::Binding)
+    ));
+    let rebound = OwnedSupportInputBindings::bind_new(
+        content.clone(),
+        &f.schema,
+        &f.rules,
+        &changed,
+        &f.stages,
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(rebound.input().preparation, *changed.identity());
+    assert_eq!(rebound.into_authored_content(), content);
+    let mut invalid = content;
+    invalid.target.has_gem = id("effective-level");
+    assert!(matches!(
+        OwnedSupportInputBindings::bind_new(
+            invalid,
+            &f.schema,
+            &f.rules,
+            &changed,
+            &f.stages,
+            Default::default(),
+        ),
+        Err(SupportInputStorageError::Invalid(_))
+    ));
+}

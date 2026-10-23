@@ -375,3 +375,24 @@ fn skill_preparation_accepts_current_properties_without_alias_or_execution_autho
         "preparation property overlaps another receiving role",
     );
 }
+
+#[test]
+fn authored_receiving_v2_preserves_preparation_and_cannot_downgrade_its_contract() {
+    let f = prepared_fixture(RuleEntity::Current);
+    let mut content = assert_authored_receiving_roundtrip(&f);
+    assert_eq!(content.contract, SupportReceivingContract::V2);
+    assert!(content.supports.iter().any(|support| {
+        support
+            .receivers
+            .members
+            .iter()
+            .any(|row| row.preparation.is_some())
+    }));
+    content.contract = SupportReceivingContract::V1;
+    assert!(matches!(
+        bind_authored_receiving(&f, content, Default::default()),
+        Err(SupportReceivingStorageError::Invalid(
+            "preparation programs require receiving V2"
+        ))
+    ));
+}

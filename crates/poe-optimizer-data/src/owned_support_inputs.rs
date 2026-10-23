@@ -11,9 +11,21 @@ use poe_optimizer_core::{
     owned_stages::StageChannel,
     owned_support_inputs::*,
 };
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 const DOMAIN: &str = "owned-support-input-bindings-v1";
+
+/// Authored preparation channels without current schema or package commitments.
+/// Rows name computed facts; they provide neither values nor coverage authority.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SupportInputBindingsContent {
+    pub release: OwnedDefinitionKey,
+    pub preparation_stage: OwnedDefinitionKey,
+    pub effective_level: StatDefId,
+    pub effective_quality: StatDefId,
+    pub target: SupportTargetInputBindings,
+}
 
 #[derive(Clone, Copy, Debug)]
 pub struct SupportInputStorageLimits {
@@ -209,6 +221,62 @@ pub struct OwnedSupportInputBindings {
     resources: SupportInputStorageUse,
 }
 impl OwnedSupportInputBindings {
+    /// Consume the exact checked declarations without copying their payload.
+    pub fn into_authored_content(self) -> SupportInputBindingsContent {
+        let SupportInputBindingsInput {
+            schema_version: _,
+            namespace: _,
+            release,
+            definitions: _,
+            rules: _,
+            preparation: _,
+            stages: _,
+            preparation_stage,
+            effective_level,
+            effective_quality,
+            target,
+        } = self.input;
+        SupportInputBindingsContent {
+            release,
+            preparation_stage,
+            effective_level,
+            effective_quality,
+            target,
+        }
+    }
+
+    /// Construct current commitments and run the sole ordinary validator.
+    /// Supplied sealed runtime artifacts must still use `new` without repair.
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: SupportInputBindingsContent,
+        index: &I,
+        rules: &OwnedRulePackage,
+        preparation: &OwnedSupportPreparation,
+        stages: &OwnedEvaluationStages,
+        limits: SupportInputStorageLimits,
+    ) -> Result<Self> {
+        Self::new(
+            SupportInputBindingsInput {
+                schema_version: OWNED_SUPPORT_INPUT_BINDINGS_VERSION,
+                namespace: index.namespace().clone(),
+                release: content.release,
+                definitions: index.identity().clone(),
+                rules: *rules.identity(),
+                preparation: *preparation.identity(),
+                stages: *stages.identity(),
+                preparation_stage: content.preparation_stage,
+                effective_level: content.effective_level,
+                effective_quality: content.effective_quality,
+                target: content.target,
+            },
+            index,
+            rules,
+            preparation,
+            stages,
+            limits,
+        )
+    }
+
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: SupportInputBindingsInput,
         index: &I,

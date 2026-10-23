@@ -9,15 +9,60 @@ use poe_optimizer_core::{
     owned_definitions::*,
     owned_rules::*,
     owned_schema::*,
+    owned_source_properties::SourcePropertyPreparationInput,
     owned_support_receiving::*,
 };
-use serde::Serialize;
+use serde::{Deserialize, Deserializer, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
 mod preparation;
 mod source_properties;
 
 const DOMAIN: &str = "owned-support-receiving-v1";
+
+/// Retains the original receiving contract without implicitly enabling readiness
+/// or source-property authority from a later semantic version.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SupportReceivingContract {
+    V1,
+    V2,
+    V3,
+}
+
+impl SupportReceivingContract {
+    pub fn schema_version(self) -> u32 {
+        match self {
+            Self::V1 => OWNED_SUPPORT_RECEIVING_VERSION,
+            Self::V2 => OWNED_SUPPORT_RECEIVING_V2,
+            Self::V3 => OWNED_SUPPORT_RECEIVING_V3,
+        }
+    }
+}
+
+/// Authored receiving relations and explicit coverage, without current package
+/// commitments. The existing Core rows retain preparation and path semantics.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SupportReceivingContent {
+    pub contract: SupportReceivingContract,
+    pub release: OwnedDefinitionKey,
+    pub roles: Vec<SupportReceivingRole>,
+    pub targets: Vec<SupportTargetReceivingRoles>,
+    pub supports: Vec<SupportReceivingEntry>,
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "content_source_properties_non_null"
+    )]
+    pub source_properties: Option<SourcePropertyPreparationInput>,
+}
+
+fn content_source_properties_non_null<'de, D: Deserializer<'de>>(
+    deserializer: D,
+) -> std::result::Result<Option<SourcePropertyPreparationInput>, D::Error> {
+    SourcePropertyPreparationInput::deserialize(deserializer).map(Some)
+}
 
 #[derive(Clone, Copy, Debug)]
 pub struct SupportReceivingStorageLimits {
@@ -652,6 +697,73 @@ pub struct OwnedSupportReceiving {
     declarations_complete: bool,
 }
 impl OwnedSupportReceiving {
+    /// Consume the exact checked payload and retain its semantic version.
+    pub fn into_authored_content(self) -> SupportReceivingContent {
+        let SupportReceivingInput {
+            schema_version,
+            namespace: _,
+            release,
+            definitions: _,
+            rules: _,
+            preparation: _,
+            inputs: _,
+            stages: _,
+            roles,
+            targets,
+            supports,
+            source_properties,
+        } = self.input;
+        let contract = match schema_version {
+            OWNED_SUPPORT_RECEIVING_VERSION => SupportReceivingContract::V1,
+            OWNED_SUPPORT_RECEIVING_V2 => SupportReceivingContract::V2,
+            OWNED_SUPPORT_RECEIVING_V3 => SupportReceivingContract::V3,
+            _ => unreachable!("checked receiving version"),
+        };
+        SupportReceivingContent {
+            contract,
+            release,
+            roles,
+            targets,
+            supports,
+            source_properties,
+        }
+    }
+
+    /// Construct current commitments and run the sole ordinary validator.
+    /// Supplied sealed runtime artifacts must still use `new` without repair.
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: SupportReceivingContent,
+        index: &I,
+        rules: &OwnedRulePackage,
+        preparation: &OwnedSupportPreparation,
+        inputs: &OwnedSupportInputBindings,
+        stages: &OwnedEvaluationStages,
+        limits: SupportReceivingStorageLimits,
+    ) -> Result<Self> {
+        Self::new(
+            SupportReceivingInput {
+                schema_version: content.contract.schema_version(),
+                namespace: index.namespace().clone(),
+                release: content.release,
+                definitions: index.identity().clone(),
+                rules: *rules.identity(),
+                preparation: *preparation.identity(),
+                inputs: *inputs.identity(),
+                stages: *stages.identity(),
+                roles: content.roles,
+                targets: content.targets,
+                supports: content.supports,
+                source_properties: content.source_properties,
+            },
+            index,
+            rules,
+            preparation,
+            inputs,
+            stages,
+            limits,
+        )
+    }
+
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: SupportReceivingInput,
         index: &I,

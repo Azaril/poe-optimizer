@@ -1,6 +1,6 @@
 # Data acquisition and evaluation overview
 
-Updated 2026-10-22. The [architecture](domain-architecture.md) defines the accepted
+Updated 2026-10-23. The [architecture](domain-architecture.md) defines the accepted
 end state; [implementation](implementation.md) records what is delivered. This
 page explains the distinction. **The tracked DSL program cutover is validated;
 broader declaration and runtime migration remain ahead. 0/5 supplied
@@ -93,10 +93,14 @@ requires Engine validation.
 No filesystem compare-and-swap or KDL allocation command is implemented by that
 API. The release builder does not publish named-allocation transactions.
 `load_names` still loads raw aliases to known schema
-addresses. Full R1 extraction must separate runtime registry/role data from the
-offline toolchain and replace the runtime release loader that currently
-reassembles authoring inputs. This library step does not publish a release or
-migrate every existing program.
+addresses. The maintained library compiler stages typed Stat declarations from
+an explicit persisted ledger and returns successor names only after complete
+release validation. Atomic authoring checkpoints were approved on October 23:
+the stable ledger and separate closed runtime directory will publish together.
+The nested publisher and allocating CLI integration remain to be implemented.
+Full R1 extraction must still separate the maintained offline toolchain from
+runtime registry/role data. The runtime reader now retains checked packages
+directly; it no longer reassembles publication inputs.
 
 KDL is maintained offline source: file bytes are limited before parsing and
 retained structure is checked afterward. These checks are not a guarantee of
@@ -140,6 +144,16 @@ group requires metrics plus stages, preparation, input bindings and receiving;
 support outputs are optional only within that group. Named query sets retain the
 order authored in the manifest. Unknown fields, duplicate declarations or source
 paths, duplicate query names and incomplete groups are errors.
+
+Those six evaluation components are authored semantic content, without runtime
+dependency headers. The compiler constructs their exact bindings after DSL
+lowering against the final checked recipe, using the existing package validators.
+Runtime-header fields in these source files are errors; published runtime files
+still require exact headers and reject stale bindings. Content inherited from a
+release is extracted only by consuming its fully checked owner. Shared aggregate
+work limits cover the source graph before copying, and final release assembly
+retains all coverage checks. The tracked release still has no evaluation bundle;
+construction support is not new mechanic coverage.
 
 Program sources are declared with `rule-source "rules/example.rule"`; their
 membership packets use `rule-packet "family/packet.kdl" names="family/names.kdl"`.

@@ -15,29 +15,38 @@ The first complete unchanged build must use the new format and sole native path.
 Legacy deletion is a gate before that milestone, not work deferred until five builds.
 The computed-support unused-input repair, immutable typed Stat declaration compiler,
 original-source dependency validation and complete Import content construction
-under R2 are implemented. The current checkpoint integrates typed Stat staging
-into the same in-memory compiler, with explicit persisted names and packet-local
-symbols. It constructs rule/routing and Import dependencies against the staged
-schema before ordinary final validation.
-Aggregate evaluation preflight accounting is repaired.
+under R2 are implemented. Typed Stat staging uses explicit persisted names and
+packet-local symbols in the same compiler. The current checkpoint constructs
+evaluation packages from authored content against the final checked recipe,
+alongside rule/routing and Import dependencies. Runtime headers are rejected in
+the replaced evaluation source format; complete final validation remains mandatory.
+Authored and runtime evaluation share one aggregate preflight traversal.
 Continue independent harness retirement while
 integrating declarations with maintained release publication and completing the
 current release's real execution declarations. Do not add a new provenance API
 for dormant support flags.
 
+Checkpoint triage follows the owner's October 23 clarification: complete the
+clean data-model/KDL migration and retire replaced paths, reassess the closest
+unchanged build, complete it, and demonstrate one native optimization pass before
+expanding supported builds and search breadth. Track every discovered task, but
+defer work that does not protect the model or unblock that sequence. Deferred
+debt keeps an explicit owner milestone and acceptance condition; it must not
+silently become a second supported implementation.
+
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; current checkpoint integrates declaration staging into maintained Authoring |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; current checkpoint constructs authored evaluation dependencies |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
-| Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation, typed Stat staging and complete Import content construction in the maintained compiler. Explicit declaration context is library-only pending the filesystem publication decision. Evaluation content construction remains next. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Move the maintained publication core and retire obsolete transformation chains |
+| Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation, typed Stat staging, complete Import and evaluation content construction in the maintained compiler. Atomic authoring checkpoints are approved; implement their publisher and allocating CLI before adding production declarations. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Move the maintained publication core and retire obsolete transformation chains |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program now comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Exact graph/placement and historical non-program preservation gates pass; named-registry filesystem CAS, declaration publication/remaining descriptor kinds and binary pack remain pending |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Node renaming changes rule/input identity; other emitted constituents remain byte-exact. No local predecessor needed; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 13:48:58 UTC on October 23, `a7069aa1` run `39889225006` had completed successfully with all twenty jobs passing; earlier baseline `ae90ec82` also passed all twenty. Pushed `96e5533e` run `39962517895` had eighteen jobs running and no failures reported. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
+| CI | At 15:04:17 UTC on October 23, `96e5533e` run `39962517895` had eight of eighteen created jobs passing and ten running, with no failures. `f5e5f49d` run `39966836052` was pending at the earlier 14:27 check. Baselines `a7069aa1` and `ae90ec82` completed all twenty jobs successfully. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release`
@@ -597,6 +606,23 @@ Missing current-release inputs remain an explicit R1 failure, never a skipped pa
 
 #### CLI parsing convergence
 
+Local iteration finding, October 23: separate Authoring/Data/Import root selections
+change the proc-macro feature union. Current fingerprint evidence shows identical
+compiler/profile/config/rustflags but different `serde_derive`/`thiserror-impl`
+dependencies through `syn` with and without `full`. Locked `clap_derive` 4.6.4
+enables `syn/full`; Authoring's normal Clap dependency and Data's dev dependency
+include it, while the selected Import tests do not. This accounts for repeated
+Data/Engine compilation in the current serial validation sequence; there is no
+evidence of a sandbox/elevation cache-path cause.
+
+Before the next broad shared-library verification, measure a combined selected
+harness compilation under one feature union, recording Cargo timings and exact
+executable/test inventories. Execute only the same required suites. Do not blindly
+combine `--lib` across all three packages: that also selects Data's legacy library
+tests. Do not add artificial production dependencies or change test semantics to
+stabilize the cache. CI uses intentionally separate package jobs/cache keys; this
+local finding alone does not justify changing its parallelization.
+
 **Implemented and locally tested; hosted confirmation pending.** All retained argument parsing now uses
 `clap`, with its dependency centralized under `[workspace.dependencies]`.
 The root `poe-optimizer` CLI and its command modules already used it. New CLI
@@ -919,10 +945,10 @@ partial coverage and the **0/5** complete-original count remain unchanged.
 Publication integration has two newly verified prerequisites. `NamedIdRegistry`
 is not wired to persisted release state, and the closed runtime directory cannot
 accept an extra authoring ledger. The [authoring checkpoint proposal](owned-authoring-checkpoint-proposal.md)
-asks for the offline workflow choice: atomic authoring checkpoint with a separate
-runtime directory (recommended), or explicit source-ledger allocation before
-read-only release builds. This decision does not block the immutable declaration
-compiler or independent test retirement; do not wire the CLI before it is resolved.
+records the accepted offline workflow: an atomic authoring checkpoint with a
+separate runtime directory. The owner chose this on October 23 over separate
+source-ledger allocation. Implement nested publication and predecessor checks
+before exposing allocating CLI inputs; independent test retirement can continue.
 
 The final assembler validates existing commitments rather than reconstructing
 them. The historical `owned_release_revision::rebind_release_dependencies` assumes
@@ -939,6 +965,25 @@ Then author initial-type producers for Original05 Sniper first: pinned
 Use `support-release/evidence.json` raw Twister/Cleric/Heal memberships and
 `djinn-support-preparation/source-vectors.json` initial definitions for independent
 breadth controls; final observed types are not initial data.
+The five retained preparation sidecars share a 34-type vocabulary, which is not
+the game's complete vocabulary. Sniper's CreatesUndeadMinion,
+CreatesSkeletonMinion, MultipleReservation, Chaos and Fire are outside that set.
+Keep the raw source facts and make any finite projection explicit; author positive
+and negative membership only within the declared vocabulary. A labelled synthetic
+component control may establish present-empty versus absent semantics if the
+pinned natural examples contain no empty context. These remain reusable Skill
+Stats and definition-owned DSL producers, with no build-name dispatch.
+
+The smallest current producer needs no level, quality, count or support-result
+read. Existing group-100/group-101 programs already produce prepared level/quality
+channels; group-000 owns physical Sniper raw/final projections. The later bundle
+must classify the full actual program/application inventory and define freezing,
+readiness, receiving and metrics. Do not copy the old fixture's complete-empty
+support census from `sniper-final-inputs/source-properties.json` into Original05;
+its unresolved support discovery remains real. Likewise, the Partial census in
+`sand-preparation/source-properties.json` cannot be promoted by relabelling it.
+Initial-type membership does not establish summoner presence or support
+prohibition; those still need their actual occurrence/definition authority.
 
 Keep support prohibition as a separate evidence/ownership task. The current Djinn
 snapshots omit nil `cannotBeSupported`; omission does not establish a native false
@@ -1005,8 +1050,9 @@ seals are deliberately outside the source prefix check: after a new-Stat program
 is introduced, an old-schema executable may not exist to authenticate them.
 Construct evaluation artifacts from explicitly authored content, or inherit only
 from an independently checked release; never treat prefix-check success as
-permission to overwrite evaluation commitments. Evaluation content construction
-remains required integration work; its content API is not yet implemented.
+permission to overwrite evaluation commitments. At that checkpoint evaluation
+content construction was still pending; the authored-evaluation checkpoint below
+now provides that API and source-builder integration.
 
 The maintained normalization source has every top-level optional subpolicy
 present; its usage inventory is present while configuration-disposition inventory
@@ -1235,6 +1281,51 @@ no material issue; diff checks and the nine protected-file hashes pass.
 Current production source identity, coverage and the **0/5**
 complete-original count remain unchanged.
 
+**Authored evaluation construction checkpoint:** Metrics, Stages, Preparation,
+Inputs, Receiving and optional Outputs now expose content without runtime seals.
+Construction follows the existing dependency graph and delegates to the same
+semantic validators. Inherited content can be extracted only by consuming the
+actual checked evaluation owner. Stage/receiving semantic contracts, partial
+coverage, optional support/outputs and explicit-null restrictions are preserved.
+No runtime package reader repairs bindings or calls the source compiler.
+
+The maintained release manifest uses these content payloads under the same six
+component labels, with no compatibility fallback for sealed source JSON. It
+constructs them after lowering against the final checked recipe and still runs
+ordinary full release assembly. One borrowed semantic view shares nested work
+and depth accounting with runtime inputs. The compiler reserves that work from
+the source-release allowance before source constituent copies; byte, component
+and final combined limits remain enforced. The old test helper that repaired
+evaluation dependency hashes is removed. Runtime stale-binding refusal tests
+remain required.
+
+Strict all-target Clippy passes for Authoring, Data and Import
+(`runs/evaluation-content-clippy-final.log`). All **225 Authoring tests pass**
+(166 library, seven CLI and 52 release), none ignored. Compilation took 11m18s;
+the three suites took 6.97s, 0.29s and 17.47s
+(`runs/evaluation-content-authoring-tests.log`). All **269 Data owned tests pass**,
+none ignored (1m37s compilation, 0.16s execution;
+`runs/evaluation-content-data-tests.log`). All **1,127 selected Import tests pass**
+(248 library and 879 owned integration), none ignored: 11m51s compilation,
+39.22s and 38.02s execution (`runs/evaluation-content-import-tests.log`). This
+checkpoint passes **1,621 tests**. Scoped formatting, diff checks and all nine
+protected-file hashes pass. Peer review found no remaining issue in constructors,
+shared accounting or compiler integration. The first lint attempt found one
+test initializer style violation; it was fixed before the successful full lint
+and test runs, with no suppressed warning or changed validation behavior.
+
+The maintained release still has no evaluation bundle; this adds construction
+capability, not Sniper content, complete coverage or a successful original.
+Implement the atomic-checkpoint publisher and allocating CLI approved on October
+23, then populate the real execution declarations and transfer useful fixture
+laws before retiring the obsolete publication closure. No separate ledger-allocation
+path is to be added. During publication-core extraction, reuse final
+checked recipe handles for content construction and assembly where practical:
+the current offline builder checks the final recipe for evaluation construction
+and ordinary assembly checks it again. This is offline duplicate validation,
+not a second validator or per-candidate runtime work; preserve validation and
+budget ordering when removing it.
+
 Historical CI performance observation, 05:07 UTC on October 23: four CLI
 two-feature-profile test steps and Windows PoB tests had run for about 163 minutes.
 Those jobs subsequently passed as part of the completed twenty-job run. Each CLI step compiles and
@@ -1431,6 +1522,8 @@ These are retained obligations, not extra competing phases.
 | UI autocomplete | Bounded query/index over loaded named definitions; no database/ORM milestone |
 | PoB updates | One pin manifest, offline extraction and selective differential tests, stable semantic anchors and a pin-bump runbook; no automatic network/source work in cargo build |
 | Repository/release hygiene | R0-R4 dependency boundaries, deduplicated tests/artifacts/docs, one MSRV policy and locked workspace dependencies; batch Windows formatting by package while workspace-wide `cargo fmt --all` exceeds the process command-line limit (OS error 206); R6 release packaging, dependency audit and measured release-profile tuning |
+| Repeated offline recipe validation | During R1 publication-core extraction, reuse the final checked recipe between authored evaluation construction and full assembly while retaining all shared aggregate and dependency checks; measure before broader performance work. No native candidate path is affected |
+| Mutable authoring-head promotion | Deferred until a shared mutable head is introduced; the first approved checkpoint publisher uses an explicit immutable predecessor. Implement actual stored-predecessor CAS/concurrency control and interruption tests before exposing head promotion; read-compare-rename alone is insufficient |
 
 ## Review finding coverage
 
@@ -1455,13 +1548,28 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
+At every checkpoint record the current MVP blocker, the smallest change that
+removes it, and any safely deferred work with its later gate. Reassess the closest
+build from actual input, execution and legality evidence rather than counting
+implemented features. Prefer removing a replaced path and shortening iteration
+over adding optional infrastructure; do not weaken model correctness or coverage.
+Use targeted PoE2/PoE1 wiki or other public mechanic references when they can
+resolve a specific ambiguity or reveal a simpler general model. Record the game
+and version, distinguish explanation from observed behavior, and validate the
+chosen semantics with independent cases and the applicable reference. This is
+targeted research, not PoEDB scraping or bulk extraction; it does not authorize
+copying source-language accidents into the native model.
+
 1. Read this plan and Git status. The computed-support unused-input repair,
    immutable typed Stat declaration compiler and original bootstrap dependency
    checks, aggregate evaluation budgets and complete Import content construction
    are implemented in the maintained builder. Immutable Stat declarations now
-   participate in that in-memory compiler. Next **construct authored evaluation dependencies**,
-   following the R2 prerequisites above. Keep these as separately validated compiler
-   phases; source extraction has no authority over evaluation inputs.
+   participate in that in-memory compiler, and authored evaluation construction
+   now follows the same final dependency graph. Next **implement the approved atomic
+   authoring checkpoint and allocating CLI**, then author the current release's
+   real execution declarations, following the R2 prerequisites above. Keep these
+   as separately validated compiler phases; source extraction has no authority
+   over evaluation inputs.
    Declaration integration takes an explicit persisted name ledger, validates it
    as a successor of the bootstrap registry, and stages before projecting newly
    allocated names against the schema. Never reconstruct an empty ledger on replay.
@@ -1475,20 +1583,44 @@ These are retained obligations, not extra competing phases.
    Before exposing declaration input in the CLI, include the packet names/source
    path in declaration-overlay errors. They currently preserve typed conflict and
    limit causes but lack packet context; staging errors remain context-wide.
-   Evaluation construction follows the existing graph in
+   Evaluation construction now follows the existing graph in
    `owned_release_evaluation.rs`: checked recipe to Metrics, Stages and Preparation;
    Stages/Preparation to Inputs; those packages to Receiving; all prerequisites to
-   optional Outputs. Reuse row DTOs, Readiness and SourceProperties, and factor
-   the shared bounded traversal over semantic payloads before hashing/copying.
+   optional Outputs. It reuses row DTOs, Readiness and SourceProperties, and one
+   shared bounded traversal over semantic payloads before hashing/copying.
    Extract inherited content only from independently checked evaluation owners;
    the source-prefix checker cannot authenticate that graph. Author historical
    fragment semantics explicitly or first validate their entire original graph.
-   Preserve optional support/outputs, coverage and predicate/path limits. Test
-   unchanged identity, changed dependencies, stale originals, missing program
-   classification, malformed closures and exact/one-short budgets. Construct
-   against the final checked recipe and retain ordinary full release assembly.
-   The offline publication workflow still needs a decision before CLI publication;
-   it does not block these library steps. Then author real initial-type facts for Sniper using its
+   Preserve optional support/outputs, coverage and predicate/path limits. Existing
+   gates cover unchanged identity, changed dependencies, stale originals, missing
+   program classification, malformed closures and exact/one-short budgets.
+   Construct against the final checked recipe and retain ordinary full release
+   assembly. Reuse checked recipe handles when extracting the publication core
+   to avoid the current offline duplicate recipe validation; do not bypass the
+   shared pre-copy budget or full graph checks.
+   The owner approved atomic authoring checkpoints on October 23: publish the
+   stable ledger and closed runtime directory together in a new immutable outer
+   directory. Reuse Host validation and atomic no-clobber publication; do not
+   bypass it with unchecked nested paths. Authenticate the stored predecessor,
+   keep failure/stale-predecessor attempts side-effect free and cover interrupted
+   publication. Mutable-head promotion needs its own actual-predecessor CAS;
+   immutable explicit checkpoints must not pretend to advance such a head.
+   Checkpoint builds must retain the predecessor allocation context even with
+   zero new declarations. The current no-context compiler selects the bootstrap
+   registry and could otherwise discard newer ledger history. Pass explicit empty
+   declarations or enforce equivalent retained-registry ownership; require the
+   emitted names' registry digest to match the actual final runtime registry.
+   Cover this replay case, including reserved names, before CLI publication.
+   First deliver bounded `names.json`, a checkpoint receipt and closed `runtime/`
+   inventory with explicit immutable predecessor selection. Add a Host bundle
+   primitive over validated directory/file basenames, reject duplicate paths and
+   file/directory collisions, stage privately and use the existing no-clobber
+   publish operation. Keep flat runtime publication strict. Reuse existing race,
+   interrupted-staging, cleanup, symlink and exact-inventory tests; add nested
+   traversal/collision and mismatched ledger/runtime controls. Mutable-head
+   promotion is a tracked later feature, not a requirement to add mutable state
+   to this first publisher.
+   Then author real initial-type facts for Sniper using its
    pinned source evidence. No structural-read decision blocks that slice.
    In parallel, continue independent behavioral transfers.
    Complete the actual execution declarations needed to replace historical

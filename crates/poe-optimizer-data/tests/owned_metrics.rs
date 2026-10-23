@@ -510,3 +510,87 @@ fn inconsistent_index_cannot_substitute_an_equal_type_with_another_owned_id() {
             .contains("inconsistent schema index")
     );
 }
+
+#[test]
+fn authored_metric_content_preserves_rows_and_rechecks_extended_schema() {
+    let s = schema(schema_input());
+    let original = package(input(&s), &s);
+    let content = original.clone().into_authored_content();
+    let rebound = OwnedMetricMapping::bind_new(content.clone(), &s, Default::default()).unwrap();
+    assert_eq!(rebound.input(), original.input());
+    assert_eq!(rebound.identity(), original.identity());
+    let mut raw = s.input().clone();
+    raw.definitions.push(DefinitionDescriptor::Stat(known(
+        id("appended"),
+        StatSchema {
+            value: ComputedValueType::Boolean,
+            targets: vec![RuleEntityKind::Actor],
+        },
+    )));
+    let extended = schema(raw);
+    assert!(
+        OwnedMetricMapping::new(original.input().clone(), &extended, Default::default()).is_err()
+    );
+    let extended_mapping =
+        OwnedMetricMapping::bind_new(content.clone(), &extended, Default::default()).unwrap();
+    assert_eq!(extended_mapping.input().definitions, *extended.identity());
+    assert_eq!(extended_mapping.input().bindings, original.input().bindings);
+    assert_eq!(extended_mapping.into_authored_content(), content);
+    let mut invalid = content.clone();
+    invalid.bindings[0].stat = id("appended");
+    assert!(
+        OwnedMetricMapping::bind_new(invalid, &extended, Default::default())
+            .unwrap_err()
+            .to_string()
+            .contains("exact Quantity(unit)")
+    );
+    assert_eq!(original.clone().into_authored_content(), content);
+}
+
+#[test]
+fn authored_metric_content_rejects_sealed_input_and_honors_exact_limits() {
+    let s = schema(schema_input());
+    let original = package(input(&s), &s);
+    let content = original.clone().into_authored_content();
+    assert_eq!(
+        serde_json::from_value::<MetricMappingContent>(serde_json::to_value(&content).unwrap())
+            .unwrap(),
+        content
+    );
+    assert!(
+        serde_json::from_value::<MetricMappingContent>(
+            serde_json::to_value(original.input()).unwrap()
+        )
+        .is_err()
+    );
+    let exact = MetricMappingLimits {
+        max_bindings: original.resources().bindings,
+        max_schema_work: original.resources().schema_work,
+        max_wire_bytes: encode_metric_mapping(&original, Default::default())
+            .unwrap()
+            .len(),
+    };
+    assert_eq!(
+        OwnedMetricMapping::bind_new(content.clone(), &s, exact)
+            .unwrap()
+            .identity(),
+        original.identity()
+    );
+    for limits in [
+        MetricMappingLimits {
+            max_bindings: exact.max_bindings - 1,
+            ..exact
+        },
+        MetricMappingLimits {
+            max_schema_work: exact.max_schema_work - 1,
+            ..exact
+        },
+        MetricMappingLimits {
+            max_wire_bytes: exact.max_wire_bytes - 1,
+            ..exact
+        },
+    ] {
+        assert!(OwnedMetricMapping::bind_new(content.clone(), &s, limits).is_err());
+    }
+    assert_eq!(original.into_authored_content(), content);
+}

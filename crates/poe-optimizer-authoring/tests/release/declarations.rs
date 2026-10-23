@@ -227,6 +227,55 @@ fn declared_stat_compiles_and_evaluates_without_mutating_source_or_ledger() {
 }
 
 #[test]
+fn declarations_and_authored_evaluation_bind_to_the_same_final_recipe() {
+    let (mut dsl, owner) = baseline(true);
+    // The fixture has a complete stage partition. Author the additional probe's
+    // placement explicitly; binding cannot manufacture its scheduling authority.
+    let mut stages: poe_optimizer_data::owned_stages::EvaluationStagesContent =
+        serde_json::from_str(dsl.source.text("support-stages.json")).unwrap();
+    let mut placement = stages
+        .programs
+        .members
+        .iter()
+        .find(|row| row.owner == owner && row.program.as_str() == "action-final")
+        .unwrap()
+        .clone();
+    placement.program = OwnedDefinitionKey::new(PROBE).unwrap();
+    stages.programs.members.push(placement);
+    dsl.source.replace_plain(
+        "support-stages.json",
+        serde_json::to_string(&stages).unwrap(),
+    );
+    let names = names(&dsl);
+    let original = ledger_bytes(&names);
+    let schema = schema(&dsl);
+    let symbols = SymbolRegistry::new(&schema, &[], &[], Default::default()).unwrap();
+    let declarations = declarations(&schema, &[FLAG]);
+    let built = dsl
+        .source
+        .build_with_declarations(
+            Some(context(&names, &declarations, &symbols)),
+            Default::default(),
+        )
+        .unwrap();
+    let release = built.release();
+    let final_schema = release.assembled().schema();
+    assert_ne!(final_schema.identity(), schema.identity());
+    let evaluation = release.evaluation().unwrap();
+    assert_eq!(
+        &evaluation.metrics().input().definitions,
+        final_schema.identity()
+    );
+    assert_eq!(
+        &evaluation.support().unwrap().stages().input().rules,
+        release.assembled().rules().identity(),
+    );
+    super::assert_dsl_metric(release);
+    assert!(built.name_allocation().is_some());
+    assert_eq!(ledger_bytes(&names), original);
+}
+
+#[test]
 fn persisted_ledger_replays_and_keeps_identity_when_earlier_names_are_added() {
     let (dsl, _) = baseline(false);
     let names = names(&dsl);
@@ -466,12 +515,17 @@ fn stale_predecessor_and_late_failures_never_publish_or_mutate_names() {
         let declarations = declarations(&schema, &[FLAG]);
         let ctx = context(&names, &declarations, &symbols);
         if with_evaluation {
-            // Declaration staging must not silently rebind stale evaluation seals.
+            // Authored content does not infer missing stage membership for the
+            // newly composed probe, even after all dependency seals are derived.
             assert!(matches!(
                 dsl.source
                     .build_with_declarations(Some(ctx), Default::default()),
                 Err(ReleaseBuildError::Assembly(OwnedReleaseError::Evaluation(
-                    _
+                    poe_optimizer_import::owned_release_evaluation::OwnedReleaseEvaluationError::Stages(
+                        poe_optimizer_data::owned_stages::StageStorageError::Invalid(
+                            "complete partition omits known programs"
+                        )
+                    )
                 )))
             ));
         } else {

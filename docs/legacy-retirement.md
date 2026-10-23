@@ -29,6 +29,10 @@ compilers. Normalization content construction and in-memory declaration staging
 now run in the maintained source builder;
 do not retrofit those old compilers with the new content APIs. Transfer their
 remaining relevant laws, then delete their dependency-repair helpers and callers.
+The same rule applies to evaluation content construction. Maintained evaluation
+source files now reject runtime headers; the release-test helper that manually
+repaired evaluation digests is retired. Runtime stale-binding tests remain useful
+and must survive. Do not add a compatibility reader for the replaced source format.
 
 Do not let a refactor turn unresolved semantics into default values or complete
 coverage. Delete unsupported abandoned features honestly; preserve a precise

@@ -6,10 +6,24 @@ use poe_optimizer_core::{
     owned_schema::*,
     owned_supports::*,
 };
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
 const DOMAIN: &str = "owned-support-preparation-v1";
+
+/// Preparation semantics without schema or rule seals. Nested source facts,
+/// explicit absence, partial coverage and predicate order are retained exactly.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SupportPreparationContent {
+    pub release: OwnedDefinitionKey,
+    pub policy: SupportPreparationPolicy,
+    pub quality_unit: UnitDefId,
+    pub types: Vec<OwnedDefinitionKey>,
+    pub effects: Vec<OwnedDefinitionKey>,
+    pub families: Vec<OwnedDefinitionKey>,
+    pub supports: Vec<SupportPreparationEntry>,
+}
 
 #[derive(Clone, Copy, Debug)]
 pub struct SupportStorageLimits {
@@ -171,6 +185,47 @@ pub struct OwnedSupportPreparation {
     resources: SupportStorageUse,
 }
 impl OwnedSupportPreparation {
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: SupportPreparationContent,
+        index: &I,
+        rules: &OwnedRulePackage,
+        limits: SupportStorageLimits,
+    ) -> Result<Self, SupportStorageError> {
+        limits.validate()?;
+        // No content is cloned or hashed here. The existing validator bounds
+        // nested memberships and predicate depth before serializing the input.
+        Self::new(
+            SupportPreparationInput {
+                schema_version: OWNED_SUPPORT_PREPARATION_VERSION,
+                namespace: index.namespace().clone(),
+                release: content.release,
+                definitions: index.identity().clone(),
+                rules: *rules.identity(),
+                policy: content.policy,
+                quality_unit: content.quality_unit,
+                types: content.types,
+                effects: content.effects,
+                families: content.families,
+                supports: content.supports,
+            },
+            index,
+            rules,
+            limits,
+        )
+    }
+
+    pub fn into_authored_content(self) -> SupportPreparationContent {
+        SupportPreparationContent {
+            release: self.input.release,
+            policy: self.input.policy,
+            quality_unit: self.input.quality_unit,
+            types: self.input.types,
+            effects: self.input.effects,
+            families: self.input.families,
+            supports: self.input.supports,
+        }
+    }
+
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: SupportPreparationInput,
         index: &I,

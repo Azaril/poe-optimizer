@@ -143,7 +143,7 @@ fn stale_import_binding_is_rejected_before_lowering_then_late_dsl_failure_stays_
 }
 
 #[test]
-fn source_dependency_success_cannot_certify_evaluation_artifacts() {
+fn source_dependency_success_cannot_admit_sealed_evaluation_sources() {
     let dsl = DslRelease::new(&fixture().input, false);
     let mut input = shell(&dsl.expected);
     let metrics = &mut input.evaluation.as_mut().unwrap().metrics;
@@ -156,9 +156,7 @@ fn source_dependency_success_cannot_certify_evaluation_artifacts() {
     source.replace_plain("metrics.json", metrics);
     assert!(matches!(
         source.build(Default::default()),
-        Err(ReleaseBuildError::Assembly(OwnedReleaseError::Evaluation(
-            _
-        )))
+        Err(ReleaseBuildError::Json { path, .. }) if path == "metrics.json"
     ));
 }
 

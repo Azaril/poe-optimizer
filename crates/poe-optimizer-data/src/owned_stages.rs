@@ -9,13 +9,63 @@ use poe_optimizer_core::{
     owned_schema::*,
     owned_stages::*,
 };
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
 mod applications;
 mod readiness;
 
 const DOMAIN: &str = "owned-evaluation-stages-v1";
+
+/// These versions retain distinct readiness and local-equipment contracts.
+/// Binding authored content never selects a newer contract implicitly.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum EvaluationStagesVersion {
+    V1,
+    V2,
+    V3,
+    V4,
+}
+impl EvaluationStagesVersion {
+    fn input_version(self) -> u32 {
+        match self {
+            Self::V1 => OWNED_EVALUATION_STAGES_VERSION,
+            Self::V2 => OWNED_EVALUATION_STAGES_V2,
+            Self::V3 => OWNED_EVALUATION_STAGES_V3,
+            Self::V4 => OWNED_EVALUATION_STAGES_V4,
+        }
+    }
+}
+
+fn content_readiness_non_null<'de, D: serde::Deserializer<'de>>(
+    deserializer: D,
+) -> std::result::Result<Option<ReadinessInput>, D::Error> {
+    ReadinessInput::deserialize(deserializer).map(Some)
+}
+
+/// Scheduling semantics without schema, rule or routing seals. The existing
+/// validator remains responsible for version/readiness agreement, coverage,
+/// exact owner-qualified programs and every potential channel access.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct EvaluationStagesContent {
+    pub version: EvaluationStagesVersion,
+    pub release: OwnedDefinitionKey,
+    pub stages: Vec<EvaluationStage>,
+    pub programs: DeclaredSet<StagedRuleProgram>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub effect_applications: Option<DeclaredSet<StagedEffectApplication>>,
+    pub routing_stage: OwnedDefinitionKey,
+    pub frozen_channels: Vec<FrozenStageChannel>,
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "content_readiness_non_null"
+    )]
+    pub readiness: Option<ReadinessInput>,
+}
+
 #[derive(Clone, Copy, Debug)]
 pub struct StageStorageLimits {
     pub max_stages: usize,
@@ -226,6 +276,61 @@ pub struct OwnedEvaluationStages {
     readiness: readiness::ReadinessIndex,
 }
 impl OwnedEvaluationStages {
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: EvaluationStagesContent,
+        index: &I,
+        rules: &OwnedRulePackage,
+        routing: &OwnedActionRouting,
+        limits: StageStorageLimits,
+    ) -> Result<Self> {
+        limits.validate()?;
+        if content.stages.len() > limits.max_stages {
+            return Err(StageStorageError::Limit("stages"));
+        }
+        // Move the authored payload; the sole validator bounds its complete
+        // representation before constructing its derived indexes.
+        Self::new(
+            EvaluationStagesInput {
+                schema_version: content.version.input_version(),
+                namespace: index.namespace().clone(),
+                release: content.release,
+                definitions: index.identity().clone(),
+                rules: *rules.identity(),
+                routing: *routing.identity(),
+                stages: content.stages,
+                programs: content.programs,
+                effect_applications: content.effect_applications,
+                routing_stage: content.routing_stage,
+                frozen_channels: content.frozen_channels,
+                readiness: content.readiness,
+            },
+            index,
+            rules,
+            routing,
+            limits,
+        )
+    }
+
+    pub fn into_authored_content(self) -> EvaluationStagesContent {
+        let version = match self.input.schema_version {
+            OWNED_EVALUATION_STAGES_VERSION => EvaluationStagesVersion::V1,
+            OWNED_EVALUATION_STAGES_V2 => EvaluationStagesVersion::V2,
+            OWNED_EVALUATION_STAGES_V3 => EvaluationStagesVersion::V3,
+            OWNED_EVALUATION_STAGES_V4 => EvaluationStagesVersion::V4,
+            _ => unreachable!("checked stage package has a supported version"),
+        };
+        EvaluationStagesContent {
+            version,
+            release: self.input.release,
+            stages: self.input.stages,
+            programs: self.input.programs,
+            effect_applications: self.input.effect_applications,
+            routing_stage: self.input.routing_stage,
+            frozen_channels: self.input.frozen_channels,
+            readiness: self.input.readiness,
+        }
+    }
+
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: EvaluationStagesInput,
         index: &I,

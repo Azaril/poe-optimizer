@@ -320,6 +320,253 @@ fn owner_qualified_partition_canonical_roundtrip_and_transitive_precedence() {
 }
 
 #[test]
+fn authored_stages_preserve_every_version_and_readiness_contract() {
+    use poe_optimizer_core::owned_readiness::*;
+    for (version, raw_version, operations) in [
+        (
+            EvaluationStagesVersion::V1,
+            OWNED_EVALUATION_STAGES_VERSION,
+            OWNED_RULE_OPERATIONS_V14,
+        ),
+        (
+            EvaluationStagesVersion::V2,
+            OWNED_EVALUATION_STAGES_V2,
+            OWNED_RULE_OPERATIONS_V16,
+        ),
+        (
+            EvaluationStagesVersion::V3,
+            OWNED_EVALUATION_STAGES_V3,
+            OWNED_RULE_OPERATIONS_V18,
+        ),
+        (
+            EvaluationStagesVersion::V4,
+            OWNED_EVALUATION_STAGES_V4,
+            OWNED_RULE_OPERATIONS_V18,
+        ),
+    ] {
+        let mut f = Fixture::new();
+        if version != EvaluationStagesVersion::V1 {
+            f.change_rules(|rules| {
+                rules.operations_version = key(operations);
+                rules.effect_applications = Some(empty());
+            });
+            f.input.schema_version = raw_version;
+            f.input.effect_applications = Some(empty());
+            f.input.readiness = Some(ReadinessInput {
+                skills: vec![],
+                programs: DeclaredSet::complete(
+                    f.input
+                        .programs
+                        .members
+                        .iter()
+                        .map(|row| ReadinessProgram {
+                            owner: row.owner.clone(),
+                            program: row.program.clone(),
+                            phase: ReadinessPhase::Execution,
+                            role: ReadinessProgramRole::Execution,
+                            outputs: vec![],
+                        })
+                        .collect(),
+                ),
+            });
+        }
+        let original = f.package().unwrap();
+        let content = original.clone().into_authored_content();
+        assert_eq!(content.version, version);
+        let value = serde_json::to_value(&content).unwrap();
+        assert_eq!(
+            serde_json::from_value::<EvaluationStagesContent>(value.clone()).unwrap(),
+            content
+        );
+        let mut null = value;
+        null["readiness"] = serde_json::Value::Null;
+        assert!(serde_json::from_value::<EvaluationStagesContent>(null).is_err());
+        assert!(
+            serde_json::from_value::<EvaluationStagesContent>(
+                serde_json::to_value(original.input()).unwrap()
+            )
+            .is_err()
+        );
+        let rebound = OwnedEvaluationStages::bind_new(
+            content.clone(),
+            &f.schema,
+            &f.rules,
+            &f.routing,
+            Default::default(),
+        )
+        .unwrap();
+        assert_eq!(rebound.input().schema_version, raw_version);
+        assert_eq!(rebound.input(), original.input());
+        assert_eq!(rebound.identity(), original.identity());
+        let mut wrong = content.clone();
+        if version == EvaluationStagesVersion::V1 {
+            wrong.version = EvaluationStagesVersion::V2;
+        } else {
+            wrong.readiness = None;
+        }
+        assert!(
+            OwnedEvaluationStages::bind_new(
+                wrong,
+                &f.schema,
+                &f.rules,
+                &f.routing,
+                Default::default(),
+            )
+            .is_err()
+        );
+        assert_eq!(original.into_authored_content(), content);
+    }
+}
+
+#[test]
+fn authored_stages_bind_all_actual_dependencies_and_recheck_classification() {
+    let mut f = Fixture::new();
+    let original = f.package().unwrap();
+    let content = original.clone().into_authored_content();
+    let mut input = f.schema.input().clone();
+    input.definitions.push(DefinitionDescriptor::Stat(entry(
+        id("appended"),
+        StatSchema {
+            value: ComputedValueType::Boolean,
+            targets: vec![RuleEntityKind::Actor],
+        },
+    )));
+    let extended = OwnedDefinitionSchemaPackage::new(input, Default::default()).unwrap();
+    assert!(matches!(
+        OwnedEvaluationStages::bind_new(
+            content.clone(),
+            &extended,
+            &f.rules,
+            &f.routing,
+            Default::default()
+        ),
+        Err(StageStorageError::Binding)
+    ));
+    let mut input = f.rules.input().clone();
+    input.definitions = extended.identity().clone();
+    let rules = OwnedRulePackage::new(input, &extended, Default::default()).unwrap();
+    assert!(matches!(
+        OwnedEvaluationStages::bind_new(
+            content.clone(),
+            &extended,
+            &rules,
+            &f.routing,
+            Default::default()
+        ),
+        Err(StageStorageError::Binding)
+    ));
+    let mut input = f.routing.input().clone();
+    input.definitions = extended.identity().clone();
+    let routing = OwnedActionRouting::new(input, &extended, Default::default()).unwrap();
+    let rebound = OwnedEvaluationStages::bind_new(
+        content.clone(),
+        &extended,
+        &rules,
+        &routing,
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(rebound.input().definitions, *extended.identity());
+    assert_eq!(rebound.input().rules, *rules.identity());
+    assert_eq!(rebound.input().routing, *routing.identity());
+    assert_eq!(rebound.into_authored_content(), content);
+    f.change_rules(|rules| {
+        let mut added = program("a");
+        added.id = key("additional");
+        rules.owners[0].programs.members.push(added);
+    });
+    assert!(matches!(
+        OwnedEvaluationStages::bind_new(
+            content.clone(),
+            &f.schema,
+            &f.rules,
+            &f.routing,
+            Default::default()
+        ),
+        Err(StageStorageError::Invalid(
+            "complete partition omits known programs"
+        ))
+    ));
+    let mut invalid = content.clone();
+    invalid.frozen_channels[0].stage = key("finish");
+    assert!(matches!(
+        OwnedEvaluationStages::bind_new(invalid, &extended, &rules, &routing, Default::default()),
+        Err(StageStorageError::Invalid(
+            "frozen channel read occurs before or outside frozen stage"
+        ))
+    ));
+    assert_eq!(original.into_authored_content(), content);
+}
+
+#[test]
+fn authored_stages_retain_partial_coverage_and_obey_exact_budgets() {
+    let mut f = Fixture::new();
+    f.input.programs.members.pop();
+    f.input.programs.closure = SchemaClosure::Partial {
+        gaps: vec![SchemaGap {
+            subject: owner("b"),
+            facet: SchemaFacet::GameRules,
+            code: key("unclassified"),
+        }],
+    };
+    let original = f.package().unwrap();
+    let content = original.clone().into_authored_content();
+    let used = original.resources();
+    let exact = StageStorageLimits {
+        max_stages: used.stages,
+        max_entries: used.entries,
+        max_work: used.work,
+        max_wire_bytes: encode_evaluation_stages(&original, Default::default())
+            .unwrap()
+            .len(),
+    };
+    let rebound =
+        OwnedEvaluationStages::bind_new(content.clone(), &f.schema, &f.rules, &f.routing, exact)
+            .unwrap();
+    assert_eq!(rebound.identity(), original.identity());
+    assert!(!rebound.is_complete());
+    assert!(
+        rebound
+            .stage_for(&owner("b"), &key("same-local-id"))
+            .is_none()
+    );
+    assert_eq!(
+        rebound.input().programs.closure,
+        original.input().programs.closure
+    );
+    for limits in [
+        StageStorageLimits {
+            max_stages: exact.max_stages - 1,
+            ..exact
+        },
+        StageStorageLimits {
+            max_entries: exact.max_entries - 1,
+            ..exact
+        },
+        StageStorageLimits {
+            max_work: exact.max_work - 1,
+            ..exact
+        },
+        StageStorageLimits {
+            max_wire_bytes: exact.max_wire_bytes - 1,
+            ..exact
+        },
+    ] {
+        assert!(
+            OwnedEvaluationStages::bind_new(
+                content.clone(),
+                &f.schema,
+                &f.rules,
+                &f.routing,
+                limits,
+            )
+            .is_err()
+        );
+    }
+    assert_eq!(original.into_authored_content(), content);
+}
+
+#[test]
 fn partition_rejects_omissions_duplicates_foreign_programs_and_stages() {
     let original = Fixture::new().input;
     for mutation in 0..5 {

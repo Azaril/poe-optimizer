@@ -1002,3 +1002,121 @@ fn empty_cartesian_dimension_has_no_unbounded_iteration_or_fabricated_receiver()
     let package = f.build(f.input.clone()).unwrap();
     assert_eq!(package.resources().expanded_endpoints, 1); // the exact Actor only
 }
+
+fn bind_authored_receiving(
+    f: &Fixture,
+    content: SupportReceivingContent,
+    limits: SupportReceivingStorageLimits,
+) -> Result<OwnedSupportReceiving, SupportReceivingStorageError> {
+    OwnedSupportReceiving::bind_new(
+        content,
+        &f.schema,
+        &f.rules,
+        &f.preparation,
+        &f.inputs,
+        &f.stages,
+        limits,
+    )
+}
+
+fn assert_authored_receiving_roundtrip(f: &Fixture) -> SupportReceivingContent {
+    let checked = f.build(f.input.clone()).unwrap();
+    let wire = encode_support_receiving(&checked, Default::default()).unwrap();
+    let expected = checked.input().clone();
+    let identity = *checked.identity();
+    let complete = checked.declarations_complete();
+    let used = checked.resources();
+    let content = checked.into_authored_content();
+    assert_eq!(content.contract.schema_version(), expected.schema_version);
+    assert_eq!(content.source_properties, expected.source_properties);
+    let exact = SupportReceivingStorageLimits {
+        max_entries: used.entries,
+        max_work: used.work,
+        max_wire_bytes: wire.len(),
+        ..Default::default()
+    };
+    let rebound = bind_authored_receiving(f, content.clone(), exact).unwrap();
+    assert_eq!(rebound.input(), &expected);
+    assert_eq!(*rebound.identity(), identity);
+    assert_eq!(rebound.resources(), used);
+    assert_eq!(rebound.declarations_complete(), complete);
+    assert_eq!(encode_support_receiving(&rebound, exact).unwrap(), wire);
+    for limits in [
+        SupportReceivingStorageLimits {
+            max_entries: used.entries - 1,
+            ..exact
+        },
+        SupportReceivingStorageLimits {
+            max_work: used.work - 1,
+            ..exact
+        },
+        SupportReceivingStorageLimits {
+            max_wire_bytes: wire.len() - 1,
+            ..exact
+        },
+    ] {
+        assert!(bind_authored_receiving(f, content.clone(), limits).is_err());
+    }
+    let value = serde_json::to_value(&content).unwrap();
+    for field in [
+        "schema_version",
+        "namespace",
+        "definitions",
+        "rules",
+        "preparation",
+        "inputs",
+        "stages",
+    ] {
+        assert!(value.get(field).is_none());
+        let mut sealed = value.clone();
+        sealed[field] = serde_json::Value::Null;
+        assert!(serde_json::from_value::<SupportReceivingContent>(sealed).is_err());
+    }
+    assert_eq!(
+        value.get("source_properties").is_some(),
+        content.source_properties.is_some()
+    );
+    let mut null = value.clone();
+    null["source_properties"] = serde_json::Value::Null;
+    assert!(serde_json::from_value::<SupportReceivingContent>(null).is_err());
+    let mut null = value;
+    null["supports"][0]["receivers"]["members"][0]["preparation"] = serde_json::Value::Null;
+    assert!(serde_json::from_value::<SupportReceivingContent>(null).is_err());
+    content
+}
+
+#[test]
+fn authored_receiving_v1_roundtrip_preserves_partial_inventory_and_absence() {
+    let mut f = Fixture::new();
+    let content = assert_authored_receiving_roundtrip(&f);
+    assert_eq!(content.contract, SupportReceivingContract::V1);
+    assert!(content.source_properties.is_none());
+    f.input.targets[0].roles.closure = partial(SchemaSubject::Definition(
+        DefinitionAddress::Skill(id("parent")),
+    ));
+    f.input.supports[0].receivers.members.pop();
+    f.input.supports[0].receivers.closure = partial(owner("support-a"));
+    assert!(!f.build(f.input.clone()).unwrap().declarations_complete());
+    let content = assert_authored_receiving_roundtrip(&f);
+    assert!(!content.supports[0].receivers.is_complete());
+}
+
+#[test]
+fn authored_receiving_binds_current_rules_without_repairing_raw_or_invalid_content() {
+    let f = Fixture::new();
+    let content = f.build(f.input.clone()).unwrap().into_authored_content();
+    let next = Fixture::with(|_| {}, |rules| rules.release = key("next-rules"), |_| {});
+    assert_ne!(f.rules.identity(), next.rules.identity());
+    assert!(matches!(
+        next.build(f.input.clone()),
+        Err(SupportReceivingStorageError::Binding)
+    ));
+    let rebound = bind_authored_receiving(&next, content.clone(), Default::default()).unwrap();
+    assert_eq!(rebound.into_authored_content(), content);
+    let mut invalid = content;
+    invalid.supports[0].receivers.members[0].applicability = key("missing-program");
+    assert!(matches!(
+        bind_authored_receiving(&next, invalid, Default::default()),
+        Err(SupportReceivingStorageError::Invalid(_))
+    ));
+}

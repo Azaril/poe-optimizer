@@ -343,7 +343,7 @@ existing raw-alias `load_names` path currently remains separate. Checked
 per-packet declaration overlays can be integrated into the in-memory compiler
 before resolving filesystem publication.
 
-The concrete publication workflow is under review in the
+The owner approved atomic authoring checkpoints on October 23, as described in the
 [authoring checkpoint proposal](owned-authoring-checkpoint-proposal.md). The runtime
 directory has a closed artifact inventory; authoring state cannot be added as an
 unlisted file. Stable allocation must persist the registry-bound name ledger, not
@@ -395,15 +395,15 @@ The maintained compiler uses this construction on every build. Its resulting
 `ImportSourceInput` is raw data: existing full release validation remains mandatory
 before publication or evaluation. Runtime readers still reject stale bindings.
 Neither content construction nor source-prefix validation certifies complete
-release execution or coverage. Evaluation content construction and filesystem
-declaration publication remain separate work; source extraction never includes
-evaluation inputs or overwrites their unvalidated commitments.
+release execution or coverage. Filesystem declaration publication remains separate
+work; source extraction never includes evaluation inputs or overwrites their
+unvalidated commitments.
 Aggregate evaluation preflight accounts for readiness, receiving preparation,
 source properties and their nested lists before digesting or cloning. Partial gap
 lists are bounded even when later semantic validation rejects them; generated and
 summoner source paths retain independent depth checks under the shared work budget.
 
-Authored evaluation construction must follow the existing checked package graph:
+Authored evaluation construction follows the existing checked package graph:
 recipe to Metrics, Stages and Preparation; Stages/Preparation to Inputs; those
 packages to Receiving; all prerequisites to optional Outputs. Extract inherited
 content only from fully checked evaluation owners, or author fresh semantic
@@ -411,6 +411,23 @@ declarations explicitly. Reuse the shared bounded traversal before hashing or
 copying and retain final release assembly. New dependency bindings grant no
 coverage: partial source inventories remain blocking, and absent support/outputs
 retain their existing meaning.
+
+The six evaluation source components now carry authored content under their
+existing manifest labels. Runtime seal fields are rejected by that format;
+there is no sealed-input fallback. Metrics, stage classification, preparation,
+receiving, readiness and source-property rows reuse the existing semantic types.
+Consuming a fully checked release can surrender its actual evaluation owner for
+content extraction. Construction derives every current binding from checked
+prerequisites and runs the existing constituent validators. Semantic stage and
+receiving contracts are preserved explicitly, with no implicit upgrade.
+
+One borrowed semantic view drives the aggregate work traversal for both authored
+and runtime inputs. The source builder reserves evaluation work from the same
+release counter before checking or copying the other source dependencies.
+Final full release assembly still checks the combined graph and budgets; neither
+new bindings nor declarations turn partial inventories into complete coverage.
+This is offline construction. Runtime artifact loading and candidate evaluation
+retain their existing strict input contracts and do not invoke Authoring.
 
 Typed Stat declarations use that same staged allocation and existing Data schema.
 The offline KDL `definitions` document names a game/version namespace and each
@@ -435,7 +452,7 @@ discard that ledger. The returned allocation result is immutable and commits no
 filesystem state. Rule source content constructs a raw package for lowering;
 routing content preserves its existing semantic version and uses the single
 validator against the final schema. Final assembly still validates complete rule
-semantics and unchanged evaluation commitments.
+semantics and the newly constructed evaluation graph.
 
 These declarations grant no producer, read or write authority and do not close
 partial coverage. Programs still pass through the sole lowerer and Engine checker.

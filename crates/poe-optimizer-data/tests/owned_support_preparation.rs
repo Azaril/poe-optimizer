@@ -352,3 +352,164 @@ fn construction_decoding_and_encoding_enforce_the_same_tighter_limits() {
         assert!(encode_support_preparation(&package, smaller).is_err());
     }
 }
+
+#[test]
+fn authored_preparation_preserves_absence_predicates_and_unmapped_rows() {
+    let (schema, rules, mut input) = fixture();
+    first(&mut input).families = None;
+    let other = input.supports[1].gem.clone();
+    input.supports[1].preparation = SchemaState::Unmapped {
+        gaps: vec![SchemaGap {
+            subject: SchemaSubject::Definition(other.address()),
+            facet: SchemaFacet::StaticLinks,
+            code: key("unconverted"),
+        }],
+    };
+    let original =
+        OwnedSupportPreparation::new(input, &schema, &rules, Default::default()).unwrap();
+    let content = original.clone().into_authored_content();
+    assert_eq!(
+        serde_json::from_value::<SupportPreparationContent>(
+            serde_json::to_value(&content).unwrap()
+        )
+        .unwrap(),
+        content
+    );
+    let rebound =
+        OwnedSupportPreparation::bind_new(content.clone(), &schema, &rules, Default::default())
+            .unwrap();
+    assert_eq!(rebound.input(), original.input());
+    assert_eq!(rebound.identity(), original.identity());
+    assert!(matches!(
+        rebound.preparation_for(&other),
+        Some(SchemaState::Unmapped { .. })
+    ));
+    let mut present_empty = content.clone();
+    let row = present_empty
+        .supports
+        .iter_mut()
+        .find_map(|row| match &mut row.preparation {
+            SchemaState::Known(value) => Some(value),
+            _ => None,
+        })
+        .unwrap();
+    row.families = Some(vec![]);
+    assert_ne!(
+        OwnedSupportPreparation::bind_new(present_empty, &schema, &rules, Default::default())
+            .unwrap()
+            .identity(),
+        original.identity()
+    );
+    assert_eq!(original.into_authored_content(), content);
+}
+
+#[test]
+fn authored_preparation_binds_actual_dependencies_without_accepting_missing_facts() {
+    let (schema, rules, input) = fixture();
+    let original =
+        OwnedSupportPreparation::new(input, &schema, &rules, Default::default()).unwrap();
+    let content = original.clone().into_authored_content();
+    let mut extended = schema.input().clone();
+    extended
+        .definitions
+        .push(DefinitionDescriptor::Stat(DefinitionEntry {
+            id: id("appended"),
+            schema: SchemaState::Known(StatSchema {
+                value: ComputedValueType::Boolean,
+                targets: vec![RuleEntityKind::Skill],
+            }),
+        }));
+    let extended = OwnedDefinitionSchemaPackage::new(extended, Default::default()).unwrap();
+    assert!(matches!(
+        OwnedSupportPreparation::bind_new(content.clone(), &extended, &rules, Default::default()),
+        Err(SupportStorageError::Binding)
+    ));
+    let mut rule_input = rules.input().clone();
+    rule_input.definitions = extended.identity().clone();
+    let extended_rules = OwnedRulePackage::new(rule_input, &extended, Default::default()).unwrap();
+    let rebound = OwnedSupportPreparation::bind_new(
+        content.clone(),
+        &extended,
+        &extended_rules,
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(rebound.input().definitions, *extended.identity());
+    assert_eq!(rebound.input().rules, *extended_rules.identity());
+    assert_eq!(rebound.into_authored_content(), content);
+    let mut invalid = content.clone();
+    let SchemaState::Known(row) = &mut invalid.supports[0].preparation else {
+        panic!()
+    };
+    row.requires = Some(SupportTypePredicate::Type(key("undeclared")));
+    assert!(matches!(
+        OwnedSupportPreparation::bind_new(invalid, &extended, &extended_rules, Default::default()),
+        Err(SupportStorageError::Invalid(
+            "undeclared preparation symbol"
+        ))
+    ));
+    assert_eq!(original.into_authored_content(), content);
+}
+
+#[test]
+fn authored_preparation_keeps_strict_fields_and_recursive_limits() {
+    let (schema, rules, input) = fixture();
+    let original =
+        OwnedSupportPreparation::new(input, &schema, &rules, Default::default()).unwrap();
+    let content = original.clone().into_authored_content();
+    assert!(
+        serde_json::from_value::<SupportPreparationContent>(
+            serde_json::to_value(original.input()).unwrap()
+        )
+        .is_err()
+    );
+    for field in ["families", "plus_version_of", "requires", "excludes"] {
+        let mut value = serde_json::to_value(&content).unwrap();
+        value["supports"][0]["preparation"]["value"]
+            .as_object_mut()
+            .unwrap()
+            .remove(field);
+        assert!(
+            serde_json::from_value::<SupportPreparationContent>(value).is_err(),
+            "{field}"
+        );
+    }
+    let used = original.resources();
+    let exact = SupportStorageLimits {
+        max_entries: used.entries,
+        max_work: used.work,
+        max_predicate_depth: used.predicate_depth,
+        max_wire_bytes: encode_support_preparation(&original, Default::default())
+            .unwrap()
+            .len(),
+    };
+    assert_eq!(
+        OwnedSupportPreparation::bind_new(content.clone(), &schema, &rules, exact)
+            .unwrap()
+            .identity(),
+        original.identity()
+    );
+    for limits in [
+        SupportStorageLimits {
+            max_entries: exact.max_entries - 1,
+            ..exact
+        },
+        SupportStorageLimits {
+            max_work: exact.max_work - 1,
+            ..exact
+        },
+        SupportStorageLimits {
+            max_predicate_depth: exact.max_predicate_depth - 1,
+            ..exact
+        },
+        SupportStorageLimits {
+            max_wire_bytes: exact.max_wire_bytes - 1,
+            ..exact
+        },
+    ] {
+        assert!(
+            OwnedSupportPreparation::bind_new(content.clone(), &schema, &rules, limits).is_err()
+        );
+    }
+    assert_eq!(original.into_authored_content(), content);
+}

@@ -11,11 +11,21 @@ use poe_optimizer_core::{
     owned_rules::{PlayerEquipmentSlotRead, RuleEffectKind, RuleEntity, RuleReadSource},
     owned_schema::*,
     owned_stages::StageChannel,
+    owned_support_inputs::SupportTypeStat,
     owned_support_outputs::*,
 };
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 const DOMAIN: &str = "owned-support-output-bindings-v1";
+
+/// Authored final type channels without current dependency commitments.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SupportOutputBindingsContent {
+    pub release: OwnedDefinitionKey,
+    pub output_stage: OwnedDefinitionKey,
+    pub final_skill_types: Vec<SupportTypeStat>,
+}
 
 /// Exact immutable packages used to validate an output-binding artifact.
 pub struct SupportOutputDependencies<'a, I> {
@@ -276,6 +286,54 @@ pub struct OwnedSupportOutputBindings {
     resources: SupportOutputStorageUse,
 }
 impl OwnedSupportOutputBindings {
+    /// Consume the exact checked declarations without copying their payload.
+    pub fn into_authored_content(self) -> SupportOutputBindingsContent {
+        let SupportOutputBindingsInput {
+            schema_version: _,
+            namespace: _,
+            release,
+            definitions: _,
+            rules: _,
+            preparation: _,
+            inputs: _,
+            receiving: _,
+            stages: _,
+            output_stage,
+            final_skill_types,
+        } = self.input;
+        SupportOutputBindingsContent {
+            release,
+            output_stage,
+            final_skill_types,
+        }
+    }
+
+    /// Construct current commitments and run the sole ordinary validator.
+    /// Supplied sealed runtime artifacts must still use `new` without repair.
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: SupportOutputBindingsContent,
+        dependencies: &SupportOutputDependencies<'_, I>,
+        limits: SupportOutputStorageLimits,
+    ) -> Result<Self> {
+        Self::new(
+            SupportOutputBindingsInput {
+                schema_version: OWNED_SUPPORT_OUTPUT_BINDINGS_VERSION,
+                namespace: dependencies.definitions.namespace().clone(),
+                release: content.release,
+                definitions: dependencies.definitions.identity().clone(),
+                rules: *dependencies.rules.identity(),
+                preparation: *dependencies.preparation.identity(),
+                inputs: *dependencies.inputs.identity(),
+                receiving: *dependencies.receiving.identity(),
+                stages: *dependencies.stages.identity(),
+                output_stage: content.output_stage,
+                final_skill_types: content.final_skill_types,
+            },
+            dependencies,
+            limits,
+        )
+    }
+
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: SupportOutputBindingsInput,
         dependencies: &SupportOutputDependencies<'_, I>,
