@@ -620,7 +620,7 @@ retained only in Authoring's
 [`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz).
 Its historical receipt
 authenticates the archived bytes. Tests remove only the exact admitted 69-Stat,
-one-program and 341 support-domain additions, restore the archived program
+one-program and 349 support-domain additions, restore the archived program
 members, and reconstruct the original dependency bindings with maintained content
 constructors. The existing
 assembler then checks every historical artifact and provenance field. A separate
@@ -655,6 +655,10 @@ and supply relationships; the generated Skill and its Actor/output descendants
 are independently checked sources. Structural completeness in one facet cannot
 close another. Unparsed modifier text requires independently reviewed semantics,
 not an empty-list inference.
+Class-local certification includes the complete class record and its attribute
+and unarmed initialization boundaries. Referenced start nodes and Ascendancies
+retain their own authority, as do equipped weapons and foreign modifiers that
+replace unarmed values. A Class declaration cannot certify these related owners.
 
 This representation change adds no evaluation bundle or numerical coverage;
 0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust

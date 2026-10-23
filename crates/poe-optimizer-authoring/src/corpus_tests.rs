@@ -823,6 +823,28 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
             domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
         });
     }
+    // Class-local source domains cover all eight mapped classes. Their current
+    // attribute and unarmed programs remain Partial numerical coverage.
+    for suffix in [
+        "0a1e", "0a1f", "0a20", "0a21", "0a22", "0a23", "0a24", "0a25",
+    ] {
+        let subject = SchemaSubject::Definition(DefinitionAddress::Class(ClassDefId::new(
+            ns.clone(),
+            key(suffix),
+        )));
+        let mut matches = original
+            .owners
+            .iter()
+            .filter(|owner| owner.owner == subject);
+        let owner = matches.next().unwrap();
+        assert!(matches.next().is_none());
+        assert!(!owner.programs.is_complete());
+        assert_eq!(owner.programs.members.len(), 2);
+        expected_domains.push(SupportSourceDomainDeclaration {
+            owner: subject,
+            domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+        });
+    }
     let domains = &mut preserved.support_discovery.as_mut().unwrap().providers;
     let prior_domains = &expected.support_discovery.as_ref().unwrap().providers;
     assert_eq!(domains.len(), prior_domains.len() + expected_domains.len());

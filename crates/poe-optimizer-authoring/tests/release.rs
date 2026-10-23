@@ -7,6 +7,10 @@ mod attribute_support_domains;
 mod attribute_support_source;
 #[path = "release/checkpoint.rs"]
 mod checkpoint;
+#[path = "release/class_support_domains.rs"]
+mod class_support_domains;
+#[path = "release/class_support_source.rs"]
+mod class_support_source;
 #[path = "release/content_bindings.rs"]
 mod content_bindings;
 #[path = "release/declarations.rs"]
@@ -1715,7 +1719,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     let current_artifacts: BTreeMap<_, _> = release.artifacts().collect();
 
     // Historical IR remains a test reference only. Authenticate the exact new
-    // producer, 69 Boolean channels and 341 support-source domains before
+    // producer, 69 Boolean channels and 349 support-source domains before
     // reconstructing old commitments through maintained APIs.
     let retained = fs::read(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"),
@@ -1853,6 +1857,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         .chain(socket_support_domains::declarations())
         .chain(gigantic_support_domains::declarations())
         .chain(structural_support_domains::declarations())
+        .chain(class_support_domains::declarations())
         .collect();
     assert_eq!(domains.len(), prior_domains.len() + additions.len());
     for added in &additions {

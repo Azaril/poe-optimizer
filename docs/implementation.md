@@ -28,15 +28,16 @@ Boolean Skill Stats and one Sniper producer, retaining Partial coverage.
 Support-source checks now include declared potential outputs even when no Action
 is queried. Gem domain proof tests and exact saved-selection finalization are
 part of the maintained release harness; the replaced Gem publisher is removed.
-The existing metadata component now declares 341 additional intrinsic source
+The existing metadata component now declares 349 additional intrinsic source
 domains: eight Sniper/minion owners, the Ascendancy and two roots, four pure
 UsagePolicy projections, all 293 ordinary attribute-choice passives, eighteen
 reviewed numeric minion passives, seven class-dependent passives, one Socket,
-Gigantic and six structurally reviewed passive owners. Unchanged Original05 selects
+Gigantic, six structurally reviewed passive owners and all eight Classes.
+Unchanged Original05 selects
 22 of those attribute-choice nodes, all eighteen numeric minion nodes, three of
 the class/Socket/Gigantic owners and all six structural owners. Its selected
-passive source domains now cover 51 of 57 owners. Twelve numerical owners remain
-Partial; six of those still lack reviewed intrinsic support domains. No IDs or
+passive source domains now cover 51 of 57 owners. Twelve selected passive numerical
+owners remain Partial; six of those still lack reviewed intrinsic support domains. No IDs or
 numerical coverage are added.
 The root/ascendancy proof laws now run in the maintained release harness; their
 five replaced test/helper files and historical publishers are removed.
@@ -52,6 +53,8 @@ component laws now use the maintained harness, while its one whole-plan CLI law
 awaits actual current execution declarations.
 The six structural passive proofs now use the maintained release harness too;
 their two old targets and two exclusive helpers are removed after transfer.
+Class source and component laws now use the same maintained harness; the old
+Class publisher target is removed while its live acquisition callers remain.
 Continue independent harness retirement while completing the current release's
 execution declarations. Do not add a new provenance API
 for dormant support flags.
@@ -66,7 +69,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; current checkpoint adds six structurally reviewed passive domains without numerical closure |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; current checkpoint adds eight Class domains without numerical closure |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -74,9 +77,9 @@ silently become a second supported implementation.
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
-| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 69 Stats, one Sniper initial-type program and 341 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,327 source domains (1,298 Known, 29 Unmapped). Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
+| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 69 Stats, one Sniper initial-type program and 349 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,335 source domains (1,306 Known, 29 Unmapped). Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 19:11 UTC on October 23, `8b6cd0a4` run `40008281569` remained pending; it superseded the pending `45c9a1a6` run. Earlier `96e5533e` run `39962517895` had seventeen of eighteen created jobs passing and one running, with no failures; Windows CLI-1 remained in its two-profile test step. Windows CLI-2 completed successfully at 18:32 UTC; both PoB jobs and Windows CLI-0/3 had also passed. Baselines `a7069aa1` and `ae90ec82` completed all twenty jobs successfully. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
+| CI | At 19:48 UTC on October 23, `0658ac0f` run `40014288399` was pending behind running `d490eb54` run `40011474882`. Earlier `96e5533e` run `39962517895` completed successfully: its final Windows CLI-1 job passed both feature profiles at 19:37 UTC after 5h50m. No timeout or test failure occurred. Baselines `a7069aa1` and `ae90ec82` also passed. Main-branch serialization preserves the running revision and coalesces pending revisions; previous success does not certify newer commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First reproduce the allocation predecessor using the
@@ -87,14 +90,14 @@ Successful publication prints the checkpoint identity to
 stderr and checkpoint receipt JSON to stdout. Bootstrap reproduces the fixed first-allocation
 source revision only; later builds must preserve its ledger as a checked
 predecessor. Current runtime input identity:
-`a80d8f7c8b4fb5bec2f5913a6aa0e5d9a4ab4d40fafaa306a448a6c6b9308c4a`.
-The 2,787 declared source files use 5,789,393 encoded and 58,663,272 decoded
+`615c66506ee4421ab03b1eef95486d8fa532755846168bb7738cee3c97e8d26e`.
+The 2,787 declared source files use 5,789,428 encoded and 58,665,128 decoded
 bytes, within the existing 64 MiB bounds. The 183,544-byte root manifest and
 expanded rule bytes also fit current limits without increases.
 Metadata JSON remains temporary; gzip is not the compact runtime format.
 The CLI still reports the 80% decoded-size warning; compact-format work remains
 required before expanding content. The production command rebuilt the tracked
-source into `runs/structural-support-domains-successor-01` with the expected input identity,
+source into `runs/class-support-domains-successor-01` with the expected input identity,
 17 constituent artifacts and all 227 provenance rows.
 
 Historical input
@@ -102,7 +105,7 @@ Historical input
 and its receipt remain independent regression evidence. Original rule IR lives
 only in Authoring's `tests/fixtures/retained-rules.json.gz`, outside production
 inputs. Actual-source graph checks plus restoration of just historical program
-members, with only the exact 69-Stat/one-program/341-domain delta removed through
+members, with only the exact 69-Stat/one-program/349-domain delta removed through
 maintained content constructors, prove all historical metadata/provenance and artifact bytes
 are preserved. `runs/dsl-conversion-02/conversion-report.json` records local
 conversion evidence; no `runs/` file or one-off conversion tool is needed by a
@@ -616,6 +619,13 @@ Independent crate/test/build work can run in parallel with explicit file ownersh
 
 ### R0 — Make verification usable and establish a reproducible baseline
 
+Hosted timing follow-up: the successful October 23 Windows CLI-1 job took 5h50m,
+close to its six-hour job limit. Continue retiring repeated historical publication
+chains and inspect completed per-target timing before changing shard assignment.
+The current sorted partition shifts when targets disappear, so validate the
+resulting workload on both feature profiles; do not mask cost by removing checks
+or raising the timeout. This is R0 verification work, not a current test failure.
+
 **In progress.** Inventory test targets and live consumers; select the
 minimum retained semantic fixture set from the current release and all five raw
 originals. Remove implementation-source pins and replace them with behavioral
@@ -788,6 +798,19 @@ bounded decoding, external-format normalization and owned project construction.
 PoB extraction/reference tooling is optional. Remove Import -> legacy Engine
 coupling by replacing required parsing with owned import recipes, not by moving a
 complete Lua emulator into a permanently required compat crate.
+The October 23 caller audit rules out a blind allocator move: it mutates private
+snapshot bookkeeping and seven remaining Import compiler families allocate IDs.
+Full-release publication still has historical revision/migration consumers;
+recipe publication has more than twenty compiler callers. Retire those chains
+before moving their authority, and keep immutable runtime checking shared.
+The next bounded cleanup is checked-recipe reuse: Authoring compiles the final
+recipe for evaluation bindings, then full-release assembly compiles it again.
+Pass that exact checked handle through the same complete-release validation,
+preserving identity, aggregate bounds, Import and artifact checks. Prove identical
+publication/rejection behavior; this does not itself remove the Import dependency.
+Later extraction can isolate `owned_release/{source,import_content,recipe_source_content}`
+and `owned_release_evaluation/content` without exporting historical normalization
+repair helpers. This follows the accepted R1 design and adds no alternate assembler.
 Alongside the DSL work, parse external XML once through a bounded checked boundary
 and pass the parsed document to projections. Type item fields and split parsing
 stages. This parser cleanup is required by R4, but does not block R2 unless a
@@ -1910,9 +1933,9 @@ All nine protected incoming-critical files retain their recorded hashes.
 Socket evidence remains shared with Mana-radius work, and Gigantic with Sniper
 item attack. No local generated output is a required CI input.
 
-**Structural passive source-domain checkpoint:** six existing owners
+**Structural passive source-domain checkpoint (`0658ac0f`):** six existing owners
 now have intrinsic declarations: `13289/0b34`, `19318/0d0f`, `32705/10d4`,
-`35560/11c2`, `45333/14d8`, `62210/19ec`. This brings the current inventory to
+`35560/11c2`, `45333/14d8`, `62210/19ec`. This brought that checkpoint's inventory to
 1,327 domains (1,298 Known, 29 Unmapped), including 51 of Original05's 57 selected
 passive owners. The historical checker proved direct structural inventories;
 the maintained tests add the required independent source-domain proof through
@@ -1985,22 +2008,61 @@ useful laws have moved to the maintained harness.
 Reward-domain proof/replay transfer is another R4 candidate; retain its generic
 complete-numeric admission and missing/restored/Unmapped receiving controls.
 
-**Next coherent tranche: all eight Class definitions `0a1e`–`0a25`, including
+**Class source-domain checkpoint: all eight Class definitions `0a1e`–`0a25`, including
 Original05's Sorceress `0a23`.** Full authority already exists in retained tree
 JSON/Lua, `PassiveTree.lua:59–446`, `Data.lua:626–636`, `Misc.lua:159` and
-`CalcSetup.lua:827–835,1852–1886`. Authenticate all class rows, exclude source-zero
-Scion explicitly, separate start-node ownership and external Hollow Palm/Facebreaker
-modifiers, and preserve the sixteen current programs, Count channels and numerical
-Partial status. Transfer useful old Class publisher laws before retiring it.
+`CalcSetup.lua:827–835,1852–1886`. Four maintained source tests authenticate all
+class rows and nested fields, explicitly exclude source-zero Scion, and separate
+start-node ownership and external Hollow Palm/Facebreaker modifiers. Four release
+tests preserve the sixteen programs, Count channels and numerical Partial status;
+they execute all 48 attribute contributions and 32 unarmed effects with fresh and
+reused scratch, and check all five originals' Class resolutions. Complete source
+evidence reuses eight full archives and five semantic artifacts. No Lua evaluator
+or parser is added. The exclusive old Class publisher target is deleted; remaining
+intrinsic acquisition callers and generic Import/Host checks retain their laws.
+The eight declarations preserve all existing programs and add no names. Current
+source domains total 1,335 (1,306 Known, 29 Unmapped); selected passive coverage
+remains 51/57. Local atomic publication produces checkpoint
+`f2924e826fc1fe66b4f91f9d7db4684011fb6a8f8471c7b13ab67fb53a1f00a2`.
+Checked predecessor replay produces
+`690df6e32a7157e787fbb803573e7c578e24c505bef06af330fc715512141d85`
+with all eighteen runtime files identical. Names, schema and registry still match
+the fixed genesis. Publication logs are
+`runs/class-support-domains-successor.log` and
+`runs/class-support-domains-reload.log`.
+All **324 affected Authoring/Host checks pass**: 166 library, eight CLI, 139
+maintained-release and eleven Host tests, with no ignored cases. The optimized
+rebuild took 4m28s; release execution took 18.53s. The first sandboxed run passed
+315 checks, including all eight new Class tests, but Windows denied atomic rename
+operations in nine existing publication tests. The two affected suites passed
+with filesystem access enabled; no production repair or test relaxation was needed.
+Logs: `runs/class-support-domains-tests.log`,
+`runs/class-support-domains-release-final.log`,
+`runs/class-support-domains-host-final.log` and
+`runs/class-support-domains-clippy-final.log`. Strict all-target Clippy, scoped
+formatting, diff checks and eleven UTF-8 file checks pass. All nine protected
+incoming-critical hashes remain unchanged. Complete builds remain 0/5, selected
+input obligations remain five, and selected passive source coverage remains 51/57.
 
-Shared Player Actor `332a` and Encounter `31d1` need independent full-constructor
-proofs; current Partial numerical programs cannot prove source absence. Shared
-Actor proof must authenticate `CalcSetup.lua:26–114,829–899` and distinguish
-foreign config/party/cache merges, items, tree and selected-skill contributions.
-Archive the pinned full `src/Classes/ModStore.lua` and `src/Modules/ModTools.lua`
-for their generic NewMod/createMod wrappers; this is a clean-clone proof-artifact
-gap, not missing mechanics. Preserve Level/config obligations and do not use the
-UI's empty-support melee fallback to invent native coverage. Encounter
+**Next source tranche: shared Player Actor `332a`.** Authenticate the complete
+`CalcSetup.lua:26–114,829–899` initializers and full environment constructor,
+distinguishing foreign config/party/cache merges, items, tree and selected skills.
+The reviewed intrinsic constructors create numeric/Boolean modifiers, not support
+origins. Preserve all nine current programs and Partial coverage. Existing
+`configuration-distance-inputs/ModStore.lua.gz` authenticates NewMod; archive only
+the missing full `src/Modules/ModTools.lua` createMod wrapper. Its verified upstream
+LF bytes are 9,130 with SHA-256
+`1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246`;
+the Windows vendor checkout has CRLF and must not be archived without verification.
+This is an evidence-artifact gap, not missing mechanics. Preserve Level/config
+obligations and do not use the UI's empty-support melee fallback as native coverage.
+Transfer the old Player ownership target's one ordinary source law and four
+ignored native laws (all-class one-Player ownership, original values, refusal and
+fresh/reused/Rayon determinism) before deleting its exclusive helper. These laws
+may need real execution declarations; a source declaration alone does not replace them.
+
+Encounter `31d1` remains a separate blocker. Its current Partial numerical
+programs cannot prove source absence. Encounter
 certification must account for custom
 modifier text: `ConfigTab.lua:1201–1241` and `CalcSetup.lua:908` can introduce
 parsed ExtraSupport/LinkedSupport sources. Do not certify all configuration from

@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "scope": "Eight complete Class source records and their intrinsic base attributes/unarmed table. Ascendancy/root, shared Actor initialization, equipment, configuration, passive and skill suppliers remain independent; no numerical or composed-build closure.",
+  "files": [
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "archive": "data/owned/poe2/3887ae68/empty-passive-socket-intrinsics/tree.lua.gz",
+      "archive_bytes": 388551,
+      "archive_sha256": "150e3945838287aa50ada2f2ef998fb50c84471b38a5e4f17e4eb06b34553acb",
+      "bytes": 2620112,
+      "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.json",
+      "archive": "data/owned/poe2/3887ae68/passive-structural-inventories/sources/src_TreeData_0_5_tree.json.gz",
+      "archive_bytes": 339380,
+      "archive_sha256": "58cf71ca3225802aac41fe04cb15df1ba66eb9afbff722adbf7495bcec0f3af5",
+      "bytes": 2049036,
+      "sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95"
+    },
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "archive": "data/owned/poe2/3887ae68/passive-structural-inventories/sources/src_Classes_PassiveTree.lua.gz",
+      "archive_bytes": 8179,
+      "archive_sha256": "f772cd60df379afff18e8f2a1003b426b39f7c774851bf89f75e5e0a9078706f",
+      "bytes": 31232,
+      "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "archive": "data/owned/poe2/3887ae68/passive-structural-inventories/sources/src_Classes_PassiveSpec.lua.gz",
+      "archive_bytes": 22792,
+      "archive_sha256": "8b797c17e938efbf73b95f0a57ea197e81be37510b54a04ea25d8a400612c55e",
+      "bytes": 95117,
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_Data.lua.gz",
+      "archive_bytes": 10604,
+      "archive_sha256": "73c2915afcc9bb90d972cd99d6aa690812ca8c2a1edd31eda7b67bd47a322af8",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Misc.lua.gz",
+      "archive_bytes": 8259,
+      "archive_sha256": "bdc486e956dfde075166d88c612d2c527df2543567ae39da56e7f48090ec50c1",
+      "bytes": 24010,
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_CalcSetup.lua.gz",
+      "archive_bytes": 21399,
+      "archive_sha256": "cdefa2fbbb4a15befdc728fd549902f4032c1cdf0b52c3070dc356f0a45e718f",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_ModParser.lua.gz",
+      "archive_bytes": 105049,
+      "archive_sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    }
+  ],
+  "spans": [
+    {
+      "role": "classes-literal",
+      "path": "src/TreeData/0_5/tree.lua",
+      "first": 274,
+      "last": 776,
+      "sha256": "30a0929e9d55f3ce81586546c4766fda5b667f62762f21a5ac9ec72636df269a"
+    },
+    {
+      "role": "tree-constructor",
+      "path": "src/Classes/PassiveTree.lua",
+      "first": 59,
+      "last": 446,
+      "sha256": "866e8425cc3761339524a84b4e154ad602e47a484c48fa2091d52944b5f3d4ef"
+    },
+    {
+      "role": "select-class",
+      "path": "src/Classes/PassiveSpec.lua",
+      "first": 655,
+      "last": 678,
+      "sha256": "feba96b8dc5ee9269f83d3533d9766a21d3278cd1932781c3fc035459425e523"
+    },
+    {
+      "role": "misc-data-import",
+      "path": "src/Modules/Data.lua",
+      "first": 112,
+      "last": 118,
+      "sha256": "2572927df62b60bb4f982cc19e1d76c8b1f530662934d80124bc643e212d87a5"
+    },
+    {
+      "role": "unarmed-table",
+      "path": "src/Modules/Data.lua",
+      "first": 626,
+      "last": 636,
+      "sha256": "5e53c6f5bad2bf66c1d0f88d7a4caff065cb22a5cada08d9dd025bfcbde83e34"
+    },
+    {
+      "role": "character-constants",
+      "path": "src/Data/Misc.lua",
+      "first": 144,
+      "last": 245,
+      "sha256": "db3765d338d45f70713aa654be1a853b8d0115dc0953c1144d7ba979c487280e"
+    },
+    {
+      "role": "environment-constructor",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 717,
+      "last": 2309,
+      "sha256": "37675e19acc72f0d62b67987ea4445a1250d312c09b1f2d1bdba43bede02e9c8"
+    },
+    {
+      "role": "class-attribute-dispatch",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 827,
+      "last": 835,
+      "sha256": "cb2017002659c3c24180d643109895885467b74d7d52427a2a3b7e9603684dfd"
+    },
+    {
+      "role": "foreign-configuration-and-cache",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 908,
+      "last": 919,
+      "sha256": "8b7dd4e75c82bd6853c4c61ba1bba315243cbde9dd2031f8d69e0fcff1e4b398"
+    },
+    {
+      "role": "foreign-item-merge",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1604,
+      "last": 1605,
+      "sha256": "eae00e8f290344721aeb58a620db9361e023fd3ecc59911e9fddb363c9dcf20e"
+    },
+    {
+      "role": "foreign-tree-merge",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1635,
+      "last": 1638,
+      "sha256": "dbef23429515d44088bbde2120d144c62b7700aacd5abaf95bbc335741f3cad4"
+    },
+    {
+      "role": "unarmed-and-foreign-weapons",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1852,
+      "last": 1886,
+      "sha256": "f07347b080249c6c04eb47316a27651d91dced9e496c96f202a9c4883dba4a4d"
+    },
+    {
+      "role": "external-support-consumers",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1898,
+      "last": 1955,
+      "sha256": "18a242a2d62003772332eefa421c249d288b5781efbe72bdfe8a684c794ddeaa"
+    },
+    {
+      "role": "linked-support-consumers",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 2078,
+      "last": 2097,
+      "sha256": "7a0e92a50256cb587b81b9df1de4dc7142a91ed6bf7fb85ace96e4f3827066f7"
+    },
+    {
+      "role": "extra-support-contrast",
+      "path": "src/Modules/ModParser.lua",
+      "first": 2219,
+      "last": 2253,
+      "sha256": "11ede92472d7dec6e85b0af4ff9c52a1da07d1a204a7d7e8339221d43872b962"
+    },
+    {
+      "role": "linked-support-contrast",
+      "path": "src/Modules/ModParser.lua",
+      "first": 3650,
+      "last": 3659,
+      "sha256": "4285cfd4639797c208b9d0872bc9324aefd23eefda1bf1b5332767f8b6f0893b"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/current/mapping.json",
+      "bytes": 3165465,
+      "sha256": "3b627b9e7195ba18a44f83a73aff8fbffc238162ccfc273992fc129179cdb1a4"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/class-bases/policy.json",
+      "bytes": 985,
+      "sha256": "67d071f9966fd418e6cd4d14d68393b7573c92c04917ed58f4e8884b7f249afe"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/intrinsic-attack/catalog.json",
+      "bytes": 2235,
+      "sha256": "e1a7fd72a1a764cf9d5cde523abb697f2184143bea19b85495f29bb7ecbc3371"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/intrinsic-attack/policy.json",
+      "bytes": 1962,
+      "sha256": "0e8c34270b25a5b58285789474a0eef7e0f6e98dae77e12ed5b36a89f25ac1c2"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/attribute-stages/count-bindings.json",
+      "bytes": 3100,
+      "sha256": "4b6501509beebe49e0da197f657f57df4ac86341e1f7f04e84a87990c9e7bc71"
+    }
+  ]
+}
