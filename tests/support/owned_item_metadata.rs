@@ -1,24 +1,14 @@
 //! Inert source metadata improves admission without adding owned gameplay facts.
 use super::support::{bundle, data, json, normalize, success};
 use poe_optimizer_core::{
-    build_identity::BuildLineage,
-    owned_build::ParameterValue,
     owned_content::digest_owned,
     owned_draft::{
         DraftAllocationAccess, DraftField, DraftLimits, DraftListCompletion, decode_draft,
     },
-    owned_schema::SchemaClosure,
 };
 use poe_optimizer_import::{
-    build_instance::ImportedBuildInstance,
-    decode_build,
     owned_item_lines::{ConvertedItemEmission, ItemLineOutcome, OwnedItemLinePolicy},
-    owned_item_source::{
-        ItemLayoutStatus, ItemRangeAttribution, ItemRangeDecision, ItemSourceDialect,
-        ItemSourceLayoutPolicy, ItemSourceProblem,
-    },
     owned_recipe::{OwnedRecipeInput, assemble_owned_recipe},
-    owned_source::SourceProjectEvidence,
 };
 use serde_json::Value;
 use std::{
@@ -71,37 +61,6 @@ fn equal_bundle(actual: &BTreeMap<String, Vec<u8>>, expected: &BTreeMap<String, 
             "bundle file changed: {name}"
         );
     }
-}
-fn attribute(
-    text: &str,
-    source: &ItemSourceLayoutPolicy,
-    lines: &OwnedItemLinePolicy,
-) -> ItemRangeAttribution {
-    let escaped = text
-        .replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;");
-    let xml = format!(
-        "<PathOfBuilding2><Items><Item id=\"7\">{escaped}</Item></Items></PathOfBuilding2>"
-    );
-    let imported = ImportedBuildInstance::from_decoded(
-        decode_build(xml.as_bytes()).unwrap(),
-        BuildLineage::from_bytes([95; 16]),
-        Default::default(),
-    )
-    .unwrap();
-    let evidence = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
-    let row = evidence
-        .rows()
-        .iter()
-        .find(|r| r.occurrence().name() == "Item")
-        .unwrap();
-    source
-        .attribute(&evidence, row.occurrence().id(), lines)
-        .unwrap()
-}
-fn item(headers: &str, body: &str) -> String {
-    format!("Rarity: RARE\nMetadata Fixture\nGrand Spear\n{headers}Implicits: 0\n{body}")
 }
 fn metadata_only(outcome: &ItemLineOutcome) {
     let ItemLineOutcome::Known { rule, emissions } = outcome else {
@@ -184,168 +143,6 @@ fn check_policy_change(prior: &Path, output: &Path) {
         "metadata publication changed unrelated source policy"
     );
 }
-fn check_preamble_cases(output: &Path) {
-    let checked = assemble_owned_recipe(recipe(output), Default::default()).unwrap();
-    let lines = OwnedItemLinePolicy::new(
-        serde_json::from_value(json(output.join("items.json"))).unwrap(),
-        checked.schema(),
-        Default::default(),
-    )
-    .unwrap();
-    let source = ItemSourceLayoutPolicy::new(
-        serde_json::from_value(json(output.join("item-source.json"))).unwrap(),
-        &lines,
-        checked.schema(),
-        Default::default(),
-    )
-    .unwrap();
-    let body = "{tags:physical,damage}{range:0.5}(10-14)% increased Physical Damage";
-    let baseline = attribute(&item("", body), &source, &lines);
-    let baseline_values = baseline.convert(&lines).unwrap();
-    for headers in [
-        "Unique ID: abc-123\n",
-        "Unique ID: alpha\nUnique ID: beta\n",
-        "Unique ID: {range:0.1}{tags:physical}{rune}\n",
-    ] {
-        let attributed = attribute(&item(headers, body), &source, &lines);
-        assert!(
-            matches!(attributed.report().layout, ItemLayoutStatus::Proven),
-            "metadata preamble: {:?}",
-            attributed.report().layout
-        );
-        assert_eq!(
-            attributed.report().writes.len(),
-            baseline.report().writes.len()
-        );
-        let converted = attributed.convert(&lines).unwrap();
-        assert!(
-            converted.parameters.is_empty(),
-            "metadata cannot emit item parameters"
-        );
-        assert_eq!(
-            converted.defaults.parameters,
-            baseline_values.defaults.parameters
-        );
-        assert_eq!(converted.modifiers.len(), 1);
-        assert_eq!(
-            converted.modifiers[0].rolls,
-            baseline_values.modifiers[0].rolls
-        );
-        assert!(matches!(
-            converted.modifiers[0].rolls_closure,
-            SchemaClosure::Partial { .. }
-        ));
-        assert!(
-            converted.modifiers[0]
-                .rolls
-                .iter()
-                .any(|r| matches!(&r.value, ParameterValue::Quantity(q) if q.value() == 12.0))
-        );
-        for row in attributed
-            .report()
-            .lines
-            .iter()
-            .filter(|l| l.raw.starts_with("Unique ID: "))
-        {
-            assert!(row.member.is_none() && row.blockers.is_empty());
-            assert_eq!(row.semantic_text, row.raw);
-            assert!(
-                row.properties.is_empty()
-                    && row.property_tokens.is_empty()
-                    && row.flag_tokens.is_empty()
-            );
-            assert!(matches!(row.range, ItemRangeDecision::Absent));
-            metadata_only(
-                &converted
-                    .lines
-                    .iter()
-                    .find(|l| l.index == row.index)
-                    .unwrap()
-                    .outcome,
-            );
-            assert!(!converted.modifiers.iter().any(|m| m.line == row.index));
-            assert!(!converted.parameters.iter().any(|p| p.line == row.index));
-        }
-    }
-    for raw in [
-        format!(
-            "Rarity: RARE\nMetadata Fixture\nUnique ID: too-early\nGrand Spear\nImplicits: 0\n{body}"
-        ),
-        item("", "17% increased Physical Damage\nUnique ID: too-late"),
-        item("Unique ID: \n", body),
-        item("Unknown Header: inert-looking\n", body),
-    ] {
-        let attributed = attribute(&raw, &source, &lines);
-        assert!(!matches!(
-            attributed.report().layout,
-            ItemLayoutStatus::Proven
-        ));
-        assert!(
-            attributed
-                .convert(&lines)
-                .unwrap()
-                .defaults
-                .parameters
-                .is_empty()
-        );
-    }
-    for value in [
-        "prefix {variant:1} suffix",
-        "{version:1}",
-        "{group:1}",
-        "prefix Foil Unique suffix",
-        "[text]",
-        "<text>",
-    ] {
-        let attributed = attribute(
-            &item(&format!("Unique ID: {value}\n"), body),
-            &source,
-            &lines,
-        );
-        assert!(
-            matches!(attributed.report().layout, ItemLayoutStatus::Unsupported(ref p) if p.contains(&ItemSourceProblem::UnsupportedSourceControl)),
-            "control must be unsupported: {value}"
-        );
-        assert!(attributed.report().lines.iter().any(|l| {
-            l.raw.starts_with("Unique ID: ")
-                && l.blockers
-                    .contains(&ItemSourceProblem::UnsupportedSourceControl)
-        }));
-        let converted = attributed.convert(&lines).unwrap();
-        assert!(
-            converted.modifiers.is_empty()
-                && converted.parameters.is_empty()
-                && converted.defaults.parameters.is_empty()
-        );
-    }
-    // Even the same metadata-only recipe needs an explicitly versioned source
-    // admission declaration; the old v4 dialect does not gain this behavior.
-    let mut old_input = source.input().clone();
-    let ItemSourceDialect::PobExportedSingleTextPreambleV1 { flag_bindings, .. } =
-        old_input.dialect
-    else {
-        panic!("new preamble dialect")
-    };
-    old_input.schema_version = 4;
-    old_input.dialect = ItemSourceDialect::PobExportedSingleTextFlagsV1 { flag_bindings };
-    let old = ItemSourceLayoutPolicy::new(old_input, &lines, checked.schema(), Default::default())
-        .unwrap();
-    let attributed = attribute(&item("Unique ID: abc-123\n", body), &old, &lines);
-    assert!(!matches!(
-        attributed.report().layout,
-        ItemLayoutStatus::Proven
-    ));
-    assert!(
-        attributed
-            .report()
-            .lines
-            .iter()
-            .any(|l| l.raw.starts_with("Unique ID: ")
-                && l.blockers.contains(&ItemSourceProblem::UnknownHeader))
-    );
-    assert!(attributed.convert(&lines).unwrap().modifiers.is_empty());
-}
-
 type Admission = (u64, u64, usize);
 fn admitted(sidecar: &Value) -> BTreeSet<Admission> {
     sidecar["item_texts"]
@@ -636,7 +433,6 @@ pub fn check_item_metadata(cwd: &Path, prior: &Path) -> PathBuf {
     assert!(json(output.join("items.json")) == json(&items));
     assert!(json(output.join("item-source.json")) == json(&source));
     check_policy_change(prior, &output);
-    check_preamble_cases(&output);
     assert!(
         !publish(cwd, prior, &authored, &items, &source, &output)
             .status

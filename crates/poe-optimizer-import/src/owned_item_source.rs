@@ -56,6 +56,20 @@ pub struct ItemSourceLayoutPolicyInput {
     pub rule_layouts: Vec<ItemRuleSourceLayout>,
     pub template_layouts: Vec<ItemTemplateSourceLayout>,
 }
+
+/// Current authored attribution declarations. The item-line dependency is
+/// supplied separately as checked storage; source provenance remains explicit.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemSourceLayoutContent {
+    pub version: OwnedDefinitionKey,
+    pub source: SourcePin,
+    pub dialect: ItemSourceDialect,
+    pub property_bindings: Vec<ItemSourcePropertyBinding>,
+    pub template_defaults: Vec<ItemSourceTemplateDefaults>,
+    pub rule_layouts: Vec<ItemRuleSourceLayout>,
+    pub template_layouts: Vec<ItemTemplateSourceLayout>,
+}
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemSourceTemplateDefaults {
@@ -459,6 +473,50 @@ pub struct ItemSourceLayoutPolicy {
     categories: categories::PreparedCategories,
 }
 impl ItemSourceLayoutPolicy {
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: ItemSourceLayoutContent,
+        lines: &OwnedItemLinePolicy,
+        schema: &I,
+        limits: ItemSourceLimits,
+    ) -> Result<Self> {
+        Self::new(
+            ItemSourceLayoutPolicyInput {
+                schema_version: OWNED_ITEM_SOURCE_CATEGORY_POLICY_VERSION,
+                namespace: schema.namespace().clone(),
+                version: content.version,
+                source: content.source,
+                item_lines: *lines.identity(),
+                dialect: content.dialect,
+                property_bindings: content.property_bindings,
+                template_defaults: content.template_defaults,
+                rule_layouts: content.rule_layouts,
+                template_layouts: content.template_layouts,
+            },
+            lines,
+            schema,
+            limits,
+        )
+    }
+
+    /// Move current declarations out of checked storage. No older dialect is
+    /// upgraded implicitly and no supplied dependency commitment is repaired.
+    pub fn into_authored_content(self) -> Result<ItemSourceLayoutContent> {
+        if self.input.schema_version != OWNED_ITEM_SOURCE_CATEGORY_POLICY_VERSION {
+            return Err(ItemSourceError::UnsupportedVersion(
+                self.input.schema_version,
+            ));
+        }
+        Ok(ItemSourceLayoutContent {
+            version: self.input.version,
+            source: self.input.source,
+            dialect: self.input.dialect,
+            property_bindings: self.input.property_bindings,
+            template_defaults: self.input.template_defaults,
+            rule_layouts: self.input.rule_layouts,
+            template_layouts: self.input.template_layouts,
+        })
+    }
+
     pub fn new<I: DefinitionSchemaIndex>(
         input: ItemSourceLayoutPolicyInput,
         lines: &OwnedItemLinePolicy,

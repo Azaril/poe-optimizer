@@ -228,6 +228,195 @@ fn role_input(
 }
 
 #[test]
+fn authored_role_content_rebinds_without_changing_historical_provenance_or_coverage() {
+    let compiled = compile(data(), AbsentSupportPolicy::Pending);
+    let (schema, mappings, input) = assemble(&compiled);
+    let roles = OwnedSkillRoleIndex::new(input, &mappings, &schema, limits()).unwrap();
+    let content = roles.clone().into_authored_content();
+    assert!(
+        content
+            .roles
+            .iter()
+            .any(|row| matches!(row.role, OwnedGemRole::Unmapped { .. }))
+    );
+    assert!(
+        serde_json::from_value::<SkillRoleContent>(serde_json::to_value(roles.input()).unwrap())
+            .is_err()
+    );
+    let rebound =
+        OwnedSkillRoleIndex::bind_new(content.clone(), &mappings, &schema, limits()).unwrap();
+    assert_eq!(rebound.input(), roles.input());
+    assert_eq!(rebound.identity(), roles.identity());
+
+    let original_registry = compiled.registry.input().clone();
+    let original_schema = schema.input().clone();
+    let original_mapping = mappings.input().clone();
+    let mut extended_registry = compiled.registry.clone();
+    let stat: StatDefId = extended_registry.allocate_definition().unwrap();
+    compiled
+        .registry
+        .validate_successor(&extended_registry)
+        .unwrap();
+    let mut schema_input = original_schema.clone();
+    schema_input
+        .definitions
+        .push(DefinitionDescriptor::Stat(DefinitionEntry {
+            id: stat,
+            schema: SchemaState::Known(StatSchema {
+                value: ComputedValueType::Boolean,
+                targets: vec![RuleEntityKind::Skill],
+            }),
+        }));
+    let extended_schema =
+        OwnedDefinitionSchemaPackage::new(schema_input, OwnedSchemaLimits::default()).unwrap();
+    let extended_mapping = OwnedMappingIndex::bind_new(
+        mappings.clone().into_authored_content(),
+        &extended_registry,
+        &extended_schema,
+        limits().mapping,
+    )
+    .unwrap();
+    let rebound = OwnedSkillRoleIndex::bind_new(
+        content.clone(),
+        &extended_mapping,
+        &extended_schema,
+        limits(),
+    )
+    .unwrap();
+    assert_eq!(&rebound.input().definitions, extended_schema.identity());
+    assert_eq!(&rebound.input().mapping, extended_mapping.identity());
+    assert_ne!(rebound.identity(), roles.identity());
+    assert_eq!(rebound.input().compilation, roles.input().compilation);
+    assert_ne!(
+        rebound.input().compilation.staged_registry,
+        extended_registry.identity().unwrap()
+    );
+    assert_eq!(rebound.into_authored_content(), content);
+    assert!(matches!(
+        OwnedSkillRoleIndex::new(
+            roles.input().clone(),
+            &extended_mapping,
+            &extended_schema,
+            limits()
+        ),
+        Err(SkillCatalogError::BindingMismatch)
+    ));
+    assert_eq!(compiled.registry.input(), &original_registry);
+    assert_eq!(schema.input(), &original_schema);
+    assert_eq!(mappings.input(), &original_mapping);
+}
+
+#[test]
+fn authored_role_binding_rechecks_provenance_and_exact_membership() {
+    let compiled = compile(data(), AbsentSupportPolicy::Pending);
+    let (schema, mappings, input) = assemble(&compiled);
+    let roles = OwnedSkillRoleIndex::new(input, &mappings, &schema, limits()).unwrap();
+    let content = roles.clone().into_authored_content();
+    let mut bad_pin = content.clone();
+    bad_pin.compilation.source.files[0].sha256 = "b".repeat(64);
+    assert!(matches!(
+        OwnedSkillRoleIndex::bind_new(bad_pin, &mappings, &schema, limits()),
+        Err(SkillCatalogError::BindingMismatch)
+    ));
+    let mut bad_primary = content.clone();
+    bad_primary.roles[0].primary =
+        OwnedPrimarySkill::Known(SkillDefId::parse(ns(), "def.0000000000000999").unwrap());
+    assert!(matches!(
+        OwnedSkillRoleIndex::bind_new(bad_primary, &mappings, &schema, limits()),
+        Err(SkillCatalogError::UnknownTarget)
+    ));
+    let mut duplicate = content.clone();
+    duplicate.roles[1] = duplicate.roles[0].clone();
+    assert!(matches!(
+        OwnedSkillRoleIndex::bind_new(duplicate, &mappings, &schema, limits()),
+        Err(SkillCatalogError::DuplicateRole)
+    ));
+    let missing_gem = content.roles[0].gem.clone();
+    let mut mapping_content = mappings.clone().into_authored_content();
+    mapping_content.entries.retain(|entry| !matches!(&entry.outcome, MappingOutcome::Mapped { target: SchemaSubject::Definition(DefinitionAddress::Gem(gem)), .. } if *gem == missing_gem));
+    let missing_mapping = OwnedMappingIndex::bind_new(
+        mapping_content,
+        &compiled.registry,
+        &schema,
+        limits().mapping,
+    )
+    .unwrap();
+    assert!(matches!(
+        OwnedSkillRoleIndex::bind_new(content.clone(), &missing_mapping, &schema, limits()),
+        Err(SkillCatalogError::UnknownTarget)
+    ));
+    assert_eq!(roles.into_authored_content(), content);
+}
+
+#[test]
+fn authored_role_binding_honors_wire_and_work_limits_without_mutating_dependencies() {
+    let compiled = compile(data(), AbsentSupportPolicy::Pending);
+    let (schema, mappings, input) = assemble(&compiled);
+    let roles = OwnedSkillRoleIndex::new(input, &mappings, &schema, limits()).unwrap();
+    let content = roles.clone().into_authored_content();
+    let original_schema = schema.input().clone();
+    let original_mapping = mappings.input().clone();
+    let wire_bytes = serde_json::to_vec(roles.input()).unwrap().len();
+    assert!(
+        encode_mapping_package(&mappings, limits().mapping)
+            .unwrap()
+            .len()
+            < wire_bytes
+    );
+    let exact = SkillCatalogLimits {
+        mapping: OwnedMappingLimits {
+            max_wire_bytes: wire_bytes,
+            ..limits().mapping
+        },
+    };
+    assert_eq!(
+        OwnedSkillRoleIndex::bind_new(content.clone(), &mappings, &schema, exact)
+            .unwrap()
+            .identity(),
+        roles.identity()
+    );
+    let short = SkillCatalogLimits {
+        mapping: OwnedMappingLimits {
+            max_wire_bytes: wire_bytes - 1,
+            ..limits().mapping
+        },
+    };
+    assert!(matches!(
+        OwnedSkillRoleIndex::bind_new(content.clone(), &mappings, &schema, short),
+        Err(SkillCatalogError::Digest(
+            poe_optimizer_core::owned_content::ContentDigestError::TooLarge { .. }
+        ))
+    ));
+    let tight = SkillCatalogLimits {
+        mapping: OwnedMappingLimits {
+            max_entries: 5,
+            ..limits().mapping
+        },
+    };
+    mappings.validate_limits(tight.mapping).unwrap();
+    assert!(matches!(
+        OwnedSkillRoleIndex::bind_new(content.clone(), &mappings, &schema, tight),
+        Err(SkillCatalogError::LimitExceeded(_))
+    ));
+    let invalid = SkillCatalogLimits {
+        mapping: OwnedMappingLimits {
+            max_entries: 0,
+            ..limits().mapping
+        },
+    };
+    assert!(matches!(
+        OwnedSkillRoleIndex::bind_new(content.clone(), &mappings, &schema, invalid),
+        Err(SkillCatalogError::Mapping(OwnedMappingError::Invalid {
+            kind: OwnedMappingErrorKind::InvalidLimit,
+            ..
+        }))
+    ));
+    assert_eq!(roles.into_authored_content(), content);
+    assert_eq!(schema.input(), &original_schema);
+    assert_eq!(mappings.input(), &original_mapping);
+}
+
+#[test]
 fn exact_identity_and_roles_bind_without_claiming_complete_input_schema() {
     let compiled = compile(data(), AbsentSupportPolicy::NonSupport);
     assert_eq!(compiled.definitions.len(), 4);

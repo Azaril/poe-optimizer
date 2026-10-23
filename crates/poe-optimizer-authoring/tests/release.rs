@@ -1,6 +1,8 @@
 //! Final constituent composition uses the existing release and Engine checks.
 #[path = "release/arithmetic.rs"]
 mod arithmetic;
+#[path = "release/content_bindings.rs"]
+mod content_bindings;
 #[path = "release/defence_components.rs"]
 mod defence_components;
 #[allow(dead_code, unused_imports)]
@@ -8,6 +10,8 @@ mod defence_components;
 mod engine_fixtures;
 #[path = "../../../tests/support/owned_evaluation_release_fixture.rs"]
 mod fixture;
+#[path = "release/item_metadata.rs"]
+mod item_metadata;
 #[path = "release/local_scaling.rs"]
 mod local_scaling;
 #[path = "release/originals.rs"]

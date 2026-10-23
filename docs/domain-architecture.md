@@ -362,6 +362,25 @@ supplies their programs. Complete rule and evaluation-artifact validation theref
 remains mandatory at final assembly. Constructing new dependencies after declaration
 allocation remains a separate compiler responsibility, not runtime repair.
 
+Mapping, skill-role, reward, item-line and item-source packages now expose explicit
+authored content without runtime dependency seals. Their `bind_new` constructors
+derive those seals from the actual checked dependencies and delegate to the same
+semantic validators used by runtime loading. Source pins and historical compiler
+receipts remain content/provenance; rebinding does not rewrite them. Consuming
+`into_authored_content` extraction moves declarations out of checked storage
+without another clone. Current item construction rejects implicit upgrades from
+older numerical or attribution contracts. Raw sealed runtime artifacts are not
+accepted as authored content and remain subject to strict binding validation.
+
+This is a component construction seam. Normalization's nested commitments and
+evaluation content still require owner-local construction before the maintained
+release compiler can publish a declaration append. Neither component success nor
+source-prefix validation certifies complete release execution or coverage.
+Aggregate evaluation preflight accounts for readiness, receiving preparation,
+source properties and their nested lists before digesting or cloning. Partial gap
+lists are bounded even when later semantic validation rejects them; generated and
+summoner source paths retain independent depth checks under the shared work budget.
+
 Typed Stat declarations use that same staged allocation and existing Data schema.
 The offline KDL `definitions` document names a game/version namespace and each
 Stat's value type and allowed entity targets. Quantity units resolve through the

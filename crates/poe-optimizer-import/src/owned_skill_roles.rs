@@ -217,14 +217,25 @@ impl Budget {
     }
 }
 
-/// Final binding supplied after schema/mapping package assembly. Receipt hashes
-/// are provenance claims, not attestation or proof of registry succession. A host
-/// may append other domains after skill compilation, so the final mapping registry
-/// need not equal the receipt's staged registry. The exact final mapping digest
-/// and schema identity are binding authority here; the host validates/publishes
-/// the registry history and reviewed compiler provenance separately. Historical
-/// source files must be an immutable matching subset of the final mapping pins;
-/// adding another catalog never rewrites the original compilation receipt.
+/// Authored role evidence without current schema or mapping bindings. Receipt
+/// hashes are provenance claims, not attestation or proof of registry succession.
+/// A host may append other domains after skill compilation, so the final mapping
+/// registry need not equal the receipt's staged registry. The host validates and
+/// publishes registry history and reviewed compiler provenance separately.
+/// Historical source files must remain an immutable matching subset of the final
+/// mapping pins; rebinding never rewrites the original compilation receipt.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SkillRoleContent {
+    /// Historical compiler provenance remains unchanged when binding to a new
+    /// definition space. Its registry hashes are not current dependency seals.
+    pub compilation: SkillCatalogReceipt,
+    pub roles: Vec<OwnedGemRoleRow>,
+    pub reverse_primary: OwnedReversePrimaryCensus,
+}
+
+/// Runtime skill-role evidence bound to exact definitions and mappings. These
+/// current dependency seals are checked independently of compiler provenance.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct OwnedSkillRolePackageInput {
@@ -262,6 +273,41 @@ pub(crate) fn provenance_is_subset(previous: &SourcePin, current: &SourcePin) ->
 }
 
 impl OwnedSkillRoleIndex {
+    /// Bind authored role evidence to actual checked dependencies. Existing
+    /// semantic validation still checks every source, member and coverage fact.
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: SkillRoleContent,
+        mappings: &OwnedMappingIndex,
+        definitions: &I,
+        limits: SkillCatalogLimits,
+    ) -> Result<Self> {
+        limits.mapping.validate()?;
+        Self::new(
+            OwnedSkillRolePackageInput {
+                schema_version: OWNED_SKILL_ROLE_VERSION,
+                namespace: definitions.namespace().clone(),
+                definitions: definitions.identity().clone(),
+                mapping: *mappings.identity(),
+                compilation: content.compilation,
+                roles: content.roles,
+                reverse_primary: content.reverse_primary,
+            },
+            mappings,
+            definitions,
+            limits,
+        )
+    }
+
+    /// Move checked semantic evidence into authoring without cloning it,
+    /// rewriting compiler provenance or granting any additional coverage.
+    pub fn into_authored_content(self) -> SkillRoleContent {
+        SkillRoleContent {
+            compilation: self.input.compilation,
+            roles: self.input.roles,
+            reverse_primary: self.input.reverse_primary,
+        }
+    }
+
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: OwnedSkillRolePackageInput,
         mappings: &OwnedMappingIndex,

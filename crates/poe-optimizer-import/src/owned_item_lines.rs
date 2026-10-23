@@ -46,6 +46,16 @@ pub struct ItemLinePolicyInput {
     pub whitespace: WhitespacePolicy,
     pub rules: Vec<ItemLineRule>,
 }
+
+/// Current authored declarations, without a namespace or schema commitment.
+/// Runtime readers continue to validate the supplied sealed artifact directly.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemLinePolicyContent {
+    pub version: OwnedDefinitionKey,
+    pub whitespace: WhitespacePolicy,
+    pub rules: Vec<ItemLineRule>,
+}
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemLineRule {
@@ -582,6 +592,38 @@ fn invalid<T>(path: &str, reason: &'static str) -> Result<T> {
     })
 }
 impl OwnedItemLinePolicy {
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: ItemLinePolicyContent,
+        schema: &I,
+        limits: ItemLineLimits,
+    ) -> Result<Self> {
+        Self::new(
+            ItemLinePolicyInput {
+                schema_version: OWNED_ITEM_LINE_POLICY_VERSION,
+                namespace: schema.namespace().clone(),
+                version: content.version,
+                definitions: schema.identity().clone(),
+                whitespace: content.whitespace,
+                rules: content.rules,
+            },
+            schema,
+            limits,
+        )
+    }
+
+    /// Move current declarations without cloning or implicitly upgrading a
+    /// historical numerical contract. Old artifact retirement is separate work.
+    pub fn into_authored_content(self) -> Result<ItemLinePolicyContent> {
+        if self.input.schema_version != OWNED_ITEM_LINE_POLICY_VERSION {
+            return Err(ItemLineError::UnsupportedVersion(self.input.schema_version));
+        }
+        Ok(ItemLinePolicyContent {
+            version: self.input.version,
+            whitespace: self.input.whitespace,
+            rules: self.input.rules,
+        })
+    }
+
     pub(crate) fn source_limits(&self) -> ItemLineLimits {
         self.limits
     }

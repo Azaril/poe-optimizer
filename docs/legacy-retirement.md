@@ -20,6 +20,9 @@ four remaining defence-component numeric laws. Their superseded numeric helpers
 and callers are removed. Outer import/layout/publication assertions and Cleric
 whole-plan cases remain live until their useful behavior has a maintained
 replacement; this is not yet retirement of the historical publication chain.
+Item-metadata preamble laws now run against the same cached release; the old
+`check_preamble_cases`, its caller and private source helpers are removed.
+`metadata_only` and original-build/publication assertions still have live consumers.
 
 Do not let a refactor turn unresolved semantics into default values or complete
 coverage. Delete unsupported abandoned features honestly; preserve a precise

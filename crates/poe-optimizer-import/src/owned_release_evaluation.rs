@@ -5,6 +5,7 @@ use poe_optimizer_core::{
     owned_content::OwnedContentDigest,
     owned_metrics::MetricMappingInput,
     owned_schema::{SchemaClosure, SchemaState},
+    owned_source_properties::{SourcePropertyEffectEndpoint, SourcePropertyOccurrence},
     owned_stages::EvaluationStagesInput,
     owned_support_inputs::SupportInputBindingsInput,
     owned_support_outputs::SupportOutputBindingsInput,
@@ -316,6 +317,19 @@ pub(crate) fn preflight(
     for stage in &s.stages.stages {
         charge(left, stage.predecessors.len())?;
     }
+    if let Some(readiness) = &s.stages.readiness {
+        charge(left, readiness.skills.len())?;
+        charge(left, readiness.programs.members.len())?;
+        closure(left, &readiness.programs.closure)?;
+        for skill in &readiness.skills {
+            charge(left, skill.parameters.members.len())?;
+            charge(left, usize::from(skill.participation.is_some()))?;
+            closure(left, &skill.parameters.closure)?;
+        }
+        for program in &readiness.programs.members {
+            charge(left, program.outputs.len())?;
+        }
+    }
     for count in [
         s.preparation.types.len(),
         s.preparation.effects.len(),
@@ -380,6 +394,66 @@ pub(crate) fn preflight(
         closure(left, &support.receivers.closure)?;
         for role in &support.receivers.members {
             charge(left, role.delivery.len())?;
+            if let Some(preparation) = &role.preparation {
+                charge(left, 1)?;
+                charge(left, preparation.properties.len())?;
+            }
+        }
+    }
+    if let Some(source) = &s.receiving.source_properties {
+        charge(left, source.relations.members.len())?;
+        closure(left, &source.relations.closure)?;
+        for relation in &source.relations.members {
+            charge(
+                left,
+                usize::from(matches!(
+                    relation.occurrence,
+                    SourcePropertyOccurrence::GeneratedSkill { .. }
+                )),
+            )?;
+            for count in [
+                relation.effects.members.len(),
+                relation.inputs.len(),
+                relation.channels.members.len(),
+                relation.external.members.len(),
+                relation.supports.members.len(),
+                relation.assembly.members.len(),
+            ] {
+                charge(left, count)?;
+            }
+            // Invalid Partial inventories are still bounded before they are
+            // cloned; only the semantic constructor may reject their authority.
+            for value in [
+                &relation.effects.closure,
+                &relation.channels.closure,
+                &relation.external.closure,
+                &relation.supports.closure,
+                &relation.assembly.closure,
+            ] {
+                closure(left, value)?;
+            }
+            for support in &relation.supports.members {
+                charge(left, support.programs.members.len())?;
+                closure(left, &support.programs.closure)?;
+            }
+            for effect in &relation.effects.members {
+                if let SourcePropertyEffectEndpoint::Generated { path, .. } = &effect.endpoint {
+                    charge(left, 1)?;
+                    charge(left, path.len())?;
+                    if path.len() > limits.receiving.max_path_depth {
+                        return Err(OwnedReleaseError::Limit("source effect path depth"));
+                    }
+                }
+                if let SupportAdmissionContext::ReceivingSkill {
+                    summoner_path: Some(path),
+                } = &effect.admission
+                {
+                    charge(left, path.len())?;
+                    if path.len() > limits.receiving.max_path_depth {
+                        return Err(OwnedReleaseError::Limit("source summoner path depth"));
+                    }
+                }
+            }
         }
     }
     if let Some(outputs) = &s.outputs {

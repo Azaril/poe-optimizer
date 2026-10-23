@@ -380,6 +380,17 @@ pub struct MappingEntry {
     pub source: ExternalSelector,
     pub outcome: MappingOutcome,
 }
+/// Authored correspondence without runtime registry or definition bindings.
+/// Source pins and unresolved outcomes remain explicit evidence; constructing a
+/// bound package does not establish source truth or schema/rule coverage.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct MappingContent {
+    pub source: SourcePin,
+    pub policy_version: OwnedDefinitionKey,
+    pub entries: Vec<MappingEntry>,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct MappingPackageInput {

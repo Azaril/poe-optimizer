@@ -178,6 +178,41 @@ pub struct OwnedMappingIndex {
     resources: ResourceUse,
 }
 impl OwnedMappingIndex {
+    /// Construct exact runtime bindings from checked dependencies, then run the
+    /// ordinary mapping validator. A sealed runtime input is never repaired.
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: MappingContent,
+        registry: &OwnedIdRegistrySnapshot,
+        definitions: &I,
+        limits: OwnedMappingLimits,
+    ) -> Result<Self> {
+        limits.validate()?;
+        Self::new(
+            MappingPackageInput {
+                schema_version: OWNED_MAPPING_PACKAGE_VERSION,
+                namespace: definitions.namespace().clone(),
+                registry: registry.identity()?,
+                definitions: definitions.identity().clone(),
+                source: content.source,
+                policy_version: content.policy_version,
+                entries: content.entries,
+            },
+            registry,
+            definitions,
+            limits,
+        )
+    }
+
+    /// Consume a checked package without cloning its semantic content or
+    /// retaining the dependency seals from its previous definition space.
+    pub fn into_authored_content(self) -> MappingContent {
+        MappingContent {
+            source: self.input.source,
+            policy_version: self.input.policy_version,
+            entries: self.input.entries,
+        }
+    }
+
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: MappingPackageInput,
         registry: &OwnedIdRegistrySnapshot,

@@ -92,6 +92,14 @@ pub struct RewardPolicyInput {
     pub rules: Vec<RewardRuleInput>,
 }
 
+/// Authored reward declarations without runtime dependency commitments.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct RewardPolicyContent {
+    pub version: OwnedDefinitionKey,
+    pub rules: Vec<RewardRuleInput>,
+}
+
 #[derive(Clone, Copy, Debug)]
 pub struct RewardPolicyLimits {
     pub value: ValuePolicyLimits,
@@ -279,6 +287,37 @@ fn bindings<I: DefinitionSchemaIndex>(
     Ok(())
 }
 impl OwnedRewardPolicy {
+    /// Construct commitments from checked dependencies, then apply the ordinary
+    /// policy validator. This does not repair a supplied runtime artifact.
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: RewardPolicyContent,
+        mappings: &OwnedMappingIndex,
+        schema: &I,
+        limits: RewardPolicyLimits,
+    ) -> Result<Self> {
+        Self::new(
+            RewardPolicyInput {
+                schema_version: OWNED_REWARD_POLICY_VERSION,
+                namespace: schema.namespace().clone(),
+                version: content.version,
+                definitions: schema.identity().clone(),
+                mapping: *mappings.identity(),
+                rules: content.rules,
+            },
+            mappings,
+            schema,
+            limits,
+        )
+    }
+
+    /// Move declarations from checked storage without copying the rule graph.
+    pub fn into_authored_content(self) -> RewardPolicyContent {
+        RewardPolicyContent {
+            version: self.input.version,
+            rules: self.input.rules,
+        }
+    }
+
     pub fn new<I: DefinitionSchemaIndex>(
         input: RewardPolicyInput,
         mappings: &OwnedMappingIndex,

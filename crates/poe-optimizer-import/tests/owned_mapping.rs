@@ -160,6 +160,187 @@ impl Fixture {
 }
 
 #[test]
+fn authored_mapping_content_round_trips_and_rebinds_only_to_checked_dependencies() {
+    let f = Fixture::new();
+    let mapping = f
+        .index(f.input(vec![
+            mapped(gem_selector(SourceComponent::Missing), subject(&f.gem_a)),
+            MappingEntry {
+                source: gem_selector(text("unresolved-variant")),
+                outcome: MappingOutcome::Unmapped {
+                    issue: key("mapping.not-converted"),
+                },
+            },
+            MappingEntry {
+                source: gem_selector(text("ambiguous-variant")),
+                outcome: MappingOutcome::Ambiguous {
+                    candidates: vec![subject(&f.gem_a), subject(&f.gem_b)],
+                    issue: key("mapping.ambiguous"),
+                },
+            },
+        ]))
+        .unwrap();
+    let content = mapping.clone().into_authored_content();
+    assert!(
+        serde_json::from_value::<MappingContent>(serde_json::to_value(mapping.input()).unwrap())
+            .is_err()
+    );
+    let rebound =
+        OwnedMappingIndex::bind_new(content.clone(), &f.registry, &f.schema, limits()).unwrap();
+    assert_eq!(rebound.input(), mapping.input());
+    assert_eq!(rebound.identity(), mapping.identity());
+    assert_eq!(
+        encode_mapping_package(&rebound, limits()).unwrap(),
+        encode_mapping_package(&mapping, limits()).unwrap()
+    );
+
+    let original_registry = f.registry.input().clone();
+    let original_schema = f.schema.input().clone();
+    let mut extended_registry = f.registry.clone();
+    let stat: StatDefId = extended_registry.allocate_definition().unwrap();
+    f.registry.validate_successor(&extended_registry).unwrap();
+    let mut schema_input = original_schema.clone();
+    schema_input
+        .definitions
+        .push(DefinitionDescriptor::Stat(DefinitionEntry {
+            id: stat.clone(),
+            schema: SchemaState::Known(StatSchema {
+                value: ComputedValueType::Boolean,
+                targets: vec![RuleEntityKind::Skill],
+            }),
+        }));
+    let extended_schema =
+        OwnedDefinitionSchemaPackage::new(schema_input, OwnedSchemaLimits::default()).unwrap();
+    let rebound = OwnedMappingIndex::bind_new(
+        content.clone(),
+        &extended_registry,
+        &extended_schema,
+        limits(),
+    )
+    .unwrap();
+    assert_eq!(
+        rebound.input().registry,
+        extended_registry.identity().unwrap()
+    );
+    assert_eq!(&rebound.input().definitions, extended_schema.identity());
+    assert_ne!(rebound.identity(), mapping.identity());
+    assert_eq!(rebound.source_identity(), mapping.source_identity());
+    assert_eq!(rebound.into_authored_content(), content);
+    assert!(matches!(
+        extended_schema.definition(&f.gem_a),
+        SchemaLookup::Unmapped(_)
+    ));
+    assert!(matches!(
+        extended_schema.definition(&stat),
+        SchemaLookup::Known(StatSchema {
+            value: ComputedValueType::Boolean,
+            ..
+        })
+    ));
+    expect_kind(
+        OwnedMappingIndex::new(
+            mapping.input().clone(),
+            &extended_registry,
+            &extended_schema,
+            limits(),
+        ),
+        OwnedMappingErrorKind::RegistryBindingMismatch,
+    );
+    assert_eq!(f.registry.input(), &original_registry);
+    assert_eq!(f.schema.input(), &original_schema);
+}
+
+#[test]
+fn authored_mapping_binding_retains_source_member_and_semantic_checks() {
+    let f = Fixture::new();
+    let mapping = f.index(f.one()).unwrap();
+    let content = mapping.clone().into_authored_content();
+    let mut bad_source = content.clone();
+    bad_source.source.files[0].path = "../escape".into();
+    expect_kind(
+        OwnedMappingIndex::bind_new(bad_source, &f.registry, &f.schema, limits()),
+        OwnedMappingErrorKind::InvalidSourcePin,
+    );
+    let mut wrong_kind = content.clone();
+    wrong_kind.entries[0] = mapped(gem_selector(SourceComponent::Missing), subject(&f.class));
+    expect_kind(
+        OwnedMappingIndex::bind_new(wrong_kind, &f.registry, &f.schema, limits()),
+        OwnedMappingErrorKind::WrongTargetKind,
+    );
+    let mut absent_member = content.clone();
+    absent_member.entries[0] = mapped(
+        gem_selector(SourceComponent::Missing),
+        subject(&GemDefId::parse(ns(), "def.0000000000000999").unwrap()),
+    );
+    expect_kind(
+        OwnedMappingIndex::bind_new(absent_member, &f.registry, &f.schema, limits()),
+        OwnedMappingErrorKind::UnknownRegistryTarget,
+    );
+    let mut duplicate = content.clone();
+    duplicate.entries.push(duplicate.entries[0].clone());
+    expect_kind(
+        OwnedMappingIndex::bind_new(duplicate, &f.registry, &f.schema, limits()),
+        OwnedMappingErrorKind::DuplicateSelector,
+    );
+    assert_eq!(mapping.into_authored_content(), content);
+}
+
+#[test]
+fn authored_mapping_binding_honors_exact_wire_and_tighter_work_bounds() {
+    let f = Fixture::new();
+    let mapping = f.index(f.one()).unwrap();
+    let content = mapping.clone().into_authored_content();
+    let wire_bytes = encode_mapping_package(&mapping, limits()).unwrap().len();
+    let exact = OwnedMappingLimits {
+        max_wire_bytes: wire_bytes,
+        ..limits()
+    };
+    assert_eq!(
+        OwnedMappingIndex::bind_new(content.clone(), &f.registry, &f.schema, exact)
+            .unwrap()
+            .identity(),
+        mapping.identity()
+    );
+    assert!(matches!(
+        OwnedMappingIndex::bind_new(
+            content.clone(),
+            &f.registry,
+            &f.schema,
+            OwnedMappingLimits {
+                max_wire_bytes: wire_bytes - 1,
+                ..limits()
+            }
+        ),
+        Err(OwnedMappingError::TooLarge { .. })
+    ));
+    expect_kind(
+        OwnedMappingIndex::bind_new(
+            content.clone(),
+            &f.registry,
+            &f.schema,
+            OwnedMappingLimits {
+                max_entries: 2,
+                ..limits()
+            },
+        ),
+        OwnedMappingErrorKind::LimitExceeded,
+    );
+    expect_kind(
+        OwnedMappingIndex::bind_new(
+            content.clone(),
+            &f.registry,
+            &f.schema,
+            OwnedMappingLimits {
+                max_entries: 0,
+                ..limits()
+            },
+        ),
+        OwnedMappingErrorKind::InvalidLimit,
+    );
+    assert_eq!(mapping.into_authored_content(), content);
+}
+
+#[test]
 fn allocation_uses_only_persisted_sequence_and_supports_all_typed_families() {
     let mut registry = OwnedIdRegistry::empty(ns(), limits()).unwrap();
     macro_rules! allocate { ($($ty:ty),+ $(,)?) => { $(let _: $ty = registry.allocate_definition().unwrap();)+ }; }
