@@ -7,10 +7,12 @@
 
 mod codec;
 mod registry;
+mod registry_snapshot;
 mod snapshot;
 
 pub use codec::{decode_mapping_package, decode_registry, encode_mapping_package, encode_registry};
 pub use registry::OwnedIdRegistry;
+pub use registry_snapshot::OwnedIdRegistrySnapshot;
 pub use snapshot::OwnedMappingIndex;
 
 use poe_optimizer_core::{

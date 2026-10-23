@@ -103,7 +103,9 @@ fn context_from_role(bundle: SuccessorBundleInput, role: Option<AuthoredGemRole>
                 && matches!(base.schema().definition(&r.gem), SchemaLookup::Unmapped(_))
         })
         .unwrap();
-    let mut registry = base.registry().clone();
+    let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        base.registry().clone(),
+    );
     let slot = registry
         .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::Gem(row.gem.clone()))
         .unwrap();
@@ -522,7 +524,9 @@ fn compact_publisher_binds_roles_source_tree_and_every_prior_artifact() {
 #[test]
 fn slot_allocation_order_foreign_ids_and_unlisted_promotions_are_rejected() {
     let c = context();
-    let mut registry = c.base.registry().clone();
+    let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        c.base.registry().clone(),
+    );
     let first = registry
         .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::Gem(c.input.gems[0].id.clone()))
         .unwrap();
@@ -639,7 +643,9 @@ fn old_wire_shapes_are_unchanged_and_v3_cannot_promote_gems() {
 #[test]
 fn mapping_checked_against_a_different_registry_cannot_author_a_prior_migration() {
     let c = context();
-    let mut foreign_registry = c.base.registry().clone();
+    let mut foreign_registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        c.base.registry().clone(),
+    );
     let _: UnitDefId = foreign_registry.allocate_definition().unwrap();
     let mut mapping = c.mapping.input().clone();
     mapping.registry = foreign_registry.identity().unwrap();

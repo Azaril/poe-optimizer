@@ -181,7 +181,8 @@ pub fn extend_owned_recipe(
             .ok_or(RecipeExtensionError::Limit("work"))?;
         Ok(())
     };
-    let mut registry = base.registry().clone();
+    let mut registry =
+        crate::owned_mapping::OwnedIdRegistry::from_snapshot(base.registry().clone());
     let mut schema = base.schema().input().clone();
     charge(schema.definitions.len() + schema.slots.len() + extension.schema.len())?;
     let mut defs: BTreeMap<_, _> = schema

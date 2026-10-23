@@ -59,6 +59,21 @@ also reuses that existing typed assembler through Import until this extraction i
 complete. Moving allocation wrappers or the filesystem publisher alone does not
 complete that extraction.
 
+Registry readers receive `OwnedIdRegistrySnapshot`: checked canonical history,
+identity and lookup without allocation or retirement methods. Offline
+`OwnedIdRegistry` wraps that same snapshot and adds mutation bookkeeping;
+resuming allocation is explicit. There is one history validator, no mutable
+access through the snapshot and no second registry format.
+
+`CheckedOwnedRecipe` separates validation from publication. It owns the immutable
+registry and shared schema, stored rules, routing and compiled rules. Executable
+rules retain their stored-source identity. Publication staging wraps these checked
+components with manifests and encoded artifacts; evaluation validation needs only
+the checked components. Consumers share the retained executable and use private
+execution scratch. This boundary is implemented, but the current release loader
+still rebuilds publication artifacts. Moving the assembler into Authoring must
+wait until release consumption no longer calls it.
+
 ```mermaid
 flowchart LR
   P[Optional pinned PoB source] --> A[Rust offline acquisition]

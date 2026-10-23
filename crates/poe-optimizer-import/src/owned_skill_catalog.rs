@@ -286,7 +286,7 @@ impl Budget {
 /// output allocates new IDs and is not a refresh or an identity migration.
 pub fn compile_fresh_owned_skill_catalog(
     catalog: &SkillIdentityCatalog,
-    base: &OwnedIdRegistry,
+    base: &OwnedIdRegistrySnapshot,
     source: &SourcePin,
     policy: &SkillCatalogPolicy,
     limits: SkillCatalogLimits,
@@ -304,7 +304,7 @@ pub fn compile_fresh_owned_skill_catalog(
 /// unchanged-settings claim. Hosts publish by compare-and-swap on prior identity.
 pub fn compile_owned_skill_catalog_extension(
     catalog: &SkillIdentityCatalog,
-    base: &OwnedIdRegistry,
+    base: &OwnedIdRegistrySnapshot,
     definitions: &OwnedDefinitionSchemaPackage,
     mappings: &OwnedMappingIndex,
     source: &SourcePin,
@@ -403,7 +403,7 @@ pub fn compile_owned_skill_catalog_extension(
 
 fn compile_catalog(
     catalog: &SkillIdentityCatalog,
-    base: &OwnedIdRegistry,
+    base: &OwnedIdRegistrySnapshot,
     source: &SourcePin,
     policy: &SkillCatalogPolicy,
     limits: SkillCatalogLimits,
@@ -496,7 +496,7 @@ fn compile_catalog(
             previous.mappings.input().entries.len(),
         )?;
     }
-    let mut registry = base.clone();
+    let mut registry = OwnedIdRegistry::from_snapshot(base.clone());
     let mut definitions = extension
         .as_ref()
         .map_or_else(Vec::new, |v| v.definitions.input().definitions.clone());

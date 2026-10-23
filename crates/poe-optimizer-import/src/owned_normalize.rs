@@ -464,7 +464,7 @@ pub struct NormalizedImport {
 /// normalize_fresh validates their content bindings before allocating anything.
 pub struct NormalizationArtifacts<'a, I> {
     pub mappings: &'a OwnedMappingIndex,
-    pub registry: &'a OwnedIdRegistry,
+    pub registry: &'a OwnedIdRegistrySnapshot,
     pub definitions: &'a I,
     pub roles: &'a OwnedSkillRoleIndex,
     pub rewards: &'a OwnedRewardPolicy,

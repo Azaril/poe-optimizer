@@ -133,7 +133,8 @@ pub fn stage_owned_gem_schema(
         }
         schema.definitions[*position] = DefinitionDescriptor::Gem(gem.clone());
     }
-    let mut registry = base.registry().clone();
+    let mut registry =
+        crate::owned_mapping::OwnedIdRegistry::from_snapshot(base.registry().clone());
     for parameter in &input.parameters {
         if !matches!(parameter.schema, SchemaState::Known(_)) {
             return Err(invalid("new gem parameter must be Known"));

@@ -266,7 +266,9 @@ pub(super) fn check_multieffect_gem_inputs(cwd: &Path, prior: &Path) -> PathBuf 
             }
         ]
     );
-    let mut expected_registry = checked_prior.registry().clone();
+    let mut expected_registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        checked_prior.registry().clone(),
+    );
     let mut expected_parameters = vec![];
     for gem in expected_owners.keys() {
         for parameter in &authored.parameters {

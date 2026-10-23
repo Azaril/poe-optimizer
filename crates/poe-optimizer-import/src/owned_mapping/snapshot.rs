@@ -180,7 +180,7 @@ pub struct OwnedMappingIndex {
 impl OwnedMappingIndex {
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: MappingPackageInput,
-        registry: &OwnedIdRegistry,
+        registry: &OwnedIdRegistrySnapshot,
         definitions: &I,
         limits: OwnedMappingLimits,
     ) -> Result<Self> {
@@ -286,7 +286,7 @@ impl OwnedMappingIndex {
     /// Pin equality is evidence binding, not proof that source bytes were acquired.
     pub fn verify_bindings<I: DefinitionSchemaIndex>(
         &self,
-        registry: &OwnedIdRegistry,
+        registry: &OwnedIdRegistrySnapshot,
         definitions: &I,
         source: &SourcePin,
         policy_version: &OwnedDefinitionKey,
@@ -320,7 +320,7 @@ impl OwnedMappingIndex {
 
 fn check_bindings<I: DefinitionSchemaIndex>(
     input: &MappingPackageInput,
-    registry: &OwnedIdRegistry,
+    registry: &OwnedIdRegistrySnapshot,
     definitions: &I,
 ) -> Result<()> {
     if &input.namespace != definitions.namespace() || input.namespace != registry.input().namespace
@@ -347,7 +347,7 @@ fn check_bindings<I: DefinitionSchemaIndex>(
 fn check_target<I: DefinitionSchemaIndex>(
     source: &ExternalSelector,
     target: &SchemaSubject,
-    registry: &OwnedIdRegistry,
+    registry: &OwnedIdRegistrySnapshot,
     definitions: &I,
 ) -> Result<()> {
     if expected_kind(source) != target_kind(target) {

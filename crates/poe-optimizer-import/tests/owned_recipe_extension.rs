@@ -256,7 +256,9 @@ impl Fixture {
             .lookup_definition(&self.modifier.address())
             .unwrap()
             .clone();
-        let mut registry = self.base.registry().clone();
+        let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+            self.base.registry().clone(),
+        );
         let slot: DeclaredSlot<ParameterSlotDefId> = registry
             .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::Modifier(
                 self.modifier.clone(),
@@ -286,7 +288,9 @@ impl Fixture {
         extension
     }
     fn receiver(&self) -> OwnedRecipeExtension {
-        let mut registry = self.base.registry().clone();
+        let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+            self.base.registry().clone(),
+        );
         let stat: StatDefId = registry.allocate_definition().unwrap();
         let mut extension = empty();
         add_definition(&mut extension, self::stat(stat.clone(), &self.unit));
@@ -330,7 +334,9 @@ fn empty_extension_preserves_all_canonical_facts_and_versions() {
 #[test]
 fn interleaved_typed_definition_and_slot_allocations_require_exact_registry_order() {
     let f = Fixture::new();
-    let mut registry = f.base.registry().clone();
+    let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        f.base.registry().clone(),
+    );
     let modifier: ModifierDefId = registry.allocate_definition().unwrap();
     let slot = registry
         .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::Modifier(modifier.clone()))
@@ -1096,7 +1102,9 @@ fn support_domain_authoring_keeps_unmapped_gaps_and_forbids_overwriting_prior_au
 fn support_domain_authoring_uses_normal_rule_validation_and_rejects_duplicates() {
     let f = Fixture::new();
     let valid = support_domain(SchemaSubject::Definition(f.modifier.address()));
-    let mut registry = f.base.registry().clone();
+    let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        f.base.registry().clone(),
+    );
     let unknown: ModifierDefId = registry.allocate_definition().unwrap();
     for case in 0..6 {
         let mut extension = empty();

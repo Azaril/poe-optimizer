@@ -2,17 +2,23 @@ use super::*;
 use poe_optimizer_core::owned_schema::DefinitionSchemaIndex;
 use std::io;
 
-pub fn decode_registry(bytes: &[u8], limits: OwnedMappingLimits) -> Result<OwnedIdRegistry> {
+pub fn decode_registry(
+    bytes: &[u8],
+    limits: OwnedMappingLimits,
+) -> Result<OwnedIdRegistrySnapshot> {
     check_bytes(bytes, limits)?;
-    OwnedIdRegistry::new(serde_json::from_slice(bytes)?, limits)
+    OwnedIdRegistrySnapshot::new(serde_json::from_slice(bytes)?, limits)
 }
-pub fn encode_registry(registry: &OwnedIdRegistry, limits: OwnedMappingLimits) -> Result<Vec<u8>> {
+pub fn encode_registry(
+    registry: &OwnedIdRegistrySnapshot,
+    limits: OwnedMappingLimits,
+) -> Result<Vec<u8>> {
     registry.validate_limits(limits)?;
     bounded_json(registry.input(), limits.max_wire_bytes)
 }
 pub fn decode_mapping_package<I: DefinitionSchemaIndex>(
     bytes: &[u8],
-    registry: &OwnedIdRegistry,
+    registry: &OwnedIdRegistrySnapshot,
     definitions: &I,
     limits: OwnedMappingLimits,
 ) -> Result<OwnedMappingIndex> {

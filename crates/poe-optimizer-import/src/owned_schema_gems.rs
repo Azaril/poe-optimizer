@@ -285,7 +285,8 @@ pub(super) fn preserve(
             "gem migration changed unrelated schema or existing slots",
         ));
     }
-    let mut registry = before.registry().clone();
+    let mut registry =
+        crate::owned_mapping::OwnedIdRegistry::from_snapshot(before.registry().clone());
     for slot in &policy.parameters {
         if registry.allocate_slot::<ParameterSlotDefinition>(slot.declaration.clone())? != *slot {
             return Err(invalid("gem migration parameter registry order"));

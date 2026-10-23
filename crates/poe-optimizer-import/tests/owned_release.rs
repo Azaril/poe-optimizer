@@ -712,7 +712,9 @@ fn explicit_schema_correction_assembles_without_weakening_v3_or_v4() {
             if schema.declarations.parameters.is_complete() && schema.declarations.parameters.members.is_empty()) => Some(entry.id.clone()),
         _ => None,
     }).unwrap();
-    let mut registry = before.assembled().registry().clone();
+    let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        before.assembled().registry().clone(),
+    );
     let slot = registry
         .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::Gem(gem.clone()))
         .unwrap();

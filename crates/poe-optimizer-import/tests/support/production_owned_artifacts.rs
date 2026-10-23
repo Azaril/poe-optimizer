@@ -24,7 +24,7 @@ pub fn json<T: DeserializeOwned>(path: &Path) -> T {
 }
 pub struct ProductionArtifacts {
     pub catalog: SkillIdentityCatalog,
-    pub registry: OwnedIdRegistry,
+    pub registry: OwnedIdRegistrySnapshot,
     pub definitions: OwnedDefinitionSchemaPackage,
     pub mappings: OwnedMappingIndex,
     pub roles: OwnedSkillRoleIndex,

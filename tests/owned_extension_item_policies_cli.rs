@@ -56,7 +56,9 @@ impl Fixture {
         for (name, bytes) in base.artifacts() {
             fs::write(prior.join(name), bytes).unwrap();
         }
-        let mut registry = base.assembled().registry().clone();
+        let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+            base.assembled().registry().clone(),
+        );
         let id = registry.allocate_definition::<UnitDefinition>().unwrap();
         let mut unit = base
             .recipe()

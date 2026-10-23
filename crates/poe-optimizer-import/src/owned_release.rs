@@ -732,7 +732,9 @@ pub fn assemble_owned_release(
     let evaluation = input
         .evaluation
         .take()
-        .map(|value| StagedOwnedReleaseEvaluation::assemble(value, &assembled, limits.evaluation))
+        .map(|value| {
+            StagedOwnedReleaseEvaluation::assemble(value, assembled.checked(), limits.evaluation)
+        })
         .transpose()?;
     let source = source_union(&mapping, &roles, &item_source, tree.as_ref())?;
     // Canonicalization changes ordering only, never an incoming dependency binding.

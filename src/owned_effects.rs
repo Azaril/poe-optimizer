@@ -78,7 +78,7 @@ struct Report<'a> {
 pub(crate) struct LoadedPlanArtifacts {
     pub request: Arc<OwnedEvaluationRequest>,
     pub definitions: Arc<OwnedDefinitionSchemaPackage>,
-    pub stored_rules: OwnedRulePackage,
+    pub stored_rules: Arc<OwnedRulePackage>,
     pub rules: Arc<CompiledRulePackage>,
     pub routing: Arc<OwnedActionRouting>,
 }
@@ -119,11 +119,11 @@ pub(crate) fn load_artifacts(args: PlanArgs) -> Result<LoadedPlanArtifacts, Box<
         schema_limits,
     )?);
     let storage_limits = RuleStorageLimits::default();
-    let stored_rules = decode_rule_package(
+    let stored_rules = Arc::new(decode_rule_package(
         &read_bounded(&args.rules, storage_limits.max_wire_bytes)?,
         definitions.as_ref(),
         storage_limits,
-    )?;
+    )?);
     let rules = Arc::new(CompiledRulePackage::compile_stored(
         &stored_rules,
         definitions.as_ref(),

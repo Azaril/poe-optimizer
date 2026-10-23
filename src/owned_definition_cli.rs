@@ -40,7 +40,9 @@ pub(crate) fn append_definitions(
     {
         return Err(invalid("definitions must be in unique canonical ID order"));
     }
-    let mut registry = base.registry().clone();
+    let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        base.registry().clone(),
+    );
     let mut schema = base.schema().input().clone();
     for descriptor in entries {
         let allowed = match (&kind, &descriptor) {

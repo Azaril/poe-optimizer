@@ -1,6 +1,6 @@
 //! Offline packaging of immutable evaluator artifacts. Validation establishes
 //! exact dependencies, not active contributors or numerical build coverage.
-use crate::owned_recipe::StagedOwnedRecipe;
+use crate::owned_recipe::CheckedOwnedRecipe;
 use poe_optimizer_core::{
     owned_content::OwnedContentDigest,
     owned_metrics::MetricMappingInput,
@@ -146,39 +146,40 @@ impl StagedOwnedReleaseEvaluation {
     }
     pub(crate) fn assemble(
         input: OwnedReleaseEvaluationInput,
-        recipe: &StagedOwnedRecipe,
+        recipe: &CheckedOwnedRecipe,
         limits: OwnedReleaseEvaluationLimits,
     ) -> Result<Self, OwnedReleaseEvaluationError> {
         limits.validate()?;
-        let metrics = OwnedMetricMapping::new(input.metrics, recipe.schema(), limits.metrics)?;
+        let metrics =
+            OwnedMetricMapping::new(input.metrics, recipe.schema().as_ref(), limits.metrics)?;
         let support = input
             .support
             .map(|s| {
                 let stages = OwnedEvaluationStages::new(
                     s.stages,
-                    recipe.schema(),
-                    recipe.rules(),
-                    recipe.routing(),
+                    recipe.schema().as_ref(),
+                    recipe.rules().as_ref(),
+                    recipe.routing().as_ref(),
                     limits.stages,
                 )?;
                 let preparation = OwnedSupportPreparation::new(
                     s.preparation,
-                    recipe.schema(),
-                    recipe.rules(),
+                    recipe.schema().as_ref(),
+                    recipe.rules().as_ref(),
                     limits.preparation,
                 )?;
                 let inputs = OwnedSupportInputBindings::new(
                     s.inputs,
-                    recipe.schema(),
-                    recipe.rules(),
+                    recipe.schema().as_ref(),
+                    recipe.rules().as_ref(),
                     &preparation,
                     &stages,
                     limits.inputs,
                 )?;
                 let receiving = OwnedSupportReceiving::new(
                     s.receiving,
-                    recipe.schema(),
-                    recipe.rules(),
+                    recipe.schema().as_ref(),
+                    recipe.rules().as_ref(),
                     &preparation,
                     &inputs,
                     &stages,
@@ -190,8 +191,8 @@ impl StagedOwnedReleaseEvaluation {
                         OwnedSupportOutputBindings::new(
                             o,
                             &SupportOutputDependencies {
-                                definitions: recipe.schema(),
-                                rules: recipe.rules(),
+                                definitions: recipe.schema().as_ref(),
+                                rules: recipe.rules().as_ref(),
                                 preparation: &preparation,
                                 inputs: &inputs,
                                 receiving: &receiving,

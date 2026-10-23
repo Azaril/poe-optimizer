@@ -1,12 +1,11 @@
 //! Offline assembly of persisted owned recipes. No ID allocation, source parsing or evaluation.
 //! Each constituent keeps its identity and coverage contract. Compilation is not game coverage.
 use crate::owned_mapping::{
-    OwnedIdRegistry, OwnedMappingError, OwnedMappingLimits, RegistryInput, RegistryState,
-    encode_registry,
+    OwnedIdRegistrySnapshot, OwnedMappingError, OwnedMappingLimits, RegistryInput, encode_registry,
 };
 use poe_optimizer_core::{
     data::DataIdentity,
-    owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},
+    owned_content::{ContentDigestError, OwnedContentDigest},
     owned_definitions::{GameVersionNamespace, OwnedDefinitionKey},
     owned_routing::ActionRoutingInput,
     owned_rules::RulePackageInput,
@@ -20,9 +19,12 @@ use poe_optimizer_data::{
         encode_schema_package,
     },
 };
-use poe_optimizer_engine::owned_rules::{CompiledRulePackage, RuleError, RuleLimits};
+use poe_optimizer_engine::owned_rules::{RuleError, RuleLimits};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
+
+mod checked;
+pub use checked::CheckedOwnedRecipe;
 
 pub const OWNED_RECIPE_VERSION: u32 = 1;
 
@@ -156,25 +158,25 @@ impl RecipeArtifact {
 /// Immutable validated artifacts ready for host publication. Construction never
 /// edits the persisted registry. The host owns no-clobber persistence.
 pub struct StagedOwnedRecipe {
-    registry: OwnedIdRegistry,
-    schema: OwnedDefinitionSchemaPackage,
-    rules: OwnedRulePackage,
-    routing: OwnedActionRouting,
+    checked: CheckedOwnedRecipe,
     manifest: OwnedRecipeManifest,
     artifacts: Vec<RecipeArtifact>,
 }
 impl StagedOwnedRecipe {
-    pub fn registry(&self) -> &OwnedIdRegistry {
-        &self.registry
+    pub fn checked(&self) -> &CheckedOwnedRecipe {
+        &self.checked
+    }
+    pub fn registry(&self) -> &OwnedIdRegistrySnapshot {
+        self.checked.registry()
     }
     pub fn schema(&self) -> &OwnedDefinitionSchemaPackage {
-        &self.schema
+        self.checked.schema().as_ref()
     }
     pub fn rules(&self) -> &OwnedRulePackage {
-        &self.rules
+        self.checked.rules().as_ref()
     }
     pub fn routing(&self) -> &OwnedActionRouting {
-        &self.routing
+        self.checked.routing().as_ref()
     }
     pub fn manifest(&self) -> &OwnedRecipeManifest {
         &self.manifest
@@ -201,52 +203,11 @@ pub fn assemble_owned_recipe(
     input: OwnedRecipeInput,
     limits: OwnedRecipeLimits,
 ) -> Result<StagedOwnedRecipe, OwnedRecipeError> {
-    limits.validate()?;
-    if input.schema_version != OWNED_RECIPE_VERSION {
-        return Err(OwnedRecipeError::Version(input.schema_version));
-    }
-    // Streaming bound before constructor clones, indexes and output buffers.
-    let recipe = digest_owned("owned-recipe-input-v1", &input, limits.max_wire_bytes)?;
-    let registry = OwnedIdRegistry::new(input.registry, limits.registry)?;
-    let schema = OwnedDefinitionSchemaPackage::new(input.schema, limits.schema)?;
-    if registry.input().namespace != schema.input().namespace {
-        return Err(OwnedRecipeError::Namespace);
-    }
-    let count = schema
-        .input()
-        .definitions
-        .len()
-        .checked_add(schema.input().slots.len())
-        .ok_or(OwnedRecipeError::Limit("registry checks"))?;
-    if count > limits.max_registry_checks {
-        return Err(OwnedRecipeError::Limit("registry checks"));
-    }
-    for subject in schema
-        .input()
-        .definitions
-        .iter()
-        .map(|v| SchemaSubject::Definition(v.address()))
-        .chain(
-            schema
-                .input()
-                .slots
-                .iter()
-                .map(|v| SchemaSubject::Slot(v.address())),
-        )
-    {
-        if !registry
-            .entry(&subject)
-            .is_some_and(|e| matches!(e.state, RegistryState::Active))
-        {
-            return Err(OwnedRecipeError::Unregistered(Box::new(subject)));
-        }
-    }
-    // Incoming bindings must already refer to the final canonical schema.
-    let rules = OwnedRulePackage::new(input.rules, &schema, limits.rules)?;
-    let routing = OwnedActionRouting::new(input.routing, &schema, limits.routing)?;
-    let compiled = CompiledRulePackage::compile(rules.input(), &schema, limits.compile)?;
-    let compiled_identity = compiled.identity();
-    drop(compiled);
+    let checked = CheckedOwnedRecipe::new(input, limits)?;
+    let registry = checked.registry();
+    let schema = checked.schema().as_ref();
+    let rules = checked.rules().as_ref();
+    let routing = checked.routing().as_ref();
     let mut artifacts = Vec::with_capacity(5);
     let mut used = 0usize;
     // Each encoder has its own ceiling; shared accounting happens before retaining
@@ -256,38 +217,38 @@ pub fn assemble_owned_recipe(
         &mut used,
         limits.max_output_bytes,
         "registry.json",
-        encode_registry(&registry, limits.registry)?,
+        encode_registry(registry, limits.registry)?,
     )?;
     push_artifact(
         &mut artifacts,
         &mut used,
         limits.max_output_bytes,
         "schema.json",
-        encode_schema_package(&schema, limits.schema)?,
+        encode_schema_package(schema, limits.schema)?,
     )?;
     push_artifact(
         &mut artifacts,
         &mut used,
         limits.max_output_bytes,
         "rules.json",
-        encode_rule_package(&rules, limits.rules)?,
+        encode_rule_package(rules, limits.rules)?,
     )?;
     push_artifact(
         &mut artifacts,
         &mut used,
         limits.max_output_bytes,
         "routing.json",
-        encode_action_routing(&routing, limits.routing)?,
+        encode_action_routing(routing, limits.routing)?,
     )?;
     let manifest = OwnedRecipeManifest {
         schema_version: 1,
         document_kind: "owned_recipe_manifest",
-        recipe,
+        recipe: checked.input_identity(),
         namespace: schema.input().namespace.clone(),
         registry: registry.identity()?,
         definitions: schema.identity().clone(),
         rules: *rules.identity(),
-        compiled_rules: compiled_identity,
+        compiled_rules: checked.compiled_rules().identity(),
         routing: *routing.identity(),
         operations_version: rules.input().operations_version.clone(),
         rule_semantics_version: rules.input().semantics_version.clone(),
@@ -323,10 +284,7 @@ pub fn assemble_owned_recipe(
         serde_json::to_vec(&manifest)?,
     )?;
     Ok(StagedOwnedRecipe {
-        registry,
-        schema,
-        rules,
-        routing,
+        checked,
         manifest,
         artifacts,
     })

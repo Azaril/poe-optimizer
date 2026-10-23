@@ -652,3 +652,6 @@ fn migration_failure_conflicting_flags_and_existing_output_never_publish_or_repl
             .starts_with(".poe-publish-")
     }));
 }
+
+#[path = "support/owned_source_action_release.rs"]
+mod source_action_release;

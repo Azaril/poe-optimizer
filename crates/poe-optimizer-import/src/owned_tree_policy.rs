@@ -306,7 +306,7 @@ impl Budget {
         Ok(values.contains(value))
     }
 }
-fn active(registry: &OwnedIdRegistry, subject: SchemaSubject) -> Result<()> {
+fn active(registry: &OwnedIdRegistrySnapshot, subject: SchemaSubject) -> Result<()> {
     if !matches!(
         registry.entry(&subject).map(|r| &r.state),
         Some(RegistryState::Active)
@@ -316,7 +316,7 @@ fn active(registry: &OwnedIdRegistry, subject: SchemaSubject) -> Result<()> {
     Ok(())
 }
 fn known<'a, I: DefinitionSchemaIndex, D: SchemaDefinitionId>(
-    registry: &OwnedIdRegistry,
+    registry: &OwnedIdRegistrySnapshot,
     index: &'a I,
     id: &D,
 ) -> Result<&'a D::Descriptor> {
@@ -338,7 +338,7 @@ fn mapped(
     Ok(())
 }
 fn choice<I: DefinitionSchemaIndex>(
-    registry: &OwnedIdRegistry,
+    registry: &OwnedIdRegistrySnapshot,
     index: &I,
     b: &mut Budget,
     parent: &PassiveNodeDefId,
@@ -399,7 +399,7 @@ pub struct OwnedTreeNormalizationPolicy {
 impl OwnedTreeNormalizationPolicy {
     pub fn bind_new<I: DefinitionSchemaIndex>(
         content: TreeNormalizationContent,
-        registry: &OwnedIdRegistry,
+        registry: &OwnedIdRegistrySnapshot,
         schema: &I,
         mapping: &OwnedMappingIndex,
         base: &NormalizationPolicy,
@@ -425,7 +425,7 @@ impl OwnedTreeNormalizationPolicy {
     }
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: TreeNormalizationPackageInput,
-        registry: &OwnedIdRegistry,
+        registry: &OwnedIdRegistrySnapshot,
         schema: &I,
         mapping: &OwnedMappingIndex,
         base: &NormalizationPolicy,
@@ -746,7 +746,7 @@ impl OwnedTreeNormalizationPolicy {
     }
     pub fn verify_bindings<I: DefinitionSchemaIndex>(
         &self,
-        registry: &OwnedIdRegistry,
+        registry: &OwnedIdRegistrySnapshot,
         schema: &I,
         mapping: &OwnedMappingIndex,
         base: &NormalizationPolicy,
@@ -820,7 +820,7 @@ impl OwnedTreeNormalizationPolicy {
 
 pub fn decode_tree_policy<I: DefinitionSchemaIndex>(
     bytes: &[u8],
-    registry: &OwnedIdRegistry,
+    registry: &OwnedIdRegistrySnapshot,
     schema: &I,
     mapping: &OwnedMappingIndex,
     base: &NormalizationPolicy,

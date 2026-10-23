@@ -206,7 +206,7 @@ fn allocation_uses_only_persisted_sequence_and_supports_all_typed_families() {
     let restored = OwnedIdRegistry::new(shuffled, limits()).unwrap();
     assert_eq!(encode_registry(&restored, limits()).unwrap(), encoded);
     assert_eq!(restored.identity().unwrap(), registry.identity().unwrap());
-    let mut restored = decode_registry(&encoded, limits()).unwrap();
+    let mut restored = OwnedIdRegistry::from_snapshot(decode_registry(&encoded, limits()).unwrap());
     let next: GemDefId = restored.allocate_definition().unwrap();
     assert_eq!(next.key().as_str(), "def.000000000000001f");
     registry.validate_successor(&restored).unwrap();
@@ -248,6 +248,177 @@ fn retirement_keeps_tombstones_and_requires_explicit_child_retirement() {
 }
 
 #[test]
+fn immutable_registry_snapshot_preserves_binding_when_offline_allocator_advances() {
+    let f = Fixture::new();
+    let original_input = f.registry.input().clone();
+    let original_bytes = encode_registry(&f.registry, limits()).unwrap();
+    let original_identity = f.registry.identity().unwrap();
+    let mut shuffled = original_input.clone();
+    shuffled.entries.reverse();
+    let snapshot = OwnedIdRegistrySnapshot::new(shuffled, limits()).unwrap();
+    assert_eq!(snapshot.input(), &original_input);
+    assert_eq!(snapshot.identity().unwrap(), original_identity);
+    assert_eq!(
+        encode_registry(&snapshot, limits()).unwrap(),
+        original_bytes
+    );
+
+    let mapping = OwnedMappingIndex::new(f.one(), &snapshot, &f.schema, limits()).unwrap();
+    let mapping_bytes = encode_mapping_package(&mapping, limits()).unwrap();
+    let mut allocator = OwnedIdRegistry::from_snapshot(snapshot.clone());
+    assert_eq!(allocator.snapshot().input(), &original_input);
+    expect_kind(
+        allocator.retire(&subject(&f.gem_a), key("removed-owner")),
+        OwnedMappingErrorKind::ActiveDependentSlots,
+    );
+    assert_eq!(allocator.snapshot().identity().unwrap(), original_identity);
+    allocator
+        .retire(&slot_subject(&f.parameter), key("removed-slot"))
+        .unwrap();
+    // Resuming after a retirement must not count its tombstone as an active child.
+    let mut allocator = OwnedIdRegistry::from_snapshot(allocator.into_snapshot());
+    allocator
+        .retire(&subject(&f.gem_a), key("removed-owner"))
+        .unwrap();
+    let next: GemDefId = allocator.allocate_definition().unwrap();
+    assert_eq!(next.key().as_str(), "def.0000000000000007");
+    assert!(snapshot.entry(&subject(&next)).is_none());
+    assert!(matches!(
+        snapshot.entry(&subject(&f.gem_a)).unwrap().state,
+        RegistryState::Active
+    ));
+    assert!(matches!(
+        snapshot.entry(&slot_subject(&f.parameter)).unwrap().state,
+        RegistryState::Active
+    ));
+    assert_eq!(snapshot.input(), &original_input);
+    assert_eq!(snapshot.identity().unwrap(), original_identity);
+    assert_eq!(
+        encode_registry(&snapshot, limits()).unwrap(),
+        original_bytes
+    );
+    snapshot.validate_successor(allocator.snapshot()).unwrap();
+    mapping
+        .verify_bindings(&snapshot, &f.schema, &pin(), &key("policy-v1"), limits())
+        .unwrap();
+    let reloaded = decode_mapping_package(&mapping_bytes, &snapshot, &f.schema, limits()).unwrap();
+    assert_eq!(reloaded.identity(), mapping.identity());
+    expect_kind(
+        mapping.verify_bindings(
+            allocator.snapshot(),
+            &f.schema,
+            &pin(),
+            &key("policy-v1"),
+            limits(),
+        ),
+        OwnedMappingErrorKind::RegistryBindingMismatch,
+    );
+    let successor = allocator.into_snapshot();
+    assert_eq!(successor.input().last_issued, number(7));
+    assert_eq!(successor.input().revision, number(9));
+    assert_ne!(successor.identity().unwrap(), original_identity);
+    let restored =
+        decode_registry(&encode_registry(&successor, limits()).unwrap(), limits()).unwrap();
+    assert_eq!(restored.input(), successor.input());
+}
+
+#[test]
+fn snapshot_and_allocator_constructors_share_exact_history_rejections() {
+    let f = Fixture::new();
+    let mut invalid_inputs = Vec::new();
+    let mut raw = f.registry.input().clone();
+    raw.revision = number(-1);
+    invalid_inputs.push((
+        raw,
+        "registry.counter",
+        OwnedMappingErrorKind::InvalidCounter,
+    ));
+    let mut raw = f.registry.input().clone();
+    raw.last_issued = number(7);
+    invalid_inputs.push((
+        raw,
+        "registry.last_issued",
+        OwnedMappingErrorKind::HistoryGap,
+    ));
+    let mut raw = f.registry.input().clone();
+    raw.entries[1].sequence = number(1);
+    invalid_inputs.push((
+        raw,
+        "registry.entries.sequence",
+        OwnedMappingErrorKind::HistoryGap,
+    ));
+    let mut raw = f.registry.input().clone();
+    raw.entries[0].target = subject(&ClassDefId::parse(ns(), "external-name").unwrap());
+    invalid_inputs.push((
+        raw,
+        "registry.entries.target",
+        OwnedMappingErrorKind::WrongAllocatedKey,
+    ));
+    let mut raw = f.registry.input().clone();
+    let SchemaSubject::Slot(SlotAddress::Parameter(slot)) = &mut raw.entries[4].target else {
+        panic!("fixture parameter slot changed");
+    };
+    slot.declaration = SlotOwnerDefId::Gem(GemDefId::parse(ns(), "def.0000000000000999").unwrap());
+    invalid_inputs.push((
+        raw,
+        "registry.slot.owner",
+        OwnedMappingErrorKind::MissingRegistryOwner,
+    ));
+    let mut raw = f.registry.input().clone();
+    raw.entries[1].state = RegistryState::Retired {
+        reason: key("removed"),
+    };
+    raw.revision = number(7);
+    invalid_inputs.push((
+        raw,
+        "registry.slot.owner",
+        OwnedMappingErrorKind::RetiredTarget,
+    ));
+    for (raw, expected_path, expected_kind) in invalid_inputs {
+        let snapshot_error = OwnedIdRegistrySnapshot::new(raw.clone(), limits()).unwrap_err();
+        let allocator_error = OwnedIdRegistry::new(raw.clone(), limits()).unwrap_err();
+        let decoded_error =
+            decode_registry(&serde_json::to_vec(&raw).unwrap(), limits()).unwrap_err();
+        for error in [snapshot_error, allocator_error, decoded_error] {
+            match error {
+                OwnedMappingError::Invalid { path, kind } => {
+                    assert_eq!(path, expected_path);
+                    assert_eq!(kind, expected_kind);
+                }
+                error => panic!("expected {expected_kind:?} at {expected_path}, got {error:?}"),
+            }
+        }
+    }
+    let mut unsupported = f.registry.input().clone();
+    unsupported.schema_version += 1;
+    assert!(matches!(
+        OwnedIdRegistrySnapshot::new(unsupported, limits()),
+        Err(OwnedMappingError::UnsupportedVersion {
+            artifact: "owned ID registry",
+            ..
+        })
+    ));
+    expect_kind(
+        OwnedIdRegistrySnapshot::new(
+            f.registry.input().clone(),
+            OwnedMappingLimits {
+                max_entries: 1,
+                ..limits()
+            },
+        ),
+        OwnedMappingErrorKind::LimitExceeded,
+    );
+    let wire_bytes = encode_registry(&f.registry, limits()).unwrap().len();
+    assert!(matches!(
+        OwnedIdRegistrySnapshot::new(f.registry.input().clone(), OwnedMappingLimits {
+            max_wire_bytes: wire_bytes - 1,
+            ..limits()
+        }),
+        Err(OwnedMappingError::TooLarge { maximum }) if maximum == wire_bytes - 1
+    ));
+}
+
+#[test]
 fn registry_mutation_limits_are_atomic_across_wire_counter_boundaries() {
     let mut registry = OwnedIdRegistry::empty(ns(), limits()).unwrap();
     for _ in 0..32 {
@@ -257,7 +428,7 @@ fn registry_mutation_limits_are_atomic_across_wire_counter_boundaries() {
             max_wire_bytes: bytes.len(),
             ..limits()
         };
-        let mut bounded = decode_registry(&bytes, exact).unwrap();
+        let mut bounded = OwnedIdRegistry::from_snapshot(decode_registry(&bytes, exact).unwrap());
         assert_eq!(encode_registry(&bounded, exact).unwrap(), bytes);
         let before = bounded.input().clone();
         let attempt: Result<GemDefId, _> = bounded.allocate_definition();

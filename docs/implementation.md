@@ -16,16 +16,17 @@ Legacy deletion is a gate before that milestone, not work deferred until five bu
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; release source composition `b9ad595d`; clap convergence `265b2afb`; current checkpoint replaces all retained production program inputs with tracked DSL |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; release source composition `b9ad595d`; clap convergence `265b2afb`; whole-program DSL source cutover `b89f8e4d`; current checkpoint separates immutable recipe validation from publication staging |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
 | Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation and production release command. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Connected offline modules still need to move out of Import |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
+| Loader extraction | Immutable registry snapshot and checked recipe implemented; metric loading shares the retained compiled rules. Release loading still reconstructs input and regenerates artifacts; role/catalog separation and relocation of offline code remain |
 | DSL / KDL / binary pack | Every retained program now comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Exact graph/placement and historical non-program preservation gates pass; named-registry filesystem CAS, broader declarations and binary pack remain pending |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Node renaming changes rule/input identity; other emitted constituents remain byte-exact. No local predecessor needed; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 23:35 UTC, baseline `ae90ec82` run `39857163789` had nine successful jobs and nine running, with no failures. `b9ad595d` run `39869615765` was last observed pending; the earlier clap/source-builder runs were cancelled by main-queue coalescing. This checkpoint needs its own hosted result; no green suite claim |
+| CI | At 00:37 UTC on October 23 (October 22 EDT), baseline `ae90ec82` run `39857163789` had 11 successful jobs and seven running, with no failures. `b89f8e4d` run `39873092907` remained pending with no jobs. Pending main runs coalesce; this checkpoint needs its own hosted result. No green suite claim |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release`
@@ -476,14 +477,14 @@ programs would not detect assignment to the wrong same-context owner. The final
 test independently checks the assembled result. This validates representation
 conversion, not complete-build parity. No native original is newly complete.
 
-**Next migration action:** make the existing release builder consume program-free
-rule metadata plus maintained names, packet manifests and `.rule` sources through
-the existing packet APIs. Preserve every empty/partial owner and both distinct
-owner-local Life programs. Assign reviewed semantic names; do not ship the test's
-synthetic aliases as the maintained authoring surface. Replace the captured program
-JSON with that composition, using this whole-corpus gate and independent numerical
-vectors to verify the change. Then move the connected offline Import modules out
-of the runtime dependency path. Do not resume the historical succession chain.
+**Source migration completed at `b89f8e4d`:** the release builder consumes
+program-free metadata, maintained semantic names, packet manifests and `.rule`
+sources through the existing packet APIs. Every empty/partial owner and both
+distinct owner-local Life programs are preserved. The whole-corpus gate and
+independent numerical vectors remain validation requirements. The next action is
+the immutable release-loader extraction described at the end of this plan;
+then move the connected offline Import modules out of the runtime dependency
+path. Do not resume the historical succession chain.
 
 Naming seeds under `data/owned/poe2/3887ae68/` include
 `inherent-life-contribution/names.kdl`, family `bindings.json` files such as
@@ -493,8 +494,9 @@ role-to-address bindings are review evidence, not a current-release certificate:
 validate every typed address and slot declaration against the final schema and
 active registry, reject collisions, and disregard historical predecessor seals.
 For content labels, join the final mapping to pinned catalog identities; labels
-must not establish mechanics or authority. No complete semantic-name registry
-already exists. Named-registry filesystem CAS remains separate from this cutover.
+must not establish mechanics or authority. The maintained migration-source names
+now cover retained programs; broader declaration naming and named-registry
+filesystem CAS remain separate from this cutover.
 
 Remaining consolidation can use three PoB and four CLI suites. CLI helpers
 require explicit parent-relative bindings before their roots become modules.
@@ -503,6 +505,13 @@ law into one registered module instead of multiplying its executions. PoB needs
 extra care: 91 source-test roots spawn their own executable with test selectors.
 Qualify those selectors after nesting and assert the worker actually executed;
 a child that runs zero tests must not count as successful reference validation.
+
+Concrete retained-chain retirement target:
+`tests/owned_extension_cli.rs::local_recipe_data_publishes_evaluates_and_preserves_original_gaps`
+still replays the long historical extension sequence, including callers changed
+by the registry-snapshot extraction. Preserve its identity, publication and
+coverage laws in the declarative harness, then delete the sequence and obsolete
+helpers. It is regression evidence, not the current production source builder.
 
 Remove implementation fingerprints coherently across Data identity, Import item
 loading, CLI diagnostics and PoB adapter/extractor reports. Retain validated
@@ -632,6 +641,54 @@ help agree, parsing failures perform no command work, and focused Windows/Linux
 tests pass. This commit's hosted Windows/Linux results remain to be recorded.
 
 ### R1 — Separate authoring and define one compact release
+
+**Immutable validation prerequisite implemented (2026-10-22):**
+`OwnedIdRegistrySnapshot` contains checked history and read indexes; the offline
+allocator wraps that one snapshot and resumes mutation explicitly. Mapping,
+normalization, tree-policy and checked recipe readers now require the snapshot.
+`CheckedOwnedRecipe` separates checked packages from manifest/artifact staging and
+retains the shared Engine executable with exact stored-source binding. Evaluation
+package validation consumes that checked recipe. Metric release loading reuses
+the schema/rules/routing/executable handles, removing its duplicate compilation.
+Wire formats, digest domains, allocation order, limits and coverage are unchanged.
+This is a prerequisite, not completion of the loader or dependency extraction.
+
+The loader audit also found that active source-action coverage stopped at the
+Import library. A small fixture now joins the existing release CLI suite, reusing
+the Import source-action model. It checks full Main/Calcs resolution and package
+identities, and rejects a stale role binding even after its artifact hash is
+updated. No new test binary or historical publication chain is introduced.
+
+Validation: all **1,498 executed Import tests pass** (244 library, 852 owned and
+402 normalization;
+one existing authoring utility ignored), plus all **179 Authoring tests** (154
+library, seven CLI and 18 release) and **45 native CLI checks** (four binary unit
+checks and 41 across the seven targets below; the existing optional Cleric
+published-release check remains ignored). All **1,722 executed checks pass**.
+Whole-corpus DSL checks, historical artifact preservation, the new source-action
+CLI check and rehashed malformed-release rejections pass. Import and Authoring
+all-target compile checks pass. The long extension regression passed in 958 seconds;
+retain its laws during the planned harness migration, not this publication sequence.
+The initial combined all-target CLI
+check encountered the protected untracked incoming-critical tests' obsolete
+interfaces; their nine files remain untouched. The tracked CLI targets below pass;
+the broad local command did not.
+
+Affected tracked CLI selection: `--bin poe-optimizer --test owned_effects_cli
+--test owned_metrics_cli --test owned_support_metrics_cli
+--test owned_evaluation_release_cli --test owned_release_cli
+--test owned_extension_cli --test owned_extension_item_policies_cli`.
+Logs: `runs/immutable-recipe-import-tests.log`,
+`runs/immutable-recipe-authoring-tests.log`, and
+`runs/immutable-recipe-cli-tests.log`.
+Strict all-target Clippy passes for Import/Authoring, as does Clippy for the CLI
+binary and all seven affected targets. All 33 changed/new Rust files pass
+formatting checks; the nine protected files still match their recorded hashes.
+The normal runtime dependency guard continues to exclude Authoring, KDL, PoB and
+Lua; this does not certify removal of legacy Rust Data/Engine default features.
+Additional logs: `runs/immutable-recipe-library-clippy.log`,
+`runs/immutable-recipe-cli-clippy.log`, and
+`runs/immutable-recipe-runtime-dependencies.log`.
 
 Move offline catalogs, recipes, assembly and publication into
 `poe-optimizer-authoring` (Rust library + developer commands). Runtime Import keeps
@@ -890,21 +947,32 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. Next extract the **checked published-release
-   loader** before moving the offline assembler out of Import. Today
-   `src/owned_release_cli.rs::load_release` reconstructs `OwnedReleaseInput` and
-   invokes offline assembly; metric and source-action commands consume that
-   result, and metric evaluation compiles rules again. Moving the assembler into
-   Authoring first would pull Authoring into these runtime callers.
-   Separate immutable registry validation from allocation in
-   `owned_mapping/registry.rs`, and role loading from catalog compilation in
-   `owned_skill_catalog.rs`, preserving the validators used by normalization.
+1. Read this plan and Git status. Continue the **checked published-release
+   loader** extraction before moving the offline assembler out of Import.
+   Immutable registry validation is separated from allocation; checked recipes
+   retain their compiled executable, which metric loading now shares. Today
+   `src/owned_release_cli.rs::load_release` still reconstructs `OwnedReleaseInput`
+   and invokes offline assembly. Moving the assembler into Authoring first would
+   pull Authoring into runtime metric and source-action callers.
+   Extract shared complete-release validation next, and separate role loading
+   from catalog compilation in `owned_skill_catalog.rs`, preserving the
+   validators used by normalization.
    Replace runtime loading with one checked immutable artifact snapshot using
    existing types and validators; update callers directly, with no compatibility
    loader or alternate evaluator. Then relocate the sole offline assembler and
    allocator into Authoring. The bounded checkpoint exit is release consumption
    without source reconstruction, artifact regeneration or offline assembly,
    preserving metric observations and malformed-artifact failures.
+   The loader audit found checks currently supplied by reassembly: canonical
+   bytes and ordering even after rehashing; complete input/recipe/compiled
+   identities; registry/schema/role/mapping and source-pin bindings;
+   normalization/reward/item/tree relationships; optional evaluation groups;
+   query ordering and policy commitments; aggregate nesting/work/output bounds;
+   manifest coverage declarations and provenance. Factor these validators once;
+   do not drop them when removing artifact regeneration. Keep source-pin subset
+   semantics where catalog roles predate later registry additions.
+   Preserve the new ordinary `resolve-owned-action` release CLI fixture during
+   cutover; existing historical publication utilities are not its replacement.
    Keep Authoring out of runtime dependencies. This does not by itself remove
    Import's legacy Data/Engine default features; their deletion remains R1/R4.
    Named-registry filesystem CAS, full schema/table declarations and the compact

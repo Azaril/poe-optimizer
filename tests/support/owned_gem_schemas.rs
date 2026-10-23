@@ -81,7 +81,9 @@ fn authored(
             _ => None,
         })
         .unwrap();
-    let mut registry = base.registry().clone();
+    let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        base.registry().clone(),
+    );
     let mut gems = vec![];
     let mut parameters = vec![];
     for row in selected {

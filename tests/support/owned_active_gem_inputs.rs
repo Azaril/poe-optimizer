@@ -199,7 +199,9 @@ fn family(
         // companion; the other eight retain both non-support candidates.
         if family_index == 0 { 26 } else { 18 }
     );
-    let mut registry = base.registry().clone();
+    let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        base.registry().clone(),
+    );
     let mut parameters = vec![];
     for (gem, (source, _)) in &selected {
         let rows: Vec<_> = authored

@@ -24,7 +24,6 @@ use poe_optimizer_engine::{
         MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport, OwnedSupportEffectPlan,
         OwnedSupportMetricPlan, PlanLimits, SupportEffectPlanInputs, SupportMetricStatus,
     },
-    owned_rules::{CompiledRulePackage, RuleLimits},
     owned_supports::SupportPreparationLimits,
 };
 use poe_optimizer_import::owned_release::OwnedReleaseLimits;
@@ -235,23 +234,19 @@ fn load_release_artifacts(path: &Path, input: &Path) -> Result<MetricArtifacts, 
     let evaluation = release.evaluation().ok_or(
         "release does not contain evaluation artifacts; supply an explicit evaluation release",
     )?;
-    // Consume the validated immutable snapshot, never re-open paths after checking
-    // the release inventory and reproducing its canonical bytes.
-    let recipe = release.assembled();
-    let definitions = Arc::new(recipe.schema().clone());
-    let stored_rules = recipe.rules().clone();
-    let rules = Arc::new(CompiledRulePackage::compile_stored(
-        &stored_rules,
-        definitions.as_ref(),
-        RuleLimits::default(),
-    )?);
+    // Share the checked packages and executable already validated during loading.
+    // Candidate plans receive their own scratch; immutable compilation is reused.
+    let recipe = release.assembled().checked();
+    let definitions = Arc::clone(recipe.schema());
+    let stored_rules = Arc::clone(recipe.rules());
+    let rules = Arc::clone(recipe.compiled_rules());
     Ok(MetricArtifacts {
         base: LoadedPlanArtifacts {
             request: load_request(input)?,
             definitions,
             stored_rules,
             rules,
-            routing: Arc::new(recipe.routing().clone()),
+            routing: Arc::clone(recipe.routing()),
         },
         metrics: Arc::new(evaluation.metrics().clone()),
         support: evaluation.support().map(|support| LoadedSupportArtifacts {

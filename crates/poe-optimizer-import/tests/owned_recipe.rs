@@ -7,6 +7,7 @@ use poe_optimizer_data::{
 use poe_optimizer_engine::owned_rules::{CompiledRulePackage, EffectDisposition};
 use poe_optimizer_import::{owned_mapping::*, owned_recipe::*};
 use sha2::{Digest, Sha256};
+use std::sync::Arc;
 fn bytes<'a>(p: &'a StagedOwnedRecipe, name: &str) -> &'a [u8] {
     p.artifacts()
         .iter()
@@ -24,8 +25,27 @@ fn deterministic_staging_reloads_each_public_artifact_without_allocating() {
     assert_eq!(a.registry().input(), &input.registry);
     assert_eq!(a.manifest(), b.manifest());
     assert_eq!(a.manifest().partial_rule_owners, 1);
+    assert_eq!(
+        a.manifest().coverage,
+        "declarations_preserved_not_certified"
+    );
     assert_eq!(a.manifest().whole_build_parity, "not_established");
     assert_eq!(a.manifest().calculation, "not_run");
+    let expected_names = [
+        "registry.json",
+        "schema.json",
+        "rules.json",
+        "routing.json",
+        "manifest.json",
+    ];
+    assert_eq!(
+        a.artifacts()
+            .iter()
+            .map(|value| value.name())
+            .collect::<Vec<_>>(),
+        expected_names
+    );
+    assert_eq!(a.artifacts().len(), b.artifacts().len());
     for (left, right) in a.artifacts().iter().zip(b.artifacts()) {
         assert_eq!(left.name(), right.name());
         assert_eq!(left.bytes(), right.bytes());
@@ -44,14 +64,31 @@ fn deterministic_staging_reloads_each_public_artifact_without_allocating() {
     assert_eq!(routing.identity(), a.routing().identity());
     let compiled = CompiledRulePackage::compile(rules.input(), &schema, limits.compile).unwrap();
     assert_eq!(compiled.identity(), a.manifest().compiled_rules);
+    let checked = a.checked().clone();
+    assert_eq!(checked.input_identity(), a.manifest().recipe);
+    assert_eq!(
+        checked.compiled_rules().source_identity(),
+        Some(*a.rules().identity())
+    );
+    assert_eq!(checked.compiled_rules().identity(), compiled.identity());
+    assert!(Arc::ptr_eq(checked.schema(), a.checked().schema()));
+    assert!(Arc::ptr_eq(checked.rules(), a.checked().rules()));
+    assert!(Arc::ptr_eq(checked.routing(), a.checked().routing()));
+    assert!(Arc::ptr_eq(
+        checked.compiled_rules(),
+        a.checked().compiled_rules()
+    ));
+    // Retained checked components remain usable after publication buffers drop.
+    drop(a);
     let owner = &rules.input().owners[0];
-    let evaluation = compiled
+    let evaluation = checked
+        .compiled_rules()
         .evaluate(
             &owner.owner,
             &owner.programs.members[0].id,
             &[],
-            &schema,
-            &mut compiled.new_scratch(),
+            checked.schema().as_ref(),
+            &mut checked.compiled_rules().new_scratch(),
         )
         .unwrap();
     assert!(matches!(&evaluation.effects[0].disposition,

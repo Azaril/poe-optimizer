@@ -167,6 +167,16 @@ Host contains no game, Import or Authoring dependencies. The native CLI still
 loads releases by reassembling authoring inputs; extracting its immutable loader
 remains required before runtime cutover.
 
+The prerequisite validation split is implemented. Registry decoding returns an
+immutable `OwnedIdRegistrySnapshot`; offline allocation resumes explicitly from
+that checked history. `CheckedOwnedRecipe` retains shared schema, stored rules,
+routing and the Engine-checked executable, including its stored-source identity.
+Publication staging wraps it, while evaluator-artifact validation uses the checked
+recipe directly. Metric release loading now shares these handles instead of
+cloning packages and compiling the rules again. Standalone artifact loading uses
+the same Engine compiler. Release loading still reconstructs and checks the
+canonical publication; removing that reconstruction is the next migration step.
+
 The immutable pre-migration IR corpus lives only in Authoring's
 [`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz),
 outside the production source inventory.

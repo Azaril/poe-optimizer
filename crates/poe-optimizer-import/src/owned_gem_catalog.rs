@@ -503,7 +503,8 @@ pub fn compile_owned_gem_catalog(
             return Err(invalid("selected source Gems collide on an owned identity"));
         }
     }
-    let mut registry = base.registry().clone();
+    let mut registry =
+        crate::owned_mapping::OwnedIdRegistry::from_snapshot(base.registry().clone());
     let mut gems = Vec::with_capacity(selected.len());
     let mut parameters = Vec::with_capacity(entries - selected.len());
     let mut inputs = Vec::with_capacity(selected.len());

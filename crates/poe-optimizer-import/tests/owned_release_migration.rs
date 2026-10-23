@@ -236,7 +236,9 @@ fn actor_migration(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
     };
     assert!(skill_schema.declarations.parameters.is_complete());
     assert!(skill_schema.declarations.parameters.members.is_empty());
-    let mut registry = prior.assembled().registry().clone();
+    let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        prior.assembled().registry().clone(),
+    );
     let actor: ActorDefId = registry.allocate_definition().unwrap();
     let owner = SlotOwnerDefId::Actor(actor.clone());
     let parameter = registry
@@ -744,7 +746,9 @@ fn migration_preflights_new_registry_rows_before_copying_the_prior_graph() {
             Err(error) => panic!("unexpected header migration failure: {error}"),
         }
     }
-    let mut registry = prior.assembled().registry().clone();
+    let mut registry = poe_optimizer_import::owned_mapping::OwnedIdRegistry::from_snapshot(
+        prior.assembled().registry().clone(),
+    );
     let id: OptionDefId = registry.allocate_definition().unwrap();
     let mut added = headers;
     added.schema.push(SchemaExtensionEntry::Definition(
