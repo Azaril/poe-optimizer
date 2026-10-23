@@ -15,6 +15,65 @@ use poe_optimizer_data::{
 use poe_optimizer_engine::owned_rules::CompiledRulePackage;
 use std::sync::Arc;
 
+/// Preserve the supplied recipe commitment and bound its complete typed input
+/// before constituent constructors allocate indexes or clone storage.
+pub(crate) fn check_recipe_input(
+    input: OwnedRecipeView<'_>,
+    limits: OwnedRecipeLimits,
+) -> Result<OwnedContentDigest, OwnedRecipeError> {
+    limits.validate()?;
+    if input.schema_version != OWNED_RECIPE_VERSION {
+        return Err(OwnedRecipeError::Version(input.schema_version));
+    }
+    Ok(digest_owned(
+        "owned-recipe-input-v1",
+        &input,
+        limits.max_wire_bytes,
+    )?)
+}
+
+/// Registry authority is checked against every descriptor, including those
+/// unused by programs. Source validation and executable recipes share this law.
+pub(crate) fn validate_definition_space(
+    registry: &OwnedIdRegistrySnapshot,
+    schema: &OwnedDefinitionSchemaPackage,
+    max_registry_checks: usize,
+) -> Result<(), OwnedRecipeError> {
+    if registry.input().namespace != schema.input().namespace {
+        return Err(OwnedRecipeError::Namespace);
+    }
+    let count = schema
+        .input()
+        .definitions
+        .len()
+        .checked_add(schema.input().slots.len())
+        .ok_or(OwnedRecipeError::Limit("registry checks"))?;
+    if count > max_registry_checks {
+        return Err(OwnedRecipeError::Limit("registry checks"));
+    }
+    for subject in schema
+        .input()
+        .definitions
+        .iter()
+        .map(|value| SchemaSubject::Definition(value.address()))
+        .chain(
+            schema
+                .input()
+                .slots
+                .iter()
+                .map(|value| SchemaSubject::Slot(value.address())),
+        )
+    {
+        if !registry
+            .entry(&subject)
+            .is_some_and(|entry| matches!(entry.state, RegistryState::Active))
+        {
+            return Err(OwnedRecipeError::Unregistered(Box::new(subject)));
+        }
+    }
+    Ok(())
+}
+
 /// Immutable checked storage and executable packages. Validation preserves all
 /// declared coverage; it neither allocates IDs nor establishes build completeness.
 #[derive(Clone, Debug)]
@@ -32,47 +91,10 @@ impl CheckedOwnedRecipe {
         input: OwnedRecipeInput,
         limits: OwnedRecipeLimits,
     ) -> Result<Self, OwnedRecipeError> {
-        limits.validate()?;
-        if input.schema_version != OWNED_RECIPE_VERSION {
-            return Err(OwnedRecipeError::Version(input.schema_version));
-        }
-        // Preserve the supplied recipe commitment before canonicalization and
-        // bound it before constructors allocate indexes or clone constituents.
-        let input_identity = digest_owned("owned-recipe-input-v1", &input, limits.max_wire_bytes)?;
+        let input_identity = check_recipe_input((&input).into(), limits)?;
         let registry = OwnedIdRegistrySnapshot::new(input.registry, limits.registry)?;
         let schema = OwnedDefinitionSchemaPackage::new(input.schema, limits.schema)?;
-        if registry.input().namespace != schema.input().namespace {
-            return Err(OwnedRecipeError::Namespace);
-        }
-        let count = schema
-            .input()
-            .definitions
-            .len()
-            .checked_add(schema.input().slots.len())
-            .ok_or(OwnedRecipeError::Limit("registry checks"))?;
-        if count > limits.max_registry_checks {
-            return Err(OwnedRecipeError::Limit("registry checks"));
-        }
-        for subject in schema
-            .input()
-            .definitions
-            .iter()
-            .map(|value| SchemaSubject::Definition(value.address()))
-            .chain(
-                schema
-                    .input()
-                    .slots
-                    .iter()
-                    .map(|value| SchemaSubject::Slot(value.address())),
-            )
-        {
-            if !registry
-                .entry(&subject)
-                .is_some_and(|entry| matches!(entry.state, RegistryState::Active))
-            {
-                return Err(OwnedRecipeError::Unregistered(Box::new(subject)));
-            }
-        }
+        validate_definition_space(&registry, &schema, limits.max_registry_checks)?;
         // Incoming bindings must already refer to the final canonical schema.
         let rules = OwnedRulePackage::new(input.rules, &schema, limits.rules)?;
         let routing = OwnedActionRouting::new(input.routing, &schema, limits.routing)?;

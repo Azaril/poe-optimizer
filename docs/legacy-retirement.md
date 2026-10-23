@@ -1,6 +1,6 @@
 # Legacy retirement register
 
-Updated 2026-10-22. [Domain architecture](domain-architecture.md) defines the
+Updated 2026-10-23. [Domain architecture](domain-architecture.md) defines the
 single end state; [implementation R0-R6](implementation.md#delivery-plan-and-gates)
 is the schedule. This register classifies deletions and semantic questions; it is
 not another plan. Older detailed audits remain available in the
@@ -14,6 +14,12 @@ test, receipt or source-file pin is not itself a consumer requirement. Preserve
 useful semantic fixtures, then delete redundant machinery with its last consumer.
 No shipped-format compatibility is required. Do not maintain V1/V2 readers,
 aliases, old profiles or a second evaluator for historical test reproduction.
+
+The cached maintained-release harness now owns scalar, Actor attribute and the
+four remaining defence-component numeric laws. Their superseded numeric helpers
+and callers are removed. Outer import/layout/publication assertions and Cleric
+whole-plan cases remain live until their useful behavior has a maintained
+replacement; this is not yet retirement of the historical publication chain.
 
 Do not let a refactor turn unresolved semantics into default values or complete
 coverage. Delete unsupported abandoned features honestly; preserve a precise

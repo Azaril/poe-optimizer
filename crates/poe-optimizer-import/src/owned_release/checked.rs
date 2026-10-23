@@ -1,4 +1,5 @@
 //! Shared constituent validation, without authoring or publication buffers.
+use super::constituents::CheckedImportConstituents;
 use super::*;
 use crate::owned_recipe::{CheckedOwnedRecipe, OwnedRecipeView};
 
@@ -68,92 +69,19 @@ impl CheckedOwnedRelease {
         digest_owned(domain, &input, limits.max_input_bytes)?;
         let mut recipe = CheckedOwnedRecipe::new(input.recipe.to_input(), limits.recipe)?;
         recipe.canonicalize_input_identity(limits.recipe.max_wire_bytes)?;
-        let mapping = OwnedMappingIndex::new(
-            input.mapping.clone(),
+        let CheckedImportConstituents {
+            mapping,
+            roles,
+            normalization,
+            rewards,
+            items,
+            item_source,
+            tree,
+        } = CheckedImportConstituents::check(
+            &input,
             recipe.registry(),
             recipe.schema().as_ref(),
-            limits.catalog.mapping,
-        )?;
-        let roles = OwnedSkillRoleIndex::new(
-            input.roles.clone(),
-            &mapping,
-            recipe.schema().as_ref(),
-            limits.catalog,
-        )?;
-        validate_normalization_inputs(
-            input.normalization,
-            &mapping,
-            recipe.schema().as_ref(),
-            &[],
-            limits.normalization,
-        )?;
-        validate_role_bound_normalization(
-            input.normalization,
-            recipe.schema().as_ref(),
-            &roles,
-            &mapping,
-            limits.normalization,
-        )?;
-        let normalization = digest_owned(
-            "owned-normalization-policy-v3",
-            input.normalization,
-            limits.normalization.max_policy_bytes,
-        )?;
-        let rewards = OwnedRewardPolicy::new(
-            input.rewards.clone(),
-            &mapping,
-            recipe.schema().as_ref(),
-            limits.rewards,
-        )?;
-        validate_configuration_reward_inventory(
-            input.normalization,
-            &mapping,
-            &rewards,
-            limits.normalization,
-        )?;
-        let items =
-            OwnedItemLinePolicy::new(input.items.clone(), recipe.schema().as_ref(), limits.items)?;
-        let item_source = ItemSourceLayoutPolicy::new(
-            input.item_source.clone(),
-            &items,
-            recipe.schema().as_ref(),
-            limits.item_source,
-        )?;
-        validate_item_modifier_membership(
-            input.normalization,
-            recipe.schema().as_ref(),
-            &items,
-            &item_source,
-            limits.normalization,
-        )?;
-        validate_item_parameter_inputs(
-            input.normalization,
-            recipe.schema().as_ref(),
-            &items,
-            &item_source,
-            limits.normalization,
-        )?;
-        let tree = input
-            .tree
-            .map(|value| {
-                OwnedTreeNormalizationPolicy::new(
-                    value.clone(),
-                    recipe.registry(),
-                    recipe.schema().as_ref(),
-                    &mapping,
-                    input.normalization,
-                    limits.tree,
-                )
-            })
-            .transpose()?;
-        validate_passive_socket_placement(
-            input.normalization,
-            recipe.schema().as_ref(),
-            &mapping,
-            &items,
-            &item_source,
-            tree.as_ref(),
-            limits.normalization,
+            limits,
         )?;
         let evaluation = input
             .evaluation

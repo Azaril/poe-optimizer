@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-22 (EDT).
+Updated: 2026-10-23 (EDT).
 
 This is the only active delivery schedule. The [architecture](domain-architecture.md)
 defines the end state; [documentation index](README.md) explains authority. The
@@ -13,25 +13,25 @@ adjustments below. Historical checkpoints remain in Git and
 **Next work is the DSL/data/runtime migration, before further mechanic content.**
 The first complete unchanged build must use the new format and sole native path.
 Legacy deletion is a gate before that milestone, not work deferred until five builds.
-The computed-support unused-input repair and immutable typed Stat declaration
-compiler under R2 are implemented. Continue independent harness retirement while
+The computed-support unused-input repair, immutable typed Stat declaration compiler
+and original-source dependency validation under R2 are implemented. Continue independent harness retirement while
 integrating declarations with maintained release publication and completing the
 current release's real execution declarations. Do not add a new provenance API
 for dormant support flags.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; current checkpoint adds typed Stat declaration staging and transfers scalar/Actor attribute laws |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging and scalar/Actor laws `dde32fef`; current checkpoint shares original-source dependency validation and transfers defence laws |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
 | Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation, typed Stat declaration staging and production release command. Declaration publication integration remains pending. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Move the maintained publication core and retire obsolete transformation chains |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
-| Loader extraction | Checked runtime reader and shared complete-release validation implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Offline module/command relocation remains |
+| Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program now comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Exact graph/placement and historical non-program preservation gates pass; named-registry filesystem CAS, declaration publication/remaining descriptor kinds and binary pack remain pending |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Node renaming changes rule/input identity; other emitted constituents remain byte-exact. No local predecessor needed; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 03:25:30 UTC on October 23 (October 22 EDT), baseline `ae90ec82` run `39857163789` had completed successfully with all twenty jobs passing (finished 02:23:26 UTC). `a7069aa1` run `39889225006` had eight successful jobs, ten running, no failures; `1a88f37c` run `39891765286` was pending. Each checkpoint needs its own hosted result; baseline success does not certify later commits |
+| CI | At 04:24:47–48 UTC on October 23, baseline `ae90ec82` run `39857163789` had completed successfully with all twenty jobs passing (finished 02:23:26 UTC). `a7069aa1` run `39889225006` had nine successful jobs, nine running, no failures; Ubuntu CLI-2 finished at 04:08:03 UTC. `dde32fef` run `39896305945` was pending with no jobs created. `1a88f37c` was cancelled by pending-run coalescing. Each checkpoint needs its own hosted result; baseline success does not certify later commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release`
@@ -921,10 +921,11 @@ compiler or independent test retirement; do not wire the CLI before it is resolv
 The final assembler validates existing commitments rather than reconstructing
 them. The historical `owned_release_revision::rebind_release_dependencies` assumes
 a checked predecessor and rejects evaluation artifacts. Do not call it on raw
-decoded source or recreate a second repair list. Extract/reuse the shared semantic
-validation for bootstrap/import constituents against the actual base registry and
-schema, then construct final dependencies through maintained Authoring and validate
-the complete release. Cover malformed incoming commitments and late failures.
+decoded source or recreate a second repair list. Shared bootstrap/import semantic
+validation against the actual original registry and schema is now implemented
+(checkpoint below). Next construct final dependencies through maintained Authoring
+after declaration allocation, then validate the complete release. Preserve the
+malformed incoming commitment and late-failure checks.
 Retire the old transformation caller when its useful tests and binding logic have
 moved; none of this may silently grant missing gameplay coverage.
 Then author initial-type producers for Original05 Sniper first: pinned
@@ -954,8 +955,9 @@ pass without changing production rules or relaxing validation.
 Removed `check_scalar_numeric`, `check_components`, their private helpers and
 exact callers from the five historical scalar/attribute publication helpers after
 the replacements passed. Retained outer publication/import/schema/closure/wire
-checks, four separate defence-family numeric checks and Cleric whole-plan checks
-remain explicit retirement work. The historical chain has not been deleted or
+checks and Cleric whole-plan checks remain explicit retirement work. The four
+separate defence-family numeric checks are transferred in the checkpoint below.
+The historical chain has not been deleted or
 rerun in full at this checkpoint; its affected target is compiled/linted below.
 
 Native-only all-target lint exposed two Data examples that imported legacy APIs
@@ -973,6 +975,91 @@ Logs: `runs/stat-declarations-authoring-clippy-final.log`,
 checks pass. Independent reviews found no remaining blocker in declaration
 staging or transferred laws. The nine pre-existing incoming-critical files remain
 unchanged and excluded from this checkpoint.
+
+**Original-source dependency and defence checkpoint:** `build_release` now decodes
+the complete source input and checks its original registry, schema, rule header,
+routing, Import policies and source pins before DSL lowering. Recipe input bounds,
+active descriptor membership and Import constituent construction are shared with
+the existing runtime path; runtime validation order and final rule/evaluation checks
+are preserved. The source check returns only a checked schema and never repairs
+incoming seals. Final dependency construction after new declaration allocation is
+still pending, as is the publication workflow decision above.
+
+The next binding audit found that Tree already separates authored content from
+`bind_new`, while Mapping, Roles, Rewards, Items and ItemSource still mix payload
+and seals. Add immutable content construction at those owning modules and call
+their existing validators against final checked dependencies; preserve source
+pins, compiler provenance and coverage. Normalization needs an owner-local seam
+for its nested role/direct-input/item/reward/configuration commitments. Do not
+replace this with field assignments spread through Authoring. Old evaluation
+seals are deliberately outside the source prefix check: after a new-Stat program
+is introduced, an old-schema executable may not exist to authenticate them.
+Construct evaluation artifacts from explicitly authored content, or inherit only
+from an independently checked release; never treat prefix-check success as
+permission to overwrite evaluation commitments. This is required integration
+work, not yet an implemented content-construction API.
+
+Smallest independent integration slice: construct Import bindings for the current
+source without an evaluation bundle, first proving unchanged-schema byte identity,
+then append one Boolean Stat and source program through immutable staging and
+complete assembly. Preserve all five normalized drafts and Partial coverage.
+This can proceed in memory before the filesystem workflow decision. Obtain rule
+and routing identities through checked storage; do not compile the Engine twice
+merely to compute dependency digests. Evaluation-content construction follows
+with explicit authored inputs rather than a raw-seal overwrite exception.
+Resolve new support-type Stats and frozen-channel references through the staged
+`SymbolRegistry`. New owner-qualified programs require explicit stage/readiness
+classification; do not predict IDs or infer a Complete partition from added rules.
+
+Found follow-up before evaluation-content construction: the aggregate preflight
+in `owned_release_evaluation.rs` does not yet charge stage readiness, receiving
+source-property declarations or receiver preparation-property lists. Their Data
+constructors still validate them, and whole-input byte bounds remain enforced,
+but the shared validation-entry budget misses these nested collections before
+cloning. Add accounting and exact/one-short budget regressions in the existing
+evaluation suite; do not increase limits or bypass the final Data checks.
+Use the component charge laws in `owned_stages/readiness.rs` and
+`owned_support_receiving/source_properties.rs`: include readiness parameters,
+participation and program outputs; optional receiver applicability/properties;
+source relations, generated occurrences, all six relation collections, nested
+support programs and generated/summoner paths. Charge hostile Partial closure
+gaps before their later semantic rejection, and apply the existing receiving
+path-depth bound to both source-property path forms before cloning.
+The existing evaluation fixture and borrowed source-check API suffice: establish
+the baseline budget once, add each subtree with an independently calculated cost,
+and check exact/one-short limits. A tiny byte budget distinguishes aggregate
+preflight from later digest work. Retain full-assembly rejection of malformed
+evaluation controls; source-check success is only structural evidence here.
+
+Six new regression tests cover corrupt original seals/source pins, retired schema
+addresses, exact and exhausted budgets, rejection before malformed DSL, late DSL
+failure, nested gem-policy binding and mandatory final evaluation validation.
+The same cached release harness now checks the four remaining defence scalar
+families with independent decimal expectations, both signs, exact units/recipients,
+live versus dormant missing inputs, scratch recovery and parallel workers.
+After that replacement passed, the old `check_legacy_numeric` helper and its
+private numeric/Boolean helpers and caller were deleted from
+`tests/support/owned_item_defence_inputs.rs`. Its outer import/layout/coverage/
+publication checks remain pending transfer; Cleric whole-plan checks still need
+the maintained execution declarations. No gameplay coverage is promoted.
+
+All **202 Authoring tests pass** (162 library, seven CLI and 33 release), with none
+ignored. This includes maintained source/input identity, historical non-program
+preservation and all-five original import/action provenance checks. Optimized
+compilation took 8m40s; release tests took 13.64s. Log:
+`runs/source-dependencies-authoring-tests.log`. Strict Authoring all-target Clippy
+also passes (`runs/source-dependencies-authoring-clippy.log`). All **1,107 selected
+Import tests pass** (246 library and 861 owned integration), with none ignored,
+including checked release/recipe roundtrips, malformed bindings and budgets.
+That is **1,309 passing checks** for this checkpoint. Import compilation took
+11m30s and each test binary completed in under 40s; compilation cost remains R0
+work. Log: `runs/source-dependencies-import-tests.log`. Strict all-target Import
+Clippy and retained `owned_extension_cli` lint pass; logs:
+`runs/source-dependencies-import-clippy.log` and
+`runs/source-dependencies-retirement-clippy.log`. Scoped formatting and diff checks
+pass. Independent review found no issue in shared validation or the transferred
+laws. The nine protected incoming-critical files remain unchanged. This checkpoint
+does not change current release identity, coverage or the **0/5** original count.
 
 The [support target facts investigation](owned-support-target-facts-proposal.md)
 also records a deferred recommendation for narrow structural source reads, which
@@ -1185,11 +1272,13 @@ These are retained obligations, not extra competing phases.
 
 ## Checkpoint workflow and next action
 
-1. Read this plan and Git status. The computed-support unused-input repair and
-   immutable typed Stat declaration compiler are implemented. Next **resolve the
-   offline publication workflow, validate bootstrap commitments and integrate
-   declarations into the maintained release compiler**, following the R2
-   prerequisite above. Then author real initial-type facts for Sniper using its
+1. Read this plan and Git status. The computed-support unused-input repair,
+   immutable typed Stat declaration compiler and original bootstrap dependency
+   checks are implemented. Next **repair aggregate evaluation preflight accounting,
+   construct final Import dependencies and integrate immutable Stat declarations
+   into the maintained in-memory compiler**, following the R2 prerequisites above.
+   The offline publication workflow still needs a decision before CLI publication;
+   it does not block these library steps. Then author real initial-type facts for Sniper using its
    pinned source evidence. No structural-read decision blocks that slice.
    In parallel, continue independent behavioral transfers.
    Complete the actual execution declarations needed to replace historical
@@ -1219,8 +1308,8 @@ These are retained obligations, not extra competing phases.
    Finish the remaining transfers in three coherent groups:
    - Numeric components: scalar families, Actor attributes, local scaling and
      elemental-channel laws now use the cached release harness; their replaced
-     numeric helpers/calls are deleted. Transfer the four separate defence-family
-     numeric cases and remaining outer canonical property-slot, import and
+     numeric helpers/calls are deleted, including the four separate defence-family
+     numeric cases. Transfer remaining outer canonical property-slot, import and
      wire-budget checks before deleting their publication helpers. Preserve
      units, exact channels, lazy branches, negative rounding, overflow, missing
      facts and independent/reused scratch. Discard old program/owner/target-growth
@@ -1232,6 +1321,15 @@ These are retained obligations, not extra competing phases.
      applicability, provenance and malformed-input rejection. Current support
      determines whether Corrupted headers and other inputs are admitted; retire
      historical dialect/version tests and intermediate admission-gain totals.
+     Next bounded transfer: `owned_item_metadata::check_preamble_cases`, using
+     cached-release `items()`/`item_source()` and the existing public attribution
+     and conversion APIs. Preserve inert metadata, duplicate IDs, malformed or
+     misplaced headers, selection/markup refusals and partial modifier coverage.
+     Its old positive physical-range line has source scaling tags now refused
+     by the maintained policy; use the admitted untagged range for the independent
+     value 12 and retain the tagged line as a refusal control. Drop the old v4
+     compatibility reconstruction. Keep `metadata_only` until `check_originals`
+     also moves; it still has that live caller.
    - Gem ownership: source-value checks in `owned_support_gem_inputs`,
      `owned_gem_numeric_aliases`, `owned_multieffect_gem_inputs` and
      `owned_active_gem_inputs`. Reuse current normalized originals and independently

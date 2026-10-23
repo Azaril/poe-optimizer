@@ -1,6 +1,6 @@
 # Project-owned game semantics and native evaluation
 
-Status: accepted architecture, updated 2026-10-22 following the
+Status: accepted architecture, updated 2026-10-23 following the
 [owner-provided review](architecture-review-2026-10-22.md). This document defines
 **the target**, not a claim that the migration is complete. The
 [implementation plan](implementation.md) is the only delivery schedule; the
@@ -350,6 +350,17 @@ recreate it from an empty history on every build. Source compilation must valida
 bootstrap commitments before constructing final dependency bindings; runtime
 validation must never repair corrupt input. Reuse shared semantic checks and
 one maintained compiler path while retiring the historical revision machinery.
+
+The maintained source builder now checks the original dependency space before
+lowering any DSL: registry/schema membership, the rule header and routing seals,
+Import constituent bindings, nested normalization policies and consistent source
+pins. It shares those validators with the runtime reader. Whole-input and recipe
+budgets precede constituent cloning. The result is only the checked source schema;
+it grants no permission to rewrite dependencies and is not a checked release.
+Program-free source metadata cannot satisfy executable queries until lowering
+supplies their programs. Complete rule and evaluation-artifact validation therefore
+remains mandatory at final assembly. Constructing new dependencies after declaration
+allocation remains a separate compiler responsibility, not runtime repair.
 
 Typed Stat declarations use that same staged allocation and existing Data schema.
 The offline KDL `definitions` document names a game/version namespace and each

@@ -1,6 +1,8 @@
 //! Final constituent composition uses the existing release and Engine checks.
 #[path = "release/arithmetic.rs"]
 mod arithmetic;
+#[path = "release/defence_components.rs"]
+mod defence_components;
 #[allow(dead_code, unused_imports)]
 #[path = "../../poe-optimizer-engine/tests/support/owned_fixtures.rs"]
 mod engine_fixtures;
@@ -12,6 +14,8 @@ mod local_scaling;
 mod originals;
 #[path = "release/scalar_attributes.rs"]
 mod scalar_attributes;
+#[path = "release/source_dependencies.rs"]
+mod source_dependencies;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{

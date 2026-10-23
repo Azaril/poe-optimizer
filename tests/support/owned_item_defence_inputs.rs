@@ -10,10 +10,8 @@ use poe_optimizer_core::{
     owned_build::{DeclaredSlot, LoadoutScope, ParameterValue},
     owned_definitions::*,
     owned_draft::{DraftField, DraftLimits, DraftListCompletion, decode_draft},
-    owned_rules::{RuleEffectKind, RuleEntity, RuleProgram, RuleReadSource},
     owned_schema::*,
 };
-use poe_optimizer_engine::owned_rules::{CompiledRulePackage, EffectDisposition, RuleFact};
 use poe_optimizer_import::{
     owned_item_lines::{ItemLineInput, LocatedItemModifier, OwnedItemLinePolicy},
     owned_item_source::{ItemSourceLayoutPolicy, ItemSourceProblem},
@@ -650,190 +648,6 @@ fn check_policies(prior: &Path, output: &Path, bindings: &Value) {
     );
 }
 
-fn numeric_fact(program: &RuleProgram, name: &str, amount: f64) -> RuleFact {
-    let read = program
-        .reads
-        .iter()
-        .find(|read| read.id.as_str() == name)
-        .unwrap();
-    let ComputedValueType::Quantity { unit } = &read.value_type else {
-        panic!("typed numeric input")
-    };
-    RuleFact {
-        read: read.id.clone(),
-        value: ParameterValue::Quantity(FiniteQuantity::new(amount, unit.clone()).unwrap()),
-    }
-}
-fn boolean_fact(program: &RuleProgram, slot: &Value, value: bool) -> RuleFact {
-    let slot: DeclaredSlot<ParameterSlotDefId> = serde_json::from_value(slot.clone()).unwrap();
-    let read = program.reads.iter().find(|read| matches!(&read.source, RuleReadSource::Parameter { slot: actual } if actual == &slot)).unwrap();
-    assert_eq!(read.value_type, ComputedValueType::Boolean);
-    RuleFact {
-        read: read.id.clone(),
-        value: ParameterValue::Boolean(value),
-    }
-}
-
-fn check_legacy_numeric(after: &OwnedRecipeInput, bindings: &Value) {
-    let checked = assemble_owned_recipe(after.clone(), Default::default()).unwrap();
-    let compiled = CompiledRulePackage::compile(
-        checked.rules().input(),
-        checked.schema(),
-        Default::default(),
-    )
-    .unwrap();
-    let mut scratch = compiled.new_scratch();
-    let specs: Vec<_> = specifications().into_iter().filter(legacy).collect();
-    assert_eq!(specs.len(), 4);
-    for spec in &specs {
-        let binding = family(bindings, spec);
-        let owner_id = SchemaSubject::Definition(modifier_id(binding).address());
-        let owner = after
-            .rules
-            .owners
-            .iter()
-            .find(|owner| owner.owner == owner_id)
-            .unwrap();
-        assert_eq!(owner.programs.members.len(), 4);
-        assert!(matches!(
-            owner.programs.closure,
-            SchemaClosure::Partial { .. }
-        ));
-        for program in &owner.programs.members {
-            assert_eq!(program.effects.len(), 1);
-            assert!(program.effects.iter().all(|effect| matches!(
-                &effect.effect,
-                RuleEffectKind::Derive {
-                    entity: RuleEntity::Modifier,
-                    ..
-                }
-            )));
-            let result = compiled
-                .evaluate(&owner_id, &program.id, &[], checked.schema(), &mut scratch)
-                .unwrap();
-            assert!(matches!(
-                result.effects[0].disposition,
-                EffectDisposition::Unresolved { .. }
-            ));
-            assert_eq!(result.owner_programs_closure, owner.programs.closure);
-        }
-        let program = owner
-            .programs
-            .members
-            .iter()
-            .find(|program| program.id.as_str() == "effective-amount")
-            .unwrap();
-        let output: StatDefId = serde_json::from_value(binding["output"].clone()).unwrap();
-        let unit: UnitDefId = serde_json::from_value(binding["unit"].clone()).unwrap();
-        assert!(
-            matches!(&program.effects[0].effect, RuleEffectKind::Derive { entity: RuleEntity::Modifier, stat, .. } if stat == &output)
-        );
-        // Hand-selected expectations from ItemTools.applyRange/applyValueScalar.
-        // Decimal lexical syntax is distinct from integral numeric value. An
-        // explicit base=1 rounds before scaling; an absent base does not.
-        for (raw, decimal, base_present, base, magnitude, expected) in [
-            (0.0, false, false, 1.0, 1.0, 0.0),
-            (10.0, false, false, 1.0, 1.0, 10.0),
-            (10.5, true, false, 1.0, 1.0, 10.5),
-            (10.5, true, true, 1.0, 1.0, 10.5),
-            (10.5, true, false, 99.0, 1.0, 10.5),
-            (0.15, true, false, 1.0, 1.5, 0.2),
-            (0.15, true, true, 1.0, 1.5, 0.3),
-            (3.0, false, false, 1.0, 1.25, 3.0),
-            (3.0, true, false, 1.0, 1.25, 3.7),
-            (10.0, false, false, 1.0, 1.29995, 13.0),
-            (10.0, true, false, 1.0, 1.29995, 12.9),
-            (1.0, false, true, 1.49, 2.0, 2.0),
-            (1.0, false, true, 1.5, 2.0, 4.0),
-            (3.0, false, true, 2.0, 1.5, 9.0),
-            (10.0, false, false, 1.0, 1.0, 10.0),
-        ] {
-            for negative in [false, true] {
-                let component = if negative && !spec.increase {
-                    -raw
-                } else {
-                    raw
-                };
-                let expected = if negative { -expected } else { expected };
-                let mut facts = vec![
-                    numeric_fact(program, "component", component),
-                    boolean_fact(program, &binding["decimal_quantization_input"], decimal),
-                    boolean_fact(
-                        program,
-                        &binding["base_rounding_present_input"],
-                        base_present,
-                    ),
-                    numeric_fact(program, "corruption-factor", base),
-                    numeric_fact(program, "magnitude-factor", magnitude),
-                ];
-                if spec.increase {
-                    facts.push(boolean_fact(program, &binding["negative_input"], negative));
-                }
-                assert_eq!(program.reads.len(), facts.len());
-                let result = compiled
-                    .evaluate(
-                        &owner_id,
-                        &program.id,
-                        &facts,
-                        checked.schema(),
-                        &mut scratch,
-                    )
-                    .unwrap();
-                let assert_value = |disposition: &EffectDisposition| {
-                    let EffectDisposition::Applied {
-                        value: ParameterValue::Quantity(value),
-                    } = disposition
-                    else {
-                        panic!(
-                            "{}: {component}/{decimal}/{base_present}/{base}/{magnitude}",
-                            spec.name
-                        )
-                    };
-                    assert_eq!(value.unit(), &unit);
-                    assert_eq!(
-                        value.value(),
-                        expected,
-                        "{}: {component}/{decimal}/{base_present}/{base}/{magnitude}",
-                        spec.name
-                    );
-                };
-                assert_value(&result.effects[0].disposition);
-                for omitted in 0..facts.len() {
-                    let reduced: Vec<_> = facts
-                        .iter()
-                        .enumerate()
-                        .filter(|(index, _)| *index != omitted)
-                        .map(|(_, fact)| fact.clone())
-                        .collect();
-                    let result = compiled
-                        .evaluate(
-                            &owner_id,
-                            &program.id,
-                            &reduced,
-                            checked.schema(),
-                            &mut scratch,
-                        )
-                        .unwrap();
-                    let unchanged = magnitude == 1.0 && (!base_present || base == 1.0);
-                    let unused = (omitted == 1 && unchanged) || (omitted == 3 && !base_present);
-                    if unused {
-                        assert_value(&result.effects[0].disposition);
-                    } else {
-                        assert!(
-                            matches!(
-                                result.effects[0].disposition,
-                                EffectDisposition::Unresolved { .. }
-                            ),
-                            "missing live input {} on {}",
-                            facts[omitted].read.as_str(),
-                            spec.name
-                        );
-                    }
-                }
-            }
-        }
-    }
-}
 /// Recognition of a preceding physical defence line can remove ambiguity from
 /// an existing following modifier without admitting the preceding line itself.
 /// These reviewed original-source witnesses are distinct from the 22 new
@@ -1205,7 +1019,6 @@ pub fn check_item_defence_inputs(cwd: &Path, prior: &Path) -> PathBuf {
             let after = recipe(output);
             check_structure(&before, &after, bindings);
             check_policies(prior, output, bindings);
-            check_legacy_numeric(&after, bindings);
             let checked = assemble_owned_recipe(after, Default::default()).unwrap();
             let lines = OwnedItemLinePolicy::new(
                 serde_json::from_value(json(output.join("items.json"))).unwrap(),

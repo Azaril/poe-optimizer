@@ -3,7 +3,7 @@
 use super::{Decoder, ReleaseBuildError, ReleaseBuildLimits, ReleaseManifest, Result};
 use crate::{NamesLimits, PacketLimits, RuleSource, load_names, lower_packet, parse_packet};
 use poe_optimizer_core::owned_rules::RulePackageInput;
-use poe_optimizer_data::owned_schema::{OwnedDefinitionSchemaPackage, SchemaPackageInput};
+use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use std::collections::{BTreeMap, BTreeSet};
 
 fn charge(total: &mut usize, amount: usize, maximum: usize, label: &'static str) -> Result<()> {
@@ -17,7 +17,7 @@ fn charge(total: &mut usize, amount: usize, maximum: usize, label: &'static str)
 pub(super) fn compose(
     manifest: &ReleaseManifest,
     decoder: &Decoder<'_>,
-    schema: &SchemaPackageInput,
+    index: &OwnedDefinitionSchemaPackage,
     rules: &mut RulePackageInput,
     limits: ReleaseBuildLimits,
 ) -> Result<()> {
@@ -33,7 +33,6 @@ pub(super) fn compose(
     if manifest.packets.is_empty() {
         return Ok(());
     }
-    let index = OwnedDefinitionSchemaPackage::new(schema.clone(), limits.release.recipe.schema)?;
     let declared: BTreeMap<_, _> = manifest
         .rules
         .iter()
@@ -51,7 +50,7 @@ pub(super) fn compose(
         let packet_path = &manifest.sources[spec.packet].path;
         let symbols = load_names(
             decoder.text(spec.names)?,
-            &index,
+            index,
             NamesLimits {
                 manifest: limits.manifest,
                 ..NamesLimits::default()
@@ -104,7 +103,7 @@ pub(super) fn compose(
         let lowered = lower_packet(
             &packet,
             &sources,
-            &index,
+            index,
             &symbols,
             &rules.tables,
             PacketLimits::default(),

@@ -15,6 +15,7 @@ use poe_optimizer_import::{
     owned_release::{
         OWNED_EVALUATION_RELEASE_VERSION, OWNED_RELEASE_VERSION, OwnedReleaseError,
         OwnedReleaseInput, OwnedReleaseLimits, StagedOwnedRelease, assemble_owned_release,
+        check_release_source_dependencies,
     },
     owned_release_evaluation::{OwnedReleaseEvaluationInput, OwnedReleaseSupportInput},
 };
@@ -254,8 +255,6 @@ pub enum ReleaseBuildError {
         path: String,
         source: crate::PacketError,
     },
-    #[error(transparent)]
-    Schema(#[from] poe_optimizer_data::owned_schema::SchemaPackageError),
     #[error(transparent)]
     Assembly(#[from] OwnedReleaseError),
 }
@@ -590,9 +589,6 @@ pub fn build_release(
         return Err(ReleaseBuildError::Invalid("missing declared source"));
     }
     let decoder = Decoder::new(manifest, supplied, limits.max_decoded_bytes)?;
-    let schema = decoder.required(Component::Schema)?;
-    let mut rules = decoder.required(Component::Rules)?;
-    rules::compose(manifest, &decoder, &schema, &mut rules, limits)?;
     let evaluation = if manifest.components.contains_key(&Component::Metrics) {
         Some(OwnedReleaseEvaluationInput {
             metrics: decoder.required(Component::Metrics)?,
@@ -611,7 +607,7 @@ pub fn build_release(
     } else {
         None
     };
-    let input = OwnedReleaseInput {
+    let mut input = OwnedReleaseInput {
         schema_version: if evaluation.is_some() {
             OWNED_EVALUATION_RELEASE_VERSION
         } else {
@@ -620,8 +616,8 @@ pub fn build_release(
         recipe: OwnedRecipeInput {
             schema_version: OWNED_RECIPE_VERSION,
             registry: decoder.required(Component::Registry)?,
-            schema,
-            rules,
+            schema: decoder.required(Component::Schema)?,
+            rules: decoder.required(Component::Rules)?,
             routing: decoder.required(Component::Routing)?,
         },
         mapping: decoder.required(Component::Mapping)?,
@@ -644,6 +640,11 @@ pub fn build_release(
             .collect::<Result<_>>()?,
         provenance: decoder.optional(Component::Provenance)?.unwrap_or_default(),
     };
+    // Authenticate original dependencies before any source program is lowered.
+    // This checks no executable rules or evaluation artifacts; complete assembly
+    // below remains mandatory after composition against this exact schema.
+    let schema = check_release_source_dependencies(&input, limits.release)?;
+    rules::compose(manifest, &decoder, &schema, &mut input.recipe.rules, limits)?;
     let decoded_bytes = decoder.decoded_bytes;
     let release = assemble_owned_release(input, limits.release)?;
     if manifest

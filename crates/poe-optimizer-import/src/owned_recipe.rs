@@ -25,6 +25,7 @@ use sha2::{Digest, Sha256};
 
 mod checked;
 pub use checked::CheckedOwnedRecipe;
+pub(crate) use checked::{check_recipe_input, validate_definition_space};
 
 pub const OWNED_RECIPE_VERSION: u32 = 1;
 

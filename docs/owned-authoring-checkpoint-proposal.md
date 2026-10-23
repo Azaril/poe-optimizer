@@ -57,3 +57,9 @@ Both workflows can preserve stable IDs and deterministic reproduction.
 
 Neither publication workflow supplies missing gameplay facts, promotes partial
 coverage, or establishes a complete original build.
+
+Implementation checkpoint, 2026-10-23: the shared original-source dependency check
+is implemented and used before DSL lowering. It returns only a checked schema;
+final rule/evaluation validation remains mandatory. This completes the incoming
+validation prerequisite, not dependency construction after allocation or either
+proposed filesystem workflow. The publication decision remains open.
