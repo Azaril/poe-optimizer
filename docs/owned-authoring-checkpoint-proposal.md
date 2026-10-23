@@ -1,14 +1,14 @@
 # Persisting named allocation with a compiled release
 
-Status: accepted by the owner, 2026-10-23. This decides the offline publication workflow;
-it does not change the native build, schema, rule or evaluation model.
+Status: accepted by the owner and implemented, 2026-10-23. This decides the offline
+publication workflow; it does not change the native build, schema, rule or
+evaluation model. Mutable-head promotion remains deferred.
 
-The current release builder publishes a closed runtime directory. Runtime loading
-rejects extra files. `NamedIdRegistry` stages a successor in memory, with an exact
-predecessor check, but its name ledger is not yet persisted by that builder.
-New declarations need stable names across later compilations. Recreating an empty
-ledger on each build would let a newly added, earlier-sorting name shift existing
-identities. Ordinary alias files do not preserve allocation history.
+The release builder publishes a name ledger and a separate closed runtime
+directory as one immutable checkpoint. `NamedIdRegistry` stages its successor in
+memory with an exact predecessor check. Persisting that history ensures that
+adding an earlier-sorting declaration does not shift existing identities.
+Ordinary alias files do not preserve allocation history.
 
 ## Accepted workflow
 
@@ -20,15 +20,50 @@ existing strict inventory. Advancing a mutable authoring head requires the plann
 compare-and-swap check against the actual stored predecessor. Failed compilation,
 stale predecessors and failed publication leave the previous checkpoint intact.
 
-The next compile reads that explicit checkpoint as its allocation predecessor.
-Reproducing a release uses its recorded source inputs and predecessor. Historical
-runtime releases remain immutable. No runtime dependency on authoring names is
-introduced, and no compatibility wrapper is needed for the unshipped CLI.
+The next compile reads an explicit checkpoint as its allocation predecessor.
+Reproducing a checkpoint uses the same source snapshot and the same predecessor
+as its original build. The receipt records source hashes, not the source files;
+retain the manifest and input files separately. Historical runtime releases remain
+immutable. No runtime dependency on authoring names is introduced.
 
 This keeps allocation and successful release construction in one transaction.
-Its cost is an explicit authoring output layout and head-promotion operation.
-The host needs a checked nested publication primitive; the existing basename-only
-artifact publisher must not be bypassed with unchecked paths.
+Its cost is an explicit authoring output layout and predecessor selection. Host's
+bounded two-level artifact publisher validates file/directory basenames and
+collisions, stages privately, and performs one atomic no-replace rename. This
+guarantees atomic visibility; it does not guarantee durability after sudden power
+loss. No mutable head is introduced by this implementation.
+
+## Current commands and layout
+
+```powershell
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output first-checkpoint
+$checkpointIdentity = "<checkpoint identity printed by the previous build>"
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor first-checkpoint --expected-predecessor $checkpointIdentity --output next-checkpoint
+```
+
+Every release build requires either explicit bootstrap or a predecessor path and
+its expected checkpoint identity. It emits receipt JSON on stdout and the new
+checkpoint identity on stderr after successful publication. The output contains
+only `checkpoint.json`, `names.json`, and `runtime/`; runtime consumers receive the
+last directory. A failed predecessor load never falls back to bootstrap.
+
+An optional `stat-declarations "definitions.kdl" names="declaration-names.kdl"`
+manifest record uses the existing bounded source decoder, KDL declaration parser
+and typed name loader. Declaration lookup aliases remain local; packets receive
+only current declared Stat names alongside their own aliases. Packet conflicts
+and declaration failures include the relevant source paths. No declaration record
+means an empty declaration set with retained allocation history, including reserved
+names. It does not discard the predecessor registry or export every persisted name.
+
+The library's `ReleaseAllocationBase` distinguishes `Bootstrap` from
+`Predecessor { names, expected_names }`. Every successful `BuiltRelease` returns a
+`ReleaseNameAllocation`; its predecessor name identity is absent only for bootstrap.
+`build_authoring_checkpoint` accepts an explicit `CheckpointBase`, records exact
+source commitments, and returns the staged receipt, ledger and runtime artifacts.
+`load_authoring_checkpoint_artifacts` requires the expected checkpoint identity,
+checks bounded canonical receipts and names, and revalidates the complete runtime.
+The runtime registry is the only registry snapshot: `NamesInput.registry` must
+equal its identity. The ledger identity is a separate commitment.
 
 ## Considered alternative: explicit source-ledger allocation
 
@@ -45,17 +80,21 @@ allocation command as another supported path.
 ## Shared requirements and separate implementation work
 
 - Use the existing allocator and generic typed Stat schema. Declaration staging
-  remains an immutable compiler operation and can proceed before this decision.
+  remains an immutable compiler operation.
 - Check incoming bootstrap commitments before constructing new dependencies.
   The current release assembler checks final bindings; it does not repair them.
   The old revision helper assumes a checked predecessor and cannot safely be
   called on raw source constituents or revived as a parallel publication path.
 - Reuse shared semantic validation and dependency construction in the maintained
   Authoring pipeline. Do not add an independent list that silently repairs stale
-  or corrupt runtime seals. Evaluation-artifact dependencies need explicit support.
+  or corrupt runtime seals. Evaluation-artifact dependencies are constructed from
+  authored content against the final checked recipe.
 - Test stable IDs after adding earlier-sorting names, stale/mismatched snapshots,
   malformed bootstrap commitments, late compilation failure, source/symbol
-  conflicts, no-clobber publication and interrupted/failed head promotion.
+  conflicts, zero-declaration history, same-limit publication/loading, closed
+  inventories and no-clobber publication. Before adding a mutable head, implement
+  actual stored-predecessor compare-and-swap and interruption/concurrency tests;
+  read-compare-rename alone is insufficient.
 
 Neither publication workflow supplies missing gameplay facts, promotes partial
 coverage, or establishes a complete original build.
@@ -66,11 +105,12 @@ registry/schema, routing and Import owners for consuming content extraction, plu
 the bounded rule payload with its checked original header. The maintained compiler
 stages declarations from explicit persisted names, reconstructs rule/routing and
 Import dependencies, then performs mandatory final rule/evaluation validation.
-Successful in-memory results retain successor names and their expected predecessor;
-the CLI still accepts no allocating declaration context. The compiler also
+Successful in-memory results retain successor names and their expected predecessor,
+including when there are no new declarations. The compiler also
 constructs evaluation dependencies from explicit authored content against the
 final checked recipe. Sealed runtime fields are rejected in those source files;
 inherited content must come from the actual fully checked evaluation owner.
-The workflow is approved; atomic nested publication, loading the explicit ledger
-predecessor and CLI integration remain implementation work. Include packet/source
-context in declaration diagnostics before exposing allocating CLI inputs.
+Atomic nested publication, checked explicit-predecessor loading and allocating CLI
+integration are implemented. Mutable-head promotion is separate future work.
+This compiler checkpoint does not add production gameplay declarations or complete
+the first original build.

@@ -133,6 +133,9 @@ fn help_is_available_at_each_command_level_without_running_the_command() {
         (vec!["rule", "fmt", "--help"], "syntax only"),
         (vec!["release", "--help"], "build"),
         (vec!["release", "build", "--help"], "--output"),
+        (vec!["release", "build", "--help"], "--bootstrap"),
+        (vec!["release", "build", "--help"], "--predecessor"),
+        (vec!["release", "build", "--help"], "--expected-predecessor"),
     ] {
         let output = run(&text_args(&args), b"");
         assert_eq!(output.status.code(), Some(0), "{args:?}");
@@ -193,6 +196,7 @@ fn argument_errors_stop_before_opening_inputs_or_publishing_outputs() {
         &[
             OsStr::new("release"),
             OsStr::new("build"),
+            OsStr::new("--bootstrap"),
             missing.as_os_str(),
             OsStr::new("--output"),
             destination.as_os_str(),
@@ -232,7 +236,7 @@ fn release_option_terminator_accepts_a_manifest_path_beginning_with_a_dash() {
     let destination = directory.path().join("new release μ");
     let output = Command::new(env!("CARGO_BIN_EXE_poe-author"))
         .current_dir(directory.path())
-        .args(["release", "build", "--output"])
+        .args(["release", "build", "--bootstrap", "--output"])
         .arg(&destination)
         .args(["--", name])
         .output()
@@ -245,6 +249,50 @@ fn release_option_terminator_accepts_a_manifest_path_beginning_with_a_dash() {
         fs::read_to_string(directory.path().join(name)).unwrap(),
         source
     );
+}
+
+#[test]
+fn release_requires_exactly_one_explicit_allocation_mode_before_io() {
+    let directory = tempfile::tempdir().unwrap();
+    let manifest = directory.path().join("missing.kdl");
+    let output = directory.path().join("must not publish");
+    let digest = "0".repeat(64);
+    for args in [
+        vec![],
+        vec![
+            "--bootstrap",
+            "--predecessor",
+            "missing",
+            "--expected-predecessor",
+            &digest,
+        ],
+        vec!["--predecessor", "missing"],
+        vec!["--expected-predecessor", &digest],
+        vec!["--bootstrap", "--expected-predecessor", &digest],
+        vec!["--bootstrap", "--bootstrap"],
+        vec![
+            "--predecessor",
+            "missing",
+            "--expected-predecessor",
+            "invalid-digest",
+        ],
+    ] {
+        let result = Command::new(env!("CARGO_BIN_EXE_poe-author"))
+            .args(["release", "build"])
+            .arg(&manifest)
+            .arg("--output")
+            .arg(&output)
+            .args(&args)
+            .output()
+            .unwrap();
+        assert_eq!(result.status.code(), Some(2), "{args:?}");
+        assert!(result.stdout.is_empty());
+        let error = String::from_utf8_lossy(&result.stderr);
+        assert!(!error.contains("cannot resolve"), "{args:?}: {error}");
+        assert!(!error.contains("cannot inspect"), "{args:?}: {error}");
+        assert!(!output.exists());
+        assert_eq!(fs::read_dir(directory.path()).unwrap().count(), 0);
+    }
 }
 
 #[cfg(unix)]

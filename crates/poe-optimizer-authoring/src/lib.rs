@@ -10,6 +10,7 @@
 mod allocation;
 mod ast;
 mod bindings;
+mod checkpoint;
 mod declarations;
 mod diagnostic;
 mod format;
@@ -35,6 +36,12 @@ pub use ast::{
 pub use bindings::{
     BindingError, BindingErrorKind, BindingKind, BindingLimits, ExpressionBindings, UnitBinding,
     ValueBinding,
+};
+pub use checkpoint::{
+    AuthoringCheckpointReceipt, CheckedAuthoringCheckpoint, CheckpointBase, CheckpointBlob,
+    CheckpointError, CheckpointLimits, CheckpointNames, CheckpointPredecessor, CheckpointRuntime,
+    CheckpointSource, CheckpointSourceFile, StagedAuthoringCheckpoint, build_authoring_checkpoint,
+    load_authoring_checkpoint_artifacts,
 };
 pub use declarations::{
     DeclarationError, DeclarationErrorKind, DeclarationLimits, StagedStatDeclarations,
@@ -63,9 +70,9 @@ pub use raise::{
     raise_program,
 };
 pub use release::{
-    BuiltRelease, ReleaseBuildError, ReleaseBuildLimits, ReleaseDeclarationContext,
-    ReleaseManifest, ReleaseNameAllocation, ReleaseSource, ReleaseSourceSpec, SourceEncoding,
-    build_release, parse_release_manifest,
+    BuiltRelease, ReleaseAllocationBase, ReleaseBuildError, ReleaseBuildLimits, ReleaseManifest,
+    ReleaseNameAllocation, ReleaseSource, ReleaseSourceSpec, SourceEncoding, build_release,
+    parse_release_manifest,
 };
 pub use symbols::{SymbolError, SymbolErrorKind, SymbolLimits, SymbolRegistry};
 

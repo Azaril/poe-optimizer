@@ -3,6 +3,7 @@
 //! Callers validate and bound their artifacts before publication. This crate
 //! owns no game model, authoring format, evaluator or source backend.
 use std::{
+    collections::BTreeSet,
     fs::{self, File},
     io::{self, Write},
     path::{Component, Path, PathBuf},
@@ -44,6 +45,180 @@ pub fn publish_artifacts<'a>(
     output: &Path,
     artifacts: impl IntoIterator<Item = (&'a str, &'a [u8])>,
 ) -> io::Result<()> {
+    publish_directory(output, |staging| {
+        for (name, bytes) in artifacts {
+            validate_basename(name)?;
+            write_artifact(&staging.join(name), bytes)?;
+        }
+        Ok(())
+    })
+}
+
+/// One borrowed artifact. The publisher never clones its payload.
+#[derive(Clone, Copy, Debug)]
+pub struct ArtifactFile<'a> {
+    pub name: &'a str,
+    pub bytes: &'a [u8],
+}
+
+/// An immediate child directory containing files only. Arbitrary nested paths
+/// cannot be represented by this API.
+#[derive(Clone, Copy, Debug)]
+pub struct ArtifactDirectory<'a> {
+    pub name: &'a str,
+    pub files: &'a [ArtifactFile<'a>],
+}
+
+/// Aggregate publication bounds, checked before staging or writing any files.
+#[derive(Clone, Copy, Debug)]
+pub struct ArtifactBundleLimits {
+    /// Root files, child directories and child files all consume one entry.
+    pub max_entries: usize,
+    /// Sum of all file payload lengths, including root and child files.
+    pub max_bytes: usize,
+}
+
+/// Publish a bounded two-level bundle with one atomic no-replace rename.
+///
+/// Root and child names are portable ASCII basenames of at most 255 bytes.
+/// Windows device names, controls, reserved punctuation and trailing dots/spaces
+/// are rejected on every host. Names must be unique ignoring ASCII case within
+/// each directory, including file/directory collisions at the root. Both bounds
+/// must be nonzero. No user-supplied name can introduce another path component.
+///
+/// Files are synced before publication. As with [`publish_artifacts`], this
+/// guarantees atomic visibility, not persistence after sudden power loss.
+pub fn publish_artifact_bundle(
+    output: &Path,
+    root_files: &[ArtifactFile<'_>],
+    directories: &[ArtifactDirectory<'_>],
+    limits: ArtifactBundleLimits,
+) -> io::Result<()> {
+    validate_bundle(root_files, directories, limits)?;
+    publish_directory(output, |staging| {
+        for file in root_files {
+            write_artifact(&staging.join(file.name), file.bytes)?;
+        }
+        for directory in directories {
+            let path = staging.join(directory.name);
+            fs::create_dir(&path)?;
+            for file in directory.files {
+                write_artifact(&path.join(file.name), file.bytes)?;
+            }
+        }
+        Ok(())
+    })
+}
+
+fn validate_bundle(
+    root_files: &[ArtifactFile<'_>],
+    directories: &[ArtifactDirectory<'_>],
+    limits: ArtifactBundleLimits,
+) -> io::Result<()> {
+    if limits.max_entries == 0 || limits.max_bytes == 0 {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "invalid artifact bundle limits",
+        ));
+    }
+    let mut entries = limits.max_entries;
+    let mut bytes = limits.max_bytes;
+    // Charge lengths before allocating name indexes or examining payloads.
+    for count in [root_files.len(), directories.len()]
+        .into_iter()
+        .chain(directories.iter().map(|directory| directory.files.len()))
+    {
+        entries = entries.checked_sub(count).ok_or_else(|| {
+            io::Error::new(io::ErrorKind::InvalidInput, "artifact bundle entry limit")
+        })?;
+    }
+    for file in root_files
+        .iter()
+        .chain(directories.iter().flat_map(|directory| directory.files))
+    {
+        bytes = bytes.checked_sub(file.bytes.len()).ok_or_else(|| {
+            io::Error::new(io::ErrorKind::InvalidInput, "artifact bundle byte limit")
+        })?;
+    }
+    let mut root_names = BTreeSet::new();
+    for file in root_files {
+        insert_portable_name(&mut root_names, file.name)?;
+    }
+    for directory in directories {
+        insert_portable_name(&mut root_names, directory.name)?;
+        let mut names = BTreeSet::new();
+        for file in directory.files {
+            insert_portable_name(&mut names, file.name)?;
+        }
+    }
+    Ok(())
+}
+
+fn insert_portable_name(names: &mut BTreeSet<String>, name: &str) -> io::Result<()> {
+    if name.len() > 255
+        || !name.bytes().all(|byte| (b' '..=b'~').contains(&byte))
+        || name.contains(['<', '>', '"', '|', '?', '*'])
+        || name.ends_with(['.', ' '])
+    {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "artifact name is not portable",
+        ));
+    }
+    validate_basename(name)?;
+    let folded = name.to_ascii_lowercase();
+    let stem = folded
+        .split('.')
+        .next()
+        .expect("split always yields a stem")
+        .trim_end_matches(' ');
+    if matches!(
+        stem,
+        "con" | "prn" | "aux" | "nul" | "conin$" | "conout$" | "clock$"
+    ) || (stem.len() == 4
+        && (stem.starts_with("com") || stem.starts_with("lpt"))
+        && (b'1'..=b'9').contains(&stem.as_bytes()[3]))
+    {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "artifact name is a reserved device",
+        ));
+    }
+    if !names.insert(folded) {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "artifact names collide",
+        ));
+    }
+    Ok(())
+}
+
+fn validate_basename(name: &str) -> io::Result<()> {
+    if name.contains(['/', '\\', ':', '\0'])
+        || Path::new(name).components().count() != 1
+        || !matches!(
+            Path::new(name).components().next(),
+            Some(Component::Normal(_))
+        )
+    {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "artifact name is not a basename",
+        ));
+    }
+    Ok(())
+}
+
+fn write_artifact(path: &Path, bytes: &[u8]) -> io::Result<()> {
+    let mut file = File::options().write(true).create_new(true).open(path)?;
+    file.write_all(bytes)?;
+    file.sync_all()
+}
+
+fn publish_directory(
+    output: &Path,
+    populate: impl FnOnce(&Path) -> io::Result<()>,
+) -> io::Result<()> {
     if !cfg!(any(windows, target_os = "linux")) {
         return Err(io::Error::new(
             io::ErrorKind::Unsupported,
@@ -64,26 +239,7 @@ pub fn publish_artifacts<'a>(
     let staging = tempfile::Builder::new()
         .prefix(".poe-publish-")
         .tempdir_in(output.parent().expect("absolute output parent"))?;
-    for (name, bytes) in artifacts {
-        if name.contains(['/', '\\', ':', '\0'])
-            || Path::new(name).components().count() != 1
-            || !matches!(
-                Path::new(name).components().next(),
-                Some(Component::Normal(_))
-            )
-        {
-            return Err(io::Error::new(
-                io::ErrorKind::InvalidInput,
-                "artifact name is not a basename",
-            ));
-        }
-        let mut file = File::options()
-            .write(true)
-            .create_new(true)
-            .open(staging.path().join(name))?;
-        file.write_all(bytes)?;
-        file.sync_all()?;
-    }
+    populate(staging.path())?;
     publish_noclobber(staging.path(), &output)?;
     // The old path no longer exists. Disarm cleanup so another process creating
     // that old path cannot have its unrelated directory removed by TempDir Drop.

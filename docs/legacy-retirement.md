@@ -34,6 +34,16 @@ source files now reject runtime headers; the release-test helper that manually
 repaired evaluation digests is retired. Runtime stale-binding tests remain useful
 and must survive. Do not add a compatibility reader for the replaced source format.
 
+Atomic authoring checkpoints replace the old flat authoring CLI output contract
+and its optional caller-assembled declaration context. All CLI builds now preserve
+one explicit allocation history and publish the ledger beside the closed runtime
+directory. KDL declarations pass through the existing manifest/decoder; no second
+allocation command, alternate source checker or compatibility layout is retained.
+The generic flat Host publisher still has other live callers and shares the same
+no-replace transaction with the new bounded nested publisher. Do not delete that
+primitive until those callers retire. Mutable-head promotion remains deferred
+until needed; explicit immutable predecessor selection is not a CAS implementation.
+
 Do not let a refactor turn unresolved semantics into default values or complete
 coverage. Delete unsupported abandoned features honestly; preserve a precise
 unsupported diagnostic when the feature is needed by an actual build.

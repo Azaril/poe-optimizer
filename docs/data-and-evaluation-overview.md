@@ -77,8 +77,8 @@ programs to existing owners after a complete structural preflight. The containin
 package still requires Engine validation. Packet APIs receive injected source
 labels and text; the release CLI resolves the declared files. The release builder
 composes all declared packets before its single checked publication transaction.
-Broader definition declarations and integration of named-allocation transactions
-remain pending.
+Broader definition declarations remain pending; typed Stat declarations now use
+the same manifest and publication transaction.
 
 Stable naming now has an in-memory staged transaction API. `NamedIdRegistry`
 wraps the single existing Import allocator; `NamesInput` stores its exact registry
@@ -90,14 +90,17 @@ reserved in history and are omitted from executable symbols. Resolving active
 names still requires the actual schema, and the complete rule package still
 requires Engine validation.
 
-No filesystem compare-and-swap or KDL allocation command is implemented by that
-API. The release builder does not publish named-allocation transactions.
-`load_names` still loads raw aliases to known schema
+The allocator itself does no filesystem work. `load_names` still loads raw aliases to known schema
 addresses. The maintained library compiler stages typed Stat declarations from
 an explicit persisted ledger and returns successor names only after complete
-release validation. Atomic authoring checkpoints were approved on October 23:
-the stable ledger and separate closed runtime directory will publish together.
-The nested publisher and allocating CLI integration remain to be implemented.
+release validation. The CLI publishes an immutable authoring checkpoint containing
+`checkpoint.json`, `names.json` and a separate closed `runtime/` directory in one
+atomic no-replace transaction. Bootstrap must be explicit; resumed builds require
+the predecessor path and expected checkpoint identity. The full runtime and name
+bindings are revalidated, including when no new declarations are present. The
+receipt commits exact encoded source bytes separately from runtime identity.
+There is no separate allocation command, compatibility layout or mutable-head
+update. Future mutable-head promotion still requires actual stored-predecessor CAS.
 Full R1 extraction must still separate the maintained offline toolchain from
 runtime registry/role data. The runtime reader now retains checked packages
 directly; it no longer reassembles publication inputs.
@@ -123,14 +126,20 @@ the separate production command below; other DSL developer commands remain plann
 
 ## Production release composition during migration
 
-`poe-author release build <release.kdl> --output <new-directory>` reads a declared
-final composition and publishes a checked release. The tracked source command is:
+`poe-author release build <release.kdl> --bootstrap --output <new-directory>` reads a
+declared final composition and publishes a checked authoring checkpoint. The tracked source command is:
 
 ```text
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output rebuilt-release
 ```
 
-The output directory must not exist and its parent must exist. The converted
+The output directory must not exist and its parent must exist. Runtime consumers
+use `rebuilt-release/runtime`. For subsequent builds replace `--bootstrap` with
+`--predecessor rebuilt-release --expected-predecessor <identity>` and choose a new
+output directory. Successful publication prints the identity to stderr and the
+checkpoint receipt JSON to stdout. Optional `stat-declarations "definitions.kdl"
+names="declaration-names.kdl"` declares new Stats in the same bounded inventory.
+The converted
 tracked source passes the complete corpus and historical artifact gates. The
 command reuses the existing
 typed release assembler; it

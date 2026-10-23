@@ -22,7 +22,7 @@ pub(super) fn compose(
     decoder: &Decoder<'_>,
     index: &OwnedDefinitionSchemaPackage,
     rules: &mut RulePackageInput,
-    declarations: Option<&StagedStatDeclarations>,
+    declarations: &StagedStatDeclarations,
     limits: ReleaseBuildLimits,
 ) -> Result<()> {
     if rules
@@ -64,11 +64,13 @@ pub(super) fn compose(
             path: names_path.clone(),
             source,
         })?;
-        let symbols = if let Some(staged) = declarations {
-            staged.symbols_for_packet(&symbols, limits.declarations.symbols)?
-        } else {
-            symbols
-        };
+        let symbols = declarations
+            .symbols_for_packet(&symbols, limits.declarations.symbols)
+            .map_err(|source| ReleaseBuildError::PacketDeclarations {
+                path: packet_path.clone(),
+                names: names_path.clone(),
+                source,
+            })?;
         let packet = parse_packet(decoder.text(spec.packet)?, &symbols, limits.manifest).map_err(
             |source| ReleaseBuildError::SourceManifest {
                 path: packet_path.clone(),

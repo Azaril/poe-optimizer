@@ -2,8 +2,7 @@
 use super::{DslRelease, Sources, fixture, fixture_names};
 use poe_optimizer_authoring::{
     AllocationError, AllocationErrorKind, DeclarationError, DeclarationErrorKind, DiagnosticCode,
-    NamedIdRegistry, ReleaseBuildError, ReleaseBuildLimits, ReleaseDeclarationContext,
-    StatDeclarations, SymbolRegistry, parse_stat_declarations,
+    NamedIdRegistry, ReleaseAllocationBase, ReleaseBuildError, ReleaseBuildLimits,
 };
 use poe_optimizer_core::{
     owned_build::ParameterValue,
@@ -23,8 +22,10 @@ const PROBE: &str = "declaration-probe";
 const PROBE_SOURCE: &str = "rules/declaration-probe.rule";
 const PROBE_PACKET: &str = "rules/declaration-probe.kdl";
 const PROBE_NAMES: &str = "rules/declaration-names.kdl";
+pub(super) const DECLARATIONS: &str = "definitions/stats.kdl";
+const DECLARATION_NAMES: &str = "definitions/names.kdl";
 
-fn declarations(schema: &OwnedDefinitionSchemaPackage, names: &[&str]) -> StatDeclarations {
+fn declarations(schema: &OwnedDefinitionSchemaPackage, names: &[&str]) -> String {
     let mut text = format!(
         "definitions game=\"{}\" version=\"{}\" {{\n",
         schema.namespace().game(),
@@ -36,10 +37,10 @@ fn declarations(schema: &OwnedDefinitionSchemaPackage, names: &[&str]) -> StatDe
         ));
     }
     text.push_str("}\n");
-    parse_stat_declarations(&text, Default::default()).unwrap()
+    text
 }
 
-fn baseline(with_evaluation: bool) -> (DslRelease, SchemaSubject) {
+pub(super) fn baseline(with_evaluation: bool) -> (DslRelease, SchemaSubject) {
     let mut input = fixture().input.clone();
     if !with_evaluation {
         input.evaluation = None;
@@ -99,6 +100,19 @@ fn baseline(with_evaluation: bool) -> (DslRelease, SchemaSubject) {
     dsl.source.declare(&format!(
         " rule-packet \"{PROBE_PACKET}\" names=\"{PROBE_NAMES}\"\n rule-source \"{PROBE_SOURCE}\"\n"
     ));
+    dsl.source
+        .add_plain(DECLARATIONS, declarations(&schema, &[FLAG]));
+    dsl.source.add_plain(
+        DECLARATION_NAMES,
+        format!(
+            "names game=\"{}\" version=\"{}\" {{}}\n",
+            schema.namespace().game(),
+            schema.namespace().version()
+        ),
+    );
+    dsl.source.declare(&format!(
+        " stat-declarations \"{DECLARATIONS}\" names=\"{DECLARATION_NAMES}\"\n"
+    ));
     (dsl, owner)
 }
 
@@ -115,16 +129,10 @@ fn schema(dsl: &DslRelease) -> OwnedDefinitionSchemaPackage {
         .unwrap()
 }
 
-fn context<'a>(
-    names: &'a NamedIdRegistry,
-    declarations: &'a StatDeclarations,
-    symbols: &'a SymbolRegistry,
-) -> ReleaseDeclarationContext<'a> {
-    ReleaseDeclarationContext {
+fn predecessor(names: &NamedIdRegistry) -> ReleaseAllocationBase<'_> {
+    ReleaseAllocationBase::Predecessor {
         names,
         expected_names: names.identity().unwrap(),
-        declarations,
-        symbols,
     }
 }
 
@@ -159,17 +167,9 @@ fn declared_stat_compiles_and_evaluates_without_mutating_source_or_ledger() {
     let original = ledger_bytes(&names);
     let original_sources = dsl.source.files.clone();
     let schema = schema(&dsl);
-    let symbols = SymbolRegistry::new(&schema, &[], &[], Default::default()).unwrap();
-    let declarations = declarations(&schema, &[FLAG]);
-    let built = dsl
-        .source
-        .build_with_declarations(
-            Some(context(&names, &declarations, &symbols)),
-            Default::default(),
-        )
-        .unwrap();
-    let allocation = built.name_allocation().unwrap();
-    assert_eq!(allocation.predecessor(), names.identity().unwrap());
+    let built = dsl.source.build(Default::default()).unwrap();
+    let allocation = built.name_allocation();
+    assert_eq!(allocation.predecessor(), None);
     assert_ne!(
         allocation.names().identity().unwrap(),
         names.identity().unwrap()
@@ -249,15 +249,7 @@ fn declarations_and_authored_evaluation_bind_to_the_same_final_recipe() {
     let names = names(&dsl);
     let original = ledger_bytes(&names);
     let schema = schema(&dsl);
-    let symbols = SymbolRegistry::new(&schema, &[], &[], Default::default()).unwrap();
-    let declarations = declarations(&schema, &[FLAG]);
-    let built = dsl
-        .source
-        .build_with_declarations(
-            Some(context(&names, &declarations, &symbols)),
-            Default::default(),
-        )
-        .unwrap();
+    let built = dsl.source.build(Default::default()).unwrap();
     let release = built.release();
     let final_schema = release.assembled().schema();
     assert_ne!(final_schema.identity(), schema.identity());
@@ -271,25 +263,16 @@ fn declarations_and_authored_evaluation_bind_to_the_same_final_recipe() {
         release.assembled().rules().identity(),
     );
     super::assert_dsl_metric(release);
-    assert!(built.name_allocation().is_some());
+    assert!(built.name_allocation().predecessor().is_none());
     assert_eq!(ledger_bytes(&names), original);
 }
 
 #[test]
 fn persisted_ledger_replays_and_keeps_identity_when_earlier_names_are_added() {
     let (dsl, _) = baseline(false);
-    let names = names(&dsl);
     let schema = schema(&dsl);
-    let symbols = SymbolRegistry::new(&schema, &[], &[], Default::default()).unwrap();
-    let declarations = declarations(&schema, &[FLAG]);
-    let first = dsl
-        .source
-        .build_with_declarations(
-            Some(context(&names, &declarations, &symbols)),
-            Default::default(),
-        )
-        .unwrap();
-    let saved = first.name_allocation().unwrap().names();
+    let first = dsl.source.build(Default::default()).unwrap();
+    let saved = first.name_allocation().names();
     let (registry_bytes, names_bytes) = ledger_bytes(saved);
     let persisted = NamedIdRegistry::new(
         OwnedIdRegistry::new(
@@ -303,27 +286,24 @@ fn persisted_ledger_replays_and_keeps_identity_when_earlier_names_are_added() {
     .unwrap();
     let replay = dsl
         .source
-        .build_with_declarations(
-            Some(context(&persisted, &declarations, &symbols)),
-            Default::default(),
-        )
+        .build_with_allocation(predecessor(&persisted), Default::default())
         .unwrap();
     assert_eq!(replay.release().receipt(), first.release().receipt());
     assert_eq!(
-        ledger_bytes(replay.name_allocation().unwrap().names()),
+        ledger_bytes(replay.name_allocation().names()),
         (registry_bytes.clone(), names_bytes.clone())
     );
     assert_eq!(
-        replay.name_allocation().unwrap().predecessor(),
-        persisted.identity().unwrap()
+        replay.name_allocation().predecessor(),
+        Some(persisted.identity().unwrap())
     );
-    let earlier = self::declarations(&schema, &["a_earlier_flag", FLAG]);
-    let extended = dsl
-        .source
-        .build_with_declarations(
-            Some(context(&persisted, &earlier, &symbols)),
-            Default::default(),
-        )
+    let mut earlier = dsl.source.clone();
+    earlier.replace_plain(
+        DECLARATIONS,
+        declarations(&schema, &["a_earlier_flag", FLAG]),
+    );
+    let extended = earlier
+        .build_with_allocation(predecessor(&persisted), Default::default())
         .unwrap();
     let prior = persisted
         .input()
@@ -331,7 +311,7 @@ fn persisted_ledger_replays_and_keeps_identity_when_earlier_names_are_added() {
         .iter()
         .find(|row| row.name == FLAG)
         .unwrap();
-    let successor = extended.name_allocation().unwrap().names();
+    let successor = extended.name_allocation().names();
     assert_eq!(
         successor
             .input()
@@ -355,31 +335,49 @@ fn persisted_ledger_replays_and_keeps_identity_when_earlier_names_are_added() {
 }
 
 #[test]
+fn predecessor_without_new_declarations_retains_all_reserved_names_and_registry_entries() {
+    let (dsl, _) = baseline(false);
+    let first = dsl.source.build(Default::default()).unwrap();
+    let saved = first.name_allocation().names();
+    let before = ledger_bytes(saved);
+    let mut original = fixture().input.clone();
+    original.evaluation = None;
+    original.schema_version = OWNED_RELEASE_VERSION;
+    let no_declarations = DslRelease::new(&original, false);
+    let rebuilt = no_declarations
+        .source
+        .build_with_allocation(predecessor(saved), Default::default())
+        .unwrap();
+    assert_eq!(ledger_bytes(rebuilt.name_allocation().names()), before);
+    assert_eq!(
+        rebuilt.name_allocation().predecessor(),
+        Some(saved.identity().unwrap())
+    );
+    assert_eq!(
+        &rebuilt.release().input().recipe.registry,
+        saved.registry().input()
+    );
+    assert_eq!(
+        rebuilt.release().input().recipe.schema,
+        original.recipe.schema
+    );
+    assert_eq!(ledger_bytes(saved), before);
+}
+
+#[test]
 fn packet_alias_scopes_accept_equal_declarations_and_reject_conflicts_or_leaks() {
     let (dsl, _) = baseline(false);
-    let names = names(&dsl);
     let schema = schema(&dsl);
-    let declarations = declarations(&schema, &[FLAG]);
-    let (_, symbols) = fixture_names(&schema);
-    let ctx = context(&names, &declarations, &symbols);
-    let built = dsl
-        .source
-        .build_with_declarations(Some(ctx), Default::default())
-        .unwrap();
+    let built = dsl.source.build(Default::default()).unwrap();
     let resolved = built
         .name_allocation()
-        .unwrap()
         .names()
         .symbols(built.release().assembled().schema(), Default::default())
         .unwrap();
     let mut equal = dsl.source.clone();
     alias(&mut equal, FLAG, resolved.definition(FLAG).unwrap());
     assert_eq!(
-        equal
-            .build_with_declarations(Some(ctx), Default::default())
-            .unwrap()
-            .release()
-            .receipt(),
+        equal.build(Default::default()).unwrap().release().receipt(),
         built.release().receipt()
     );
 
@@ -403,40 +401,26 @@ fn packet_alias_scopes_accept_equal_declarations_and_reject_conflicts_or_leaks()
     alias_at(&mut local, "rules/names.kdl", "packet_local", &old_stat);
     alias(&mut local, "packet_local", &other_stat);
     assert_eq!(
-        local
-            .build_with_declarations(Some(ctx), Default::default())
-            .unwrap()
-            .release()
-            .receipt(),
+        local.build(Default::default()).unwrap().release().receipt(),
         built.release().receipt()
     );
     let mut conflicting = dsl.source.clone();
     alias(&mut conflicting, FLAG, &old_stat);
     assert!(matches!(
-        conflicting.build_with_declarations(Some(ctx), Default::default()),
-        Err(ReleaseBuildError::Declaration(DeclarationError::Invalid {
-            kind: DeclarationErrorKind::SymbolConflict,
-            ..
-        }))
+        conflicting.build(Default::default()),
+        Err(ReleaseBuildError::PacketDeclarations { path, names, source: DeclarationError::Invalid {
+            kind: DeclarationErrorKind::SymbolConflict, ..
+        }}) if path == PROBE_PACKET && names == PROBE_NAMES
     ));
 
     // Declaration-context aliases are not a second ambient packet namespace.
-    let private_symbols = SymbolRegistry::new(
-        &schema,
-        &[("context_private", old_stat)],
-        &[],
-        Default::default(),
-    )
-    .unwrap();
     let mut leak = dsl.source.clone();
+    alias_at(&mut leak, DECLARATION_NAMES, "context_private", &old_stat);
     leak.replace_plain(
         PROBE_SOURCE,
         leak.text(PROBE_SOURCE).replace(FLAG, "context_private"),
     );
-    match leak.build_with_declarations(
-        Some(context(&names, &declarations, &private_symbols)),
-        Default::default(),
-    ) {
+    match leak.build(Default::default()) {
         Err(ReleaseBuildError::Packet { path, source }) => {
             assert_eq!(path, PROBE_PACKET);
             assert_eq!(
@@ -455,13 +439,7 @@ fn declaration_and_packet_budgets_are_enforced_at_the_release_boundary() {
     let names = names(&dsl);
     let original = ledger_bytes(&names);
     let schema = schema(&dsl);
-    let symbols = SymbolRegistry::new(&schema, &[], &[], Default::default()).unwrap();
-    let declarations = declarations(&schema, &[FLAG]);
-    let ctx = context(&names, &declarations, &symbols);
-    let built = dsl
-        .source
-        .build_with_declarations(Some(ctx), Default::default())
-        .unwrap();
+    let built = dsl.source.build(Default::default()).unwrap();
     let (_, packet_symbols) = fixture_names(&schema);
     let mut exact = ReleaseBuildLimits::default();
     exact.declarations.max_declarations = 1;
@@ -469,13 +447,11 @@ fn declaration_and_packet_budgets_are_enforced_at_the_release_boundary() {
     exact.declarations.symbols.max_symbols =
         packet_symbols.definitions().count() + packet_symbols.slots().count() + 1;
     exact.declarations.max_names_bytes =
-        serde_json::to_vec(built.name_allocation().unwrap().names().input())
+        serde_json::to_vec(built.name_allocation().names().input())
             .unwrap()
             .len();
     exact.max_expanded_rule_bytes = dsl.expanded_bytes + dsl.source.text(PROBE_SOURCE).len();
-    dsl.source
-        .build_with_declarations(Some(ctx), exact)
-        .unwrap();
+    dsl.source.build(exact).unwrap();
     for field in 0..3 {
         let mut short = exact;
         match field {
@@ -484,22 +460,16 @@ fn declaration_and_packet_budgets_are_enforced_at_the_release_boundary() {
             2 => short.max_expanded_rule_bytes -= 1,
             _ => unreachable!(),
         }
-        assert!(
-            dsl.source
-                .build_with_declarations(Some(ctx), short)
-                .is_err(),
-            "budget field {field}"
-        );
+        assert!(dsl.source.build(short).is_err(), "budget field {field}");
         assert_eq!(ledger_bytes(&names), original);
     }
-    let two = self::declarations(&schema, &[FLAG, "another_flag"]);
+    let mut two = dsl.source.clone();
+    two.replace_plain(DECLARATIONS, declarations(&schema, &[FLAG, "another_flag"]));
     assert!(matches!(
-        dsl.source
-            .build_with_declarations(Some(context(&names, &two, &symbols)), exact),
-        Err(ReleaseBuildError::Declaration(DeclarationError::Invalid {
-            kind: DeclarationErrorKind::LimitExceeded,
-            ..
-        }))
+        two.build(exact),
+        Err(ReleaseBuildError::DeclarationSource { path, names, source: DeclarationError::Invalid {
+            kind: DeclarationErrorKind::LimitExceeded, ..
+        }}) if path == DECLARATIONS && names == DECLARATION_NAMES
     ));
 }
 
@@ -510,16 +480,13 @@ fn stale_predecessor_and_late_failures_never_publish_or_mutate_names() {
         let names = names(&dsl);
         let original = ledger_bytes(&names);
         let original_sources = dsl.source.files.clone();
-        let schema = schema(&dsl);
-        let symbols = SymbolRegistry::new(&schema, &[], &[], Default::default()).unwrap();
-        let declarations = declarations(&schema, &[FLAG]);
-        let ctx = context(&names, &declarations, &symbols);
+        let ctx = predecessor(&names);
         if with_evaluation {
             // Authored content does not infer missing stage membership for the
             // newly composed probe, even after all dependency seals are derived.
             assert!(matches!(
                 dsl.source
-                    .build_with_declarations(Some(ctx), Default::default()),
+                    .build_with_allocation(ctx, Default::default()),
                 Err(ReleaseBuildError::Assembly(OwnedReleaseError::Evaluation(
                     poe_optimizer_import::owned_release_evaluation::OwnedReleaseEvaluationError::Stages(
                         poe_optimizer_data::owned_stages::StageStorageError::Invalid(
@@ -529,17 +496,19 @@ fn stale_predecessor_and_late_failures_never_publish_or_mutate_names() {
                 )))
             ));
         } else {
-            let mut stale = ctx;
-            stale.expected_names = "0".repeat(64).parse().unwrap();
+            let stale = ReleaseAllocationBase::Predecessor {
+                names: &names,
+                expected_names: "0".repeat(64).parse().unwrap(),
+            };
             assert!(matches!(
-                dsl.source
-                    .build_with_declarations(Some(stale), Default::default()),
-                Err(ReleaseBuildError::Declaration(
-                    DeclarationError::Allocation(AllocationError::Invalid {
+                dsl.source.build_with_allocation(stale, Default::default()),
+                Err(ReleaseBuildError::DeclarationSource {
+                    source: DeclarationError::Allocation(AllocationError::Invalid {
                         kind: AllocationErrorKind::StalePredecessor,
                         ..
-                    })
-                ))
+                    }),
+                    ..
+                })
             ));
             let mut invalid_rule = dsl.source.clone();
             invalid_rule.replace_plain(
@@ -549,7 +518,7 @@ fn stale_predecessor_and_late_failures_never_publish_or_mutate_names() {
                     .replace(FLAG, "unknown_stat"),
             );
             assert!(matches!(
-                invalid_rule.build_with_declarations(Some(ctx), Default::default()),
+                invalid_rule.build_with_allocation(ctx, Default::default()),
                 Err(ReleaseBuildError::Packet { .. })
             ));
             let mut wrong_identity = dsl.source.clone();
@@ -559,7 +528,7 @@ fn stale_predecessor_and_late_failures_never_publish_or_mutate_names() {
                 1,
             );
             super::invalid(
-                wrong_identity.build_with_declarations(Some(ctx), Default::default()),
+                wrong_identity.build_with_allocation(ctx, Default::default()),
                 "assembled input identity differs from expected_input",
             );
         }

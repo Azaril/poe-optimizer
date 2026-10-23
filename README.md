@@ -99,21 +99,36 @@ Use `-` as the path to read stdin. Input files are unchanged. Check mode exits
 0 when formatted, 1 when formatting differs, and 2 on syntax, argument or I/O
 errors. Formatting preserves names, numeric spelling and comments; it does not
 validate rule types, ownership or complete coverage. Name/membership KDL loading
-and bounded packet assembly, including stable named allocation, are library APIs;
-broader declaration manifests and named-allocation publication remain ahead.
+and bounded packet assembly use the same library compiler as release builds.
+Optional `stat-declarations "definitions.kdl" names="declaration-names.kdl"`
+entries in a release manifest stage typed Stats through the stable name allocator
+before packet lowering; declaration aliases stay separate from packet aliases.
 
-Build the retained release into a new directory with:
+Start an authoring checkpoint in a new directory with:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output rebuilt-checkpoint
 ```
 
-The command validates every declared constituent through the existing typed
-assembler, checks the expected input identity and atomically publishes without
-replacing an existing output. Its tracked JSON/gzip inputs are a temporary
-migration bootstrap; all formulas still need to move into maintained `.rule`
-source. Compression preserves the source bytes and does not relax decoded limits.
-The immutable runtime loader and compact binary format remain migration gates.
+The output contains `checkpoint.json`, `names.json` and the closed `runtime/`
+release directory. Pass `rebuilt-checkpoint/runtime` to runtime consumers.
+The command writes the checkpoint receipt to stdout and prints its checkpoint
+identity on stderr. Use that identity to continue allocation history explicitly:
+
+```powershell
+$checkpointIdentity = "<checkpoint identity printed by the previous build>"
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor rebuilt-checkpoint --expected-predecessor $checkpointIdentity --output next-checkpoint
+```
+
+Choose `--bootstrap` only to start a new history. A predecessor is fully checked,
+and its names remain reserved even when the next build declares no new Stats.
+Every build validates the final rule/evaluation graph and any `expected_input`
+commitment before atomically publishing the complete checkpoint without replacing
+an existing output. It does not advance a mutable head. Source hashes record the
+exact manifest and encoded input files; preserve those source files separately.
+Tracked JSON/gzip constituents remain a temporary migration bootstrap alongside
+maintained KDL and `.rule` sources. Compression does not relax decoded limits.
+Compact runtime artifacts remain a migration gate.
 Run focused checks with `cargo test -p poe-optimizer-authoring --locked --all-targets`.
 
 ## Boundaries

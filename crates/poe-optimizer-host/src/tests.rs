@@ -130,6 +130,308 @@ fn publication_has_one_winner_and_keeps_the_losing_staged_bundle() {
     assert_eq!(fs::read(b.join("manifest.json")).unwrap(), b"second");
 }
 
+fn bundle_limits() -> ArtifactBundleLimits {
+    ArtifactBundleLimits {
+        max_entries: 8,
+        max_bytes: 128,
+    }
+}
+
+#[cfg(any(windows, target_os = "linux"))]
+#[test]
+fn bundle_publication_preserves_nested_inventory_and_exact_aggregate_limits() {
+    let parent = tempfile::tempdir().unwrap();
+    let output = parent.path().join("checkpoint μ");
+    let root = [
+        ArtifactFile {
+            name: "names.json",
+            bytes: b"names",
+        },
+        ArtifactFile {
+            name: "checkpoint.json",
+            bytes: b"receipt",
+        },
+    ];
+    let runtime = [
+        ArtifactFile {
+            name: "release.json",
+            bytes: b"release",
+        },
+        ArtifactFile {
+            name: "registry.json",
+            bytes: b"registry",
+        },
+    ];
+    let evidence = [ArtifactFile {
+        name: "names.json",
+        bytes: b"source",
+    }];
+    let directories = [
+        ArtifactDirectory {
+            name: "runtime",
+            files: &runtime,
+        },
+        ArtifactDirectory {
+            name: "evidence",
+            files: &evidence,
+        },
+    ];
+    // Two root files + two directories + three child files; 5+7+7+8+6 bytes.
+    let exact = ArtifactBundleLimits {
+        max_entries: 7,
+        max_bytes: 33,
+    };
+    for limits in [
+        ArtifactBundleLimits {
+            max_entries: 6,
+            ..exact
+        },
+        ArtifactBundleLimits {
+            max_bytes: 32,
+            ..exact
+        },
+        ArtifactBundleLimits {
+            max_entries: 0,
+            ..exact
+        },
+        ArtifactBundleLimits {
+            max_bytes: 0,
+            ..exact
+        },
+    ] {
+        let error = publish_artifact_bundle(&output, &root, &directories, limits).unwrap_err();
+        assert_eq!(error.kind(), io::ErrorKind::InvalidInput);
+        assert_eq!(fs::read_dir(parent.path()).unwrap().count(), 0);
+    }
+    publish_artifact_bundle(&output, &root, &directories, exact).unwrap();
+    assert_eq!(fs::read_dir(&output).unwrap().count(), 4);
+    assert_eq!(fs::read_dir(output.join("runtime")).unwrap().count(), 2);
+    assert_eq!(fs::read_dir(output.join("evidence")).unwrap().count(), 1);
+    for file in root {
+        assert_eq!(fs::read(output.join(file.name)).unwrap(), file.bytes);
+    }
+    for directory in directories {
+        for file in directory.files {
+            assert_eq!(
+                fs::read(output.join(directory.name).join(file.name)).unwrap(),
+                file.bytes
+            );
+        }
+    }
+    assert_eq!(fs::read_dir(parent.path()).unwrap().count(), 1);
+    assert_eq!(
+        publish_artifact_bundle(&output, &root, &directories, exact)
+            .unwrap_err()
+            .kind(),
+        io::ErrorKind::AlreadyExists,
+    );
+    assert_eq!(
+        fs::read(output.join("runtime/release.json")).unwrap(),
+        b"release"
+    );
+    assert_eq!(fs::read_dir(parent.path()).unwrap().count(), 1);
+}
+
+#[test]
+fn bundle_name_collisions_are_rejected_before_any_staging() {
+    let parent = tempfile::tempdir().unwrap();
+    let output = parent.path().join("checkpoint");
+    for second in ["same", "SaMe"] {
+        let file = ArtifactFile {
+            name: "same",
+            bytes: b"first",
+        };
+        let duplicate = ArtifactFile {
+            name: second,
+            bytes: b"second",
+        };
+        let children = [file, duplicate];
+        for (roots, directories) in [
+            (vec![file, duplicate], vec![]),
+            (
+                vec![file],
+                vec![ArtifactDirectory {
+                    name: second,
+                    files: &[],
+                }],
+            ),
+            (
+                vec![],
+                vec![
+                    ArtifactDirectory {
+                        name: "same",
+                        files: &[],
+                    },
+                    ArtifactDirectory {
+                        name: second,
+                        files: &[],
+                    },
+                ],
+            ),
+            (
+                vec![],
+                vec![ArtifactDirectory {
+                    name: "runtime",
+                    files: &children,
+                }],
+            ),
+        ] {
+            let error = publish_artifact_bundle(&output, &roots, &directories, bundle_limits())
+                .unwrap_err();
+            assert_eq!(error.kind(), io::ErrorKind::InvalidInput);
+            assert_eq!(error.to_string(), "artifact names collide");
+            assert_eq!(fs::read_dir(parent.path()).unwrap().count(), 0);
+        }
+    }
+}
+
+#[test]
+fn bundle_names_are_portable_in_every_position_before_filesystem_access() {
+    let parent = tempfile::tempdir().unwrap();
+    // The absent parent would produce an I/O error if validation reached staging.
+    let output = parent.path().join("missing/checkpoint");
+    let too_long = "a".repeat(256);
+    for name in [
+        "",
+        ".",
+        "..",
+        "../escape",
+        "a/b",
+        "a\\b",
+        "C:stream",
+        "a\0b",
+        "a\nb",
+        "CON",
+        "aux.json",
+        "Nul",
+        "com1.txt",
+        "LPT9",
+        "CONIN$",
+        "conout$.json",
+        "clock$",
+        "CON .json",
+        "trailing.",
+        "trailing ",
+        "a?b",
+        "a*b",
+        "a|b",
+        "a<b",
+        "a>b",
+        "a\"b",
+        "café.json",
+        too_long.as_str(),
+    ] {
+        let invalid_file = ArtifactFile {
+            name,
+            bytes: b"payload",
+        };
+        let child = [invalid_file];
+        for (roots, directories) in [
+            (vec![invalid_file], vec![]),
+            (vec![], vec![ArtifactDirectory { name, files: &[] }]),
+            (
+                vec![],
+                vec![ArtifactDirectory {
+                    name: "runtime",
+                    files: &child,
+                }],
+            ),
+        ] {
+            assert_eq!(
+                publish_artifact_bundle(&output, &roots, &directories, bundle_limits())
+                    .unwrap_err()
+                    .kind(),
+                io::ErrorKind::InvalidInput,
+                "accepted {name:?}",
+            );
+        }
+    }
+    assert_eq!(fs::read_dir(parent.path()).unwrap().count(), 0);
+}
+
+#[cfg(any(windows, target_os = "linux"))]
+#[test]
+fn staged_nested_bundle_failure_and_racing_destination_leave_no_partial_publication() {
+    let parent = tempfile::tempdir().unwrap();
+    let output = parent.path().join("checkpoint");
+    // Exercise the shared publication transaction at its real write boundary.
+    let error = publish_directory(&output, |staging| {
+        fs::create_dir(staging.join("runtime"))?;
+        write_artifact(&staging.join("names.json"), b"ledger")?;
+        write_artifact(&staging.join("runtime/release.json"), b"complete")?;
+        Err(io::Error::other("injected write failure"))
+    })
+    .unwrap_err();
+    assert_eq!(error.to_string(), "injected write failure");
+    assert_eq!(fs::read_dir(parent.path()).unwrap().count(), 0);
+
+    assert!(
+        publish_directory(&output, |staging| {
+            fs::create_dir(staging.join("runtime"))?;
+            write_artifact(&staging.join("names.json"), b"loser")?;
+            write_artifact(&staging.join("runtime/release.json"), b"loser")?;
+            // The destination appears only after the initial absence check.
+            fs::create_dir(&output)?;
+            Ok(())
+        })
+        .is_err()
+    );
+    assert_eq!(fs::read_dir(&output).unwrap().count(), 0);
+    assert_eq!(fs::read_dir(parent.path()).unwrap().count(), 1);
+}
+
+#[cfg(any(windows, target_os = "linux"))]
+#[test]
+fn concurrent_bundle_publishers_have_one_complete_winner() {
+    let parent = tempfile::tempdir().unwrap();
+    let output = parent.path().join("checkpoint");
+    let barrier = std::sync::Barrier::new(2);
+    let results = std::thread::scope(|scope| {
+        let handles: Vec<_> = [b"first".as_slice(), b"second".as_slice()]
+            .into_iter()
+            .map(|value| {
+                let barrier = &barrier;
+                let output = &output;
+                scope.spawn(move || {
+                    let root = [ArtifactFile {
+                        name: "names.json",
+                        bytes: value,
+                    }];
+                    let runtime = [ArtifactFile {
+                        name: "release.json",
+                        bytes: value,
+                    }];
+                    barrier.wait();
+                    publish_artifact_bundle(
+                        output,
+                        &root,
+                        &[ArtifactDirectory {
+                            name: "runtime",
+                            files: &runtime,
+                        }],
+                        bundle_limits(),
+                    )
+                })
+            })
+            .collect();
+        handles
+            .into_iter()
+            .map(|handle| handle.join().unwrap())
+            .collect::<Vec<_>>()
+    });
+    assert_eq!(results.iter().filter(|result| result.is_ok()).count(), 1);
+    assert_eq!(results.iter().filter(|result| result.is_err()).count(), 1);
+    let names = fs::read(output.join("names.json")).unwrap();
+    assert!(names == b"first" || names == b"second");
+    assert_eq!(
+        fs::read(output.join("runtime/release.json")).unwrap(),
+        names
+    );
+    assert_eq!(fs::read_dir(&output).unwrap().count(), 2);
+    assert_eq!(fs::read_dir(output.join("runtime")).unwrap().count(), 1);
+    assert_eq!(fs::read_dir(parent.path()).unwrap().count(), 1);
+}
+
 #[cfg(not(any(windows, target_os = "linux")))]
 #[test]
 fn unsupported_directory_publication_performs_no_staging_io() {
@@ -139,6 +441,24 @@ fn unsupported_directory_publication_performs_no_staging_io() {
             .unwrap_err()
             .kind(),
         io::ErrorKind::Unsupported
+    );
+    assert_eq!(fs::read_dir(root.path()).unwrap().count(), 0);
+    assert_eq!(
+        publish_artifact_bundle(
+            &root.path().join("bundle"),
+            &[ArtifactFile {
+                name: "names.json",
+                bytes: b"names"
+            }],
+            &[ArtifactDirectory {
+                name: "runtime",
+                files: &[]
+            }],
+            bundle_limits(),
+        )
+        .unwrap_err()
+        .kind(),
+        io::ErrorKind::Unsupported,
     );
     assert_eq!(fs::read_dir(root.path()).unwrap().count(), 0);
 }

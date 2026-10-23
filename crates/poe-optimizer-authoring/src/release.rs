@@ -7,8 +7,7 @@
 //! evaluation. Publication happens only after complete assembly succeeds.
 use crate::{
     DeclarationError, DeclarationLimits, ManifestError, ManifestLimits, NamedIdRegistry,
-    StagedStatDeclarations, StatDeclarations, SymbolRegistry, manifest_parse::parse_document,
-    stage_stat_declarations,
+    manifest_parse::parse_document,
 };
 use poe_optimizer_core::{
     owned_content::OwnedContentDigest, owned_definitions::OwnedDefinitionKey,
@@ -31,6 +30,7 @@ use std::{
     io::{self, Read},
 };
 
+mod declarations;
 mod rules;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -45,6 +45,7 @@ enum SourceRole {
     Names,
     Packet,
     Rule,
+    Declarations,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -115,6 +116,7 @@ pub struct ReleaseManifest {
     components: BTreeMap<Component, usize>,
     queries: Vec<(OwnedDefinitionKey, usize)>,
     packets: Vec<RulePacket>,
+    declarations: Option<DeclarationSource>,
     rules: BTreeSet<usize>,
     expected_input: Option<OwnedContentDigest>,
 }
@@ -122,6 +124,12 @@ pub struct ReleaseManifest {
 #[derive(Clone, Copy, Debug)]
 struct RulePacket {
     packet: usize,
+    names: usize,
+}
+
+#[derive(Clone, Copy, Debug)]
+struct DeclarationSource {
+    declarations: usize,
     names: usize,
 }
 impl ReleaseManifest {
@@ -136,7 +144,9 @@ impl ReleaseManifest {
         if self.sources.len() > limits.max_sources {
             return Err(ReleaseBuildError::Limit("source count"));
         }
-        if self.components.len() + self.queries.len() > limits.max_components {
+        if self.components.len() + self.queries.len() + usize::from(self.declarations.is_some())
+            > limits.max_components
+        {
             return Err(ReleaseBuildError::Limit("component count"));
         }
         if self.packets.len() > limits.max_rule_packets {
@@ -214,7 +224,7 @@ impl Default for ReleaseBuildLimits {
     }
 }
 impl ReleaseBuildLimits {
-    fn validate(self) -> Result<()> {
+    pub(crate) fn validate(self) -> Result<()> {
         let hard = Self::default();
         if self.max_sources == 0
             || self.max_sources > hard.max_sources
@@ -262,6 +272,18 @@ pub enum ReleaseBuildError {
         path: String,
         source: crate::PacketError,
     },
+    #[error("invalid Stat declarations {path} with names {names}: {source}")]
+    DeclarationSource {
+        path: String,
+        names: String,
+        source: DeclarationError,
+    },
+    #[error("invalid declaration symbols for packet {path} with names {names}: {source}")]
+    PacketDeclarations {
+        path: String,
+        names: String,
+        source: DeclarationError,
+    },
     #[error(transparent)]
     Assembly(#[from] OwnedReleaseError),
     #[error(transparent)]
@@ -271,7 +293,7 @@ type Result<T> = std::result::Result<T, ReleaseBuildError>;
 
 /// Paths are portable source labels here. The filesystem host must additionally
 /// resolve them under the manifest directory and enforce bounded regular reads.
-fn valid_path(value: &str) -> bool {
+pub(crate) fn valid_path(value: &str) -> bool {
     !value.is_empty()
         && value.len() <= 1024
         && !value
@@ -309,6 +331,7 @@ pub fn parse_release_manifest(text: &str, limits: ReleaseBuildLimits) -> Result<
         components: BTreeMap::new(),
         queries: vec![],
         packets: vec![],
+        declarations: None,
         rules: BTreeSet::new(),
         expected_input,
     };
@@ -316,6 +339,42 @@ pub fn parse_release_manifest(text: &str, limits: ReleaseBuildLimits) -> Result<
     let mut queries = BTreeSet::new();
     for &id in &root.children {
         let node = &document.nodes[id];
+        if node.name == "stat-declarations" {
+            if !node.children.is_empty()
+                || node.arguments.len() != 1
+                || node.properties.len() != 1
+                || !node.properties.contains_key("names")
+            {
+                return Err(ReleaseBuildError::Invalid(
+                    "invalid Stat declaration source fields",
+                ));
+            }
+            if output.declarations.is_some() {
+                return Err(ReleaseBuildError::Invalid(
+                    "duplicate Stat declaration source",
+                ));
+            }
+            let declarations = output.add_source(
+                &mut paths,
+                &node.arguments[0],
+                SourceRole::Declarations,
+                SourceEncoding::Plain,
+                limits,
+            )?;
+            let names = output.add_source(
+                &mut paths,
+                &node.properties["names"],
+                SourceRole::Names,
+                SourceEncoding::Plain,
+                limits,
+            )?;
+            output.declarations = Some(DeclarationSource {
+                declarations,
+                names,
+            });
+            output.validate_counts(limits)?;
+            continue;
+        }
         if matches!(node.name.as_str(), "rule-packet" | "rule-source") {
             let packet = node.name == "rule-packet";
             if !node.children.is_empty()
@@ -465,26 +524,27 @@ pub struct ReleaseSource<'a> {
     pub bytes: &'a [u8],
 }
 
-/// Explicit offline allocation inputs. The persisted ledger may be a validated
-/// successor of the source bootstrap registry. Symbols resolve declarations
-/// against the bootstrap schema; packet alias scopes remain independent.
+/// Explicit allocation history for every compilation. Bootstrap initializes a
+/// ledger once from the checked source registry. A predecessor may retain newer
+/// allocations than that source, including names not declared by this build.
 #[derive(Clone, Copy, Debug)]
-pub struct ReleaseDeclarationContext<'a> {
-    pub names: &'a NamedIdRegistry,
-    pub expected_names: OwnedContentDigest,
-    pub declarations: &'a StatDeclarations,
-    pub symbols: &'a SymbolRegistry,
+pub enum ReleaseAllocationBase<'a> {
+    Bootstrap,
+    Predecessor {
+        names: &'a NamedIdRegistry,
+        expected_names: OwnedContentDigest,
+    },
 }
 
 /// A successful compilation's allocation result. The host must retain allocation
 /// history and check its stored predecessor when publishing it. This value does
 /// not choose a filesystem publication workflow or commit any persistent state.
 pub struct ReleaseNameAllocation {
-    predecessor: OwnedContentDigest,
+    predecessor: Option<OwnedContentDigest>,
     names: NamedIdRegistry,
 }
 impl ReleaseNameAllocation {
-    pub fn predecessor(&self) -> OwnedContentDigest {
+    pub fn predecessor(&self) -> Option<OwnedContentDigest> {
         self.predecessor
     }
     pub fn names(&self) -> &NamedIdRegistry {
@@ -496,7 +556,7 @@ pub struct BuiltRelease {
     release: StagedOwnedRelease,
     encoded_bytes: usize,
     decoded_bytes: usize,
-    name_allocation: Option<ReleaseNameAllocation>,
+    name_allocation: ReleaseNameAllocation,
 }
 impl BuiltRelease {
     pub fn release(&self) -> &StagedOwnedRelease {
@@ -508,8 +568,8 @@ impl BuiltRelease {
     pub fn decoded_bytes(&self) -> usize {
         self.decoded_bytes
     }
-    pub fn name_allocation(&self) -> Option<&ReleaseNameAllocation> {
-        self.name_allocation.as_ref()
+    pub fn name_allocation(&self) -> &ReleaseNameAllocation {
+        &self.name_allocation
     }
 }
 
@@ -590,13 +650,13 @@ impl<'a> Decoder<'a> {
     }
 }
 
-/// Decode authenticated source constituents, optionally stage declarations, and
+/// Decode authenticated source constituents, retain allocation history, and
 /// run the single existing release checker against the resulting dependency graph.
 /// All declared files must be supplied exactly once; extras and fallbacks fail.
 pub fn build_release(
     manifest: &ReleaseManifest,
     sources: &[ReleaseSource<'_>],
-    declarations: Option<ReleaseDeclarationContext<'_>>,
+    allocation: ReleaseAllocationBase<'_>,
     limits: ReleaseBuildLimits,
 ) -> Result<BuiltRelease> {
     limits.validate()?;
@@ -690,31 +750,16 @@ pub fn build_release(
         }
     }
     let source = check_release_source_dependencies(&input, source_limits)?.into_parts()?;
-    let staged = declarations
-        .map(|context| {
-            context
-                .names
-                .registry()
-                .validate_limits(limits.declarations.registry)?;
-            source
-                .registry
-                .validate_successor(context.names.registry())?;
-            stage_stat_declarations(
-                context.names,
-                context.expected_names,
-                &source.schema,
-                context.symbols,
-                context.declarations,
-                limits.declarations,
-            )
-        })
-        .transpose()?;
-    let schema = staged
-        .as_ref()
-        .map_or(&source.schema, StagedStatDeclarations::schema);
-    let registry = staged.as_ref().map_or(&source.registry, |staged| {
-        staged.names().registry().snapshot()
-    });
+    let (staged, predecessor) = declarations::stage(
+        manifest,
+        &decoder,
+        source.registry,
+        &source.schema,
+        allocation,
+        limits,
+    )?;
+    let schema = staged.schema();
+    let registry = staged.names().registry().snapshot();
     input.recipe.registry = registry.input().clone();
     input.recipe.schema = schema.input().clone();
     input.recipe.rules = source.rules.into_input(schema);
@@ -728,7 +773,7 @@ pub fn build_release(
         &decoder,
         schema,
         &mut input.recipe.rules,
-        staged.as_ref(),
+        &staged,
         limits,
     )?;
     // Content was captured from the original checked owners before composition.
@@ -759,15 +804,8 @@ pub fn build_release(
             "assembled input identity differs from expected_input",
         ));
     }
-    let name_allocation = staged.map(|staged| {
-        let (names, _, _) = staged.into_parts();
-        ReleaseNameAllocation {
-            predecessor: declarations
-                .expect("declaration staging has an explicit context")
-                .expected_names,
-            names,
-        }
-    });
+    let (names, _, _) = staged.into_parts();
+    let name_allocation = ReleaseNameAllocation { predecessor, names };
     Ok(BuiltRelease {
         release,
         encoded_bytes,

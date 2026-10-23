@@ -395,8 +395,8 @@ The maintained compiler uses this construction on every build. Its resulting
 `ImportSourceInput` is raw data: existing full release validation remains mandatory
 before publication or evaluation. Runtime readers still reject stale bindings.
 Neither content construction nor source-prefix validation certifies complete
-release execution or coverage. Filesystem declaration publication remains separate
-work; source extraction never includes evaluation inputs or overwrites their
+release execution or coverage. Filesystem declaration publication uses the atomic
+checkpoint boundary below; source extraction never includes evaluation inputs or overwrites their
 unvalidated commitments.
 Aggregate evaluation preflight accounts for readiness, receiving preparation,
 source properties and their nested lists before digesting or cloning. Partial gap
@@ -499,8 +499,8 @@ layout counts, duplicated ID restatements and receipt types that merely encode
 the current implementation. Source provenance is a sidecar, not behavior identity.
 
 The current R1 production seam is `release.kdl`, which declares the final
-constituent composition directly. `poe-author release build <manifest> --output
-<new-directory>` decodes those explicitly named inputs into the existing typed
+constituent composition directly. `poe-author release build <manifest> --bootstrap
+--output <new-directory>` decodes those explicitly named inputs into the existing typed
 `OwnedReleaseInput` and invokes the single release assembler. It does not replay
 test staging functions or predecessor histories, synthesize missing mechanics,
 repair stale bindings, or certify complete-build coverage. Schema, tables,
@@ -517,6 +517,27 @@ metrics, with optional support outputs. Named query sets retain manifest order.
 Unknown fields, duplicate components/query names and incomplete evaluation
 groups fail. Optional `expected_input` asserts the exact assembled release-input
 identity; it grants no completeness or reference-parity claim.
+
+The authoring result is one immutable checkpoint: `checkpoint.json`, `names.json`
+and the closed `runtime/` release directory. Every CLI build uses this layout.
+Bootstrap is explicit. Later builds select `--predecessor <checkpoint>` and
+`--expected-predecessor <identity>`; they fully validate that runtime release and
+its registry-bound name ledger before retaining allocation history. Even a build
+without new declarations preserves reserved names and the predecessor registry.
+The receipt binds the predecessor, canonical ledger, runtime receipt and exact
+encoded manifest/source inventory. Comments or transport changes can change this
+authoring identity without changing runtime behavior. Digests alone confer no
+semantic authority. The CLI emits receipt JSON on stdout and the checkpoint
+identity on stderr. This selects an immutable predecessor; it does not advance a
+mutable head or claim compare-and-swap. A future head requires real concurrency
+control against its stored predecessor.
+
+Optional `stat-declarations "definitions.kdl" names="declaration-names.kdl"`
+uses the same closed source inventory and bounded parsers. Its symbol scope
+resolves existing units against the checked source schema. Declaration staging
+overlays only currently declared names onto each packet's own symbol scope;
+persisted reserved names do not become executable merely by existing in history.
+No separate allocation command or runtime-only authoring publication path exists.
 
 Rule source composition uses `rule-packet "family/packet.kdl"
 names="family/names.kdl"` and explicit `rule-source "rules/example.rule"`
@@ -544,11 +565,13 @@ are independent, alongside source/component/packet counts, expanded rule work
 and typed assembly limits. `plain` is the default transport encoding; rule,
 packet and names files are plain UTF-8. Constituent DTOs can opt into gzip. Gzip is a
 single-member lossless transport: trailing bytes and concatenated members fail.
-Only after complete assembly succeeds does the shared Host crate publish a new
-directory without replacement. Both CLI hosts use that one publisher; Host has
-no game dependencies. Native execution still requires extraction of an immutable
-release loader so loading an existing release no longer reassembles authoring
-inputs.
+Only after complete assembly succeeds does the shared Host crate publish the
+whole checkpoint through one no-replace rename. Its bounded bundle API accepts
+root files and immediate child directories of files, rejects nonportable names
+and case-insensitive collisions before staging, and shares the transaction with
+the existing flat publisher. Host has no game dependencies. This provides atomic
+visibility, not power-loss durability. Runtime consumers load `runtime/` through
+the existing checked reader without publication reassembly or authoring ledgers.
 
 The tracked source cutover under
 [`migration-source`](../data/owned/poe2/3887ae68/migration-source/release.kdl)

@@ -1,8 +1,10 @@
 //! Stable authoring names over the single existing allocation registry.
 //!
 //! Transactions return a staged successor without changing their base. They do
-//! not publish files: a host must compare-and-swap the actual stored predecessor
-//! identity and publish registry and names together. Neither allocation nor a
+//! not publish files: the host publishes registry and names in one immutable
+//! checkpoint. A future mutable head requires compare-and-swap against its actual
+//! stored predecessor; choosing an explicit immutable predecessor is not head CAS.
+//! Neither allocation nor a
 //! name binding grants schema membership or permission to execute a rule.
 use crate::{
     SymbolError, SymbolLimits, SymbolRegistry, bindings::valid_name, manifest::slot_owner,

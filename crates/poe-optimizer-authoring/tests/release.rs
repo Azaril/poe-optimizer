@@ -1,6 +1,8 @@
 //! Final constituent composition uses the existing release and Engine checks.
 #[path = "release/arithmetic.rs"]
 mod arithmetic;
+#[path = "release/checkpoint.rs"]
+mod checkpoint;
 #[path = "release/content_bindings.rs"]
 mod content_bindings;
 #[path = "release/declarations.rs"]
@@ -27,7 +29,7 @@ mod source_dependencies;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{
-    BuiltRelease, ReleaseBuildError, ReleaseBuildLimits, ReleaseDeclarationContext, ReleaseSource,
+    BuiltRelease, ReleaseAllocationBase, ReleaseBuildError, ReleaseBuildLimits, ReleaseSource,
     SourceEncoding, SymbolRegistry, build_release, load_names, lower_program, parse_program,
     parse_release_manifest, raise_program,
 };
@@ -257,16 +259,16 @@ impl Sources {
     }
 
     fn build(&self, limits: ReleaseBuildLimits) -> Result<BuiltRelease, ReleaseBuildError> {
-        self.build_with_declarations(None, limits)
+        self.build_with_allocation(ReleaseAllocationBase::Bootstrap, limits)
     }
 
-    fn build_with_declarations(
+    fn build_with_allocation(
         &self,
-        declarations: Option<ReleaseDeclarationContext<'_>>,
+        allocation: ReleaseAllocationBase<'_>,
         limits: ReleaseBuildLimits,
     ) -> Result<BuiltRelease, ReleaseBuildError> {
         let manifest = parse_release_manifest(&self.manifest, limits)?;
-        build_release(&manifest, &self.sources(), declarations, limits)
+        build_release(&manifest, &self.sources(), allocation, limits)
     }
 
     fn encoded_bytes(&self) -> usize {
@@ -572,8 +574,15 @@ fn declared_kdl_and_dsl_build_a_complete_release_with_the_independent_metric() {
         );
         let mut sources = fixture.source.sources();
         sources.reverse();
-        let actual = build_release(&manifest, &sources, None, Default::default()).unwrap();
-        assert!(actual.name_allocation().is_none());
+        let actual = build_release(
+            &manifest,
+            &sources,
+            ReleaseAllocationBase::Bootstrap,
+            Default::default(),
+        )
+        .unwrap();
+        assert!(actual.name_allocation().predecessor().is_none());
+        assert!(actual.name_allocation().names().input().bindings.is_empty());
         assert_eq!(actual.release().input(), expected.input());
         assert_eq!(files(actual.release()), files(&expected));
         assert_eq!(actual.encoded_bytes(), fixture.source.encoded_bytes());
@@ -599,7 +608,13 @@ fn dsl_sources_and_names_have_exact_inventory_and_cannot_borrow_component_roles(
             .filter(|source| source.path != path)
             .collect();
         assert!(
-            build_release(&manifest, &missing, None, Default::default()).is_err(),
+            build_release(
+                &manifest,
+                &missing,
+                ReleaseAllocationBase::Bootstrap,
+                Default::default()
+            )
+            .is_err(),
             "missing {path}"
         );
     }
@@ -608,7 +623,15 @@ fn dsl_sources_and_names_have_exact_inventory_and_cannot_borrow_component_roles(
         path: "rules/extra.rule",
         bytes: b"program \"extra\" context actor {}",
     });
-    assert!(build_release(&manifest, &extra, None, Default::default()).is_err());
+    assert!(
+        build_release(
+            &manifest,
+            &extra,
+            ReleaseAllocationBase::Bootstrap,
+            Default::default()
+        )
+        .is_err()
+    );
 
     let mut unused = fixture.source.clone();
     unused.declare(" rule-source \"rules/unused.rule\"\n");
@@ -1125,7 +1148,15 @@ fn aggregate_packet_and_ir_budgets_apply_across_the_complete_release() {
             "rule packet count",
         ),
     ] {
-        limited(build_release(&manifest, &supplied, None, stricter), message);
+        limited(
+            build_release(
+                &manifest,
+                &supplied,
+                ReleaseAllocationBase::Bootstrap,
+                stricter,
+            ),
+            message,
+        );
     }
     for smaller in [
         ReleaseBuildLimits {
@@ -1211,7 +1242,13 @@ fn plain_and_gzip_constituents_build_the_same_dsl_release_and_metric() {
             }));
         let mut supplied = source.sources();
         supplied.reverse();
-        let actual = build_release(&manifest, &supplied, None, Default::default()).unwrap();
+        let actual = build_release(
+            &manifest,
+            &supplied,
+            ReleaseAllocationBase::Bootstrap,
+            Default::default(),
+        )
+        .unwrap();
         assert_eq!(actual.encoded_bytes(), source.encoded_bytes());
         assert_eq!(actual.decoded_bytes(), source.decoded_bytes);
         assert_eq!(actual.release().input(), expected.input());
@@ -1276,7 +1313,12 @@ fn supplied_source_inventory_is_exact_without_fallbacks() {
     let manifest = parse_release_manifest(&source.manifest, Default::default()).unwrap();
     let supplied = source.sources();
     invalid(
-        build_release(&manifest, &supplied[1..], None, Default::default()),
+        build_release(
+            &manifest,
+            &supplied[1..],
+            ReleaseAllocationBase::Bootstrap,
+            Default::default(),
+        ),
         "source inventory differs",
     );
     let mut changed = supplied.clone();
@@ -1285,25 +1327,45 @@ fn supplied_source_inventory_is_exact_without_fallbacks() {
         bytes: b"{}",
     });
     invalid(
-        build_release(&manifest, &changed, None, Default::default()),
+        build_release(
+            &manifest,
+            &changed,
+            ReleaseAllocationBase::Bootstrap,
+            Default::default(),
+        ),
         "source inventory differs",
     );
     let mut changed = supplied.clone();
     changed[0] = changed[1];
     invalid(
-        build_release(&manifest, &changed, None, Default::default()),
+        build_release(
+            &manifest,
+            &changed,
+            ReleaseAllocationBase::Bootstrap,
+            Default::default(),
+        ),
         "duplicate supplied source",
     );
     let mut changed = supplied.clone();
     changed[0].path = "unlisted.json";
     invalid(
-        build_release(&manifest, &changed, None, Default::default()),
+        build_release(
+            &manifest,
+            &changed,
+            ReleaseAllocationBase::Bootstrap,
+            Default::default(),
+        ),
         "missing declared source",
     );
     let mut changed = supplied;
     changed[0].path = "../outside.json";
     invalid(
-        build_release(&manifest, &changed, None, Default::default()),
+        build_release(
+            &manifest,
+            &changed,
+            ReleaseAllocationBase::Bootstrap,
+            Default::default(),
+        ),
         "invalid supplied source path",
     );
 }
@@ -1350,7 +1412,7 @@ fn encoded_decoded_and_source_count_budgets_have_exact_boundaries() {
             build_release(
                 &manifest,
                 &source.sources(),
-                None,
+                ReleaseAllocationBase::Bootstrap,
                 ReleaseBuildLimits {
                     max_sources: limits.max_sources - 1,
                     ..limits
@@ -1743,7 +1805,7 @@ fn tracked_dsl_release_preserves_every_historical_constituent_except_program_rep
 
 fn cli(manifest: &Path, output: &Path) -> Output {
     Command::new(env!("CARGO_BIN_EXE_poe-author"))
-        .args(["release", "build"])
+        .args(["release", "build", "--bootstrap"])
         .arg(manifest)
         .arg("--output")
         .arg(output)
@@ -1782,6 +1844,59 @@ fn directory_entries(path: &Path) -> BTreeSet<std::ffi::OsString> {
         .collect()
 }
 
+fn checkpoint_files(path: &Path) -> BTreeMap<String, Vec<u8>> {
+    assert_eq!(
+        directory_entries(path),
+        ["checkpoint.json", "names.json", "runtime"]
+            .into_iter()
+            .map(std::ffi::OsString::from)
+            .collect()
+    );
+    let mut output = BTreeMap::from([
+        (
+            "checkpoint.json".into(),
+            fs::read(path.join("checkpoint.json")).unwrap(),
+        ),
+        (
+            "names.json".into(),
+            fs::read(path.join("names.json")).unwrap(),
+        ),
+    ]);
+    output.extend(
+        directory_files(&path.join("runtime"))
+            .into_iter()
+            .map(|(name, bytes)| (format!("runtime/{name}"), bytes)),
+    );
+    output
+}
+
+fn assert_checkpoint_runtime(path: &Path, expected: &BTreeMap<String, Vec<u8>>) -> Vec<u8> {
+    checkpoint_files(path);
+    assert_eq!(directory_files(&path.join("runtime")), *expected);
+    // The nested runtime remains independently loadable with its closed inventory.
+    let checked = load_owned_release_artifacts(expected, Default::default()).unwrap();
+    let names: poe_optimizer_authoring::NamesInput =
+        serde_json::from_slice(&fs::read(path.join("names.json")).unwrap()).unwrap();
+    assert_eq!(
+        names.registry,
+        checked.recipe().registry().identity().unwrap()
+    );
+    fs::read(path.join("checkpoint.json")).unwrap()
+}
+
+fn assert_checkpoint_success(result: &Output, receipt: &[u8]) {
+    let parsed: poe_optimizer_authoring::AuthoringCheckpointReceipt =
+        serde_json::from_slice(receipt).unwrap();
+    let identity = parsed.identity(Default::default()).unwrap();
+    assert_eq!(
+        result.stderr,
+        format!("checkpoint identity: {identity}\n").as_bytes()
+    );
+    let mut stdout = receipt.to_vec();
+    stdout.push(b'\n');
+    assert_eq!(result.stdout, stdout);
+}
+
 #[test]
 fn cli_builds_declared_dsl_and_rejected_dsl_leaves_no_publication() {
     let temp = tempfile::tempdir().unwrap();
@@ -1805,11 +1920,9 @@ fn cli_builds_declared_dsl_and_rejected_dsl_leaves_no_publication() {
         "{}",
         String::from_utf8_lossy(&result.stderr)
     );
-    assert!(result.stderr.is_empty());
-    let mut receipt = files(&expected)["release.json"].clone();
-    receipt.push(b'\n');
-    assert_eq!(result.stdout, receipt);
-    assert_eq!(directory_files(&output), files(&expected));
+    let receipt = assert_checkpoint_runtime(&output, &files(&expected));
+    assert_checkpoint_success(&result, &receipt);
+    let published = checkpoint_files(&output);
     assert_eq!(declared_files(&input, &dsl.source), initial_sources);
 
     let rule = dsl.source_for("action-final");
@@ -1826,7 +1939,7 @@ fn cli_builds_declared_dsl_and_rejected_dsl_leaves_no_publication() {
     assert!(String::from_utf8_lossy(&failed.stderr).contains("invalid rule packet"));
     assert!(!failed_output.exists());
     assert_eq!(directory_entries(temp.path()), before);
-    assert_eq!(directory_files(&output), files(&expected));
+    assert_eq!(checkpoint_files(&output), published);
 }
 
 #[test]
@@ -1854,19 +1967,17 @@ fn cli_build_publishes_exact_artifacts_and_failures_leave_no_output_or_staging()
         "{}",
         String::from_utf8_lossy(&result.stderr)
     );
-    assert!(result.stderr.is_empty());
-    let mut receipt = expected_files["release.json"].clone();
-    receipt.push(b'\n');
-    assert_eq!(result.stdout, receipt);
-    assert_eq!(directory_files(&output), expected_files);
+    let receipt = assert_checkpoint_runtime(&output, &expected_files);
+    assert_checkpoint_success(&result, &receipt);
+    let published = checkpoint_files(&output);
     assert_eq!(declared_files(&input, &source), initial_sources);
     let published_entries = directory_entries(temp.path());
 
     let repeated = cli(&manifest, &output);
     assert_eq!(repeated.status.code(), Some(2));
     assert!(repeated.stdout.is_empty());
-    assert!(String::from_utf8_lossy(&repeated.stderr).contains("cannot publish release"));
-    assert_eq!(directory_files(&output), expected_files);
+    assert!(String::from_utf8_lossy(&repeated.stderr).contains("cannot publish"));
+    assert_eq!(checkpoint_files(&output), published);
     assert_eq!(directory_entries(temp.path()), published_entries);
 
     for (text, message) in [
@@ -1896,7 +2007,7 @@ fn cli_build_publishes_exact_artifacts_and_failures_leave_no_output_or_staging()
         );
         assert!(!failed_output.exists());
         assert_eq!(directory_entries(temp.path()), before);
-        assert_eq!(directory_files(&output), expected_files);
+        assert_eq!(checkpoint_files(&output), published);
     }
     fs::write(&manifest, &source.manifest).unwrap();
     assert_eq!(declared_files(&input, &source), initial_sources);
