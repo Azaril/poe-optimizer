@@ -568,6 +568,23 @@ fn check_actor_attributes(recipe: &CheckedOwnedRecipe) {
                 "effective",
             );
         }
+        // Projection is independently defined for fractional effective inputs;
+        // formatter rounding above must not hide its floor semantics.
+        for (effective, expected) in [(10.9, 10.0), (-10.1, -11.0)] {
+            let projected = evaluate(
+                recipe,
+                owner,
+                projection,
+                &[quantity(projection, "effective", effective)],
+                &mut scratch,
+            );
+            assert!(projected.iter().all(|value| value
+                == &EffectDisposition::Applied {
+                    value: ParameterValue::Quantity(
+                        FiniteQuantity::new(expected, unit.clone()).unwrap()
+                    ),
+                }));
+        }
         for exact in [BoundedInteger::MIN, BoundedInteger::MAX] {
             let projected = evaluate(
                 recipe,

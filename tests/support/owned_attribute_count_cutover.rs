@@ -1,17 +1,8 @@
 //! Exact per-occurrence Count cutover. This supplies neither final attributes nor ordering policy.
-use super::migration_preservation;
 use poe_optimizer_core::{
-    owned_build::ParameterValue,
-    owned_content::{OwnedContentDigest, digest_owned},
-    owned_definitions::*,
-    owned_rules::*,
-    owned_schema::*,
+    owned_build::ParameterValue, owned_definitions::*, owned_rules::*, owned_schema::*,
 };
-use poe_optimizer_import::{
-    owned_recipe::OwnedRecipeInput,
-    owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
-    owned_release_migration::{OwnedReleaseMigrationInput, compile_owned_release_migration},
-};
+use poe_optimizer_import::owned_release_migration::OwnedReleaseMigrationInput;
 use serde::{Deserialize, de::DeserializeOwned};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -20,7 +11,6 @@ use std::{
     fs,
     path::PathBuf,
 };
-pub const KIND: &str = "attribute-count-cutover-v1";
 #[derive(Deserialize)]
 struct Programs {
     schema_version: u32,
@@ -47,17 +37,6 @@ fn key(name: &str) -> OwnedDefinitionKey {
 }
 fn hash(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
-}
-fn digest() -> OwnedContentDigest {
-    let values: Vec<Value> = [
-        "count-authoring",
-        "count-bindings",
-        "count-schema-migration",
-        "count-programs",
-    ]
-    .map(|name| read(&format!("{name}.json")))
-    .into();
-    digest_owned(KIND, &values, 8 * 1024 * 1024).unwrap()
 }
 fn channels(b: &Value) -> (UnitDefId, Vec<StatDefId>, Vec<Vec<StatDefId>>) {
     (
@@ -356,80 +335,4 @@ pub fn assert_programs(rules: &RulePackageInput) {
             .all(|p| targets(p, &old).is_empty())),
         "old Integer contribution path remains live"
     );
-}
-fn replace(input: &mut OwnedRecipeInput, forward: bool) {
-    let p: Programs = read("count-programs.json");
-    for row in p.programs {
-        let owner = input
-            .rules
-            .owners
-            .iter_mut()
-            .find(|o| o.owner == row.owner)
-            .unwrap();
-        assert_eq!(owner.programs.closure, row.closure);
-        let (before, after) = if forward {
-            (row.before, row.after)
-        } else {
-            (row.after, row.before)
-        };
-        let program = owner
-            .programs
-            .members
-            .iter_mut()
-            .find(|p| p.id == before.id)
-            .unwrap();
-        assert_eq!(*program, before, "pinned predecessor program differs");
-        *program = after;
-    }
-}
-/// Exact inverse to the checked six-definition migration, not a broad metadata filter.
-pub fn assert_inverse(prior: &StagedOwnedRelease, next: &StagedOwnedRelease) {
-    let m: OwnedReleaseMigrationInput = read("count-schema-migration.json");
-    let schema_step = compile_owned_release_migration(prior, m, Default::default()).unwrap();
-    let mut inverse = next.input().clone();
-    replace(&mut inverse.recipe, false);
-    // Only the one jointly-authored provenance row replaces the internal schema step.
-    inverse.provenance = schema_step.input().provenance.clone();
-    assert!(
-        inverse == *schema_step.input(),
-        "Count inverse differs from exact six-definition migration"
-    );
-    migration_preservation::assert_import_rebindings_only(prior, next);
-    // Independently verify the old rules' exact serialized bytes after restoring
-    // only the migration's release/definition bindings; all other fields survive.
-    inverse.recipe.rules.release = prior.input().recipe.rules.release.clone();
-    inverse.recipe.rules.definitions = prior.input().recipe.rules.definitions.clone();
-    assert!(
-        serde_json::to_vec(&inverse.recipe.rules).unwrap()
-            == serde_json::to_vec(&prior.input().recipe.rules).unwrap(),
-        "prior rules bytes changed beyond the reviewed cutover"
-    );
-    assert_eq!(next.input().recipe.registry.last_issued.get(), 0x3320);
-    assert_eq!(prior.input().recipe.registry.last_issued.get(), 0x331a);
-}
-pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
-    check_authored();
-    let a: Value = read("count-authoring.json");
-    let b: Value = read("count-bindings.json");
-    assert_eq!(json!(prior.receipt().input), b["before"]);
-    assert_eq!(json!(prior.receipt().registry), b["registry"]);
-    assert_eq!(json!(prior.receipt().definitions), b["definitions"]);
-    assert_eq!(json!(prior.receipt().rules), b["rules"]);
-    // Published compact rule bytes are canonical serde JSON without a trailing newline.
-    let bytes = serde_json::to_vec(&prior.input().recipe.rules).unwrap();
-    assert_eq!(hash(&bytes), a["source_rule_byte_sha256"]);
-    let m: OwnedReleaseMigrationInput = read("count-schema-migration.json");
-    let schema_step = compile_owned_release_migration(prior, m, Default::default()).unwrap();
-    let mut input = schema_step.input().clone();
-    replace(&mut input.recipe, true);
-    assert_eq!(input.provenance.len(), prior.input().provenance.len() + 1);
-    *input.provenance.last_mut().unwrap() = OwnedReleaseProvenance {
-        kind: key(KIND),
-        prior_input: prior.receipt().input,
-        authoring_input: digest(),
-    };
-    let next = assemble_owned_release(input, Default::default()).unwrap();
-    assert_programs(&next.input().recipe.rules);
-    assert_inverse(prior, &next);
-    next
 }

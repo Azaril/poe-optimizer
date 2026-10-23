@@ -1,6 +1,10 @@
 //! Final constituent composition uses the existing release and Engine checks.
 #[path = "release/arithmetic.rs"]
 mod arithmetic;
+#[path = "release/attribute_support_domains.rs"]
+mod attribute_support_domains;
+#[path = "release/attribute_support_source.rs"]
+mod attribute_support_source;
 #[path = "release/checkpoint.rs"]
 mod checkpoint;
 #[path = "release/content_bindings.rs"]
@@ -1691,7 +1695,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     let current_artifacts: BTreeMap<_, _> = release.artifacts().collect();
 
     // Historical IR remains a test reference only. Authenticate the exact new
-    // producer, 69 Boolean channels and fifteen support-source domains before
+    // producer, 69 Boolean channels and 308 support-source domains before
     // reconstructing old commitments through maintained APIs.
     let retained = fs::read(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"),
@@ -1823,6 +1827,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         .into_iter()
         .chain(root_support_domains::declarations())
         .chain(usage_support_domains::declarations())
+        .chain(attribute_support_domains::declarations())
         .collect();
     assert_eq!(domains.len(), prior_domains.len() + additions.len());
     for added in &additions {

@@ -651,7 +651,7 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
         });
     }
     assert_eq!(removed, 1);
-    // Independently pin the sole admitted metadata delta. All prior rows and
+    // Independently pin the admitted metadata additions. All prior rows and
     // every other metadata field still undergo whole-package equality below.
     let ns = schema.namespace();
     let key = |suffix| OwnedDefinitionKey::new(format!("def.000000000000{suffix}")).unwrap();
@@ -662,7 +662,7 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
             slot: ActionOutputDefId::new(ns.clone(), key(suffix)),
         }))
     };
-    let expected_domains: Vec<_> = [
+    let mut expected_domains: Vec<_> = [
         SchemaSubject::Definition(DefinitionAddress::Skill(skill("0012"))),
         SchemaSubject::Slot(SlotAddress::Actor(DeclaredSlot {
             declaration: SlotOwnerDefId::Skill(skill("0012")),
@@ -712,6 +712,34 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
         domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
     })
     .collect();
+    // The immutable pre-migration corpus independently identifies this complete
+    // choice family. The release harness also checks all source catalog options,
+    // their exact mappings and current Count bodies; do not select this list
+    // from the production support inventory being tested.
+    let attribute_owners: Vec<_> = original
+        .owners
+        .iter()
+        .filter(|owner| {
+            owner
+                .programs
+                .members
+                .iter()
+                .any(|program| program.id.as_str() == "attribute-choice")
+        })
+        .collect();
+    assert_eq!(attribute_owners.len(), 293);
+    for owner in attribute_owners {
+        assert!(matches!(
+            owner.owner,
+            SchemaSubject::Definition(DefinitionAddress::PassiveNode(_))
+        ));
+        assert!(owner.programs.is_complete());
+        assert_eq!(owner.programs.members.len(), 1);
+        expected_domains.push(SupportSourceDomainDeclaration {
+            owner: owner.owner.clone(),
+            domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+        });
+    }
     let domains = &mut preserved.support_discovery.as_mut().unwrap().providers;
     let prior_domains = &expected.support_discovery.as_ref().unwrap().providers;
     assert_eq!(domains.len(), prior_domains.len() + expected_domains.len());

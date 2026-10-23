@@ -57,7 +57,7 @@ fn link<T>(
     only(origin.links.iter().filter_map(select), kind)
 }
 
-pub(super) fn saved(
+pub(crate) fn saved(
     evidence: &SourceProjectEvidence<'_>,
     normalized: &NormalizedImport,
 ) -> EvaluationSelection {

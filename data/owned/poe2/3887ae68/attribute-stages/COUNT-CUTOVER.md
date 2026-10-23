@@ -1,8 +1,12 @@
 # Per-occurrence Count contribution cutover
 
-This records the checked V20 transition. The subsequent
+This records the historical checked V20 transition. Its publisher and exclusive
+staging helpers are retired; current publication uses the
+[maintained manifest](../migration-source/README.md). Shared authored and native
+fixture laws remain until their step-consumer and empty-MORE callers migrate.
+The subsequent
 [attribute consumers](../attribute-step-consumers/README.md) adopt these streams
-under V21. Keep this packet for exact transition replay and Count regression tests;
+under V21. Keep this packet for historical transition auditing and Count regression tests;
 the implementation plan identifies the current combined release.
 
 This authored step preserves final Integer attributes `1d2e/1d2f/1d30` and introduces six Actor Count input channels using existing unit `295a`: `331b/331c/331d` for the first Strength/Dexterity/Intelligence pass, and `331e/331f/3320` for the second. It supplies no final attribute formula, query ordering, MORE grouping, comparison conditions or contributor closure.
@@ -11,7 +15,7 @@ The pinned predecessor is `runs/owned-strength-life-01/package` (input `f94f845b
 
 Class/passive integer Add literals become exactly representable Count literals. Item projections retain their existing per-occurrence `QuantizeInteger` and then use `ScaleInteger(1 Count, integer)`. Their formatter already produces integral Counts, but the quantization also enforces the browser-safe Integer bound; retaining it preserves that failure behavior. All Attributes still converts once per modifier occurrence before emitting to the three attributes in each pass. Repeated equipped uses remain independent occurrences.
 
-`count-programs.json` stores only the affected programs and their exact owner closures, including the predecessor bodies needed for inverse checks. The shared test helper uses the existing V5 six-definition migration as an internal authoring step, replaces only those exact bodies, and assembles a checked V20 release. It verifies the inverse against that exact schema migration, the prior rules' serialized bytes, and all inherited Import dependency rebindings. Frozen migration and converter APIs are unchanged. The subsequent V21 consumer recipe uses these streams without retaining a second live Integer contribution path.
+`count-programs.json` stores only the affected programs and their exact owner closures, including the predecessor bodies used for inverse checks. The retired publication helper used the V5 six-definition migration as an internal authoring step, replaced only those exact bodies, and assembled a checked V20 release. It verified the inverse against that schema migration, the prior rules' serialized bytes, and all inherited Import dependency rebindings. The retained authored helper still checks all 368 exact transformations. The subsequent V21 consumer recipe uses these streams without retaining a second live Integer contribution path; current publication comes from the maintained DSL release.
 
 The authored check passes. Publication passes in 29.89 seconds and preserves all five imported drafts, exact selections and 110 queries. The eighteen output files rebuild byte-identically. Five native tests pass in 3.16 seconds: actual class/passive occurrences across all five selections, exact node15782 choice changes and inactive loadouts, preserved Partial class refusal, fresh/reused/four-worker Rayon equality, and the four item projection programs' missing-input and overflow boundaries. Class/passive tests operate in an explicitly finite unpublished domain; item tests inspect exact projection programs, not full equipped-item routing.
 
@@ -26,7 +30,6 @@ Compile each target with `cargo test -p poe-optimizer-cli --test <target> --no-r
 | Target / filter | Environment |
 | --- | --- |
 | `owned_attribute_count_cutover_authored`: `--exact authored_attribute_count_cutover_preserves_each_existing_occurrence` | No local published artifact needed |
-| `owned_attribute_count_cutover`: `--ignored --exact publish_count_contributions_preserving_all_five_originals` | `POE_OPTIMIZER_TEST_ATTRIBUTE_COUNT_PRIOR`: checked Strength-Life predecessor; `POE_OPTIMIZER_TEST_ATTRIBUTE_COUNT_OUTPUT`: fresh output directory |
-| `owned_attribute_count_cutover`: `--ignored native::` | `POE_OPTIMIZER_TEST_ATTRIBUTE_COUNT_RELEASE`: resulting checked package |
+| `owned_attribute_count_cutover`: `--ignored native::` | `POE_OPTIMIZER_TEST_ATTRIBUTE_COUNT_RELEASE`: retained historical checked package and its original draft/selection sidecars; this fixture is not the current release workflow |
 
 The optional original-function pipeline witness is independent of this exact conversion proof. No Lua runtime, source output graph or observer code enters the native package.

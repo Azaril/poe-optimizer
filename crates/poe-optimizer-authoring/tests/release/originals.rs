@@ -21,6 +21,7 @@ use std::{collections::BTreeMap, fs, path::Path};
 
 #[path = "originals/selection.rs"]
 mod selection;
+pub(super) use selection::saved;
 
 // Only source identity and ordered query identities are consumed. Recorded PoB
 // values and historical implementation metadata are not native answers.
