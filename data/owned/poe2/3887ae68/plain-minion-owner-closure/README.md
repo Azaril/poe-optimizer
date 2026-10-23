@@ -1,5 +1,11 @@
 # Two complete default Minion Damage passive owners
 
+This packet records a historical publication checkpoint. Its predecessor-specific
+publisher has been retired. The maintained Authoring release tests validate the
+current definitions and source domains, including the independent evidence laws
+from this packet. Publication uses the [current source workflow](../migration-source/README.md).
+The release identities and validation results below describe the original checkpoint.
+
 This packet closes the existing default definitions for source nodes 8737 and 95
 (owned Passive `1b84` and `1bc9`). Both are selected in Original05. Each complete
 source node has one unconditional `Minions deal 10% increased Damage` line, and
@@ -36,38 +42,37 @@ and consequently prunes 8737. Static source and original runtime observations
 are separate evidence; the runtime's copied effective node is not assumed to be
 the static table object.
 
-The test publication helper uses the existing checked compact successor and
-`PassiveDeclarationRefinement` APIs. It authenticates predecessor bindings,
-source pins and both report byte commitments before publication. It restores
-only the reviewed closures and exact dependency identities, then compares the
-entire remaining recipe and release. No new migration version, compiler or
-runtime exception is introduced. Ordinary CI checks the tracked packet and
-manifest without loading PoB or ignored reports.
+The retired test publication helper used the checked compact successor and
+`PassiveDeclarationRefinement` APIs. It authenticated predecessor bindings,
+source pins and both report byte commitments before publication. It restored
+only the reviewed closures and exact dependency identities, then compared the
+entire remaining recipe and release. It introduced no migration version,
+compiler or runtime exception.
 
-Both publication tests pass. The checked package is
+Both publication tests passed at the historical checkpoint. The checked package was
 `runs/owned-plain-minion-owner-closure-01/package`, input
 `75d4189c657a3a39e4c80fe3d6358aeb7a6e2a42b1caba6a22f3643f216c0857`.
-Its eighteen files total 60,787,062 bytes with 83 provenance rows and rebuild
+Its eighteen files totaled 60,787,062 bytes with 83 provenance rows and rebuilt
 byte-for-byte. All five original input projects, sidecars, saved selections,
-local IDs and 110 queries are preserved. Selected unresolved input counts remain
+local IDs and 110 queries were preserved. Selected unresolved input counts remained
 113/116/108/121/11. Closing two selected owners does not resolve the remaining
 input, topology, contributor, support, encounter or numerical coverage gaps.
 No evaluation bundle or whole-build parity is claimed.
 
-Three new native closure tests and the six existing passive tests pass. They
+Three new native closure tests and the six existing passive tests passed. They
 reuse the explicitly finite passive topology and final-level fixture: the exact
 published owners contribute 10+10; prior or other selected Partial owners still
 block totals; unselected Partial catalog rows do not; scratch reuse remains
 stable. The tests do not assert full-tree legality or complete original builds.
 
-For an opt-in publication check, use a new, nonexistent output directory:
+Run the maintained release proof and independent native component checks:
 
 ```powershell
-$env:POE_OPTIMIZER_TEST_MINION_OWNER_CLOSURE_PRIOR = 'runs/owned-amulet-level-copy-02/package'
-$env:POE_OPTIMIZER_TEST_MINION_OWNER_CLOSURE_OUTPUT = 'runs/owned-plain-minion-owner-closure-01'
-cargo test --test owned_plain_minion_owner_closure_cli -- --include-ignored
+cargo test -p poe-optimizer-authoring --test release minion_support_domains
+cargo test -p poe-optimizer-engine --test owned plain_minion_owner_closure
 ```
 
-The parent `runs/owned-minion-physical-damage-source-02` reports and pinned source
-checkout are required only for that opt-in publication proof. The existing source
-witness need not be rerun when those exact evidence bytes remain available.
+The old `runs/owned-minion-physical-damage-source-02` paths identify historical
+source observations. The maintained ordinary proof authenticates tracked source
+archives and packet evidence without a generated predecessor package, local
+reports or Lua execution. The native component remains explicitly finite.

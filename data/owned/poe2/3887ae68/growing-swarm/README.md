@@ -1,5 +1,11 @@
 # Growing Swarm: complete default effects and receiving
 
+This packet records a historical publication checkpoint. Its predecessor-specific
+publisher has been retired. The maintained Authoring release tests validate the
+current source domains, both producer effects and their separate receiving paths.
+Publication uses the [current source workflow](../migration-source/README.md).
+The release identities and validation results below describe the original checkpoint.
+
 This packet completes the existing default Passive owner `0bc0` (source node
 14945, Growing Swarm). Its two effects are 20% increased minion Area of Effect
 and 20% increased minion Cooldown Recovery Rate. Neither effect has a Commandable
@@ -72,28 +78,28 @@ or copied final number is required or claimed.
 `closure.json` contains the single refined default Passive; `migration.json`
 contains four new channels, their four receiver programs and two Action appends.
 `source-vectors.json` preserves bounded exact source observations and complete
-static-node evidence. The shared passive publisher preserves the earlier Command
-packet's provenance domain and reconstructs the exact expected successor recipe.
-It compares every unrelated schema, rule, routing, import and query field.
+static-node evidence. The retired shared passive publisher preserved the earlier
+Command packet's provenance domain and reconstructed the exact expected successor
+recipe. It compared every unrelated schema, rule, routing, import and query field.
 
 ## Verification
 
-Twelve combined Command/Growing Swarm native tests and four fast authoring checks
-pass. The checked publication at `runs/owned-growing-swarm-02/validation.json`
-passes, with endpoint
+At that checkpoint, twelve combined Command/Growing Swarm native tests and four
+fast authoring checks passed. The checked publication at
+`runs/owned-growing-swarm-02/validation.json` passed, with endpoint
 `caa08fd53b2902cbf6b6362daa478bba843aad00944a173fe3a8a4a85fc5cc58`.
 The historical Command replay at `runs/owned-command-shared-replay-01/validation.json`
-also passes with the extracted publisher. Logs are
+also passed with the extracted publisher. Logs are
 `runs/owned-growing-swarm-{focused-02,publication-02,historical-01}.log`.
-Strict workspace/all-feature/all-target Clippy and package formatting pass;
+Strict workspace/all-feature/all-target Clippy and package formatting passed;
 lint log: `runs/owned-growing-swarm-clippy-01.log`.
 
-Ordinary authoring checks need tracked files and the source
-manifest. Optional publication additionally needs the exact prior package,
-pinned source checkout and authenticated reports. It normalizes all five original
-builds against both endpoints, preserves 110 ordered queries and the selected
-issue counts `114/117/109/122/11`, and requires all eighteen rebuilt files to match.
-The selected builds remain incomplete and no evaluation bundle is added.
+The historical publication normalized all five original builds against both
+endpoints, preserved 110 ordered queries and selected issue counts
+`114/117/109/122/11`, and required all eighteen rebuilt files to match. The
+maintained ordinary proof authenticates tracked source archives and packet
+evidence without a generated predecessor package, local reports or Lua execution.
+Source-domain coverage does not complete the selected builds or add an evaluation bundle.
 
 The reused native Command fixture supplies two distinct Sniper populations and
 explicitly finite parent inputs and contributor coverage. New checks retain exact
@@ -102,14 +108,10 @@ contributions, removal behavior, missing-input and coverage failures, and scratc
 reuse. They do not authorize those finite closures in the real package.
 
 ```powershell
-cargo test --test owned_command_cooldown_native
-cargo test --test owned_plain_minion_owner_closure_cli growing_swarm_keeps_both_source_effects_and_existing_conditional_action_rules
-
-$env:POE_OPTIMIZER_TEST_GROWING_SWARM_PRIOR = 'runs/owned-reward-recovery-inputs-02/package'
-$env:POE_OPTIMIZER_TEST_GROWING_SWARM_OUTPUT = 'runs/owned-growing-swarm-reproduction'
-cargo test --test owned_plain_minion_owner_closure_cli publish_growing_swarm_preserving_all_five_originals -- --include-ignored --nocapture
+cargo test -p poe-optimizer-authoring --test release minion_support_domains
+cargo test -p poe-optimizer-cli --test owned_command_cooldown_native
 ```
 
-Choose a new nonexistent output directory. This packet does not implement final
-cooldown duration, tick rounding, base uses, final Area/radius, other minion
+This packet does not implement final cooldown duration, tick rounding, base uses,
+final Area/radius, other minion
 families' receiving declarations or complete incoming contributor inventories.

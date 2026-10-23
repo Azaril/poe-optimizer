@@ -740,6 +740,32 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
             domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
         });
     }
+    // This bounded source-family list is independent of the current provider
+    // inventory. The release harness authenticates all eighteen source nodes
+    // and their exact mappings, and exercises their unchanged numeric bodies.
+    let minion_owners = [
+        "1b84", "1bc9", "0cf8", "0dfb", "1311", "1791", "0aef", "1372", "0bac", "11ca", "1434",
+        "1462", "167e", "1974", "0edd", "10e4", "139d", "0bc0",
+    ];
+    let mut minion_programs = 0;
+    for suffix in minion_owners {
+        let subject = SchemaSubject::Definition(DefinitionAddress::PassiveNode(
+            PassiveNodeDefId::new(ns.clone(), key(suffix)),
+        ));
+        let mut matches = original
+            .owners
+            .iter()
+            .filter(|owner| owner.owner == subject);
+        let owner = matches.next().unwrap();
+        assert!(matches.next().is_none());
+        assert!(owner.programs.is_complete());
+        minion_programs += owner.programs.members.len();
+        expected_domains.push(SupportSourceDomainDeclaration {
+            owner: subject,
+            domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+        });
+    }
+    assert_eq!(minion_programs, 26);
     let domains = &mut preserved.support_discovery.as_mut().unwrap().providers;
     let prior_domains = &expected.support_discovery.as_ref().unwrap().providers;
     assert_eq!(domains.len(), prior_domains.len() + expected_domains.len());

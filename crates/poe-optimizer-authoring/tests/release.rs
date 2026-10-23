@@ -26,6 +26,10 @@ mod initial_skill_types;
 mod item_metadata;
 #[path = "release/local_scaling.rs"]
 mod local_scaling;
+#[path = "release/minion_support_domains.rs"]
+mod minion_support_domains;
+#[path = "release/minion_support_source.rs"]
+mod minion_support_source;
 #[path = "release/normalization_content.rs"]
 mod normalization_content;
 #[path = "release/originals.rs"]
@@ -1695,7 +1699,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     let current_artifacts: BTreeMap<_, _> = release.artifacts().collect();
 
     // Historical IR remains a test reference only. Authenticate the exact new
-    // producer, 69 Boolean channels and 308 support-source domains before
+    // producer, 69 Boolean channels and 326 support-source domains before
     // reconstructing old commitments through maintained APIs.
     let retained = fs::read(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"),
@@ -1828,6 +1832,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         .chain(root_support_domains::declarations())
         .chain(usage_support_domains::declarations())
         .chain(attribute_support_domains::declarations())
+        .chain(minion_support_domains::declarations())
         .collect();
     assert_eq!(domains.len(), prior_domains.len() + additions.len());
     for added in &additions {

@@ -620,7 +620,7 @@ retained only in Authoring's
 [`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz).
 Its historical receipt
 authenticates the archived bytes. Tests remove only the exact admitted 69-Stat,
-one-program and 308 support-domain additions, restore the archived program
+one-program and 326 support-domain additions, restore the archived program
 members, and reconstruct the original dependency bindings with maintained content
 constructors. The existing
 assembler then checks every historical artifact and provenance field. A separate
@@ -638,6 +638,11 @@ For a selectable passive, the proof includes every admitted option and its
 constructor dispatch, exact occurrence-owned choice slot, and current program
 effects. Saved selections demonstrate build relevance; they do not bound a
 definition's possible behavior. A missing required choice remains unresolved.
+Numeric passive families also retain every source effect and the corresponding
+current channels and conditional receivers. Matching display text on another
+node does not certify its identity, constructor behavior or complete program
+inventory; source-domain additions remain bounded to independently reviewed
+definitions.
 
 This representation change adds no evaluation bundle or numerical coverage;
 0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust

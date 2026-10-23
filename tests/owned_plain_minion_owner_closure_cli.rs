@@ -1,18 +1,8 @@
-//! Proved default passive owners close without changing original inputs.
+//! Retained Bidding publication proof; passive laws live in Authoring release tests.
 #[path = "support/owned_bidding_support_delivery.rs"]
 mod bidding;
-#[path = "support/owned_command_cooldown.rs"]
-mod command;
-#[path = "support/owned_plain_minion_owner_closure.rs"]
-mod family;
-#[path = "support/owned_growing_swarm.rs"]
-mod growing_swarm;
-#[path = "support/owned_plain_minion_life_passives.rs"]
-mod life;
 #[path = "support/owned_release_migration_preservation.rs"]
 mod migration_preservation;
-#[path = "support/owned_passive_refinement_publication.rs"]
-mod passive_publication;
 #[allow(dead_code)]
 #[path = "support/owned_physical_inventory_preservation.rs"]
 mod preservation;
@@ -50,26 +40,6 @@ fn publish(input: &Path, output: &Path) -> Value {
 }
 
 #[test]
-fn two_default_node_closures_have_complete_evidence_and_unchanged_programs() {
-    family::check_authored();
-}
-
-#[test]
-fn four_life_node_closures_preserve_damage_and_have_complete_source_evidence() {
-    life::check_authored();
-}
-
-#[test]
-fn command_receiving_preserves_prior_damage_and_partial_action_mechanics() {
-    command::check_authored();
-}
-
-#[test]
-fn growing_swarm_keeps_both_source_effects_and_existing_conditional_action_rules() {
-    growing_swarm::check_authored();
-}
-
-#[test]
 fn bidding_preserves_partial_owners_and_exact_child_receiving() {
     bidding::check_authored();
 }
@@ -83,70 +53,6 @@ struct Checkpoint {
     new_definitions: usize,
     new_programs: usize,
     selected_counts: [usize; 5],
-}
-
-#[test]
-#[ignore = "requires the checked Amulet-copy release and authenticated passive source evidence"]
-fn publish_two_passive_owner_closures_preserving_all_five_originals() {
-    check_publication(Checkpoint {
-        prior_env: "POE_OPTIMIZER_TEST_MINION_OWNER_CLOSURE_PRIOR",
-        output_env: "POE_OPTIMIZER_TEST_MINION_OWNER_CLOSURE_OUTPUT",
-        stage: family::stage,
-        bindings: family::read("bindings.json"),
-        node_field: "node",
-        new_definitions: 0,
-        new_programs: 0,
-        selected_counts: [113, 116, 108, 121, 11],
-    });
-}
-
-#[test]
-#[ignore = "requires the checked passive-closure release and authenticated Life source evidence"]
-fn publish_four_life_owner_closures_preserving_all_five_originals() {
-    check_publication(Checkpoint {
-        prior_env: "POE_OPTIMIZER_TEST_MINION_LIFE_PRIOR",
-        output_env: "POE_OPTIMIZER_TEST_MINION_LIFE_OUTPUT",
-        stage: life::stage,
-        bindings: life::read("bindings.json"),
-        node_field: "node",
-        new_definitions: 1,
-        new_programs: 4,
-        selected_counts: [113, 116, 108, 121, 11],
-    });
-}
-
-#[test]
-#[ignore = "requires the permanent-reward release and authenticated Command/actor source evidence"]
-fn publish_command_receiving_preserving_all_five_originals() {
-    check_publication(Checkpoint {
-        prior_env: "POE_OPTIMIZER_TEST_COMMAND_COOLDOWN_PRIOR",
-        output_env: "POE_OPTIMIZER_TEST_COMMAND_COOLDOWN_OUTPUT",
-        stage: command::stage,
-        bindings: command::read("bindings.json"),
-        node_field: "definition",
-        new_definitions: 7,
-        new_programs: 12,
-        selected_counts: [113, 116, 108, 121, 11],
-    });
-}
-
-#[test]
-#[ignore = "requires the exact reward-recovery02 release and authenticated Growing Swarm source evidence"]
-fn publish_growing_swarm_preserving_all_five_originals() {
-    let bindings: Value = growing_swarm::read("bindings.json");
-    // This packet has one whole source owner. The shared publication census
-    // accepts the same explicit node list used by the earlier multi-node gates.
-    let selected_nodes = json!({"nodes":[{"definition":bindings["node"]}]});
-    check_publication(Checkpoint {
-        prior_env: "POE_OPTIMIZER_TEST_GROWING_SWARM_PRIOR",
-        output_env: "POE_OPTIMIZER_TEST_GROWING_SWARM_OUTPUT",
-        stage: growing_swarm::stage,
-        bindings: selected_nodes,
-        node_field: "definition",
-        new_definitions: 4,
-        new_programs: 7,
-        selected_counts: [114, 117, 109, 122, 11],
-    });
 }
 
 #[test]
