@@ -86,7 +86,7 @@ pub(super) fn run(command: Command) -> Result<ExitCode, String> {
             bytes,
         })
         .collect();
-    let built = build_release(&manifest, &sources, limits).map_err(|e| e.to_string())?;
+    let built = build_release(&manifest, &sources, None, limits).map_err(|e| e.to_string())?;
     if built.decoded_bytes() * 5 >= limits.max_decoded_bytes * 4 {
         eprintln!(
             "warning: decoded release sources use {} of {} bytes; compact-format migration is required before expanding content",

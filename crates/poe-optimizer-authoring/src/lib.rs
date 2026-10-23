@@ -63,8 +63,9 @@ pub use raise::{
     raise_program,
 };
 pub use release::{
-    BuiltRelease, ReleaseBuildError, ReleaseBuildLimits, ReleaseManifest, ReleaseSource,
-    ReleaseSourceSpec, SourceEncoding, build_release, parse_release_manifest,
+    BuiltRelease, ReleaseBuildError, ReleaseBuildLimits, ReleaseDeclarationContext,
+    ReleaseManifest, ReleaseNameAllocation, ReleaseSource, ReleaseSourceSpec, SourceEncoding,
+    build_release, parse_release_manifest,
 };
 pub use symbols::{SymbolError, SymbolErrorKind, SymbolLimits, SymbolRegistry};
 

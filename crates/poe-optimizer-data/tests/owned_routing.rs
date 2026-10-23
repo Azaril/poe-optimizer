@@ -763,3 +763,134 @@ fn source_selector_resources_are_bounded_across_outputs_even_without_routes() {
         Err(RoutingError::Limit("source selectors"))
     ));
 }
+
+#[test]
+fn authored_routing_roundtrip_preserves_versions_selectors_and_partial_gaps() {
+    for version in [OWNED_ACTION_ROUTING_V1, OWNED_ACTION_ROUTING_VERSION] {
+        let (s, mut raw) = if version == OWNED_ACTION_ROUTING_V1 {
+            let s = schema();
+            let mut raw = input(&s);
+            raw.schema_version = version;
+            raw.outputs[0].source_selectors = None;
+            (s, raw)
+        } else {
+            selected_input()
+        };
+        raw.outputs.push(ActionOutputRoutes {
+            output: output("second"),
+            routes: DeclaredSet::partial(vec![], vec![gap("second", "unconverted")]),
+            source_selectors: (version == OWNED_ACTION_ROUTING_VERSION)
+                .then(|| DeclaredSet::complete(vec![])),
+        });
+        let original = package(raw, &s);
+        let expected_input = original.input().clone();
+        let expected_identity = *original.identity();
+        let expected_resources = original.resources();
+        let expected_bytes = encode_action_routing(&original, RoutingLimits::default()).unwrap();
+        let content = original.into_authored_content();
+        let mut wire = serde_json::to_value(&content).unwrap();
+        for field in ["schema_version", "namespace", "definitions"] {
+            assert!(wire.get(field).is_none(), "{field}");
+        }
+        wire["definitions"] = serde_json::to_value(s.identity()).unwrap();
+        assert!(serde_json::from_value::<ActionRoutingContent>(wire).is_err());
+        let rebound = OwnedActionRouting::bind_new(content, &s, RoutingLimits::default()).unwrap();
+        assert_eq!(rebound.input(), &expected_input);
+        assert_eq!(*rebound.identity(), expected_identity);
+        assert_eq!(rebound.resources(), expected_resources);
+        assert_eq!(
+            encode_action_routing(&rebound, RoutingLimits::default()).unwrap(),
+            expected_bytes
+        );
+    }
+}
+
+#[test]
+fn authored_routing_binds_new_schema_without_repairing_stale_raw_inputs() {
+    let s = schema();
+    let original = package(input(&s), &s);
+    let stale = original.input().clone();
+    let content = original.into_authored_content();
+    let mut next = schema_input();
+    next.release = key("next-schema");
+    let next = OwnedDefinitionSchemaPackage::new(next, OwnedSchemaLimits::default()).unwrap();
+    assert_ne!(s.identity(), next.identity());
+    assert!(matches!(
+        OwnedActionRouting::new(stale.clone(), &next, RoutingLimits::default()),
+        Err(RoutingError::Binding)
+    ));
+    let rebound =
+        OwnedActionRouting::bind_new(content.clone(), &next, RoutingLimits::default()).unwrap();
+    assert_eq!(rebound.input().definitions, *next.identity());
+    assert_eq!(rebound.input().outputs, stale.outputs);
+    assert_eq!(rebound.input().release, stale.release);
+    assert_eq!(rebound.input().schema_version, stale.schema_version);
+
+    // Content is editable authoring input, so rebinding must still check its
+    // exact source/target types through the sole ordinary storage validator.
+    let ActionRoutingContent::V2 {
+        mut outputs,
+        release,
+    } = content
+    else {
+        panic!("current routing fixture");
+    };
+    outputs[0].routes.members[0].target = id("action-integer");
+    assert!(matches!(
+        OwnedActionRouting::bind_new(
+            ActionRoutingContent::V2 { release, outputs },
+            &next,
+            RoutingLimits::default()
+        ),
+        Err(RoutingError::Invalid { .. })
+    ));
+}
+
+#[test]
+fn authored_routing_reuses_exact_constructor_work_and_wire_limits() {
+    let s = schema();
+    let original = package(input(&s), &s);
+    let bytes = encode_action_routing(&original, RoutingLimits::default()).unwrap();
+    let work = original.resources().schema_work;
+    let content = original.into_authored_content();
+    let exact = RoutingLimits {
+        max_wire_bytes: bytes.len(),
+        max_schema_work: work,
+        max_routes: 2,
+        ..RoutingLimits::default()
+    };
+    assert!(OwnedActionRouting::bind_new(content.clone(), &s, exact).is_ok());
+    assert!(matches!(
+        OwnedActionRouting::bind_new(
+            content.clone(),
+            &s,
+            RoutingLimits {
+                max_schema_work: work - 1,
+                ..exact
+            }
+        ),
+        Err(RoutingError::Limit("schema work"))
+    ));
+    assert!(
+        OwnedActionRouting::bind_new(
+            content.clone(),
+            &s,
+            RoutingLimits {
+                max_wire_bytes: bytes.len() - 1,
+                ..exact
+            }
+        )
+        .is_err()
+    );
+    assert!(matches!(
+        OwnedActionRouting::bind_new(
+            content,
+            &s,
+            RoutingLimits {
+                max_routes: 1,
+                ..exact
+            }
+        ),
+        Err(RoutingError::Limit("routes"))
+    ));
+}

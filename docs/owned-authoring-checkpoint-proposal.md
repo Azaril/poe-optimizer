@@ -60,8 +60,10 @@ coverage, or establishes a complete original build.
 
 Implementation checkpoint, 2026-10-23: the shared original-source dependency check
 is implemented and used before DSL lowering. It now retains the checked source
-registry/schema and Import owners for consuming content extraction. The maintained
-builder constructs Import dependencies from that content, including normalization
-and Tree, then performs mandatory final rule/evaluation validation. Declaration
-staging integration and evaluation-content construction remain separate from
-either proposed filesystem workflow. The publication decision remains open.
+registry/schema, routing and Import owners for consuming content extraction, plus
+the bounded rule payload with its checked original header. The maintained compiler
+stages declarations from explicit persisted names, reconstructs rule/routing and
+Import dependencies, then performs mandatory final rule/evaluation validation.
+Successful in-memory results retain successor names and their expected predecessor;
+the CLI still accepts no allocating declaration context. Evaluation-content
+construction remains separate work. The publication decision remains open.

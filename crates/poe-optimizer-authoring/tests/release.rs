@@ -3,6 +3,8 @@
 mod arithmetic;
 #[path = "release/content_bindings.rs"]
 mod content_bindings;
+#[path = "release/declarations.rs"]
+mod declarations;
 #[path = "release/defence_components.rs"]
 mod defence_components;
 #[allow(dead_code, unused_imports)]
@@ -25,8 +27,8 @@ mod source_dependencies;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{
-    BuiltRelease, ReleaseBuildError, ReleaseBuildLimits, ReleaseSource, SourceEncoding,
-    SymbolRegistry, build_release, load_names, lower_program, parse_program,
+    BuiltRelease, ReleaseBuildError, ReleaseBuildLimits, ReleaseDeclarationContext, ReleaseSource,
+    SourceEncoding, SymbolRegistry, build_release, load_names, lower_program, parse_program,
     parse_release_manifest, raise_program,
 };
 use poe_optimizer_core::{
@@ -251,8 +253,16 @@ impl Sources {
     }
 
     fn build(&self, limits: ReleaseBuildLimits) -> Result<BuiltRelease, ReleaseBuildError> {
+        self.build_with_declarations(None, limits)
+    }
+
+    fn build_with_declarations(
+        &self,
+        declarations: Option<ReleaseDeclarationContext<'_>>,
+        limits: ReleaseBuildLimits,
+    ) -> Result<BuiltRelease, ReleaseBuildError> {
         let manifest = parse_release_manifest(&self.manifest, limits)?;
-        build_release(&manifest, &self.sources(), limits)
+        build_release(&manifest, &self.sources(), declarations, limits)
     }
 
     fn encoded_bytes(&self) -> usize {
@@ -611,7 +621,8 @@ fn declared_kdl_and_dsl_build_a_complete_release_with_the_independent_metric() {
         );
         let mut sources = fixture.source.sources();
         sources.reverse();
-        let actual = build_release(&manifest, &sources, Default::default()).unwrap();
+        let actual = build_release(&manifest, &sources, None, Default::default()).unwrap();
+        assert!(actual.name_allocation().is_none());
         assert_eq!(actual.release().input(), expected.input());
         assert_eq!(files(actual.release()), files(&expected));
         assert_eq!(actual.encoded_bytes(), fixture.source.encoded_bytes());
@@ -637,7 +648,7 @@ fn dsl_sources_and_names_have_exact_inventory_and_cannot_borrow_component_roles(
             .filter(|source| source.path != path)
             .collect();
         assert!(
-            build_release(&manifest, &missing, Default::default()).is_err(),
+            build_release(&manifest, &missing, None, Default::default()).is_err(),
             "missing {path}"
         );
     }
@@ -646,7 +657,7 @@ fn dsl_sources_and_names_have_exact_inventory_and_cannot_borrow_component_roles(
         path: "rules/extra.rule",
         bytes: b"program \"extra\" context actor {}",
     });
-    assert!(build_release(&manifest, &extra, Default::default()).is_err());
+    assert!(build_release(&manifest, &extra, None, Default::default()).is_err());
 
     let mut unused = fixture.source.clone();
     unused.declare(" rule-source \"rules/unused.rule\"\n");
@@ -1069,7 +1080,7 @@ fn aggregate_packet_and_ir_budgets_apply_across_the_complete_release() {
             "rule packet count",
         ),
     ] {
-        limited(build_release(&manifest, &supplied, stricter), message);
+        limited(build_release(&manifest, &supplied, None, stricter), message);
     }
     for smaller in [
         ReleaseBuildLimits {
@@ -1155,7 +1166,7 @@ fn plain_and_gzip_constituents_build_the_same_dsl_release_and_metric() {
             }));
         let mut supplied = source.sources();
         supplied.reverse();
-        let actual = build_release(&manifest, &supplied, Default::default()).unwrap();
+        let actual = build_release(&manifest, &supplied, None, Default::default()).unwrap();
         assert_eq!(actual.encoded_bytes(), source.encoded_bytes());
         assert_eq!(actual.decoded_bytes(), source.decoded_bytes);
         assert_eq!(actual.release().input(), expected.input());
@@ -1220,7 +1231,7 @@ fn supplied_source_inventory_is_exact_without_fallbacks() {
     let manifest = parse_release_manifest(&source.manifest, Default::default()).unwrap();
     let supplied = source.sources();
     invalid(
-        build_release(&manifest, &supplied[1..], Default::default()),
+        build_release(&manifest, &supplied[1..], None, Default::default()),
         "source inventory differs",
     );
     let mut changed = supplied.clone();
@@ -1229,25 +1240,25 @@ fn supplied_source_inventory_is_exact_without_fallbacks() {
         bytes: b"{}",
     });
     invalid(
-        build_release(&manifest, &changed, Default::default()),
+        build_release(&manifest, &changed, None, Default::default()),
         "source inventory differs",
     );
     let mut changed = supplied.clone();
     changed[0] = changed[1];
     invalid(
-        build_release(&manifest, &changed, Default::default()),
+        build_release(&manifest, &changed, None, Default::default()),
         "duplicate supplied source",
     );
     let mut changed = supplied.clone();
     changed[0].path = "unlisted.json";
     invalid(
-        build_release(&manifest, &changed, Default::default()),
+        build_release(&manifest, &changed, None, Default::default()),
         "missing declared source",
     );
     let mut changed = supplied;
     changed[0].path = "../outside.json";
     invalid(
-        build_release(&manifest, &changed, Default::default()),
+        build_release(&manifest, &changed, None, Default::default()),
         "invalid supplied source path",
     );
 }
@@ -1294,6 +1305,7 @@ fn encoded_decoded_and_source_count_budgets_have_exact_boundaries() {
             build_release(
                 &manifest,
                 &source.sources(),
+                None,
                 ReleaseBuildLimits {
                     max_sources: limits.max_sources - 1,
                     ..limits

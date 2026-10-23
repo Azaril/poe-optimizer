@@ -1,7 +1,10 @@
 //! Connect declared source packets to the sole release compiler. No evaluator,
 //! include resolution, alias allocation, or identity repair happens here.
 use super::{Decoder, ReleaseBuildError, ReleaseBuildLimits, ReleaseManifest, Result};
-use crate::{NamesLimits, PacketLimits, RuleSource, load_names, lower_packet, parse_packet};
+use crate::{
+    NamesLimits, PacketLimits, RuleSource, StagedStatDeclarations, load_names, lower_packet,
+    parse_packet,
+};
 use poe_optimizer_core::owned_rules::RulePackageInput;
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use std::collections::{BTreeMap, BTreeSet};
@@ -19,6 +22,7 @@ pub(super) fn compose(
     decoder: &Decoder<'_>,
     index: &OwnedDefinitionSchemaPackage,
     rules: &mut RulePackageInput,
+    declarations: Option<&StagedStatDeclarations>,
     limits: ReleaseBuildLimits,
 ) -> Result<()> {
     if rules
@@ -60,6 +64,11 @@ pub(super) fn compose(
             path: names_path.clone(),
             source,
         })?;
+        let symbols = if let Some(staged) = declarations {
+            staged.symbols_for_packet(&symbols, limits.declarations.symbols)?
+        } else {
+            symbols
+        };
         let packet = parse_packet(decoder.text(spec.packet)?, &symbols, limits.manifest).map_err(
             |source| ReleaseBuildError::SourceManifest {
                 path: packet_path.clone(),

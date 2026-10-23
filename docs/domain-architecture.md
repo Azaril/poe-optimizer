@@ -357,7 +357,8 @@ lowering any DSL: registry/schema membership, the rule header and routing seals,
 Import constituent bindings, nested normalization policies and consistent source
 pins. It shares those validators with the runtime reader. Whole-input and recipe
 budgets precede constituent cloning. The result retains the checked registry,
-schema and Import packages. Consuming it extracts content from those actual owners;
+schema, routing and Import packages, plus the bounded rule payload whose original
+header was checked. Consuming it extracts content from those actual owners;
 it grants no permission to discard seals from another input and is not a checked release.
 Program-free source metadata cannot satisfy executable queries until lowering
 supplies their programs. Complete rule and evaluation-artifact validation therefore
@@ -394,8 +395,8 @@ The maintained compiler uses this construction on every build. Its resulting
 `ImportSourceInput` is raw data: existing full release validation remains mandatory
 before publication or evaluation. Runtime readers still reject stale bindings.
 Neither content construction nor source-prefix validation certifies complete
-release execution or coverage. Evaluation content construction and declaration
-publication integration remain separate work; source extraction never includes
+release execution or coverage. Evaluation content construction and filesystem
+declaration publication remain separate work; source extraction never includes
 evaluation inputs or overwrites their unvalidated commitments.
 Aggregate evaluation preflight accounts for readiness, receiving preparation,
 source properties and their nested lists before digesting or cloning. Partial gap
@@ -420,7 +421,7 @@ Saved allocation names can be replayed against the unchanged baseline schema,
 while an already installed definition remains a conflict. Input aliases that
 overlap persisted names must agree on the exact typed address.
 
-Production integration must accept an explicit persisted ledger that is a checked
+The in-memory release compiler accepts an explicit persisted ledger that is a checked
 successor of the immutable bootstrap registry, rather than require registry
 identity equality or recreate an empty ledger. Reserved names may lack bootstrap
 descriptors until staging. Keep packet aliases local and overlay only the current
@@ -429,8 +430,12 @@ growth; do not union unrelated packet scopes or project every persisted name.
 Construct final rule-shell and routing bindings from their authenticated original
 inputs before packet application. Return the successor names and predecessor
 identity only after complete release validation and the expected-input check pass.
-The current CLI must not accept allocating declarations while its publisher could
-discard that ledger. These in-memory integration steps remain work in progress.
+The current CLI does not accept allocating declarations while its publisher could
+discard that ledger. The returned allocation result is immutable and commits no
+filesystem state. Rule source content constructs a raw package for lowering;
+routing content preserves its existing semantic version and uses the single
+validator against the final schema. Final assembly still validates complete rule
+semantics and unchanged evaluation commitments.
 
 These declarations grant no producer, read or write authority and do not close
 partial coverage. Programs still pass through the sole lowerer and Engine checker.

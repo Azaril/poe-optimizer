@@ -5,10 +5,15 @@
 //! transport for retained fixtures. This module
 //! performs no filesystem access, source acquisition, patch-history replay or
 //! evaluation. Publication happens only after complete assembly succeeds.
-use crate::{ManifestError, ManifestLimits, manifest_parse::parse_document};
+use crate::{
+    DeclarationError, DeclarationLimits, ManifestError, ManifestLimits, NamedIdRegistry,
+    StagedStatDeclarations, StatDeclarations, SymbolRegistry, manifest_parse::parse_document,
+    stage_stat_declarations,
+};
 use poe_optimizer_core::{
     owned_content::OwnedContentDigest, owned_definitions::OwnedDefinitionKey,
 };
+use poe_optimizer_data::owned_routing::OwnedActionRouting;
 use poe_optimizer_import::{
     owned_normalize::NamedQuerySet,
     owned_recipe::{OWNED_RECIPE_VERSION, OwnedRecipeInput},
@@ -184,6 +189,7 @@ impl ReleaseManifest {
 pub struct ReleaseBuildLimits {
     pub manifest: ManifestLimits,
     pub release: OwnedReleaseLimits,
+    pub declarations: DeclarationLimits,
     pub max_sources: usize,
     pub max_components: usize,
     pub max_rule_packets: usize,
@@ -197,6 +203,7 @@ impl Default for ReleaseBuildLimits {
         Self {
             manifest: ManifestLimits::default(),
             release: OwnedReleaseLimits::default(),
+            declarations: DeclarationLimits::default(),
             max_sources: 4096,
             max_components: 128,
             max_rule_packets: 128,
@@ -257,6 +264,8 @@ pub enum ReleaseBuildError {
     },
     #[error(transparent)]
     Assembly(#[from] OwnedReleaseError),
+    #[error(transparent)]
+    Declaration(#[from] DeclarationError),
 }
 type Result<T> = std::result::Result<T, ReleaseBuildError>;
 
@@ -456,10 +465,38 @@ pub struct ReleaseSource<'a> {
     pub bytes: &'a [u8],
 }
 
+/// Explicit offline allocation inputs. The persisted ledger may be a validated
+/// successor of the source bootstrap registry. Symbols resolve declarations
+/// against the bootstrap schema; packet alias scopes remain independent.
+#[derive(Clone, Copy, Debug)]
+pub struct ReleaseDeclarationContext<'a> {
+    pub names: &'a NamedIdRegistry,
+    pub expected_names: OwnedContentDigest,
+    pub declarations: &'a StatDeclarations,
+    pub symbols: &'a SymbolRegistry,
+}
+
+/// A successful compilation's allocation result. The host must retain allocation
+/// history and check its stored predecessor when publishing it. This value does
+/// not choose a filesystem publication workflow or commit any persistent state.
+pub struct ReleaseNameAllocation {
+    predecessor: OwnedContentDigest,
+    names: NamedIdRegistry,
+}
+impl ReleaseNameAllocation {
+    pub fn predecessor(&self) -> OwnedContentDigest {
+        self.predecessor
+    }
+    pub fn names(&self) -> &NamedIdRegistry {
+        &self.names
+    }
+}
+
 pub struct BuiltRelease {
     release: StagedOwnedRelease,
     encoded_bytes: usize,
     decoded_bytes: usize,
+    name_allocation: Option<ReleaseNameAllocation>,
 }
 impl BuiltRelease {
     pub fn release(&self) -> &StagedOwnedRelease {
@@ -470,6 +507,9 @@ impl BuiltRelease {
     }
     pub fn decoded_bytes(&self) -> usize {
         self.decoded_bytes
+    }
+    pub fn name_allocation(&self) -> Option<&ReleaseNameAllocation> {
+        self.name_allocation.as_ref()
     }
 }
 
@@ -550,11 +590,13 @@ impl<'a> Decoder<'a> {
     }
 }
 
-/// Decode exact final constituents and run the single existing release checker.
+/// Decode authenticated source constituents, optionally stage declarations, and
+/// run the single existing release checker against the resulting dependency graph.
 /// All declared files must be supplied exactly once; extras and fallbacks fail.
 pub fn build_release(
     manifest: &ReleaseManifest,
     sources: &[ReleaseSource<'_>],
+    declarations: Option<ReleaseDeclarationContext<'_>>,
     limits: ReleaseBuildLimits,
 ) -> Result<BuiltRelease> {
     limits.validate()?;
@@ -643,13 +685,54 @@ pub fn build_release(
     // Authenticate original dependencies before any source program is lowered.
     // This checks no executable rules or evaluation artifacts; complete assembly
     // below remains mandatory after composition against this exact schema.
-    let (registry, schema, authored_imports) =
-        check_release_source_dependencies(&input, limits.release)?.into_parts()?;
-    rules::compose(manifest, &decoder, &schema, &mut input.recipe.rules, limits)?;
+    let source = check_release_source_dependencies(&input, limits.release)?.into_parts()?;
+    let staged = declarations
+        .map(|context| {
+            context
+                .names
+                .registry()
+                .validate_limits(limits.declarations.registry)?;
+            source
+                .registry
+                .validate_successor(context.names.registry())?;
+            stage_stat_declarations(
+                context.names,
+                context.expected_names,
+                &source.schema,
+                context.symbols,
+                context.declarations,
+                limits.declarations,
+            )
+        })
+        .transpose()?;
+    let schema = staged
+        .as_ref()
+        .map_or(&source.schema, StagedStatDeclarations::schema);
+    let registry = staged.as_ref().map_or(&source.registry, |staged| {
+        staged.names().registry().snapshot()
+    });
+    input.recipe.registry = registry.input().clone();
+    input.recipe.schema = schema.input().clone();
+    input.recipe.rules = source.rules.into_input(schema);
+    input.recipe.routing =
+        OwnedActionRouting::bind_new(source.routing, schema, limits.release.recipe.routing)
+            .map_err(|error| OwnedReleaseError::Recipe(error.into()))?
+            .input()
+            .clone();
+    rules::compose(
+        manifest,
+        &decoder,
+        schema,
+        &mut input.recipe.rules,
+        staged.as_ref(),
+        limits,
+    )?;
     // Content was captured from the original checked owners before composition.
     // Construct current dependencies; evaluation inputs retain their supplied
     // commitments and must independently pass complete assembly below.
-    let imports = authored_imports.into_input(&registry, &schema, limits.release)?;
+    let imports = source
+        .imports
+        .into_input(registry, schema, limits.release)?;
     input.mapping = imports.mapping;
     input.roles = imports.roles;
     input.normalization = imports.normalization;
@@ -667,9 +750,19 @@ pub fn build_release(
             "assembled input identity differs from expected_input",
         ));
     }
+    let name_allocation = staged.map(|staged| {
+        let (names, _, _) = staged.into_parts();
+        ReleaseNameAllocation {
+            predecessor: declarations
+                .expect("declaration staging has an explicit context")
+                .expected_names,
+            names,
+        }
+    });
     Ok(BuiltRelease {
         release,
         encoded_bytes,
         decoded_bytes,
+        name_allocation,
     })
 }

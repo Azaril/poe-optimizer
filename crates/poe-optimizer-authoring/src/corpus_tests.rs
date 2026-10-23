@@ -437,7 +437,7 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
         .iter()
         .map(|(path, bytes)| ReleaseSource { path, bytes })
         .collect();
-    let release = build_release(&manifest, &sources, limits).unwrap();
+    let release = build_release(&manifest, &sources, None, limits).unwrap();
     let schema = release.release().assembled().schema();
     let actual = &release.release().input().recipe.rules;
     let original = retained_rules();

@@ -99,6 +99,62 @@ fn fixture() -> Fixture {
         actor,
     }
 }
+
+fn fixture_with_slots() -> (Fixture, SlotAddress, SlotAddress) {
+    let mut f = fixture();
+    let mut registry = f.names.registry().clone();
+    let modifier = registry
+        .allocate_definition::<ModifierDefinition>()
+        .unwrap();
+    let first = registry
+        .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::Modifier(modifier.clone()))
+        .unwrap();
+    let second = registry
+        .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::Modifier(modifier.clone()))
+        .unwrap();
+    let mut input = f.schema.input().clone();
+    let mut declarations = ports();
+    declarations.parameters = DeclaredSet::complete(vec![first.clone(), second.clone()]);
+    input
+        .definitions
+        .push(DefinitionDescriptor::Modifier(DefinitionEntry {
+            id: modifier,
+            schema: SchemaState::Known(ModifierSchema { declarations }),
+        }));
+    for id in [first.clone(), second.clone()] {
+        input.slots.push(SlotDescriptor::Parameter(DefinitionEntry {
+            id,
+            schema: SchemaState::Known(ParameterSlotSchema {
+                value: ValueSchema::Integer(IntegerRange {
+                    minimum: BoundedInteger::new(0).unwrap(),
+                    maximum: BoundedInteger::new(1).unwrap(),
+                }),
+                presence: SlotPresence::RequiredOnce,
+                sites: vec![ParameterSite::ModifierRoll],
+                skill_input: None,
+            }),
+        }));
+    }
+    f.schema = OwnedDefinitionSchemaPackage::new(input, OwnedSchemaLimits::default()).unwrap();
+    let mut input = f.names.input().clone();
+    input.registry = registry.identity().unwrap();
+    f.names = NamedIdRegistry::new(registry, input, AllocationLimits::default()).unwrap();
+    let first = SlotAddress::Parameter(first);
+    let second = SlotAddress::Parameter(second);
+    f.names = f
+        .names
+        .allocate(
+            f.names.identity().unwrap(),
+            &[NameRequest::Alias {
+                name: "flag".into(),
+                target: SchemaSubject::Slot(first.clone()),
+            }],
+        )
+        .unwrap();
+    f.symbols = f.names.symbols(&f.schema, SymbolLimits::default()).unwrap();
+    (f, first, second)
+}
+
 fn parse(body: &str) -> StatDeclarations {
     parse_stat_declarations(
         &format!("definitions game=\"stat-tests\" version=\"v1\" {{ {body} }}"),
@@ -581,6 +637,295 @@ fn supplied_aliases_must_agree_with_persisted_names_but_need_not_all_be_persiste
             .iter()
             .any(|binding| binding.name == "factor_alias")
     );
+}
+
+#[test]
+fn packet_symbols_share_only_declared_stats_and_preserve_local_alias_scopes() {
+    let f = fixture();
+    let declaration_symbols = SymbolRegistry::new(
+        &f.schema,
+        &[("declaration_unit", DefinitionAddress::Unit(f.unit.clone()))],
+        &[],
+        SymbolLimits::default(),
+    )
+    .unwrap();
+    let declarations =
+        parse(r#"stat "amount" type="quantity" unit="declaration_unit" { target "actor"; }"#);
+    let staged = stage_stat_declarations(
+        &f.names,
+        f.names.identity().unwrap(),
+        &f.schema,
+        &declaration_symbols,
+        &declarations,
+        DeclarationLimits::default(),
+    )
+    .unwrap();
+    let before = bytes(staged.names(), staged.schema());
+    let amount = staged.symbols().definition("amount").unwrap().clone();
+    for local in [
+        DefinitionAddress::Actor(f.actor.clone()),
+        DefinitionAddress::Unit(f.unit.clone()),
+    ] {
+        let aliases = SymbolRegistry::new(
+            &f.schema,
+            &[("local", local.clone())],
+            &[],
+            SymbolLimits::default(),
+        )
+        .unwrap();
+        let projected = staged
+            .symbols_for_packet(&aliases, SymbolLimits::default())
+            .unwrap();
+        assert_eq!(projected.definition("local"), Some(&local));
+        assert_eq!(projected.definition("amount"), Some(&amount));
+        for hidden in ["declaration_unit", "factor", "owner", "choice"] {
+            assert!(projected.definition(hidden).is_none(), "{hidden}");
+        }
+        assert_eq!(projected.definitions().count(), 2);
+        assert!(aliases.definition("amount").is_none());
+    }
+    let aliases = SymbolRegistry::new(
+        staged.schema(),
+        &[("amount", amount.clone())],
+        &[],
+        SymbolLimits::default(),
+    )
+    .unwrap();
+    let projected = staged
+        .symbols_for_packet(
+            &aliases,
+            SymbolLimits {
+                max_symbols: 1,
+                max_name_bytes: "amount".len(),
+            },
+        )
+        .unwrap();
+    assert_eq!(projected.definitions().count(), 1);
+    assert_eq!(projected.definition("amount"), Some(&amount));
+    let (names, schema, symbols) = staged.into_parts();
+    assert_eq!(bytes(&names, &schema), before);
+    assert_eq!(symbols.definition("amount"), Some(&amount));
+    assert!(symbols.definition("declaration_unit").is_some());
+}
+
+#[test]
+fn packet_alias_collisions_require_exact_addresses_with_independent_slot_names() {
+    let (f, first, second) = fixture_with_slots();
+    let staged = stage(
+        &f,
+        &parse(r#"stat "flag" type="boolean" { target "actor"; }"#),
+    );
+    let flag = staged.symbols().definition("flag").unwrap().clone();
+    let aliases = SymbolRegistry::new(
+        staged.schema(),
+        &[
+            ("flag", flag.clone()),
+            ("owner", DefinitionAddress::Actor(f.actor.clone())),
+        ],
+        &[("flag", first.clone()), ("owner", second.clone())],
+        SymbolLimits::default(),
+    )
+    .unwrap();
+    let projected = staged
+        .symbols_for_packet(
+            &aliases,
+            SymbolLimits {
+                max_symbols: 4,
+                max_name_bytes: "owner".len(),
+            },
+        )
+        .unwrap();
+    assert_eq!(projected.definition("flag"), Some(&flag));
+    assert_eq!(projected.slot("flag"), Some(&first));
+    assert_eq!(
+        projected.definition("owner"),
+        Some(&DefinitionAddress::Actor(f.actor.clone()))
+    );
+    assert_eq!(projected.slot("owner"), Some(&second));
+    let before = bytes(staged.names(), staged.schema());
+    for wrong_name in ["flag", "owner"] {
+        let wrong = SymbolRegistry::new(
+            staged.schema(),
+            &[(wrong_name, DefinitionAddress::Unit(f.unit.clone()))],
+            &[],
+            SymbolLimits::default(),
+        )
+        .unwrap();
+        assert_eq!(
+            failure_kind(
+                staged
+                    .symbols_for_packet(&wrong, SymbolLimits::default())
+                    .unwrap_err()
+            ),
+            DeclarationErrorKind::SymbolConflict
+        );
+    }
+    let wrong_slot = SymbolRegistry::new(
+        staged.schema(),
+        &[],
+        &[("flag", second)],
+        SymbolLimits::default(),
+    )
+    .unwrap();
+    assert_eq!(
+        failure_kind(
+            staged
+                .symbols_for_packet(&wrong_slot, SymbolLimits::default())
+                .unwrap_err()
+        ),
+        DeclarationErrorKind::SymbolConflict
+    );
+    assert_eq!(bytes(staged.names(), staged.schema()), before);
+    assert_eq!(aliases.slot("flag"), Some(&first));
+}
+
+#[test]
+fn reserved_names_remain_reserved_without_becoming_packet_symbols() {
+    let f = fixture();
+    let reserved = f
+        .names
+        .allocate(
+            f.names.identity().unwrap(),
+            &[NameRequest::Definition {
+                name: "reserved".into(),
+                kind: DefinitionKind::Stat,
+            }],
+        )
+        .unwrap();
+    let reserved_binding = reserved
+        .input()
+        .bindings
+        .iter()
+        .find(|binding| binding.name == "reserved")
+        .unwrap()
+        .clone();
+    let staged = stage_stat_declarations(
+        &reserved,
+        reserved.identity().unwrap(),
+        &f.schema,
+        &f.symbols,
+        &parse(r#"stat "flag" type="boolean" { target "actor"; }"#),
+        DeclarationLimits::default(),
+    )
+    .unwrap();
+    let empty = SymbolRegistry::new(&f.schema, &[], &[], SymbolLimits::default()).unwrap();
+    let projected = staged
+        .symbols_for_packet(&empty, SymbolLimits::default())
+        .unwrap();
+    assert_eq!(projected.definitions().count(), 1);
+    assert!(projected.definition("flag").is_some());
+    assert!(projected.definition("reserved").is_none());
+    assert!(staged.names().input().bindings.contains(&reserved_binding));
+    let SchemaSubject::Definition(reserved_address) = &reserved_binding.target else {
+        panic!("reserved definition")
+    };
+    assert!(
+        staged
+            .schema()
+            .lookup_definition(reserved_address)
+            .is_none()
+    );
+    let conflict = SymbolRegistry::new(
+        staged.schema(),
+        &[("reserved", DefinitionAddress::Actor(f.actor.clone()))],
+        &[],
+        SymbolLimits::default(),
+    )
+    .unwrap();
+    assert_eq!(
+        failure_kind(
+            staged
+                .symbols_for_packet(&conflict, SymbolLimits::default())
+                .unwrap_err()
+        ),
+        DeclarationErrorKind::SymbolConflict
+    );
+}
+
+#[test]
+fn packet_symbol_limits_and_schema_are_rechecked_without_mutating_staged_inputs() {
+    let f = fixture();
+    let staged = stage(
+        &f,
+        &parse(
+            r#"
+            stat "long_flag" type="boolean" { target "actor"; }
+            stat "other" type="integer" { target "skill"; }
+        "#,
+        ),
+    );
+    let before = bytes(staged.names(), staged.schema());
+    let aliases = SymbolRegistry::new(
+        staged.schema(),
+        &[(
+            "long_flag",
+            staged.symbols().definition("long_flag").unwrap().clone(),
+        )],
+        &[],
+        SymbolLimits::default(),
+    )
+    .unwrap();
+    let exact = SymbolLimits {
+        max_symbols: 2,
+        max_name_bytes: "long_flag".len(),
+    };
+    assert_eq!(
+        staged
+            .symbols_for_packet(&aliases, exact)
+            .unwrap()
+            .definitions()
+            .count(),
+        2
+    );
+    for limits in [
+        SymbolLimits {
+            max_symbols: 1,
+            ..exact
+        },
+        SymbolLimits {
+            max_name_bytes: exact.max_name_bytes - 1,
+            ..exact
+        },
+        SymbolLimits {
+            max_symbols: 0,
+            ..exact
+        },
+        SymbolLimits {
+            max_name_bytes: 0,
+            ..exact
+        },
+    ] {
+        assert!(staged.symbols_for_packet(&aliases, limits).is_err());
+        assert_eq!(bytes(staged.names(), staged.schema()), before);
+    }
+    // A symbol registry checked against a different staged successor cannot
+    // smuggle that successor's extra definitions into this packet.
+    let successor = stage_stat_declarations(
+        staged.names(),
+        staged.names().identity().unwrap(),
+        staged.schema(),
+        &f.symbols,
+        &parse(r#"stat "later" type="boolean" { target "actor"; }"#),
+        DeclarationLimits::default(),
+    )
+    .unwrap();
+    let foreign = SymbolRegistry::new(
+        successor.schema(),
+        &[(
+            "local",
+            successor.symbols().definition("later").unwrap().clone(),
+        )],
+        &[],
+        SymbolLimits::default(),
+    )
+    .unwrap();
+    assert!(matches!(
+        staged.symbols_for_packet(&foreign, SymbolLimits::default()),
+        Err(DeclarationError::SymbolIndex(SymbolErrorKind::Missing))
+    ));
+    assert_eq!(bytes(staged.names(), staged.schema()), before);
+    assert_eq!(aliases.definitions().count(), 1);
+    assert!(aliases.definition("other").is_none());
 }
 
 #[test]

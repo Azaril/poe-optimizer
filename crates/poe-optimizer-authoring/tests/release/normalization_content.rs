@@ -41,7 +41,8 @@ fn content(
         checked.registry().identity().unwrap(),
         input.mapping.registry
     );
-    checked.into_parts().unwrap()
+    let parts = checked.into_parts().unwrap();
+    (parts.registry, parts.schema, parts.imports)
 }
 
 fn install(input: &mut OwnedReleaseInput, imported: ImportSourceInput) {
@@ -304,13 +305,13 @@ fn authored_content_and_final_validation_honor_separate_resource_limits() {
     let mut exact_limits = OwnedReleaseLimits::default();
     exact_limits.normalization.max_policy_bytes = raw_bytes;
     assemble_owned_release(baseline.clone(), exact_limits).unwrap();
-    let (exact_registry, exact_schema, exact_content) =
-        check_release_source_dependencies(baseline, exact_limits)
-            .unwrap()
-            .into_parts()
-            .unwrap();
-    let imported = exact_content
-        .into_input(&exact_registry, &exact_schema, exact_limits)
+    let parts = check_release_source_dependencies(baseline, exact_limits)
+        .unwrap()
+        .into_parts()
+        .unwrap();
+    let imported = parts
+        .imports
+        .into_input(&parts.registry, &parts.schema, exact_limits)
         .unwrap();
     let mut exact_input = baseline.clone();
     install(&mut exact_input, imported);

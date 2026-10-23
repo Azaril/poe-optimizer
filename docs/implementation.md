@@ -15,8 +15,10 @@ The first complete unchanged build must use the new format and sole native path.
 Legacy deletion is a gate before that milestone, not work deferred until five builds.
 The computed-support unused-input repair, immutable typed Stat declaration compiler,
 original-source dependency validation and complete Import content construction
-under R2 are implemented. The maintained builder now reconstructs normalization
-and Tree bindings from checked-source content before ordinary final validation.
+under R2 are implemented. The current checkpoint integrates typed Stat staging
+into the same in-memory compiler, with explicit persisted names and packet-local
+symbols. It constructs rule/routing and Import dependencies against the staged
+schema before ordinary final validation.
 Aggregate evaluation preflight accounting is repaired.
 Continue independent harness retirement while
 integrating declarations with maintained release publication and completing the
@@ -25,17 +27,17 @@ for dormant support flags.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; current checkpoint integrates complete Import content construction into maintained Authoring |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; current checkpoint integrates declaration staging into maintained Authoring |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
-| Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation, typed Stat staging and complete Import content construction in the production release command. Evaluation content construction and declaration staging/publication integration remain pending. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Move the maintained publication core and retire obsolete transformation chains |
+| Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation, typed Stat staging and complete Import content construction in the maintained compiler. Explicit declaration context is library-only pending the filesystem publication decision. Evaluation content construction remains next. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Move the maintained publication core and retire obsolete transformation chains |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program now comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Exact graph/placement and historical non-program preservation gates pass; named-registry filesystem CAS, declaration publication/remaining descriptor kinds and binary pack remain pending |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Node renaming changes rule/input identity; other emitted constituents remain byte-exact. No local predecessor needed; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | Baseline `ae90ec82` run `39857163789` completed successfully with all twenty jobs passing. At 05:53:08 UTC on October 23, `a7069aa1` run `39889225006` had fifteen successful jobs, three running, no failures; Windows CLI-0/1/2 remained. `8e93cd7f` run `39905176183` was pending with no jobs created. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
+| CI | At 13:48:58 UTC on October 23, `a7069aa1` run `39889225006` had completed successfully with all twenty jobs passing; earlier baseline `ae90ec82` also passed all twenty. Pushed `96e5533e` run `39962517895` had eighteen jobs running and no failures reported. Workflow-level main-branch serialization preserves the running revision and coalesces pending revisions. Baseline success does not certify later commits |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 Use `cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --output rebuilt-release`
@@ -1196,8 +1198,46 @@ saved hashes; release identity, coverage and the **0/5** complete-original count
 remain unchanged. The next implementation step is production declaration
 integration, with evaluation construction as the separately tracked dependency.
 
-CI follow-up: the remaining jobs above were inside four CLI two-feature-profile
-test steps and Windows PoB tests for about 163 minutes. Each CLI step compiles and
+**Production in-memory declaration checkpoint:** the existing `build_release`
+now takes optional explicit declaration context: persisted names, expected name
+digest, typed declarations and their baseline symbol scope. The checked source
+registry must accept the persisted registry as a successor before staging.
+Packet aliases remain local; only current declarations are overlaid, and exact
+ledger collisions, namespace separation and unique symbol budgets share the same
+checks used by declaration staging. Reserved names without current descriptors
+remain reserved and are not projected into executable scope.
+
+The original source checker now retains actual checked routing plus the bounded
+rule payload whose original header was authenticated. `ReleaseSourceParts`
+replaces the tuple directly. Rule content reconstructs raw bindings; routing
+content preserves its existing semantic version and calls the sole validator.
+The compiler binds both to the staged schema before lowering and reconstructs
+Import content through the same path. Evaluation commitments remain untouched.
+Only complete assembly and the expected-input check can produce a `BuiltRelease`
+with its staged name allocation. No persisted state changes, compatibility entry
+point, alternate compiler, or allocating CLI input was added.
+
+New tests cover native Boolean Stat execution, serialized-ledger replay,
+earlier-sorting additions, stale predecessors, local/equal/conflicting aliases,
+reserved names, symbol/name/source budgets, late DSL/evaluation/identity failures,
+routing semantic versions and partial coverage, stale routing inputs, and raw rule
+content that remains subject to final validation. Strict all-target Clippy passes
+for Authoring, Import and Data (`runs/release-declarations-clippy.log`). All **223
+Authoring tests pass** (166 library, seven CLI, 50 release), none ignored; the
+build took 11m11s and the suites 18.17s, 0.31s and 17.65s
+(`runs/release-declarations-authoring-tests.log`). Scoped formatting passes.
+All **18 focused routing tests pass** (1m36s compilation, under 0.01s execution;
+`runs/release-declarations-routing-tests.log`). Both new Import rule-content tests
+pass (3m53s compilation, under 0.01s execution;
+`runs/release-declarations-rule-content-tests.log`). This checkpoint passes **243
+tests**, with none ignored in the selected suites. Peer integration review found
+no material issue; diff checks and the nine protected-file hashes pass.
+Current production source identity, coverage and the **0/5**
+complete-original count remain unchanged.
+
+Historical CI performance observation, 05:07 UTC on October 23: four CLI
+two-feature-profile test steps and Windows PoB tests had run for about 163 minutes.
+Those jobs subsequently passed as part of the completed twenty-job run. Each CLI step compiles and
 tests both profiles serially; public step metadata does not identify its current
 subphase or establish ongoing log progress. Windows CLI-3 completed at 05:04:43 UTC,
 so the snapshot does not indicate a workflow-wide hang. Keep the existing R0 work
@@ -1418,8 +1458,8 @@ These are retained obligations, not extra competing phases.
 1. Read this plan and Git status. The computed-support unused-input repair,
    immutable typed Stat declaration compiler and original bootstrap dependency
    checks, aggregate evaluation budgets and complete Import content construction
-   are implemented in the maintained builder. Next **integrate immutable Stat declarations
-   into the production in-memory compiler and construct authored evaluation dependencies**,
+   are implemented in the maintained builder. Immutable Stat declarations now
+   participate in that in-memory compiler. Next **construct authored evaluation dependencies**,
    following the R2 prerequisites above. Keep these as separately validated compiler
    phases; source extraction has no authority over evaluation inputs.
    Declaration integration takes an explicit persisted name ledger, validates it
@@ -1432,6 +1472,9 @@ These are retained obligations, not extra competing phases.
    identity only after final assembly and `expected_input` succeed. Cover replay,
    earlier-sorting additions, predecessor mismatch, alias agreement/conflict,
    symbol limits and late DSL/evaluation failures without predecessor mutation.
+   Before exposing declaration input in the CLI, include the packet names/source
+   path in declaration-overlay errors. They currently preserve typed conflict and
+   limit causes but lack packet context; staging errors remain context-wide.
    Evaluation construction follows the existing graph in
    `owned_release_evaluation.rs`: checked recipe to Metrics, Stages and Preparation;
    Stages/Preparation to Inputs; those packages to Receiving; all prerequisites to

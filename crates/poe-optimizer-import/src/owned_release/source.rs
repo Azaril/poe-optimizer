@@ -1,7 +1,8 @@
 //! Check the original source dependency space before authoring changes it.
 use super::{
     ImportSourceContent, OwnedReleaseInput, OwnedReleaseLimits, ReleaseView, Result,
-    checked::input_domain, constituents::CheckedImportConstituents, preflight_view, source_union,
+    RuleSourceContent, checked::input_domain, constituents::CheckedImportConstituents,
+    preflight_view, source_union,
 };
 use crate::{
     owned_mapping::OwnedIdRegistrySnapshot,
@@ -9,7 +10,8 @@ use crate::{
 };
 use poe_optimizer_core::{owned_content::digest_owned, owned_rules::OWNED_RULE_PACKAGE_VERSION};
 use poe_optimizer_data::{
-    owned_routing::OwnedActionRouting, owned_rules::RuleStorageError,
+    owned_routing::{ActionRoutingContent, OwnedActionRouting},
+    owned_rules::RuleStorageError,
     owned_schema::OwnedDefinitionSchemaPackage,
 };
 
@@ -18,7 +20,20 @@ use poe_optimizer_data::{
 pub struct CheckedImportSource {
     registry: OwnedIdRegistrySnapshot,
     schema: OwnedDefinitionSchemaPackage,
+    rules: RuleSourceContent,
+    routing: OwnedActionRouting,
     imports: CheckedImportConstituents,
+}
+
+/// Source parts obtained from the exact authenticated input. Routing and Import
+/// content come from checked owners; rule semantics still require final ordinary
+/// validation after source lowering against the completed definition schema.
+pub struct ReleaseSourceParts {
+    pub registry: OwnedIdRegistrySnapshot,
+    pub schema: OwnedDefinitionSchemaPackage,
+    pub rules: RuleSourceContent,
+    pub routing: ActionRoutingContent,
+    pub imports: ImportSourceContent,
 }
 
 impl CheckedImportSource {
@@ -31,18 +46,14 @@ impl CheckedImportSource {
 
     /// Consume the actual checked owners before changing the dependency space.
     /// Evaluation inputs are deliberately absent: this checker never certified them.
-    pub fn into_parts(
-        self,
-    ) -> Result<(
-        OwnedIdRegistrySnapshot,
-        OwnedDefinitionSchemaPackage,
-        ImportSourceContent,
-    )> {
-        Ok((
-            self.registry,
-            self.schema,
-            ImportSourceContent::from_checked(self.imports)?,
-        ))
+    pub fn into_parts(self) -> Result<ReleaseSourceParts> {
+        Ok(ReleaseSourceParts {
+            registry: self.registry,
+            schema: self.schema,
+            rules: self.rules,
+            routing: self.routing.into_authored_content(),
+            imports: ImportSourceContent::from_checked(self.imports)?,
+        })
     }
 }
 
@@ -88,8 +99,9 @@ pub fn check_release_source_dependencies(
     if rules.namespace != schema.input().namespace || rules.definitions != *schema.identity() {
         return Err(OwnedRecipeError::Rules(RuleStorageError::Binding).into());
     }
-    OwnedActionRouting::new(input.recipe.routing.clone(), &schema, limits.recipe.routing)
-        .map_err(OwnedRecipeError::from)?;
+    let routing =
+        OwnedActionRouting::new(input.recipe.routing.clone(), &schema, limits.recipe.routing)
+            .map_err(OwnedRecipeError::from)?;
 
     let imported = CheckedImportConstituents::check(&view, &registry, &schema, limits)?;
     source_union(
@@ -101,6 +113,10 @@ pub fn check_release_source_dependencies(
     Ok(CheckedImportSource {
         registry,
         schema,
+        // Aggregate preflight and the complete release/recipe byte limits ran
+        // before any constituent clone, including this unvalidated rule payload.
+        rules: RuleSourceContent::from_checked_header(rules.clone()),
+        routing,
         imports: imported,
     })
 }

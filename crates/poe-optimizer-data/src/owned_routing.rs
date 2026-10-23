@@ -6,10 +6,26 @@ use poe_optimizer_core::{
     owned_routing::*,
     owned_schema::*,
 };
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
 const DOMAIN: &str = "owned-action-routing-v1";
+
+/// Authored routing declarations without a supplied schema commitment. The
+/// version retains its source-selector contract; extraction never upgrades it.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ActionRoutingContent {
+    V1 {
+        release: OwnedDefinitionKey,
+        outputs: Vec<ActionOutputRoutes>,
+    },
+    V2 {
+        release: OwnedDefinitionKey,
+        outputs: Vec<ActionOutputRoutes>,
+    },
+}
+
 #[derive(Clone, Copy, Debug)]
 pub struct RoutingLimits {
     pub max_outputs: usize,
@@ -458,6 +474,51 @@ pub struct OwnedActionRouting {
     resources: RoutingUse,
 }
 impl OwnedActionRouting {
+    /// Consume the checked declarations, preserving the original semantic version
+    /// and all explicit route, selector and coverage inventories.
+    pub fn into_authored_content(self) -> ActionRoutingContent {
+        let ActionRoutingInput {
+            schema_version,
+            namespace: _,
+            release,
+            definitions: _,
+            outputs,
+        } = self.input;
+        match schema_version {
+            OWNED_ACTION_ROUTING_V1 => ActionRoutingContent::V1 { release, outputs },
+            OWNED_ACTION_ROUTING_VERSION => ActionRoutingContent::V2 { release, outputs },
+            _ => unreachable!("checked routing version"),
+        }
+    }
+
+    /// Bind new authored declarations through the ordinary storage validator.
+    /// Supplied sealed runtime artifacts must continue to use `new` directly.
+    pub fn bind_new<I: DefinitionSchemaIndex>(
+        content: ActionRoutingContent,
+        index: &I,
+        limits: RoutingLimits,
+    ) -> Result<Self, RoutingError> {
+        let (schema_version, release, outputs) = match content {
+            ActionRoutingContent::V1 { release, outputs } => {
+                (OWNED_ACTION_ROUTING_V1, release, outputs)
+            }
+            ActionRoutingContent::V2 { release, outputs } => {
+                (OWNED_ACTION_ROUTING_VERSION, release, outputs)
+            }
+        };
+        Self::new(
+            ActionRoutingInput {
+                schema_version,
+                namespace: index.namespace().clone(),
+                release,
+                definitions: index.identity().clone(),
+                outputs,
+            },
+            index,
+            limits,
+        )
+    }
+
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: ActionRoutingInput,
         index: &I,

@@ -104,7 +104,7 @@ pub enum DeclarationError {
     Schema(#[from] SchemaPackageError),
     #[error(transparent)]
     Symbols(#[from] SymbolError),
-    #[error("input symbols do not resolve against the baseline schema: {0:?}")]
+    #[error("input symbols do not resolve against the supplied schema: {0:?}")]
     SymbolIndex(SymbolErrorKind),
     #[error(transparent)]
     Content(#[from] ContentDigestError),
@@ -121,6 +121,9 @@ pub struct StagedStatDeclarations {
     names: NamedIdRegistry,
     schema: OwnedDefinitionSchemaPackage,
     symbols: SymbolRegistry,
+    /// Only this declaration set is shared with packets. The declaration's
+    /// own lookup aliases and other persisted reservations remain private.
+    declared_names: Vec<String>,
 }
 impl StagedStatDeclarations {
     pub fn names(&self) -> &NamedIdRegistry {
@@ -131,6 +134,70 @@ impl StagedStatDeclarations {
     }
     pub fn symbols(&self) -> &SymbolRegistry {
         &self.symbols
+    }
+
+    /// Resolve each packet independently against the final schema. Persisted
+    /// spellings retain their exact addresses, while unpersisted aliases stay
+    /// local to this packet. Equal explicit Stat aliases count only once.
+    pub(crate) fn symbols_for_packet(
+        &self,
+        aliases: &SymbolRegistry,
+        limits: SymbolLimits,
+    ) -> Result<SymbolRegistry, DeclarationError> {
+        let ledger = LedgerNames::new(&self.names);
+        let mut count = ledger.check_aliases(aliases, limits)?;
+        aliases
+            .validate_against(&self.schema)
+            .map_err(DeclarationError::SymbolIndex)?;
+        for name in &self.declared_names {
+            check_name(name, None, limits)?;
+            if aliases.definition(name).is_none() {
+                count = count
+                    .checked_add(1)
+                    .filter(|total| *total <= limits.max_symbols)
+                    .ok_or_else(|| invalid(DeclarationErrorKind::LimitExceeded, None))?;
+            }
+        }
+        // Check the unique result size and every copied name before cloning
+        // addresses or constructing the owned output symbol registry.
+        let mut definitions: Vec<_> = aliases
+            .definitions()
+            .map(|(name, address)| (name, address.clone()))
+            .collect();
+        definitions.extend(
+            self.declared_names
+                .iter()
+                .filter(|name| aliases.definition(name).is_none())
+                .map(|name| {
+                    (
+                        name.as_str(),
+                        self.symbols
+                            .definition(name)
+                            .expect("staged declarations have exact symbols")
+                            .clone(),
+                    )
+                }),
+        );
+        let slots: Vec<_> = aliases
+            .slots()
+            .map(|(name, address)| (name, address.clone()))
+            .collect();
+        Ok(SymbolRegistry::new(
+            &self.schema,
+            &definitions,
+            &slots,
+            limits,
+        )?)
+    }
+
+    pub(crate) fn into_parts(
+        self,
+    ) -> (
+        NamedIdRegistry,
+        OwnedDefinitionSchemaPackage,
+        SymbolRegistry,
+    ) {
+        (self.names, self.schema, self.symbols)
     }
 }
 
@@ -250,15 +317,79 @@ pub fn parse_stat_declarations(
 fn check_name(
     name: &str,
     index: Option<usize>,
-    limits: DeclarationLimits,
+    limits: SymbolLimits,
 ) -> Result<(), DeclarationError> {
-    if name.len() > limits.symbols.max_name_bytes {
+    if name.len() > limits.max_name_bytes {
         return Err(invalid(DeclarationErrorKind::LimitExceeded, index));
     }
     if !valid_name(name) {
         return Err(invalid(DeclarationErrorKind::InvalidName, index));
     }
     Ok(())
+}
+
+/// Borrow the canonical ledger without copying names or addresses. Definition
+/// and slot spellings are intentionally independent namespaces.
+struct LedgerNames<'a> {
+    definitions: BTreeMap<&'a str, &'a DefinitionAddress>,
+    slots: BTreeMap<&'a str, &'a SlotAddress>,
+}
+impl<'a> LedgerNames<'a> {
+    fn new(names: &'a NamedIdRegistry) -> Self {
+        let mut result = Self {
+            definitions: BTreeMap::new(),
+            slots: BTreeMap::new(),
+        };
+        for binding in &names.input().bindings {
+            match &binding.target {
+                SchemaSubject::Definition(address) => {
+                    result.definitions.insert(&binding.name, address);
+                }
+                SchemaSubject::Slot(address) => {
+                    result.slots.insert(&binding.name, address);
+                }
+            }
+        }
+        result
+    }
+
+    fn check_aliases(
+        &self,
+        symbols: &SymbolRegistry,
+        limits: SymbolLimits,
+    ) -> Result<usize, DeclarationError> {
+        if limits.max_symbols == 0 || limits.max_name_bytes == 0 {
+            return Err(invalid(DeclarationErrorKind::InvalidLimits, None));
+        }
+        let mut count = 0usize;
+        for (name, agrees) in symbols
+            .definitions()
+            .map(|(name, address)| {
+                (
+                    name,
+                    self.definitions
+                        .get(name)
+                        .is_none_or(|saved| *saved == address),
+                )
+            })
+            .chain(symbols.slots().map(|(name, address)| {
+                (
+                    name,
+                    self.slots.get(name).is_none_or(|saved| *saved == address),
+                )
+            }))
+        {
+            check_name(name, None, limits)?;
+            if !agrees {
+                return Err(invalid(DeclarationErrorKind::SymbolConflict, None));
+            }
+            count = count
+                .checked_add(1)
+                .filter(|total| *total <= limits.max_symbols)
+                .ok_or_else(|| invalid(DeclarationErrorKind::LimitExceeded, None))?;
+        }
+        Ok(count)
+    }
 }
 
 /// Stage one immutable successor. Names reserve identities only; an existing
@@ -302,7 +433,7 @@ pub fn stage_stat_declarations(
         return Err(invalid(DeclarationErrorKind::LimitExceeded, None));
     }
     for binding in &base.input().bindings {
-        check_name(&binding.name, None, limits)?;
+        check_name(&binding.name, None, limits.symbols)?;
     }
     digest_owned(
         "owned-stat-declaration-name-budget-v1",
@@ -337,54 +468,8 @@ pub fn stage_stat_declarations(
             return Err(invalid(DeclarationErrorKind::UnregisteredBase, None));
         }
     }
-    let base_definitions: BTreeMap<_, _> = base
-        .input()
-        .bindings
-        .iter()
-        .filter_map(|binding| {
-            if let SchemaSubject::Definition(address) = &binding.target {
-                Some((binding.name.as_str(), address))
-            } else {
-                None
-            }
-        })
-        .collect();
-    let base_slots: BTreeMap<_, _> = base
-        .input()
-        .bindings
-        .iter()
-        .filter_map(|binding| {
-            if let SchemaSubject::Slot(address) = &binding.target {
-                Some((binding.name.as_str(), address))
-            } else {
-                None
-            }
-        })
-        .collect();
-    let mut projected_count = 0usize;
-    for (name, address) in symbols.definitions() {
-        check_name(name, None, limits)?;
-        if base_definitions
-            .get(name)
-            .is_some_and(|saved| *saved != address)
-        {
-            return Err(invalid(DeclarationErrorKind::SymbolConflict, None));
-        }
-        projected_count += 1;
-        if projected_count > limits.symbols.max_symbols {
-            return Err(invalid(DeclarationErrorKind::LimitExceeded, None));
-        }
-    }
-    for (name, address) in symbols.slots() {
-        check_name(name, None, limits)?;
-        if base_slots.get(name).is_some_and(|saved| *saved != address) {
-            return Err(invalid(DeclarationErrorKind::SymbolConflict, None));
-        }
-        projected_count += 1;
-        if projected_count > limits.symbols.max_symbols {
-            return Err(invalid(DeclarationErrorKind::LimitExceeded, None));
-        }
-    }
+    let ledger = LedgerNames::new(base);
+    let projected_count = ledger.check_aliases(symbols, limits.symbols)?;
     symbols
         .validate_against(schema)
         .map_err(DeclarationError::SymbolIndex)?;
@@ -392,7 +477,7 @@ pub fn stage_stat_declarations(
     let mut targets = 0usize;
     let mut added_names = 0usize;
     for (index, stat) in declarations.stats.iter().enumerate() {
-        check_name(&stat.name, Some(index), limits)?;
+        check_name(&stat.name, Some(index), limits.symbols)?;
         if !names.insert(stat.name.as_str()) {
             return Err(invalid(DeclarationErrorKind::DuplicateName, Some(index)));
         }
@@ -412,14 +497,14 @@ pub fn stage_stat_declarations(
             return Err(invalid(DeclarationErrorKind::InvalidTargets, Some(index)));
         }
         if let StatValueDeclaration::Quantity { unit } = &stat.value {
-            check_name(unit, Some(index), limits)?;
+            check_name(unit, Some(index), limits.symbols)?;
             match symbols.definition(unit) {
                 Some(DefinitionAddress::Unit(_)) => {}
                 Some(_) => return Err(invalid(DeclarationErrorKind::WrongKind, Some(index))),
                 None => return Err(invalid(DeclarationErrorKind::UnknownUnit, Some(index))),
             }
         }
-        if let Some(previous) = base_definitions.get(stat.name.as_str()) {
+        if let Some(previous) = ledger.definitions.get(stat.name.as_str()) {
             let DefinitionAddress::Stat(id) = previous else {
                 return Err(invalid(DeclarationErrorKind::WrongKind, Some(index)));
             };
@@ -563,6 +648,11 @@ pub fn stage_stat_declarations(
         names,
         schema,
         symbols,
+        declared_names: declarations
+            .stats
+            .iter()
+            .map(|stat| stat.name.clone())
+            .collect(),
     })
 }
 
