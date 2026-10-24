@@ -724,6 +724,13 @@ catalog route can prove that a secondary selector has no consumer; a saved Skill
 ID alone cannot. Count remains a typed usage value with its own consumers. These
 proofs neither admit execution nor establish complete numerical coverage.
 Whole-preset accounting commits only after every source and destination succeeds.
+Archived generated occurrences may prove actual reference absence without a
+topology adapter when all reference selectors and children are absent and no
+numeric counts were authored. Preserve the exact preset's existing unresolved
+raw-input, usage and support-source owners, reject conflicting adapter authority,
+and refuse any live-output links. Missing or literal nil counts supply no native
+default. Authored numeric counts still require the existing checked recipes.
+Adding an unused valid adapter cannot revoke an independently proved absence.
 Multieffect sources need separate authority, including any external stat suppliers
 and lazy initialization that can change the source gate. A sampled metadata flag
 is not an all-context fact or a native default.
@@ -759,6 +766,16 @@ complete any Scenario output domain.
 Preserve normal-load migration and headless fallback as separate external source
 behaviors. No source receipt can certify an Encounter's intrinsic domain without
 also checking every admitted typed consumer.
+Outside-Config defaults require exact source-frame and consumer proofs. Observe
+MAIN and CALCS separately, including query selection, and preserve constructor
+absence versus explicit false/zero values. Fresh-load witnesses establish only
+their admitted cases; they neither certify arbitrary saved searches nor imply
+warm-state equivalence. Whole-header receipts must join validated outputs to
+their actual character, allocation, skill, equipment and selection owners.
+Constructor redundancy alone does not classify a saved calculation-view selector
+as presentation-only: it can still choose a different Action or assumptions.
+Require checked query/scenario ownership or an explicitly reviewed reference-only
+disposition before retiring that source responsibility.
 
 This representation change adds no evaluation bundle or numerical coverage;
 0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust

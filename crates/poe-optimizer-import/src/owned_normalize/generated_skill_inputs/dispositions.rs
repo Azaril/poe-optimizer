@@ -426,6 +426,29 @@ fn saved_switch(row: &SourceEvidenceRow<'_>, name: &str, nil: bool) -> bool {
     matches!(value(row, name), None | Some("true" | "false"))
         || (nil && value(row, name) == Some("nil"))
 }
+
+/// The caller has charged and checked the complete source frame. This proves
+/// actual absence only: a present nil selector still needs reference semantics.
+fn reference_is_absent(row: &SourceEvidenceRow<'_>) -> bool {
+    row.children().is_empty()
+        && SELECTOR_FIELDS
+            .iter()
+            .all(|name| row.attribute(name).is_none())
+}
+
+/// An archived row with no authored numeric counts needs no numeric recipe to
+/// retain its unresolved usage responsibility. A saved nil is source syntax;
+/// it supplies neither a native count nor a constructor default. Nonempty
+/// numbers still require the existing checked deferred-usage recipes.
+fn counts_are_unauthored(row: &SourceEvidenceRow<'_>, group: &SourceEvidenceRow<'_>) -> bool {
+    [(row, "count"), (group, "groupCount")]
+        .into_iter()
+        .all(|(source, name)| {
+            source
+                .attribute(name)
+                .is_none_or(|value| value.raw() == "nil" && value.decoded().ok() == Some("nil"))
+        })
+}
 fn frame(
     b: &mut Builder<'_, '_>,
     source: SourceOccurrenceId,
@@ -805,11 +828,7 @@ pub(in crate::owned_normalize) fn account(
         } else {
             // With no checked topology adapter only actual selector absence is
             // provable. No default Action, Actor or stat-set is invented.
-            if !row.children().is_empty()
-                || SELECTOR_FIELDS
-                    .iter()
-                    .any(|name| row.attribute(name).is_some())
-            {
+            if !reference_is_absent(row) {
                 continue;
             }
             None
@@ -884,22 +903,34 @@ fn account_archived(
         {
             continue;
         }
-        let Some((adapter, usage)) = selector_proof(bound.row, direct, physical)? else {
+        // Resolve configured adapters first so contradictory policy authority
+        // still fails even when no reference selector was saved.
+        let proof = selector_proof(bound.row, direct, physical)?;
+        let children = if reference_is_absent(row) && counts_are_unauthored(row, group) {
+            // The checked frame owns Boolean/main-selector syntax; every
+            // unresolved meaning remains with this exact preset's three
+            // existing Pending owners. An unused adapter cannot change absence.
+            vec![]
+        } else if let Some((adapter, usage)) = proof {
+            if !usage.prove_generated(b, row, group)? {
+                continue;
+            }
+            let Some(children) = account_reference(
+                b,
+                row,
+                |context| {
+                    Ok(adapter.inspect_generated_selectors(evidence, receipt.source, context)?)
+                },
+                adapter.construction_work(),
+            )?
+            else {
+                continue;
+            };
+            children.into_children()
+        } else {
+            // Authored numeric spellings require an injected recipe.
             continue;
         };
-        if !usage.prove_generated(b, row, group)? {
-            continue;
-        }
-        let Some(children) = account_reference(
-            b,
-            row,
-            |context| Ok(adapter.inspect_generated_selectors(evidence, receipt.source, context)?),
-            adapter.construction_work(),
-        )?
-        else {
-            continue;
-        };
-        let children = children.into_children();
         // The receipt recognizes external syntax only. No live physical or
         // generated output may be relabelled as an unresolved archived row.
         b.charge(children.len().saturating_add(2))?;

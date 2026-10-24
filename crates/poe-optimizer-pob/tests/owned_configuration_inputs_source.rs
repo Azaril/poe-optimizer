@@ -1,5 +1,7 @@
 //! Complete source evidence for saved and effective Config inputs and original downstream records.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/outside_config_defaults_source.rs"]
+mod outside_config_defaults;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;

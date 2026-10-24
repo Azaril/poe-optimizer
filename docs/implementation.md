@@ -10,7 +10,61 @@ adjustments below. Historical checkpoints remain in Git and
 
 ## Current state
 
-**Current checkpoint:** configuration inventory matching now retains checked
+**Current checkpoint:** archived generated-source accounting now proves actual
+reference/count absence independently of unused topology adapters. It checks the
+complete saved frame, exact source/preset identity and all three existing Pending
+owners, and rejects any live-output links. No native count, selector, skill or
+constructor default is emitted. Numeric counts still require an injected recipe;
+conflicting adapter authority remains an error before the absence branch.
+The unchanged original's dormant Skill/Gem pair now retains only its SkillPreset
+and actual generated-input, usage and support-origin issues. This removes two
+redundant configuration-origin links without completing any build obligation.
+Production policy and runtime artifacts are unchanged. Complete originals remain
+**0/5** and Sniper still has five selected input obligations.
+
+The optional fresh PoB default/omission witness passes in 44.41s: eight independent
+loads in each JIT mode, including an original replay and nondefault controls.
+The two 1,742,265-byte reports are identical, SHA-256
+`47380e2c9bbb0ed67ecb523e9b92cb75171dd6b6aebad97494878d6b5e7804af`.
+MAIN keeps group 3 while default CALCS uses group 1; the query-selection control
+changes only CALCS to group 3. Omission preserves the observed outputs while the
+explicit Timeless false/zero fields remain distinct from constructor absence.
+The witness claims neither native coverage nor warm-state equivalence. Evidence:
+`runs/outside-config-defaults-01`; the exact XML-edit preservation test also passes.
+All **1,557 Import regression tests pass**: 249 library, 891 owned-integration
+and 417 normalization tests. The ordinary run leaves one existing explicit
+current-release test ignored. All five new absence laws pass, including exact
+provenance changes, unchanged real owners, unused-adapter independence, refusal
+controls and exact/one-short work budgets with replay. A test initially compared
+distinct edited XML snapshots directly; it now authenticates both complete
+occurrence frames before comparing the permitted link changes. Independent review
+confirmed that no behavioral assertion was weakened. Evidence:
+`runs/configuration-census-audit-01/archived-import-regression.log`.
+Strict all-feature/all-target Import and Authoring Clippy and the affected PoB
+target Clippy pass. All three unchanged-original Authoring laws pass in 70.69s;
+the authenticated five-original preservation replay passes in 75.22s, preserving
+the exact drafts, allocator state, provenance and remaining obligations under
+partial-census controls. Logs are `archived-real-tests-final.log`,
+`archived-originals-final.log`, `archived-clippy.log` and
+`outside-defaults-clippy.log` in the audit directory. Scoped formatting,
+whitespace, strict UTF-8/LF and all nine protected-draft hashes pass. The known
+optional Windows PoB LNK4098 linkage warning remains tracked under R4; it does
+not affect the passing source execution or strict lint.
+Independent reviews found no production ownership or budget regression.
+
+Checkpoint triage: finish exact Build/Tree/Skills/Items header-owner receipts,
+bounded Timeless/Calcs source-frame and consumer proofs, then the independently
+complete configuration/default/custom census. Calcs still lacks checked
+correspondence to an owned QueryPreset/scenario or an explicitly reviewed
+reference-only disposition: constructor redundancy does not establish that
+ownership. This combined path can retire the
+real configuration Choice obligation; a header, sampled default or output count
+alone cannot. Keep the separate Scenario domain proofs and the Djinn selected
+supplier/transform join in the queue below. If numeric archived counts need
+broader admission, reuse the existing compiled occurrence count recipes and
+exact correspondence rather than adding a second usage decoder.
+
+**Preceding checkpoint (`00c57b66`, pushed and remote-verified):** configuration inventory matching now retains checked
 inapplicability proofs. Each inventory consumer selects either its existing
 adapter outputs or one exact existing disposition-rule ID; the rule remains the
 sole owner of the selector, recipe and encounter guards. A private proof is
@@ -47,13 +101,12 @@ remaining obligations under partial census controls. Evidence:
 diagnostic remains in `inapplicable-originals.log`. Scoped formatting, strict
 UTF-8/LF, whitespace checks and all nine protected-draft hashes pass.
 
-The parallel outside-Config audit identifies an immediate follow-up: archived
-generated sources currently require a selector adapter even when every reference
-selector is absent. Reuse the live path's exact absence proof while preserving the
-archived usage owner and refusing live-output links. Build/Tree/Skills/Items headers
+The parallel outside-Config audit identified the archived absence follow-up now
+implemented above. Build/Tree/Skills/Items headers
 need full field-to-owner correspondence; their existing child/domain checks alone
-cannot close the headers. TimelessData and Calcs need a bounded ordinary-load
-default-versus-omission witness for both MAIN and CALCS before any retirement.
+cannot close the headers. TimelessData and Calcs now have the bounded ordinary-load
+default-versus-omission witness for both MAIN and CALCS described above; complete
+frame, consumer and owner proofs remain necessary before any retirement.
 Evidence: `runs/configuration-census-audit-01/outside-config-next.md`.
 
 **Preceding checkpoint (`a1f9e586`, pushed and remote-verified):** the existing optional source witness now proves the bounded
@@ -518,7 +571,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal `f55fdacc`; intrinsic item-template support domains and redundant Gem-helper retirement `8b11bad1`; skeletal parent/profile source domains and exact selected Skill accounting `bdb0e883`; generated singleton field accounting and retained-witness repair `1e227d5d`; finite ExtraSkillStat factory/filter evidence `d96d454b`; ordinary direct-record transport evidence in this checkpoint |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal `f55fdacc`; intrinsic item-template support domains and redundant Gem-helper retirement `8b11bad1`; skeletal parent/profile source domains and exact selected Skill accounting `bdb0e883`; generated singleton field accounting and retained-witness repair `1e227d5d`; finite ExtraSkillStat factory/filter evidence `d96d454b`; ordinary direct-record transport evidence `a1f9e586`; checked inapplicability inventory proofs `00c57b66`; archived-source absence accounting and bounded outside-Config default evidence in this checkpoint |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -528,7 +581,7 @@ silently become a second supported implementation.
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets; all 117 contribution queries come from five named KDL fragments. The normal builder rejects embedded program and query members. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
 | Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 73 Stats, six exact program occurrences, three revival queries with one outer gap and 363 intrinsic support-source domains. The current Import delta changes exactly four inventory destinations and derives their dependency commitments. Historical restoration admits only these exact deltas through checked content constructors. There are 1,349 source domains (1,320 Known, 29 Unmapped). Canonical checkpoint `71ff4429` remains the complete 73-name allocation predecessor; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Future commands must use the same standard; hosted status belongs to the CI row below |
-| CI | Pushed `1e227d5d` run [40106355676](https://github.com/Azaril/poe-optimizer/actions/runs/40106355676) has five successful and thirteen running jobs with no failures in the public snapshot at 15:42:28 UTC October 24; `a1f9e586` run [40107869444](https://github.com/Azaril/poe-optimizer/actions/runs/40107869444) is pending. Hosted success is not yet established. Earlier snapshot at 15:00 UTC: main `bdb0e883` run [40073568065](https://github.com/Azaril/poe-optimizer/actions/runs/40073568065) and preceding `bf533382` run [40066505992](https://github.com/Azaril/poe-optimizer/actions/runs/40066505992) both completed with sixteen successful and four failed jobs. In each run, Ubuntu and Windows CLI jobs fail the same retained flat-life witness source-hash assertion; the other two failures are their aggregate checks. The local repair authenticates the exact archived witness and proves that only the two compact-schema loader substitutions produce the maintained source; its two local tests pass in each CLI feature profile. No numerical witness is relabeled or relaxed. Previous `8f91c7b1` run `40045082862` passed all twenty jobs; its Windows CLI jobs took 3h02m–4h17m. Per-target cost remains R0/R4 work. This checkpoint still requires hosted validation; local success does not imply hosted success |
+| CI | Pushed `1e227d5d` run [40106355676](https://github.com/Azaril/poe-optimizer/actions/runs/40106355676) has eight successful and ten running jobs with no failures in the public snapshot at 16:21:11 UTC October 24 (Windows workspace has passed); `00c57b66` run [40109271478](https://github.com/Azaril/poe-optimizer/actions/runs/40109271478) is pending with no jobs. Hosted success is not yet established. Earlier snapshot at 15:00 UTC: main `bdb0e883` run [40073568065](https://github.com/Azaril/poe-optimizer/actions/runs/40073568065) and preceding `bf533382` run [40066505992](https://github.com/Azaril/poe-optimizer/actions/runs/40066505992) both completed with sixteen successful and four failed jobs. In each run, Ubuntu and Windows CLI jobs fail the same retained flat-life witness source-hash assertion; the other two failures are their aggregate checks. The local repair authenticates the exact archived witness and proves that only the two compact-schema loader substitutions produce the maintained source; its two local tests pass in each CLI feature profile. No numerical witness is relabeled or relaxed. Previous `8f91c7b1` run `40045082862` passed all twenty jobs; its Windows CLI jobs took 3h02m–4h17m. Per-target cost remains R0/R4 work. This checkpoint still requires hosted validation; local success does not imply hosted success |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First extract and verify the allocation predecessor using the
@@ -2142,10 +2195,11 @@ The delivery order is:
    Skill-preset usage separately retains twenty origins, while assumptions,
    Scenario usage and Scenario intents each retain the selected ConfigSet origin.
    Evidence and exact source/release pins: `runs/configuration-census-audit-01/`.
-   Existing leaf adapters do not yet prove the ten outside links redundant:
-   their frame checks discharge narrower responsibilities. Investigate the
-   existing archived-generated-skill proof for the dormant Firebolt pair; do not
-   remove its fallback links merely because reference/quality resolution succeeded.
+   That baseline predates the current archived-absence change: the dormant
+   Skill/Gem pair now transfers its configuration links to three exact existing
+   Pending owners after complete frame/identity/absence validation. The remaining
+   eight outside origins are the four headers, TimelessData, Calcs and its two
+   Inputs. Existing child/domain checks alone cannot certify those headers.
    The retained Calcs presentation proof is MAIN-only and cannot silently apply
    to the general native normalizer. Preserve that scope when deciding how to
    account for the two calculation-view Inputs.
@@ -2205,23 +2259,52 @@ The delivery order is:
    occurrences and 563 distinct names, including the duplicate. The 28 non-reward
    defaults include seven actual child-effect enables; saved Inputs or callback
    output alone cannot certify absence. Check direct readers and absent controls.
-   Before Choice retirement, account for all ten outside-Config origins using
-   their actual Build/Tree/Skills/Items/archived-source owners. TimelessData and
-   Calcs with its two Inputs remain source-evidence gaps. MAIN-only admission
-   proof is insufficient for general import; empty/default values do not justify
-   dropping meaningful settings. Discuss ownership only if that audit finds
-   semantics the existing model cannot preserve. This is accepted accounting
-   completion, not a second importer or native model.
-   The archived Firebolt group/Gem can next reuse the live path's checked absence
-   of all reference selectors, instead of requiring a nonexistent selector
-   adapter. Preserve its genuine archived usage issue, exact preset/provider and
-   remaining saved fields (including literal nil); produce no live skill/input.
+   Before Choice retirement, account for the remaining eight outside-Config
+   origins using their actual Build/Tree/Skills/Items and query/presentation
+   owners. The archived generated pair is now accounted for without inventing a
+   topology adapter or native values; its three genuine Pending owners remain.
+   TimelessData and Calcs have bounded fresh-load evidence in both MAIN and CALCS,
+   but still require the exact consumer/frame proofs and private owner receipts.
+   Empty/default values alone do not justify dropping meaningful settings.
+   Discuss ownership only if that audit finds semantics the existing model cannot
+   preserve. This is accepted accounting completion, not a second importer or
+   native model.
    Build character/reward, Tree allocation/socket, Skills container and Items
    loadout proofs are reusable prerequisites for whole-header checks, not
-   substitutes. For TimelessData/Calcs, compare ordinary load of the exact saved
-   constructor defaults against omission in both MAIN and CALCS; preserve query
-   selection and reject nondefault, unknown and legacy-migration cases. Account
-   for optional false/zero fields installed by load before claiming equivalence.
+   substitutes. Reuse the character/reward fresh-frame checks and actual
+   CharacterPreset outputs, skill container census, equipment membership and
+   current active-selector-to-saved-selection correspondence. The smallest next
+   transfer is Tree selection: reuse the canonical tree frame and existing
+   selected-source resolver, then join the actual Spec to its Character and
+   Allocation presets while retaining saved-selection responsibility. Prefer one
+   private whole-header ownership pass after preset construction and before the
+   historical fallback assignment; do not teach the final global scan to ignore
+   headers. Share the existing resolver instead of adding another source-axis
+   parser. Keep exact per-set weapon state and independent presets. Build's
+   saved class/ascendancy labels do not provide class authority; its actual level
+   and MAIN selection have their own consumers. For TimelessData/Calcs, the fresh
+   default/omission witness now passes with query-selection contrasts and all 49
+   layout Sections preserved. Finish consumer accounting; reject nondefault,
+   unknown and legacy-migration cases. Explicit optional false/zero fields still
+   differ from omission. Fresh normal Build loading resets these objects; no
+   warm-load equivalence is claimed or required for that bounded contract.
+   CompareEntry separately synchronizes CALCS to MAIN and remains outside this
+   admission, as do undo and interactive search state.
+   The fresh audit confirms that default-only Calcs evidence is insufficient for
+   retirement: `skill_number=1` selects a real different Action from MAIN group 3,
+   and EFFECTIVE chooses actual assumptions. Current QueryPresets are built from
+   supplied ImportQuery rows, with no checked correspondence to those saved
+   Calcs defaults. Preserve the unresolved responsibility until an existing
+   query/scenario ownership proof or explicitly reviewed reference-only
+   disposition accounts for it. Do not call it presentation-only merely because
+   omission reconstructs the same values. Discuss a new public ownership contract
+   if the existing accepted query/presentation model cannot represent the result.
+   Reuse exact Action/DirectAction locators and QueryPreset/Scenario owners where
+   their real contracts suffice; supplied query rows still require actual metrics,
+   and Scenario has no generic PoB buff-mode shortcut. SourceOnly labels, Section
+   presentation and Config inapplicability receipts cannot stand in for that
+   ownership. The complete bounded consumer audit and seventeen checked source
+   pins are in `runs/configuration-census-audit-01/outside-default-consumer-audit.md`.
    Details: `runs/configuration-census-audit-01/outside-config-next.md`.
    Scenario follow-on is also explicit: the current draft has 34 known assumptions
    (fifteen presence flags, one option and eighteen scalar/default records), no

@@ -381,7 +381,34 @@ fn assert_original_archived(evidence: &SourceProjectEvidence<'_>, result: &Norma
             .members
             .is_empty()
     );
-    let issue = pending_usage(result, preset_id);
+    let intent = preset.intent.as_ref().unwrap();
+    let supports = preset.authored_support_order.as_ref().unwrap();
+    let expected_issues: std::collections::BTreeSet<_> = [
+        (
+            &intent.generated_inputs.completion,
+            "generated-skill-inputs-not-converted",
+        ),
+        (&intent.usage.completion, "usage-preferences-not-converted"),
+        (
+            &supports.completion,
+            "support-origin-discovery-not-converted",
+        ),
+    ]
+    .into_iter()
+    .map(|(completion, expected)| {
+        let DraftListCompletion::Pending { id, code } = completion else {
+            panic!("retained archived {expected}");
+        };
+        assert_eq!(code.as_str(), expected);
+        *id
+    })
+    .collect();
+    assert_eq!(
+        expected_issues.len(),
+        3,
+        "distinct real archived responsibilities"
+    );
+    assert!(expected_issues.contains(&pending_usage(result, preset_id)));
     for ordinal in [174, 175] {
         let source = &evidence.rows()[ordinal];
         let origin = only(
@@ -391,21 +418,33 @@ fn assert_original_archived(evidence: &SourceProjectEvidence<'_>, result: &Norma
                 .iter()
                 .filter(|r| r.source == source.occurrence().id()),
         );
-        assert!(origin.links.contains(&OwnedOriginTarget::Issue(issue)));
+        assert!(
+            origin
+                .links
+                .contains(&OwnedOriginTarget::SkillPreset(preset_id))
+        );
         assert!(
             !origin
                 .links
                 .iter()
                 .any(|link| matches!(link, OwnedOriginTarget::GeneratedSkillInput { .. }))
         );
-        assert!(
-            origin
-                .links
-                .iter()
-                .filter(|link| matches!(link, OwnedOriginTarget::Issue(_)))
-                .count()
-                >= 2
+        let actual_issues: std::collections::BTreeSet<_> = origin
+            .links
+            .iter()
+            .filter_map(|link| {
+                if let OwnedOriginTarget::Issue(id) = link {
+                    Some(*id)
+                } else {
+                    None
+                }
+            })
+            .collect();
+        assert_eq!(
+            actual_issues, expected_issues,
+            "only the actual archived owners remain; configuration fallback is retired"
         );
+        assert_eq!(origin.links.len(), expected_issues.len() + 1);
     }
     assert_eq!(attr(&evidence.rows()[175], "skillId"), "FireboltPlayer");
 }

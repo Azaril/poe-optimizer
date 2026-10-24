@@ -9,6 +9,9 @@ use poe_optimizer_import::{
 };
 use std::collections::BTreeSet;
 
+#[path = "owned_generated_reference_absence.rs"]
+mod reference_absence;
+
 fn configured() -> Fixture {
     let mut f = Fixture::new();
     let DirectSkillInputPolicy::PobManualDirectSkillV2 { skills, .. } =
