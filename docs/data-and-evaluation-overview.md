@@ -312,6 +312,12 @@ archived presets retain their obligations. The Djinn secondary switches remain
 deferred: their complete declared-stat census does not cover every external
 `ExtraSkillStat` supplier or later lazy-map initialization. This is an Import
 evidence gap, not permission to invent a native default or relax evaluation.
+The optional actual-parser witness now covers fourteen literal constructors and
+their filters. It demonstrates why the distinction matters: an inherited global
+effect can be initialized by a zero-valued stat, while the real producer's skill
+filter prevents delivery to these Commands. Isolated copies and fresh JIT-on/off
+runs preserve shared metadata. This finite family evidence does not yet account
+for every reachable supplier, copy or transform, so the fields remain deferred.
 
 One next limitation is documented in the [Skill-to-Actor contribution proposal](owned-skill-actor-contribution-proposal.md):
 direct Skill effects can name Player, while checked Skill-origin queries currently

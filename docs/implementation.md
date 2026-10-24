@@ -10,7 +10,42 @@ adjustments below. Historical checkpoints remain in Git and
 
 ## Current state
 
-**Current checkpoint:** generated singleton field accounting through the existing
+**Current checkpoint:** bounded actual-parser evidence for the remaining generated
+Djinn secondary switch. The existing optional PoB witness now exercises all fourteen
+literal `ExtraSkillStat` constructors through eleven parser patterns, preserving
+thirteen distinct keys, exact payload types and mandatory filters. Isolated Command
+copies show that the fixed family is excluded, while unscoped or retargeted
+Consecrated Ground records initialize a GlobalEffect even at zero. The original
+shared metadata remains unchanged. This proves the finite parser family only;
+supplier/transform completeness, Import field retirement and native coverage remain
+unproved. No production format, policy, runtime data or build input changes.
+
+The explicitly requested optional test passes in 5.32s with fresh JIT-off/on VMs
+and repeat probes. Both 12,117-byte reports are identical, SHA-256
+`5673e3004c605dd94dd28a35cf662b6e3a6d6f5237f580743b220a65fac96acb`.
+The ordinary target passes sixteen tests with eight optional captures ignored;
+strict target Clippy passes. Run the exact ignored test
+`generated_extra_skill_stats_source::factory_family::all_literal_extra_stat_factories_preserve_fixed_filters`
+in `owned_authored_skill_membership_source`, with a fresh absolute
+`POE_EXTRA_STAT_FACTORY_OUT`. It requires the pinned full PoB source but no native
+release. Local evidence: `runs/owned-extra-stat-factory-family-02` and
+`runs/generated-singleton-usage/factory-family-{tests-02,ordinary,clippy-02}.log`.
+Independent review found no isolation/scope blocker and tightened the expected
+five mode/value pairs in Rust. The final fresh replay preserves the first run's
+observations exactly; only the witness-source commitment changes.
+The next step is reachable supplier/transform closure with mandatory filter
+preservation, not another unfiltered key inventory. First reuse these exact records
+to check ordinary `ScaleAddMod`, `CopyList`, `ScaleAddList`, provenance assignment
+and ModDB insertion at zero, fractional, unit and greater-than-unit factors.
+Retain exact nested payloads and filters through the actual List/merge consumer.
+The selected Amulet's observed zero-factor path motivates this bounded family;
+it does not authorize arbitrary constructors, replacement, conversion, effective
+node/radius callbacks or the remaining complete selected-source join.
+Complete originals remain
+**0/5**; the unchanged Sniper build still has five selected input obligations.
+
+**Preceding production checkpoint (`1e227d5d`, pushed and remote-verified):**
+generated singleton field accounting through the existing
 private Import receipts. Exact provider/preset snapshots, complete constructor
 facts and a unique reverse-primary catalog route justify two saved selectors and
 an unread secondary switch. Count remains an independent typed usage value.
@@ -415,7 +450,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal `f55fdacc`; intrinsic item-template support domains and redundant Gem-helper retirement `8b11bad1`; skeletal parent/profile source domains and exact selected Skill accounting `bdb0e883`; generated singleton field accounting in the current local checkpoint |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal `f55fdacc`; intrinsic item-template support domains and redundant Gem-helper retirement `8b11bad1`; skeletal parent/profile source domains and exact selected Skill accounting `bdb0e883`; generated singleton field accounting and retained-witness repair `1e227d5d`; finite ExtraSkillStat factory/filter evidence in this checkpoint |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -425,7 +460,7 @@ silently become a second supported implementation.
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets; all 117 contribution queries come from five named KDL fragments. The normal builder rejects embedded program and query members. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
 | Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 73 Stats, six exact program occurrences, three revival queries with one outer gap and 363 intrinsic support-source domains. The current Import delta changes exactly four inventory destinations and derives their dependency commitments. Historical restoration admits only these exact deltas through checked content constructors. There are 1,349 source domains (1,320 Known, 29 Unmapped). Canonical checkpoint `71ff4429` remains the complete 73-name allocation predecessor; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Future commands must use the same standard; hosted status belongs to the CI row below |
-| CI | Anonymous public snapshot at 15:00 UTC October 24: main `bdb0e883` run [40073568065](https://github.com/Azaril/poe-optimizer/actions/runs/40073568065) and preceding `bf533382` run [40066505992](https://github.com/Azaril/poe-optimizer/actions/runs/40066505992) both completed with sixteen successful and four failed jobs. In each run, Ubuntu and Windows CLI jobs fail the same retained flat-life witness source-hash assertion; the other two failures are their aggregate checks. The local repair authenticates the exact archived witness and proves that only the two compact-schema loader substitutions produce the maintained source; its two local tests pass in each CLI feature profile. No numerical witness is relabeled or relaxed. Previous `8f91c7b1` run `40045082862` passed all twenty jobs; its Windows CLI jobs took 3h02m–4h17m. Per-target cost remains R0/R4 work. This checkpoint still requires hosted validation; local success does not imply hosted success |
+| CI | Pushed `1e227d5d` run [40106355676](https://github.com/Azaril/poe-optimizer/actions/runs/40106355676) is in progress in the public snapshot at 15:20 UTC October 24; hosted success is not yet established. Earlier snapshot at 15:00 UTC: main `bdb0e883` run [40073568065](https://github.com/Azaril/poe-optimizer/actions/runs/40073568065) and preceding `bf533382` run [40066505992](https://github.com/Azaril/poe-optimizer/actions/runs/40066505992) both completed with sixteen successful and four failed jobs. In each run, Ubuntu and Windows CLI jobs fail the same retained flat-life witness source-hash assertion; the other two failures are their aggregate checks. The local repair authenticates the exact archived witness and proves that only the two compact-schema loader substitutions produce the maintained source; its two local tests pass in each CLI feature profile. No numerical witness is relabeled or relaxed. Previous `8f91c7b1` run `40045082862` passed all twenty jobs; its Windows CLI jobs took 3h02m–4h17m. Per-target cost remains R0/R4 work. This checkpoint still requires hosted validation; local success does not imply hosted success |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First extract and verify the allocation predecessor using the
@@ -2080,8 +2115,12 @@ The delivery order is:
    warmed by other occurrences. Each reachable ExtraSkillStat needs either a
    preserved mandatory target filter excluding the recipient or an exact key
    checked through its lazy map. Unknown callbacks/names/transforms must refuse.
-   Add a late reachable GlobalEffect positive control. The fourteen literal
-   factories and current intrinsic support domains do not close this scope.
+   The finite actual-parser family and isolated unscoped/retargeted GlobalEffect
+   controls now pass, including zero-valued records and preservation of shared
+   metadata. Reuse those fixed-filter facts; a key-only union is unsound because
+   the inherited Consecrated Ground map contains a GlobalEffect. A late reachable
+   selected-context control is still required. The fourteen literal factories
+   and current intrinsic support domains do not close supplier/transform scope.
    This needs source-output completeness, not full numerical implementation.
    A successful contextual census may justify a new Import-only checked fact;
    discuss that public contract before implementation. If a reachable supplier

@@ -31,6 +31,387 @@ const COMMANDS: [&str; 2] = [
     "CommandWaterDjinnBubblePlayer",
 ];
 
+// This finite family is deliberately separate from the read-only build observer:
+// parser-cache probes and synthetic retargeting must not contaminate its captures.
+mod factory_family {
+    use super::*;
+    const TEST: &str = "generated_extra_skill_stats_source::factory_family::all_literal_extra_stat_factories_preserve_fixed_filters";
+    const CHILD: &str = "POE_EXTRA_STAT_FACTORY_CHILD";
+    const OUTPUT: &str = "POE_EXTRA_STAT_FACTORY_OUT";
+    const PROBE: &str = include_str!("generated_extra_stat_factory_family.lua");
+
+    fn extra(key: &str, value: Json, tag: Json) -> Json {
+        json!({"name":"ExtraSkillStat","type":"LIST","flags":0,"keywordFlags":0,
+            "value":{"key":key,"value":value},"1":tag})
+    }
+    fn named(skill: &str, key: &str, value: Json, transfigured: bool) -> Json {
+        let mut tag = json!({"type":"SkillName","skillName":skill});
+        if transfigured {
+            tag["includeTransfigured"] = json!(true);
+        }
+        extra(key, value, tag)
+    }
+    fn bloodbarrier(duration: u64, percent: u64) -> Vec<Json> {
+        let mut mods = vec![
+            json!({"name":"ExtraSkill","type":"LIST","flags":0,"keywordFlags":0,
+            "value":{"skillId":ITEM_EFFECT,"level":1,"noSupports":true,"name":"Bloodbarrier"}}),
+        ];
+        for (key, value) in ITEM_STATS.into_iter().zip([1, duration, percent]) {
+            mods.push(extra(
+                key,
+                json!(value),
+                json!({"type":"SkillId","skillId":ITEM_EFFECT}),
+            ));
+        }
+        mods
+    }
+    fn cases() -> Vec<(&'static str, Vec<Json>)> {
+        vec![
+            (ITEM_UNCACHED, bloodbarrier(7125, 53)),
+            (
+                "Wave of Conviction's Exposure applies -137% Elemental Resistance",
+                vec![named(
+                    "Wave of Conviction",
+                    "purge_expose_resist_%_matching_highest_element_damage",
+                    json!(-137),
+                    false,
+                )],
+            ),
+            (
+                "Wave of Conviction's Exposure applies an extra -139% to Elemental Resistance",
+                vec![named(
+                    "Wave of Conviction",
+                    "purge_expose_resist_%_matching_highest_element_damage",
+                    json!(-139),
+                    false,
+                )],
+            ),
+            (
+                "Arcane Cloak spends an additional 137% of current Mana",
+                vec![named(
+                    "Arcane Cloak",
+                    "arcane_cloak_consume_%_of_mana",
+                    json!(137),
+                    false,
+                )],
+            ),
+            (
+                "Steelskin Buff can take 137% increased amount of Damage",
+                vec![named(
+                    "Steelskin",
+                    "steelskin_damage_limit_+%",
+                    json!(137),
+                    false,
+                )],
+            ),
+            (
+                PURIFYING,
+                vec![named("Purifying Flame", PURIFYING_STAT, json!(17), true)],
+            ),
+            (
+                "Enemies Drenched by Hydrosphere have Cold and Lightning Exposure, applying -137% to Resistances",
+                vec![named(
+                    "Hydrosphere",
+                    "water_sphere_cold_lightning_exposure_%",
+                    json!(-137),
+                    false,
+                )],
+            ),
+            (
+                "Frost Shield has +137 to maximum Life per Stage",
+                vec![named(
+                    "Frost Shield",
+                    "frost_globe_health_per_stage",
+                    json!(137),
+                    false,
+                )],
+            ),
+            // parseMod passes secondary captures as strings. Preserve the actual
+            // representation; the later Lua addition is a different consumer.
+            (
+                "Flame Wall grants 137 to 139 Added Fire Damage to Projectiles",
+                vec![
+                    named(
+                        "Flame Wall",
+                        "flame_wall_minimum_added_fire_damage",
+                        json!("137"),
+                        false,
+                    ),
+                    named(
+                        "Flame Wall",
+                        "flame_wall_maximum_added_fire_damage",
+                        json!("139"),
+                        false,
+                    ),
+                ],
+            ),
+            (
+                "Plague Bearer Buff grants +137% to Poison Damage over Time Multiplier while Infecting",
+                vec![named(
+                    "Plague Bearer",
+                    "corrosive_shroud_poison_dot_multiplier_+_while_aura_active",
+                    json!(137),
+                    false,
+                )],
+            ),
+            (
+                LIGHTNING,
+                vec![named("Lightning Trap", LIGHTNING_STAT, json!(19), true)],
+            ),
+        ]
+    }
+    fn ordered(mods: &Json) -> Vec<String> {
+        let mut values: Vec<_> = rows(mods)
+            .iter()
+            .map(|v| serde_json::to_string(v).unwrap())
+            .collect();
+        values.sort();
+        values
+    }
+    fn canonical_records(mut observation: Json) -> Json {
+        for row in observation["records"].as_array_mut().unwrap() {
+            row["mods"]
+                .as_array_mut()
+                .unwrap()
+                .sort_by_cached_key(|v| serde_json::to_string(v).unwrap());
+        }
+        observation["cached_records"]
+            .as_array_mut()
+            .unwrap()
+            .sort_by_cached_key(|v| serde_json::to_string(v).unwrap());
+        observation
+    }
+    fn check(actual: &Json) {
+        let expected = cases();
+        assert_eq!(rows(&actual["records"]).len(), 11);
+        for ((line, mods), row) in expected.iter().zip(rows(&actual["records"])) {
+            assert_eq!(row["line"], *line);
+            assert_eq!(ordered(&row["mods"]), ordered(&json!(mods)), "{line}");
+        }
+        assert_eq!(
+            ordered(&actual["cached_records"]),
+            ordered(&json!(bloodbarrier(5000, 50)))
+        );
+        assert_eq!(rows(&actual["commands"]).len(), 2);
+        let mapped = [ITEM_STATS[1], ITEM_STATS[2], PURIFYING_STAT, LIGHTNING_STAT];
+        for (id, row) in COMMANDS.iter().zip(rows(&actual["commands"])) {
+            assert_eq!(row["id"], *id);
+            assert_eq!(row["name_lookup_present"], false);
+            assert_eq!(rows(&row["maps"]).len(), 13);
+            for map in rows(&row["maps"]) {
+                let key = map["key"].as_str().unwrap();
+                assert_eq!(map["mapped"], mapped.contains(&key), "{id}/{key}");
+                assert_eq!(map["global"], key == PURIFYING_STAT, "{id}/{key}");
+            }
+            assert_eq!(rows(&row["controls"]).len(), 5);
+            let expected_controls = [
+                ("fixed_family", 0),
+                ("unscoped", 17),
+                ("unscoped", 0),
+                ("retargeted", 17),
+                ("retargeted", 0),
+            ];
+            for (control, (mode, value)) in rows(&row["controls"]).iter().zip(expected_controls) {
+                assert_eq!(control["mode"], mode);
+                assert_eq!(control["value"], value);
+                let fixed = mode == "fixed_family";
+                assert_eq!(control["delivered"], usize::from(!fixed));
+                assert_eq!(control["global"], !fixed);
+                assert_eq!(control["mapped"], !fixed);
+                assert_eq!(control["global_records"], usize::from(!fixed));
+                if fixed {
+                    assert!(control.get("record").is_none());
+                } else {
+                    assert_eq!(
+                        control["record"],
+                        json!({"name":"DamageTakenConsecratedGround","type":"INC",
+                        "flags":0,"keywordFlags":0,"value":control["value"],"source":format!("Skill:{id}"),
+                        "1":{"type":"GlobalEffect","effectType":"Debuff"},
+                        "2":{"type":"Condition","var":"OnConsecratedGround"}})
+                    );
+                }
+            }
+        }
+        for key in ["shared_metadata_preserved", "methods_preserved"] {
+            assert_eq!(actual[key], true);
+        }
+        for key in [
+            "supplier_closure",
+            "transform_closure",
+            "native_inventory_authority",
+            "current_original_field_closure",
+        ] {
+            assert_eq!(actual[key], false);
+        }
+        assert!(actual["work"].as_u64().unwrap() <= 1_000_000);
+    }
+    fn literal_census(root: &Path) {
+        let path = "src/Modules/ModParser.lua";
+        let bytes = fs::read(root.join("vendor/path-of-building-poe2").join(path)).unwrap();
+        let text = String::from_utf8(bytes).unwrap().replace("\r\n", "\n");
+        assert_eq!(
+            digest(text.as_bytes()),
+            pinned::expected_file_sha256(path).unwrap()
+        );
+        // A pinned, finite literal-site inventory, not a Lua parser or a claim
+        // that dynamically named factories / copied records cannot exist.
+        let lines: Vec<_> = text
+            .lines()
+            .enumerate()
+            .flat_map(|(line, text)| {
+                std::iter::repeat_n(line + 1, text.matches("mod(\"ExtraSkillStat\"").count())
+            })
+            .collect();
+        assert_eq!(
+            lines,
+            [
+                3672, 3673, 3674, 6207, 6208, 6209, 6217, 6225, 6226, 6227, 6228, 6228, 6229, 6230
+            ]
+        );
+    }
+    fn run(root: &Path, out: &Path, enabled: bool) {
+        literal_census(root);
+        let controls = cases();
+        let lines: Vec<_> = controls.iter().map(|(line, _)| *line).collect();
+        let keys: std::collections::BTreeSet<_> = controls
+            .iter()
+            .flat_map(|(_, mods)| mods.iter())
+            .filter(|m| m["name"] == "ExtraSkillStat")
+            .map(|m| m["value"]["key"].as_str().unwrap())
+            .collect();
+        assert_eq!(keys.len(), 13);
+        let before = |lua: &Lua| -> Result<(), RuntimeError> {
+            lua.globals().set("factoryWitnessJit", enabled)?;
+            lua.load("if factoryWitnessJit then jit.on() else jit.off();jit.flush() end")
+                .exec()?;
+            Ok(())
+        };
+        let captured = std::cell::RefCell::new(None);
+        let install = |lua: &Lua| -> Result<Function, RuntimeError> {
+            let probe: Function = lua
+                .load(PROBE)
+                .set_name("@extra-stat-factory-family-witness")
+                .eval()?;
+            let observe = |first| -> Result<Json, RuntimeError> {
+                let value: Value = probe.call((
+                    lua.to_value(&lines)?,
+                    lua.to_value(&COMMANDS)?,
+                    lua.to_value(&keys)?,
+                    PURIFYING_STAT,
+                    ITEM_CACHED,
+                    first,
+                ))?;
+                Ok(canonical_records(lua.from_value(value)?))
+            };
+            let first = observe(true)?;
+            check(&first);
+            assert_eq!(first, observe(false)?, "fresh copies / parser-cache replay");
+            *captured.borrow_mut() = Some(first);
+            Ok(lua.load("return function() end").eval()?)
+        };
+        let xml =
+            fs::read_to_string(root.join("tests/fixtures/builds/breadth-20260908/build-05.xml"))
+                .unwrap();
+        let scratch = tempfile::tempdir().unwrap();
+        source::observe_with_build_hook_unwrapped(
+            &root.join("vendor/path-of-building-poe2"),
+            scratch.path(),
+            &xml,
+            None,
+            false,
+            Some(&before),
+            Some(&install),
+            None,
+        )
+        .unwrap();
+        let files = [
+            "src/Modules/ModParser.lua",
+            "src/Data/ModCache.lua",
+            "src/Modules/ModTools.lua",
+            "src/Modules/Data.lua",
+            "src/Data/SkillStatMap.lua",
+            "src/Data/Skills/other.lua",
+            "src/Modules/CalcActiveSkill.lua",
+            "src/Modules/CalcTools.lua",
+            "src/Classes/ModStore.lua",
+            "src/Classes/ModList.lua",
+            "src/Modules/Common.lua",
+        ];
+        let report = json!({"schema_version":1,"source_revision":pinned::UPSTREAM_REVISION,
+            "manifest_sha256":pinned::manifest_sha256(),"probe_sha256":digest(PROBE.as_bytes()),
+            "rust_witness_sha256":digest(include_bytes!("generated_extra_skill_stats_source.rs")),
+            "literal_sites":14,"distinct_payload_keys":13,"parser_patterns":11,
+            "numeric_representation":"exact; Flame Wall secondary captures remain strings",
+            "comparison":"complete records, unordered only within each parser result; numeric tolerance zero",
+            "scope":"literal factory family and fixed filters only; no supplier/transform closure, obtainable-item claim, native policy or Deferred retirement",
+            "files":files.map(|path| json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})),
+            "observation":captured.into_inner().unwrap()});
+        // Only each parser result's records are canonically ordered. Every
+        // record, duplicate, tag, payload type and numeric value stays exact.
+        let bytes = serde_json::to_vec(&report).unwrap();
+        assert!(bytes.len() <= 1024 * 1024);
+        fs::write(
+            out.join(format!(
+                "factory-jit-{}.json",
+                if enabled { "on" } else { "off" }
+            )),
+            bytes,
+        )
+        .unwrap();
+    }
+    #[test]
+    #[ignore = "requires complete pinned PoB; literal factory/filter evidence, not producer closure"]
+    fn all_literal_extra_stat_factories_preserve_fixed_filters() {
+        let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../..")
+            .canonicalize()
+            .unwrap();
+        let out = root.join(
+            std::env::var_os(OUTPUT)
+                .map(PathBuf::from)
+                .unwrap_or_else(|| PathBuf::from("runs/owned-extra-stat-factory-family-01")),
+        );
+        if let Some(mode) = std::env::var_os(CHILD) {
+            assert!(mode == "off" || mode == "on");
+            run(&root, &out, mode == "on");
+            return;
+        }
+        assert!(!out.exists(), "choose fresh {OUTPUT}: {}", out.display());
+        fs::create_dir_all(&out).unwrap();
+        for mode in ["off", "on"] {
+            let path = out.join(format!("factory-jit-{mode}.log"));
+            let log = fs::File::create(&path).unwrap();
+            let mut child = Command::new(std::env::current_exe().unwrap())
+                .args(["--exact", TEST, "--ignored", "--nocapture"])
+                .env(CHILD, mode)
+                .env(OUTPUT, &out)
+                .current_dir(root.join("vendor/path-of-building-poe2/src"))
+                .stdout(Stdio::from(log.try_clone().unwrap()))
+                .stderr(Stdio::from(log))
+                .spawn()
+                .unwrap();
+            let start = Instant::now();
+            loop {
+                if let Some(status) = child.try_wait().unwrap() {
+                    assert!(status.success(), "{}\n{}", path.display(), tail(&path));
+                    break;
+                }
+                if start.elapsed() > Duration::from_secs(300) {
+                    child.kill().unwrap();
+                    child.wait().unwrap();
+                    panic!("factory deadline: {}\n{}", path.display(), tail(&path));
+                }
+                std::thread::sleep(Duration::from_millis(100));
+            }
+        }
+        assert_eq!(
+            fs::read(out.join("factory-jit-off.json")).unwrap(),
+            fs::read(out.join("factory-jit-on.json")).unwrap(),
+            "JIT modes must agree"
+        );
+    }
+}
+
 fn observe(lua: &Lua, phase: &str, item: &Json) -> Result<Json, RuntimeError> {
     let observer: Function = lua
         .load(OBSERVER)

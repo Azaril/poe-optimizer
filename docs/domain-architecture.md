@@ -727,6 +727,11 @@ Whole-preset accounting commits only after every source and destination succeeds
 Multieffect sources need separate authority, including any external stat suppliers
 and lazy initialization that can change the source gate. A sampled metadata flag
 is not an all-context fact or a native default.
+External-modifier proofs must preserve both payload identity and mandatory target
+filters through every admitted transfer or transform. A key-only inventory or
+zero payload cannot establish non-consumption when lookup itself changes source
+metadata. Keep this evidence in the offline adapter; native rules receive explicit
+owned mechanics and never inherit incidental lazy-cache behavior.
 
 Configuration source accounting must enumerate repeated custom-modifier blocks
 and legacy fields separately from typed Encounter inputs. Proving constructor
