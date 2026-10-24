@@ -318,19 +318,7 @@ fn selected(b: &mut Builder<'_, '_>, sets: Option<&[SourceOccurrenceId]>) -> Res
         }
     }
     result.spec = source_selection::tree(b)?.map(|(_, spec)| spec);
-    if let Some(parent) = equipment_membership::ordinary_items(b)? {
-        let row = &evidence.rows()[parent.ordinal() as usize];
-        charge_frame(b, row, &["activeItemSet"])?;
-        if let Some(key) = value(row, "activeItemSet").filter(|v| positive(v)) {
-            for id in row.children() {
-                let set = &evidence.rows()[id.ordinal() as usize];
-                b.charge(1)?;
-                if set.occurrence().name() == "ItemSet" && value(set, "id") == Some(key) {
-                    result.items = Some((parent, *id));
-                }
-            }
-        }
-    }
+    result.items = source_selection::items(b)?;
     Ok(result)
 }
 

@@ -2348,6 +2348,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     items::defer_unmaterialized_augments(&mut b, &mut draft)?;
     source_presentation::apply(&mut b, source_presentation.as_ref())?;
     source_header_owners::account_tree(&mut b, &draft, &spec_sets, &spec_characters)?;
+    source_header_owners::account_items(&mut b, &draft, &equipment_sets)?;
     // Unknown source semantics cannot become "UI-only" by default. They point to
     // real selected character/choice obligations until individually converted.
     for row in evidence.rows() {

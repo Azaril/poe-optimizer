@@ -793,6 +793,16 @@ pinned normal loader; the actual set remains its own weapon-state authority.
 Comparison-tooltip preferences retain their source meaning without generating
 native gameplay values. Legacy no-set fallback requires its own proof and cannot
 borrow the ordinary-set ownership contract.
+Tree and equipment header receipts retain saved source ownership only. They do
+not certify PoB's final active tuple after loadout synchronization or an evaluated
+Action after generated-skill reconciliation. Preserve unresolved selection and
+require those separate correspondence proofs wherever a later conversion depends
+on final reference execution state.
+In particular, title-based loadout callbacks and generated-group insertion or
+removal are reference-tool lifecycle steps. A raw saved key or in-range group
+index proves only its source referent. Generated-provider and reference-query
+conversion must prove the required post-load correspondence or retain the
+unresolved responsibility; native execution must not acquire UI title matching.
 
 This representation change adds no evaluation bundle or numerical coverage;
 0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust

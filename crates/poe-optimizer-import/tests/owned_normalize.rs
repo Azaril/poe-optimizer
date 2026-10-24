@@ -3322,3 +3322,6 @@ mod skill_inventory_tests;
 
 #[path = "support/owned_tree_header_owners.rs"]
 mod tree_header_owner_tests;
+
+#[path = "support/owned_items_header_owners.rs"]
+mod items_header_owner_tests;

@@ -56,3 +56,27 @@ pub(super) fn tree(
     }
     Ok(None)
 }
+
+/// Return the ordinary Items container and the explicitly selected ItemSet.
+/// ItemSet selection uses its canonical numeric key, not its source position.
+/// Keep the generated-provider resolver's existing refusal and work behavior.
+pub(super) fn items(
+    b: &mut Builder<'_, '_>,
+) -> Result<Option<(SourceOccurrenceId, SourceOccurrenceId)>> {
+    let evidence = b.evidence;
+    let mut selected = None;
+    if let Some(parent) = equipment_membership::ordinary_items(b)? {
+        let row = &evidence.rows()[parent.ordinal() as usize];
+        charge_frame(b, row, &["activeItemSet"])?;
+        if let Some(key) = value(row, "activeItemSet").filter(|v| positive(v)) {
+            for id in row.children() {
+                let set = &evidence.rows()[id.ordinal() as usize];
+                b.charge(1)?;
+                if set.occurrence().name() == "ItemSet" && value(set, "id") == Some(key) {
+                    selected = Some((parent, *id));
+                }
+            }
+        }
+    }
+    Ok(selected)
+}

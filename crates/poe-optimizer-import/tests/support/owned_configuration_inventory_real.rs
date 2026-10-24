@@ -161,6 +161,34 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
             assert_eq!(links.len(), 3);
             assert!(owners.iter().all(|owner| links.contains(owner)));
             assert!(links.contains(&OwnedOriginTarget::Issue(*id)));
+
+            let items = evidence
+                .rows()
+                .iter()
+                .find(|r| r.occurrence().name() == "Items")
+                .unwrap();
+            assert_eq!(items.attribute("activeItemSet").unwrap().raw(), "2");
+            let selected = items
+                .children()
+                .iter()
+                .map(|id| &evidence.rows()[id.ordinal() as usize])
+                .find(|r| r.occurrence().name() == "ItemSet")
+                .unwrap();
+            // In this unchanged original key 2 is the first set, not position 2.
+            assert_eq!(selected.attribute("id").unwrap().raw(), "2");
+            assert_eq!(selected.occurrence().id().ordinal(), 597);
+            let owners: Vec<_> = baseline.sidecar().origins[597]
+                .links
+                .iter()
+                .filter(|link| matches!(link, OwnedOriginTarget::EquipmentPreset(_)))
+                .cloned()
+                .collect();
+            assert_eq!(owners.len(), 1);
+            let links =
+                &baseline.sidecar().origins[items.occurrence().id().ordinal() as usize].links;
+            assert_eq!(links.len(), 2);
+            assert!(links.contains(&owners[0]));
+            assert!(links.contains(&OwnedOriginTarget::Issue(*id)));
         }
         for retained_control in [false, true] {
             let mut policy = staged.normalization().clone();
