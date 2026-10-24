@@ -1,6 +1,6 @@
 # Project-owned game semantics and native evaluation
 
-Status: accepted architecture, updated 2026-10-23 following the
+Status: accepted architecture, updated 2026-10-24 following the
 [owner-provided review](architecture-review-2026-10-22.md). This document defines
 **the target**, not a claim that the migration is complete. The
 [implementation plan](implementation.md) is the only delivery schedule; the
@@ -959,6 +959,17 @@ Capture the complete bounded final definition catalog in canonical identity orde
 including definitions outside Gem references or the selected build. Preserve
 absence separately from explicit false. Caller-provided facts or copied provenance
 cannot acquire authority merely by matching an upstream revision.
+
+Selected-build evidence must join saved occurrences to their actual native
+owners before classifying coverage. A physical Gem container, an exact Skill,
+its supplying Actor slot and its supplied Actor remain distinct. Repeated support
+assignments retain their own source and order; manual and generated skills retain
+their respective authored-input and provider authority. A complete intrinsic
+support-source domain says only where support assignments can originate. It
+does not complete numerical outputs, inherited support sources, missing child
+definitions or the build's input inventory. Source-only coverage checks use the
+ordinary checked package; runtime diagnostic claims require a genuinely admitted
+request, without manufacturing complete inputs for an incomplete original.
 
 ### Command-line parsing
 

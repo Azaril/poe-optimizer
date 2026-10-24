@@ -467,6 +467,11 @@ pub(super) fn declarations() -> Vec<SupportSourceDomainDeclaration> {
 
 #[test]
 fn authenticated_constructors_preserve_inherited_candidates_and_external_origin_boundaries() {
+    check_constructor_boundaries();
+}
+
+/// Shared authenticated construction proof; candidate inheritance remains external.
+pub(super) fn check_constructor_boundaries() {
     let proof = authenticate(&evidence()).unwrap();
     let span = &proof.spans;
     for (role, header) in [

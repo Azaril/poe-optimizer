@@ -997,6 +997,31 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
             domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
         });
     }
+    // Only these three complete parent/profile source proofs admit intrinsic
+    // domains. Command references, child effects and numerical coverage stay
+    // unchanged; a supplying slot does not certify its descendants.
+    for (parent, slot, actor) in [
+        ("0323", "3288", "3287"),
+        ("0326", "3292", "3291"),
+        ("0327", "329c", "329b"),
+    ] {
+        for owner in [
+            SchemaSubject::Definition(DefinitionAddress::Skill(skill(parent))),
+            SchemaSubject::Slot(SlotAddress::Actor(DeclaredSlot {
+                declaration: SlotOwnerDefId::Skill(skill(parent)),
+                slot: ActorSlotDefId::new(ns.clone(), key(slot)),
+            })),
+            SchemaSubject::Definition(DefinitionAddress::Actor(ActorDefId::new(
+                ns.clone(),
+                key(actor),
+            ))),
+        ] {
+            expected_domains.push(SupportSourceDomainDeclaration {
+                owner,
+                domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+            });
+        }
+    }
     let domains = &mut preserved.support_discovery.as_mut().unwrap().providers;
     let prior_domains = &expected.support_discovery.as_ref().unwrap().providers;
     assert_eq!(domains.len(), prior_domains.len() + expected_domains.len());

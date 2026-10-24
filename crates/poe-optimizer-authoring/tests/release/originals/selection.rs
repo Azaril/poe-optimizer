@@ -84,12 +84,18 @@ pub(crate) fn selected_spec<'a, 's>(
         .expect("selected Spec must exist")
 }
 
+pub(crate) fn selected_skill_set<'a, 's>(
+    evidence: &'a SourceProjectEvidence<'s>,
+) -> &'a SourceEvidenceRow<'s> {
+    selected(evidence, "Skills", "SkillSet", "activeSkillSet")
+}
+
 pub(crate) fn saved(
     evidence: &SourceProjectEvidence<'_>,
     normalized: &NormalizedImport,
 ) -> EvaluationSelection {
     let items = selected(evidence, "Items", "ItemSet", "activeItemSet");
-    let skills = selected(evidence, "Skills", "SkillSet", "activeSkillSet");
+    let skills = selected_skill_set(evidence);
     let config = selected(evidence, "Config", "ConfigSet", "activeConfigSet");
     let spec = selected_spec(evidence);
     let loadout = match attr(items, "useSecondWeaponSet") {

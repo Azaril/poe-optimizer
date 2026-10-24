@@ -10,7 +10,48 @@ adjustments below. Historical checkpoints remain in Git and
 
 ## Current state
 
-**Current checkpoint:** admitted the four independently reviewed
+**Current checkpoint:** nine intrinsic skeletal source
+domains and exact accounting of all 28 selected SkillSet rows. The production
+change covers each Arsonist/Frost Mage/Reaver parent Skill, Actor slot and supplied
+Actor. The proof preserves complete parent/profile outputs, all 22 resolved
+mapping rows, positive revival, distinct Graft magnitudes, reservation and Rage.
+Missing Command references, child definitions, inherited support sources and
+Partial numerical owners remain separate. The selected join preserves seven
+physical active rows, sixteen support occurrences, two manual Direct skills and
+three generated sources through the existing import sidecar and constructors.
+No second importer, production skill switch or new runtime API is introduced.
+The five selected input obligations and **0/5** complete builds remain unchanged.
+Runtime diagnostic removal is deliberately unclaimed until a genuine admitted
+request exists. The next priority is complete selected SkillSet usage accounting
+through the existing generated-source receipt model; configuration responsibility
+follows with its ten outside-Config origins identified by the fresh audit below.
+
+All **388 Authoring tests pass without optimization**: 175 library, eight CLI
+and 205 release tests. The full release run took 201.04s using the ordinary debug
+profile. Eight new laws cover the complete source proof, exact nine-row metadata
+delta, existing structural program execution, selected 28-row ownership and
+fifteen detached refusal controls. Peer review tightened the test's historical
+node-name comparison and exact generated provider/quality slot/unit join before
+execution; no production validator or readiness gate changed. The source build
+and standalone checkpoint verifier pass. The full ledger and registry remain
+unchanged; repeated builds reproduce all eighteen runtime files and names, and
+only rules/manifest/receipt differ from the preceding item checkpoint.
+Evidence: `runs/skeletal-support-library-tests.log`,
+`runs/skeletal-support-integration-tests.log`, `runs/skeletal-support-verified.json`,
+`runs/skeletal-support-inventory.json` and `runs/skeletal-support-equivalence.json`.
+Strict all-feature/all-target Authoring Clippy passes after two test-only repairs
+(boxing the large generated-source variant and collapsing a nested condition).
+Both targeted selected-skill laws pass again after those representation-only edits;
+all other assertions and the published source are unchanged. Scoped formatting,
+strict UTF-8, diff checks and all nine protected draft hashes pass.
+Lint evidence: `runs/skeletal-support-clippy-final.log`; targeted recheck:
+`runs/skeletal-support-selected-final.log`.
+The staged whitespace check caught CRLF in the new authored evidence manifest.
+It now uses canonical LF with an updated exact hash; JSON meaning is unchanged,
+and all three source-proof laws pass again in `runs/skeletal-support-source-final.log`.
+The runtime source and checkpoint identities are unaffected.
+
+**Preceding checkpoint (`8b11bad1`):** admitted the four independently reviewed
 intrinsic item-template support domains: Ashen Staff `1d75`, Fine Belt `1e84`,
 Rope Cuffs `2007` and Tattered Robe `238c`. The proof reuses complete base records and
 item-constructor proof. Rolled, socketed and class-requirement modifiers remain
@@ -327,7 +368,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal `f55fdacc`; intrinsic item-template support domains and redundant Gem-helper retirement in this checkpoint |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal `f55fdacc`; intrinsic item-template support domains and redundant Gem-helper retirement `8b11bad1`; skeletal parent/profile source domains and exact selected Skill accounting in this checkpoint |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -335,9 +376,9 @@ silently become a second supported implementation.
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets; all 117 contribution queries come from five named KDL fragments. The normal builder rejects embedded program and query members. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
-| Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 73 Stats, six exact program occurrences, three revival queries with one outer gap and 354 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,340 source domains (1,311 Known, 29 Unmapped). The complete current 73-name checkpoint is the predecessor for later builds; evaluation bundle still absent |
+| Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 73 Stats, six exact program occurrences, three revival queries with one outer gap and 363 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,349 source domains (1,320 Known, 29 Unmapped). The complete current 73-name checkpoint is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Future commands must use the same standard; hosted status belongs to the CI row below |
-| CI | At 06:29:41 UTC October 24, `bf533382` run `40066505992` has eight passed, ten running and no failures; `f55fdacc` run `40070070780` is pending. Previous `8f91c7b1` run `40045082862` completed with all twenty jobs passing. Its Windows CLI jobs took 3h02m–4h17m; per-target compile/execution attribution remains R4 work. Main-branch serialization preserves the running revision and coalesces pending revisions. This checkpoint still requires hosted validation; local success does not imply hosted success |
+| CI | At 06:51 UTC October 24, `bf533382` run `40066505992` has eight passed, ten running and no failures; `8b11bad1` run `40071722745` is pending. The pending `f55fdacc` run was coalesced/cancelled, not failed. Previous `8f91c7b1` run `40045082862` completed with all twenty jobs passing. Its Windows CLI jobs took 3h02m–4h17m; per-target compile/execution attribution remains R4 work. Main-branch serialization preserves the running revision and coalesces pending revisions. This checkpoint still requires hosted validation; local success does not imply hosted success |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First extract and verify the allocation predecessor using the
@@ -348,15 +389,15 @@ Successful publication prints the checkpoint identity to
 stderr and checkpoint receipt JSON to stdout. The committed complete snapshot
 supplies the complete allocation history; later builds preserve its ledger as a checked
 predecessor. Do not bootstrap evolving source. Current runtime input identity:
-`dea68bc5b1b2d3ed90b38d1765eeb0e42511eef47fe25872c3f4cbebde6d3d1e`.
-The 2,802 declared source files use 6,725,000 encoded and 46,024,917 decoded
+`baa13efffdac5ca8b784b53e83254c5fc46ba9a0cdc142de8c2e392f8a768ba6`.
+The 2,802 declared source files use 6,725,104 encoded and 46,027,477 decoded
 bytes, within the existing 64 MiB bounds. The 184,374-byte root manifest and
 expanded rule bytes also fit current limits without increases.
 Metadata JSON remains temporary; gzip is not the compact runtime format.
 Decoded source bytes are now below the 80% warning threshold. Fresh publication
 from the extracted canonical snapshot produces checkpoint
-`c8ea736130313d4d0b320471733aaf365362195ae36394c1b7862c4516815a17`, whose eighteen
-runtime files total 53,656,984 bytes (13,451,880 bytes below the unchanged aggregate
+`9c052dd7909f65b7654f40892859d82b55cbb79cc11ffcc208b07e41c5cf7762`, whose eighteen
+runtime files total 53,659,543 bytes (13,449,321 bytes below the unchanged aggregate
 cap). Its schema is 19,774,085 bytes; checkpoint/name files add 455,214 bytes.
 The fresh full verifier passes. The distinct indexed binary runtime work remains
 required; no resident-memory or evaluator-throughput saving is claimed.
@@ -366,7 +407,7 @@ Historical input
 and its receipt remain independent regression evidence. Original rule IR lives
 only in Authoring's `tests/fixtures/retained-rules.json.gz`, outside production
 inputs. Actual-source graph checks plus restoration of just historical program
-members, with only the exact 73-Stat/six-program/three-query/one-outer-gap/354-domain delta removed through
+members, with only the exact 73-Stat/six-program/three-query/one-outer-gap/363-domain delta removed through
 maintained content constructors, prove complete historical schema meaning and
 metadata/provenance are preserved. All other artifact bytes remain exact; the
 manifest is authenticated after restoring only its historical schema row. New
@@ -1863,7 +1904,7 @@ The delivery order is:
    Ring and Iron Crown. Their constructors and each exact rolled modifier still
    need review; the two uses of item 26 remain separate occurrences. Do not
    substitute template-domain coverage for a physical modifier/output census.
-   The next coherent selected Skill batch is nine existing intrinsic source
+   The selected Skill batch adds nine existing intrinsic source
    domains: Arsonist Skill `0323` / ActorSlot `3288` / Actor `3287`, Frost Mage
    `0326` / `3292` / `3291`, and Reaver `0327` / `329c` / `329b`. Join all 28
    selected source rows first (seven physical actives, sixteen physical supports,
@@ -1874,9 +1915,11 @@ The delivery order is:
    magnitudes, reservation, quality and Rage outputs rather than calling them
    numerically empty. Missing Command definitions, second children, child output
    domains, inherited supports and all Partial numerical owners remain separate.
-   Show that the nine exact declarations remove their missing-source-domain
-   classification without manufacturing a Complete build fixture. Then finish
-   other Skill/support/effect output inventories and reward/configuration
+   Check the exact nine declarations through the ordinary compiled package.
+   Runtime diagnostic removal remains unmeasured until a genuine input-ready
+   request exists; do not manufacture a Complete fixture or expose a test-only
+   production API to claim it. Then finish other Skill/support/effect output
+   inventories and reward/configuration
    responsibility. Preserve
    unresolved initialization conditions and all other indirect contributors.
 2. Acquire two exact passive-grant joins for 10561/Navira's Fracturing and
@@ -1906,6 +1949,56 @@ The delivery order is:
    The current normalization has 38 disposition rules but no inventory/census;
    the selected ConfigSet has eight Inputs and 34 Placeholders. A custom-empty
    row alone cannot complete that responsibility inventory.
+   A fresh October 24 normalization of the frozen Original05 against verified
+   checkpoint `c8ea7361` found twelve origins still attached to the shared
+   configuration issue: Config and the selected ConfigSet, plus ten outside
+   records (Build, TimelessData, Tree, Skills, a dormant Firebolt Skill/Gem pair,
+   Items, Calcs and two Calcs Inputs). No Config Input or Placeholder retains that
+   issue link. Classify each outside responsibility using actual owner/receipt
+   evidence before retirement; a Config-only census still cannot close the gate.
+   Skill-preset usage separately retains twenty origins, while assumptions,
+   Scenario usage and Scenario intents each retain the selected ConfigSet origin.
+   Evidence and exact source/release pins: `runs/configuration-census-audit-01/`.
+   Existing leaf adapters do not yet prove the ten outside links redundant:
+   their frame checks discharge narrower responsibilities. Investigate the
+   existing archived-generated-skill proof for the dormant Firebolt pair; do not
+   remove its fallback links merely because reference/quality resolution succeeded.
+   The retained Calcs presentation proof is MAIN-only and cannot silently apply
+   to the general native normalizer. Preserve that scope when deciding how to
+   account for the two calculation-view Inputs.
+   **Next bounded input-completion target:** selected SkillSet usage already has
+   38 resolved selections with Complete parameters (twelve each for count,
+   participation and FullDPS, plus Offering and Frost Bomb). Its twenty links
+   share one whole-preset obligation; they are not twenty missing calculations.
+   Reuse `usage_inputs/inventory/group_selectors.rs` for the existing physical
+   primary and manual Direct nil/1 proofs. Generated groups remain the guaranteed
+   blockers: Sand/Water each have 25 Deferred field destinations; selected Firebolt
+   has four (MAIN/CALCS selectors, count and secondary global-effect switch).
+   Count already has its actual UsageParameter destination as well; that does
+   not discharge an independent Deferred consumer. Preserve the other Firebolt
+   source rule and all independent presets.
+   Authenticate the actual generated constructor/loader route, then extend only
+   existing private generated receipts with proved selector, absence and
+   nonconsumer facts. Replace a Deferred destination only after all its consumers
+   have exact authority. Test provider changes, missing versus malformed optional
+   selectors, extra/reordered effects, nonselected presets, and atomic late-budget
+   refusal. The endpoint is the actual whole selected usage obligation disappearing,
+   while the other four obligations and numerical gaps remain unchanged. If the
+   whole preset still fails, report its first remaining field through existing
+   private diagnostics; do not add a second public validator or claim one row
+   equals one completed obligation. Evidence: `runs/selected-skill-usage-audit/next-step.md`.
+   Scenario follow-on is also explicit: the current draft has 34 known assumptions
+   (fifteen presence flags, one option and eighteen scalar/default records), no
+   exact usage overrides, and two known intents (Sigil stage 1 and Corrupting Cry
+   count 10). All three memberships remain Pending. The existing configuration
+   retirement completes Choice accounting only; a Complete Config census alone
+   will not complete Scenario lists. After full source/default authority exists,
+   extend that same private checked-retirement path to separately proved Scenario
+   output domains. Require a real ownership/grammar proof for complete-empty exact
+   usage, preserve unknown input failures, and allocate no new Stats or defaults
+   merely to close an inventory. This is completion plumbing within the accepted
+   model; any newly discovered ownership change still needs design review.
+   Evidence: `runs/configuration-census-audit-01/scenario-obligations-next.md`.
 4. Resolve the two [Graft contribution decisions](owned-skill-actor-contribution-proposal.md)
    before changing the public runtime contract. The existing DSL can author a
    direct Skill-to-Player contribution, but checked Skill-origin membership only
@@ -3029,11 +3122,13 @@ Production activation audit: the tracked normalization artifact has 38 dispositi
 rules, 19 reward controls, 34 scalar projection rows and two scenario-usage
 intents, but no configuration inventory. Existing catalogue/constructor evidence
 proves the damage-roll observation branch, not the complete custom-source family.
-The next slice must compose new authority from retained `ConfigTab` source for
+The next slice must compose authority from retained `ConfigTab` source for
 fresh construction, input/placeholder loading, legacy migration and custom
-execution; preserve the existing proof and 38 rules, and add only the reviewed
-family row to an explicitly Partial census. Rebuild through maintained Authoring
-and test unchanged originals plus changed-source controls. The retained
+execution, alongside the complete current linked-origin responsibility matrix.
+Preserve the existing proof and 38 rules. Activate the reviewed strict-empty
+family only as part of substantive census work; a standalone Partial row cannot
+remove a selected input obligation. Rebuild through maintained Authoring and
+test unchanged originals plus changed-source controls. The retained
 configuration-accounting archive contains ConfigTab, ConfigOptions and BossSkills;
 it does not include XML.lua. This strict-empty adapter admits no new XML lexical
 semantics; broader lexical behavior needs separately pinned evidence.
@@ -3503,14 +3598,15 @@ chosen semantics with independent cases and the applicable reference. This is
 targeted research, not PoEDB scraping or bulk extraction; it does not authorize
 copying source-language accidents into the native model.
 
-Immediate next bounded batch after the item-template checkpoint: the nine
-Arsonist/Frost Mage/Reaver intrinsic source domains and their exact selected
-source joins, as specified in the joined-source accounting section. All required
-parent/profile evidence is retained; preserve the unresolved Commands, children
-and numerical outputs. The Skill-to-Player query and exact-sum choices remain
-pending and do not block this batch. The other four selected item templates and
-their physical modifier census follow. The redundant Gem-input leaf is already
-retired; do not spend another checkpoint rediscovering or moving that assertion.
+After validating the nine Arsonist/Frost Mage/Reaver intrinsic source domains
+and selected source joins, prioritize whole selected SkillSet usage completion
+through the existing generated-source field receipts. Its inventory already
+exists, while configuration still needs its full source census and ten
+outside-Config responsibilities. Follow the bounded field/consumer work above;
+only proved obligations may retire. The other four selected item templates and
+their physical modifier census remain parallel source work. The Skill-to-Player
+query and exact-sum choices remain pending. The redundant Gem-input leaf is
+already retired; do not spend another checkpoint rediscovering or moving it.
 
 1. Read this plan and Git status. The computed-support unused-input repair,
    immutable typed Stat declaration compiler and original bootstrap dependency

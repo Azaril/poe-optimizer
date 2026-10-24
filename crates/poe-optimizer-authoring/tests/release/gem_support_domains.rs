@@ -295,7 +295,7 @@ fn authenticate_exports(proof: &Value) {
     }
 }
 
-fn check_authored() {
+pub(super) fn check_authored() {
     let authoring: Value = read("authoring.json");
     authenticate_evidence(&authoring);
     let records: Vec<Value> = catalog_evidence::read("source-records.json");

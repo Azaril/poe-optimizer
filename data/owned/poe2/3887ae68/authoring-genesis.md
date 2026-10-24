@@ -59,15 +59,15 @@ byte-for-byte, with no further allocation. Evidence is recorded in
 Replay changes the checkpoint's predecessor commitment without allocating more
 names or changing runtime bytes. The snapshot above remains the explicit predecessor.
 
-The subsequent four-item support-domain tranche preserves this entire name
-ledger and registry. Current tracked source publishes verified checkpoint
-`c8ea736130313d4d0b320471733aaf365362195ae36394c1b7862c4516815a17`, with runtime
-input `dea68bc5b1b2d3ed90b38d1765eeb0e42511eef47fe25872c3f4cbebde6d3d1e`.
+The subsequent item and skeletal support-domain tranches preserve this entire
+name ledger and registry. Current tracked source publishes verified checkpoint
+`9c052dd7909f65b7654f40892859d82b55cbb79cc11ffcc208b07e41c5cf7762`, with runtime
+input `baa13efffdac5ca8b784b53e83254c5fc46ba9a0cdc142de8c2e392f8a768ba6`.
 The current runtime differs from the allocation snapshot only in rule metadata
 and the corresponding manifest/receipt commitments. This snapshot remains the
 allocation predecessor; it is not advertised as the latest evaluated content.
 Build the tracked source to obtain the current release. Local verification:
-`runs/item-support-verified.json` and `runs/item-support-inventory.json`.
+`runs/skeletal-support-verified.json` and `runs/skeletal-support-inventory.json`.
 
 Archive transport is not a second semantic format, a source-reproduction proof
 or the planned indexed binary runtime pack. Future canonical allocation

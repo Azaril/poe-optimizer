@@ -292,6 +292,17 @@ equipped copy, its modifiers, or its numerical outputs. The maintained source
 proofs and ordinary release checker validate the four exact declarations; the
 remaining item sources and numerical coverage stay unresolved.
 
+The selected-skill evidence joins every saved row through the existing Import
+sidecar, retaining physical containers, exact Skill occurrences, manual inputs
+and generated providers as distinct authorities. The three additional skeletal
+families each declare intrinsic support coverage for the parent Skill, its Actor
+slot and its supplied Actor. Full retained bodies and all resolved mapping rows
+remain part of the proof, including numerical outputs and null mappings.
+Missing Commands, child effects and incomplete numerical ownership remain
+unresolved. These declarations are checked release metadata; they do not make
+the unchanged build executable or demonstrate runtime diagnostic removal before
+its input obligations have been discharged.
+
 One next limitation is documented in the [Skill-to-Actor contribution proposal](owned-skill-actor-contribution-proposal.md):
 direct Skill effects can name Player, while checked Skill-origin queries currently
 admit only self recipients. Repeated Skill contributions also need an explicit

@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "scope": "Finite intrinsic parent/profile support origins only; inherited candidates, external applications, missing Command and child definitions, and numerical coverage remain independent.",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "files": [
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "archive": "data/owned/poe2/3887ae68/self-flat-minion-store/act_int.lua.gz",
+      "archive_bytes": 141617,
+      "archive_sha256": "076f9caf8f271b4faf456497f254b69d6cab0c7864f15b9f63dd3ba475df39ac",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "archive": "data/owned/poe2/3887ae68/self-flat-minion-store/Minions.lua.gz",
+      "archive_bytes": 4752,
+      "archive_sha256": "7abe2ddb8b83894af28484642a7fed90cc5367d8dda2bbb57e54f0f03650aa59",
+      "bytes": 46701,
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "archive": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Data_SkillStatMap.lua.gz",
+      "archive_bytes": 17343,
+      "archive_sha256": "9e98975b399de8e883e327e448440c1e55f2da586026bf6e1da19ee697f4f43d",
+      "bytes": 111112,
+      "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Data.lua.gz",
+      "archive_bytes": 10599,
+      "archive_sha256": "38cd62af46c9f291240d5a33f20779bd101766d9f62b2165b929737380586c46",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    }
+  ],
+  "spans": [
+    {
+      "role": "arsonist-parent",
+      "path": "src/Data/Skills/act_int.lua",
+      "first": 18047,
+      "last": 18170,
+      "sha256": "fb2bece57ff904a5d4a5766f3b3df28b112a90279ebd7cc25bc5153d6f5c3515"
+    },
+    {
+      "role": "frost-parent",
+      "path": "src/Data/Skills/act_int.lua",
+      "first": 18419,
+      "last": 18542,
+      "sha256": "c9812f0956393628f52ef649f3d00eaa196a618a9905d9d34aa282f2518949d2"
+    },
+    {
+      "role": "reaver-parent",
+      "path": "src/Data/Skills/act_int.lua",
+      "first": 18543,
+      "last": 18676,
+      "sha256": "54e56cb56c42207527985611680171aeb3eeeefeef94cab28a16dd62116a01a1"
+    },
+    {
+      "role": "arsonist-profile",
+      "path": "src/Data/Minions.lua",
+      "first": 286,
+      "last": 325,
+      "sha256": "e280c7aedbfc5df8598ebc0fabbbe2bd5ebba24d56183659cda3afc5e57f401d"
+    },
+    {
+      "role": "frost-profile",
+      "path": "src/Data/Minions.lua",
+      "first": 205,
+      "last": 243,
+      "sha256": "7a94009231fa1b4d1e5ead618edaf282766ec1890b82661d96e613b1af583d03"
+    },
+    {
+      "role": "reaver-profile",
+      "path": "src/Data/Minions.lua",
+      "first": 327,
+      "last": 367,
+      "sha256": "7cedf7c971a0563dfcbe5e95c020b26d06a92e64d299f6de9094d7c59158943c"
+    },
+    {
+      "role": "projectiles",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 1886,
+      "last": 1889,
+      "sha256": "bb33c585e447a925d50fe0754d4e95594e68b53f4b6886872e40ef61ec245783"
+    },
+    {
+      "role": "minion-damage",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 2626,
+      "last": 2628,
+      "sha256": "3568bc4adb6f9c94b9899e67235c176df6f48eebd17fec150a6efb04c4b12d11"
+    },
+    {
+      "role": "reviving",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 2690,
+      "last": 2692,
+      "sha256": "f6faeb1f7eb770970f5be4766d146513a2778a6b78b92dfaf408398d23409fea"
+    },
+    {
+      "role": "revive-time",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 2693,
+      "last": 2696,
+      "sha256": "a40e914142d6a8e4039c5e8a71bf86d15c3ea6ee8972fa306e166993ee9535bb"
+    },
+    {
+      "role": "reservation",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 2798,
+      "last": 2800,
+      "sha256": "e1232d85b96cb97e96eee94cec3144e9ebc609c2de4520775e15c014e8c71d15"
+    },
+    {
+      "role": "armour-break",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 2971,
+      "last": 2973,
+      "sha256": "c98eb1082e182f31d480e9b08cb0988ca45a753b653b7f40e15dd2e90d8a1bd1"
+    },
+    {
+      "role": "graft",
+      "path": "src/Data/SkillStatMap.lua",
+      "first": 2986,
+      "last": 2988,
+      "sha256": "e8aa349559bab35292b171d90bd78f9304ee10ee5112ce7b9c4d3399252b5630"
+    },
+    {
+      "role": "mod-constructors",
+      "path": "src/Modules/Data.lua",
+      "first": 56,
+      "last": 71,
+      "sha256": "d93a8a1011b44dd06bb8e2b89e847b670a52258d3aad27b97c2469ef88d08d38"
+    },
+    {
+      "role": "profile-loader",
+      "path": "src/Modules/Data.lua",
+      "first": 1071,
+      "last": 1082,
+      "sha256": "86602208764ba38487a6d5acd234e1dd878c3d17be3c59bcc6daa10a737a8203"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+      "bytes": 2247063,
+      "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain.json",
+      "bytes": 471969,
+      "sha256": "ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/skeletal-inputs/bindings.json",
+      "bytes": 27540,
+      "sha256": "99a80f60a6ec5a9e94485af7a0c3eacaa9f1babb310935ae75edd931aabb04e1"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/skeletal-inputs/migration.json",
+      "bytes": 217336,
+      "sha256": "780814d4d9101ab00657b096d26c7fe8c975eae6bf7289a4dfaeadac03f98fa2"
+    }
+  ]
+}

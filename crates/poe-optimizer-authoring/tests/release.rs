@@ -72,6 +72,12 @@ mod scalar_attributes;
 mod selected_actor_output_accounting;
 #[path = "release/selected_passive_accounting.rs"]
 mod selected_passive_accounting;
+#[path = "release/selected_skill_accounting.rs"]
+mod selected_skill_accounting;
+#[path = "release/skeletal_support_domains.rs"]
+mod skeletal_support_domains;
+#[path = "release/skeletal_support_source.rs"]
+mod skeletal_support_source;
 #[path = "release/sniper_support_domains.rs"]
 mod sniper_support_domains;
 #[path = "release/socket_support_domains.rs"]
@@ -2059,6 +2065,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         .chain(class_support_domains::declarations())
         .chain(player_support_domains::declarations())
         .chain(item_support_domains::declarations())
+        .chain(skeletal_support_domains::declarations())
         .collect();
     assert_eq!(domains.len(), prior_domains.len() + additions.len());
     for added in &additions {
