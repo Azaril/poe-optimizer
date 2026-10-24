@@ -32,6 +32,8 @@ mod evaluation_content;
 mod fixture;
 #[path = "release/gem_support_domains.rs"]
 mod gem_support_domains;
+#[path = "release/generated_singleton_usage.rs"]
+mod generated_singleton_usage;
 #[path = "release/gigantic_support_domains.rs"]
 mod gigantic_support_domains;
 #[path = "release/gigantic_support_source.rs"]
@@ -2124,8 +2126,16 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     .unwrap()
     .input()
     .clone();
-    let imported = parts
-        .imports
+    let mut import_content = parts.imports;
+    let Some(poe_optimizer_import::owned_normalize::UsageInputContent::PobOccurrenceUsageV3 {
+        inventory: Some(inventory),
+        ..
+    }) = &mut import_content.normalization.usage_inputs
+    else {
+        panic!("retained usage inventory")
+    };
+    generated_singleton_usage::restore_inventory(inventory);
+    let imported = import_content
         .into_input(&old_registry, &old_schema, Default::default())
         .unwrap();
     restored.mapping = imported.mapping;

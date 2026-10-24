@@ -10,7 +10,54 @@ adjustments below. Historical checkpoints remain in Git and
 
 ## Current state
 
-**Current checkpoint:** nine intrinsic skeletal source
+**Current checkpoint:** generated singleton field accounting through the existing
+private Import receipts. Exact provider/preset snapshots, complete constructor
+facts and a unique reverse-primary catalog route justify two saved selectors and
+an unread secondary switch. Count remains an independent typed usage value.
+The selected Firebolt correspondence changes exactly four destinations; all
+25 inventory rows and 456 fields remain, and Sol Pole's nineteen Deferred
+destinations remain independent. No public DTO, runtime rule or per-skill
+production dispatch is added. The unchanged original still has five selected
+input obligations and complete builds remain **0/5**.
+
+The owner's atomic authoring checkpoint choice is reaffirmed. Independent review
+of the CLI, loader, Host publication and failure tests found the implemented
+contract consistent: ledger/runtime commit together, explicit checked predecessor,
+no-clobber publication, no mutable head or power-loss durability claim.
+
+All **391 Authoring tests pass**: 175 library tests (83.17s), eight CLI tests
+(1.25s) and 208 release tests (181.20s), with none ignored. The isolated
+unoptimized build took 1m03s with debug information and incremental compilation
+disabled. All three new singleton laws pass, including the exact two issue-origin
+links for the derived group and its single Gem. The retained Import selection
+also passes 700 tests: 246 library, 411 normalization and 43 usage tests, with one
+existing utility ignored. Authoring evidence is in
+`runs/generated-singleton-usage/authoring-tests-isolated.log`.
+The published checkpoint is
+`2be706a87dd1d7ab916565121422cb6fd16e7d0a04268a590d3887c01901c3f6`; saved full
+verification and replay confirm all eighteen runtime files and the unchanged
+73-name ledger. Strict Import/Authoring all-features, all-targets Clippy passes
+(`runs/generated-singleton-usage/clippy-isolated.log`). The CI source-hash repair
+passes both CLI feature profiles, two tests each. It authenticates the original
+non-executable witness and proves that exactly two schema-loader substitutions
+reproduce the maintained capture source; all seventeen numeric cases and their
+original report hashes remain unchanged. Evidence is in
+`runs/generated-singleton-usage/ci-life-all-features.log` and `ci-life-native.log`.
+Both selected CLI lint profiles pass. All 24 existing PoB secondary-switch
+component tests also pass (`pob-generated-tests-repaired.log`). Their first run
+caught an edit to the README inside an immutable evidence packet; restoring its
+original authenticated bytes repaired the failure without changing evidence
+hashes or assertions. Current notes live in the maintained follow-on document.
+Scoped formatting, strict UTF-8, whitespace checks and all nine protected-draft
+hashes pass. Hosted validation remains separate from these local results.
+The next selected-usage blocker is the generated Djinn secondary switch. Existing
+full declared-stat and actual-consumer captures already show its observed behavior,
+but explicitly leave external `ExtraSkillStat` supplier/transform closure unproved.
+Extend that existing consumer harness with a complete selected-context supplier
+census and late matching GlobalEffect control. Do not repeat a cold catalog probe
+or infer all-context non-consumption from initialized metadata alone.
+
+**Preceding checkpoint (`bdb0e883`):** nine intrinsic skeletal source
 domains and exact accounting of all 28 selected SkillSet rows. The production
 change covers each Arsonist/Frost Mage/Reaver parent Skill, Actor slot and supplied
 Actor. The proof preserves complete parent/profile outputs, all 22 resolved
@@ -368,7 +415,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal `f55fdacc`; intrinsic item-template support domains and redundant Gem-helper retirement `8b11bad1`; skeletal parent/profile source domains and exact selected Skill accounting in this checkpoint |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal `f55fdacc`; intrinsic item-template support domains and redundant Gem-helper retirement `8b11bad1`; skeletal parent/profile source domains and exact selected Skill accounting `bdb0e883`; generated singleton field accounting in the current local checkpoint |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -376,9 +423,9 @@ silently become a second supported implementation.
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets; all 117 contribution queries come from five named KDL fragments. The normal builder rejects embedded program and query members. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
-| Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 73 Stats, six exact program occurrences, three revival queries with one outer gap and 363 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,349 source domains (1,320 Known, 29 Unmapped). The complete current 73-name checkpoint is the predecessor for later builds; evaluation bundle still absent |
+| Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 73 Stats, six exact program occurrences, three revival queries with one outer gap and 363 intrinsic support-source domains. The current Import delta changes exactly four inventory destinations and derives their dependency commitments. Historical restoration admits only these exact deltas through checked content constructors. There are 1,349 source domains (1,320 Known, 29 Unmapped). Canonical checkpoint `71ff4429` remains the complete 73-name allocation predecessor; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Future commands must use the same standard; hosted status belongs to the CI row below |
-| CI | At 06:51 UTC October 24, `bf533382` run `40066505992` has eight passed, ten running and no failures; `8b11bad1` run `40071722745` is pending. The pending `f55fdacc` run was coalesced/cancelled, not failed. Previous `8f91c7b1` run `40045082862` completed with all twenty jobs passing. Its Windows CLI jobs took 3h02m–4h17m; per-target compile/execution attribution remains R4 work. Main-branch serialization preserves the running revision and coalesces pending revisions. This checkpoint still requires hosted validation; local success does not imply hosted success |
+| CI | Anonymous public snapshot at 15:00 UTC October 24: main `bdb0e883` run [40073568065](https://github.com/Azaril/poe-optimizer/actions/runs/40073568065) and preceding `bf533382` run [40066505992](https://github.com/Azaril/poe-optimizer/actions/runs/40066505992) both completed with sixteen successful and four failed jobs. In each run, Ubuntu and Windows CLI jobs fail the same retained flat-life witness source-hash assertion; the other two failures are their aggregate checks. The local repair authenticates the exact archived witness and proves that only the two compact-schema loader substitutions produce the maintained source; its two local tests pass in each CLI feature profile. No numerical witness is relabeled or relaxed. Previous `8f91c7b1` run `40045082862` passed all twenty jobs; its Windows CLI jobs took 3h02m–4h17m. Per-target cost remains R0/R4 work. This checkpoint still requires hosted validation; local success does not imply hosted success |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First extract and verify the allocation predecessor using the
@@ -389,26 +436,44 @@ Successful publication prints the checkpoint identity to
 stderr and checkpoint receipt JSON to stdout. The committed complete snapshot
 supplies the complete allocation history; later builds preserve its ledger as a checked
 predecessor. Do not bootstrap evolving source. Current runtime input identity:
-`baa13efffdac5ca8b784b53e83254c5fc46ba9a0cdc142de8c2e392f8a768ba6`.
-The 2,802 declared source files use 6,725,104 encoded and 46,027,477 decoded
-bytes, within the existing 64 MiB bounds. The 184,374-byte root manifest and
-expanded rule bytes also fit current limits without increases.
+`58aa33797506bbd1c49988059756f04749a46207a8d85b569683a0b66f07e8dc`.
+The source and runtime inventories remain within their existing limits:
+
+| Current inventory | Count or bytes |
+| --- | ---: |
+| Declared source files | 2,802 |
+| Encoded source bytes | 6,728,208 |
+| Decoded source bytes | 46,027,282 |
+| Root manifest bytes | 184,374 |
+| Runtime files | 18 |
+| Runtime bytes | 53,659,348 |
+| Schema artifact bytes | 19,774,085 |
+| Checkpoint and name-ledger bytes | 455,214 |
+
+The source bytes fit the existing 64 MiB bounds; the root manifest and expanded
+rule bytes also fit current limits without increases.
 Metadata JSON remains temporary; gzip is not the compact runtime format.
 Decoded source bytes are now below the 80% warning threshold. Fresh publication
 from the extracted canonical snapshot produces checkpoint
-`9c052dd7909f65b7654f40892859d82b55cbb79cc11ffcc208b07e41c5cf7762`, whose eighteen
-runtime files total 53,659,543 bytes (13,449,321 bytes below the unchanged aggregate
-cap). Its schema is 19,774,085 bytes; checkpoint/name files add 455,214 bytes.
-The fresh full verifier passes. The distinct indexed binary runtime work remains
-required; no resident-memory or evaluator-throughput saving is claimed.
+`2be706a87dd1d7ab916565121422cb6fd16e7d0a04268a590d3887c01901c3f6`, whose runtime
+is 13,449,516 bytes below the unchanged aggregate cap. The saved full verifier
+passes, and replay preserves every runtime file and the unchanged 73-name ledger.
+Compared with the preceding skeletal checkpoint, only `normalization.json`,
+`tree-normalization.json` and `release.json` change: exactly four inventory
+destinations and their derived dependency commitments. Evidence is recorded in
+`runs/generated-singleton-usage/verified.json`, `equivalence.json` and
+`inventory.json`; these local records are not build inputs. The distinct indexed
+binary runtime work remains required; no resident-memory or evaluator-throughput
+saving is claimed.
 
 Historical input
 `a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905`
 and its receipt remain independent regression evidence. Original rule IR lives
 only in Authoring's `tests/fixtures/retained-rules.json.gz`, outside production
 inputs. Actual-source graph checks plus restoration of just historical program
-members, with only the exact 73-Stat/six-program/three-query/one-outer-gap/363-domain delta removed through
-maintained content constructors, prove complete historical schema meaning and
+members, with only the exact 73-Stat/six-program/three-query/one-outer-gap/363-domain
+delta removed and four inventory destinations restored through checked content constructors,
+prove complete historical schema meaning and
 metadata/provenance are preserved. All other artifact bytes remain exact; the
 manifest is authenticated after restoring only its historical schema row. New
 schema encoding commitments are checked separately.
@@ -931,6 +996,21 @@ migration cases; do not expand content to work around a compiler limitation.
 Independent crate/test/build work can run in parallel with explicit file ownership.
 
 ### R0 — Make verification usable and establish a reproducible baseline
+
+Current storage/build-cache follow-up, October 24: checkpoint compilation first
+failed with OS112 (disk full). After storage recovered, the resumed `target/debug`
+build failed with OS3 (path not found). These observations do not establish why
+the path was missing; root performed no deletions in this recovery. An isolated
+`CARGO_TARGET_DIR` under `runs/`, with debug information and incremental compilation
+disabled and optimization level zero, compiled the Authoring test selection in
+1m03s; all 391 Authoring tests and strict package lint then passed. The separate
+CI source-hash repair also passes both CLI feature profiles.
+Record compilation, test execution and publication disk usage separately, and
+retain the exact target/profile and executable inventory for the successful replay.
+Before another broad run, define a bounded regenerable-cache retention procedure
+that preserves active artifacts and source/evidence. Do not infer a speed-up from
+this isolated build or attribute the missing directory without evidence. R4 harness
+retirement must reduce repeated build/publication work while preserving useful laws.
 
 Hosted timing follow-up: the successful October 23 Windows CLI-1 job took 5h50m,
 close to its six-hour job limit. Continue retiring repeated historical publication
@@ -1972,21 +2052,40 @@ The delivery order is:
    share one whole-preset obligation; they are not twenty missing calculations.
    Reuse `usage_inputs/inventory/group_selectors.rs` for the existing physical
    primary and manual Direct nil/1 proofs. Generated groups remain the guaranteed
-   blockers: Sand/Water each have 25 Deferred field destinations; selected Firebolt
-   has four (MAIN/CALCS selectors, count and secondary global-effect switch).
-   Count already has its actual UsageParameter destination as well; that does
-   not discharge an independent Deferred consumer. Preserve the other Firebolt
-   source rule and all independent presets.
-   Authenticate the actual generated constructor/loader route, then extend only
-   existing private generated receipts with proved selector, absence and
-   nonconsumer facts. Replace a Deferred destination only after all its consumers
-   have exact authority. Test provider changes, missing versus malformed optional
-   selectors, extra/reordered effects, nonselected presets, and atomic late-budget
-   refusal. The endpoint is the actual whole selected usage obligation disappearing,
+   blockers: Sand/Water each have 25 Deferred field destinations. The selected
+   Firebolt's former four Deferred destinations are now accounted for by exact
+   generated-singleton receipts and the existing typed count destination. This
+   preserves the other Firebolt source rule and all independent presets.
+   The current private receipt extension retains checked reference absence and
+   authenticates the generated constructor/loader route. Tests cover changed
+   providers, missing versus malformed selectors, extra/missing/ambiguous effects,
+   independent presets and atomic late-budget refusal. The real selected group
+   proves usage completion only in the explicitly derived one-group fixture;
+   the unchanged whole preset remains Pending. Replace further Deferred
+   destinations only after all consumers have exact authority. The endpoint
+   remains the actual whole selected usage obligation disappearing,
    while the other four obligations and numerical gaps remain unchanged. If the
    whole preset still fails, report its first remaining field through existing
    private diagnostics; do not add a second public validator or claim one row
-   equals one completed obligation. Evidence: `runs/selected-skill-usage-audit/next-step.md`.
+   equals one completed obligation. Evidence: `runs/selected-skill-usage-audit/next-step.md`
+   and the [maintained singleton evidence](../data/owned/poe2/3887ae68/generated-firebolt-dispositions/singleton-accounting.md).
+   **Next blocker:** the existing generated-global-switch census initializes
+   complete declared roots/stat sets and lazy maps; the existing extra-stat
+   consumer capture observes both Djinn Commands with secondary=false. Both
+   explicitly leave external supplier/transform closure unproved. Reuse
+   `generated_extra_stat_consumption` to join all selected Skill/support/parent,
+   item/rune/variant/range, effective passive/replacement/socket, shared Actor,
+   Config/default/custom and Party/buff/curse/link outputs to the actual consumer.
+   Account for nested wrappers, copied/scaled mods, ordering and shared metadata
+   warmed by other occurrences. Each reachable ExtraSkillStat needs either a
+   preserved mandatory target filter excluding the recipient or an exact key
+   checked through its lazy map. Unknown callbacks/names/transforms must refuse.
+   Add a late reachable GlobalEffect positive control. The fourteen literal
+   factories and current intrinsic support domains do not close this scope.
+   This needs source-output completeness, not full numerical implementation.
+   A successful contextual census may justify a new Import-only checked fact;
+   discuss that public contract before implementation. If a reachable supplier
+   makes the gate effective, retain its actual child-usage obligation instead.
    Scenario follow-on is also explicit: the current draft has 34 known assumptions
    (fifteen presence flags, one option and eighteen scalar/default records), no
    exact usage overrides, and two known intents (Sigil stage 1 and Corrupting Cry
@@ -3459,6 +3558,12 @@ load, import, prepare, compile, execute and report separately, with allocations
 and p50/p95; quantify improvements without using performance to weaken validation.
 
 ### R4 — Cut over and delete the old system
+
+Carry the R0 storage/build-cache finding into retirement validation: measure the
+remaining repeated publication chains and their temporary outputs before choosing
+the next bounded transfer. Preserve the required executable/test inventory and
+independent source witnesses; a recovered disk or a successful compile alone does
+not prove the affected tests passed.
 
 Use the [retirement map](architecture-migration.md) to remove legacy modules,
 feature flags, profiles, generated snapshots, old wire readers, test publishers,

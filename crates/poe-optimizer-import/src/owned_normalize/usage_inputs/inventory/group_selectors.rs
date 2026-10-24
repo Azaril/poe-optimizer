@@ -5,6 +5,7 @@ pub(super) struct GroupSelectors {
     source: SourceOccurrenceId,
     main: bool,
     calcs: bool,
+    secondary_unconsumed: bool,
 }
 
 impl GroupSelectors {
@@ -14,10 +15,13 @@ impl GroupSelectors {
         field: &UsageInventoryFieldSelector,
     ) -> bool {
         receipt.source == self.source
-            && matches!(field,
+            && (matches!(field,
                 UsageInventoryFieldSelector::GroupAttribute { name }
                 if name == "mainActiveSkill" && self.main
                     || name == "mainActiveSkillCalcs" && self.calcs)
+                || matches!(field,
+                    UsageInventoryFieldSelector::OccurrenceAttribute { name }
+                    if name == "enableGlobal2" && self.secondary_unconsumed))
     }
 }
 
@@ -25,6 +29,101 @@ fn exact_neutral(group: &SourceEvidenceRow<'_>, name: &str) -> bool {
     group.attribute(name).is_some_and(|attribute| {
         matches!(attribute.raw(), "nil" | "1") && attribute.decoded().ok() == Some(attribute.raw())
     })
+}
+
+/// Generated reconstruction uses the reverse-primary catalog route, not just
+/// the saved Gem tuple. Only a complete singleton on that exact unique route
+/// makes its secondary switch unread and nil/1 selectors choose the primary or
+/// nothing. The live generated receipt separately proves the actual provider,
+/// raw inputs and usage outputs; no fact here proves admission or count.
+fn generated_singleton(
+    b: &mut Builder<'_, '_>,
+    draft: &DraftSessionInput,
+    preset: &SkillPresetDraft,
+    group: &SourceEvidenceRow<'_>,
+    receipts: &InventoryReceipts,
+) -> Result<Option<GroupSelectors>> {
+    b.charge(group.children().len().saturating_add(receipts.inputs.len()))?;
+    let [source] = group.children() else {
+        return Ok(None);
+    };
+    let mut matching = receipts.inputs.iter().filter(|receipt| {
+        receipt.source == *source
+            && receipt.group == group.occurrence().id()
+            && receipt.preset == preset.id
+    });
+    let Some(receipt) = matching.next() else {
+        return Ok(None);
+    };
+    if matching.next().is_some() {
+        return Ok(None);
+    }
+    let InputOutput::Generated(proof) = &receipt.output else {
+        return Ok(None);
+    };
+    if !matching_input_present(b, draft, preset, receipt)? {
+        return Ok(None);
+    }
+    // record_generated_input_disposition creates the immutable source identity
+    // from this same checked proof; do not reconstruct it from an origin label.
+    let correspondence = proof.correspondence();
+    let row = &b.evidence.rows()[source.ordinal() as usize];
+    let roles = b.roles;
+    let Some(role) =
+        skill_input_disposition::charged_source_role(b, roles, row, &correspondence.gem)?
+    else {
+        return Ok(None);
+    };
+    if role.role != OwnedGemRole::Known(AuthoredGemRole::SkillUse)
+        || matches!(
+            role.materialization,
+            OwnedGemMaterialization::Unmapped { .. }
+        )
+        || !skill_input_disposition::source_is_singleton(row, &correspondence.gem, role)
+    {
+        return Ok(None);
+    }
+    let OwnedGemSourceConstruction::Observed(facts) = &role.construction else {
+        return Ok(None);
+    };
+    let OwnedReversePrimaryCensus::Observed { routes } = &roles.input().reverse_primary else {
+        return Ok(None);
+    };
+    // The checked role index uses binary lookup. Charge an upper bound on its
+    // string comparisons and the exact candidate join before inspecting either.
+    b.charge(
+        ((usize::BITS - routes.len().saturating_add(1).leading_zeros()) as usize)
+            .saturating_mul(correspondence.skill_id.len().saturating_add(1)),
+    )?;
+    let OwnedReversePrimaryLookup::Observed(route) =
+        roles.reverse_primary(&correspondence.skill_id, &correspondence.skill)
+    else {
+        return Ok(None);
+    };
+    b.charge(
+        route
+            .candidates
+            .len()
+            .saturating_add(facts.catalog_gem_key.len())
+            .saturating_add(correspondence.gem.key().as_str().len())
+            .saturating_add(1),
+    )?;
+    let [candidate] = route.candidates.as_slice() else {
+        return Ok(None);
+    };
+    if candidate.gem != correspondence.gem || candidate.catalog_gem_key != facts.catalog_gem_key {
+        return Ok(None);
+    }
+    let secondary_unconsumed = row.attribute("enableGlobal2").is_some_and(|attribute| {
+        matches!(attribute.raw(), "nil" | "false" | "true")
+            && attribute.decoded().ok() == Some(attribute.raw())
+    });
+    Ok(Some(GroupSelectors {
+        source: *source,
+        main: exact_neutral(group, "mainActiveSkill"),
+        calcs: exact_neutral(group, "mainActiveSkillCalcs"),
+        secondary_unconsumed,
+    }))
 }
 
 /// Source-reference selection may retain missing additional references without
@@ -172,7 +271,10 @@ pub(super) fn prove(
     )?;
     let main = exact_neutral(group, "mainActiveSkill");
     let calcs = exact_neutral(group, "mainActiveSkillCalcs");
-    if (!main && !calcs) || group.attribute("source").is_some() {
+    if group.attribute("source").is_some() {
+        return generated_singleton(b, draft, preset, group, receipts);
+    }
+    if !main && !calcs {
         return Ok(None);
     }
     let mut primary = None;
@@ -321,5 +423,6 @@ pub(super) fn prove(
         source,
         main,
         calcs,
+        secondary_unconsumed: false,
     }))
 }

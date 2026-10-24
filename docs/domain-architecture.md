@@ -717,6 +717,17 @@ Shared Actor source proofs cover their complete intrinsic initialization and
 generic modifier constructors. Foreign configuration, equipment, passive and skill
 merges retain their own authority. Source classification neither completes the
 Actor's numerical rules nor substitutes a UI fallback for an authored occurrence.
+Generated source-field accounting stays inside Import. A private same-attempt
+receipt must retain its exact provider, preset, raw-input outputs and checked
+reference facts. A complete singleton constructor plus a unique reverse-primary
+catalog route can prove that a secondary selector has no consumer; a saved Skill
+ID alone cannot. Count remains a typed usage value with its own consumers. These
+proofs neither admit execution nor establish complete numerical coverage.
+Whole-preset accounting commits only after every source and destination succeeds.
+Multieffect sources need separate authority, including any external stat suppliers
+and lazy initialization that can change the source gate. A sampled metadata flag
+is not an all-context fact or a native default.
+
 Configuration source accounting must enumerate repeated custom-modifier blocks
 and legacy fields separately from typed Encounter inputs. Proving constructor
 absence or literal emptiness can close that source family; disabled, overwritten

@@ -663,8 +663,9 @@ fn capture_checked(
     receipt: &MaterializedInput,
     row: &GeneratedSkillInputRule,
     usages: &[usage_inputs::MaterializedUsage],
-    children: &[SourceOccurrenceId],
+    reference: Option<&skill_input_disposition::CheckedSourceReference>,
 ) -> Result<Option<CheckedInputDisposition>> {
+    let children = reference.map_or(&[][..], |proof| proof.children());
     let Some(provider) = capture_provider(b, draft, inputs, receipt)? else {
         return Ok(None);
     };
@@ -682,11 +683,21 @@ fn capture_checked(
             .saturating_add(group.attributes().len())
             .saturating_add(children.len())
             .saturating_add(receipt.binding.parameters.members.len())
+            .saturating_add(reference.map_or(0, |_| 6))
             .saturating_add(1),
     )?;
     let source = &b.evidence.rows()[receipt.source.ordinal() as usize];
     let group = &b.evidence.rows()[receipt.group.ordinal() as usize];
-    let (occurrence_attributes, group_attributes) = intrinsic_attributes(source, group);
+    let (mut occurrence_attributes, group_attributes) = intrinsic_attributes(source, group);
+    if let Some(reference) = reference {
+        if reference.source() != receipt.source || reference.group() != Some(receipt.group) {
+            return Ok(None);
+        }
+        // Both generated MAIN/CALCS inspections have already accounted for
+        // every present selector and descendant. Retain only their proven
+        // absence facts; no missing value becomes a native default.
+        occurrence_attributes.extend(reference.absent_fields().map(str::to_owned));
+    }
     let proof = CheckedInputDisposition {
         source: receipt.source,
         group: receipt.group,
@@ -777,7 +788,7 @@ pub(in crate::owned_normalize) fn account(
         };
         let bound = &compiled.rows[receipt.row];
         let row = &b.evidence.rows()[receipt.source.ordinal() as usize];
-        let children = if let Some((adapter, _)) = selector_proof(bound.row, direct, physical)? {
+        let reference = if let Some((adapter, _)) = selector_proof(bound.row, direct, physical)? {
             let evidence = b.evidence;
             let Some(children) = account_reference(
                 b,
@@ -790,9 +801,7 @@ pub(in crate::owned_normalize) fn account(
             else {
                 continue;
             };
-            // Generated accounting intentionally retains only the existing
-            // descendant scope; authored absence facts do not transfer here.
-            children.into_children()
+            Some(children)
         } else {
             // With no checked topology adapter only actual selector absence is
             // provable. No default Action, Actor or stat-set is invented.
@@ -803,8 +812,9 @@ pub(in crate::owned_normalize) fn account(
             {
                 continue;
             }
-            vec![]
+            None
         };
+        let children = reference.as_ref().map_or(&[][..], |proof| proof.children());
         for source in [receipt.source, receipt.group]
             .into_iter()
             .chain(children.iter().copied())
@@ -817,8 +827,15 @@ pub(in crate::owned_normalize) fn account(
             );
         }
         if let Some(checked) = checked.as_deref_mut()
-            && let Some(proof) =
-                capture_checked(b, draft, inputs, receipt, bound.row, usages, &children)?
+            && let Some(proof) = capture_checked(
+                b,
+                draft,
+                inputs,
+                receipt,
+                bound.row,
+                usages,
+                reference.as_ref(),
+            )?
         {
             checked.push(proof);
         }
@@ -1589,6 +1606,73 @@ mod tests {
                         .unwrap()
                 );
             }
+            // Reuse the actual shared reference accountant. Its resolved
+            // reports prove overwritten scalar-header absence, but without a
+            // minion report they prove no minion-selector default or absence.
+            b.origins = checked_origins;
+            let evidence = b.evidence;
+            let reference = account_reference(
+                b,
+                &evidence.rows()[source.ordinal() as usize],
+                |_| {
+                    Ok(crate::owned_source_actions::SourceActionInspection {
+                        resolved: true,
+                        selection: crate::owned_source_actions::SourceActionSelection::Absent,
+                        ignored_legacy_attributes: vec![],
+                        minion: None,
+                        work: 0,
+                    })
+                },
+                0,
+            )
+            .unwrap()
+            .unwrap();
+            let retained = capture_checked(
+                b,
+                &draft,
+                &inputs,
+                &inputs.materialized[0],
+                &row,
+                &usages,
+                Some(&reference),
+            )
+            .unwrap()
+            .unwrap();
+            assert!(retained.occurrence_attributes().contains("statSetIndex"));
+            assert!(
+                retained
+                    .occurrence_attributes()
+                    .contains("statSetIndexCalcs")
+            );
+            for field in [
+                "skillMinion",
+                "skillMinionCalcs",
+                "skillMinionSkill",
+                "skillMinionSkillCalcs",
+            ] {
+                assert!(!retained.occurrence_attributes().contains(field));
+            }
+            assert_eq!(retained.binding(), emitted[0].binding());
+            assert_eq!(retained.usage_bindings(), emitted[0].usage_bindings());
+            assert!(!emitted[0].occurrence_attributes().contains("statSetIndex"));
+            let foreign = skill_input_disposition::CheckedSourceReference::consumer_fixture(
+                set,
+                Some(group),
+                vec![],
+            );
+            assert!(
+                capture_checked(
+                    b,
+                    &draft,
+                    &inputs,
+                    &inputs.materialized[0],
+                    &row,
+                    &usages,
+                    Some(&foreign),
+                )
+                .unwrap()
+                .is_none()
+            );
         });
     }
 

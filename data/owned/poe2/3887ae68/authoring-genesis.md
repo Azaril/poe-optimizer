@@ -59,15 +59,38 @@ byte-for-byte, with no further allocation. Evidence is recorded in
 Replay changes the checkpoint's predecessor commitment without allocating more
 names or changing runtime bytes. The snapshot above remains the explicit predecessor.
 
-The subsequent item and skeletal support-domain tranches preserve this entire
-name ledger and registry. Current tracked source publishes verified checkpoint
-`9c052dd7909f65b7654f40892859d82b55cbb79cc11ffcc208b07e41c5cf7762`, with runtime
-input `baa13efffdac5ca8b784b53e83254c5fc46ba9a0cdc142de8c2e392f8a768ba6`.
-The current runtime differs from the allocation snapshot only in rule metadata
-and the corresponding manifest/receipt commitments. This snapshot remains the
-allocation predecessor; it is not advertised as the latest evaluated content.
-Build the tracked source to obtain the current release. Local verification:
-`runs/skeletal-support-verified.json` and `runs/skeletal-support-inventory.json`.
+The subsequent item/skeletal support-domain and generated-singleton accounting
+tranches preserve this entire 73-name ledger and registry. Current tracked source
+publishes verified checkpoint
+`2be706a87dd1d7ab916565121422cb6fd16e7d0a04268a590d3887c01901c3f6`, with runtime
+input `58aa33797506bbd1c49988059756f04749a46207a8d85b569683a0b66f07e8dc`.
+Compared with the preceding skeletal checkpoint, exactly four inventory
+destinations and their derived dependency commitments change; the only changed
+runtime files are `normalization.json`, `tree-normalization.json` and `release.json`.
+Historical restoration restores those four destinations through checked content
+constructors, alongside the independently bounded earlier content deltas.
+
+| Current tracked-source build | Count or bytes |
+| --- | ---: |
+| Declared source files | 2,802 |
+| Encoded source bytes | 6,728,208 |
+| Decoded source bytes | 46,027,282 |
+| Root manifest bytes | 184,374 |
+| Runtime files | 18 |
+| Runtime bytes | 53,659,348 |
+| Schema artifact bytes | 19,774,085 |
+| Checkpoint and name-ledger bytes | 455,214 |
+
+The saved verifier accepts the current checkpoint, and replay reproduces all
+eighteen runtime files and the name ledger without allocation. Evidence is in
+`runs/generated-singleton-usage/verified.json`, `equivalence.json` and
+`inventory.json`; these local records are not build inputs. The canonical
+`71ff4429` snapshot above remains the allocation predecessor, not the latest
+content. Build the tracked source to obtain the current release. Current accounting
+validation passes all 391 Authoring tests (175 library, eight CLI and 208 release)
+without optimization, including the three singleton laws. Strict Import/Authoring
+package lint also passes. The separate historical-witness repair passes both
+CLI feature profiles; hosted confirmation remains separate from these local checks.
 
 Archive transport is not a second semantic format, a source-reproduction proof
 or the planned indexed binary runtime pack. Future canonical allocation

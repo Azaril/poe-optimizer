@@ -172,7 +172,7 @@ fn retained_numeric_evidence_matches_its_source_witness() {
     for (field, path) in [
         (
             "witness_sha256",
-            "crates/poe-optimizer-pob/tests/owned_flat_life_numeric.rs",
+            "tests/fixtures/owned-flat-life-numeric-witness.rs",
         ),
         (
             "driver_sha256",
@@ -182,4 +182,30 @@ fn retained_numeric_evidence_matches_its_source_witness() {
         let bytes = fs::read(root().join(path)).unwrap();
         assert_eq!(format!("{:x}", Sha256::digest(bytes)), v[field]);
     }
+
+    // The retained report predates the compact schema wire format. Authenticate
+    // its exact, non-executable witness above, then allow only the reviewed
+    // schema-loader adaptation in the maintained capture harness. Numerical
+    // observations and their historical provenance remain unchanged.
+    let mut historical =
+        fs::read_to_string(root().join("tests/fixtures/owned-flat-life-numeric-witness.rs"))
+            .unwrap();
+    for (before, after) in [
+        (
+            "use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;\n",
+            "",
+        ),
+        (
+            "    let schema = OwnedDefinitionSchemaPackage::new(\n        serde_json::from_slice(&read(\"schema.json\")).unwrap(),\n",
+            "    let schema = poe_optimizer_data::owned_schema::decode_schema_package(\n        &read(\"schema.json\"),\n",
+        ),
+    ] {
+        assert_eq!(historical.matches(before).count(), 1);
+        historical = historical.replacen(before, after, 1);
+    }
+    assert_eq!(
+        historical.as_bytes(),
+        fs::read(root().join("crates/poe-optimizer-pob/tests/owned_flat_life_numeric.rs")).unwrap(),
+        "maintained witness changed beyond the reviewed schema-loader adaptation"
+    );
 }

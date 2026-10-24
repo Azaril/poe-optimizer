@@ -57,9 +57,12 @@ owner membership, and compiles the complete reconstructed rule package with the
 existing Engine. Non-program metadata and all incomplete-coverage declarations
 must remain unchanged except for the explicitly admitted 73 Stat declarations,
 six program occurrences, three revival queries with one new outer gap, and 363
-intrinsic support-domain declarations. The six programs comprise Sniper's initial
+intrinsic support-domain declarations, plus four reviewed generated-singleton
+usage destinations and their constructed dependency commitments. The six programs comprise Sniper's initial
 types, support prohibition and intrinsic revival, plus three passive revival sources.
-The release test removes exactly that delta,
+The [singleton accounting evidence](../generated-firebolt-dispositions/singleton-accounting.md)
+keeps the unchanged originals and independent generated sources blocked. The
+release test removes exactly the reviewed deltas,
 restores historical program members and uses checked content constructors to bind
 the original dependencies. Complete historical schema meaning and semantic receipt
 fields must match. Every non-schema, non-manifest artifact remains byte-exact;

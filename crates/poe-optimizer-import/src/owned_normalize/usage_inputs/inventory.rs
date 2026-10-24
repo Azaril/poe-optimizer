@@ -53,12 +53,16 @@ pub enum UsageInventoryDestination {
     /// the generated enabled fields retain their independent typed participation
     /// destinations. Exact physical
     /// singleton construction can additionally account for the unread secondary
-    /// source switch; Direct/generated dispatch is not covered. A checked physical
+    /// source switch. Generated singleton sources additionally require their
+    /// exact live provider and unique checked reverse-primary catalog route;
+    /// no other generated secondary switch is covered. A checked physical
     /// SupportAssignment with complete singleton construction may account count=1
     /// and enableGlobal1=enableGlobal2=true only when raw and decoded text agree.
     /// Final whole-group accounting may additionally prove
-    /// nil/1 selectors for one physical singleton SkillUse with only checked
-    /// singleton support companions. Other deferred usage remains excluded.
+    /// nil/1 selectors for one physical primary/manual Direct with checked
+    /// support companions, or one exact generated singleton. Generated checked
+    /// reference absence facts retain source accounting only. Other deferred
+    /// usage remains excluded.
     InputDisposition,
     UsageParameter {
         policy: UsagePolicyDefId,

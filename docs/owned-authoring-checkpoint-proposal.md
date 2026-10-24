@@ -2,7 +2,9 @@
 
 Status: accepted by the owner and implemented, 2026-10-23. This decides the offline
 publication workflow; it does not change the native build, schema, rule or
-evaluation model. Mutable-head promotion remains deferred.
+evaluation model. Mutable-head promotion remains deferred. The owner reaffirmed
+this choice on 2026-10-24; an independent implementation review found the current
+CLI, checkpoint loader and Host publisher consistent with the accepted contract.
 
 The release builder publishes a name ledger and a separate closed runtime
 directory as one immutable checkpoint. `NamedIdRegistry` stages its successor in

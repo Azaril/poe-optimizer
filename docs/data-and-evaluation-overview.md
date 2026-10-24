@@ -303,6 +303,16 @@ unresolved. These declarations are checked release metadata; they do not make
 the unchanged build executable or demonstrate runtime diagnostic removal before
 its input obligations have been discharged.
 
+Generated singleton usage accounting now uses the same private Import receipts.
+It requires the exact live provider and a unique checked reverse-primary catalog
+route. The selected Firebolt policy accounts for its two nil/1 selectors and
+unread secondary switch; count still uses its typed usage receipt. An isolated
+saved-group test exercises actual completion, while the unchanged original and
+archived presets retain their obligations. The Djinn secondary switches remain
+deferred: their complete declared-stat census does not cover every external
+`ExtraSkillStat` supplier or later lazy-map initialization. This is an Import
+evidence gap, not permission to invent a native default or relax evaluation.
+
 One next limitation is documented in the [Skill-to-Actor contribution proposal](owned-skill-actor-contribution-proposal.md):
 direct Skill effects can name Player, while checked Skill-origin queries currently
 admit only self recipients. Repeated Skill contributions also need an explicit

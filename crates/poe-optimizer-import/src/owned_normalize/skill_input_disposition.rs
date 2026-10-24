@@ -115,7 +115,18 @@ pub(super) fn physical_source_is_singleton(
     gem: &GemDefId,
     role: &OwnedGemRoleRow,
 ) -> bool {
-    if &role.gem != gem || role.materialization != OwnedGemMaterialization::Physical {
+    role.materialization == OwnedGemMaterialization::Physical && source_is_singleton(row, gem, role)
+}
+
+/// Construction identity alone. Generated callers additionally need an exact
+/// live provider and a unique checked reverse-primary route; this predicate
+/// grants neither physical materialization nor any source-field authority.
+pub(super) fn source_is_singleton(
+    row: &SourceEvidenceRow<'_>,
+    gem: &GemDefId,
+    role: &OwnedGemRoleRow,
+) -> bool {
+    if &role.gem != gem {
         return false;
     }
     let (OwnedPrimarySkill::Known(primary), OwnedGemSourceConstruction::Observed(facts)) =

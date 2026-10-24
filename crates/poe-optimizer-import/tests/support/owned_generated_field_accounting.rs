@@ -1,6 +1,9 @@
 //! One current generated-input path, synthetic exact Tree and Item identities.
 use super::*;
 
+#[path = "owned_generated_singleton_inventory.rs"]
+mod singleton_inventory;
+
 fn fixture() -> Fixture {
     let mut f = generated();
     // Count transport knows these saved fields syntactically; only the separate
