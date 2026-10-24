@@ -1,21 +1,5 @@
 //! One retired obligation; unchanged six production programs and import guards.
-#[path = "support/owned_minion_level_scalability.rs"]
-mod family;
-#[allow(dead_code)]
-#[path = "support/owned_release_migration_preservation.rs"]
-mod migration_preservation;
-#[allow(dead_code)]
-#[path = "support/owned_global_minion_level_native.rs"]
-mod native;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
-mod preservation;
-#[path = "support/owned_support_delivery_publication.rs"]
-mod publication;
-#[path = "support/owned_release_fixture.rs"]
-mod release;
-#[path = "support/owned_selected_request.rs"]
-mod selected;
+use super::{minion_level_family as family, native, publication};
 use poe_optimizer_core::owned_schema::SchemaClosure;
 use poe_optimizer_engine::owned_plan::{EffectValue, PlanGapReason};
 use serde_json::{Value, json};

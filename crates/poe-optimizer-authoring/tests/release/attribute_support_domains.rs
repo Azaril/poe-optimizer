@@ -289,6 +289,19 @@ fn entries(
         .unwrap();
     (definition, choice, rules)
 }
+/// Reuse the complete three-option family proof in joined source accounting.
+pub(super) fn accounts_for(
+    definition: &DefinitionEntry<PassiveNodeDefId, PassiveNodeSchema>,
+    rules: &DefinitionRules,
+) -> bool {
+    attributes()
+        .into_iter()
+        .find(|row| row.node == definition.id)
+        .is_some_and(|row| {
+            let (_, choice, _) = entries(row);
+            attribute_family(definition, choice, row, rules, &channels())
+        })
+}
 fn assert_projection(
     attribute: &TreeAttributeRule,
     option: &OptionDefId,

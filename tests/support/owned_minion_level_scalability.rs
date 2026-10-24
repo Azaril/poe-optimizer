@@ -1,7 +1,7 @@
 //! Retire one proved obligation without changing programs or source admission.
 #[allow(dead_code)]
 #[path = "owned_amulet_copy_consumer.rs"]
-mod copy_consumer;
+pub(crate) mod copy_consumer;
 use poe_optimizer_core::{
     owned_content::{OwnedContentDigest, digest_owned},
     owned_definitions::OwnedDefinitionKey,

@@ -100,7 +100,7 @@ fn literal(
     }
     matches!(&program.effects[0].effect, RuleEffectKind::Contribute { entity: RuleEntity::Player, stat: target, contribution: kind, value } if target == stat && *kind == contribution && value == &program.nodes[0].id)
 }
-fn producer_family(
+pub(super) fn producer_family(
     schema: &DefinitionEntry<PassiveNodeDefId, PassiveNodeSchema>,
     body: &DefinitionRules,
 ) -> bool {

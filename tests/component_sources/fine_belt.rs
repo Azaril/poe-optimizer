@@ -1,14 +1,6 @@
 //! Actual Fine Belt modifier programs in an explicitly finite numerical domain.
 //! Local charm capacity and player flask recovery remain separate consumers.
-#[allow(dead_code)]
-#[path = "support/owned_global_minion_level_native.rs"]
-mod component;
-#[allow(dead_code)]
-#[path = "support/owned_fine_belt_modifiers.rs"]
-mod family;
-#[allow(dead_code)]
-#[path = "support/owned_release_fixture.rs"]
-mod release;
+use super::{fine_belt_family as family, native as component, release};
 
 use component::{
     AuthoredComponent, AuthoredTemplateInputs, CategoryBindings, ComponentBindings, Fixture,
@@ -578,7 +570,7 @@ fn missing_inputs_and_partial_owner_coverage_remain_visible() {
 // finite topology adds the actual authored delivery to the same four programs.
 // Reuse the checked stage/support fixture without changing any authored IDs.
 #[allow(dead_code)]
-#[path = "../crates/poe-optimizer-engine/tests/support/owned_plan_fixture.rs"]
+#[path = "../../crates/poe-optimizer-engine/tests/support/owned_plan_fixture.rs"]
 mod flask_delivery_base;
 mod support {
     pub use super::flask_delivery_base::Fixture;
@@ -599,7 +591,7 @@ mod support {
     }
 }
 #[allow(dead_code)]
-#[path = "../crates/poe-optimizer-engine/tests/support/owned_empty_support_contribution_fixture.rs"]
+#[path = "../../crates/poe-optimizer-engine/tests/support/owned_empty_support_contribution_fixture.rs"]
 mod checked_empty_support;
 
 mod flask_delivery {

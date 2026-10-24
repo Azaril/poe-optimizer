@@ -133,8 +133,7 @@ fn exact_refinement(before: &DefinitionDescriptor, after: &DefinitionDescriptor)
     restored == *old
 }
 
-#[test]
-fn six_exact_domains_preserve_three_closure_refinements_and_partial_numerical_coverage() {
+fn check_current_structural_inventory() {
     let declarations = declarations();
     let before = prior_definitions();
     let replacements: Vec<DefinitionDescriptor> = source::migration()["schema"]
@@ -428,8 +427,7 @@ fn check_supplier(program: &RuleProgram, chain: &Chain) {
     assert_eq!((projected, activated), (1, 1));
 }
 
-#[test]
-fn both_barya_chains_execute_level_one_and_exact_grants_without_closing_descendants() {
+fn check_barya_chains() {
     let recipe = tracked_release().release().assembled().checked();
     let mut scratch = recipe.compiled_rules().new_scratch();
     let chains = chains();
@@ -495,6 +493,22 @@ fn both_barya_chains_execute_level_one_and_exact_grants_without_closing_descenda
     }
 }
 
+/// Joined accounting retains the real grants and all incomplete numerical facets.
+pub(super) fn check_accounted_structure() {
+    static CHECKED: std::sync::OnceLock<()> = std::sync::OnceLock::new();
+    CHECKED.get_or_init(|| {
+        check_current_structural_inventory();
+        check_barya_chains();
+    });
+}
+#[test]
+fn six_exact_domains_preserve_three_closure_refinements_and_partial_numerical_coverage() {
+    check_current_structural_inventory();
+}
+#[test]
+fn both_barya_chains_execute_level_one_and_exact_grants_without_closing_descendants() {
+    check_barya_chains();
+}
 #[test]
 fn preservation_controls_reject_unrelated_closures_missing_members_and_crossed_chains() {
     let old = prior_definitions().remove(0);

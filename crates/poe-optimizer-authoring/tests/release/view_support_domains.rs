@@ -191,8 +191,7 @@ fn effects(
 fn complete_empty<T>(s: &DeclaredSet<T>) -> bool {
     s.is_complete() && s.members.is_empty()
 }
-#[test]
-fn seven_exact_owners_keep_only_pure_class_contributions_and_current_count_channels() {
+fn check_current_output_families() {
     let recipe = tracked_release().release().assembled().checked();
     let declarations = declarations();
     let inventory = &recipe
@@ -306,8 +305,7 @@ fn seven_exact_owners_keep_only_pure_class_contributions_and_current_count_chann
         );
     }
 }
-#[test]
-fn both_whole_lists_execute_and_missing_class_never_selects_default_with_reused_scratch() {
+fn check_both_whole_lists() {
     let recipe = tracked_release().release().assembled().checked();
     let mut scratch = recipe.compiled_rules().new_scratch();
     for id in source::SOURCE_IDS {
@@ -349,6 +347,22 @@ fn both_whole_lists_execute_and_missing_class_never_selects_default_with_reused_
         };
         assert_eq!(q.value(), wanted);
     }
+}
+/// Both complete branches are checked against authenticated source contributions.
+pub(super) fn check_accounted_views() {
+    static CHECKED: std::sync::OnceLock<()> = std::sync::OnceLock::new();
+    CHECKED.get_or_init(|| {
+        check_current_output_families();
+        check_both_whole_lists();
+    });
+}
+#[test]
+fn seven_exact_owners_keep_only_pure_class_contributions_and_current_count_channels() {
+    check_current_output_families();
+}
+#[test]
+fn both_whole_lists_execute_and_missing_class_never_selects_default_with_reused_scratch() {
+    check_both_whole_lists();
 }
 #[test]
 fn maintained_receivers_keep_exact_target_and_missing_input_semantics() {

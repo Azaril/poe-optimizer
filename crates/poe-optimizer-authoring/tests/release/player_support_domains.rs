@@ -111,8 +111,7 @@ fn assert_structure(error: RuleStorageError, expected: &str) {
     assert!(matches!(error, RuleStorageError::Structure(message) if message == expected));
 }
 
-#[test]
-fn one_checked_player_relation_is_class_independent_and_preserves_nine_partial_programs() {
+pub(super) fn check_accounted_player() {
     let release = tracked_release().release();
     let recipe = release.assembled().checked();
     let rules = recipe.rules().input();
@@ -214,6 +213,11 @@ fn one_checked_player_relation_is_class_independent_and_preserves_nine_partial_p
     }
     assert_eq!(classes.len(), class_support_source::SOURCES.len());
     assert_eq!(classes.len(), 8);
+}
+
+#[test]
+fn one_checked_player_relation_is_class_independent_and_preserves_nine_partial_programs() {
+    check_accounted_player();
 }
 
 #[test]

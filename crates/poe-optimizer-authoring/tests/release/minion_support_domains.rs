@@ -249,6 +249,16 @@ fn numeric_family(
     }
     remaining.is_empty()
 }
+/// Full paired producer bodies, not a test for an absent channel name.
+pub(super) fn accounts_for(
+    definition: &DefinitionEntry<PassiveNodeDefId, PassiveNodeSchema>,
+    rules: &DefinitionRules,
+) -> bool {
+    owners()
+        .iter()
+        .find(|row| row.node == definition.id)
+        .is_some_and(|row| numeric_family(row, definition, rules))
+}
 fn quantity(value: f64, unit: &UnitDefId) -> ParameterValue {
     ParameterValue::Quantity(FiniteQuantity::new(value, unit.clone()).unwrap())
 }

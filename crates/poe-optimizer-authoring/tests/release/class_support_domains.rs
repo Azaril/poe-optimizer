@@ -95,8 +95,7 @@ fn assert_partial(owner: &DefinitionRules) {
     assert_eq!(gaps[0].code.as_str(), "tree-game-rules-not-converted");
 }
 
-#[test]
-fn eight_exact_class_domains_preserve_sixteen_programs_and_exclude_source_zero() {
+fn check_class_structure() {
     let expected = declarations();
     assert_eq!(expected.len(), 8);
     let release = tracked_release().release();
@@ -308,8 +307,7 @@ fn assert_component(
     }
 }
 
-#[test]
-fn all_class_attributes_execute_both_count_passes_with_exact_channels_and_reused_scratch() {
+fn check_class_attributes() {
     // Independent complete source vectors in Strength/Dexterity/Intelligence order.
     let vectors = [
         (1, [7, 7, 15]),
@@ -376,8 +374,7 @@ fn all_class_attributes_execute_both_count_passes_with_exact_channels_and_reused
     }
 }
 
-#[test]
-fn all_unarmed_components_preserve_injected_values_units_and_partial_coverage() {
+fn check_class_unarmed() {
     let maxima = [
         (1, 5.0),
         (10, 5.0),
@@ -435,6 +432,25 @@ fn all_unarmed_components_preserve_injected_values_units_and_partial_coverage() 
             &mut scratch,
         );
     }
+}
+
+pub(super) fn check_accounted_classes() {
+    check_class_structure();
+    check_class_attributes();
+    check_class_unarmed();
+}
+
+#[test]
+fn eight_exact_class_domains_preserve_sixteen_programs_and_exclude_source_zero() {
+    check_class_structure();
+}
+#[test]
+fn all_class_attributes_execute_both_count_passes_with_exact_channels_and_reused_scratch() {
+    check_class_attributes();
+}
+#[test]
+fn all_unarmed_components_preserve_injected_values_units_and_partial_coverage() {
+    check_class_unarmed();
 }
 
 #[test]

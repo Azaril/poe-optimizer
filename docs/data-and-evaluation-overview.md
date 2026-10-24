@@ -269,6 +269,27 @@ These migration gates pass without introducing an alternate release reader.
 The retained source release has no evaluation bundle. Added component producers
 retain Partial owner and incoming-query coverage; they do not establish a complete
 source census or final revival result.
+The maintained release tests now join Original05's 55 selected allocations and
+two implicit roots to their exact preserved source identities. They distinguish
+45 reviewed intrinsic output families, six dependent/descendant-producing sources
+and six unresolved sources. This reuses the existing import sidecar and full
+family proofs; it is not a new runtime absence certificate. Neither support-source
+classification nor an empty parser result proves that every numerical modifier
+has been accounted for.
+The same evidence layer joins the selected Class and existing shared Player
+application. It checks the complete 148 literal initialization outputs, fixed
+attribute loop and Class/unarmed source records against the watched channels.
+Initialization conditions and Level context can affect later calculations, so
+they and foreign modifier stores remain separate obligations. These checks
+preserve source identity; they neither add a second importer nor complete the
+Actor's numerical coverage.
+
+One next limitation is documented in the [Skill-to-Actor contribution proposal](owned-skill-actor-contribution-proposal.md):
+direct Skill effects can name Player, while checked Skill-origin queries currently
+admit only self recipients. Repeated Skill contributions also need an explicit
+arithmetic policy. The proposed authority and exact-sum extensions await review;
+the current runtime and its completeness gates remain unchanged.
+
 **No supplied original is complete natively (0/5).** Rebuilding its release is a
 reproducibility step toward the new-format first build, not that build's completion.
 

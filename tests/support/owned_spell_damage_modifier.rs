@@ -1,6 +1,5 @@
 //! Checked fixed Spell Damage numeric family; receiving damage semantics stay open.
-#[path = "owned_family_preservation.rs"]
-mod preserve;
+use super::preserve;
 
 use poe_optimizer_core::{
     data::DataIdentity,

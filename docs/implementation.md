@@ -10,7 +10,64 @@ adjustments below. Historical checkpoints remain in Git and
 
 ## Current state
 
-**Current checkpoint:** the existing KDL/DSL compiler now publishes three generic
+**Current checkpoint:** exact selected-passive accounting joins all
+57 Original05 sources through the preserved import sidecar: 55 allocations and
+two implicit roots. It classifies 45 reviewed intrinsic families, six structural
+or descendant-dependent sources, and six unresolved sources. Existing complete
+family/source proofs are reused. Missing/duplicate/foreign origins, wrong
+membership, missing choices, occupied sockets, changed conditional tags and erased
+paired effects are rejected or remain unresolved. All **191 maintained release
+tests pass without optimization**, including seven new accounting laws, and strict
+Authoring all-target Clippy passes. No production artifact, ID, query closure,
+Pending obligation or complete-build count changes.
+
+The selected Class/shared Player output-accounting slice is implemented and
+validated in that full run. It reuses the complete 148-row constructor census,
+the fixed dynamic attribute loop and eight-Class/unarmed source proofs. Four
+new laws join the exact saved Spec/Class and single shared Player application,
+reject fifteen detached authority mutations and eight altered source inventories,
+and retain five Pending obligations. Conditions, Level context and foreign
+modifier stores remain outside direct-channel disjointness. Independent review
+verified all eight watched channel/kind pairs against the pinned consumers and
+name-preserving factories, and confirmed that the existing Class/Player laws
+survive the helper extraction. The same-Class/unselected-Spec control reuses the
+existing saved-selection parser; no second importer or runtime certificate is added.
+The first full run found a test-only ownership assumption: valid Spec child
+records also reference their allocation preset. The isolated diagnostic confirmed
+one owning Spec and four child projections. The repaired check retains valid
+descendants, bounds ancestry traversal and rejects unknown, foreign or duplicate
+references; all previous controls remain. No production validator is changed.
+The repaired complete suite passes in 175.30s, with strict all-target Authoring
+Clippy. Evidence: `runs/selected-source-accounting-repaired-release-tests.log`,
+`runs/selected-source-accounting-repaired-clippy.log` and the isolated diagnostic
+`runs/selected-source-accounting-join-diagnostic.log`. Scoped formatting, UTF-8,
+diff checks and all nine protected draft hashes also pass.
+
+The audited nine CLI component roots now form the `component_sources` suite.
+Normalized bodies and all five relocated file references match the originals;
+21 distinct ordinary laws and eighteen ignored utilities remain, with only three
+duplicate preservation registrations shared once. Four external targets retain
+their helper bindings. Strict selected-target Clippy and execution pass in both
+feature profiles: 27 ordinary tests and 39 retained ignored utilities each across
+the new suite and four affected callers. The builds took 12m38s and 12m08s;
+execution took under one second per profile. Fresh clean-checkout plans select
+240 runnable targets exactly once as 61/60/60/59 in both profiles, plus the
+separate build-script dependency. No before/after elapsed speedup is claimed.
+The first check caught three moved
+`include_str!` paths; they now resolve to the same files from their new directory.
+
+The Graft source review found the actual activation source: tree node 26085's
+Abyssal Lich view, on existing Passive `0ee8` guarded by Ascendancy `0a29`.
+Its full view-selection/replacement proof is required; it does not grant the
+base Lich view that flag. The existing DSL can express exact own-child
+suppression and a direct Player contribution, but checked Skill-origin queries
+currently admit only self recipients. Duplicate Skill sources also have no
+semantic arithmetic order. The [concrete contribution proposal](owned-skill-actor-contribution-proposal.md)
+is awaiting the owner's decisions on literal-Player admission and an opt-in
+exact quantity sum. No runtime authority or numerical policy is changed pending
+that review, and no constant-only Graft packet is published as a substitute.
+
+**Preceding revival checkpoint (`bf533382`):** the existing KDL/DSL compiler publishes three generic
 revival channels and four exact producer instances: Sniper's own revival flag
 and twelve-second override, Restless Dead's +25 increased speed, and two distinct
 +5 passive sources. Shared Skill/Actor channel types preserve exact recipients.
@@ -44,11 +101,13 @@ and passing release/CLI suites), `runs/revival-producers-authoring-library-repai
 `runs/revival-producers-extracted-verified.json` and
 `runs/revival-producers-replay-equivalence.json`.
 
-The next blocking work is joined selected-source accounting, not a neutral-only
-revival consumer. Existing family proofs can cover much of the selected build;
-two passive-grant joins, four version-aligned buff payloads and configuration
-responsibility still need evidence. Graft's exact-own-child route fits existing
-Skill contributions and Actor projection. Reservation ownership/contributor
+The first joined selected-source accounting batch is implemented for passives;
+the shared Player/Class direct-output batch is also implemented. Item, skill,
+reward, configuration and indirect-context families still need their complete
+output/constructor dispositions. Two passive-grant joins and four
+version-aligned buff payloads also need evidence. Graft's exact-own-child route
+fits Actor projection; checked direct Skill-to-Player membership and repeated
+quantity reduction need the pending model decision. Reservation ownership/contributor
 delivery and the proposed amount signature remain separate work. The concrete
 source counts and next-step order are recorded in the Sniper section below.
 
@@ -225,7 +284,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint in this checkpoint |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal in this checkpoint |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -235,7 +294,7 @@ silently become a second supported implementation.
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets; all 117 contribution queries come from five named KDL fragments. The normal builder rejects embedded program and query members. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
 | Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 73 Stats, six exact program occurrences, three revival queries with one outer gap and 350 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,336 source domains (1,307 Known, 29 Unmapped). The complete current 73-name checkpoint is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally. The later `d490eb54` hosted workflow is successful; this compact cutover still requires its own run |
-| CI | At 05:18:51 UTC October 24, `d490eb54` run `40011474882` is successful. `8f91c7b1` run `40045082862` is running (fifteen passed, three running, none failed among eighteen jobs). Windows CLI shards 0/1/3 have run for about 3h53m; slow-suite work remains tracked under R4. Parent main `513f2ead` has pending run `40064778721`, with no jobs started. This checkpoint still requires its hosted run. Main-branch serialization preserves the running revision and coalesces pending revisions; local validation does not imply hosted success |
+| CI | At 05:51:29 UTC October 24, `8f91c7b1` run `40045082862` is successful: all twenty jobs passed. Its Windows CLI jobs took 3h02m–4h17m; per-target compile/execution attribution remains R4 work. Parent main `bf533382` run `40066505992` is running (one passed, seventeen running, none failed among eighteen created jobs). Superseded pending `513f2ead` was coalesced. This checkpoint still requires its hosted run. Main-branch serialization preserves the running revision and coalesces pending revisions; local validation does not imply hosted success |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First extract and verify the allocation predecessor using the
@@ -738,6 +797,14 @@ declarations exist. Preserve remaining semantic laws in that
 same harness, then delete the sequence and obsolete helpers. It is regression
 evidence, not the current production source builder.
 
+A bounded follow-up in that chain is `tests/support/owned_gem_inputs.rs`, whose
+only caller is `remaining_historical_family_laws`. It emits no successor and
+mostly pins obsolete intermediate all-Pending counts. Before removing that leaf,
+verify that Import's existing omitted-policy/neutral-guard laws and maintained
+originals retain the useful rule: known-empty schema is not source-input
+authority. Do not transfer obsolete counts. This deletion removes neither a
+publisher nor a binary, so it follows the next selected-source accounting batch.
+
 Remove implementation fingerprints coherently across Data identity, Import item
 loading, CLI diagnostics and PoB adapter/extractor reports. Retain validated
 content identities, explicit semantic versions, upstream pins and executable
@@ -890,22 +957,36 @@ only the two protected untracked drafts are excluded from this clean-checkout
 simulation. Evidence: `runs/weapon-profile-retirement/clean-metadata.json` and
 `runs/weapon-profile-retirement/shard-plans.json`. No hosted speedup is claimed.
 
-Next audited R0 candidate (not yet implemented): nine roots share the
-`owned_global_minion_level_native` closure: amulet-copy consumer, Fine Belt,
-fire damage, global minion level, minion-level scalability, modifier category,
-passive jewel placement, Ruby inputs and spell damage. The audit found 75 module
-instances / 30 unique files and a roughly 62 KiB shared native/helper closure
-compiled nine times. Sharing exact bindings would retain 21 distinct ordinary
-laws and all eighteen ignored utilities, removing three repeated preservation
-registrations. Keep conflicting family aliases local and explicitly share the
-nested Amulet/Fire/Ruby/preservation helpers. Recheck live consumers before edits;
-this candidate does not displace the schema-format and R1 dependency cut.
+**Implemented and validated:** nine roots sharing the
+`owned_global_minion_level_native` closure now form `tests/component_sources.rs`:
+amulet-copy consumer, Fine Belt, fire damage, global minion level, minion-level
+scalability, modifier category, passive jewel placement, Ruby inputs and spell
+damage. The new suite has 31 module registrations over 31 unique files, replacing
+75 registrations over 30 unique files; the additional file is its shared root.
+All nine normalized bodies and five relocated file references match their
+originals. It preserves 21 distinct ordinary laws and all eighteen ignored
+utilities, sharing three identical preservation registrations once. Four external
+targets retain their original test/status inventories and helper bindings.
+Independent review confirms the exact moves and source checks. Strict Clippy
+passes for all five targets in both CLI feature profiles. Both profiles execute
+27 ordinary test registrations successfully and retain 39 ignored utilities across
+these targets. Every exact compiled name/status agrees with the saved inventory.
+Optional-PoB and native builds take 12m38s and 12m08s; suite execution is 0.41s
+and 0.37s, with under 0.2s for the external targets in each profile. No before/after
+speedup is inferred from the reduced binary count. Evidence, including exact
+body/path and compiled inventories: `runs/component-suite-consolidation/`.
 
-October 24 re-audit confirms this cohort and its 61,608-byte three-file shared
-closure. Consolidation removes eight binaries per profile; preserve all eighteen
-ignored entry points as well as the 21 distinct active laws, and verify 240
-runnable targets exactly once if no other roots change. The active `8f91c7b1`
-hosted run predates only the weapon-profile root retirement (shard 3); the costly
+October 24 consolidation removes eight binaries per profile and repeated
+compilation of its 61,608-byte three-file shared closure. Fresh clean-checkout
+metadata and the unchanged planner verify all 240 runnable targets exactly once
+as 61/60/60/59 in each profile, plus one separate build-script dependency. All nine
+retired roots are absent and `component_sources` appears once. Only the two
+protected untracked roots are excluded from this clean-checkout simulation; the
+drafts themselves are unchanged. Evidence: `clean-metadata.json` and
+`shard-plans.json` in the same directory.
+
+The successful `8f91c7b1` hosted run predates the weapon-profile root retirement
+(shard 3) and this consolidation; the costly
 `owned_extension_cli` chain is on its already-completed shard 2. There is no
 evidence that retired tests explain all three long-running shards. Use completed
 job logs to distinguish compilation from execution before rebalancing or changing
@@ -1684,7 +1765,7 @@ composed sources and enforce its reviewed precision domain. The remaining
 critical path still includes the graft application, reservation ownership and
 contributor delivery, complete source-field disposition, then readiness.
 
-**Next checkpoint: joined selected-source accounting.** Preserve the existing
+**In progress: joined selected-source accounting.** Preserve the existing
 whole-plan gate: query compilation requires complete owners, the complete outer
 query registry and complete groups, including unread groups. A complete-empty
 native candidate list cannot establish that unconverted game data has no writer.
@@ -1709,14 +1790,33 @@ The delivery order is:
    item, attribute, numeric-passive, class, reward, support and generated-source
    families. Reuse exact authored selection and checked source inventories;
    support-source classification alone does not establish numerical absence.
-   Start with the exact 57-passive partition: 45 reviewed intrinsic families
+   The first batch implements the exact 57-passive partition: 45 reviewed intrinsic families
    (22 attribute choices, eighteen numeric minion passives, two roots, class view,
    socket and Gigantic), six structural/descendant-dependent sources, and the six
    unresolved sources below. Reuse complete family checkers and the normalized
-   sidecar to join every exact selected origin once. Unknown/nested outputs,
-   redirected owners, erased paired effects, occupied sockets and missing choices
-   must fail or remain unresolved. This is an evidence gate, not 45 newly complete
-   numerical owners or a change to the five Pending input obligations.
+   sidecar to join all 55 saved allocations and two implicit roots exactly once.
+   Three new laws cover the actual unchanged build, nine provenance/membership
+   mutations and complete conditional/paired-output preservation. Unknown/nested
+   outputs, redirected owners, erased paired effects, occupied sockets and missing
+   choices fail or remain unresolved. All 187 maintained release tests pass at
+   opt-level zero, with strict Authoring Clippy. This is an evidence gate, not 45
+   newly complete numerical owners or a change to the five Pending input
+   obligations. Continue with the other selected families; do not use this test
+   partition as a runtime absence certificate.
+   The second batch implements shared Player Actor `332a` plus selected Class
+   `0a23`, reusing the existing complete 148-call initializer proof (99 BASE,
+   24 FLAG, twenty INC and five MORE outputs), its name-preserving constructors,
+   the separate dynamic Str/Dex/Int loop and all eight Class source records.
+   Join the exact saved selection and shared-rule target, reject missing,
+   duplicate, crossed or altered sources, and classify complete intrinsic output
+   families independently of the nine currently compiled Player programs.
+   Keep all external item/tree/configuration/Party/support inputs unresolved.
+   Source projection and owner identity are distinct: legitimate child records
+   can reference their preset, while only the exact selected Spec owns it.
+   The batch neither closes incoming queries nor replaces whole Actor coverage.
+   Next continue the selected item/modifier and constructed Skill/support/effect
+   output inventories, followed by reward/configuration responsibility. Preserve
+   unresolved initialization conditions and all other indirect contributors.
 2. Acquire two exact passive-grant joins for 10561/Navira's Fracturing and
    23265/Kelari's Deception. Child Djinn mechanics already exist; the missing
    evidence is `PassiveSkills.GrantedSkill -> SkillGems.GemEffects`, which the
@@ -1725,6 +1825,18 @@ The delivery order is:
    nodes 14686/53324/53795 and Archon of Undeath 26926. Empty ModParser output
    does not prove absence. Pin the exact content revision and complete records;
    an exporter label such as `0_5` alone cannot authenticate new data.
+   Bounded October 24 discovery found no reconciled raw authority in the checked
+   public repositories. The pinned exporter hardcodes `0_5`; PoB's application
+   version `0.23.1` is not a client-content revision. GGG's
+   [official tree export](https://github.com/grindinggear/poe2-skilltree-export)
+   supplies topology/identity evidence, while this
+   [documented patch-CDN extraction route](https://github.com/PraedythXIV/poe2-build-converter/blob/main/ARCHITECTURE.md)
+   is an acquisition lead, not our missing historical rows. Locate the archived
+   client build/bundle identity, then capture the six PassiveSkills records and
+   their exact transitive GemEffects or buff/stat rows, including list order and
+   absence. A contemporary capture needs explicit source-version reconciliation;
+   it must not silently become parity evidence for the current pin. Keep any new
+   repository acquisition code in Rust. No website scraping is required.
 3. Finish configuration responsibility, including absent/default callbacks,
    all ConfigSets and outside-Config origins. Activate the strict-empty custom
    adapter only with its actual source census. Skill-preset usage, external
@@ -1732,15 +1844,25 @@ The delivery order is:
    The current normalization has 38 disposition rules but no inventory/census;
    the selected ConfigSet has eight Inputs and 34 Placeholders. A custom-empty
    row alone cannot complete that responsibility inventory.
-4. Author graft through the existing exact Skill-to-Player contribution and
+4. Resolve the two [Graft contribution decisions](owned-skill-actor-contribution-proposal.md)
+   before changing the public runtime contract. The existing DSL can author a
+   direct Skill-to-Player contribution, but checked Skill-origin membership only
+   admits self recipients, and repeated occurrences lack semantic arithmetic
+   order. The proposed literal-Player admission and opt-in exact quantity sum
+   remain unimplemented pending owner review. Then author Graft through that
+   checked contribution and the existing
    `ProjectActorStat` own-child relation. The source maps magnitude 15 to a local
    property; Player activation and a positive magnitude suppress that exact
    child and contribute projectile speed multiplied by actual active Skill count.
    Reuse typed participation/count authority. Review the direct `NewMod` stacking
    path; do not copy Sacrifice's maximum-stack policy or use an application target
-   that cross-products every matching child slot. The UmbralWell activation source
-   remains unresolved, and its false value cannot be inferred from the selected
-   tree. Disposition the main-Skill configuration cache instead of importing it.
+   that cross-products every matching child slot. The activation source is now
+   identified: allocation 26085's Abyssal Lich view, existing Passive `0ee8`,
+   guarded by Ascendancy `0a29`. Preserve the complete view-construction and
+   replacement proof; the base Lich view must not gain that flag. Incoming flag
+   completeness still needs its source census. Positive magnitude suppresses the
+   exact child even at count zero, so suppression must not depend on count.
+   Disposition the main-Skill configuration cache instead of importing it.
 5. Complete accepted reservation obligations/contributor delivery and full Sniper
    field disposition. Add the revival consumer only after complete real incoming
    memberships and the reviewed precision domain/policy. Then finish exact

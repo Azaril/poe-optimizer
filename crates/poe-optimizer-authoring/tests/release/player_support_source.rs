@@ -350,6 +350,16 @@ pub(super) fn verified_life_bindings() -> &'static Value {
     &facts().inputs["player-intrinsic-life/bindings.json"]
 }
 
+/// Whole pinned constructor output names, independent of native conversion.
+pub(super) fn verified_intrinsic_modifiers() -> &'static Value {
+    &facts().evidence["intrinsic_modifiers"]
+}
+pub(super) fn check_intrinsic_modifiers(census: &Value) {
+    let f = facts();
+    check_intrinsics(census, &f.spans);
+    check_wrappers_and_boundaries(&f.spans);
+}
+
 /// Check the finite reviewed call prefixes, not arbitrary Lua syntax. Complete
 /// source/span hashes above authenticate all arguments, control flow and bodies.
 fn check_intrinsics(census: &Value, spans: &BTreeMap<String, String>) {

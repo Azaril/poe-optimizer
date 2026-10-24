@@ -1,14 +1,6 @@
 //! Published Fire Damage programs in an unpublished finite numerical domain.
 //! This supplies no receiving damage contribution, aggregate, or build parity.
-#[allow(dead_code)]
-#[path = "support/owned_global_minion_level_native.rs"]
-mod component;
-#[allow(dead_code)]
-#[path = "support/owned_fire_damage_modifier.rs"]
-mod family;
-#[allow(dead_code)]
-#[path = "support/owned_release_fixture.rs"]
-mod release;
+use super::{fire as family, native as component, release};
 
 use component::{AuthoredComponent, CategoryBindings, ComponentBindings, Fixture, occurrence};
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};

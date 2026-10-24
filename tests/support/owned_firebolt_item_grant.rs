@@ -1,4 +1,6 @@
 //! Explicit raw item-grant supply; saved group settings and effective inputs stay open.
+#[path = "owned_family_preservation.rs"]
+mod preserve;
 #[path = "owned_spell_damage_modifier.rs"]
 pub mod spell;
 use poe_optimizer_core::{

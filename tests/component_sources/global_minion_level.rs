@@ -1,6 +1,5 @@
 //! Actual authored family programs in a closed, explicitly synthetic component.
-#[path = "support/owned_global_minion_level_native.rs"]
-mod native;
+use super::native;
 use native::{Fixture, occurrence};
 use poe_optimizer_core::{owned_build::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;

@@ -1,17 +1,6 @@
 //! Actual imported Ruby inputs and compiled programs in a finite numerical fixture.
 //! This does not supply a damage receiver, aggregate, or whole-build parity.
-#[allow(dead_code)]
-#[path = "support/owned_global_minion_level_native.rs"]
-mod component;
-#[allow(dead_code)]
-#[path = "support/owned_fire_damage_modifier.rs"]
-mod family;
-#[allow(dead_code)]
-#[path = "support/owned_ruby_item_inputs.rs"]
-mod physical;
-#[allow(dead_code)]
-#[path = "support/owned_release_fixture.rs"]
-mod release;
+use super::{fire as family, native as component, physical, release};
 
 use component::{
     AuthoredComponent, AuthoredTemplateInputs, CategoryBindings, ComponentBindings, Fixture,

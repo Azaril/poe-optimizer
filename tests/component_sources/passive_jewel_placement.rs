@@ -1,17 +1,6 @@
 //! Published Ruby inputs through a finite, unpublished passive receiving topology.
 //! This proves native occurrence relations, not complete original-build parity.
-#[allow(dead_code)]
-#[path = "support/owned_global_minion_level_native.rs"]
-mod component;
-#[allow(dead_code)]
-#[path = "support/owned_fire_damage_modifier.rs"]
-mod fire;
-#[allow(dead_code)]
-#[path = "support/owned_ruby_item_inputs.rs"]
-mod physical;
-#[allow(dead_code)]
-#[path = "support/owned_release_fixture.rs"]
-mod release;
+use super::{fire, native as component, physical, release};
 
 use component::{
     AuthoredComponent, AuthoredTemplateInputs, CategoryBindings, ComponentBindings, Fixture,
@@ -88,7 +77,7 @@ struct Inputs {
 impl Inputs {
     fn load() -> Self {
         let authoring: Value = serde_json::from_str(include_str!(
-            "../data/owned/poe2/3887ae68/ordinary-passive-jewel-placement/authoring.json"
+            "../../data/owned/poe2/3887ae68/ordinary-passive-jewel-placement/authoring.json"
         ))
         .unwrap();
         assert_eq!(authoring["source_validation"]["status"], "passed");
@@ -170,7 +159,7 @@ impl Inputs {
             a["id"] == destination["allocation"]["value"]
         });
         let bindings: Vec<OrdinaryPassiveSocketBinding> = serde_json::from_str(include_str!(
-            "../data/owned/poe2/3887ae68/ordinary-passive-jewel-placement/bindings.json"
+            "../../data/owned/poe2/3887ae68/ordinary-passive-jewel-placement/bindings.json"
         ))
         .unwrap();
         let ruby = bindings
@@ -200,7 +189,7 @@ impl Inputs {
             24
         );
         let extension: OwnedRecipeExtension = serde_json::from_str(include_str!(
-            "../data/owned/poe2/3887ae68/ordinary-passive-jewel-placement/extension.json"
+            "../../data/owned/poe2/3887ae68/ordinary-passive-jewel-placement/extension.json"
         ))
         .unwrap();
         for entry in extension.schema {

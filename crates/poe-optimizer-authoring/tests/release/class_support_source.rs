@@ -338,6 +338,13 @@ pub(super) fn verified_attack_policy() -> &'static Value {
     &facts().inputs["intrinsic-attack/policy.json"]
 }
 
+/// Reuse complete literal/body checks for detached output-accounting controls.
+pub(super) fn check_intrinsic_outputs(classes: &Value, unarmed: &Value) {
+    let f = facts();
+    check_classes(classes, &f.spans["classes-literal"]);
+    check_unarmed(classes, unarmed, &f.spans["unarmed-table"]);
+}
+
 fn background(value: &Value, class: bool) {
     let mut keys = vec!["height", "image", "section", "width", "x", "y"];
     if class {

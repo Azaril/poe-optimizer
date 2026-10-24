@@ -26,6 +26,25 @@ const FIELDS: [&str; 7] = [
     "outputs",
     "sockets",
 ];
+/// Authenticated empty intrinsic roots; neighboring owners are not included.
+pub(super) fn reviewed_roots() -> &'static [(DefinitionDescriptor, DefinitionRules); 2] {
+    static ROOTS: std::sync::OnceLock<[(DefinitionDescriptor, DefinitionRules); 2]> =
+        std::sync::OnceLock::new();
+    ROOTS.get_or_init(|| {
+        family::check_authored();
+        ascendancy_family::check_authored();
+        [
+            family::read::<Value>("closure.json"),
+            ascendancy_family::read::<Value>("closure.json"),
+        ]
+        .map(|value| {
+            (
+                serde_json::from_value(value["definitions"][0].clone()).unwrap(),
+                serde_json::from_value(value["owners"][0].clone()).unwrap(),
+            )
+        })
+    })
+}
 fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
 }

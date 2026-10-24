@@ -1,7 +1,5 @@
 //! A finite native category boundary, separate from whole-build source coverage.
-#[allow(dead_code)]
-#[path = "support/owned_global_minion_level_native.rs"]
-mod native;
+use super::native;
 use native::{Fixture, categories as category};
 use poe_optimizer_core::owned_build::ParameterValue;
 use poe_optimizer_engine::owned_plan::{EffectValue, PlanError};

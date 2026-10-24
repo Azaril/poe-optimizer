@@ -57,13 +57,9 @@ fn link<T>(
     only(origin.links.iter().filter_map(select), kind)
 }
 
-pub(crate) fn saved(
-    evidence: &SourceProjectEvidence<'_>,
-    normalized: &NormalizedImport,
-) -> EvaluationSelection {
-    let items = selected(evidence, "Items", "ItemSet", "activeItemSet");
-    let skills = selected(evidence, "Skills", "SkillSet", "activeSkillSet");
-    let config = selected(evidence, "Config", "ConfigSet", "activeConfigSet");
+pub(crate) fn selected_spec<'a, 's>(
+    evidence: &'a SourceProjectEvidence<'s>,
+) -> &'a SourceEvidenceRow<'s> {
     let tree = only(
         evidence
             .rows()
@@ -77,7 +73,7 @@ pub(crate) fn saved(
         .unwrap()
         .checked_sub(1)
         .expect("activeSpec must be one-based");
-    let spec = evidence
+    evidence
         .rows()
         .iter()
         .filter(|row| {
@@ -85,7 +81,17 @@ pub(crate) fn saved(
                 && row.occurrence().name() == "Spec"
         })
         .nth(spec_index)
-        .expect("selected Spec must exist");
+        .expect("selected Spec must exist")
+}
+
+pub(crate) fn saved(
+    evidence: &SourceProjectEvidence<'_>,
+    normalized: &NormalizedImport,
+) -> EvaluationSelection {
+    let items = selected(evidence, "Items", "ItemSet", "activeItemSet");
+    let skills = selected(evidence, "Skills", "SkillSet", "activeSkillSet");
+    let config = selected(evidence, "Config", "ConfigSet", "activeConfigSet");
+    let spec = selected_spec(evidence);
     let loadout = match attr(items, "useSecondWeaponSet") {
         "true" => "weapon-set-two",
         "false" | "nil" => "weapon-set-one",

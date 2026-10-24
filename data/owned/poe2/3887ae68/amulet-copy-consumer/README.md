@@ -53,7 +53,8 @@ original imports and 110 query rows must survive unchanged. Complete native
 builds remain **0/5**; Original05 remains the delivery target.
 
 Validation lives in the existing Amulet arithmetic and Sand item integration
-tests plus `tests/owned_amulet_copy_consumer.rs`. The opt-in publication test
+tests plus `tests/component_sources/amulet_copy.rs` in the shared
+`component_sources` target. The opt-in publication test
 requires `POE_OPTIMIZER_TEST_AMULET_COPY_CONSUMER_PRIOR` and a fresh
 `POE_OPTIMIZER_TEST_AMULET_COPY_CONSUMER_OUTPUT`. Sand's joined test continues to
 use `POE_OPTIMIZER_TEST_SAND_ITEM_RELEASE` with the checked current package.

@@ -3,6 +3,8 @@
 mod family;
 #[path = "support/owned_identity_correspondence.rs"]
 mod identity;
+#[path = "support/owned_family_preservation.rs"]
+mod preserve;
 #[path = "support/owned_release_fixture.rs"]
 mod release;
 #[path = "support/owned_selected_request.rs"]

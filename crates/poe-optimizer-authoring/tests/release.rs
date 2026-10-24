@@ -64,6 +64,10 @@ mod revival_source;
 mod root_support_domains;
 #[path = "release/scalar_attributes.rs"]
 mod scalar_attributes;
+#[path = "release/selected_actor_output_accounting.rs"]
+mod selected_actor_output_accounting;
+#[path = "release/selected_passive_accounting.rs"]
+mod selected_passive_accounting;
 #[path = "release/sniper_support_domains.rs"]
 mod sniper_support_domains;
 #[path = "release/socket_support_domains.rs"]
