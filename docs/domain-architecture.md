@@ -666,8 +666,9 @@ The conversion passes its preservation gates; detailed validation belongs in the
 retained only in Authoring's
 [`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz).
 Its historical receipt
-authenticates the archived bytes. Tests remove only the exact admitted 70-Stat,
-two-program and 350 support-domain additions, restore the archived program
+authenticates the archived bytes. Tests remove only each explicitly admitted
+production addition: typed declarations, exact program/query instances and
+reviewed support domains. They restore the archived program
 members, and reconstruct the original dependency bindings with maintained content
 constructors. The existing
 assembler then checks every historical artifact and provenance field. A separate
@@ -690,6 +691,12 @@ current channels and conditional receivers. Matching display text on another
 node does not certify its identity, constructor behavior or complete program
 inventory; source-domain additions remain bounded to independently reviewed
 definitions.
+Item templates likewise cover their complete intrinsic base and constructor
+behavior. Implicit, explicit, enchantment, rune and class-requirement modifiers
+retain separate supplying occurrences. Certifying a template's support-source
+domain cannot certify those suppliers, move their grants onto the template or
+erase intrinsic numerical outputs. Reuse authenticated source-family evidence
+without treating a selected item's display name as runtime authority.
 Conditional definitions require evidence for every admitted branch, including
 whole-list replacements, rather than only the selected character's branch.
 Intrinsic source absence does not close a contribution-query membership or the

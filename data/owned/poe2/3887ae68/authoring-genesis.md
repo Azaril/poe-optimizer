@@ -45,8 +45,9 @@ its recorded predecessor digest is provenance and does not require an ancestor.
 The [revival producers](revival-producers/README.md) add component contributions,
 while source census, final duration and complete-build coverage remain unresolved.
 
-Verified on October 24, 2026: the extracted predecessor passed complete checkpoint
-validation, then current tracked source built and independently verified successor
+Verified for revival checkpoint `bf533382` on October 24, 2026: the extracted
+predecessor passed complete checkpoint validation, then that source built and
+independently verified successor
 `dd2d337ab5ce1f0970a0644491636aa6d710895e3beb804dce5f8368da63a5f8` with the
 same semantic runtime input, ledger and registry. Its eighteen runtime files
 total 53,655,992 bytes. All eighteen runtime files and the name ledger replay
@@ -57,6 +58,16 @@ byte-for-byte, with no further allocation. Evidence is recorded in
 `runs/revival-producers-archive.json`; those local files are not inputs.
 Replay changes the checkpoint's predecessor commitment without allocating more
 names or changing runtime bytes. The snapshot above remains the explicit predecessor.
+
+The subsequent four-item support-domain tranche preserves this entire name
+ledger and registry. Current tracked source publishes verified checkpoint
+`c8ea736130313d4d0b320471733aaf365362195ae36394c1b7862c4516815a17`, with runtime
+input `dea68bc5b1b2d3ed90b38d1765eeb0e42511eef47fe25872c3f4cbebde6d3d1e`.
+The current runtime differs from the allocation snapshot only in rule metadata
+and the corresponding manifest/receipt commitments. This snapshot remains the
+allocation predecessor; it is not advertised as the latest evaluated content.
+Build the tracked source to obtain the current release. Local verification:
+`runs/item-support-verified.json` and `runs/item-support-inventory.json`.
 
 Archive transport is not a second semantic format, a source-reproduction proof
 or the planned indexed binary runtime pack. Future canonical allocation

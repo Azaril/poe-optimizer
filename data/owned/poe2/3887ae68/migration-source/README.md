@@ -56,7 +56,7 @@ node renaming, retains read/operand/effect semantics and order, checks exact
 owner membership, and compiles the complete reconstructed rule package with the
 existing Engine. Non-program metadata and all incomplete-coverage declarations
 must remain unchanged except for the explicitly admitted 73 Stat declarations,
-six program occurrences, three revival queries with one new outer gap, and 350
+six program occurrences, three revival queries with one new outer gap, and 354
 intrinsic support-domain declarations. The six programs comprise Sniper's initial
 types, support prohibition and intrinsic revival, plus three passive revival sources.
 The release test removes exactly that delta,
@@ -98,8 +98,8 @@ Eight existing Skill, Actor and declared-slot owners, three root/Ascendancy
 owners, four UsagePolicies, 293 ordinary attribute-choice passives, eighteen
 reviewed numeric minion passives, seven class-view passives, one intrinsic socket,
 one Boolean-flag passive, six structurally reviewed passives, all eight Classes
-and the shared Player Actor now have intrinsic support-source domains,
-bringing the total to 1,336 (1,307 Known, 29 Unmapped).
+the shared Player Actor and four reviewed item templates now have intrinsic
+support-source domains, bringing the total to 1,340 (1,311 Known, 29 Unmapped).
 See [source evidence and boundaries](../sniper-support-domains/README.md).
 The [attribute-choice proof](../attribute-support-domains/README.md) includes
 every option and retains the current six Count contribution channels.
@@ -122,6 +122,10 @@ The [shared Player proof](../player-support-domains/README.md) covers its intrin
 initializer and generic modifier constructors. Foreign sources and the nine
 Partial numerical programs remain independently accountable; the UI fallback
 action supplies no native coverage.
+The [item-template proof](../item-support-domains/README.md) reuses complete base
+records and authenticates constructor/output boundaries for Ashen Staff, Fine
+Belt, Rope Cuffs and Tattered Robe. Numerical records, separate modifier suppliers
+and Firebolt's exact Modifier grant remain intact.
 Inherited supports remain present, external origins remain independently checked,
 and all numerical Partial coverage stays unchanged. The support-domain metadata
 additions allocate no names or IDs; the separate Stat declarations do.
@@ -144,14 +148,14 @@ serve as production names.
 
 ## Checked source inventory
 
-Current input: `f94b745619f5a1b4fd40339289b5a62edfe3d103ff4bca69d0ca7393557a9d66`.
+Current input: `dea68bc5b1b2d3ed90b38d1765eeb0e42511eef47fe25872c3f4cbebde6d3d1e`.
 The 104 packets reference 2,566 distinct complete rule sources, preserving all
 8,218 occurrences. Their local names bind exact existing addresses; the shared
 `declarations/mechanics.kdl` component declares the 73 Stats bound by the persisted
 name ledger. The five
 contribution-query fragments use those declarations without separate allocation.
-The 2,802 declared inputs occupy 6,726,652 encoded and 46,023,925 decoded bytes;
-the root manifest is 184,374 bytes. The eighteen runtime files occupy 53,655,992
+The 2,802 declared inputs occupy 6,725,000 encoded and 46,024,917 decoded bytes;
+the root manifest is 184,374 bytes. The eighteen runtime files occupy 53,656,984
 bytes, including the 19,774,085-byte schema; the checkpoint receipt and name ledger
 total 455,214 bytes. All fit the existing default limits. The maintained Authoring
 tests check actual source graphs, historical artifacts and the new component producers.

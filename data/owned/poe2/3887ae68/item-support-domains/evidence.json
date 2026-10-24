@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "scope": "Four intrinsic ItemTemplate support-source domains only. Modifier recipes and supplied rune/enchant/class/implicit/explicit/buff records remain separate suppliers; generated Firebolt remains Modifier-owned. Numerical and incoming-source coverage remain Partial.",
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/item-structural-inventories/source-vectors.json",
+      "bytes": 625715,
+      "sha256": "e53ebdb5c969ce22cca6686a0befbfb168694b88c8131350d8810517e621a675"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/item-structural-inventories/dependencies.json",
+      "bytes": 731735,
+      "sha256": "5ed14afb9fe5049290612136b220da3b010b748b1465d9f1e90fc0af0aa9f92f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/item-structural-inventories/migration.json",
+      "bytes": 93903,
+      "sha256": "cb898ca775050f456b0ea92ceaa74af052be689cca306c520c2c6cc2d085ee34"
+    }
+  ],
+  "additional_files": [
+    {
+      "path": "src/Classes/ModList.lua",
+      "archive": "data/owned/poe2/3887ae68/mana-supplier-sources/passive-ModList.lua.gz",
+      "archive_bytes": 2020,
+      "archive_sha256": "7b1b25081e088b45c6a28ba5449faf44409641ad0d6688518ba07bc2b36dc815",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+      "archive_bytes": 7158,
+      "archive_sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Modules/ModTools.lua",
+      "archive": "data/owned/poe2/3887ae68/player-support-domains/ModTools.lua.gz",
+      "archive_bytes": 2806,
+      "archive_sha256": "74782a360e84ac9f468190e49215b5349ad8594d93302a7ed7870d46f7f42d69",
+      "bytes": 9130,
+      "sha256": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+    }
+  ],
+  "spans": [
+    {
+      "role": "item-slot",
+      "path": "src/Classes/Item.lua",
+      "first": 2414,
+      "last": 2669,
+      "bytes": 14926,
+      "sha256": "de8b5197cddf270583923305ee8a827a043e72869b0c50ecce0749cd56289b2f"
+    },
+    {
+      "role": "item-slot-dispatch",
+      "path": "src/Classes/Item.lua",
+      "first": 2671,
+      "last": 2680,
+      "bytes": 401,
+      "sha256": "2caa35d0b3e0a7144b68c830bf1435342b3fc5d7df0f6e2cce4356996a235b56"
+    },
+    {
+      "role": "item-build",
+      "path": "src/Classes/Item.lua",
+      "first": 2694,
+      "last": 2863,
+      "bytes": 7930,
+      "sha256": "258c1bedc2da8e89e9d073a77f14d17c1cc004261e0591aa5d5cc1105bf094e9"
+    },
+    {
+      "role": "modlist-class",
+      "path": "src/Classes/ModList.lua",
+      "first": 17,
+      "last": 20,
+      "bytes": 120,
+      "sha256": "b9178b65304ff73d5880bae8a4911e8d023dd1eb87127721da2da6392a10fa57"
+    },
+    {
+      "role": "modlist-constructor",
+      "path": "src/Classes/ModList.lua",
+      "first": 24,
+      "last": 27,
+      "bytes": 77,
+      "sha256": "66e1a709aa7494e422402d386e83fe3affe9f976b3827e9f6c7acad2ba53f9e8"
+    },
+    {
+      "role": "modlist-add",
+      "path": "src/Classes/ModList.lua",
+      "first": 29,
+      "last": 31,
+      "bytes": 58,
+      "sha256": "db5ed4fafe9105adb1a04b73f5594da005ca19b90050c29f8f39ef74c45e93fd"
+    },
+    {
+      "role": "modlist-add-list",
+      "path": "src/Classes/ModList.lua",
+      "first": 90,
+      "last": 96,
+      "bytes": 125,
+      "sha256": "cc06461df8d3036d8087e9f2a92888ee3d0d68f42778fbd9c7327e37c56dfe66"
+    },
+    {
+      "role": "modstore-constructor",
+      "path": "src/Classes/ModStore.lua",
+      "first": 65,
+      "last": 71,
+      "bytes": 179,
+      "sha256": "1e45c95b1f9fdd7fa2c0934c389e57024732fad0c6c082f4a08be1518a8dcd43"
+    },
+    {
+      "role": "scale-add",
+      "path": "src/Classes/ModStore.lua",
+      "first": 82,
+      "last": 119,
+      "bytes": 1377,
+      "sha256": "2cfb017fc33de4d32161bbff2096276f7e139ca37fe489b55f14e231d1ac22bf"
+    },
+    {
+      "role": "newmod-alias",
+      "path": "src/Classes/ModStore.lua",
+      "first": 18,
+      "last": 18,
+      "bytes": 38,
+      "sha256": "a240ad023a106fed93cea074d5c3e4c4d216776122420af3c8da943ac8b4da49"
+    },
+    {
+      "role": "newmod",
+      "path": "src/Classes/ModStore.lua",
+      "first": 142,
+      "last": 144,
+      "bytes": 71,
+      "sha256": "18ce657190ddb1cbab624655b07f30e6ad9b28b036978f5ce0303a4d2aacfe87"
+    },
+    {
+      "role": "create-mod",
+      "path": "src/Modules/ModTools.lua",
+      "first": 57,
+      "last": 91,
+      "bytes": 930,
+      "sha256": "c124b50cba30a13b0b1cb30bd8f470e8791f654e8a6362485dbda4199e72ae11"
+    },
+    {
+      "role": "set-source",
+      "path": "src/Modules/ModTools.lua",
+      "first": 277,
+      "last": 283,
+      "bytes": 166,
+      "sha256": "f48d33b883e7a54ba4a5ab8053a0af889821738333510c955ac51a9a6663c0cf"
+    },
+    {
+      "role": "extra-support",
+      "path": "src/Modules/ModParser.lua",
+      "first": 2219,
+      "last": 2253,
+      "bytes": 1356,
+      "sha256": "0e0ee80dab490746e3d9eb2408968d6420a42ce776a16a8febdbecb02f1a791d"
+    },
+    {
+      "role": "linked-support",
+      "path": "src/Modules/ModParser.lua",
+      "first": 3650,
+      "last": 3659,
+      "bytes": 750,
+      "sha256": "6be65f950f2e8f40c7d0e12f872aa20f03c366d3344f145133705ed60b403f72"
+    },
+    {
+      "role": "support-consumers",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1898,
+      "last": 1955,
+      "bytes": 2911,
+      "sha256": "3d6da3519b49165e2bd3b017ee88ef12bd392551cfac6f589dbf97ad1ad8a1fc"
+    },
+    {
+      "role": "linked-consumers",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 2078,
+      "last": 2097,
+      "bytes": 1037,
+      "sha256": "2b6a2b70adc75a94cdd1653f9288b25ac9a07796a22ce7308ed3c429729e63a8"
+    }
+  ],
+  "constructor_outputs": [
+    {
+      "line": 2451,
+      "role": "slot-quality",
+      "text": "\t\tmodList:NewMod(\"Multiplier:QualityOn\"..slotName, \"BASE\", self.quality, \"Quality\")"
+    },
+    {
+      "line": 2562,
+      "role": "armour-movement",
+      "text": "\t\t\tmodList:NewMod(\"MovementSpeed\", \"BASE\", -self.base.armour.MovementPenalty, self.modSource, { type = \"Condition\", var = \"IgnoreMovementPenalties\", neg = true })"
+    },
+    {
+      "line": 2618,
+      "role": "unreachable-jewel",
+      "text": "\t\t\tlocal spectrumMod = modLib.createMod(\"Multiplier:GrandSpectrum\", \"BASE\", 1, self.name)"
+    },
+    {
+      "line": 2620,
+      "role": "unreachable-jewel",
+      "text": "\t\t\tmodList:NewMod(\"MinionModifier\", \"LIST\", { mod = spectrumMod }, self.name)"
+    },
+    {
+      "line": 2825,
+      "role": "cosmetic-armour-data",
+      "text": "\t\tbaseList:NewMod(\"ArmourData\", \"LIST\", { key = \"EnergyShield\", value = 0 })"
+    },
+    {
+      "line": 2829,
+      "role": "cosmetic-armour-data",
+      "text": "\t\tbaseList:NewMod(\"ArmourData\", \"LIST\", { key = \"EnergyShield\", value = 0 })"
+    }
+  ],
+  "item_templates": [
+    "def.0000000000001d75",
+    "def.0000000000001e84",
+    "def.0000000000002007",
+    "def.000000000000238c"
+  ],
+  "numerical_completeness": false,
+  "modifier_source_completeness": false,
+  "source_discovery_completeness": false
+}

@@ -1,5 +1,5 @@
 // Checked source manifest. Rule programs are authored only in the declared DSL files.
-release expected_input="f94b745619f5a1b4fd40339289b5a62edfe3d103ff4bca69d0ca7393557a9d66" {
+release expected_input="dea68bc5b1b2d3ed90b38d1765eeb0e42511eef47fe25872c3f4cbebde6d3d1e" {
     stat-declarations "declarations/mechanics.kdl" names="names/mechanics-declarations.kdl"
     rule-source "rules/initial-skill-types/skeletal-sniper.rule"
     rule-source "rules/support-prohibition/skeletal-sniper.rule"

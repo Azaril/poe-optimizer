@@ -10,7 +10,50 @@ adjustments below. Historical checkpoints remain in Git and
 
 ## Current state
 
-**Current checkpoint:** exact selected-passive accounting joins all
+**Current checkpoint:** admitted the four independently reviewed
+intrinsic item-template support domains: Ashen Staff `1d75`, Fine Belt `1e84`,
+Rope Cuffs `2007` and Tattered Robe `238c`. The proof reuses complete base records and
+item-constructor proof. Rolled, socketed and class-requirement modifiers remain
+separate sources; the Firebolt grant remains on its exact supplying Modifier.
+This changes structural support discovery only, not numerical owner closure or
+the five selected input obligations. The complete native build count remains
+**0/5**. Independent review cleared the full source proof and exact four-row
+corpus inverse. The current-source checkpoint builds and passes the standalone
+verifier; all 73 names and the entire registry are unchanged. Repeated builds
+produce identical runtime files and names. Compared with the allocation
+predecessor, only rules and their manifest/receipt commitments differ.
+All **380 Authoring checks pass without optimization**: 175 library tests, eight
+CLI tests and 197 release tests. Strict all-target Authoring Clippy passes.
+The six new release laws authenticate full constructors, positive external
+support factories, exact template/Modifier ownership and selected occurrences.
+The first selected-item check wrongly treated every Item reference as an owner;
+the repaired check preserves direct-child ModRange provenance and rejects eight
+missing/duplicate/crossed-source controls. No production validator was changed.
+The final complete release run passes in 174.43s. Evidence:
+`runs/item-support-authoring-tests.log` (initial diagnostics),
+`runs/item-support-release-repaired-tests.log`,
+`runs/item-support-authoring-clippy.log`, `runs/item-support-verified.json`,
+`runs/item-support-inventory.json` and `runs/item-support-equivalence.json`.
+All five originals retain their exact query identities and selected input
+obligations (123/137/127/144/5). Scoped formatting, UTF-8 and protected-draft
+hash checks pass. No readiness or numerical closure is added.
+
+The redundant historical Gem-input assertion helper is deleted from the CLI
+family chain. Its known-empty-schema/absent-policy distinction, neutral-value
+guards and five-original census survive in Import; all thirteen selected witness
+tests pass. Strict `owned_extension_cli` Clippy/typechecking passes in both
+feature profiles. No artifact-producing step or surviving chain check changed,
+so the unchanged historical publication/Cleric chain was not replayed solely
+for this deletion. This retires a helper, not another binary or compiler.
+
+Local publication-test execution must place `TEMP`/`TMP` in a writable workspace
+scratch directory under this sandbox. Five unchanged publication laws initially
+failed with Windows error 5 in the default temporary directory; all five pass
+unchanged with workspace temporary storage. The production checkpoint publisher
+and its no-clobber checks were not relaxed. CI's ordinary temporary storage does
+not need changing on this evidence.
+
+**Preceding checkpoint (`f55fdacc`):** exact selected-passive accounting joins all
 57 Original05 sources through the preserved import sidecar: 55 allocations and
 two implicit roots. It classifies 45 reviewed intrinsic families, six structural
 or descendant-dependent sources, and six unresolved sources. Existing complete
@@ -284,7 +327,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal in this checkpoint |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal `f55fdacc`; intrinsic item-template support domains and redundant Gem-helper retirement in this checkpoint |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -292,9 +335,9 @@ silently become a second supported implementation.
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets; all 117 contribution queries come from five named KDL fragments. The normal builder rejects embedded program and query members. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
-| Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 73 Stats, six exact program occurrences, three revival queries with one outer gap and 350 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,336 source domains (1,307 Known, 29 Unmapped). The complete current 73-name checkpoint is the predecessor for later builds; evaluation bundle still absent |
-| CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally. The later `d490eb54` hosted workflow is successful; this compact cutover still requires its own run |
-| CI | At 05:51:29 UTC October 24, `8f91c7b1` run `40045082862` is successful: all twenty jobs passed. Its Windows CLI jobs took 3h02m–4h17m; per-target compile/execution attribution remains R4 work. Parent main `bf533382` run `40066505992` is running (one passed, seventeen running, none failed among eighteen created jobs). Superseded pending `513f2ead` was coalesced. This checkpoint still requires its hosted run. Main-branch serialization preserves the running revision and coalesces pending revisions; local validation does not imply hosted success |
+| Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 73 Stats, six exact program occurrences, three revival queries with one outer gap and 354 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,340 source domains (1,311 Known, 29 Unmapped). The complete current 73-name checkpoint is the predecessor for later builds; evaluation bundle still absent |
+| CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Future commands must use the same standard; hosted status belongs to the CI row below |
+| CI | At 06:29:41 UTC October 24, `bf533382` run `40066505992` has eight passed, ten running and no failures; `f55fdacc` run `40070070780` is pending. Previous `8f91c7b1` run `40045082862` completed with all twenty jobs passing. Its Windows CLI jobs took 3h02m–4h17m; per-target compile/execution attribution remains R4 work. Main-branch serialization preserves the running revision and coalesces pending revisions. This checkpoint still requires hosted validation; local success does not imply hosted success |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First extract and verify the allocation predecessor using the
@@ -305,15 +348,15 @@ Successful publication prints the checkpoint identity to
 stderr and checkpoint receipt JSON to stdout. The committed complete snapshot
 supplies the complete allocation history; later builds preserve its ledger as a checked
 predecessor. Do not bootstrap evolving source. Current runtime input identity:
-`f94b745619f5a1b4fd40339289b5a62edfe3d103ff4bca69d0ca7393557a9d66`.
-The 2,802 declared source files use 6,726,652 encoded and 46,023,925 decoded
+`dea68bc5b1b2d3ed90b38d1765eeb0e42511eef47fe25872c3f4cbebde6d3d1e`.
+The 2,802 declared source files use 6,725,000 encoded and 46,024,917 decoded
 bytes, within the existing 64 MiB bounds. The 184,374-byte root manifest and
 expanded rule bytes also fit current limits without increases.
 Metadata JSON remains temporary; gzip is not the compact runtime format.
 Decoded source bytes are now below the 80% warning threshold. Fresh publication
 from the extracted canonical snapshot produces checkpoint
-`dd2d337ab5ce1f0970a0644491636aa6d710895e3beb804dce5f8368da63a5f8`, whose eighteen
-runtime files total 53,655,992 bytes (13,452,872 bytes below the unchanged aggregate
+`c8ea736130313d4d0b320471733aaf365362195ae36394c1b7862c4516815a17`, whose eighteen
+runtime files total 53,656,984 bytes (13,451,880 bytes below the unchanged aggregate
 cap). Its schema is 19,774,085 bytes; checkpoint/name files add 455,214 bytes.
 The fresh full verifier passes. The distinct indexed binary runtime work remains
 required; no resident-memory or evaluator-throughput saving is claimed.
@@ -323,7 +366,7 @@ Historical input
 and its receipt remain independent regression evidence. Original rule IR lives
 only in Authoring's `tests/fixtures/retained-rules.json.gz`, outside production
 inputs. Actual-source graph checks plus restoration of just historical program
-members, with only the exact 73-Stat/six-program/three-query/one-outer-gap/350-domain delta removed through
+members, with only the exact 73-Stat/six-program/three-query/one-outer-gap/354-domain delta removed through
 maintained content constructors, prove complete historical schema meaning and
 metadata/provenance are preserved. All other artifact bytes remain exact; the
 manifest is authenticated after restoring only its historical schema row. New
@@ -797,13 +840,13 @@ declarations exist. Preserve remaining semantic laws in that
 same harness, then delete the sequence and obsolete helpers. It is regression
 evidence, not the current production source builder.
 
-A bounded follow-up in that chain is `tests/support/owned_gem_inputs.rs`, whose
-only caller is `remaining_historical_family_laws`. It emits no successor and
-mostly pins obsolete intermediate all-Pending counts. Before removing that leaf,
-verify that Import's existing omitted-policy/neutral-guard laws and maintained
-originals retain the useful rule: known-empty schema is not source-input
-authority. Do not transfer obsolete counts. This deletion removes neither a
-publisher nor a binary, so it follows the next selected-source accounting batch.
+The read-only `tests/support/owned_gem_inputs.rs` leaf and its sole call from
+`remaining_historical_family_laws` are now removed. Import's existing
+omitted-policy/neutral-guard laws, retained breadth checks and maintained
+originals preserve the useful rule: known-empty schema is not source-input
+authority. No historical counts were copied into another helper. The surviving
+skill-scope and publication/Cleric chain is intact; this deletes neither a
+publisher nor a binary.
 
 Remove implementation fingerprints coherently across Data identity, Import item
 loading, CLI diagnostics and PoB adapter/extractor reports. Retain validated
@@ -1814,8 +1857,27 @@ The delivery order is:
    Source projection and owner identity are distinct: legitimate child records
    can reference their preset, while only the exact selected Spec owns it.
    The batch neither closes incoming queries nor replaces whole Actor coverage.
-   Next continue the selected item/modifier and constructed Skill/support/effect
-   output inventories, followed by reward/configuration responsibility. Preserve
+   The current intrinsic item-template tranche covers Ashen Staff, Fine Belt, Rope
+   Cuffs and Tattered Robe using their already retained complete base records.
+   Remaining selected templates are Solar Amulet, Cryptic Leggings, Sapphire
+   Ring and Iron Crown. Their constructors and each exact rolled modifier still
+   need review; the two uses of item 26 remain separate occurrences. Do not
+   substitute template-domain coverage for a physical modifier/output census.
+   The next coherent selected Skill batch is nine existing intrinsic source
+   domains: Arsonist Skill `0323` / ActorSlot `3288` / Actor `3287`, Frost Mage
+   `0326` / `3292` / `3291`, and Reaver `0327` / `329c` / `329b`. Join all 28
+   selected source rows first (seven physical actives, sixteen physical supports,
+   two Direct and three generated); all 23 physical Gem domains already exist.
+   The complete parent/profile bodies and constructed recipes are retained.
+   Reuse common constructor proofs and account for all 22 parent mapping rows,
+   including seven null mappings. Preserve positive revival, distinct Graft
+   magnitudes, reservation, quality and Rage outputs rather than calling them
+   numerically empty. Missing Command definitions, second children, child output
+   domains, inherited supports and all Partial numerical owners remain separate.
+   Show that the nine exact declarations remove their missing-source-domain
+   classification without manufacturing a Complete build fixture. Then finish
+   other Skill/support/effect output inventories and reward/configuration
+   responsibility. Preserve
    unresolved initialization conditions and all other indirect contributors.
 2. Acquire two exact passive-grant joins for 10561/Navira's Fracturing and
    23265/Kelari's Deception. Child Djinn mechanics already exist; the missing
@@ -2874,7 +2936,7 @@ Partial coverage, the one class-independent Player binding, ten independent Life
 observations, fresh/reused scratch and missing/type-invalid inputs. Public
 ExistingActor validation still rejects missing, empty, duplicate or unowned
 bindings. Original05 remains level 92, Class `0a23`, with five input obligations.
-There are now 1,336 source domains (1,307 Known, 29 Unmapped); selected passive
+That shared-Player checkpoint had 1,336 source domains (1,307 Known, 29 Unmapped); selected passive
 source coverage remains 51/57. Level/config obligations and foreign sources
 remain independently blocking; the UI's empty-support melee fallback grants no
 native coverage.
@@ -3440,6 +3502,15 @@ and version, distinguish explanation from observed behavior, and validate the
 chosen semantics with independent cases and the applicable reference. This is
 targeted research, not PoEDB scraping or bulk extraction; it does not authorize
 copying source-language accidents into the native model.
+
+Immediate next bounded batch after the item-template checkpoint: the nine
+Arsonist/Frost Mage/Reaver intrinsic source domains and their exact selected
+source joins, as specified in the joined-source accounting section. All required
+parent/profile evidence is retained; preserve the unresolved Commands, children
+and numerical outputs. The Skill-to-Player query and exact-sum choices remain
+pending and do not block this batch. The other four selected item templates and
+their physical modifier census follow. The redundant Gem-input leaf is already
+retired; do not spend another checkpoint rediscovering or moving that assertion.
 
 1. Read this plan and Git status. The computed-support unused-input repair,
    immutable typed Stat declaration compiler and original bootstrap dependency

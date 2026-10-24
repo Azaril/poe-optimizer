@@ -42,6 +42,10 @@ mod initial_skill_types;
 mod item_bases;
 #[path = "release/item_metadata.rs"]
 mod item_metadata;
+#[path = "release/item_support_domains.rs"]
+mod item_support_domains;
+#[path = "release/item_support_source.rs"]
+mod item_support_source;
 #[path = "release/local_scaling.rs"]
 mod local_scaling;
 #[path = "release/minion_support_domains.rs"]
@@ -1775,7 +1779,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     let current_artifacts: BTreeMap<_, _> = release.artifacts().collect();
 
     // Historical IR remains a test reference only. Authenticate the exact new
-    // producers, 73 generic channels and 350 support-source domains before
+    // producers, 73 generic channels and 354 support-source domains before
     // reconstructing old commitments through maintained APIs.
     let retained = fs::read(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"),
@@ -2054,6 +2058,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         .chain(structural_support_domains::declarations())
         .chain(class_support_domains::declarations())
         .chain(player_support_domains::declarations())
+        .chain(item_support_domains::declarations())
         .collect();
     assert_eq!(domains.len(), prior_domains.len() + additions.len());
     for added in &additions {

@@ -284,6 +284,14 @@ they and foreign modifier stores remain separate obligations. These checks
 preserve source identity; they neither add a second importer nor complete the
 Actor's numerical coverage.
 
+Intrinsic item-template support discovery has a separate boundary from rolled
+or socketed modifiers. The implemented source-backed tranche covers four complete base
+records and their item constructors; the existing Firebolt supplier remains an
+exact Modifier grant. A template's intrinsic domain does not certify every
+equipped copy, its modifiers, or its numerical outputs. The maintained source
+proofs and ordinary release checker validate the four exact declarations; the
+remaining item sources and numerical coverage stay unresolved.
+
 One next limitation is documented in the [Skill-to-Actor contribution proposal](owned-skill-actor-contribution-proposal.md):
 direct Skill effects can name Player, while checked Skill-origin queries currently
 admit only self recipients. Repeated Skill contributions also need an explicit

@@ -987,6 +987,16 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
         owner: player,
         domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
     });
+    // Only the four independently reviewed intrinsic item templates are added.
+    // Their rolled/socketed modifiers remain separate source domains.
+    for id in ["1d75", "1e84", "2007", "238c"] {
+        expected_domains.push(SupportSourceDomainDeclaration {
+            owner: SchemaSubject::Definition(DefinitionAddress::ItemTemplate(
+                ItemTemplateDefId::new(ns.clone(), key(id)),
+            )),
+            domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+        });
+    }
     let domains = &mut preserved.support_discovery.as_mut().unwrap().providers;
     let prior_domains = &expected.support_discovery.as_ref().unwrap().providers;
     assert_eq!(domains.len(), prior_domains.len() + expected_domains.len());

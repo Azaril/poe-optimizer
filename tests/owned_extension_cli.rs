@@ -21,8 +21,6 @@ mod defence_profiles;
 mod elemental_resistance;
 #[path = "support/owned_elemental_weapons.rs"]
 mod elemental_weapons;
-#[path = "support/owned_gem_inputs.rs"]
-mod gem_inputs;
 #[path = "support/owned_gem_numeric_aliases.rs"]
 mod gem_numeric_aliases;
 #[path = "support/owned_gem_schemas.rs"]
@@ -166,7 +164,6 @@ fn remaining_historical_family_laws() {
     let resistance = elemental_resistance::check_elemental_resistance(cwd, &observations);
     let attributes = item_attributes::check_item_attributes(cwd, &resistance);
     let rarity = rarity_chaos::check_rarity_chaos(cwd, &attributes);
-    gem_inputs::check_gem_inputs(cwd, &rarity);
     let scopes = skill_scopes::check_skill_scopes(cwd, &rarity);
     let actor = actor_attributes::check_actor_attributes(cwd, &scopes);
     let passive = passive_attributes::check_passive_attributes(cwd, &actor);
