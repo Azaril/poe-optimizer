@@ -2282,7 +2282,14 @@ The delivery order is:
    headers. Share the existing resolver instead of adding another source-axis
    parser. Keep exact per-set weapon state and independent presets. Build's
    saved class/ascendancy labels do not provide class authority; its actual level
-   and MAIN selection have their own consumers. For TimelessData/Calcs, the fresh
+   and MAIN selection have their own consumers. The completed header audit is in
+   `runs/configuration-census-audit-01/header-owner-next.md`: Tree is the immediately
+   bounded transfer; Items needs a finite root-toggle applicability proof, Skills
+   needs saved-input versus future-edit default consumer separation, and Build
+   needs exact MAIN source-group correspondence under the existing saved-selection
+   Pending owner. MAIN must not borrow CALCS or usage authority. These are private
+   accounting follow-ups, without a new public model or native defaults.
+   For TimelessData/Calcs, the fresh
    default/omission witness now passes with query-selection contrasts and all 49
    layout Sections preserved. Finish consumer accounting; reject nondefault,
    unknown and legacy-migration cases. Explicit optional false/zero fields still

@@ -776,6 +776,10 @@ Constructor redundancy alone does not classify a saved calculation-view selector
 as presentation-only: it can still choose a different Action or assumptions.
 Require checked query/scenario ownership or an explicitly reviewed reference-only
 disposition before retiring that source responsibility.
+Header accounting distinguishes values consumed by the saved build from defaults
+used only by future editing operations. Root equipment toggles require their
+actual applicability proof independently of each selected loadout; MAIN source
+group selection retains its own selection owner independently of CALCS and usage.
 
 This representation change adds no evaluation bundle or numerical coverage;
 0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust
