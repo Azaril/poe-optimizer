@@ -692,7 +692,7 @@ fn migration_bounds_combined_inputs_allocations_and_prior_provenance() {
             ..Default::default()
         },
         OwnedReleaseLimits {
-            max_input_bytes: 1,
+            max_semantic_bytes: 1,
             ..Default::default()
         },
         OwnedReleaseLimits {

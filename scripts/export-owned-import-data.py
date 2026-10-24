@@ -366,89 +366,10 @@ def produce(snapshot_bytes, base_bytes, ids_bytes, mechanics_bytes, facts_bytes,
 
 
 
-def bind_policies(seed_outputs, compiled, limits=HARD):
-    """Explicit offline successor edit after exact preservation/binding checks.
-
-    This is not a loader repair path. Rust has already produced the immutable
-    bundle; every old descriptor, mapping and rule body must remain unchanged.
-    """
-    if sum(map(len, compiled.values())) > limits.output_bytes or any(len(b) > limits.artifact_bytes for b in compiled.values()):
-        raise ValueError("compiled artifact byte bound exceeded")
-    transition = decode(compiled["transition.json"])
-    for artifact in transition["artifacts"]:
-        raw = compiled.get(artifact["file"])
-        if raw is None or len(raw) != artifact["bytes"] or sha(raw) != artifact["sha256"]:
-            raise ValueError("compiled transition artifact hash mismatch")
-    before = decode(seed_outputs["recipe-seed.json"])
-    previous_mapping = decode(seed_outputs["mapping-seed.json"])
-    after = decode(compiled["recipe.json"])
-    mapping = decode(compiled["mapping.json"])
-    validate_rule_wire(before["rules"])
-    validate_rule_wire(after["rules"])
-    before_identity, after_identity = before["rules"]["definitions"], after["rules"]["definitions"]
-    if transition["before_registry"] != owned_digest("owned-id-registry-v1", before["registry"]) or transition["before_definitions"] != before_identity or transition["before_mapping"] != owned_digest("owned-external-mapping-v1", previous_mapping):
-        raise ValueError("transition does not begin at the exact seed")
-    if transition["after_registry"] != owned_digest("owned-id-registry-v1", after["registry"]) or transition["after_definitions"] != after_identity or transition["after_mapping"] != owned_digest("owned-external-mapping-v1", mapping):
-        raise ValueError("transition successor identity differs")
-    if mapping["definitions"] != after_identity or mapping["registry"] != transition["after_registry"] or mapping["source"] != previous_mapping["source"] or mapping["policy_version"] != previous_mapping["policy_version"]:
-        raise ValueError("mapping successor context differs")
-    if schema_identity(after["schema"]) != after_identity or after["registry"]["namespace"] != before["registry"]["namespace"]:
-        raise ValueError("successor schema identity/namespace differs")
-    for field, filename in [("schema", "schema.json"), ("registry", "registry.json"), ("rules", "rules.json"), ("routing", "routing.json")]:
-        if after[field] != decode(compiled[filename]):
-            raise ValueError("compiled recipe and separate artifact differ")
-    old_entries, new_entries = before["registry"]["entries"], after["registry"]["entries"]
-    if new_entries[:len(old_entries)] != old_entries or after["registry"]["revision"] < before["registry"]["revision"] or after["registry"]["last_issued"] < before["registry"]["last_issued"]:
-        raise ValueError("registry successor changed existing history")
-    for field in ["definitions", "slots"]:
-        existing = {compact(row["value"]["id"]): row for row in after["schema"][field]}
-        if len(existing) != len(after["schema"][field]) or any(existing.get(compact(row["value"]["id"])) != row for row in before["schema"][field]):
-            raise ValueError("successor changed existing schema declaration")
-    for field in ["rules", "routing"]:
-        old, new = copy.deepcopy(before[field]), copy.deepcopy(after[field])
-        old.pop("definitions")
-        new.pop("definitions")
-        if old != new:
-            raise ValueError("successor changed semantic rule/routing content")
-    mapped = {compact(row["source"]): row for row in mapping["entries"]}
-    if len(mapped) != len(mapping["entries"]) or any(mapped.get(compact(row["source"])) != row for row in previous_mapping["entries"]):
-        raise ValueError("successor changed existing source mapping")
-    normalization = decode(seed_outputs["normalization-policy-seed.json"])
-    rewards = decode(seed_outputs["reward-policy-seed.json"])
-    items = decode(seed_outputs["item-policy-seed.json"])
-    item_source = decode(seed_outputs["item-source-policy-seed.json"])
-    if normalization["gem_quality"]["value"]["definitions"] != before_identity or rewards["definitions"] != before_identity or items["definitions"] != before_identity or rewards["mapping"] != transition["before_mapping"] or item_source["item_lines"] != owned_digest("owned-item-line-policy-v2", items) or item_source["source"] != previous_mapping["source"]:
-        raise ValueError("policy does not bind exact seed dependencies")
-    normalization["gem_quality"]["value"]["definitions"] = after_identity
-    rewards["definitions"], rewards["mapping"] = after_identity, transition["after_mapping"]
-    items["definitions"] = after_identity
-    item_source["item_lines"] = owned_digest("owned-item-line-policy-v2", items)
-    outputs = {"policies/normalization.json": pretty(normalization), "policies/rewards.json": pretty(rewards),
-               "policies/items.json": pretty(items), "policies/item-source.json": pretty(item_source)}
-    receipt = {"schema_version": 1, "scope": "explicit-checked-import-policy-successor",
-               "before_definitions": before_identity, "after_definitions": after_identity,
-               "before_mapping": transition["before_mapping"], "after_mapping": transition["after_mapping"],
-               "compiled_transition_sha256": sha(compiled["transition.json"]),
-               "preserved_definition_count": len(before["schema"]["definitions"]), "preserved_slot_count": len(before["schema"]["slots"]),
-               "source_execution": False, "numeric_coverage": False,
-               "artifacts": [{"path": name, "sha256": sha(data), "bytes": len(data)} for name, data in sorted(outputs.items())]}
-    outputs["policies/transition.json"] = pretty(receipt)
-    if sum(map(len, outputs.values())) > limits.output_bytes:
-        raise ValueError("bound policy output byte bound exceeded")
-    return outputs
-
-
-def read_compiled(directory, limits=HARD):
-    names = ["transition.json", "recipe.json", "registry.json", "schema.json", "rules.json",
-             "routing.json", "mapping.json", "roles.json", "manifest.json"]
-    return {name: read(directory / name, limits.artifact_bytes) for name in names}
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ["snapshot", "base-recipe", "base-ids", "mechanics-manifest", "mechanics-facts", "reward-facts", "query-manifest", "authoring", "source-root"]:
         parser.add_argument("--" + name, type=Path, required=True)
-    parser.add_argument("--compiled", type=Path, help="Explicit validated successor bundle; author checked policy copies")
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--output-dir", type=Path)
     mode.add_argument("--check-dir", type=Path)
@@ -456,8 +377,6 @@ def main():
     values = [read(args.snapshot, HARD.snapshot_bytes)] + [read(getattr(args, name), HARD.artifact_bytes) for name in
         ["base_recipe", "base_ids", "mechanics_manifest", "mechanics_facts", "reward_facts", "query_manifest", "authoring"]]
     outputs = produce(*values, args.source_root)
-    if args.compiled:
-        outputs.update(bind_policies(outputs, read_compiled(args.compiled)))
     if args.check_dir:
         for name, data in outputs.items():
             if read(args.check_dir / name, HARD.artifact_bytes) != data:

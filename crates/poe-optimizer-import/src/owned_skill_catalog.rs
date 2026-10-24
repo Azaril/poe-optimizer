@@ -128,6 +128,7 @@ pub fn compile_owned_skill_catalog_extension(
         max_entries: limits.mapping.max_entries,
         max_collection_entries: limits.mapping.max_collection_entries,
         max_wire_bytes: limits.mapping.max_wire_bytes,
+        max_semantic_bytes: limits.mapping.max_wire_bytes,
     };
     // The immutable schema can have been built under looser caller limits.
     encode_schema_package(definitions, schema_limits)?;

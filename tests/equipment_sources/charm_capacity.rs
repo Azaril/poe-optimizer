@@ -76,7 +76,7 @@ fn exact_recipe_transition_rejects_drift_preserves_inverse_and_compiles() {
         serde_json::from_slice(&fs::read(path.join(name)).unwrap()).unwrap()
     };
     let prior: OwnedRecipeInput = serde_json::from_value(serde_json::json!({
-        "schema_version":1, "registry":read("registry.json"), "schema":read("schema.json"),
+        "schema_version":1, "registry":read("registry.json"), "schema":poe_optimizer_data::owned_schema::decode_schema_input(&fs::read(path.join("schema.json")).unwrap(), Default::default()).unwrap(),
         "rules":read("rules.json"), "routing":read("routing.json")
     }))
     .unwrap();

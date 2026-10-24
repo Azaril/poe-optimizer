@@ -232,7 +232,11 @@ fn runtime_reader_rejects_constructor_sortable_constituents_with_fresh_hashes() 
     rejects_runtime_files(&emitted, "sortable registry history");
 
     let mut emitted = runtime_fixture().0.clone();
-    let mut schema: SchemaPackageInput = serde_json::from_slice(&emitted["schema.json"]).unwrap();
+    let mut schema: SchemaPackageInput = poe_optimizer_data::owned_schema::decode_schema_input(
+        &emitted["schema.json"],
+        Default::default(),
+    )
+    .unwrap();
     assert!(schema.definitions.len() > 1);
     schema.definitions.reverse();
     assert_eq!(
@@ -241,10 +245,20 @@ fn runtime_reader_rejects_constructor_sortable_constituents_with_fresh_hashes() 
             .input(),
         checked.recipe().schema().input()
     );
+    let mut wire: serde_json::Value = serde_json::from_slice(&emitted["schema.json"]).unwrap();
+    wire["definitions"].as_array_mut().unwrap().reverse();
+    assert_eq!(
+        poe_optimizer_data::owned_schema::decode_schema_input(
+            &serde_json::to_vec(&wire).unwrap(),
+            Default::default(),
+        )
+        .unwrap(),
+        schema
+    );
     replace_recipe_artifact(
         &mut emitted,
         "schema.json",
-        serde_json::to_vec(&schema).unwrap(),
+        serde_json::to_vec(&wire).unwrap(),
     );
     rejects_runtime_files(&emitted, "sortable schema definitions");
 
@@ -397,6 +411,8 @@ fn runtime_reader_requires_strict_fields_and_canonical_bytes() {
 #[test]
 fn runtime_reader_enforces_aggregate_bytes_and_cumulative_query_work() {
     let emitted = &runtime_fixture().0;
+    let supplied = input();
+    let semantic_bytes = serde_json::to_vec(&supplied).unwrap().len();
     let receipt: OwnedReleaseReceipt = serde_json::from_slice(&emitted["release.json"]).unwrap();
     let total: usize = emitted.values().map(Vec::len).sum();
     let largest = emitted.values().map(Vec::len).max().unwrap();
@@ -411,8 +427,13 @@ fn runtime_reader_enforces_aggregate_bytes_and_cumulative_query_work() {
     .map(|name| emitted[name].len())
     .sum();
     assert!(total > largest);
+    assert!(
+        semantic_bytes > total,
+        "compact artifact admission must not bound the expanded semantic commitment"
+    );
     let exact = OwnedReleaseLimits {
         max_input_bytes: total,
+        max_semantic_bytes: semantic_bytes,
         max_output_bytes: total,
         max_artifact_bytes: largest,
         max_query_sets: receipt.query_sets,
@@ -420,7 +441,25 @@ fn runtime_reader_enforces_aggregate_bytes_and_cumulative_query_work() {
         max_query_commitment_bytes: receipt.query_policy_bytes,
         ..Default::default()
     };
-    load_owned_release_artifacts(emitted, exact).unwrap();
+    assert_eq!(
+        load_owned_release_artifacts(emitted, exact)
+            .unwrap()
+            .receipt(),
+        &receipt,
+        "independent byte budgets preserve the complete release commitment"
+    );
+    assert!(matches!(
+        load_owned_release_artifacts(
+            emitted,
+            OwnedReleaseLimits {
+                max_semantic_bytes: semantic_bytes - 1,
+                ..exact
+            }
+        ),
+        Err(OwnedReleaseError::Digest(
+            poe_optimizer_core::owned_content::ContentDigestError::TooLarge { maximum }
+        )) if maximum == semantic_bytes - 1
+    ));
     for (label, limits) in [
         (
             "aggregate input",
@@ -465,12 +504,16 @@ fn runtime_reader_enforces_aggregate_bytes_and_cumulative_query_work() {
             },
         ),
     ] {
-        assert!(
-            load_owned_release_artifacts(emitted, limits).is_err(),
-            "{label}"
-        );
+        let result = load_owned_release_artifacts(emitted, limits);
+        if label == "aggregate input" {
+            assert!(matches!(
+                result,
+                Err(OwnedReleaseError::Limit("input bytes"))
+            ));
+        } else {
+            assert!(result.is_err(), "{label}");
+        }
     }
-    let supplied = input();
     let independent_counts = [
         supplied.recipe.registry.entries.len(),
         supplied.recipe.schema.definitions.len(),
@@ -824,7 +867,11 @@ fn independent_assembly_preserves_every_exact_bound_artifact_and_all_ordered_que
     let reconstructed = OwnedRecipeInput {
         schema_version: supplied.recipe.schema_version,
         registry: serde_json::from_slice(&emitted["registry.json"]).unwrap(),
-        schema: serde_json::from_slice(&emitted["schema.json"]).unwrap(),
+        schema: poe_optimizer_data::owned_schema::decode_schema_input(
+            &emitted["schema.json"],
+            Default::default(),
+        )
+        .unwrap(),
         rules: serde_json::from_slice(&emitted["rules.json"]).unwrap(),
         routing: serde_json::from_slice(&emitted["routing.json"]).unwrap(),
     };
@@ -970,7 +1017,7 @@ fn aggregate_and_constituent_limits_bound_release_work_and_output() {
     let wire = serde_json::to_vec(&supplied).unwrap();
     for limits in [
         OwnedReleaseLimits {
-            max_input_bytes: wire.len() - 1,
+            max_semantic_bytes: wire.len() - 1,
             ..Default::default()
         },
         OwnedReleaseLimits {
@@ -1002,6 +1049,14 @@ fn aggregate_and_constituent_limits_bound_release_work_and_output() {
             ..Default::default()
         },
         OwnedReleaseLimits {
+            max_semantic_bytes: 0,
+            ..Default::default()
+        },
+        OwnedReleaseLimits {
+            max_semantic_bytes: OwnedReleaseLimits::default().max_semantic_bytes + 1,
+            ..Default::default()
+        },
+        OwnedReleaseLimits {
             max_queries: OwnedReleaseLimits::default().max_queries + 1,
             ..Default::default()
         },
@@ -1011,16 +1066,47 @@ fn aggregate_and_constituent_limits_bound_release_work_and_output() {
     let mut limits = OwnedReleaseLimits::default();
     limits.tree.max_entries = 1;
     assert!(assemble_owned_release(supplied.clone(), limits).is_err());
-    assert!(
+    assert!(matches!(
         decode_owned_release(
             &wire,
             OwnedReleaseLimits {
                 max_input_bytes: wire.len() - 1,
                 ..Default::default()
             }
-        )
-        .is_err()
+        ),
+        Err(OwnedReleaseError::Limit("input bytes"))
+    ));
+    let exact = OwnedReleaseLimits {
+        max_input_bytes: wire.len(),
+        max_semantic_bytes: wire.len(),
+        ..Default::default()
+    };
+    assert_eq!(
+        decode_owned_release(&wire, exact).unwrap().receipt(),
+        release.receipt()
     );
+    assert!(matches!(
+        decode_owned_release(
+            &wire,
+            OwnedReleaseLimits {
+                max_semantic_bytes: wire.len() - 1,
+                ..exact
+            }
+        ),
+        Err(OwnedReleaseError::Digest(
+            poe_optimizer_core::owned_content::ContentDigestError::TooLarge { maximum }
+        )) if maximum == wire.len() - 1
+    ));
+    for maximum in [0, OwnedReleaseLimits::default().max_semantic_bytes + 1] {
+        assert!(matches!(
+            OwnedReleaseLimits {
+                max_semantic_bytes: maximum,
+                ..Default::default()
+            }
+            .validate(),
+            Err(OwnedReleaseError::InvalidLimit("semantic bytes"))
+        ));
+    }
 }
 
 #[test]

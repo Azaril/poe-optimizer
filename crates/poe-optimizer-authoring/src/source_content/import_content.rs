@@ -64,7 +64,7 @@ impl ImportSourceContent {
         digest_owned(
             "owned-import-source-content-v1",
             &self,
-            limits.max_input_bytes,
+            limits.max_semantic_bytes,
         )?;
         let Self {
             mapping,

@@ -218,7 +218,15 @@ impl Sources {
             };
         }
         component!("registry", &input.recipe.registry);
-        component!("schema", &input.recipe.schema);
+        components.push((
+            "schema",
+            poe_optimizer_data::owned_schema::encode_schema_package(
+                &OwnedDefinitionSchemaPackage::new(input.recipe.schema.clone(), Default::default())
+                    .unwrap(),
+                Default::default(),
+            )
+            .unwrap(),
+        ));
         component!("rules", &input.recipe.rules);
         component!("routing", &input.recipe.routing);
         component!("mapping", &input.mapping);
@@ -1533,33 +1541,40 @@ fn gzip_requires_one_complete_member_without_trailing_data() {
 #[test]
 fn constituent_json_is_strict_and_reports_its_source() {
     for compressed in [false, true] {
-        for suffix in [b" {}".as_slice(), b" trailing".as_slice()] {
-            let mut source = DslRelease::new(&fixture().input, compressed).source;
-            let target = if compressed {
-                "metrics.json.gz"
-            } else {
-                "metrics.json"
-            };
-            let (_, bytes) = source
-                .files
-                .iter_mut()
-                .find(|(path, _)| path == target)
-                .unwrap();
-            let mut json = if compressed {
-                let mut json = Vec::new();
-                GzDecoder::new(bytes.as_slice())
-                    .read_to_end(&mut json)
+        for component in ["metrics", "schema"] {
+            for suffix in [b" {}".as_slice(), b" trailing".as_slice()] {
+                let mut source = DslRelease::new(&fixture().input, compressed).source;
+                let target = if compressed {
+                    format!("{component}.json.gz")
+                } else {
+                    format!("{component}.json")
+                };
+                let (_, bytes) = source
+                    .files
+                    .iter_mut()
+                    .find(|(path, _)| path == &target)
                     .unwrap();
-                json
-            } else {
-                bytes.clone()
-            };
-            json.extend_from_slice(suffix);
-            *bytes = if compressed { gzip(&json) } else { json };
-            match source.build(Default::default()) {
-                Err(ReleaseBuildError::Json { path, .. }) => assert_eq!(path, target),
-                Err(other) => panic!("unexpected error: {other}"),
-                Ok(_) => panic!("trailing JSON was accepted"),
+                let mut json = if compressed {
+                    let mut json = Vec::new();
+                    GzDecoder::new(bytes.as_slice())
+                        .read_to_end(&mut json)
+                        .unwrap();
+                    json
+                } else {
+                    bytes.clone()
+                };
+                json.extend_from_slice(suffix);
+                *bytes = if compressed { gzip(&json) } else { json };
+                match source.build(Default::default()) {
+                    Err(ReleaseBuildError::Json { path, .. }) if component == "metrics" => {
+                        assert_eq!(path, target)
+                    }
+                    Err(ReleaseBuildError::Schema { path, .. }) if component == "schema" => {
+                        assert_eq!(path, target)
+                    }
+                    Err(other) => panic!("unexpected error: {other}"),
+                    Ok(_) => panic!("trailing JSON was accepted"),
+                }
             }
         }
     }
@@ -1750,7 +1765,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         rule_reference.sha256
     );
     let historical: RulePackageInput = serde_json::from_slice(&bytes).unwrap();
-    fn bootstrap<T: serde::de::DeserializeOwned>(source: &Sources, path: &str) -> T {
+    fn bootstrap_bytes(source: &Sources, path: &str) -> Vec<u8> {
         let encoded = &source
             .files
             .iter()
@@ -1763,15 +1778,32 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
             .read_to_end(&mut bytes)
             .unwrap();
         assert!(bytes.len() <= ReleaseBuildLimits::default().max_decoded_bytes);
-        serde_json::from_slice(&bytes).unwrap()
+        bytes
     }
-    let old_schema = OwnedDefinitionSchemaPackage::new(
-        bootstrap(source, "bootstrap/schema.json.gz"),
+    let old_schema = poe_optimizer_data::owned_schema::decode_schema_package(
+        &bootstrap_bytes(source, "bootstrap/schema.json.gz"),
         Default::default(),
     )
     .unwrap();
+    assert_eq!(old_schema.identity(), &reference.definitions);
+    let historical_schema = reference
+        .artifacts
+        .iter()
+        .find(|row| row.file == "schema.json")
+        .unwrap();
+    assert_eq!(
+        historical_schema.sha256,
+        old_schema.identity().content_sha256,
+        "the authenticated historical schema used canonical semantic bytes"
+    );
+    assert!(old_schema.canonical_bytes().len() < historical_schema.bytes);
+    assert_ne!(
+        format!("{:x}", Sha256::digest(old_schema.canonical_bytes())),
+        historical_schema.sha256,
+        "new storage has its own artifact commitment"
+    );
     let old_registry = poe_optimizer_import::owned_mapping::OwnedIdRegistrySnapshot::new(
-        bootstrap(source, "bootstrap/registry.json.gz"),
+        serde_json::from_slice(&bootstrap_bytes(source, "bootstrap/registry.json.gz")).unwrap(),
         Default::default(),
     )
     .unwrap();
@@ -1937,11 +1969,36 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     restored.item_source = imported.item_source;
     restored.tree = imported.tree;
     let restored = assemble_owned_release(restored, Default::default()).unwrap();
-    assert_eq!(restored.receipt(), &reference);
+    // Authenticate every recipe-manifest field: only its schema transport row
+    // changes. This uses the retained manifest model, not an old schema encoder.
+    let mut prior_manifest = restored.assembled().manifest().clone();
+    let schema_row = prior_manifest
+        .artifacts
+        .iter_mut()
+        .find(|row| row.file == "schema.json")
+        .unwrap();
+    schema_row.bytes = historical_schema.bytes;
+    schema_row.sha256.clone_from(&historical_schema.sha256);
+    let prior_manifest_bytes = serde_json::to_vec(&prior_manifest).unwrap();
+    let historical_manifest = reference
+        .artifacts
+        .iter()
+        .find(|row| row.file == "manifest.json")
+        .unwrap();
+    assert_eq!(prior_manifest_bytes.len(), historical_manifest.bytes);
+    assert_eq!(
+        format!("{:x}", Sha256::digest(&prior_manifest_bytes)),
+        historical_manifest.sha256
+    );
+    // Storage-only changes replace the schema artifact and its enclosing recipe
+    // manifest. Preserve the full historical semantic receipt, not old encoding.
+    let mut semantic_reference = reference.clone();
+    semantic_reference.artifacts = restored.receipt().artifacts.clone();
+    assert_eq!(restored.receipt(), &semantic_reference);
     let artifacts: BTreeMap<_, _> = restored.artifacts().collect();
     assert_eq!(artifacts.len(), reference.artifacts.len() + 1);
     assert_eq!(current_artifacts.len(), artifacts.len());
-    assert_eq!(artifacts["release.json"], reference_bytes);
+    assert_ne!(artifacts["release.json"], reference_bytes);
     assert_ne!(current_artifacts["release.json"], reference_bytes);
     assert!(
         reference
@@ -1951,13 +2008,22 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     );
     for row in &reference.artifacts {
         let bytes = artifacts[row.file.as_str()];
-        assert_eq!(bytes.len(), row.bytes, "{} length", row.file);
-        assert_eq!(
-            format!("{:x}", Sha256::digest(bytes)),
-            row.sha256,
-            "{} digest",
-            row.file
-        );
+        if matches!(row.file.as_str(), "schema.json" | "manifest.json") {
+            assert_ne!(
+                format!("{:x}", Sha256::digest(bytes)),
+                row.sha256,
+                "{} storage commitment must change",
+                row.file
+            );
+        } else {
+            assert_eq!(bytes.len(), row.bytes, "{} length", row.file);
+            assert_eq!(
+                format!("{:x}", Sha256::digest(bytes)),
+                row.sha256,
+                "{} digest",
+                row.file
+            );
+        }
         if row.file.starts_with("queries-") {
             assert_eq!(
                 current_artifacts[row.file.as_str()],

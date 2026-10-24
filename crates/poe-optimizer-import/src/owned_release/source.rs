@@ -96,7 +96,7 @@ pub fn check_release_source_dependencies(
     let view = ReleaseView::from(input);
     let domain = input_domain(view.schema_version, view.evaluation.is_some())?;
     preflight_view(&view, limits)?;
-    digest_owned(domain, &view, limits.max_input_bytes)?;
+    digest_owned(domain, &view, limits.max_semantic_bytes)?;
     check_recipe_input(view.recipe, limits.recipe)?;
 
     let registry =

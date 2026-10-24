@@ -100,7 +100,7 @@ pub fn compile_owned_release_revision(
     digest_owned(
         "owned-release-revision-prior-budget-v1",
         prior.input(),
-        limits.max_input_bytes,
+        limits.max_semantic_bytes,
     )?;
     if prior.input().provenance.len() >= limits.max_provenance_entries {
         return Err(OwnedReleaseError::Limit("provenance entries"));

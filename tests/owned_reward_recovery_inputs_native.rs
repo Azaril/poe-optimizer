@@ -229,7 +229,11 @@ fn alternate_charm_duration_reward_does_not_inherit_charges_or_capacity_programs
     // This different source option has an existing exact Reward descriptor but
     // no numerical owner in this packet. Import mapping assigns it Reward002f;
     // Option002e is a separate identity. Use the tracked descriptor unchanged.
-    let schema: SchemaPackageInput = shared::packet("import/compiled", "schema.json");
+    let schema: SchemaPackageInput = poe_optimizer_data::owned_schema::decode_schema_input(
+        include_bytes!("../data/owned/poe2/3887ae68/import/compiled/schema.json"),
+        Default::default(),
+    )
+    .unwrap();
     let alternate: RewardDefId = id(&f, 0x002f);
     let descriptor = schema
         .definitions

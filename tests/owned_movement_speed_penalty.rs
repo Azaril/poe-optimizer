@@ -76,7 +76,7 @@ fn exact_current_recipe_unit_repair_rejects_stale_values_and_compiles_new_ingred
     let read = |name: &str| -> Value {
         serde_json::from_slice(&fs::read(path.join(name)).unwrap()).unwrap()
     };
-    let prior:OwnedRecipeInput=serde_json::from_value(serde_json::json!({"schema_version":1,"registry":read("registry.json"),"schema":read("schema.json"),"rules":read("rules.json"),"routing":read("routing.json")})).unwrap();
+    let prior:OwnedRecipeInput=serde_json::from_value(serde_json::json!({"schema_version":1,"registry":read("registry.json"),"schema":poe_optimizer_data::owned_schema::decode_schema_input(&fs::read(path.join("schema.json")).unwrap(), Default::default()).unwrap(),"rules":read("rules.json"),"routing":read("routing.json")})).unwrap();
     let next = packet::correct_raw_units(&prior).unwrap();
     assert!(packet::correct_raw_units(&next).is_err());
     let mut bad = prior.clone();

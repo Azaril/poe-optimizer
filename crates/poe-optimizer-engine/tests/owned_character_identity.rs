@@ -470,8 +470,8 @@ fn v7_is_explicit_and_v6_cannot_admit_either_new_predicate() {
 fn current_snapshot_uses_unified_actor_identity_and_refuses_retired_wire_version() {
     let path =
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../data/owned/poe2/3887ae68/current");
-    let schema = OwnedDefinitionSchemaPackage::new(
-        serde_json::from_slice(&fs::read(path.join("schema.json")).unwrap()).unwrap(),
+    let schema = poe_optimizer_data::owned_schema::decode_schema_package(
+        &fs::read(path.join("schema.json")).unwrap(),
         OwnedSchemaLimits::default(),
     )
     .unwrap();

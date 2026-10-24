@@ -53,7 +53,14 @@ fn selected_rows(baseline: &Path) -> Vec<Json> {
     let selected = read(&baseline.join("selected-05.json"));
     let rules = read(&baseline.join("package/rules.json"));
     let mapping = read(&baseline.join("package/mapping.json"));
-    let schema = read(&baseline.join("package/schema.json"));
+    let schema = serde_json::to_value(
+        poe_optimizer_data::owned_schema::decode_schema_input(
+            &fs::read(baseline.join("package/schema.json")).unwrap(),
+            Default::default(),
+        )
+        .unwrap(),
+    )
+    .unwrap();
     let draft = &draft["draft"];
     let preset = draft["allocation_presets"]["members"]
         .as_array()

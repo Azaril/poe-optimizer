@@ -1,53 +1,58 @@
 # Canonical first-allocation checkpoint
 
-This is the reproducible predecessor for the maintained authoring history. It
-contains the first 69 named Stat allocations, alongside the existing registry.
-It is outside the compiled manifest inventory to avoid a self-referential receipt.
+This complete immutable snapshot preserves the first 69 named Stat allocations
+alongside their checked runtime. It is outside the compiled manifest inventory
+to avoid a self-referential receipt. A clean clone can load it directly; no
+historical source rebuild or prior local output is required.
 
 | Commitment | Value |
 | --- | --- |
-| Git source revision | `caca40a55885e5c8612e7d9b47c1691f8ea321a9` |
-| Manifest within that revision | `data/owned/poe2/3887ae68/migration-source/release.kdl` |
-| Checkpoint identity | `e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109` |
+| Archive | `authoring-checkpoints/c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124.zip` |
+| Archive bytes | 1,439,333 |
+| Archive SHA-256 | `3dec46a43add68b63b095f07e58cd0c3275dc204ff286726175e5fe918170254` |
+| Checkpoint identity | `c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124` |
 | Name-ledger identity | `dabf9a92dffb7e9ec36ee587e1dd377bc9aaffa096373c32062ac4428dadabd2` |
-| Runtime input identity | `802bf2eccbdf83814dbb34f0745a2006c75ec4fdcd80e4ee8fc80e053852cdcb` |
-
-Use the maintained compiler, not a compiler checked out from the source revision.
-The source revision supplies only data. A full clone already contains it; shallow
-clones and CI must fetch that exact revision before reproduction. No prior local
-`runs/` directory, PoB checkout, old migration helper or separate ledger importer
-is required.
+| Registry identity | `003d28c7f38b4b3f72e3c39b2f25462d216cbf3fc7c6f67c393073d127ddfcb8` |
+| Genesis runtime input identity | `802bf2eccbdf83814dbb34f0745a2006c75ec4fdcd80e4ee8fc80e053852cdcb` |
 
 From the repository root, with fresh output paths:
 
 ```powershell
-$genesisRevision = "caca40a55885e5c8612e7d9b47c1691f8ea321a9"
-git archive --format=zip --output=genesis-source.zip $genesisRevision data/owned/poe2/3887ae68/migration-source
-Expand-Archive -LiteralPath genesis-source.zip -DestinationPath genesis-source
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build genesis-source/data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output genesis-checkpoint
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109 --output rebuilt-checkpoint
+Expand-Archive -LiteralPath data/owned/poe2/3887ae68/authoring-checkpoints/c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124.zip -DestinationPath genesis-checkpoint
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release verify genesis-checkpoint --expected c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124 --output rebuilt-checkpoint
 ```
 
-The second command to `poe-author` verifies the exact expected genesis identity,
-canonical ledger and complete runtime through the normal checked loader before
-using it. The final runtime is `rebuilt-checkpoint/runtime`. Bootstrap only the
-fixed source above; do not bootstrap evolving current sources to reconstruct IDs.
-The same-source successor has a different checkpoint identity because its receipt
-records a predecessor, while names and runtime bytes remain identical.
+The archive contains `checkpoint.json`, `names.json` and the eighteen files in
+`runtime/`. Verification uses the ordinary bounded loader to check the complete
+ledger/runtime closure against the independently supplied identity. It needs no
+source files or ancestor checkpoints. Current builds consume this checked ledger
+as an explicit predecessor; never bootstrap evolving sources to reconstruct IDs.
+Runtime consumers use `rebuilt-checkpoint/runtime`.
 
-Verified on October 23, 2026: an archive of the committed revision reproduced the
-exact checkpoint identity with the maintained CLI. Loading that fresh checkpoint
-and compiling current source produced successor
-`d15cabc5774b85149fa98d7672257e8b9188fa586c9fee8c598cdf732d8c4622`; the name ledger
-and all eighteen runtime files matched byte for byte. Local evidence is in
-`runs/initial-types-archived-{genesis,successor}.{stdout,stderr}.log`, not required
-inputs. The Rust authoring/host suites pass 245 tests; this source adds no complete
-build admission or numerical parity claim.
+The October 23 compact schema cutover regenerated storage from the original
+first-allocation source at Git revision
+`caca40a55885e5c8612e7d9b47c1691f8ea321a9`, replacing only its bootstrap schema
+with the new canonical encoding before using the maintained compiler. Name
+allocations, registry identity and semantic runtime input are unchanged. Schema
+artifact, manifest, source and checkpoint transport commitments deliberately
+change; the replaced expanded-artifact reader and one-time converter are gone.
+The original source revision alone is no longer a current-format reproduction
+command. The snapshot replaces that temporary source-rebuild bridge.
 
-This is one bounded bridge to R3 storage/distribution. Before a second allocation
-generation needs another canonical predecessor, archive or distribute one full
-checked snapshot that can be loaded directly. Do not extend this into a chain of
-historical source rebuilds. Compiler/source-format cutovers deliberately regenerate
-the canonical checkpoint/reference rather than keeping compatibility readers.
-See the [checkpoint design](../../../../docs/owned-authoring-checkpoint-proposal.md)
-and [implementation plan](../../../../docs/implementation.md).
+Verified on October 23, 2026: a fresh extraction passed complete checkpoint
+validation, then current tracked source built successor
+`3872b395afc00c61f75e11804fdab4b7b91993806711817f17f03a861657bf31` with semantic
+runtime input
+`3ede2f3da137c16ccf3a3d3cbb914f9b1a65db717d86edd339346ccdbdd22d43` and the same
+ledger/registry. Its eighteen runtime files total 53,647,002 bytes. Evidence is
+recorded in `runs/compact-schema-*-verified.json` and
+`runs/compact-schema-checkpoint-inventory.json`; those local files are not inputs.
+
+Archive transport is not a second semantic format, a source-reproduction proof
+or the planned indexed binary runtime pack. Future canonical allocation
+predecessors must likewise be available as one complete checked snapshot; do not
+grow a chain of historical source rebuilds or compatibility readers. No complete
+build admission or numerical parity is added here. See the
+[checkpoint design](../../../../docs/owned-authoring-checkpoint-proposal.md) and
+[implementation plan](../../../../docs/implementation.md).

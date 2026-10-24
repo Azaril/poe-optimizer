@@ -37,7 +37,7 @@ its useful acquisition law, and exposes read-only complete-checkpoint verificati
 Both CLI feature profiles and strict Clippy pass, alongside the complete Authoring
 suite and retained Import intrinsic laws. Production mechanics and completeness
 are unchanged.
-The current checkpoint removes Authoring's duplicate schema size serializer:
+The preceding `8f91c7b1` checkpoint removes Authoring's duplicate schema size serializer:
 Data owns the shared artifact/growth-preflight projection, streams the separate
 semantic commitment, and shares immutable canonical bytes across package clones.
 Import compares those checked bytes directly. Artifact format, semantic identity
@@ -47,6 +47,20 @@ exporter moves to acquisition, and its replaced publication target is deleted.
 The affected package suites, strict Clippy and acquisition CLI tests in both
 feature profiles pass. Real genesis and current checkpoints retain their verified
 identities; no new allocation generation or mechanic coverage is introduced.
+The compact schema cutover is implemented. Data owns exhaustive typed wire
+projections for all 25 definition and six slot families, with one root namespace,
+checked local `kind:key` references and an explicit storage discriminator.
+Standalone consumers now use the sole bounded decoder; semantic compiler DTOs
+remain separate. Independent wire/semantic byte ceilings and pre-expansion
+collection/reference accounting are implemented. Data's 292 selected tests,
+Import's final 886 integration tests and Authoring's 337 tests pass. Complete
+checkpoint publication, fresh archive extraction and current-source rebuild also
+pass with unchanged ledger/registry/runtime semantic identities. Migrated CLI and
+Engine consumers, strict lint, native dependency/source-boundary checks and the
+useful legacy-exporter law transfers all pass. Two optional PoB audit targets
+compile and remain explicitly ignored. A disk-full failure in the historical
+CLI chain was resolved by verified cache cleanup and a passing isolated replay.
+No complete build or binary-runtime milestone is claimed here.
 The delivery driver also has a validated private repair: exact receiving
 effects, source memberships, summoner dependencies and prepared outputs determine
 applicability preparation. An unused selection container no longer needs invented
@@ -101,7 +115,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; current checkpoint centralizes schema encoding preflight, separates semantic commitment, shares checked artifact bytes and retires the item-base publication target |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; current checkpoint compacts standalone schema artifacts, separates release transport/semantic bounds, publishes a complete allocation snapshot and retires two obsolete Python export paths |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -110,27 +124,30 @@ silently become a second supported implementation.
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 69 Stats, one Sniper initial-type program and 350 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,336 source domains (1,307 Known, 29 Unmapped). Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
-| CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally; hosted confirmation remains pending |
-| CI | At 00:21 UTC October 24 (October 23 EDT), `60287fde` run `40040728189` is pending behind running `d490eb54` run `40011474882`; seventeen jobs passed, Windows CLI-2 is running and none failed. Its combined test step has run about 4h43m. Intermediate pending runs, including `d9b905d2` and `eda3612b`, were coalesced. Earlier `96e5533e` run `39962517895` completed successfully: its final Windows CLI-1 job passed both feature profiles at 19:37 UTC after 5h50m. No timeout or test failure occurred. Baselines `a7069aa1` and `ae90ec82` also passed. Main-branch serialization preserves the running revision and coalesces pending revisions; previous success does not certify newer commits |
+| CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally. The later `d490eb54` hosted workflow is successful; this compact cutover still requires its own run |
+| CI | At 02:39 UTC October 24 (October 23 EDT), `d490eb54` run `40011474882` is successful: all twenty jobs passed, with no timeout or failure. Main `8f91c7b1` run `40045082862` is running (eight passed, ten running, none failed among eighteen jobs at that snapshot). Earlier `96e5533e` also passed. Main-branch serialization preserves the running revision and coalesces pending revisions; this compact-format checkpoint still requires its own hosted run |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
-First reproduce the allocation predecessor using the
+First extract and verify the allocation predecessor using the
 [canonical genesis reference](../data/owned/poe2/3887ae68/authoring-genesis.md), then use
-`cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109 --output rebuilt-release`
+`cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124 --output rebuilt-release`
 with a fresh output directory; runtime consumers use `rebuilt-release/runtime`.
 Successful publication prints the checkpoint identity to
-stderr and checkpoint receipt JSON to stdout. Bootstrap reproduces the fixed first-allocation
-source revision only; later builds must preserve its ledger as a checked
-predecessor. Current runtime input identity:
+stderr and checkpoint receipt JSON to stdout. The committed complete snapshot
+supplies first-allocation history; later builds preserve its ledger as a checked
+predecessor. Do not bootstrap evolving source. Current runtime input identity:
 `3ede2f3da137c16ccf3a3d3cbb914f9b1a65db717d86edd339346ccdbdd22d43`.
-The 2,787 declared source files use 5,789,442 encoded and 58,665,360 decoded
+The 2,787 declared source files use 6,056,538 encoded and 46,244,165 decoded
 bytes, within the existing 64 MiB bounds. The 183,544-byte root manifest and
 expanded rule bytes also fit current limits without increases.
 Metadata JSON remains temporary; gzip is not the compact runtime format.
-The CLI still reports the 80% decoded-size warning; compact-format work remains
-required before expanding content. The production command rebuilt the tracked
-source into `runs/player-support-domains-successor-01` with the expected input identity,
-17 constituent artifacts and all 227 provenance rows.
+Decoded source bytes are now below the 80% warning threshold. Fresh publication
+from the extracted canonical snapshot produces checkpoint
+`3872b395afc00c61f75e11804fdab4b7b91993806711817f17f03a861657bf31`, whose eighteen
+runtime files total 53,647,002 bytes (13,461,862 bytes below the unchanged aggregate
+cap). Its schema is 19,773,401 bytes; checkpoint/name files add 452,231 bytes.
+The fresh full verifier passes. The distinct indexed binary runtime work remains
+required; no resident-memory or evaluator-throughput saving is claimed.
 
 Historical input
 `a75ef471b57d8184b208ca5f2a26ce6a9a01d15340db8b15fc1f318be40c1905`
@@ -138,8 +155,11 @@ and its receipt remain independent regression evidence. Original rule IR lives
 only in Authoring's `tests/fixtures/retained-rules.json.gz`, outside production
 inputs. Actual-source graph checks plus restoration of just historical program
 members, with only the exact 69-Stat/one-program/350-domain delta removed through
-maintained content constructors, prove all historical metadata/provenance and artifact bytes
-are preserved. `runs/dsl-conversion-02/conversion-report.json` records local
+maintained content constructors, prove complete historical schema meaning and
+metadata/provenance are preserved. All other artifact bytes remain exact; the
+manifest is authenticated after restoring only its historical schema row. New
+schema encoding commitments are checked separately.
+`runs/dsl-conversion-02/conversion-report.json` records local
 conversion evidence; no `runs/` file or one-off conversion tool is needed by a
 normal source build or CI.
 
@@ -1091,6 +1111,14 @@ Next transfer the 337 weapon profiles and all 14 field/default/omission/presence
 unit laws, move that exporter into acquisition and remove its root. These
 whole-profile laws are not yet maintained Authoring tests: graph-equivalence and
 synthetic Import checks support transfer, but cannot substitute for it.
+The follow-up audit fixes the scope: one module in the existing Authoring
+`release` harness must preserve 1,762 source values, 2,652 zero defaults, 304 reload
+omissions and 337 presence flags (33 true, 304 false), including authored zeros
+and fresh/reused/reverse scratch. Acquisition keeps both exact catalog outputs
+and whole-directory no-clobber; its native-only help check must exclude the weapon
+export command. Delete only the replaced root. Keep the nine Import refusal laws,
+including synthetic present-zero reload, and the intrinsic predecessor still
+used by `owned_extension_cli`. This is the next independent leaf retirement.
 
 After those two leaf retirements, `owned_extension_cli` still consumes the shared
 intrinsic predecessor and intrinsic/item/weapon compiler commands; its defence
@@ -1335,12 +1363,11 @@ owner coverage remains Partial. Independent controls distinguish own Attack=fals
 minion Attack=true and own Physical=true from minion Physical=false. Exact repeated
 Skill recipients and missing-producer plan controls belong with the upcoming actual
 execution bundle; the current slice does not construct a parallel fixture bundle.
-The validated first source revision and checkpoint digest are now pinned in the
-canonical reference, outside the compiled inventory, to avoid self-reference.
-Reproduce only that fixed genesis
-with the maintained compiler, verify/load it normally, then use it as predecessor.
-Before a second allocation generation needs a new predecessor, R3 must distribute
-one complete checked snapshot. Do not grow a historical source-replay chain;
+The canonical reference, outside the compiled inventory, pins one complete
+first-allocation snapshot. The compact storage cutover regenerates its transport
+without changing the established ledger or semantic runtime input. Extract and
+verify the snapshot through the normal reader, then use it as predecessor.
+Historical source replay is no longer the normal allocation-history workflow;
 local checkpoint outputs are evidence only.
 
 The smallest current producer needs no level, quality, count or support-result
@@ -1751,8 +1778,8 @@ other projected memberships are explicitly false. Five excluded raw own types
 remain in reviewed evidence. The finite preparation vocabulary is not the game's
 complete type universe. There is no new Rust mechanic or dispatch by skill name.
 
-The first non-empty persisted ledger belongs to this declaration source, not the earlier
-empty-ledger publication. The full CLI build produced genesis identity
+Historical pre-cutover evidence: the first non-empty persisted ledger belonged to
+this declaration source, not the earlier empty-ledger publication. That CLI build produced genesis identity
 `e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109`, name identity
 `dabf9a92dffb7e9ec36ee587e1dd377bc9aaffa096373c32062ac4428dadabd2`, and runtime
 input `802bf2eccbdf83814dbb34f0745a2006c75ec4fdcd80e4ee8fc80e053852cdcb`.
@@ -1760,14 +1787,17 @@ Replaying through the ordinary checked predecessor loader produced checkpoint
 `d15cabc5774b85149fa98d7672257e8b9188fa586c9fee8c598cdf732d8c4622`; the ledger
 and all eighteen runtime files are byte-identical. Source text has LF bytes on
 all 2,771 inventoried KDL/rule paths, including the manifest. Git attributes retain
-those bytes across platforms. The following reference checkpoint pins source
+those bytes across platforms. The source-rebuild reference then pinned
 revision `caca40a55885e5c8612e7d9b47c1691f8ea321a9`, avoiding a self-referential
 source commitment. A fresh `git archive` of that revision reproduced the exact
-genesis digest with the maintained CLI. Its normal checked-predecessor replay
+genesis digest with the CLI at that checkpoint. Its checked-predecessor replay
 preserved the ledger and all eighteen runtime artifacts byte for byte. See
 `runs/initial-types-archived-{genesis,successor}.{stdout,stderr}.log` for local
-evidence; reproduction requires no pre-existing local checkpoint. This reference
-update changes documentation only, so the 245-test validation below still applies.
+historical evidence. The compact-format cutover supersedes that source-rebuild
+bridge with the complete `c588b782` checkpoint archive; use the current canonical
+reference above for verification and reproduction. The old source alone is not a
+current-format build path. The 245-test validation below belongs to that earlier
+declaration checkpoint.
 
 Validation covers real declaration types/ownership and Sniper facts, reused rule
 scratch, six independently specified projection controls, and absent versus
@@ -2612,137 +2642,144 @@ per-mechanic test binary. Fresh generation equals the checked-in canonical outpu
 ### R3 — One native library evaluator and efficient runtime data
 
 Checkpoint transport uses the existing complete directory, not another ledger
-format. The checked loader already validates the full runtime and ledger without
-following predecessor digests or loading old source. The new thin CLI command
+format. The checked loader validates runtime and ledger without following
+predecessor digests or loading old source. The read-only command
 `poe-author release verify CHECKPOINT_DIRECTORY --expected DIGEST` exposes that
-same bounded loader and reports identities only after complete validation. It
-writes nothing and does not establish source reproducibility or build readiness.
-A standard archive may distribute these exact files; before the next allocation,
-publish a durable digest-addressed snapshot and verify it after clean extraction.
-The read-only verifier is implemented; durable publication remains outstanding.
-The complete Authoring target set passes: 168 library, eight CLI and 158 release
-tests, including source-free transport of a second allocation generation,
-continued allocation, wrong identity, corrupted artifacts and extra-file refusal.
-Compilation took 6m24s and the release suite 18.45s
-(`runs/checkpoint-verifier-authoring-tests.log`). The built command also verified
-the actual pinned genesis `e89ae92a...` and current reload `53e1c02a...`, reporting
-the expected ledger `dabf9a92...`, registry `003d28c7...` and their respective
-runtime inputs. Compact reports are in `runs/checkpoint-verifier-genesis.json`
-and `runs/checkpoint-verifier-current.json`; these are checks of real artifacts,
-not inferred identities or a claim of durable distribution.
+same bounded loader. A standard archive transports the exact directory; it is
+neither the binary runtime implementation nor proof of source reproducibility.
+The compact schema cutover replaces the first-generation source-rebuild bridge
+with one complete current-format snapshot, pinned in the canonical reference.
+The name ledger, registry and semantic runtime input survive the representation
+change. Verify a fresh extraction and build maintained source using that checked
+predecessor before publishing the reference; never rebootstrap evolving sources.
 
-Measured current runtime inventory: 18 files / 66,073,441 bytes, leaving only
-1,035,423 bytes below the 64 MiB aggregate cap. Root checkpoint/name files add
-452,231 bytes. Transport compression does not reduce decoded limits or resident
-memory. Complete canonical compaction before expanding content; do not raise the
-cap or call a compressed JSON archive the binary runtime implementation.
+The `8f91c7b1` prerequisite separated Data's streaming semantic commitment from
+its artifact encoding and shared immutable checked bytes across package clones.
+It also removed Authoring's duplicate append-size serializer. Its verification
+passed 2,712 tests and one existing utility remained ignored, with strict Clippy.
+Those results are historical; the following format cutover requires fresh checks.
 
-Next concrete format slice: Data-owned canonical schema storage. The current
-`schema.json` alone is 32,199,840 bytes. Core `DefId<K>` repeats namespace/kind/key;
-`SchemaPackageInput` already supplies an authoritative namespace. Implement an
-explicit typed schema wire projection with namespace hoisted once, kind checks
-and exact slot owners. Preserve arbitrary valid keys; do not assume allocator
-`def.<hex>` spelling or derive identity from descriptor order. Do not change global
-Core serde behavior, use ambient namespace state or rewrite arbitrary JSON fields.
-Keep qualified internal references until the separate indexed runtime cutover.
+**Compact schema storage and full snapshot transport are implemented and validated.**
+Data owns exhaustive private typed projections for all 25 definition and six slot
+families. One root namespace and checked `kind:key` references replace repeated
+qualified IDs in standalone artifacts. Arbitrary valid keys, exact slot owners,
+gap subjects, units, Partial/Unmapped states and absent/empty distinctions survive.
+Core's qualified IDs and ordinary semantic DTO serialization are unchanged.
+The required `wire_version` is separate from semantic schema version; it selects
+one current format, with no old-format detection or compatibility reader.
 
-Its prerequisite is implemented at the existing consumers: Data streams the
-canonical typed semantic hash independently of its artifact projection, shares
-immutable encoded bytes across package clones, and owns the borrowed append-byte
-preflight formerly duplicated in Authoring. Import's canonicality check consumes
-those checked bytes directly. Exact/one-short append limits, duplicate-address
-non-authority, exported-buffer isolation and refreshed-hash noncanonical schema
-refusals protect the seam. No dormant codec or second reader is introduced.
-The current wire format is unchanged, so its semantic-hash byte ceiling remains
-equal to its wire ceiling until the cutover introduces separate accounting.
-The complete package run passes: 2,707 tests and one existing ignored case.
-Authoring contributes 337 (168 library, eight CLI, 161 release); Data contributes
-633 (fifteen library, 348 legacy, 270 owned); Import contributes 1,737
-(246 library, 205 legacy, 879 owned, 407 normalization, with one normalization
-utility ignored). Compilation took 22m10s. The complete maintained release suite
-took 19.22s, Data's owned suite 0.19s, Import's owned suite 38.05s and its
-normalization suite 0.52s. Log: `runs/schema-storage-authoring-import-tests.log`.
-Strict Clippy passes for the three packages and the explicit acquisition target;
-logs: `runs/schema-storage-package-clippy.log` and
-`runs/schema-storage-acquisition-clippy.log`. All-feature acquisition CLI passes
-four tests in 1.81s after 8m33s compilation; native-only acquisition CLI passes its
-one test in 0.28s after 2m33s compilation. Logs:
-`runs/schema-storage-acquisition-all-features.log` and
-`runs/schema-storage-acquisition-native.log`. The optional Windows link retains
-the tracked LNK4098 CRT warning. In total, 2,712 tests passed and one existing
-utility remained ignored; all five serial Cargo commands exited successfully.
-No measured memory or speed-up claim follows from storage sharing.
-This combined command also selected the unrelated legacy suites, including
-Data's 418.10s legacy run. It is not the like-for-like selected-harness compilation
-benchmark required by R0; use explicit suite selection for that measurement.
-The rebuilt `poe-author` binary has independently verified both the archived
-genesis and current reload checkpoint. Their checkpoint, ledger, runtime-input
-and registry identities match the maintained references; reports are
-`runs/schema-storage-genesis-verified.json` and
-`runs/schema-storage-current-verified.json`. This read-only check creates no new
-allocation generation; the full package suites independently passed afterward.
+Encoding and append preflight borrow semantic input instead of constructing a
+second complete wire tree. Decoding owns local DTOs, preflights collections and
+every reference, then consumes them during namespace expansion. Each reference
+charges its exact expanded DefId JSON length before cloning; the complete expanded
+meaning must independently fit `max_semantic_bytes`. Wire bytes use
+`max_wire_bytes`. Both default to 64 MiB with existing entry, largest-collection
+and semantic-link limits retained. References are not collection entries: an
+owner-qualified slot has two references in one member. Required-nullable usage
+applicability and omitted-but-non-null skill-input/preset permissions retain their
+existing semantics. The fixed-depth schema and serde depth refusal remain intact.
+`decode_schema_input` returns bounded semantic input for assembly, not proof of
+reference closure; `decode_schema_package` adds the ordinary complete validation.
 
-Change Data's schema codec, Authoring's schema decoder and Import's schema decode
-together. Import's canonical comparison now follows Data's cached encoding;
-`stage_checked_recipe` already uses the schema
-encoder. Regenerate the maintained schema source and canonical predecessor at
-cutover, deleting the replaced wire reader without an autodetection fallback.
-Preserve the now-separate semantic commitment during that representation change.
-Its bounded streaming hash retains canonical typed meaning without an expanded
-wire buffer. Charge reference count/nesting/expanded reconstruction before namespace
-clones so compact input cannot evade work/memory limits. Verify the full current
-schema, indices, units, slot ownership, Partial/Unmapped and absent/empty states,
-plus wrong-kind/local-reference/foreign-namespace and exact/one-short controls.
-Use private exhaustive typed projections, with checked `kind:key` local IDs and
-one namespace at the root; a required wire discriminator stays separate from
-semantic schema version. Count every reference before expansion, including gap
-subjects, both owner and slot of each declared slot, and both quantity endpoints'
-units. Preserve required-nullable usage applicability, omitted-but-non-null skill
-input/preset permissions and the current optional Actor provider distinction.
-Core containment is finite-depth; retain depth refusal and explicit traversal,
-without a generic recursive graph parser or ambient namespace state.
-This implementation contract needs no change to gameplay ownership or validation.
-Define the private projection/budget interface first, then implement the 25
-definition and six slot families in disjoint files before one consumer/artifact
-cutover. Encoding and append preflight must borrow semantic input; do not build a
-second complete wire tree. Decoding may own local wire DTOs, preflight them, then
-consume them during namespace expansion. Assembly callers can use one bounded
-Data input decoder while the checked-package wrapper adds semantic validation;
-this is one codec, not an alternate format or validation authority.
-The current schema has 163,507 identical namespace fields occupying 9,483,406
-bytes before commas (`runs/schema-namespace-inventory.json`). This is a lexical
-inventory supporting the first cut, not a measured codec size or memory saving.
+Integrated validation exposed the same transport/meaning coupling in complete
+release hashing: the compact artifact total is smaller than expanded content.
+`OwnedReleaseLimits` therefore separates semantic commitment bytes from input
+transport bytes too. Apply the semantic bound consistently to checked release,
+source-prefix and authored content commitments; preserve transport bounds for
+raw input and artifact inventories. Cover independent exact/one-short limits
+without raising existing default or hard caps. Transition receipts and their
+dependent evidence pin also require regenerated artifact rows, not just the
+schema and manifest files. Preserve all other receipt fields and historical
+evidence; exact Rust reproduction remains the acceptance check.
 
-The cutover audit identifies these additional live boundaries:
+Authoring, Import, the tree CLI and all standalone fixture readers now use that
+codec. All three live artifact groups are regenerated together: maintained
+`migration-source/bootstrap/schema.json.gz`, `current/schema.json`, and
+`import/compiled/schema.json`, with their manifest commitments. The temporary
+Rust converter is removed. Nested recipe/compiler DTOs remain semantic input,
+not a second standalone decoder; their obsolete commands still retire under R1/R4.
 
-- `src/owned_tree_cli.rs` compact-successor loading is another standalone schema
-  reader. Migrate or retire it with the codec. Shared release, canonical-admission,
-  effective-gem and raw-gem test loaders also reconstruct schemas directly.
-  `tests/owned_effective_gem_cli.rs` also writes semantic input directly to schema
-  files; replace both writes with the Data encoder. Migrate the shared historical
-  test readers centrally, rather than adding per-caller JSON rewrites. Existing
-  callers of `encode_schema_package` follow the new format automatically.
-- Regenerate all three live artifact groups: maintained
-  `migration-source/bootstrap/schema.json.gz`, `current/schema.json`, and
-  `import/compiled/schema.json`, together with their package commitments. Migrate
-  Authoring's `Sources::with_evaluation_content` and corpus/bootstrap fixture
-  decoding. Preserve protected work while updating actual consumers.
-- The maintained historical-restoration test currently requires original receipt
-  and artifact bytes. Retain its authenticated historical evidence and complete
-  semantic comparisons, but assert new encoding commitments separately. Do not
-  retain an old encoder or silently relabel new bytes as historical evidence.
-- Data/CLI schema laws and Import release, compact-successor, passive-refinement
-  and configuration-inventory fixtures need the new codec. Begin every wire
-  refusal test with an accepted new-format baseline so wrong-kind, duplicate/
-  missing-field, version, order and exact-limit controls cannot pass merely
-  because an obsolete format was rejected.
+The consumer audit found two Python paths reading the replaced standalone schema.
+Remove the import exporter's optional policy-rebinding branch and its three
+exclusive tests, retaining all thirteen seed laws; a new Rust Import law checks
+full policy content, dependency seals, receipt fields and compiler artifact hashes.
+Retire the allocation emitter, fourteen obsolete tests and its CI step after six
+Rust source-proof laws preserve the complete 4,914-role/4,503-cost census, three
+free nodes and explicit-false presence, unknown capacities/Partial gaps, exact
+mappings and both artifact manifests. Existing strict tree and native laws retain
+independent rejection coverage. This is implemented and peer-reviewed; the final
+886-test Import suite passes with all seven new laws. No Python schema compatibility
+reader or new generic allocation exporter is introduced. A generic Rust acquisition
+path for future pin updates remains R2/R4 work; retained source facts/policies/rules
+stay unchanged. The six other existing Python test programs remain live until
+their own Rust replacement or justified retirement.
 
-Full R1 compiler retirement is not a prerequisite for this bounded cutover:
-typed `SchemaPackageInput` fixtures and compiler algorithms can remain, and the
-shared recipe encoder already centralizes publication. Nested historical
-recipe/release inputs and descriptor/evidence fragments are semantic authoring
-inputs, never an alternate runtime schema decoder. Retire their obsolete command
-contracts under R1/R4 without adding format autodetection or a compatibility path.
+Historical restoration authenticates the original receipt and complete schema
+meaning. All non-schema, non-manifest artifacts still match historical bytes.
+For the manifest, restoring only the old schema row must reproduce its original
+size and hash, proving every other field unchanged. New artifact and checkpoint
+commitments are asserted separately; no old encoder is retained.
+
+Measured decoded schema sizes are 32,184,798 → 19,763,603 bytes for the maintained
+bootstrap, 14,858,081 → 10,390,286 for `current`, and 1,055,838 → 675,627 for
+`import/compiled`. Semantic identities remain identical in all three. The rebuilt
+bootstrap gzip uses fast compression and is 696,124 bytes versus 429,028 before;
+compressed transport size is not the claimed improvement. Core still holds
+qualified references: no heap, throughput or binary-runtime improvement is claimed.
+
+Validation status and the final checkpoint inventory are recorded at the active
+resume point above. The new Data tests cover typed local references, required
+versions, duplicate/missing fields, gap and slot addresses, semantic authority,
+nullable distinctions and independent exact/one-short byte ceilings. Every wire
+refusal starts from an accepted current-format baseline. Selected Import,
+Authoring, CLI, Engine and optional PoB targets cover migrated consumers; protected
+untracked incoming-critical drafts remain excluded. Retain the existing ignored
+utilities as ignored; do not count compilation as their execution.
+
+The all-features CLI selection compiled in 22m25s and passed 100 tests, with 41
+existing utilities ignored. Its one historical-family law reached the final
+active-gem publication stage but failed with OS112 (disk full), after 657s; this
+does not establish that law as passing. The drive had about 2.7 GiB free. After
+verifying that no compiler was running and that the paths were ordinary local
+cache directories, fifteen old incremental-cache entries were removed; current
+executables, libraries and all source/evidence were retained. Approximately
+25 GiB was restored. The isolated replay passed in 720.20s, bringing the selected
+all-features CLI result to 101 passed and 41 existing utilities ignored. Native-only
+CLI checks also pass (13 tests, one existing utility ignored; 4m36s compilation),
+including exact tree-bundle reproduction. Affected Engine tests pass (13 tests,
+one existing reference ignored; 4m58s compilation); the two changed PoB audit
+targets compile and remain ignored. Strict lint found one unnecessary clone in
+the new allocation proof; it now uses a borrowed slice. Strict package and selected
+CLI lint reruns pass. The final Import suite passes all 886 tests (4m15s compilation,
+42.88s execution), including the seven transferred laws. The native Data/Engine
+dependency and actual compiled-source boundary check passes. Track temporary
+publication volume as part of R0/R4 test-chain retirement;
+retain the initial environmental failure and successful replay as separate evidence.
+
+Final selected verification:
+
+| Scope | Passed | Existing ignored utilities |
+| --- | ---: | ---: |
+| Data library and owned integration | 292 | 0 |
+| Import owned integration, including transferred source laws | 886 | 0 |
+| Authoring library, CLI and maintained release | 337 | 0 |
+| Selected all-features CLI targets | 101 | 41 |
+| Selected native-only CLI targets | 13 | 1 |
+| Affected Engine character/minion families | 13 | 1 |
+| Changed optional PoB audit targets (compile only) | 0 | 2 |
+| Six retained Python CI test programs | 132 | 0 |
+
+Strict Clippy passes for Data/Import/Authoring with all targets and for the
+selected CLI targets. Scoped formatting passes across all 75 changed Rust files;
+the nine protected drafts are unchanged and excluded from compilation/staging.
+Local evidence is in `runs/compact-schema-*.log`; ordinary CI remains the full
+tracked-tree check. These results preserve the recorded 0/5 complete-build state.
+
+Next, complete the R1 publication-core and obsolete compiler/harness retirement
+and the remaining runtime storage work below. This bounded schema cutover neither
+adds gameplay coverage nor closes R3. Before expansion, keep aggregate limits
+measured and do not substitute compressed archives or a higher cap for runtime
+representation work.
 
 Pack checked rules/definitions into bounded binary runtime data with package-local
 interned IDs and compact values. Benchmark a straightforward serializer such as
@@ -2863,7 +2900,7 @@ These are retained obligations, not extra competing phases.
 | Generated preset raw inputs and usage; scenario intent | Preserve exact provider applicability, dormant vs unresolved, single-writer slots, preparation vs participation; test in migration and finish actual R5 blockers |
 | Support-generated skills and physical selector/supply separation | Existing proposals remain unapproved where explicitly marked; reassess against the new model before adding authority, not another parallel graph |
 | Disabled sources on unselected loadouts | Existing resolver precedence can wrongly require their support domains. Fix scope eligibility across authored dependencies before loadout optimization (or earlier if it blocks R5); retain disabled selected-source coverage, required-input checks and structural requirements. Cover the enabled/scope matrix and support-target/container ancestry without a second Engine traversal |
-| Windows test runtime-library linkage | The support-census validation emitted LNK4098 from the Lua-linked Engine `legacy` and `owned` test binaries. Resolve the linkage for oracle binaries retained through R4; do not suppress all linker diagnostics. No warning was emitted by strict Clippy, and native production gained no Lua dependency |
+| Windows test runtime-library linkage | Support-census validation emitted LNK4098 from the Lua-linked Engine `legacy` and `owned` test binaries; the compact-format all-features CLI build also reports it. Resolve the linkage for oracle binaries retained through R4; do not suppress all linker diagnostics. Earlier strict Clippy emitted no warning, and native production gained no Lua dependency |
 | Resource obligations | Accepted Skill-owned payer/resource model remains required; amount-channel signature proposal still needs a concrete decision if R5 requires it |
 | Separate socket configurations | Accepted but incomplete; finish when needed for the first build or R6 equipment search; keep rolls/configurations/physical copies separate |
 | Scoped numerical coverage / computed source selection | Pending, not implied by DSL approval; unknown reach stays blocking. Ask only when a concrete required case needs a public contract change |
@@ -2876,7 +2913,7 @@ These are retained obligations, not extra competing phases.
 | Repository/release hygiene | R0-R4 dependency boundaries, deduplicated tests/artifacts/docs, one MSRV policy and locked workspace dependencies; batch Windows formatting by package while workspace-wide `cargo fmt --all` exceeds the process command-line limit (OS error 206); R6 release packaging, dependency audit and measured release-profile tuning |
 | Repeated offline recipe validation | Exact-input, same-limit reuse is implemented and validated for evaluation-bearing authoring. Keep all shared aggregate and dependency checks. The current metadata-only release has no evaluation bundle and gets no performance claim; measure actual evaluation-bearing builds before broader optimization |
 | Mutable authoring-head promotion | Deferred until a shared mutable head is introduced; the first approved checkpoint publisher uses an explicit immutable predecessor. Implement actual stored-predecessor CAS/concurrency control and interruption tests before exposing head promotion; read-compare-rename alone is insufficient |
-| Canonical allocation-history distribution | R2 first-generation bridge implemented: canonical reference pins source `caca40a5` + checkpoint digest outside the compiled inventory; fresh source-archive reproduction and normal checked loading pass. Before a second allocation generation needs a new predecessor, R3 must archive/distribute one full checked snapshot. No historical source-replay chain, silent rebootstrap, machine-local dependency or second ledger importer |
+| Canonical allocation-history distribution | Compact storage cutover replaces the first-generation source bridge with a complete checked snapshot and pinned archive/checkpoint digests. Fresh extraction must verify before current-source replay. Preserve the ledger and semantic input; no historical source-replay chain, silent rebootstrap, machine-local dependency or second ledger importer |
 
 ## Review finding coverage
 
@@ -2955,7 +2992,8 @@ copying source-language accidents into the native model.
    closed inventories and atomic no-clobber publication. Mutable-head promotion
    remains deferred; do not add another publication layout or allocation command.
    Sniper's real initial-type facts are now authored from pinned source evidence.
-   Canonical first-genesis reproduction is verified and its reference published.
+   The compact cutover preserves first-genesis semantics and publishes a full
+   current-format checkpoint snapshot through the canonical reference.
    Next complete the composed Original05 support-source audit above, followed by
    execution inputs: explicit shared
    support-prohibition authority and any genuinely demanded assigned-target facts, then
@@ -2987,8 +3025,14 @@ copying source-language accidents into the native model.
    The audited 24-root
    resource/equipment cohort now forms two verified suites. Reassess compilation
    and live consumers before choosing another R0 cohort. In R3, the new standalone checkpoint
-   verifier reuses the existing loader; durable snapshot distribution and
-   canonical/runtime compaction remain required before content expansion.
+   verifier reuses the existing loader. The compact schema cutover and durable
+   snapshot replace the historical source bridge; indexed binary runtime data
+   remains separate required work before content expansion.
+   The allocation Python emitter and import-policy rebinding branch are retired;
+   source and semantic evidence now use the existing Rust Import harness. Retain
+   the remaining corpus/seed/mechanics/resistance/tree tooling until its useful
+   consumers migrate. Implement required acquisition for future source-pin updates
+   through Rust; the allocation source-proof tests are not an exporter.
 
    Preserve still-relevant behavioral assertions in the declarative release/DSL
    harness, then delete the historical succession, recipe extension/membership

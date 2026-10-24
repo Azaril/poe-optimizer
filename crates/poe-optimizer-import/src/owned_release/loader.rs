@@ -154,7 +154,13 @@ pub fn load_owned_release_artifacts(
     let recipe = OwnedRecipeInput {
         schema_version: OWNED_RECIPE_VERSION,
         registry: decode(files, "registry.json")?,
-        schema: decode(files, "schema.json")?,
+        schema: poe_optimizer_data::owned_schema::decode_schema_input(
+            files
+                .get("schema.json")
+                .ok_or(OwnedReleaseError::Invalid("missing release artifact"))?,
+            limits.recipe.schema,
+        )
+        .map_err(OwnedRecipeError::from)?,
         rules: decode(files, "rules.json")?,
         routing: decode(files, "routing.json")?,
     };

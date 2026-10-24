@@ -509,7 +509,11 @@ pub(super) fn check(prior_path: &Path) {
     input.recipe = OwnedRecipeInput {
         schema_version: 1,
         registry: read(normalized.join("registry.json")),
-        schema: read(normalized.join("schema.json")),
+        schema: poe_optimizer_data::owned_schema::decode_schema_input(
+            &std::fs::read(normalized.join("schema.json")).unwrap(),
+            Default::default(),
+        )
+        .unwrap(),
         rules: read(normalized.join("rules.json")),
         routing: read(normalized.join("routing.json")),
     };

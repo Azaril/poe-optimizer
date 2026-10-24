@@ -447,6 +447,40 @@ fn reject(input: SchemaPackageInput, kind: SchemaPackageErrorKind) {
     }
 }
 
+fn wire(input: SchemaPackageInput) -> Value {
+    let package = package(input);
+    let bytes = encode_schema_package(&package, Default::default()).unwrap();
+    assert_eq!(
+        decode_schema_input(&bytes, Default::default()).unwrap(),
+        *package.input()
+    );
+    serde_json::from_slice(&bytes).unwrap()
+}
+
+fn wire_definition<'a>(wire: &'a mut Value, kind: &str, reference: &str) -> &'a mut Value {
+    wire["definitions"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|row| row["kind"] == kind && row["value"]["id"] == reference)
+        .unwrap()
+}
+
+fn wire_slot<'a>(wire: &'a mut Value, kind: &str, reference: &str) -> &'a mut Value {
+    wire["slots"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|row| row["kind"] == kind && row["value"]["id"]["slot"] == reference)
+        .unwrap()
+}
+
+fn reject_wire(wire: &Value) {
+    let bytes = serde_json::to_vec(wire).unwrap();
+    assert!(decode_schema_input(&bytes, Default::default()).is_err());
+    assert!(decode_schema_package(&bytes, Default::default()).is_err());
+}
+
 #[test]
 fn every_descriptor_family_loads_and_roundtrips_as_a_source_independent_index() {
     let package = package(input());
@@ -537,6 +571,15 @@ fn unordered_permutations_preserve_identity_but_changed_content_does_not() {
     let second = package(serde_json::from_value(permuted).unwrap());
     assert_eq!(first.input(), second.input());
     assert_eq!(first.identity(), second.identity());
+    let mut wire_permutation = wire(original.clone());
+    reverse_arrays(&mut wire_permutation);
+    let wire_permutation = serde_json::to_vec(&wire_permutation).unwrap();
+    let decoded_input = decode_schema_input(&wire_permutation, Default::default()).unwrap();
+    assert_ne!(&decoded_input, first.input());
+    let decoded = decode_schema_package(&wire_permutation, Default::default()).unwrap();
+    assert_eq!(decoded.input(), first.input());
+    assert_eq!(decoded.identity(), first.identity());
+    assert_eq!(decoded.canonical_bytes(), first.canonical_bytes());
     // Identity commits to canonical typed meaning, independently of the artifact
     // codec. A storage-only migration must preserve this semantic commitment.
     assert_eq!(
@@ -558,6 +601,322 @@ fn unordered_permutations_preserve_identity_but_changed_content_does_not() {
     };
     assert_eq!(before.level.maximum.get(), 30);
     assert_eq!(after.level.maximum.get(), 31);
+}
+
+#[test]
+fn compact_wire_keeps_typed_shapes_and_places_namespace_only_at_the_root() {
+    let checked = package(input());
+    let bytes = encode_schema_package(&checked, Default::default()).unwrap();
+    let text = std::str::from_utf8(&bytes).unwrap();
+    let mut value: Value = serde_json::from_slice(&bytes).unwrap();
+    assert_eq!(value["wire_version"], OWNED_SCHEMA_WIRE_VERSION);
+    assert_eq!(value["schema_version"], OWNED_SCHEMA_PACKAGE_VERSION);
+    assert_eq!(
+        value["namespace"],
+        json!({"game":"authored-game", "version":"v1"})
+    );
+    assert_eq!(text.matches("\"namespace\"").count(), 1);
+    assert_eq!(text.matches("authored-game").count(), 1);
+    assert_eq!(
+        wire_definition(&mut value, "class", "class:class")["value"]["schema"]["value"]["ascendancies"]
+            ["members"],
+        json!(["ascendancy:ascendancy"])
+    );
+    assert_eq!(
+        wire_slot(&mut value, "parameter", "parameter_slot:roll")["value"]["id"],
+        json!({"declaration":{"kind":"modifier", "definition":"modifier:modifier"},"slot":"parameter_slot:roll"})
+    );
+    for (reference, unit, minimum, maximum) in [
+        ("parameter_slot:roll", "unit:ratio", -3.5, 9.5),
+        ("parameter_slot:duration", "unit:time", 0.0, 100.0),
+    ] {
+        assert_eq!(
+            wire_slot(&mut value, "parameter", reference)["value"]["schema"]["value"]["value"],
+            json!({"kind":"quantity", "value":{"minimum":{"value":minimum,"unit":unit},"maximum":{"value":maximum,"unit":unit}}})
+        );
+    }
+    assert_eq!(
+        wire_definition(&mut value, "stat", "stat:stat")["value"]["schema"]["value"]["value"],
+        json!({"kind":"quantity", "value":{"unit":"unit:ratio"}})
+    );
+    assert_eq!(
+        decode_schema_input(&bytes, Default::default()).unwrap(),
+        *checked.input()
+    );
+    assert_ne!(bytes, serde_json::to_vec(checked.input()).unwrap());
+    assert_eq!(
+        checked.identity().content_sha256,
+        format!(
+            "{:x}",
+            Sha256::digest(serde_json::to_vec(checked.input()).unwrap())
+        )
+    );
+}
+
+#[test]
+fn compact_wire_requires_its_version_and_rejects_expanded_or_malformed_references() {
+    let baseline = wire(input());
+    let mut missing = baseline.clone();
+    missing.as_object_mut().unwrap().remove("wire_version");
+    reject_wire(&missing);
+    for version in [0, OWNED_SCHEMA_WIRE_VERSION + 1] {
+        let mut wrong = baseline.clone();
+        wrong["wire_version"] = json!(version);
+        let bytes = serde_json::to_vec(&wrong).unwrap();
+        assert!(
+            matches!(decode_schema_input(&bytes, Default::default()), Err(SchemaPackageError::UnsupportedWireVersion(actual)) if actual == version)
+        );
+        assert!(
+            matches!(decode_schema_package(&bytes, Default::default()), Err(SchemaPackageError::UnsupportedWireVersion(actual)) if actual == version)
+        );
+    }
+    let expanded = serde_json::to_value(package(input()).input()).unwrap();
+    reject_wire(&expanded);
+    let mut expanded_with_version = expanded;
+    expanded_with_version["wire_version"] = json!(OWNED_SCHEMA_WIRE_VERSION);
+    reject_wire(&expanded_with_version);
+    for reference in [
+        "class",
+        "class:",
+        "class:two:keys",
+        "Class:class",
+        "unknown:class",
+        "class:with space",
+        "class:../outside",
+        "gem:class",
+    ] {
+        let mut wrong = baseline.clone();
+        wire_definition(&mut wrong, "class", "class:class")["value"]["id"] = json!(reference);
+        reject_wire(&wrong);
+    }
+    for (field, wrong) in [
+        ("slot", json!("grant_slot:roll")),
+        (
+            "declaration",
+            json!({"kind":"modifier","definition":"skill:modifier"}),
+        ),
+    ] {
+        let mut value = baseline.clone();
+        wire_slot(&mut value, "parameter", "parameter_slot:roll")["value"]["id"][field] = wrong;
+        reject_wire(&value);
+    }
+    let text = serde_json::to_string(&baseline).unwrap();
+    for (needle, replacement) in [
+        (
+            "\"wire_version\":1",
+            "\"wire_version\":1,\"wire_version\":1",
+        ),
+        (
+            "\"slot\":\"parameter_slot:roll\"",
+            "\"slot\":\"parameter_slot:roll\",\"slot\":\"parameter_slot:roll\"",
+        ),
+    ] {
+        let duplicate = text.replacen(needle, replacement, 1);
+        assert_ne!(duplicate, text);
+        assert!(decode_schema_input(duplicate.as_bytes(), Default::default()).is_err());
+        assert!(decode_schema_package(duplicate.as_bytes(), Default::default()).is_err());
+    }
+}
+
+#[test]
+fn compact_raw_decode_does_not_certify_reference_closure_or_slot_ownership() {
+    let baseline = wire(input());
+    let mut missing = baseline.clone();
+    wire_definition(&mut missing, "metric", "metric:metric")["value"]["schema"]["value"]["unit"] =
+        json!("unit:missing");
+    let mut wrong_owner = baseline.clone();
+    wire_definition(&mut wrong_owner, "item_template", "item_template:item")["value"]["schema"]["value"]
+        ["declarations"]["parameters"]["members"] = json!([{
+        "declaration":{"kind":"gem", "definition":"gem:gem"}, "slot":"parameter_slot:gem-variant"
+    }]);
+    let mut wrong_unit = baseline;
+    wire_slot(&mut wrong_unit, "parameter", "parameter_slot:roll")["value"]["schema"]["value"]["value"]
+        ["value"]["maximum"]["unit"] = json!("unit:other-ratio");
+    for (candidate, expected) in [
+        (missing, SchemaPackageErrorKind::MissingDefinition),
+        (wrong_owner, SchemaPackageErrorKind::WrongDeclaration),
+        (wrong_unit, SchemaPackageErrorKind::UnitMismatch),
+    ] {
+        let bytes = serde_json::to_vec(&candidate).unwrap();
+        let raw = decode_schema_input(&bytes, Default::default()).unwrap();
+        reject(raw, expected.clone());
+        match decode_schema_package(&bytes, Default::default()) {
+            Err(SchemaPackageError::Invalid { kind, path }) => {
+                assert_eq!(kind, expected, "{path}");
+                assert!(!path.is_empty());
+            }
+            result => panic!("expected {expected:?}, got {result:?}"),
+        }
+    }
+}
+
+#[test]
+fn compact_gap_subjects_preserve_definition_and_owner_qualified_slot_addresses() {
+    let mut raw = input();
+    let slot = declared::<ParameterSlotDefinition>(item_owner(), "item-state");
+    item(&mut raw).declarations.parameters.closure = SchemaClosure::Partial {
+        gaps: vec![
+            gap(SchemaSubject::Definition(
+                id::<ItemTemplateDefinition>("item").address(),
+            )),
+            gap(SchemaSubject::Slot(ParameterSlotDefId::address(&slot))),
+        ],
+    };
+    let checked = package(raw.clone());
+    let mut value = wire(raw);
+    let gaps = &wire_definition(&mut value, "item_template", "item_template:item")["value"]["schema"]
+        ["value"]["declarations"]["parameters"]["closure"]["value"]["gaps"];
+    let subjects = gaps
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|gap| gap["subject"].clone())
+        .collect::<Vec<_>>();
+    assert_eq!(subjects.len(), 2);
+    assert!(subjects.contains(
+        &json!({"kind":"definition","value":{"kind":"item_template","value":"item_template:item"}})
+    ));
+    assert!(subjects.contains(&json!({"kind":"slot","value":{"kind":"parameter","value":{"declaration":{"kind":"item_template","definition":"item_template:item"},"slot":"parameter_slot:item-state"}}})));
+    let bytes = serde_json::to_vec(&value).unwrap();
+    assert_eq!(
+        decode_schema_package(&bytes, Default::default())
+            .unwrap()
+            .input(),
+        checked.input()
+    );
+    let gaps = wire_definition(&mut value, "item_template", "item_template:item")["value"]["schema"]["value"]["declarations"]["parameters"]["closure"]["value"]["gaps"].as_array_mut().unwrap();
+    gaps.iter_mut()
+        .find(|gap| gap["subject"]["kind"] == "definition")
+        .unwrap()["subject"]["value"]["value"] = json!("item_template:missing");
+    let bytes = serde_json::to_vec(&value).unwrap();
+    assert!(decode_schema_input(&bytes, Default::default()).is_ok());
+    assert!(matches!(
+        decode_schema_package(&bytes, Default::default()),
+        Err(SchemaPackageError::Invalid {
+            kind: SchemaPackageErrorKind::MissingDefinition,
+            ..
+        })
+    ));
+}
+
+#[test]
+fn compact_wire_preserves_required_nullable_and_optional_non_null_fields() {
+    let mut baseline = wire(input());
+    assert_eq!(
+        wire_definition(&mut baseline, "usage_policy", "usage_policy:usage")["value"]["schema"]["value"]
+            ["scenario_skill_applicability"],
+        Value::Null
+    );
+    let mut missing_required = baseline.clone();
+    wire_definition(&mut missing_required, "usage_policy", "usage_policy:usage")["value"]["schema"]
+        ["value"]
+        .as_object_mut()
+        .unwrap()
+        .remove("scenario_skill_applicability");
+    reject_wire(&missing_required);
+    for (kind, reference, field) in [
+        ("parameter", "parameter_slot:item-state", "skill_input"),
+        (
+            "skill_grant",
+            "skill_grant_slot:skill-grant",
+            "preset_inputs",
+        ),
+    ] {
+        assert!(
+            wire_slot(&mut baseline, kind, reference)["value"]["schema"]["value"]
+                .get(field)
+                .is_none()
+        );
+        let mut explicit_null = baseline.clone();
+        wire_slot(&mut explicit_null, kind, reference)["value"]["schema"]["value"][field] =
+            Value::Null;
+        reject_wire(&explicit_null);
+    }
+    assert!(
+        wire_slot(&mut baseline, "actor", "actor_slot:owned-actor")["value"]["schema"]["value"]
+            .get("provider_definition")
+            .is_none()
+    );
+    let mut nullable = baseline;
+    wire_slot(&mut nullable, "actor", "actor_slot:owned-actor")["value"]["schema"]["value"]["provider_definition"] =
+        Value::Null;
+    let bytes = serde_json::to_vec(&nullable).unwrap();
+    assert_eq!(
+        decode_schema_package(&bytes, Default::default())
+            .unwrap()
+            .input(),
+        package(input()).input()
+    );
+}
+
+#[test]
+fn compact_wire_and_expanded_semantic_byte_budgets_are_independent_and_exact() {
+    let checked = package(input());
+    let bytes = encode_schema_package(&checked, Default::default()).unwrap();
+    let semantic_bytes = serde_json::to_vec(checked.input()).unwrap().len();
+    assert!(semantic_bytes > bytes.len());
+    let exact = OwnedSchemaLimits {
+        max_wire_bytes: bytes.len(),
+        max_semantic_bytes: semantic_bytes,
+        ..Default::default()
+    };
+    assert!(OwnedDefinitionSchemaPackage::new(checked.input().clone(), exact).is_ok());
+    assert_eq!(
+        decode_schema_input(&bytes, exact).unwrap(),
+        *checked.input()
+    );
+    assert_eq!(
+        decode_schema_package(&bytes, exact).unwrap().identity(),
+        checked.identity()
+    );
+    checked.validate_limits(exact).unwrap();
+    assert_eq!(encode_schema_package(&checked, exact).unwrap(), bytes);
+    for (limits, semantic) in [
+        (
+            OwnedSchemaLimits {
+                max_wire_bytes: bytes.len() - 1,
+                ..exact
+            },
+            false,
+        ),
+        (
+            OwnedSchemaLimits {
+                max_semantic_bytes: semantic_bytes - 1,
+                ..exact
+            },
+            true,
+        ),
+        (
+            OwnedSchemaLimits {
+                max_semantic_bytes: 1,
+                ..exact
+            },
+            true,
+        ),
+    ] {
+        let expected_maximum = if semantic {
+            limits.max_semantic_bytes
+        } else {
+            limits.max_wire_bytes
+        };
+        for error in [
+            OwnedDefinitionSchemaPackage::new(checked.input().clone(), limits).unwrap_err(),
+            decode_schema_input(&bytes, limits).unwrap_err(),
+            decode_schema_package(&bytes, limits).unwrap_err(),
+            checked.validate_limits(limits).unwrap_err(),
+            encode_schema_package(&checked, limits).unwrap_err(),
+        ] {
+            match error {
+                SchemaPackageError::SemanticTooLarge { maximum } if semantic => {
+                    assert_eq!(maximum, expected_maximum)
+                }
+                SchemaPackageError::TooLarge { maximum } if !semantic => {
+                    assert_eq!(maximum, expected_maximum)
+                }
+                other => panic!("wrong independent byte limit failure: {other:?}"),
+            }
+        }
+    }
 }
 
 #[test]
@@ -586,6 +945,7 @@ fn definition_append_byte_preflight_matches_storage_without_certifying_semantics
     let extended = package(extended);
     let exact = OwnedSchemaLimits {
         max_wire_bytes: extended.canonical_bytes().len(),
+        max_semantic_bytes: serde_json::to_vec(extended.input()).unwrap().len(),
         ..Default::default()
     };
     baseline
@@ -598,6 +958,15 @@ fn definition_append_byte_preflight_matches_storage_without_certifying_semantics
     assert!(matches!(
         baseline.validate_definition_append_bytes(&additions, short),
         Err(SchemaPackageError::TooLarge { maximum }) if maximum == short.max_wire_bytes
+    ));
+    let semantic_short = OwnedSchemaLimits {
+        max_semantic_bytes: exact.max_semantic_bytes - 1,
+        ..exact
+    };
+    assert!(matches!(
+        baseline.validate_definition_append_bytes(&additions, semantic_short),
+        Err(SchemaPackageError::SemanticTooLarge { maximum })
+            if maximum == semantic_short.max_semantic_bytes
     ));
     baseline
         .validate_definition_append_bytes(
@@ -843,7 +1212,7 @@ fn known_empty_scopes_and_potential_cycles_are_not_game_legality_or_activation()
 fn wire_rejects_unknown_duplicate_missing_and_wrong_kind_fields() {
     let raw = input();
     let limits = OwnedSchemaLimits::default();
-    let wire = serde_json::to_value(&raw).unwrap();
+    let wire = wire(raw.clone());
     for pointer in ["", "/definitions/0/value/schema/value"] {
         let mut extra = wire.clone();
         extra
@@ -858,9 +1227,9 @@ fn wire_rejects_unknown_duplicate_missing_and_wrong_kind_fields() {
     missing.as_object_mut().unwrap().remove("slots");
     assert!(decode_schema_package(&serde_json::to_vec(&missing).unwrap(), limits).is_err());
     let mut wrong = wire.clone();
-    wrong["definitions"][0]["value"]["id"]["kind"] = json!("gem");
+    wire_definition(&mut wrong, "class", "class:class")["value"]["id"] = json!("gem:class");
     assert!(decode_schema_package(&serde_json::to_vec(&wrong).unwrap(), limits).is_err());
-    let encoded = serde_json::to_string(&raw).unwrap();
+    let encoded = serde_json::to_string(&wire).unwrap();
     let duplicated = encoded.replacen(
         &format!("\"schema_version\":{OWNED_SCHEMA_PACKAGE_VERSION}"),
         &format!("\"schema_version\":{OWNED_SCHEMA_PACKAGE_VERSION},\"schema_version\":{OWNED_SCHEMA_PACKAGE_VERSION}"),
@@ -906,6 +1275,7 @@ fn bytes_total_entries_and_each_collection_obey_exact_tightened_limits() {
         max_entries: entries,
         max_collection_entries: collection,
         max_wire_bytes: bytes.len(),
+        max_semantic_bytes: serde_json::to_vec(package.input()).unwrap().len(),
     };
     assert!(OwnedDefinitionSchemaPackage::new(raw.clone(), exact).is_ok());
     assert!(decode_schema_package(&bytes, exact).is_ok());
@@ -923,6 +1293,10 @@ fn bytes_total_entries_and_each_collection_obey_exact_tightened_limits() {
             max_wire_bytes: bytes.len() - 1,
             ..exact
         },
+        OwnedSchemaLimits {
+            max_semantic_bytes: exact.max_semantic_bytes - 1,
+            ..exact
+        },
     ] {
         assert!(OwnedDefinitionSchemaPackage::new(raw.clone(), below).is_err());
         assert!(decode_schema_package(&bytes, below).is_err());
@@ -937,6 +1311,14 @@ fn bytes_total_entries_and_each_collection_obey_exact_tightened_limits() {
             max_wire_bytes: HARD_SCHEMA_MAX_WIRE_BYTES + 1,
             ..exact
         },
+        OwnedSchemaLimits {
+            max_semantic_bytes: 0,
+            ..exact
+        },
+        OwnedSchemaLimits {
+            max_semantic_bytes: HARD_SCHEMA_MAX_SEMANTIC_BYTES + 1,
+            ..exact
+        },
     ] {
         assert!(OwnedDefinitionSchemaPackage::new(raw.clone(), invalid).is_err());
         assert!(decode_schema_package(&bytes, invalid).is_err());
@@ -946,6 +1328,7 @@ fn bytes_total_entries_and_each_collection_obey_exact_tightened_limits() {
         max_entries: DEFAULT_SCHEMA_MAX_ENTRIES + 1,
         max_collection_entries: DEFAULT_SCHEMA_MAX_COLLECTION_ENTRIES + 1,
         max_wire_bytes: DEFAULT_SCHEMA_MAX_WIRE_BYTES + 1,
+        max_semantic_bytes: DEFAULT_SCHEMA_MAX_SEMANTIC_BYTES + 1,
     };
     assert!(OwnedDefinitionSchemaPackage::new(raw, raised).is_ok());
     assert!(decode_schema_package(&bytes, raised).is_ok());
@@ -1120,10 +1503,13 @@ fn computed_schema_validates_exact_unit_closure_targets_and_limits() {
 
 #[test]
 fn superseded_schema_formats_are_rejected_without_a_compatibility_loader() {
+    let current = wire(computed_input());
     for version in 0..OWNED_SCHEMA_PACKAGE_VERSION {
         let mut old = computed_input();
         old.schema_version = version;
-        let bytes = serde_json::to_vec(&old).unwrap();
+        let mut old_wire = current.clone();
+        old_wire["schema_version"] = json!(version);
+        let bytes = serde_json::to_vec(&old_wire).unwrap();
         assert!(
             matches!(OwnedDefinitionSchemaPackage::new(old, Default::default()), Err(SchemaPackageError::UnsupportedVersion(v)) if v == version)
         );
@@ -1378,6 +1764,7 @@ fn reused_actor_templates_charge_each_potential_ability_check() {
         max_entries: actor_link_checks,
         max_collection_entries: largest_collection,
         max_wire_bytes: bytes.len(),
+        max_semantic_bytes: serde_json::to_vec(package.input()).unwrap().len(),
     };
     // Stored-entry growth must not reduce the separate semantic-link budget.
     // This baseline already uses that whole budget, but has spare stored rows.

@@ -264,16 +264,12 @@ fn omitted_parameter_roundtrips_and_explicit_authority_changes_identity() {
     assert_eq!(schema, parameter(None, vec![]));
     assert_eq!(serde_json::to_string(&schema).unwrap(), LEGACY);
     let legacy_input = input(None, vec![], OWNED_SCHEMA_PACKAGE_VERSION);
-    let legacy_bytes = serde_json::to_vec(&legacy_input).unwrap();
+    let legacy = package(legacy_input);
+    let legacy_bytes = encode_schema_package(&legacy, Default::default()).unwrap();
     assert!(
         !String::from_utf8(legacy_bytes.clone())
             .unwrap()
             .contains("skill_input")
-    );
-    let legacy = package(legacy_input);
-    assert_eq!(
-        encode_schema_package(&legacy, Default::default()).unwrap(),
-        legacy_bytes
     );
     assert_eq!(
         decode_schema_package(&legacy_bytes, Default::default())

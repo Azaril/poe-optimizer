@@ -446,7 +446,7 @@ fn authored_aggregate_preflight_accepts_exact_budget_and_runs_before_hashing() {
         .bindings
         .push(duplicate.metrics.bindings[0].clone());
     let mut tiny = limits(low);
-    tiny.max_input_bytes = 1;
+    tiny.max_semantic_bytes = 1;
     assert!(matches!(
         duplicate.clone().into_input(&recipe, tiny),
         Err(OwnedReleaseError::Limit("validation entries"))
@@ -480,7 +480,7 @@ fn authored_aggregate_preflight_accepts_exact_budget_and_runs_before_hashing() {
     }
     row.requires = Some(predicate);
     let tiny = OwnedReleaseLimits {
-        max_input_bytes: 1,
+        max_semantic_bytes: 1,
         ..Default::default()
     };
     assert!(matches!(

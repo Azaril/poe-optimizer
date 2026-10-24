@@ -1,20 +1,19 @@
 # Tracked rule source and remaining metadata bootstrap
 
 `release.kdl` is the sole production source manifest for the retained release.
-It lists every input explicitly, relative to this directory. First reproduce the
+It lists every input explicitly, relative to this directory. First extract and verify the
 allocation predecessor using the [canonical reference](../authoring-genesis.md),
 then build into a fresh output directory:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109 --output rebuilt-release
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124 --output rebuilt-release
 ```
 
-Bootstrap reproduces the first 69-name allocation genesis only at its fixed
-source revision. Later source builds use that checked checkpoint with
+The canonical snapshot preserves the first 69-name allocation ledger. Source builds use that checked checkpoint with
 `--predecessor` and `--expected-predecessor`; do not bootstrap evolving sources.
 The output contains `checkpoint.json`, `names.json` and `runtime/`. Runtime
 consumers receive `rebuilt-release/runtime`. The [canonical reference](../authoring-genesis.md)
-records the source revision, checkpoint digest and clean-clone commands outside
+records archive and checkpoint digests and clean-clone commands outside
 this compiled inventory; local `runs/` outputs are only verification evidence.
 
 Rule programs live in the declared `.rule` files. KDL packets bind each program
@@ -29,8 +28,10 @@ coverage inventories, tables, receivers, queries, applications and bindings.
 It has **no program members**. The builder rejects embedded programs, including
 when no packets are declared. A DSL error cannot select another execution path.
 The remaining compressed JSON constituents are temporary R1/R2 metadata inputs,
-not the final compact runtime pack. Reproducing the fixed genesis needs no local
-predecessor, historical staging helper, migration generator or PoB checkout.
+not the final compact runtime pack. Loading the fixed genesis needs no local
+predecessor, historical source rebuild, staging helper, migration generator or PoB checkout.
+Schema artifacts use the sole compact typed codec with one root namespace; the
+semantic schema version and identity are independent of that wire representation.
 
 ## Independent migration evidence
 
@@ -48,9 +49,12 @@ must remain unchanged except for the explicitly admitted 69 Stat declarations,
 one Sniper initial-type program and 350 intrinsic support-domain declarations.
 The release test removes exactly that delta,
 restores historical program members and uses checked content constructors to bind
-the original dependencies. Every reconstructed historical artifact length/hash
-and receipt byte must match. New schema/registry identities change dependent
-artifact bindings; unchanged query payloads remain byte-exact.
+the original dependencies. Complete historical schema meaning and semantic receipt
+fields must match. Every non-schema, non-manifest artifact remains byte-exact;
+restoring only the old schema row must reproduce the original manifest size/hash.
+New schema wire commitments are asserted separately, without an old encoder.
+New semantic schema/registry identities change dependent artifact bindings;
+unchanged query payloads remain byte-exact.
 
 Historical reference identity (not the current DSL input):
 

@@ -86,45 +86,30 @@ equal its identity. The ledger identity is a separate commitment.
 
 ## Canonical first-allocation genesis
 
-The first production declaration slice establishes one genesis checkpoint
-containing its 69 allocated Skill Stats. The earlier empty-ledger checkpoint is
-verification evidence, not that genesis. Record the exact Git source revision,
-manifest path and expected checkpoint identity in a maintained reference outside
-the compiled manifest's source inventory. Record those values after the validated
-content commit, in a follow-up reference/documentation commit; the manifest must
-not refer to its own future Git commit or checkpoint identity. The
-[canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md) now pins source
-revision `caca40a55885e5c8612e7d9b47c1691f8ea321a9` and checkpoint
-`e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109`.
-An archive of that committed source reproduced the digest, then passed normal
-checked predecessor loading and retained all name/runtime bytes.
+The first production declaration slice establishes one genesis checkpoint with
+69 allocated Skill Stats. The earlier empty-ledger checkpoint is verification
+evidence, not that genesis. The [canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md)
+pins a complete immutable snapshot and its checkpoint/archive identities outside
+the compiled manifest inventory, avoiding a self-referential receipt.
 
-A clean clone reproduces genesis by obtaining that fixed source revision and
-running the maintained compiler with explicit `--bootstrap` against its manifest.
-Check the resulting checkpoint identity against the reference, then pass the
-artifacts through the normal checked checkpoint loader. The referenced source
-revision supplies data; it does not select a historical compiler or migration
-helper. CI must make that exact revision available even when its initial checkout
-is shallow. No pre-existing `runs/` output or machine-local ledger is required.
+The initial fixed-source rebuild bridge has been replaced by that snapshot.
+A clean clone extracts it and validates the exact expected identity through the
+normal checked checkpoint loader. No historical compiler, ancestor checkpoint,
+source checkout or machine-local ledger is needed. Standard archive transport
+wraps the existing complete checkpoint directory and adds no semantic format.
 
-Current source builds use the fully checked reproduced genesis as their explicit
-predecessor. Never bootstrap the evolving source to reconstruct its allocation
-history, and never substitute the earlier empty ledger: either would permit
-earlier-sorting additions to change assigned IDs. Rebuilding identical source with
-genesis as predecessor can preserve runtime and name identities while changing the
-checkpoint identity, because the receipt now records that predecessor. Reproducing
-the genesis receipt itself still requires the pinned source and its original
-explicit bootstrap operation.
+Current source builds use the checked snapshot as their explicit predecessor.
+Never bootstrap evolving source to reconstruct allocation history or substitute
+an empty ledger: earlier-sorting additions could then change assigned IDs.
+Identical source can preserve runtime and name identities while its checkpoint
+identity changes to record a predecessor. A storage-only cutover must preserve
+name allocations and semantic runtime commitments while deliberately regenerating
+artifact hashes and the canonical snapshot. Old readers and compatibility
+compilers are not retained to reproduce superseded storage.
 
-This source reference is a bounded bridge to R3 distribution. Before a second
-allocation generation needs a new canonical predecessor, archive or distribute
-one full, checked immutable checkpoint snapshot through R3. Do not extend this
-recipe into recursive historical source builds, retain a growing chain of duplicate
-working-tree snapshots, or introduce a separate names-ledger importer. The next
-build must be able to load its allocation predecessor directly. If compiler or
-artifact formats change, deliberately regenerate or migrate the canonical snapshot
-and its reference; do not add compatibility compilers or fallback loaders to keep
-the genesis recipe alive. Mutable-head promotion remains a separate deferred task.
+Do not grow a recursive source-replay chain or a separate ledger importer. Each
+new canonical allocation predecessor must be available as one complete checked
+snapshot. Mutable-head promotion remains a separate deferred task.
 
 ## Considered alternative: explicit source-ledger allocation
 

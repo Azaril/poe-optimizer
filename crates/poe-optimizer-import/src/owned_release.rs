@@ -102,7 +102,10 @@ pub struct OwnedReleaseInput {
 /// matching the complete pair consumed by fresh normalization.
 #[derive(Clone, Copy, Debug)]
 pub struct OwnedReleaseLimits {
+    /// Supplied bytes: raw compiler JSON or the complete runtime artifact inventory.
     pub max_input_bytes: usize,
+    /// Expanded typed input commitments, independent of their storage encoding.
+    pub max_semantic_bytes: usize,
     pub max_output_bytes: usize,
     pub max_artifact_bytes: usize,
     pub max_validation_entries: usize,
@@ -123,6 +126,7 @@ impl Default for OwnedReleaseLimits {
     fn default() -> Self {
         Self {
             max_input_bytes: 64 * 1024 * 1024,
+            max_semantic_bytes: 64 * 1024 * 1024,
             max_output_bytes: 64 * 1024 * 1024,
             max_artifact_bytes: 64 * 1024 * 1024,
             max_validation_entries: 2_000_000,
@@ -146,6 +150,11 @@ impl OwnedReleaseLimits {
         let hard = Self::default();
         for (name, value, maximum) in [
             ("input bytes", self.max_input_bytes, hard.max_input_bytes),
+            (
+                "semantic bytes",
+                self.max_semantic_bytes,
+                hard.max_semantic_bytes,
+            ),
             ("output bytes", self.max_output_bytes, hard.max_output_bytes),
             (
                 "artifact bytes",

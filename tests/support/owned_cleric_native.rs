@@ -39,8 +39,8 @@ struct World {
 impl World {
     fn load(package: &Path) -> Self {
         let schema = Arc::new(
-            OwnedDefinitionSchemaPackage::new(
-                read(package.join("schema.json")),
+            poe_optimizer_data::owned_schema::decode_schema_package(
+                &std::fs::read(package.join("schema.json")).unwrap(),
                 Default::default(),
             )
             .unwrap(),

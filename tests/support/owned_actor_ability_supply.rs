@@ -68,7 +68,11 @@ fn check_registry_and_contract(
         assert_eq!(actual.state, RegistryState::Active);
         assert_eq!(actual.target, authored.subject());
     }
-    let schema: SchemaPackageInput = load(output.join("schema.json"));
+    let schema: SchemaPackageInput = poe_optimizer_data::owned_schema::decode_schema_input(
+        &std::fs::read(output.join("schema.json")).unwrap(),
+        Default::default(),
+    )
+    .unwrap();
     assert_eq!(schema.schema_version, 7);
     assert_eq!(schema.release, migration.release);
     assert_eq!(

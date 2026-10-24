@@ -79,7 +79,11 @@ fn load(prior: &Path) -> StagedOwnedRelease {
         recipe: OwnedRecipeInput {
             schema_version: 1,
             registry: read(prior.join("registry.json")),
-            schema: read(prior.join("schema.json")),
+            schema: poe_optimizer_data::owned_schema::decode_schema_input(
+                &std::fs::read(prior.join("schema.json")).unwrap(),
+                Default::default(),
+            )
+            .unwrap(),
             rules: read(prior.join("rules.json")),
             routing: read(prior.join("routing.json")),
         },
@@ -488,7 +492,15 @@ pub(super) fn check(prior_path: &Path) {
     preservation(&prior, &staged, &policy, &compiled);
     let schema = output.join("schema.json");
     let recipe_path = output.join("recipe.json");
-    write(&schema, staged.assembled().schema().input());
+    fs::write(
+        &schema,
+        poe_optimizer_data::owned_schema::encode_schema_package(
+            staged.assembled().schema(),
+            Default::default(),
+        )
+        .unwrap(),
+    )
+    .unwrap();
     write(&recipe_path, &recipe);
     let fragment_dir = output.join("fragments");
     success(compile_cli(&recipe_path, &schema, &fragment_dir));

@@ -15,14 +15,20 @@ use std::{
     sync::Arc,
 };
 
+mod wire;
+use wire::SchemaWireView;
+
 pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = OWNED_SCHEMA_PACKAGE_V7;
 pub const OWNED_SCHEMA_PACKAGE_V7: u32 = 7;
+pub const OWNED_SCHEMA_WIRE_VERSION: u32 = 1;
 pub const DEFAULT_SCHEMA_MAX_ENTRIES: usize = 1_000_000;
 pub const DEFAULT_SCHEMA_MAX_COLLECTION_ENTRIES: usize = 100_000;
 pub const DEFAULT_SCHEMA_MAX_WIRE_BYTES: usize = 64 * 1024 * 1024;
+pub const DEFAULT_SCHEMA_MAX_SEMANTIC_BYTES: usize = 64 * 1024 * 1024;
 pub const HARD_SCHEMA_MAX_ENTRIES: usize = 4_000_000;
 pub const HARD_SCHEMA_MAX_COLLECTION_ENTRIES: usize = 1_000_000;
 pub const HARD_SCHEMA_MAX_WIRE_BYTES: usize = 256 * 1024 * 1024;
+pub const HARD_SCHEMA_MAX_SEMANTIC_BYTES: usize = 256 * 1024 * 1024;
 
 /// Canonical typed schema meaning. These are input DTOs, not validated storage;
 /// artifact encoding and size preflight belong to this module's storage codec.
@@ -44,6 +50,9 @@ pub struct OwnedSchemaLimits {
     pub max_entries: usize,
     pub max_collection_entries: usize,
     pub max_wire_bytes: usize,
+    /// Ceiling for expanded, canonical typed meaning, independent of storage.
+    /// Decoding also charges expanded references before cloning namespaces.
+    pub max_semantic_bytes: usize,
 }
 impl Default for OwnedSchemaLimits {
     fn default() -> Self {
@@ -51,6 +60,7 @@ impl Default for OwnedSchemaLimits {
             max_entries: DEFAULT_SCHEMA_MAX_ENTRIES,
             max_collection_entries: DEFAULT_SCHEMA_MAX_COLLECTION_ENTRIES,
             max_wire_bytes: DEFAULT_SCHEMA_MAX_WIRE_BYTES,
+            max_semantic_bytes: DEFAULT_SCHEMA_MAX_SEMANTIC_BYTES,
         }
     }
 }
@@ -67,6 +77,11 @@ impl OwnedSchemaLimits {
                 "max_wire_bytes",
                 self.max_wire_bytes,
                 HARD_SCHEMA_MAX_WIRE_BYTES,
+            ),
+            (
+                "max_semantic_bytes",
+                self.max_semantic_bytes,
+                HARD_SCHEMA_MAX_SEMANTIC_BYTES,
             ),
         ] {
             if value == 0 || value > maximum {
@@ -109,8 +124,12 @@ pub enum SchemaPackageError {
     },
     #[error("unsupported owned schema package version {0}")]
     UnsupportedVersion(u32),
+    #[error("unsupported owned schema wire version {0}")]
+    UnsupportedWireVersion(u32),
     #[error("owned schema package exceeds {maximum} bytes")]
     TooLarge { maximum: usize },
+    #[error("owned schema meaning exceeds {maximum} bytes")]
+    SemanticTooLarge { maximum: usize },
     #[error(transparent)]
     Json(#[from] serde_json::Error),
 }
@@ -139,6 +158,7 @@ pub struct OwnedDefinitionSchemaPackage {
     definitions: BTreeMap<DefinitionAddress, usize>,
     slots: BTreeMap<SlotAddress, usize>,
     canonical_bytes: Arc<[u8]>,
+    semantic_bytes: usize,
     resources: ResourceUse,
 }
 impl OwnedDefinitionSchemaPackage {
@@ -150,9 +170,9 @@ impl OwnedDefinitionSchemaPackage {
         validate_shape_limits(&input, limits)?;
         let resources = validate_and_canonicalize(&mut input, limits)?;
         // Commit to canonical typed meaning independently of artifact encoding.
-        // Both currently have equal byte representations; a storage-only cutover
-        // must not change this commitment or keep a second expanded output buffer.
-        let content_sha256 = semantic_sha256(&input, limits.max_wire_bytes)?;
+        // Compact artifacts must not change this commitment or keep a second
+        // expanded output buffer.
+        let (content_sha256, semantic_bytes) = semantic_sha256(&input, limits.max_semantic_bytes)?;
         let canonical_bytes =
             bounded_json(&SchemaWireView::new(&input, &[]), limits.max_wire_bytes)?.into();
         let identity = DataIdentity {
@@ -180,6 +200,7 @@ impl OwnedDefinitionSchemaPackage {
             definitions,
             slots,
             canonical_bytes,
+            semantic_bytes,
             resources,
         })
     }
@@ -210,6 +231,11 @@ impl OwnedDefinitionSchemaPackage {
                 maximum: limits.max_wire_bytes,
             });
         }
+        if self.semantic_bytes > limits.max_semantic_bytes {
+            return Err(SchemaPackageError::SemanticTooLarge {
+                maximum: limits.max_semantic_bytes,
+            });
+        }
         Ok(())
     }
     /// Reserve additional stored entries before extending this schema. This
@@ -238,6 +264,11 @@ impl OwnedDefinitionSchemaPackage {
         limits: OwnedSchemaLimits,
     ) -> Result {
         self.validate_limits(limits)?;
+        write_bounded_meaning(
+            &SchemaMeaningView::new(&self.input, additions),
+            io::sink(),
+            limits.max_semantic_bytes,
+        )?;
         write_bounded_json(
             &SchemaWireView::new(&self.input, additions),
             io::sink(),
@@ -267,13 +298,21 @@ pub fn decode_schema_package(
     bytes: &[u8],
     limits: OwnedSchemaLimits,
 ) -> Result<OwnedDefinitionSchemaPackage> {
+    OwnedDefinitionSchemaPackage::new(decode_schema_input(bytes, limits)?, limits)
+}
+
+/// Decode the sole schema artifact format with bounded reconstruction. This
+/// returns input DTOs for assembly, not membership or semantic-validation proof.
+pub fn decode_schema_input(bytes: &[u8], limits: OwnedSchemaLimits) -> Result<SchemaPackageInput> {
     limits.validate()?;
     if bytes.len() > limits.max_wire_bytes {
         return Err(SchemaPackageError::TooLarge {
             maximum: limits.max_wire_bytes,
         });
     }
-    OwnedDefinitionSchemaPackage::new(serde_json::from_slice(bytes)?, limits)
+    let input = wire::decode(bytes, limits)?;
+    write_bounded_meaning(&input, io::sink(), limits.max_semantic_bytes)?;
+    Ok(input)
 }
 pub fn encode_schema_package(
     package: &OwnedDefinitionSchemaPackage,
@@ -283,25 +322,36 @@ pub fn encode_schema_package(
     Ok(package.canonical_bytes.to_vec())
 }
 
-fn semantic_sha256(input: &SchemaPackageInput, maximum: usize) -> Result<String> {
-    struct HashWriter(Sha256);
+fn semantic_sha256(input: &SchemaPackageInput, maximum: usize) -> Result<(String, usize)> {
+    struct HashWriter {
+        hash: Sha256,
+        bytes: usize,
+    }
     impl io::Write for HashWriter {
         fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
-            self.0.update(bytes);
+            self.hash.update(bytes);
+            self.bytes += bytes.len();
             Ok(bytes.len())
         }
         fn flush(&mut self) -> io::Result<()> {
             Ok(())
         }
     }
-    let writer = write_bounded_json(input, HashWriter(Sha256::new()), maximum)?;
-    Ok(format!("{:x}", writer.0.finalize()))
+    let writer = write_bounded_meaning(
+        input,
+        HashWriter {
+            hash: Sha256::new(),
+            bytes: 0,
+        },
+        maximum,
+    )?;
+    Ok((format!("{:x}", writer.hash.finalize()), writer.bytes))
 }
 
-/// The storage projection belongs to Data. Authoring must not reproduce this
-/// layout to estimate a future artifact's size.
+/// Borrowed semantic append view, used only for commitment-budget preflight.
+/// Artifact storage is exclusively the compact codec in `wire`.
 #[derive(Serialize)]
-struct SchemaWireView<'a> {
+struct SchemaMeaningView<'a> {
     schema_version: u32,
     namespace: &'a GameVersionNamespace,
     release: &'a OwnedDefinitionKey,
@@ -309,7 +359,7 @@ struct SchemaWireView<'a> {
     definitions: Definitions<'a>,
     slots: &'a [SlotDescriptor],
 }
-impl<'a> SchemaWireView<'a> {
+impl<'a> SchemaMeaningView<'a> {
     fn new(input: &'a SchemaPackageInput, additions: &'a [DefinitionDescriptor]) -> Self {
         Self {
             schema_version: input.schema_version,
@@ -339,6 +389,19 @@ impl Serialize for Definitions<'_> {
 
 fn bounded_json(value: &impl Serialize, maximum: usize) -> Result<Vec<u8>> {
     write_bounded_json(value, Vec::new(), maximum)
+}
+
+fn write_bounded_meaning<W: io::Write>(
+    value: &impl Serialize,
+    output: W,
+    maximum: usize,
+) -> Result<W> {
+    write_bounded_json(value, output, maximum).map_err(|error| match error {
+        SchemaPackageError::TooLarge { maximum } => {
+            SchemaPackageError::SemanticTooLarge { maximum }
+        }
+        other => other,
+    })
 }
 
 fn write_bounded_json<W: io::Write>(

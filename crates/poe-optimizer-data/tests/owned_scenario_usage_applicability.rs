@@ -189,16 +189,151 @@ fn package(input: SchemaPackageInput) -> OwnedDefinitionSchemaPackage {
     OwnedDefinitionSchemaPackage::new(input, Default::default()).unwrap()
 }
 fn reject(input: SchemaPackageInput, expected: SchemaPackageErrorKind) {
-    for result in [
-        OwnedDefinitionSchemaPackage::new(input.clone(), Default::default()),
-        decode_schema_package(&serde_json::to_vec(&input).unwrap(), Default::default()),
+    match OwnedDefinitionSchemaPackage::new(input, Default::default()) {
+        Err(SchemaPackageError::Invalid { kind, path }) => {
+            assert_eq!(kind, expected, "{path}");
+            assert!(!path.is_empty());
+        }
+        other => panic!("expected {expected:?}, got {other:?}"),
+    }
+}
+
+fn wire_policy(wire: &mut Value) -> &mut Value {
+    &mut wire["definitions"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|row| row["kind"] == "usage_policy")
+        .unwrap()["value"]["schema"]["value"]
+}
+
+fn wire_supplied(wire: &mut Value) -> &mut Value {
+    &mut wire_policy(wire)["scenario_skill_applicability"]["members"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|row| {
+            row["kind"] == "supplied"
+                && row["value"]["grant"]["declaration"]["definition"] == "item_template:item"
+        })
+        .unwrap()["value"]
+}
+
+#[test]
+fn compact_artifact_decode_retains_the_ordinary_usage_semantic_rejections() {
+    let checked = package(input());
+    let bytes = encode_schema_package(&checked, Default::default()).unwrap();
+    assert_eq!(
+        decode_schema_package(&bytes, Default::default())
+            .unwrap()
+            .input(),
+        checked.input()
+    );
+    let baseline: Value = serde_json::from_slice(&bytes).unwrap();
+    for (case, expected) in [
+        ("target", SchemaPackageErrorKind::InvalidUsageApplicability),
+        ("duplicate", SchemaPackageErrorKind::DuplicateMember),
+        ("missing-direct", SchemaPackageErrorKind::MissingDefinition),
+        (
+            "not-direct",
+            SchemaPackageErrorKind::InvalidUsageApplicability,
+        ),
+        ("missing-grant", SchemaPackageErrorKind::MissingSlot),
+        ("missing-supply", SchemaPackageErrorKind::MissingSlot),
+        (
+            "wrong-skill",
+            SchemaPackageErrorKind::InvalidUsageApplicability,
+        ),
+        (
+            "crossed-supply",
+            SchemaPackageErrorKind::InvalidUsageApplicability,
+        ),
+        (
+            "wrong-grant",
+            SchemaPackageErrorKind::InvalidUsageApplicability,
+        ),
+        ("undeclared-grant", SchemaPackageErrorKind::UndeclaredSlot),
+        ("undeclared-supply", SchemaPackageErrorKind::UndeclaredSlot),
+        ("empty-gaps", SchemaPackageErrorKind::EmptyGapEvidence),
     ] {
-        match result {
+        let mut bad = baseline.clone();
+        match case {
+            "target" => wire_policy(&mut bad)["targets"] = json!(["actor"]),
+            "duplicate" => {
+                let rows = wire_policy(&mut bad)["scenario_skill_applicability"]["members"]
+                    .as_array_mut()
+                    .unwrap();
+                rows.push(rows[0].clone());
+            }
+            "missing-direct" | "not-direct" => {
+                let row = wire_policy(&mut bad)["scenario_skill_applicability"]["members"]
+                    .as_array_mut()
+                    .unwrap()
+                    .iter_mut()
+                    .find(|row| row["kind"] == "authored_direct")
+                    .unwrap();
+                row["value"]["skill"] = json!(if case == "missing-direct" {
+                    "skill:absent"
+                } else {
+                    "skill:other"
+                });
+            }
+            "missing-grant" => {
+                wire_supplied(&mut bad)["grant"]["slot"] = json!("grant_slot:missing-grant")
+            }
+            "missing-supply" => {
+                wire_supplied(&mut bad)["supply"]["slot"] = json!("skill_grant_slot:missing-supply")
+            }
+            "wrong-skill" => wire_supplied(&mut bad)["skill"] = json!("skill:other"),
+            "crossed-supply" => {
+                wire_supplied(&mut bad)["supply"] = json!({
+                    "declaration":{"kind":"passive_node","definition":"passive_node:node"}, "slot":"skill_grant_slot:supply"
+                })
+            }
+            "wrong-grant" => {
+                let row = bad["slots"]
+                    .as_array_mut()
+                    .unwrap()
+                    .iter_mut()
+                    .find(|row| {
+                        row["kind"] == "grant"
+                            && row["value"]["id"]["declaration"]["definition"]
+                                == "item_template:item"
+                    })
+                    .unwrap();
+                row["value"]["schema"]["value"]["target"] = json!({"kind":"allocation_access","value":{"pools":{"members":[],"closure":{"kind":"complete"}}}});
+            }
+            "undeclared-grant" | "undeclared-supply" => {
+                let row = bad["definitions"]
+                    .as_array_mut()
+                    .unwrap()
+                    .iter_mut()
+                    .find(|row| row["kind"] == "item_template")
+                    .unwrap();
+                let field = if case == "undeclared-grant" {
+                    "grants"
+                } else {
+                    "skill_grants"
+                };
+                row["value"]["schema"]["value"]["declarations"][field]["members"] = json!([]);
+            }
+            "empty-gaps" => {
+                wire_policy(&mut bad)["scenario_skill_applicability"] =
+                    json!({"members":[],"closure":{"kind":"partial","value":{"gaps":[]}}})
+            }
+            _ => unreachable!(),
+        }
+        assert_ne!(bad, baseline, "{case}");
+        let bytes = serde_json::to_vec(&bad).unwrap();
+        // The compact syntax is valid; only the ordinary final validator certifies these links.
+        let raw = decode_schema_input(&bytes, Default::default()).unwrap();
+        reject(raw, expected.clone());
+        match decode_schema_package(&bytes, Default::default()) {
             Err(SchemaPackageError::Invalid { kind, path }) => {
-                assert_eq!(kind, expected, "{path}");
+                assert_eq!(kind, expected, "{case}: {path}");
                 assert!(!path.is_empty());
             }
-            other => panic!("expected {expected:?}, got {other:?}"),
+            other => panic!("{case}: expected {expected:?}, got {other:?}"),
         }
     }
 }
@@ -582,6 +717,7 @@ fn semantic_link_work_and_collection_wire_budgets_apply_to_decode_and_encode() {
         max_entries: links,
         max_collection_entries: largest,
         max_wire_bytes: bytes.len(),
+        max_semantic_bytes: serde_json::to_vec(baseline.input()).unwrap().len(),
     };
     assert_eq!(
         OwnedDefinitionSchemaPackage::new(raw.clone(), exact)

@@ -74,9 +74,43 @@ avoid importing the obsolete compiler DTOs into the maintained harness.
 Authoring's private schema size serializer is removed. Data owns one artifact
 projection for publication and borrowed append preflight, with separate streaming
 semantic commitment and immutable shared encoded bytes. Import compares those
-checked bytes rather than recreating the schema format. The current artifact
-format is unchanged; the compact format cutover must replace all live schema
-readers together and add reconstruction accounting without a compatibility reader.
+checked bytes rather than recreating the schema format. The compact schema cutover
+replaces all standalone artifact readers together with one bounded typed codec.
+One root namespace and checked local references replace repeated qualified IDs
+on disk; Core keeps its qualified semantic types. Wire and expanded-meaning budgets
+are separate, with reference/collection accounting before namespace expansion.
+The required wire discriminator is not a compatibility switch: old standalone
+schema artifacts are refused. Typed compiler inputs and nested recipe DTOs remain
+semantic authoring input, not another runtime reader. Regenerated artifacts retain
+their semantic identities; transport hashes change. Historical preservation checks
+authenticate the original receipt, complete schema meaning, and every unchanged
+manifest field without retaining an old encoder. The one-time Rust converter is
+removed after regeneration. Complete-release content commitments also have an
+independent semantic byte ceiling; compact transport size is no longer reused as
+that ceiling. Transition receipts and their dependent evidence pin are regenerated
+with the changed artifact rows, while semantic fields and historical evidence
+remain unchanged.
+
+The compact-format consumer audit also found two obsolete Python export paths.
+The optional import-policy rebinding branch and its three exclusive tests are
+removed; thirteen unchanged seed-generation tests remain. A Rust law in the
+existing Import harness preserves full policy content, checked dependency seals,
+receipt claims and actual compiler artifact hashes. The allocation emitter, its
+fourteen tests and its CI step are removed after transferring source proof into
+six ordinary Rust laws: all 4,914 catalog roles and 4,503 exact costs, free-node
+presence semantics, unresolved budgets, exact mappings and authenticated artifact
+correspondence. Retained strict tree-source and native validation tests preserve
+the independent negative laws. No generic Rust allocation exporter is claimed;
+future source-pin updates need the R2/R4 acquisition path. The unchanged allocation
+source facts, policies and rules remain evidence, not a second publisher. Corpus,
+seed, mechanics, resistance and tree Python tooling still has named live consumers
+and remains scheduled for replacement or retirement under R4.
+
+The first-allocation source-rebuild bridge is replaced by a complete immutable
+checkpoint archive and a pinned reference. The ordinary checked loader validates
+freshly extracted runtime and ledger together; no ancestor source, prior local
+output or second ledger importer is required. This retires the bridge, not the
+remaining R3 binary-runtime work or R1 publication-core extraction.
 
 Atomic authoring checkpoints replace the old flat authoring CLI output contract
 and its optional caller-assembled declaration context. All CLI builds now preserve
@@ -114,6 +148,13 @@ current definitions. Leave its working files unchanged until explicitly resumed;
 its backup location is in the implementation plan.
 
 ## Lua type and behavior audit
+
+The allocation source-proof transfer retains one concrete review case:
+`PassiveSpec.lua::CountAllocNodes` checks `isFreeAllocate == nil`, so an explicitly
+false field is treated as present by that pinned source algorithm. Its Rust
+control preserves extraction evidence, not a native truthiness rule. Review the
+intended game meaning when replacing allocation acquisition; native rules keep
+explicit numeric costs, without Lua field-presence semantics.
 
 For every surviving compatibility behavior, classify it with a concrete consumer:
 

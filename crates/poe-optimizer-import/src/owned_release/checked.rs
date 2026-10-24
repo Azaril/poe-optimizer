@@ -82,7 +82,7 @@ impl CheckedOwnedRelease {
         let domain = input_domain(input.schema_version, input.evaluation.is_some())?;
         let query_policy_bytes = preflight_view(&input, limits)?;
         // Bound nested data before constituent clones or indexes are allocated.
-        digest_owned(domain, &input, limits.max_input_bytes)?;
+        digest_owned(domain, &input, limits.max_semantic_bytes)?;
         let mut recipe = match recipe {
             Some(recipe) => recipe.check_for_input(input.recipe, limits.recipe)?,
             None => CheckedOwnedRecipe::new(input.recipe.to_input(), limits.recipe)?,
@@ -126,7 +126,7 @@ impl CheckedOwnedRelease {
         let receipt = OwnedReleaseReceipt {
             schema_version: input.schema_version,
             document_kind: "owned_data_release".into(),
-            input: digest_owned(domain, &canonical, limits.max_input_bytes)?,
+            input: digest_owned(domain, &canonical, limits.max_semantic_bytes)?,
             registry: recipe.registry().identity()?,
             definitions: recipe.schema().identity().clone(),
             rules: *recipe.rules().identity(),

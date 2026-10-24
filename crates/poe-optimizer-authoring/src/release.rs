@@ -13,7 +13,12 @@ use crate::{
 use poe_optimizer_core::{
     owned_content::OwnedContentDigest, owned_definitions::OwnedDefinitionKey,
 };
-use poe_optimizer_data::owned_routing::OwnedActionRouting;
+use poe_optimizer_data::{
+    owned_routing::OwnedActionRouting,
+    owned_schema::{
+        OwnedSchemaLimits, SchemaPackageError, SchemaPackageInput, decode_schema_input,
+    },
+};
 use poe_optimizer_import::{
     owned_normalize::NamedQuerySet,
     owned_recipe::{CheckedOwnedRecipe, OWNED_RECIPE_VERSION, OwnedRecipeInput},
@@ -257,6 +262,11 @@ pub enum ReleaseBuildError {
     Json {
         path: String,
         source: serde_json::Error,
+    },
+    #[error("cannot decode schema source {path}: {source}")]
+    Schema {
+        path: String,
+        source: SchemaPackageError,
     },
     #[error("cannot decompress source {path}: {source}")]
     Compression { path: String, source: io::Error },
@@ -640,6 +650,15 @@ impl<'a> Decoder<'a> {
     fn required<T: DeserializeOwned>(&self, component: Component) -> Result<T> {
         self.source(self.manifest.components[&component])
     }
+    fn schema(&self, limits: OwnedSchemaLimits) -> Result<SchemaPackageInput> {
+        let position = self.manifest.components[&Component::Schema];
+        decode_schema_input(&self.decoded[position], limits).map_err(|source| {
+            ReleaseBuildError::Schema {
+                path: self.manifest.sources[position].path.clone(),
+                source,
+            }
+        })
+    }
     fn optional<T: DeserializeOwned>(&self, component: Component) -> Result<Option<T>> {
         self.manifest
             .components
@@ -714,7 +733,7 @@ pub fn build_release(
         recipe: OwnedRecipeInput {
             schema_version: OWNED_RECIPE_VERSION,
             registry: decoder.required(Component::Registry)?,
-            schema: decoder.required(Component::Schema)?,
+            schema: decoder.schema(limits.release.recipe.schema)?,
             rules: decoder.required(Component::Rules)?,
             routing: decoder.required(Component::Routing)?,
         },

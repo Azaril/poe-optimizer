@@ -64,6 +64,7 @@ mod owned_actor_baseline_plan;
 mod owned_actor_baseline_recipe;
 mod owned_actor_baselines;
 mod owned_actor_supply_real;
+mod owned_allocation_source;
 mod owned_attribute_recipe;
 mod owned_augment_reconstruction;
 mod owned_augments;

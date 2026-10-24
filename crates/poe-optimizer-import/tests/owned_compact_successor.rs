@@ -103,7 +103,11 @@ fn v1_preserves_supplied_order_and_original_digest_while_v2_reconstructs_canonic
     let reconstructed = OwnedRecipeInput {
         schema_version: OWNED_RECIPE_VERSION,
         registry: serde_json::from_slice(files["registry.json"]).unwrap(),
-        schema: serde_json::from_slice(files["schema.json"]).unwrap(),
+        schema: poe_optimizer_data::owned_schema::decode_schema_input(
+            files["schema.json"],
+            Default::default(),
+        )
+        .unwrap(),
         rules: serde_json::from_slice(files["rules.json"]).unwrap(),
         routing: serde_json::from_slice(files["routing.json"]).unwrap(),
     };

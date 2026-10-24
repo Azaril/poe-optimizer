@@ -193,7 +193,14 @@ fn read(path: impl AsRef<std::path::Path>) -> Value {
 fn published_snapshot(package: &std::path::Path) {
     let snapshot: Value =
         serde_json::from_str(include_str!("support/minion_attack_source_snapshot.json")).unwrap();
-    let schema = read(package.join("schema.json"));
+    let schema = serde_json::to_value(
+        poe_optimizer_data::owned_schema::decode_schema_input(
+            &fs::read(package.join("schema.json")).unwrap(),
+            Default::default(),
+        )
+        .unwrap(),
+    )
+    .unwrap();
     for (old, published) in [
         ("schema_definitions", "definitions"),
         ("schema_slots", "slots"),

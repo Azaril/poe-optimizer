@@ -452,7 +452,7 @@ fn aggregate_nested_semantics_depth_constituent_and_output_limits_apply() {
     let output_size: usize = release.artifacts().map(|(_, bytes)| bytes.len()).sum();
     for limits in [
         OwnedReleaseLimits {
-            max_input_bytes: wire.len() - 1,
+            max_semantic_bytes: wire.len() - 1,
             ..Default::default()
         },
         OwnedReleaseLimits {
@@ -829,7 +829,7 @@ fn migration_preflights_both_evaluation_groups_and_depth_before_digest_or_copy()
     ));
     for limits in [
         OwnedReleaseLimits {
-            max_input_bytes: 1,
+            max_semantic_bytes: 1,
             ..Default::default()
         },
         OwnedReleaseLimits {

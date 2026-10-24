@@ -80,7 +80,7 @@ fn assert_delta(label: &str, input: &OwnedReleaseInput, additional: usize) {
     // A tiny digest budget makes the ordering observable without allocating an
     // oversized fixture: preflight must fail before digesting or cloning it.
     let mut bounded = limits(exact - 1);
-    bounded.max_input_bytes = 1;
+    bounded.max_semantic_bytes = 1;
     assert!(matches!(
         check_release_source_dependencies(input, bounded),
         Err(OwnedReleaseError::Limit("validation entries"))
@@ -384,7 +384,7 @@ fn source_effect_and_summoner_depths_are_bounded_before_digest_or_clone() {
         bounded.evaluation.receiving.max_path_depth = 3;
         check_release_source_dependencies(&input, bounded).unwrap();
         bounded.evaluation.receiving.max_path_depth = 2;
-        bounded.max_input_bytes = 1;
+        bounded.max_semantic_bytes = 1;
         let expected = if summoner {
             "source summoner path depth"
         } else {

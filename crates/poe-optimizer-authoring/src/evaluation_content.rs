@@ -112,7 +112,11 @@ impl OwnedReleaseEvaluationContent {
     ) -> Result<OwnedReleaseEvaluationInput, OwnedReleaseError> {
         let mut remaining = limits.max_validation_entries;
         self.charge_validation_entries(limits, &mut remaining)?;
-        digest_owned("owned-evaluation-content-v1", &self, limits.max_input_bytes)?;
+        digest_owned(
+            "owned-evaluation-content-v1",
+            &self,
+            limits.max_semantic_bytes,
+        )?;
         self.bind(recipe, limits.evaluation).map_err(Into::into)
     }
 

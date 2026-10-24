@@ -325,7 +325,7 @@ fn authored_content_and_final_validation_honor_separate_resource_limits() {
     for case in 0..2 {
         let mut limits = OwnedReleaseLimits::default();
         match case {
-            0 => limits.max_input_bytes = 1,
+            0 => limits.max_semantic_bytes = 1,
             1 => limits.normalization.max_policy_bytes = 1,
             _ => unreachable!(),
         }

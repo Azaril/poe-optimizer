@@ -48,8 +48,6 @@ jobs:
         run: python scripts/tests/test_export_owned_resistance.py
       - name: Verify owned tree conversion
         run: python scripts/tests/test_export_owned_tree.py
-      - name: Verify owned allocation conversion
-        run: python scripts/tests/test_export_owned_allocations.py
       - name: Install Rust
         run: rustup show
       - name: Cache Rust dependencies

@@ -42,12 +42,12 @@ poe-optimizer extend-owned-skill-catalog data/owned/poe2/3887ae68/import/recipe-
 
 The extension validates the seed, appends only missing identities, preserves prior descriptors and mappings, and explicitly creates new schema/rule/routing bindings. It does not silently repair stale runtime artifacts. Its published successor schema is `84c2f56f027e5a93c0bd6392072f051b97157374940699b7b3e3035467613d73` and mapping identity is `e43cbc95751fadaae7ed3d810fc16c5e8fa76f424052fa14a460a3ba5dbf0e65`.
 
-To reproduce the final policy files, add `--compiled runs/my-import-compiled` to the exporter command and use another new output directory. Before changing a policy binding, that mode checks the compiled publication hashes, the exact seed/successor identities, the preserved 119 registry entries, all 105 seed definitions and 14 slots, previous source mappings, and unchanged rule/routing content. Only then does it emit policy copies bound to the successor. Runtime loaders continue to reject stale bindings.
+The `policies/` files and their transition receipt retain the reviewed seed-to-catalog policy binding. The former Python `--compiled` rebinding mode has been retired. The Rust `owned_catalog_recipe::archived_seed_to_bound_policies_preserve_content_and_authenticate_the_receipt` test checks both endpoints with the existing constructors, preserves the seed registry, descriptors, slots, mappings and rule/routing content, compares all four policy payloads with only their explicit dependency seals changed, and authenticates the retained receipt and artifact hashes. Historical policy versions remain unchanged. Ordinary runtime loaders continue to reject stale bindings; the maintained Authoring checkpoint constructs new releases through its checked content APIs.
 
-To verify the checked-in seed and final policies without writing, use the same exporter inputs with:
+To verify the checked-in seed without writing, use the same exporter inputs with:
 
 ```text
---compiled data/owned/poe2/3887ae68/import/compiled --check-dir data/owned/poe2/3887ae68/import
+--check-dir data/owned/poe2/3887ae68/import
 ```
 
 The Python regression suite is:
@@ -56,7 +56,13 @@ The Python regression suite is:
 python scripts/tests/test_export_owned_import_data.py -v
 ```
 
-It checks exact reproduction, ID/descriptor preservation, external selector spelling, canonical bindings, explicit reward defaults, equipment aliases, quality absence/zero conventions, stale transition rejection, source hashes, shared bounds, and independence from reference numerical payloads. The production Rust constructors remain the semantic validation gate.
+Its 13 seed tests check exact reproduction, ID/descriptor preservation, external selector spelling, canonical bindings, explicit reward defaults, equipment aliases, quality absence/zero conventions, stale source/base rejection, source hashes, shared bounds, and independence from reference numerical payloads. The production Rust constructors remain the semantic validation gate. The archived bound-policy witness runs with the existing Import suite:
+
+```text
+cargo test -p poe-optimizer-import --test owned archived_seed_to_bound_policies
+```
+
+Rust catalog/successor, release-loader and Host tests retain stale-dependency, changed-declaration, tampered-artifact, aggregate-limit and no-clobber controls. No Python reader for the compact standalone schema format is provided.
 
 ## Normalize with the persisted artifacts
 

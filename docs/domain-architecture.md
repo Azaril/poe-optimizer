@@ -589,16 +589,15 @@ same checked IR and occurrence plan as other mechanics. No skill-name dispatch o
 special native evaluator is introduced, and adding a fact does not certify the
 owner's remaining programs or complete-build coverage.
 
-Canonical allocation history must be available from a clean clone. The bounded
-first-generation bridge pins an immutable Git source revision and expected
-checkpoint digest in the [canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md),
-outside the compiled inventory. Reproduce that fixed genesis,
-verify and load it through the ordinary checkpoint reader, then use it as the
-predecessor for current source builds. Never bootstrap evolving current sources
-to recover IDs. Before a second allocation generation needs a new predecessor,
-R3 must provide an archived/distributed complete checked snapshot; do not grow a
-chain of historical source rebuilds. Source-format cutovers regenerate the
-canonical checkpoint deliberately instead of retaining compatibility readers.
+Canonical allocation history must be available from a clean clone as one complete
+checkpoint snapshot. The [canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md)
+pins its archive and checkpoint digests outside the compiled inventory. Extract,
+verify and load that snapshot through the ordinary checkpoint reader, then use it
+as the predecessor for current source builds. Never bootstrap evolving current
+sources to recover IDs or require a chain of historical source rebuilds.
+Source-format cutovers regenerate the canonical checkpoint deliberately instead
+of retaining compatibility readers; established name allocations and semantic
+commitments must survive a storage-only change.
 The checkpoint reader validates a full snapshot without following its recorded
 predecessor digest. `poe-author release verify CHECKPOINT_DIRECTORY --expected DIGEST`
 uses that same reader, validates runtime and ledger together and reports their
@@ -733,9 +732,26 @@ encoding. Compute that commitment with a bounded streaming hash; artifact hashes
 remain the responsibility of transport manifests/checkpoints. Current schema
 packages share immutable canonical bytes across clones, and the release reader
 compares supplied bytes directly against that checked representation. This is a
-prerequisite to compaction, not the compact runtime implementation. During the
-format cutover, distinguish compact-wire bytes from expanded semantic and
-reconstruction work limits; a compact input must not evade the latter limits.
+prerequisite to the compact binary runtime implementation. Schema artifacts use
+one explicit Data-owned wire version, with their namespace stored once and each
+local reference retaining its checked kind and arbitrary stable key. Qualified
+Core references remain the semantic representation. There is no ambient
+namespace, generic JSON rewriting or fallback reader for the replaced artifact.
+Borrow encoding views; decode typed local DTOs, charge all collections and every
+expanded reference before namespace cloning, then consume the DTOs. Compact-wire
+and expanded-semantic byte limits are independent. The latter bounds both the
+reference expansion lower bound and the complete serialized meaning; collection
+and semantic-link limits separately bound traversal work. Input decoding does
+not certify membership or complete semantics: final package validation remains
+mandatory. Stored semantic byte counts make tighter consumer checks independent
+of repeated serialization.
+The same separation applies to the complete release: artifact input bytes use a
+transport budget, while expanded semantic content commitments use their own
+budget. A smaller representation must neither make a valid exact transport limit
+fail during semantic hashing nor allow expanded meaning to evade its bound.
+Authored evaluation/Import content and source-prefix commitments use that semantic
+budget too; filesystem reads and closed artifact inventories retain transport
+limits. Neither limit is derived from the other.
 
 Track canonical review output and a named content manifest. Large runtime bundles
 are reproducible build/release artifacts addressed by digest. Never require a
@@ -846,6 +862,11 @@ ad-hoc generators. Shell orchestrates tools/CI/Git; it does not implement anothe
 data model. Replace or delete existing Python utilities with their live consumers
 during cutover; do not merely rewrite tests around an obsolete Python workflow.
 Upstream Lua/reference probes remain optional source-specific tooling.
+When a format cutover exposes an obsolete exporter, preserve its useful source
+authentication and domain laws in the existing Rust harness, then remove the
+exporter and its exclusive CI step. Retained evidence does not imply that a
+generic replacement acquisition tool exists; track that capability explicitly
+before claiming support for future dataset updates.
 
 One data-driven semantic harness replaces per-packet publication programs and
 source-text tests. Share ordinary support modules; consolidate integration targets

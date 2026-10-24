@@ -236,18 +236,15 @@ impl References {
     }
 }
 
-fn bootstrap<T: serde::de::DeserializeOwned>(name: &str) -> T {
-    let path = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../data/owned/poe2/3887ae68/migration-source/bootstrap")
-        .join(name);
-    gzip_json(&path)
-}
-
 fn retained_rules() -> RulePackageInput {
     gzip_json(&Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"))
 }
 
 fn gzip_json<T: serde::de::DeserializeOwned>(path: &Path) -> T {
+    serde_json::from_slice(&gzip_bytes(path)).unwrap()
+}
+
+fn gzip_bytes(path: &Path) -> Vec<u8> {
     let maximum = 64 * 1024 * 1024;
     let mut bytes = Vec::new();
     GzDecoder::new(File::open(path).unwrap())
@@ -255,13 +252,19 @@ fn gzip_json<T: serde::de::DeserializeOwned>(path: &Path) -> T {
         .read_to_end(&mut bytes)
         .unwrap();
     assert!(bytes.len() as u64 <= maximum);
-    serde_json::from_slice(&bytes).unwrap()
+    bytes
 }
 
 #[test]
 fn entire_retained_corpus_roundtrips_through_kdl_packets_and_the_existing_engine() {
-    let schema =
-        OwnedDefinitionSchemaPackage::new(bootstrap("schema.json.gz"), Default::default()).unwrap();
+    let schema = poe_optimizer_data::owned_schema::decode_schema_package(
+        &gzip_bytes(
+            &Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../data/owned/poe2/3887ae68/migration-source/bootstrap/schema.json.gz"),
+        ),
+        Default::default(),
+    )
+    .unwrap();
     let original = retained_rules();
     // Establish the retained reference is accepted before changing its representation.
     drop(CompiledRulePackage::compile(&original, &schema, Default::default()).unwrap());

@@ -82,7 +82,11 @@ fn all_profiles_publish_compactly_without_closing_original_builds() {
         OwnedRecipeInput {
             schema_version: 1,
             registry: serde_json::from_value(json(output.join("registry.json"))).unwrap(),
-            schema: serde_json::from_value(json(output.join("schema.json"))).unwrap(),
+            schema: poe_optimizer_data::owned_schema::decode_schema_input(
+                &std::fs::read(output.join("schema.json")).unwrap(),
+                Default::default(),
+            )
+            .unwrap(),
             rules: serde_json::from_value(json(output.join("rules.json"))).unwrap(),
             routing: serde_json::from_value(json(output.join("routing.json"))).unwrap(),
         },

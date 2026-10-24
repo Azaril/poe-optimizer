@@ -171,7 +171,7 @@ fn release_preflight_and_publication_limits_still_apply_before_recipe_reuse() {
     foreign.recipe.rules.release = key("foreign-recipe");
     let bounded = OwnedReleaseLimits {
         max_validation_entries: 1,
-        max_input_bytes: 1,
+        max_semantic_bytes: 1,
         ..Default::default()
     };
     assert!(matches!(
@@ -183,7 +183,7 @@ fn release_preflight_and_publication_limits_still_apply_before_recipe_reuse() {
             input.clone(),
             checked.clone(),
             OwnedReleaseLimits {
-                max_input_bytes: 1,
+                max_semantic_bytes: 1,
                 ..Default::default()
             },
         ),

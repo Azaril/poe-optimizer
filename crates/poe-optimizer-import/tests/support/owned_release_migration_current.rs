@@ -211,7 +211,7 @@ fn current_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets
     assert!(compile_owned_release_migration(&prior, stale, Default::default()).is_err());
     for limits in [
         OwnedReleaseLimits {
-            max_input_bytes: 1,
+            max_semantic_bytes: 1,
             ..Default::default()
         },
         OwnedReleaseLimits {

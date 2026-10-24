@@ -47,7 +47,11 @@ fn recipe(path: &Path) -> OwnedRecipeInput {
     OwnedRecipeInput {
         schema_version: 1,
         registry: serde_json::from_value(json(path.join("registry.json"))).unwrap(),
-        schema: serde_json::from_value(json(path.join("schema.json"))).unwrap(),
+        schema: poe_optimizer_data::owned_schema::decode_schema_input(
+            &std::fs::read(path.join("schema.json")).unwrap(),
+            Default::default(),
+        )
+        .unwrap(),
         rules: serde_json::from_value(json(path.join("rules.json"))).unwrap(),
         routing: serde_json::from_value(json(path.join("routing.json"))).unwrap(),
     }
@@ -244,8 +248,18 @@ fn check_extension(prior: &Path, output: &Path, bindings: &Value) {
     {
         assert!(old == new, "registry entry {index} changed");
     }
-    let before = json(prior.join("schema.json"));
-    let after = json(output.join("schema.json"));
+    let schema_meaning = |path| {
+        serde_json::to_value(
+            poe_optimizer_data::owned_schema::decode_schema_input(
+                &std::fs::read(path).unwrap(),
+                Default::default(),
+            )
+            .unwrap(),
+        )
+        .unwrap()
+    };
+    let before = schema_meaning(prior.join("schema.json"));
+    let after = schema_meaning(output.join("schema.json"));
     assert_eq!(
         before["definitions"].as_array().unwrap().len(),
         after["definitions"].as_array().unwrap().len()

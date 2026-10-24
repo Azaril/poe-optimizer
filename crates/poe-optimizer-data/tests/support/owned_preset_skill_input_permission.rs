@@ -349,6 +349,7 @@ fn permission_members_are_charged_and_revalidated_at_tighter_limits() {
         max_entries,
         max_collection_entries,
         max_wire_bytes: bytes.len(),
+        max_semantic_bytes: serde_json::to_vec(stored.input()).unwrap().len(),
     };
     assert_eq!(
         OwnedDefinitionSchemaPackage::new(raw.clone(), exact)

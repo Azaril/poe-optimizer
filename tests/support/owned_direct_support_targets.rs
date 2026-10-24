@@ -471,7 +471,15 @@ fn direct_support_target_publication_preserves_five_originals_and_pending_bounda
     fs::create_dir_all(&out).unwrap();
     write(out.join("authority.json"), &authority);
     write(out.join("endpoint.json"), next.input());
-    write(out.join("prior-schema.json"), &prior.input().recipe.schema);
+    fs::write(
+        out.join("prior-schema.json"),
+        poe_optimizer_data::owned_schema::encode_schema_package(
+            prior.assembled().schema(),
+            Default::default(),
+        )
+        .unwrap(),
+    )
+    .unwrap();
     let package = out.join("package");
     let rebuilt = out.join("rebuilt");
     assert_eq!(

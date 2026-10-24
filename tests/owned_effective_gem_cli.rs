@@ -179,7 +179,11 @@ fn recipe_cli_matches_public_compiler_and_preserves_existing_destination() {
     let (schema, policy) = synthetic();
     let schema_path = temp.path().join("schema.json");
     let policy_path = temp.path().join("policy.json");
-    write(&schema_path, schema.input());
+    fs::write(
+        &schema_path,
+        encode_schema_package(&schema, Default::default()).unwrap(),
+    )
+    .unwrap();
     write(&policy_path, &policy);
     let output = temp.path().join("compiled");
     let report = success(compile_cli(&policy_path, &schema_path, &output));
@@ -209,7 +213,12 @@ fn recipe_cli_rejects_stale_schema_and_invalid_output_scope_before_publication()
     write(&policy_path, &policy);
     let mut changed = schema.input().clone();
     changed.release = key("different-release");
-    write(&schema_path, &changed);
+    let changed = OwnedDefinitionSchemaPackage::new(changed, Default::default()).unwrap();
+    fs::write(
+        &schema_path,
+        encode_schema_package(&changed, Default::default()).unwrap(),
+    )
+    .unwrap();
     rejected(
         compile_cli(&policy_path, &schema_path, &temp.path().join("stale")),
         &temp.path().join("stale"),
@@ -217,7 +226,11 @@ fn recipe_cli_rejects_stale_schema_and_invalid_output_scope_before_publication()
     let mut invalid = policy.clone();
     invalid.bindings[0].quality_output = invalid.bindings[0].level_output.clone();
     write(&policy_path, &invalid);
-    write(&schema_path, schema.input());
+    fs::write(
+        &schema_path,
+        encode_schema_package(&schema, Default::default()).unwrap(),
+    )
+    .unwrap();
     rejected(
         compile_cli(&policy_path, &schema_path, &temp.path().join("bad-scope")),
         &temp.path().join("bad-scope"),

@@ -1134,7 +1134,7 @@ fn revision_compiles_changed_schema_and_bounds_work_before_expansion() {
             ..Default::default()
         },
         OwnedReleaseLimits {
-            max_input_bytes: 1,
+            max_semantic_bytes: 1,
             ..Default::default()
         },
         OwnedReleaseLimits {

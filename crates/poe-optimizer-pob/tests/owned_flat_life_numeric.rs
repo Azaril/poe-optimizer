@@ -6,7 +6,6 @@ mod resource;
 use poe_optimizer_core::{
     owned_build::ParameterValue, owned_definitions::FiniteQuantity, owned_rules::*, owned_schema::*,
 };
-use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_engine::owned_rules::{CompiledRulePackage, EffectDisposition, RuleFact};
 use poe_optimizer_pob::source as pinned;
 use resource::{hash, observe};
@@ -66,8 +65,8 @@ fn child(root: &Path, out: &Path, jit: bool) {
         receipt["input"],
         "26c0a5022e550ae9f2d2488c27b761a58917f2153aeda4b402f465a7d7c0bf76"
     );
-    let schema = OwnedDefinitionSchemaPackage::new(
-        serde_json::from_slice(&read("schema.json")).unwrap(),
+    let schema = poe_optimizer_data::owned_schema::decode_schema_package(
+        &read("schema.json"),
         Default::default(),
     )
     .unwrap();

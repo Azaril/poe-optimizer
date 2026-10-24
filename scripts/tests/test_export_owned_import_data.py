@@ -200,48 +200,5 @@ class ImportExportTests(unittest.TestCase):
             EXPORT.produce(*self.inputs, self.source, replace(EXPORT.HARD, queries=0))
 
 
-    def test_bound_policies_reproduce_after_checked_real_successor(self):
-        compiled = EXPORT.read_compiled(DATA / "import/compiled")
-        policies = EXPORT.bind_policies(self.outputs, compiled)
-        for name, data in policies.items():
-            self.assertEqual(data, (DATA / "import" / name).read_bytes(), name)
-        transition = EXPORT.decode(policies["policies/transition.json"])
-        self.assertNotEqual(transition["before_definitions"], transition["after_definitions"])
-        self.assertEqual((transition["preserved_definition_count"], transition["preserved_slot_count"]), (105, 14))
-
-    def test_policy_rebinding_rejects_stale_seed_and_changed_mapping_even_if_rehashed(self):
-        compiled = EXPORT.read_compiled(DATA / "import/compiled")
-        seed = dict(self.outputs)
-        policy = EXPORT.decode(seed["reward-policy-seed.json"])
-        policy["mapping"] = "0" * 64
-        seed["reward-policy-seed.json"] = EXPORT.pretty(policy)
-        with self.assertRaisesRegex(ValueError, "exact seed dependencies"):
-            EXPORT.bind_policies(seed, compiled)
-        changed = dict(compiled)
-        mapping = EXPORT.decode(changed["mapping.json"])
-        previous = EXPORT.decode(self.outputs["mapping-seed.json"])["entries"][0]
-        row = next(r for r in mapping["entries"] if r["source"] == previous["source"])
-        row["outcome"]["value"]["basis"] = EXPORT.tag("reviewed_alias", {"reason": "changed"})
-        changed["mapping.json"] = EXPORT.pretty(mapping)
-        transition = EXPORT.decode(changed["transition.json"])
-        transition["after_mapping"] = EXPORT.owned_digest("owned-external-mapping-v1", mapping)
-        for artifact in transition["artifacts"]:
-            raw = changed[artifact["file"]]
-            artifact["bytes"], artifact["sha256"] = len(raw), EXPORT.sha(raw)
-        changed["transition.json"] = EXPORT.pretty(transition)
-        with self.assertRaisesRegex(ValueError, "changed existing source mapping"):
-            EXPORT.bind_policies(self.outputs, changed)
-        self.assertEqual(compiled, EXPORT.read_compiled(DATA / "import/compiled"))
-
-    def test_policy_rebinding_checks_publication_hashes_and_combined_bounds(self):
-        compiled = EXPORT.read_compiled(DATA / "import/compiled")
-        changed = dict(compiled)
-        changed["rules.json"] += b" "
-        with self.assertRaisesRegex(ValueError, "artifact hash mismatch"):
-            EXPORT.bind_policies(self.outputs, changed)
-        with self.assertRaisesRegex(ValueError, "byte bound"):
-            EXPORT.bind_policies(self.outputs, compiled, replace(EXPORT.HARD, output_bytes=100))
-
-
 if __name__ == "__main__":
     unittest.main()

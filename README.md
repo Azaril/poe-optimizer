@@ -104,12 +104,12 @@ Optional `stat-declarations "definitions.kdl" names="declaration-names.kdl"`
 entries in a release manifest stage typed Stats through the stable name allocator
 before packet lowering; declaration aliases stay separate from packet aliases.
 
-First reproduce the fixed allocation checkpoint using the
+First extract and verify the fixed allocation checkpoint using the
 [canonical genesis reference](data/owned/poe2/3887ae68/authoring-genesis.md).
 Then build current source into a fresh directory:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor e89ae92ac3895a3e9f38591452d340b8c640d4af737a544cc18759de4d98b109 --output rebuilt-checkpoint
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124 --output rebuilt-checkpoint
 ```
 
 The output contains `checkpoint.json`, `names.json` and the closed `runtime/`

@@ -234,7 +234,11 @@ fn compact_refinement_preserves_endpoints_and_constituents_without_duplicate_rec
     let reconstructed = OwnedRecipeInput {
         schema_version: OWNED_RECIPE_VERSION,
         registry: serde_json::from_slice(files["registry.json"]).unwrap(),
-        schema: serde_json::from_slice(files["schema.json"]).unwrap(),
+        schema: poe_optimizer_data::owned_schema::decode_schema_input(
+            files["schema.json"],
+            Default::default(),
+        )
+        .unwrap(),
         rules: serde_json::from_slice(files["rules.json"]).unwrap(),
         routing: serde_json::from_slice(files["routing.json"]).unwrap(),
     };

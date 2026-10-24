@@ -134,7 +134,7 @@ fn source_schema_membership_requires_active_registry_addresses() {
 fn source_checks_honor_original_release_recipe_and_constituent_budgets() {
     let input = shell(&fixture().input);
     let mut exact = OwnedReleaseLimits {
-        max_input_bytes: serde_json::to_vec(&input).unwrap().len(),
+        max_semantic_bytes: serde_json::to_vec(&input).unwrap().len(),
         ..Default::default()
     };
     exact.recipe.max_wire_bytes = serde_json::to_vec(&input.recipe).unwrap().len();
@@ -144,7 +144,7 @@ fn source_checks_honor_original_release_recipe_and_constituent_budgets() {
     for case in 0..5 {
         let mut limited = exact;
         match case {
-            0 => limited.max_input_bytes -= 1,
+            0 => limited.max_semantic_bytes -= 1,
             1 => limited.recipe.max_wire_bytes -= 1,
             2 => limited.recipe.max_registry_checks -= 1,
             3 => limited.max_validation_entries = 1,

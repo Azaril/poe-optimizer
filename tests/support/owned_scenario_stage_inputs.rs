@@ -816,21 +816,23 @@ pub fn author_packet() {
     let receipt: Value = serde_json::from_slice(&release_bytes).unwrap();
     assert_eq!(receipt["input"], PREDECESSOR);
     let schema_bytes = bounded(&prior.join("schema.json"), 40 * 1024 * 1024).unwrap();
+    let schema = decode_schema_package(&schema_bytes, Default::default()).unwrap();
     assert_eq!(
-        hash(&schema_bytes),
+        schema.identity().content_sha256.to_string(),
         "a94498067cdd85b2ed8c7a00dceda065e4d726cbcd52690b4c3dd167e448cc20"
     );
-    let schema: SchemaPackageInput = serde_json::from_slice(&schema_bytes).unwrap();
     let ids = [
         "1dd9", "0911", "02fb", "06eb", "06ec", "06ed", "05a5", "05a6", "05a7",
     ];
     let definitions: Vec<_> = schema
+        .input()
         .definitions
-        .into_iter()
+        .iter()
         .filter(|d| {
             ids.iter()
                 .any(|s| d.address().key().as_str() == format!("def.{s:0>16}"))
         })
+        .cloned()
         .collect();
     assert_eq!(definitions.len(), 9);
     let handoff_bytes = bounded(

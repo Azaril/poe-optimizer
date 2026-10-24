@@ -256,12 +256,14 @@ fn root_members_and_gap_evidence_use_the_shared_constructor_decode_and_encode_bu
             id::<PassiveNodeDefinition>("root").address(),
         ))],
     };
-    let bytes = serde_json::to_vec(&raw).unwrap();
+    let baseline = OwnedDefinitionSchemaPackage::new(raw.clone(), Default::default()).unwrap();
+    let bytes = encode_schema_package(&baseline, Default::default()).unwrap();
     let (total, largest) = arrays(&serde_json::to_value(&raw).unwrap());
     let limits = OwnedSchemaLimits {
         max_entries: total,
         max_collection_entries: largest,
-        max_wire_bytes: bytes.len() + 1024,
+        max_wire_bytes: bytes.len(),
+        max_semantic_bytes: serde_json::to_vec(baseline.input()).unwrap().len(),
     };
     let checked = OwnedDefinitionSchemaPackage::new(raw.clone(), limits).unwrap();
     assert!(decode_schema_package(&bytes, limits).is_ok());
@@ -277,7 +279,8 @@ fn root_members_and_gap_evidence_use_the_shared_constructor_decode_and_encode_bu
 #[test]
 fn schema_v2_requires_both_root_fields_and_rejects_old_or_duplicate_wire() {
     let raw = input();
-    let bytes = serde_json::to_vec(&raw).unwrap();
+    let baseline = OwnedDefinitionSchemaPackage::new(raw.clone(), Default::default()).unwrap();
+    let bytes = encode_schema_package(&baseline, Default::default()).unwrap();
     let mut old = raw;
     old.schema_version = 1;
     assert!(matches!(

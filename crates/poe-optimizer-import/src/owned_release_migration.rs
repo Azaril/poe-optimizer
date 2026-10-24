@@ -495,7 +495,7 @@ pub fn compile_owned_release_migration(
     digest_owned(
         budget_domain,
         &(prior.input(), &migration),
-        limits.max_input_bytes,
+        limits.max_semantic_bytes,
     )?;
     let mut input = prior.input().clone();
     let contract = &migration.contract;

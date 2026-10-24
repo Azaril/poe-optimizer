@@ -41,6 +41,13 @@ fn input() -> SchemaPackageInput {
         slots: vec![],
     }
 }
+fn encoded(input: SchemaPackageInput) -> Vec<u8> {
+    encode_schema_package(
+        &OwnedDefinitionSchemaPackage::new(input, Default::default()).unwrap(),
+        Default::default(),
+    )
+    .unwrap()
+}
 fn run(directory: &Path, input: &str, canonical: Option<&str>) -> Output {
     let mut command = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"));
     command
@@ -67,9 +74,11 @@ fn successful(output: Output) -> Value {
     report
 }
 #[test]
-fn caller_schema_has_exact_canonical_artifact_identity_and_data_only_changes() {
+fn caller_schema_has_stable_semantic_identity_and_data_only_changes() {
     let temp = tempfile::tempdir().unwrap();
-    let original = serde_json::to_vec_pretty(&input()).unwrap();
+    let original =
+        serde_json::to_vec_pretty(&serde_json::from_slice::<Value>(&encoded(input())).unwrap())
+            .unwrap();
     fs::write(temp.path().join("input.json"), &original).unwrap();
     let first = successful(run(temp.path(), "input.json", Some("canonical.json")));
     let canonical = fs::read(temp.path().join("canonical.json")).unwrap();
@@ -80,7 +89,10 @@ fn caller_schema_has_exact_canonical_artifact_identity_and_data_only_changes() {
     );
     assert_eq!(
         first["identity"]["content_sha256"],
-        format!("{:x}", Sha256::digest(&canonical))
+        format!(
+            "{:x}",
+            Sha256::digest(serde_json::to_vec(package.input()).unwrap())
+        )
     );
     assert_eq!(first["definition_entries"], 2);
     assert_eq!(first["slot_entries"], 0);
@@ -100,11 +112,7 @@ fn caller_schema_has_exact_canonical_artifact_identity_and_data_only_changes() {
         panic!("wrong fixture")
     };
     range.maximum = FiniteQuantity::new(75.0, id("distance")).unwrap();
-    fs::write(
-        temp.path().join("changed.json"),
-        serde_json::to_vec(&changed).unwrap(),
-    )
-    .unwrap();
+    fs::write(temp.path().join("changed.json"), encoded(changed)).unwrap();
     let second = successful(run(temp.path(), "changed.json", None));
     assert_ne!(
         first["identity"]["content_sha256"],
@@ -133,11 +141,7 @@ fn explicit_unmapped_definition_survives_without_becoming_known_or_missing() {
                 }],
             },
         }));
-    fs::write(
-        temp.path().join("input.json"),
-        serde_json::to_vec(&input).unwrap(),
-    )
-    .unwrap();
+    fs::write(temp.path().join("input.json"), encoded(input)).unwrap();
     successful(run(temp.path(), "input.json", Some("canonical.json")));
     let package = decode_schema_package(
         &fs::read(temp.path().join("canonical.json")).unwrap(),
@@ -156,17 +160,26 @@ fn explicit_unmapped_definition_survives_without_becoming_known_or_missing() {
 #[test]
 fn malformed_or_dangling_schema_fails_before_output_creation() {
     let temp = tempfile::tempdir().unwrap();
-    let mut missing_unit = input();
-    missing_unit.definitions.pop();
-    let mut unknown = serde_json::to_value(input()).unwrap();
+    let valid = encoded(input());
+    decode_schema_package(&valid, Default::default()).unwrap();
+    let baseline: Value = serde_json::from_slice(&valid).unwrap();
+    let mut missing_unit = baseline.clone();
+    missing_unit["definitions"]
+        .as_array_mut()
+        .unwrap()
+        .retain(|entry| entry["kind"] != "unit");
+    assert!(
+        decode_schema_input(
+            &serde_json::to_vec(&missing_unit).unwrap(),
+            Default::default()
+        )
+        .is_ok()
+    );
+    let mut unknown = baseline.clone();
     unknown["source_program"] = json!({});
-    let mut missing_field = serde_json::to_value(input()).unwrap();
+    let mut missing_field = baseline;
     missing_field.as_object_mut().unwrap().remove("slots");
-    for malformed in [
-        serde_json::to_value(missing_unit).unwrap(),
-        unknown,
-        missing_field,
-    ] {
+    for malformed in [missing_unit, unknown, missing_field] {
         fs::write(
             temp.path().join("input.json"),
             serde_json::to_vec(&malformed).unwrap(),
@@ -181,7 +194,7 @@ fn malformed_or_dangling_schema_fails_before_output_creation() {
 #[test]
 fn schema_check_never_overwrites_inputs_or_existing_outputs() {
     let temp = tempfile::tempdir().unwrap();
-    let original = serde_json::to_vec(&input()).unwrap();
+    let original = encoded(input());
     fs::write(temp.path().join("input.json"), &original).unwrap();
     fs::write(temp.path().join("existing.json"), b"preserve").unwrap();
     for target in ["input.json", "existing.json"] {
