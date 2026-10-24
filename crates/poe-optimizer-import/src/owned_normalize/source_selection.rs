@@ -9,6 +9,28 @@ pub(super) fn positive(text: &str) -> bool {
         && text.parse::<u64>().is_ok_and(|n| n < (1_u64 << 53))
 }
 
+/// Resolve only the saved source key in an already checked SkillSet census.
+/// Later source UI synchronization is not part of this correspondence.
+pub(super) fn skills(
+    b: &mut Builder<'_, '_>,
+    sets: Option<&[SourceOccurrenceId]>,
+) -> Result<Option<(SourceOccurrenceId, SourceOccurrenceId)>> {
+    let evidence = b.evidence;
+    let mut selected = None;
+    if let Some(sets) = sets {
+        b.charge(sets.len())?;
+        for set in sets {
+            let row = &evidence.rows()[set.ordinal() as usize];
+            let parent = &evidence.rows()
+                [row.occurrence().parent().expect("checked set").ordinal() as usize];
+            if value(row, "id") == value(parent, "activeSkillSet") {
+                selected = Some((parent.occurrence().id(), *set));
+            }
+        }
+    }
+    Ok(selected)
+}
+
 /// Return the actual container and the selected direct Spec source. This keeps
 /// the existing generated-provider selector strict: no absent-value default,
 /// out-of-range clamping, or interpretation of a Spec position as an ID.

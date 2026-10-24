@@ -763,6 +763,13 @@ and inapplicability are distinct evidence within the same inventory transaction;
 neither implies the other. Missing, duplicate, surplus or foreign proofs refuse
 completion. A leaf proof does not settle outside-Config responsibilities or
 complete any Scenario output domain.
+The source census must cover installed defaults and direct or computed-key readers
+as well as saved leaves and apply callbacks. An absent Input/Placeholder can still
+select a real fallback, topology rule or parent-qualified child effect. Preserve
+duplicate declarations and distinct consumers of the same name. A lexical search
+or sampled absence cannot prove arbitrary aliases absent. Retaining meaningful
+work on an unresolved owner requires a checked exact-owner contract; neither a
+Deferred destination nor a generic no-op disposition establishes completeness.
 Preserve normal-load migration and headless fallback as separate external source
 behaviors. No source receipt can certify an Encounter's intrinsic domain without
 also checking every admitted typed consumer.
@@ -793,7 +800,15 @@ pinned normal loader; the actual set remains its own weapon-state authority.
 Comparison-tooltip preferences retain their source meaning without generating
 native gameplay values. Legacy no-set fallback requires its own proof and cannot
 borrow the ordinary-set ownership contract.
-Tree and equipment header receipts retain saved source ownership only. They do
+Skill-header editing defaults, ranking and filtering preferences retain their
+source owner independently of the saved inputs on each Gem. Validate complete
+keyed SkillSet-to-preset correspondence before attributing the header to its
+actual SkillPreset and unresolved selection owner. Absent preferences cannot
+generate native level/quality defaults, and a saved ranking field cannot create
+an optimization objective. Legacy precedence, malformed numeric fallback and
+clamping require separate proof; ordinary finite preferences cannot authorize
+them. Descendant input/usage obligations and final selection remain independent.
+Tree, equipment and skill header receipts retain saved source ownership only. They do
 not certify PoB's final active tuple after loadout synchronization or an evaluated
 Action after generated-skill reconciliation. Preserve unresolved selection and
 require those separate correspondence proofs wherever a later conversion depends
@@ -803,6 +818,15 @@ removal are reference-tool lifecycle steps. A raw saved key or in-range group
 index proves only its source referent. Generated-provider and reference-query
 conversion must prove the required post-load correspondence or retain the
 unresolved responsibility; native execution must not acquire UI title matching.
+The pinned reference loader reproducibly changes equipment and its generated
+skill for a title-only ItemSet edit. Independent fresh JIT replays agree, and the
+unchanged original remains stable. The
+[selection-authority proposal](owned-loadout-title-selection-proposal.md) asks
+whether Import should honor explicit saved selectors and diagnose the reference
+discrepancy, or reproduce reference title-driven selection within Import. That
+product decision is pending. Saved-source receipts are not post-load equivalence
+proofs; compare actual selected identities before numerical reference results.
+This evidence grants no blanket parity exception or new native selection policy.
 
 This representation change adds no evaluation bundle or numerical coverage;
 0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust

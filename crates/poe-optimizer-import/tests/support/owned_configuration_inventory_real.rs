@@ -189,6 +189,32 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
             assert_eq!(links.len(), 2);
             assert!(links.contains(&owners[0]));
             assert!(links.contains(&OwnedOriginTarget::Issue(*id)));
+
+            let skills = evidence
+                .rows()
+                .iter()
+                .find(|r| r.occurrence().name() == "Skills")
+                .unwrap();
+            assert_eq!(skills.attribute("activeSkillSet").unwrap().raw(), "4");
+            let selected = skills
+                .children()
+                .iter()
+                .map(|id| &evidence.rows()[id.ordinal() as usize])
+                .find(|r| r.attribute("id").is_some_and(|id| id.raw() == "4"))
+                .unwrap();
+            assert_eq!(selected.occurrence().id().ordinal(), 204);
+            let owners: Vec<_> = baseline.sidecar().origins[204]
+                .links
+                .iter()
+                .filter(|link| matches!(link, OwnedOriginTarget::SkillPreset(_)))
+                .cloned()
+                .collect();
+            assert_eq!(owners.len(), 1);
+            let links =
+                &baseline.sidecar().origins[skills.occurrence().id().ordinal() as usize].links;
+            assert_eq!(links.len(), 2);
+            assert!(links.contains(&owners[0]));
+            assert!(links.contains(&OwnedOriginTarget::Issue(*id)));
         }
         for retained_control in [false, true] {
             let mut policy = staged.normalization().clone();

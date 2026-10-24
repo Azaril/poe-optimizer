@@ -14,19 +14,142 @@ local methods = {
  {common.classes.CalcsTab, "BuildOutput", "Classes/CalcsTab.lua", 486},
  {calcs, "initEnv", "Modules/CalcSetup.lua", 717},
 }
+local function same(a, b)
+ if type(a) ~= type(b) then return false end
+ if type(a) ~= "table" then return a == b end
+ for k, v in pairs(a) do if not same(v, b[k]) then return false end end
+ for k in pairs(b) do if a[k] == nil then return false end end
+ return true
+end
+-- Observe only ordinary identities and scalar inputs. Never invoke a selection,
+-- rebuild, source parser or UI callback to manufacture the suspected outcome.
+local function loadout_snapshot()
+ local work = 0
+ local function charge() work = work + 1; assert(work <= 1000000) end
+ local function fields(value, keys)
+  local out = {}
+  for _, key in ipairs(keys) do
+   charge(); local v = value and value[key]
+   if v ~= nil then
+    assert(type(v) == "number" or type(v) == "string" or type(v) == "boolean", key)
+    if type(v) == "number" then assert(v == v and v ~= math.huge and v ~= -math.huge) end
+    out[key] = v
+   end
+  end
+  return out
+ end
+ local items, tree, skills, config = build.itemsTab, build.treeTab, build.skillsTab, build.configTab
+ local function matches(object, collection)
+  local out = {}
+  if object then
+   for key, candidate in pairs(collection or {}) do
+    charge(); assert(type(key) == "string" or type(key) == "number")
+    if object == candidate then out[tostring(key)] = true end
+   end
+  end
+  return out
+ end
+ local function provider(value)
+  return {item_present=value.sourceItem~=nil, node_present=value.sourceNode~=nil,
+   item_ids=matches(value.sourceItem, items and items.items),
+   allocated_node_ids=matches(value.sourceNode, build.spec and build.spec.allocNodes),
+   node_id=value.sourceNode and value.sourceNode.id}
+ end
+ local selected = {items=items and items.activeItemSetId, skills=skills and skills.activeSkillSetId,
+  config=config and config.activeConfigSetId, spec=tree and tree.activeSpec, main_group=build.mainSocketGroup}
+ local titles = {items=items and items.activeItemSet and items.activeItemSet.title,
+  skills=skills and skills.skillSets[skills.activeSkillSetId] and skills.skillSets[skills.activeSkillSetId].title,
+  config=config and config.configSets[config.activeConfigSetId] and config.configSets[config.activeConfigSetId].title,
+  spec=build.spec and build.spec.title}
+ local slots = {}
+ for key, slot in pairs(items and items.slots or {}) do
+  charge(); slots[tostring(key)] = fields(slot, {"selItemId", "active", "nodeId"})
+ end
+ local groups = {}
+ for index, group in ipairs(skills and skills.socketGroupList or {}) do
+  charge(); local gems = {}
+  for i, gem in ipairs(group.gemList) do
+   charge(); gems[i] = fields(gem, {"gemId", "variantId", "skillId", "nameSpec", "level", "quality", "enabled", "fromItem", "enableGlobal1", "enableGlobal2"})
+  end
+  groups[index] = {index=index, saved=fields(group, {"source", "slot", "enabled", "label", "mainActiveSkill", "mainActiveSkillCalcs"}),
+   provider=provider(group), gems=gems}
+ end
+ local modes = {}
+ for _, mode in ipairs({"MAIN", "CALCS"}) do
+  local env = build.calcsTab and (mode == "MAIN" and build.calcsTab.mainEnv or build.calcsTab.calcsEnv)
+  if env then
+   local grants = {}
+   for i, grant in ipairs(env.grantedSkills or {}) do
+    charge(); grants[i] = {index=i, saved=fields(grant, {"source", "slotName", "skillId", "nameSpec", "level", "noSupports", "noReservation"}), provider=provider(grant)}
+   end
+   local main = env.player and env.player.mainSkill
+   local main_groups = matches(main and main.socketGroup, skills and skills.socketGroupList)
+   local effect = main and main.activeEffect
+   modes[mode] = {main_group=env.mainSocketGroup, grants=grants, main_group_identity=main_groups,
+    main_effect=effect and effect.grantedEffect.id, main_input=fields(effect and effect.srcInstance, {"skillId", "level", "quality", "gemId"})}
+  end
+ end
+ local dropdown = build.controls and build.controls.buildLoadouts
+ return {selected=selected, titles=titles, equipment_slots=slots, groups=groups, modes=modes,
+  build_flag=build.buildFlag, loadout_index=build.activeLoadout,
+  dropdown=dropdown and {selected=dropdown.selIndex, value=dropdown.list[dropdown.selIndex]}, observation_work=work}
+end
+local function loadout_objects()
+ return {items=build.itemsTab, tree=build.treeTab, spec=build.spec, skills=build.skillsTab, config=build.configTab,
+  groups=build.skillsTab and build.skillsTab.socketGroupList,
+  main=build.calcsTab and build.calcsTab.mainEnv, calcs=build.calcsTab and build.calcsTab.calcsEnv}
+end
+local function same_objects(refs)
+ local current = loadout_objects()
+ for key, value in pairs(refs) do assert(current[key] == value, "changed loadout object: "..key) end
+ for key, value in pairs(current) do assert(refs[key] == value, "new loadout object: "..key) end
+end
+if outsideConfigLoadouts then
+ local extra = {
+  {build, "SyncLoadouts", "Modules/Build.lua", 637},
+  {build, "GetLoadoutByName", "Modules/Build.lua", 899},
+  {build, "SetActiveLoadout", "Modules/Build.lua", 956},
+  {common.classes.DropDownControl, "SetSel", "Classes/DropDownControl.lua", 166},
+  {common.classes.SkillsTab, "Load", "Classes/SkillsTab.lua", 407},
+  {common.classes.SkillsTab, "SetActiveSkillSet", "Classes/SkillsTab.lua", 1548},
+  {common.classes.ItemsTab, "Load", "Classes/ItemsTab.lua", 1193},
+  {common.classes.ItemsTab, "SetActiveItemSet", "Classes/ItemsTab.lua", 1628},
+  {common.classes.TreeTab, "Load", "Classes/TreeTab.lua", 492},
+  {common.classes.TreeTab, "SetActiveSpec", "Classes/TreeTab.lua", 540},
+  {common.classes.ConfigTab, "Load", "Classes/ConfigTab.lua", 878},
+  {common.classes.ConfigTab, "SetActiveConfigSet", "Classes/ConfigTab.lua", 1407},
+ }
+ for _, entry in ipairs(extra) do methods[#methods+1] = entry end
+end
 if outsideConfigPhase == "before" then
  local refs, sources = {}, {}
  for i, m in ipairs(methods) do refs[i], sources[i] = original(m[1][m[2]], m[3], m[4]) end
  outsideConfigAuth = {refs=refs, sources=sources}
+ if outsideConfigLoadouts then outsideConfigAuth.before_load = loadout_snapshot() end
  return function()
   assert(jit.status() == outsideConfigJit)
   for i, m in ipairs(methods) do assert(m[1][m[2]] == refs[i], "changed source method") end
+  if outsideConfigLoadouts then
+   outsideConfigAuth.load_objects = loadout_objects()
+   outsideConfigAuth.load_return = loadout_snapshot()
+   same_objects(outsideConfigAuth.load_objects)
+  end
   outsideConfigAuth.finished = true
  end
 end
 local auth = assert(outsideConfigAuth)
 assert(outsideConfigPhase == "observe" and auth.finished)
 for i, m in ipairs(methods) do assert(m[1][m[2]] == auth.refs[i]) end
+if outsideConfigLoadouts then
+ same_objects(auth.load_objects)
+ local observed = loadout_snapshot()
+ assert(same(auth.load_return, observed), "state changed between original loader return and observation")
+ assert(same(observed, loadout_snapshot()), "read-only loadout observation changed source state")
+ same_objects(auth.load_objects)
+ return {before_load=auth.before_load, load_return=auth.load_return, saved=observed, methods=auth.sources,
+  methods_preserved=true, objects_preserved=true, native_effect_coverage=false, source_inventory_complete=false,
+  selection_correspondence_proven=false, observation_scope="actual original loader return; no rebuild or selection invocation"}
+end
 local work = 0
 local function plain(value, depth)
  work = work + 1; assert(work <= 200000)

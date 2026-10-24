@@ -5,6 +5,10 @@ use std::ops::Range;
 const TEST: &str = "outside_config_defaults::fresh_outside_configuration_defaults_and_contrasts";
 const CHILD: &str = "POE_OUTSIDE_CONFIG_DEFAULTS_CHILD";
 const OUTPUT: &str = "POE_OUTSIDE_CONFIG_DEFAULTS_OUT";
+const LOADOUT_TEST: &str =
+    "outside_config_defaults::fresh_loadout_titles_preserve_actual_loader_selection_evidence";
+const LOADOUT_CHILD: &str = "POE_LOADOUT_TITLES_CHILD";
+const LOADOUT_OUTPUT: &str = "POE_LOADOUT_TITLES_OUT";
 const OBSERVER: &str = include_str!("outside_config_defaults_source.lua");
 const ORIGINAL: &str =
     include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-05.xml");
@@ -100,6 +104,151 @@ fn controls(original: &str) -> Vec<Control> {
         .collect()
 }
 
+fn loadout_controls(original: &str) -> Vec<Control> {
+    let doc = roxmltree::Document::parse(original).unwrap();
+    let items: Vec<_> = doc
+        .root_element()
+        .children()
+        .filter(|node| node.has_tag_name("Items"))
+        .collect();
+    assert_eq!(items.len(), 1);
+    assert_eq!(items[0].attribute("activeItemSet"), Some("2"));
+    let selected: Vec<_> = items[0]
+        .children()
+        .filter(|node| node.has_tag_name("ItemSet") && node.attribute("id") == Some("2"))
+        .collect();
+    assert_eq!(selected.len(), 1);
+    let title = selected[0]
+        .attributes()
+        .find(|attribute| attribute.name() == "title")
+        .unwrap();
+    assert_eq!(title.value(), "Act 1 & 2 (Pre-Ascend)");
+    let range = title.range();
+    assert_eq!(
+        &original[range.clone()],
+        r#"title="Act 1 &amp; 2 (Pre-Ascend)""#
+    );
+    [
+        ("original-05", None),
+        ("title-nonmatching", Some("No shared loadout")),
+        ("title-substring", Some("Prefix Act 3")),
+        ("title-exact", Some("Act 3")),
+        ("title-substring-repeat", Some("Prefix Act 3")),
+        ("original-05-repeat", None),
+    ]
+    .into_iter()
+    .map(|(name, replacement)| {
+        let edits = replacement
+            .map(|title| Edit {
+                range: range.clone(),
+                replacement: format!(r#"title="{title}""#),
+            })
+            .into_iter()
+            .collect::<Vec<_>>();
+        let mut xml = original.to_owned();
+        for edit in &edits {
+            xml.replace_range(edit.range.clone(), &edit.replacement);
+        }
+        Control { name, xml, edits }
+    })
+    .collect()
+}
+
+fn saved_axes(xml: &str) -> Json {
+    let doc = roxmltree::Document::parse(xml).unwrap();
+    let header = |name: &str| {
+        let found = doc
+            .root_element()
+            .children()
+            .filter(|node| node.has_tag_name(name))
+            .collect::<Vec<_>>();
+        assert_eq!(found.len(), 1);
+        found[0]
+    };
+    json!({
+        "spec": header("Tree").attribute("activeSpec").unwrap(),
+        "skills": header("Skills").attribute("activeSkillSet").unwrap(),
+        "items": header("Items").attribute("activeItemSet").unwrap(),
+        "config": header("Config").attribute("activeConfigSet").unwrap(),
+        "main_group": header("Build").attribute("mainSocketGroup").unwrap(),
+    })
+}
+
+fn assert_unchanged_surroundings(case: &Control) {
+    let mut source_offset = 0;
+    let mut target_offset = 0;
+    for edit in &case.edits {
+        let unchanged = &ORIGINAL[source_offset..edit.range.start];
+        assert_eq!(
+            &case.xml[target_offset..target_offset + unchanged.len()],
+            unchanged,
+            "{} surrounding bytes",
+            case.name
+        );
+        target_offset += unchanged.len();
+        assert_eq!(
+            &case.xml[target_offset..target_offset + edit.replacement.len()],
+            edit.replacement
+        );
+        target_offset += edit.replacement.len();
+        source_offset = edit.range.end;
+    }
+    assert_eq!(
+        &case.xml[target_offset..],
+        &ORIGINAL[source_offset..],
+        "{} trailing bytes",
+        case.name
+    );
+}
+
+#[test]
+fn loadout_title_controls_change_only_the_exact_selected_items_title() {
+    let cases = loadout_controls(ORIGINAL);
+    assert_eq!(cases.len(), 6);
+    for case in &cases {
+        assert_unchanged_surroundings(case);
+        assert_eq!(
+            case.edits.len(),
+            usize::from(case.name.starts_with("title-"))
+        );
+        let doc = roxmltree::Document::parse(&case.xml).unwrap();
+        let items = doc
+            .root_element()
+            .children()
+            .find(|node| node.has_tag_name("Items"))
+            .unwrap();
+        assert_eq!(items.attribute("activeItemSet"), Some("2"));
+        assert_eq!(saved_axes(&case.xml), saved_axes(ORIGINAL));
+        for (id, expected_title) in [("2", None), ("4", Some("Act 3"))] {
+            let set = items
+                .children()
+                .find(|node| node.has_tag_name("ItemSet") && node.attribute("id") == Some(id))
+                .unwrap();
+            if let Some(title) = expected_title {
+                assert_eq!(set.attribute("title"), Some(title));
+            }
+            let weapon = set
+                .children()
+                .find(|node| {
+                    node.has_tag_name("Slot") && node.attribute("name") == Some("Weapon 1")
+                })
+                .unwrap();
+            assert_eq!(
+                weapon.attribute("itemId"),
+                Some(if id == "2" { "28" } else { "24" })
+            );
+        }
+        assert_eq!(
+            doc.descendants()
+                .filter(|node| node.has_tag_name("Section"))
+                .count(),
+            49
+        );
+    }
+    assert_eq!(cases[2].xml, cases[4].xml);
+    assert_eq!(cases[0].xml, cases[5].xml);
+}
+
 #[test]
 fn outside_configuration_controls_preserve_every_unedited_xml_byte_and_all_sections() {
     let cases = controls(ORIGINAL);
@@ -119,30 +268,7 @@ fn outside_configuration_controls_preserve_every_unedited_xml_byte_and_all_secti
             "{} Section preservation",
             case.name
         );
-        let mut source_offset = 0;
-        let mut target_offset = 0;
-        for edit in &case.edits {
-            let unchanged = &ORIGINAL[source_offset..edit.range.start];
-            assert_eq!(
-                &case.xml[target_offset..target_offset + unchanged.len()],
-                unchanged,
-                "{} surrounding bytes",
-                case.name
-            );
-            target_offset += unchanged.len();
-            assert_eq!(
-                &case.xml[target_offset..target_offset + edit.replacement.len()],
-                edit.replacement
-            );
-            target_offset += edit.replacement.len();
-            source_offset = edit.range.end;
-        }
-        assert_eq!(
-            &case.xml[target_offset..],
-            &ORIGINAL[source_offset..],
-            "{} trailing bytes",
-            case.name
-        );
+        assert_unchanged_surroundings(case);
         let calcs = after
             .root_element()
             .children()
@@ -169,18 +295,28 @@ fn outside_configuration_controls_preserve_every_unedited_xml_byte_and_all_secti
 #[test]
 #[ignore = "optional complete pinned PoB source witness; dedicated fresh JIT processes"]
 fn fresh_outside_configuration_defaults_and_contrasts() {
+    supervise(TEST, CHILD, OUTPUT, false);
+}
+
+#[test]
+#[ignore = "optional complete pinned PoB source witness; dedicated fresh JIT processes"]
+fn fresh_loadout_titles_preserve_actual_loader_selection_evidence() {
+    supervise(LOADOUT_TEST, LOADOUT_CHILD, LOADOUT_OUTPUT, true);
+}
+
+fn supervise(test: &str, child_env: &str, output_env: &str, loadouts: bool) {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../..")
         .canonicalize()
         .unwrap();
-    if let Some(mode) = std::env::var_os(CHILD) {
+    if let Some(mode) = std::env::var_os(child_env) {
         assert!(mode == "off" || mode == "on");
-        let out = root.join(std::env::var_os(OUTPUT).expect("supervisor output"));
+        let out = root.join(std::env::var_os(output_env).expect("supervisor output"));
         assert!(out.is_dir());
-        run_child(&root, &out, mode == "on");
+        run_child(&root, &out, mode == "on", loadouts);
         return;
     }
-    let out = if let Some(path) = std::env::var_os(OUTPUT) {
+    let out = if let Some(path) = std::env::var_os(output_env) {
         let out = root.join(path);
         assert!(
             !out.exists(),
@@ -203,9 +339,9 @@ fn fresh_outside_configuration_defaults_and_contrasts() {
         let log_path = out.join(format!("source-jit-{mode}.log"));
         let log = fs::File::create(&log_path).unwrap();
         let mut child = Command::new(std::env::current_exe().unwrap())
-            .args(["--exact", TEST, "--ignored", "--nocapture"])
-            .env(CHILD, mode)
-            .env(OUTPUT, &out)
+            .args(["--exact", test, "--ignored", "--nocapture"])
+            .env(child_env, mode)
+            .env(output_env, &out)
             .current_dir(root.join("vendor/path-of-building-poe2/src"))
             .stdout(Stdio::from(log.try_clone().unwrap()))
             .stderr(Stdio::from(log))
@@ -241,7 +377,7 @@ fn fresh_outside_configuration_defaults_and_contrasts() {
     );
 }
 
-fn run_child(root: &Path, out: &Path, enabled: bool) {
+fn run_child(root: &Path, out: &Path, enabled: bool, loadouts: bool) {
     assert_eq!(
         pinned::manifest_sha256(),
         "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
@@ -262,10 +398,18 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
         "source-jit-{}.json",
         if enabled { "on" } else { "off" }
     ));
-    for case in controls(&original) {
+    let controls = if loadouts {
+        loadout_controls(&original)
+    } else {
+        controls(&original)
+    };
+    let fresh_loads = controls.len();
+    for case in controls {
+        assert_unchanged_surroundings(&case);
         eprintln!("outside-Config source case {}", case.name);
         let before = |lua: &Lua| {
             lua.globals().set("outsideConfigJit", enabled)?;
+            lua.globals().set("outsideConfigLoadouts", loadouts)?;
             lua.load("if outsideConfigJit then jit.on() else jit.off(); jit.flush() end")
                 .exec()?;
             Ok(())
@@ -291,7 +435,7 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
             scratch.path(),
             &case.xml,
             None,
-            !case.name.starts_with("original-"),
+            !loadouts && !case.name.starts_with("original-"),
             Some(&before),
             Some(&install),
             Some(&observe),
@@ -302,10 +446,10 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
                 assert_eq!(value["source_hash"], pinned::manifest_sha256());
                 assert_eq!(value["configuration_method_wrappers"], false);
                 assert_eq!(value["original_build_output_available"], true);
-                json!({"name":case.name,"xml_sha256":digest(case.xml.as_bytes()),"edits":edits,"available":true,"observed":value["additional_observation"]})
+                json!({"name":case.name,"xml_sha256":digest(case.xml.as_bytes()),"saved_axes":saved_axes(&case.xml),"edits":edits,"available":true,"observed":value["additional_observation"]})
             }
             Err(error) => {
-                json!({"name":case.name,"xml_sha256":digest(case.xml.as_bytes()),"edits":edits,"available":false,"source_error":error.to_string()})
+                json!({"name":case.name,"xml_sha256":digest(case.xml.as_bytes()),"saved_axes":saved_axes(&case.xml),"edits":edits,"available":false,"source_error":error.to_string()})
             }
         };
         cases.push(row);
@@ -324,14 +468,185 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
         "src/Modules/CalcPerform.lua",
         "src/Modules/Common.lua",
         "src/Classes/ConfigTab.lua",
+        "src/Classes/SkillsTab.lua",
+        "src/Classes/ItemsTab.lua",
+        "src/Classes/TreeTab.lua",
+        "src/Classes/DropDownControl.lua",
     ]
     .map(|path| json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()}));
     let result = json!({"source_revision":"3887ae68a6a6b8bb7b41d1b61998f1aa184201e4","source_hash":pinned::manifest_sha256(),
         "observer_sha256":digest(OBSERVER.as_bytes()),"bootstrap_sha256":digest(include_bytes!("configuration_preparation_source.rs")),
-        "fresh_loads":8,"original_xml_sha256":digest(original.as_bytes()),"native_effect_coverage":false,"source_inventory_complete":false,
+        "fresh_loads":fresh_loads,"original_xml_sha256":digest(original.as_bytes()),"native_effect_coverage":false,"source_inventory_complete":false,
+        "loadout_title_probe":loadouts,"selection_correspondence_proven":false,
         "files":files,"cases":cases});
     fs::write(&report_path, serde_json::to_vec_pretty(&result).unwrap()).unwrap();
-    check(&result);
+    if loadouts {
+        check_loadouts(&result);
+    } else {
+        check(&result);
+    }
+}
+
+fn check_loadouts(result: &Json) {
+    assert_eq!(rows(&result["cases"]).len(), 6);
+    let original = saved(result, "original-05");
+    same(
+        original,
+        saved(result, "original-05-repeat"),
+        "independent original replay",
+    );
+    same(
+        saved(result, "title-substring"),
+        saved(result, "title-substring-repeat"),
+        "independent title-substring replay",
+    );
+    assert_eq!(
+        original["selected"],
+        json!({"config":1,"skills":4,"items":2,"spec":3,"main_group":3})
+    );
+    assert_eq!(original["equipment_slots"]["Weapon 1"]["selItemId"], 28);
+    for (name, item_set, weapon, offhand, item_source, skill, gem_id) in [
+        (
+            "original-05",
+            2,
+            28,
+            0,
+            "Item:28:New Item, Ashen Staff",
+            "FireboltPlayer",
+            "Metadata/Items/Gems/SkillGemFirebolt",
+        ),
+        (
+            "title-nonmatching",
+            2,
+            28,
+            0,
+            "Item:28:New Item, Ashen Staff",
+            "FireboltPlayer",
+            "Metadata/Items/Gems/SkillGemFirebolt",
+        ),
+        (
+            "title-substring",
+            4,
+            24,
+            25,
+            "Item:24:New Item, Rattling Sceptre",
+            "SummonSkeletalWarriorsPlayer",
+            "Metadata/Items/Gems/SkillGemSkeletalWarrior",
+        ),
+        (
+            "title-exact",
+            2,
+            28,
+            0,
+            "Item:28:New Item, Ashen Staff",
+            "FireboltPlayer",
+            "Metadata/Items/Gems/SkillGemFirebolt",
+        ),
+        (
+            "title-substring-repeat",
+            4,
+            24,
+            25,
+            "Item:24:New Item, Rattling Sceptre",
+            "SummonSkeletalWarriorsPlayer",
+            "Metadata/Items/Gems/SkillGemSkeletalWarrior",
+        ),
+        (
+            "original-05-repeat",
+            2,
+            28,
+            0,
+            "Item:28:New Item, Ashen Staff",
+            "FireboltPlayer",
+            "Metadata/Items/Gems/SkillGemFirebolt",
+        ),
+    ] {
+        let row = case(result, name);
+        let snapshot = saved(result, name);
+        assert_eq!(
+            row["saved_axes"],
+            json!({"spec":"3","skills":"4","items":"2","config":"1","main_group":"3"})
+        );
+        same(
+            &row["observed"]["load_return"],
+            snapshot,
+            "unchanged state after original loader return",
+        );
+        assert_eq!(row["observed"]["selection_correspondence_proven"], false);
+        assert_eq!(row["observed"]["source_inventory_complete"], false);
+        assert_eq!(row["observed"]["native_effect_coverage"], false);
+        assert_eq!(
+            snapshot["selected"],
+            json!({"config":1,"skills":4,"items":item_set,"spec":3,"main_group":3}),
+            "{name} actual selected tuple"
+        );
+        assert_eq!(
+            snapshot["equipment_slots"]["Weapon 1"]["selItemId"], weapon,
+            "{name}"
+        );
+        assert_eq!(
+            snapshot["equipment_slots"]["Weapon 2"]["selItemId"], offhand,
+            "{name}"
+        );
+        let item_ids = BTreeMap::from([(weapon.to_string(), true)]);
+        let expected_provider = json!({
+            "item_present":true,"node_present":false,
+            "item_ids":item_ids,"allocated_node_ids":{}
+        });
+        let item_groups = rows(&snapshot["groups"])
+            .iter()
+            .filter(|group| group["provider"]["item_present"] == true)
+            .collect::<Vec<_>>();
+        assert_eq!(item_groups.len(), 1, "{name} exact generated item group");
+        let group = item_groups[0];
+        assert_eq!(group["index"], 12, "{name}");
+        assert_eq!(group["saved"]["source"], item_source, "{name}");
+        assert_eq!(group["saved"]["slot"], "Weapon 1", "{name}");
+        same(&group["provider"], &expected_provider, name);
+        let gems = rows(&group["gems"]);
+        assert_eq!(gems.len(), 1, "{name}");
+        assert_eq!(gems[0]["skillId"], skill, "{name}");
+        assert_eq!(gems[0]["gemId"], gem_id, "{name}");
+        assert_eq!(gems[0]["level"], 11, "{name}");
+        assert_eq!(gems[0]["quality"], 0, "{name}");
+        for field in ["fromItem", "enabled", "enableGlobal1"] {
+            assert_eq!(gems[0][field], true, "{name} {field}");
+        }
+        if weapon == 28 {
+            assert_eq!(gems[0]["enableGlobal2"], false, "{name}");
+        } else {
+            assert!(
+                gems[0].get("enableGlobal2").is_none(),
+                "{name} absence remains distinct"
+            );
+        }
+        for mode in ["MAIN", "CALCS"] {
+            let observed = &snapshot["modes"][mode];
+            assert_eq!(
+                observed["main_group"],
+                if mode == "MAIN" { 3 } else { 1 },
+                "{name} {mode}"
+            );
+            let item_grants = rows(&observed["grants"])
+                .iter()
+                .filter(|grant| grant["provider"]["item_present"] == true)
+                .collect::<Vec<_>>();
+            assert_eq!(item_grants.len(), 1, "{name} {mode} exact item grant");
+            let grant = item_grants[0];
+            same(
+                &grant["provider"],
+                &expected_provider,
+                &format!("{name} {mode}"),
+            );
+            assert_eq!(grant["saved"]["source"], item_source, "{name} {mode}");
+            assert_eq!(grant["saved"]["slotName"], "Weapon 1", "{name} {mode}");
+            assert_eq!(grant["saved"]["skillId"], skill, "{name} {mode}");
+            assert_eq!(grant["saved"]["level"], 11, "{name} {mode}");
+        }
+    }
+    // These exact contrasts were observed under the unmodified original loader
+    // in both fresh JIT modes. They authorize no native selection or broad
+    // source-inventory closure, and are not a general title-matching policy.
 }
 
 fn saved<'a>(result: &'a Json, name: &str) -> &'a Json {

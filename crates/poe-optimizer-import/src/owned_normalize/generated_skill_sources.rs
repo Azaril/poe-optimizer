@@ -300,23 +300,12 @@ pub(super) struct ProvenSource {
 }
 
 fn selected(b: &mut Builder<'_, '_>, sets: Option<&[SourceOccurrenceId]>) -> Result<Selected> {
-    let evidence = b.evidence;
     let mut result = Selected {
         skills: None,
         spec: None,
         items: None,
     };
-    if let Some(sets) = sets {
-        b.charge(sets.len())?;
-        for set in sets {
-            let row = &evidence.rows()[set.ordinal() as usize];
-            let parent = &evidence.rows()
-                [row.occurrence().parent().expect("checked set").ordinal() as usize];
-            if value(row, "id") == value(parent, "activeSkillSet") {
-                result.skills = Some(*set);
-            }
-        }
-    }
+    result.skills = source_selection::skills(b, sets)?.map(|(_, set)| set);
     result.spec = source_selection::tree(b)?.map(|(_, spec)| spec);
     result.items = source_selection::items(b)?;
     Ok(result)

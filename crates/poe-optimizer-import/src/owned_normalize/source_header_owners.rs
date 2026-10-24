@@ -1,5 +1,5 @@
 //! Account for proved source-header ownership without resolving saved selection.
-use super::source_shape::{charge_row, container_text, plain_row};
+use super::source_shape::{charge_frame, charge_row, container_text, plain_row, value};
 use super::*;
 
 fn saved_selection(
@@ -265,6 +265,144 @@ pub(super) fn account_items(
     )
 }
 
+fn skill_preferences(b: &mut Builder<'_, '_>, row: &SourceEvidenceRow<'_>) -> Result<bool> {
+    charge_frame(
+        b,
+        row,
+        &[
+            "defaultGemLevel",
+            "defaultGemQuality",
+            "sortGemsByDPS",
+            "showLegacyGems",
+            "showSupportGemTypes",
+            "sortGemsByDPSField",
+        ],
+    )?;
+    // The checked container has already rejected unknown/duplicate attributes
+    // and unavailable decoding. Admit ordinary finite editing preferences only;
+    // do not import legacy precedence, numeric fallback, or clamping behavior.
+    if row.attribute("matchGemLevelToCharacterLevel").is_some()
+        || value(row, "defaultGemLevel")
+            .is_some_and(|v| !matches!(v, "normalMaximum" | "corruptedMaximum" | "characterLevel"))
+        || value(row, "defaultGemQuality").is_some_and(|v| {
+            v.is_empty()
+                || v.len() > 2
+                || (v.len() > 1 && v.starts_with('0'))
+                || !v.bytes().all(|byte| byte.is_ascii_digit())
+                || !v.parse::<u8>().is_ok_and(|quality| quality <= 23)
+        })
+        || ["sortGemsByDPS", "showLegacyGems"]
+            .iter()
+            .any(|name| value(row, name).is_some_and(|v| !matches!(v, "true" | "false")))
+        || value(row, "showSupportGemTypes")
+            .is_some_and(|v| !matches!(v, "ALL" | "LINEAGE" | "NORMAL"))
+        || value(row, "sortGemsByDPSField").is_some_and(|v| {
+            !matches!(
+                v,
+                "FullDPS"
+                    | "CombinedDPS"
+                    | "TotalDPS"
+                    | "AverageDamage"
+                    | "TotalDot"
+                    | "BleedDPS"
+                    | "IgniteDPS"
+                    | "TotalPoisonDPS"
+                    | "TotalEHP"
+            )
+        })
+    {
+        return Ok(false);
+    }
+    Ok(true)
+}
+
+/// Retain ordinary source editing/ranking/filter preferences and the saved set
+/// key under their existing owner. Saved Gem inputs have separate authority:
+/// absent preferences emit no defaults, and rankings create no native objective.
+/// This does not prove the final active source tuple or resolve MAIN selection.
+pub(super) fn account_skills(
+    b: &mut Builder<'_, '_>,
+    draft: &DraftSessionInput,
+    sets: &BTreeMap<SourceOccurrenceId, usize>,
+) -> Result<()> {
+    let Some(sources) = skill_source_census::container_sets(b)? else {
+        return Ok(());
+    };
+    let Some((skills, selected_set)) = source_selection::skills(b, Some(&sources))? else {
+        return Ok(());
+    };
+    let evidence = b.evidence;
+    let row = &evidence.rows()[skills.ordinal() as usize];
+    if b.origins.len() != evidence.rows().len() || !skill_preferences(b, row)? {
+        return Ok(());
+    }
+    let origin = &b.origins[skills.ordinal() as usize];
+    if origin.source != skills
+        || origin.disposition != SourceDisposition::Contributes
+        || !origin.links.is_empty()
+    {
+        return Ok(());
+    }
+    let Some(selection_issue) = saved_selection(b, draft)? else {
+        return Ok(());
+    };
+    b.charge(
+        sources
+            .len()
+            .saturating_add(sets.len())
+            .saturating_add(draft.skill_presets.members.len()),
+    )?;
+    if sources.len() != sets.len() || sources.len() != draft.skill_presets.members.len() {
+        return Ok(());
+    }
+    let mut owners = BTreeSet::new();
+    let mut indices = BTreeSet::new();
+    let mut selected = None;
+    for source in sources {
+        let Some(&index) = sets.get(&source) else {
+            return Ok(());
+        };
+        let Some(preset) = draft.skill_presets.members.get(index) else {
+            return Ok(());
+        };
+        b.charge(
+            b.origins[source.ordinal() as usize]
+                .links
+                .len()
+                .saturating_add(2),
+        )?;
+        let origin = &b.origins[source.ordinal() as usize];
+        if origin.source != source
+            || origin.disposition != SourceDisposition::Contributes
+            || !indices.insert(index)
+            || !owners.insert(preset.id)
+        {
+            return Ok(());
+        }
+        let mut linked = origin.links.iter().filter_map(|link| match link {
+            OwnedOriginTarget::SkillPreset(id) => Some(*id),
+            _ => None,
+        });
+        if linked.next() != Some(preset.id) || linked.next().is_some() {
+            return Ok(());
+        }
+        if source == selected_set {
+            selected = Some(preset.id);
+        }
+    }
+    let Some(selected) = selected else {
+        return Ok(());
+    };
+    append(
+        b,
+        skills,
+        [
+            OwnedOriginTarget::SkillPreset(selected),
+            OwnedOriginTarget::Issue(selection_issue),
+        ],
+    )
+}
+
 #[cfg(test)]
 #[path = "source_header_owners_tests.rs"]
 mod tests;
@@ -272,3 +410,7 @@ mod tests;
 #[cfg(test)]
 #[path = "items_header_owners_tests.rs"]
 mod items_tests;
+
+#[cfg(test)]
+#[path = "skills_header_owners_tests.rs"]
+mod skills_tests;
