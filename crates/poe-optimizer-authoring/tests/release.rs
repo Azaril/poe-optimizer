@@ -32,6 +32,8 @@ mod gigantic_support_domains;
 mod gigantic_support_source;
 #[path = "release/initial_skill_types.rs"]
 mod initial_skill_types;
+#[path = "release/item_bases.rs"]
+mod item_bases;
 #[path = "release/item_metadata.rs"]
 mod item_metadata;
 #[path = "release/local_scaling.rs"]

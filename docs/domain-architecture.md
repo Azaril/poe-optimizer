@@ -495,8 +495,11 @@ partial coverage. Programs still pass through the sole lowerer and Engine checke
 Preflight declaration counts, target memberships, registry/symbol growth, schema
 entry growth and encoded bytes before cloning the baseline schema. Stored entries
 and semantic-link validation work have separate counters under their common
-ceiling; adding ordinary Stats must not consume the latter counter. Final schema
-construction remains mandatory after preflight. The checkpoint CLI uses this
+ceiling; adding ordinary Stats must not consume the latter counter. Data owns the
+artifact projection used both to encode schemas and count appended definitions
+without cloning the baseline or buffering output. Authoring must not duplicate
+that wire layout. A byte preflight grants no semantic or membership authority;
+final schema construction remains mandatory after preflight. The checkpoint CLI uses this
 same compiler seam; there is no separate allocation-only publication path.
 
 Program membership uses explicit definition/slot owners and injected source
@@ -724,6 +727,15 @@ once at load. Intern IDs to package-local handles; arithmetic values contain a
 number/typed tag and compact unit handle, not heap Strings. Immutable data is
 shared; scratch is worker-private. Binary codec selection is an implementation
 benchmark between serialization/validation approaches, not a zero-copy promise.
+
+Schema identity commits to canonical typed meaning independently of storage
+encoding. Compute that commitment with a bounded streaming hash; artifact hashes
+remain the responsibility of transport manifests/checkpoints. Current schema
+packages share immutable canonical bytes across clones, and the release reader
+compares supplied bytes directly against that checked representation. This is a
+prerequisite to compaction, not the compact runtime implementation. During the
+format cutover, distinguish compact-wire bytes from expanded semantic and
+reconstruction work limits; a compact input must not evade the latter limits.
 
 Track canonical review output and a named content manifest. Large runtime bundles
 are reproducible build/release artifacts addressed by digest. Never require a

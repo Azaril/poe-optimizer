@@ -14,14 +14,10 @@ use poe_optimizer_core::{
     owned_schema::*,
 };
 use poe_optimizer_data::owned_schema::{
-    OwnedDefinitionSchemaPackage, OwnedSchemaLimits, SchemaPackageError, SchemaPackageInput,
+    OwnedDefinitionSchemaPackage, OwnedSchemaLimits, SchemaPackageError,
 };
 use poe_optimizer_import::owned_mapping::{OwnedMappingError, OwnedMappingLimits, RegistryState};
-use serde::{Serialize, Serializer, ser::SerializeSeq};
-use std::{
-    collections::{BTreeMap, BTreeSet},
-    io,
-};
+use std::collections::{BTreeMap, BTreeSet};
 
 /// Unresolved syntax for the existing computed value types. Only quantities
 /// require a name lookup; their unit must already exist in the supplied schema.
@@ -635,7 +631,7 @@ pub fn stage_stat_declarations(
         definition_symbols.push((stat.name.as_str(), address));
     }
     // Count the actual extended wire representation before cloning the baseline.
-    check_schema_bytes(schema.input(), &additions, limits.schema.max_wire_bytes)?;
+    schema.validate_definition_append_bytes(&additions, limits.schema)?;
     let mut input = schema.input().clone();
     input.definitions.extend(additions);
     let schema = OwnedDefinitionSchemaPackage::new(input, limits.schema)?;
@@ -654,67 +650,4 @@ pub fn stage_stat_declarations(
             .map(|stat| stat.name.clone())
             .collect(),
     })
-}
-
-fn check_schema_bytes(
-    base: &SchemaPackageInput,
-    added: &[DefinitionDescriptor],
-    maximum: usize,
-) -> Result<(), DeclarationError> {
-    struct Definitions<'a>(&'a [DefinitionDescriptor], &'a [DefinitionDescriptor]);
-    impl Serialize for Definitions<'_> {
-        fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-            let mut sequence = serializer.serialize_seq(Some(self.0.len() + self.1.len()))?;
-            for entry in self.0.iter().chain(self.1) {
-                sequence.serialize_element(entry)?;
-            }
-            sequence.end()
-        }
-    }
-    #[derive(Serialize)]
-    struct View<'a> {
-        schema_version: u32,
-        namespace: &'a GameVersionNamespace,
-        release: &'a OwnedDefinitionKey,
-        semantics_version: &'a OwnedDefinitionKey,
-        definitions: Definitions<'a>,
-        slots: &'a [SlotDescriptor],
-    }
-    struct Count {
-        remaining: usize,
-        exceeded: bool,
-    }
-    impl io::Write for Count {
-        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
-            if bytes.len() > self.remaining {
-                self.exceeded = true;
-                return Err(io::Error::other("schema wire budget exceeded"));
-            }
-            self.remaining -= bytes.len();
-            Ok(bytes.len())
-        }
-        fn flush(&mut self) -> io::Result<()> {
-            Ok(())
-        }
-    }
-    let mut count = Count {
-        remaining: maximum,
-        exceeded: false,
-    };
-    let result = serde_json::to_writer(
-        &mut count,
-        &View {
-            schema_version: base.schema_version,
-            namespace: &base.namespace,
-            release: &base.release,
-            semantics_version: &base.semantics_version,
-            definitions: Definitions(&base.definitions, added),
-            slots: &base.slots,
-        },
-    );
-    if count.exceeded {
-        return Err(SchemaPackageError::TooLarge { maximum }.into());
-    }
-    result?;
-    Ok(())
 }

@@ -226,7 +226,7 @@ pub fn load_owned_release_artifacts(
     };
     let recipe = checked.recipe();
     reader.check("registry.json", recipe.registry().input())?;
-    reader.check("schema.json", recipe.schema().input())?;
+    reader.check_bytes("schema.json", recipe.schema().canonical_bytes())?;
     reader.check("rules.json", recipe.rules().input())?;
     reader.check("routing.json", recipe.routing().input())?;
     let manifest = recipe.manifest(
@@ -282,6 +282,20 @@ struct CanonicalReader<'a> {
     rows: Vec<OwnedReleaseArtifactManifest>,
 }
 impl CanonicalReader<'_> {
+    fn check_bytes(&mut self, name: &str, canonical: &[u8]) -> Result<()> {
+        let bytes = self
+            .files
+            .get(name)
+            .ok_or(OwnedReleaseError::Invalid("missing release artifact"))?;
+        if bytes.as_slice() != canonical {
+            return Err(OwnedReleaseError::Invalid(
+                "release artifact is not canonical or its claims differ",
+            ));
+        }
+        self.record(name, bytes);
+        Ok(())
+    }
+
     fn check<T: Serialize>(&mut self, name: &str, value: &T) -> Result<()> {
         let bytes = self
             .files
@@ -298,12 +312,16 @@ impl CanonicalReader<'_> {
             ));
         }
         result?;
+        self.record(name, bytes);
+        Ok(())
+    }
+
+    fn record(&mut self, name: &str, bytes: &[u8]) {
         self.rows.push(OwnedReleaseArtifactManifest {
             file: name.into(),
             bytes: bytes.len(),
             sha256: format!("{:x}", Sha256::digest(bytes)),
         });
-        Ok(())
     }
 }
 struct CompareWriter<'a> {

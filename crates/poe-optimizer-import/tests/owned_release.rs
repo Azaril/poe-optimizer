@@ -342,7 +342,13 @@ fn runtime_reader_rejects_query_reordering_without_a_new_input_commitment() {
 
 #[test]
 fn runtime_reader_requires_strict_fields_and_canonical_bytes() {
-    for name in ["release.json", "registry.json", "manifest.json"] {
+    load_owned_release_artifacts(&runtime_fixture().0, Default::default()).unwrap();
+    for name in [
+        "release.json",
+        "registry.json",
+        "schema.json",
+        "manifest.json",
+    ] {
         for case in 0..4 {
             let mut emitted = runtime_fixture().0.clone();
             let original = String::from_utf8(emitted[name].clone()).unwrap();
@@ -354,17 +360,26 @@ fn runtime_reader_requires_strict_fields_and_canonical_bytes() {
                 2 => original.replacen('{', "{\"assume_valid\":true,", 1),
                 _ => original.replacen(&format!("\"schema_version\":{version},"), "", 1),
             };
-            if name == "registry.json" {
+            if matches!(name, "registry.json" | "schema.json") {
                 replace_recipe_artifact(&mut emitted, name, changed.into_bytes());
             } else {
                 replace_artifact(&mut emitted, name, changed.into_bytes());
             }
             // Deliberately malformed receipt fields cannot use the typed receipt
             // helper, which must itself reject duplicate/unknown/missing fields.
-            assert!(
-                load_owned_release_artifacts(&emitted, Default::default()).is_err(),
-                "{name} case {case}"
-            );
+            let result = load_owned_release_artifacts(&emitted, Default::default());
+            if name == "schema.json" && case == 0 {
+                // Refreshed transport commitments admit these semantically equal
+                // bytes. The cached-artifact comparison must still reject them.
+                assert!(matches!(
+                    result,
+                    Err(OwnedReleaseError::Invalid(
+                        "release artifact is not canonical or its claims differ"
+                    ))
+                ));
+            } else {
+                assert!(result.is_err(), "{name} case {case}");
+            }
         }
     }
     for extension in ["\"provenance\":[],", "\"evaluation\":null,"] {

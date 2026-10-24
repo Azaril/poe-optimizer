@@ -6,12 +6,13 @@
 use poe_optimizer_core::{
     data::DataIdentity, owned_build::DeclaredSlot, owned_definitions::*, owned_schema::*,
 };
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, Serializer, ser::SerializeSeq};
 use sha2::{Digest, Sha256};
 use std::{
     cmp::Ordering,
     collections::{BTreeMap, BTreeSet},
     io,
+    sync::Arc,
 };
 
 pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = OWNED_SCHEMA_PACKAGE_V7;
@@ -23,7 +24,8 @@ pub const HARD_SCHEMA_MAX_ENTRIES: usize = 4_000_000;
 pub const HARD_SCHEMA_MAX_COLLECTION_ENTRIES: usize = 1_000_000;
 pub const HARD_SCHEMA_MAX_WIRE_BYTES: usize = 256 * 1024 * 1024;
 
-/// The entire versioned artifact. These are input DTOs, not validated storage.
+/// Canonical typed schema meaning. These are input DTOs, not validated storage;
+/// artifact encoding and size preflight belong to this module's storage codec.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SchemaPackageInput {
@@ -136,7 +138,7 @@ pub struct OwnedDefinitionSchemaPackage {
     identity: DataIdentity,
     definitions: BTreeMap<DefinitionAddress, usize>,
     slots: BTreeMap<SlotAddress, usize>,
-    canonical_bytes: Vec<u8>,
+    canonical_bytes: Arc<[u8]>,
     resources: ResourceUse,
 }
 impl OwnedDefinitionSchemaPackage {
@@ -147,12 +149,17 @@ impl OwnedDefinitionSchemaPackage {
         }
         validate_shape_limits(&input, limits)?;
         let resources = validate_and_canonicalize(&mut input, limits)?;
-        let canonical_bytes = bounded_json(&input, limits.max_wire_bytes)?;
+        // Commit to canonical typed meaning independently of artifact encoding.
+        // Both currently have equal byte representations; a storage-only cutover
+        // must not change this commitment or keep a second expanded output buffer.
+        let content_sha256 = semantic_sha256(&input, limits.max_wire_bytes)?;
+        let canonical_bytes =
+            bounded_json(&SchemaWireView::new(&input, &[]), limits.max_wire_bytes)?.into();
         let identity = DataIdentity {
             game: input.namespace.game().as_str().into(),
             release: input.release.as_str().into(),
             schema_version: input.schema_version,
-            content_sha256: format!("{:x}", Sha256::digest(&canonical_bytes)),
+            content_sha256,
             semantics_version: input.semantics_version.as_str().into(),
         };
         let definitions = input
@@ -181,6 +188,12 @@ impl OwnedDefinitionSchemaPackage {
     }
     pub fn identity(&self) -> &DataIdentity {
         &self.identity
+    }
+    /// Canonical artifact bytes, shared by package clones. Their transport hash
+    /// belongs to the enclosing artifact manifest; `identity` commits to meaning.
+    /// Consumers requiring tighter budgets must also call `validate_limits`.
+    pub fn canonical_bytes(&self) -> &[u8] {
+        &self.canonical_bytes
     }
     /// Check tighter consumer budgets using the validated resource counts and
     /// canonical length, without cloning or serializing the schema again.
@@ -212,6 +225,24 @@ impl OwnedDefinitionSchemaPackage {
         {
             return invalid("package", SchemaPackageErrorKind::LimitExceeded);
         }
+        Ok(())
+    }
+
+    /// Check the encoded size of a definition append before cloning this package's
+    /// input. This uses the same artifact projection as `new`, without buffering
+    /// the output. It does not validate the additions' semantics, membership or
+    /// collection/work budgets: the completed input still requires `new`.
+    pub fn validate_definition_append_bytes(
+        &self,
+        additions: &[DefinitionDescriptor],
+        limits: OwnedSchemaLimits,
+    ) -> Result {
+        self.validate_limits(limits)?;
+        write_bounded_json(
+            &SchemaWireView::new(&self.input, additions),
+            io::sink(),
+            limits.max_wire_bytes,
+        )?;
         Ok(())
     }
 }
@@ -249,31 +280,94 @@ pub fn encode_schema_package(
     limits: OwnedSchemaLimits,
 ) -> Result<Vec<u8>> {
     package.validate_limits(limits)?;
-    Ok(package.canonical_bytes.clone())
+    Ok(package.canonical_bytes.to_vec())
 }
 
-fn bounded_json(value: &impl Serialize, maximum: usize) -> Result<Vec<u8>> {
-    struct Writer {
-        bytes: Vec<u8>,
-        maximum: usize,
-        exceeded: bool,
-    }
-    impl io::Write for Writer {
+fn semantic_sha256(input: &SchemaPackageInput, maximum: usize) -> Result<String> {
+    struct HashWriter(Sha256);
+    impl io::Write for HashWriter {
         fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
-            if bytes.len() > self.maximum - self.bytes.len() {
-                self.exceeded = true;
-                return Err(io::Error::other("owned schema byte limit exceeded"));
-            }
-            self.bytes.extend_from_slice(bytes);
+            self.0.update(bytes);
             Ok(bytes.len())
         }
         fn flush(&mut self) -> io::Result<()> {
             Ok(())
         }
     }
+    let writer = write_bounded_json(input, HashWriter(Sha256::new()), maximum)?;
+    Ok(format!("{:x}", writer.0.finalize()))
+}
+
+/// The storage projection belongs to Data. Authoring must not reproduce this
+/// layout to estimate a future artifact's size.
+#[derive(Serialize)]
+struct SchemaWireView<'a> {
+    schema_version: u32,
+    namespace: &'a GameVersionNamespace,
+    release: &'a OwnedDefinitionKey,
+    semantics_version: &'a OwnedDefinitionKey,
+    definitions: Definitions<'a>,
+    slots: &'a [SlotDescriptor],
+}
+impl<'a> SchemaWireView<'a> {
+    fn new(input: &'a SchemaPackageInput, additions: &'a [DefinitionDescriptor]) -> Self {
+        Self {
+            schema_version: input.schema_version,
+            namespace: &input.namespace,
+            release: &input.release,
+            semantics_version: &input.semantics_version,
+            definitions: Definitions(&input.definitions, additions),
+            slots: &input.slots,
+        }
+    }
+}
+struct Definitions<'a>(&'a [DefinitionDescriptor], &'a [DefinitionDescriptor]);
+impl Serialize for Definitions<'_> {
+    fn serialize<S: Serializer>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error> {
+        let len = self
+            .0
+            .len()
+            .checked_add(self.1.len())
+            .ok_or_else(|| serde::ser::Error::custom("schema definition count overflow"))?;
+        let mut sequence = serializer.serialize_seq(Some(len))?;
+        for entry in self.0.iter().chain(self.1) {
+            sequence.serialize_element(entry)?;
+        }
+        sequence.end()
+    }
+}
+
+fn bounded_json(value: &impl Serialize, maximum: usize) -> Result<Vec<u8>> {
+    write_bounded_json(value, Vec::new(), maximum)
+}
+
+fn write_bounded_json<W: io::Write>(
+    value: &impl Serialize,
+    output: W,
+    maximum: usize,
+) -> Result<W> {
+    struct Writer<W> {
+        output: W,
+        remaining: usize,
+        exceeded: bool,
+    }
+    impl<W: io::Write> io::Write for Writer<W> {
+        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+            if bytes.len() > self.remaining {
+                self.exceeded = true;
+                return Err(io::Error::other("owned schema byte limit exceeded"));
+            }
+            let written = self.output.write(bytes)?;
+            self.remaining -= written;
+            Ok(written)
+        }
+        fn flush(&mut self) -> io::Result<()> {
+            self.output.flush()
+        }
+    }
     let mut writer = Writer {
-        bytes: Vec::new(),
-        maximum,
+        output,
+        remaining: maximum,
         exceeded: false,
     };
     let result = serde_json::to_writer(&mut writer, value);
@@ -281,7 +375,7 @@ fn bounded_json(value: &impl Serialize, maximum: usize) -> Result<Vec<u8>> {
         return Err(SchemaPackageError::TooLarge { maximum });
     }
     result?;
-    Ok(writer.bytes)
+    Ok(writer.output)
 }
 
 struct Check<'a> {

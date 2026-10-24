@@ -113,6 +113,52 @@ fn optional_export_reproduces_checked_catalog_without_runtime_ui() {
 
 #[cfg(feature = "pob")]
 #[test]
+fn optional_item_base_export_reproduces_catalog_and_does_not_replace_output() {
+    use std::{collections::BTreeMap, fs, path::Path};
+
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let temp = tempfile::tempdir().unwrap();
+    let output = temp.path().join("exported");
+    let call = || {
+        Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
+            .current_dir(temp.path())
+            .arg("export-owned-item-bases")
+            .arg("--source-root")
+            .arg(root.join("vendor/path-of-building-poe2"))
+            .arg("--output")
+            .arg(&output)
+            .output()
+            .unwrap()
+    };
+    let first = call();
+    assert!(
+        first.status.success(),
+        "{}",
+        String::from_utf8_lossy(&first.stderr)
+    );
+    let report: serde_json::Value = serde_json::from_slice(&first.stdout).unwrap();
+    assert_eq!(report["bases"], 1756);
+    assert_eq!(report["table_weapon_fields"], 337);
+    assert_eq!(
+        fs::read(output.join("catalog.json")).unwrap(),
+        fs::read(root.join("data/owned/poe2/3887ae68/item-bases/catalog.json")).unwrap()
+    );
+    let snapshot = || {
+        fs::read_dir(&output)
+            .unwrap()
+            .map(|entry| {
+                let entry = entry.unwrap();
+                (entry.file_name(), fs::read(entry.path()).unwrap())
+            })
+            .collect::<BTreeMap<_, _>>()
+    };
+    let before = snapshot();
+    assert!(!call().status.success());
+    assert_eq!(snapshot(), before);
+}
+
+#[cfg(feature = "pob")]
+#[test]
 fn absent_source_does_not_publish_an_acquisition() {
     let temp = tempfile::tempdir().unwrap();
     for name in ["export-owned-actor-baselines", "export-owned-augments"] {
@@ -142,4 +188,5 @@ fn native_cli_excludes_optional_source_acquisition_commands() {
     assert!(!help.contains("export-owned-actor-baselines"));
     assert!(!help.contains("export-owned-augments"));
     assert!(!help.contains("export-owned-intrinsic-attack"));
+    assert!(!help.contains("export-owned-item-bases"));
 }

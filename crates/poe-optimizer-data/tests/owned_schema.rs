@@ -2,6 +2,7 @@
 use poe_optimizer_core::{owned_build::DeclaredSlot, owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::*;
 use serde_json::{Value, json};
+use sha2::{Digest, Sha256};
 
 fn ns() -> GameVersionNamespace {
     GameVersionNamespace::new("authored-game", "v1").unwrap()
@@ -536,6 +537,15 @@ fn unordered_permutations_preserve_identity_but_changed_content_does_not() {
     let second = package(serde_json::from_value(permuted).unwrap());
     assert_eq!(first.input(), second.input());
     assert_eq!(first.identity(), second.identity());
+    // Identity commits to canonical typed meaning, independently of the artifact
+    // codec. A storage-only migration must preserve this semantic commitment.
+    assert_eq!(
+        first.identity().content_sha256,
+        format!(
+            "{:x}",
+            Sha256::digest(serde_json::to_vec(first.input()).unwrap())
+        )
+    );
     let mut changed = original;
     gem(&mut changed).level.maximum = BoundedInteger::new(31).unwrap();
     let changed = package(changed);
@@ -548,6 +558,87 @@ fn unordered_permutations_preserve_identity_but_changed_content_does_not() {
     };
     assert_eq!(before.level.maximum.get(), 30);
     assert_eq!(after.level.maximum.get(), 31);
+}
+
+#[test]
+fn definition_append_byte_preflight_matches_storage_without_certifying_semantics() {
+    let baseline = package(input());
+    let original = baseline.input().clone();
+    let bytes = baseline.canonical_bytes().to_vec();
+    let additions = vec![
+        DefinitionDescriptor::Stat(known(
+            id("a-added-count"),
+            StatSchema {
+                value: ComputedValueType::Integer,
+                targets: vec![RuleEntityKind::Skill, RuleEntityKind::Actor],
+            },
+        )),
+        DefinitionDescriptor::Stat(known(
+            id("z-added-quantity"),
+            StatSchema {
+                value: ComputedValueType::Quantity { unit: id("ratio") },
+                targets: vec![RuleEntityKind::Action],
+            },
+        )),
+    ];
+    let mut extended = original.clone();
+    extended.definitions.extend(additions.clone());
+    let extended = package(extended);
+    let exact = OwnedSchemaLimits {
+        max_wire_bytes: extended.canonical_bytes().len(),
+        ..Default::default()
+    };
+    baseline
+        .validate_definition_append_bytes(&additions, exact)
+        .unwrap();
+    let short = OwnedSchemaLimits {
+        max_wire_bytes: exact.max_wire_bytes - 1,
+        ..exact
+    };
+    assert!(matches!(
+        baseline.validate_definition_append_bytes(&additions, short),
+        Err(SchemaPackageError::TooLarge { maximum }) if maximum == short.max_wire_bytes
+    ));
+    baseline
+        .validate_definition_append_bytes(
+            &[],
+            OwnedSchemaLimits {
+                max_wire_bytes: bytes.len(),
+                ..exact
+            },
+        )
+        .unwrap();
+    assert!(
+        baseline
+            .validate_definition_append_bytes(
+                &[],
+                OwnedSchemaLimits {
+                    max_wire_bytes: 0,
+                    ..exact
+                }
+            )
+            .is_err()
+    );
+
+    // A size check neither canonicalizes the additions nor certifies their
+    // membership. Duplicate addresses still fail the final semantic validator.
+    let duplicate = vec![original.definitions[0].clone()];
+    baseline
+        .validate_definition_append_bytes(&duplicate, Default::default())
+        .unwrap();
+    let mut invalid = original.clone();
+    invalid.definitions.extend(duplicate);
+    reject(invalid, SchemaPackageErrorKind::DuplicateAddress);
+    assert_eq!(baseline.input(), &original);
+    assert_eq!(baseline.canonical_bytes(), bytes);
+
+    // Callers may mutate an exported buffer without changing a checked package
+    // or any immutable package clone that shares its canonical artifact.
+    let clone = baseline.clone();
+    let mut exported = encode_schema_package(&clone, Default::default()).unwrap();
+    exported[0] = b'!';
+    assert_eq!(baseline.canonical_bytes(), bytes);
+    assert_eq!(clone.canonical_bytes(), bytes);
 }
 
 #[test]

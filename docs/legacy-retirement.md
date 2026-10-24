@@ -63,8 +63,20 @@ ownership consumer retains its existing tests through the shared parent binding.
 The obsolete intrinsic CLI publication target is deleted after moving its useful
 optional exporter/digest/no-clobber law into acquisition. Maintained class/source
 and declaration laws already own its semantic proofs. Its shared predecessor and
-three live item/weapon/extension callers remain until their own migration; this
+two live weapon/extension callers remain until their own migration; this
 does not yet remove that production compiler.
+The item-base publication target is also deleted after transferring its complete
+1,756-template identity/capability/Partial-coverage and five-original item laws
+to the maintained release. Acquisition retains the real exporter and no-clobber
+check; Import retains compiler-negative laws. Test-only pinned evidence views
+avoid importing the obsolete compiler DTOs into the maintained harness.
+
+Authoring's private schema size serializer is removed. Data owns one artifact
+projection for publication and borrowed append preflight, with separate streaming
+semantic commitment and immutable shared encoded bytes. Import compares those
+checked bytes rather than recreating the schema format. The current artifact
+format is unchanged; the compact format cutover must replace all live schema
+readers together and add reconstruction accounting without a compatibility reader.
 
 Atomic authoring checkpoints replace the old flat authoring CLI output contract
 and its optional caller-assembled declaration context. All CLI builds now preserve
