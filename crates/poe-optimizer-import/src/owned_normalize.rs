@@ -599,6 +599,8 @@ struct Builder<'e, 's> {
     fresh_skill_containers: Option<Option<Vec<SourceOccurrenceId>>>,
     /// Immutable saved-SkillSet census shared by Direct and inventory adapters.
     fresh_skill_sets: Option<Option<Vec<SourceOccurrenceId>>>,
+    /// Shared immutable Build framing, never reward/level/selection authority.
+    fresh_build_frame: Option<character_reward_inventory::BuildFrameCache>,
 }
 impl Builder<'_, '_> {
     fn charge(&mut self, n: usize) -> Result<()> {
@@ -708,6 +710,15 @@ impl Builder<'_, '_> {
         row: &SourceEvidenceRow<'_>,
         recipe: &ValueRecipe,
     ) -> Result<ScalarValue> {
+        Ok(self.scalar_provenance(row, recipe)?.0)
+    }
+    /// Preserve the actual selected source attribute for private ownership
+    /// checks without allocating another Pending value or changing decoding.
+    fn scalar_provenance(
+        &mut self,
+        row: &SourceEvidenceRow<'_>,
+        recipe: &ValueRecipe,
+    ) -> Result<(ScalarValue, Option<SourceAttributeRef>)> {
         let mut candidates = vec![];
         for tier in &recipe.input().tiers {
             for selector in &tier.selectors {
@@ -732,18 +743,20 @@ impl Builder<'_, '_> {
             }
         }
         Ok(match recipe.decide(&candidates)?.outcome {
-            ValueOutcome::Selected { value, .. } => ScalarValue::Selected(value),
-            ValueOutcome::Defaulted { value } => ScalarValue::Defaulted(value),
-            ValueOutcome::Absent => ScalarValue::Absent,
+            ValueOutcome::Selected { value, origin } => {
+                (ScalarValue::Selected(value), Some(origin))
+            }
+            ValueOutcome::Defaulted { value } => (ScalarValue::Defaulted(value), None),
+            ValueOutcome::Absent => (ScalarValue::Absent, None),
             ValueOutcome::Pending {
                 reason: ValuePendingReason::Missing,
-            } => ScalarValue::Missing,
+            } => (ScalarValue::Missing, None),
             ValueOutcome::Pending {
                 reason: ValuePendingReason::Unavailable(_),
-            } => ScalarValue::Unavailable,
+            } => (ScalarValue::Unavailable, None),
             ValueOutcome::Pending {
                 reason: ValuePendingReason::Decode(_),
-            } => ScalarValue::Malformed,
+            } => (ScalarValue::Malformed, None),
         })
     }
     fn level(
@@ -1252,6 +1265,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         fresh_configuration_sets: None,
         fresh_skill_containers: None,
         fresh_skill_sets: None,
+        fresh_build_frame: None,
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(usage_inputs.as_ref().map_or(0, |policy| policy.work))?;
@@ -2350,6 +2364,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     source_header_owners::account_tree(&mut b, &draft, &spec_sets, &spec_characters)?;
     source_header_owners::account_items(&mut b, &draft, &equipment_sets)?;
     source_header_owners::account_skills(&mut b, &draft, &skill_sets)?;
+    source_header_owners::account_build(
+        &mut b,
+        &draft,
+        &spec_characters,
+        &skill_sets,
+        character_reward_inventory.as_ref(),
+        &recipes[0],
+    )?;
     // Unknown source semantics cannot become "UI-only" by default. They point to
     // real selected character/choice obligations until individually converted.
     for row in evidence.rows() {

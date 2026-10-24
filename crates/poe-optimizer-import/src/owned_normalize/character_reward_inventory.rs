@@ -18,6 +18,29 @@ pub(super) struct CompiledCharacterRewardInventory<'p> {
     target_version: &'p str,
 }
 
+/// One immutable source-frame result, independent of reward or owner proofs.
+/// The child ceiling is part of its admission context; resource errors are not
+/// cached, and another source or injected target must be checked afresh.
+#[derive(Clone)]
+pub(super) struct BuildFrameCache {
+    source: SourceOccurrenceId,
+    target_version: String,
+    max_children: usize,
+    accepted: bool,
+}
+
+impl CompiledCharacterRewardInventory<'_> {
+    /// Reuse only the checked source frame and injected version. This does not
+    /// grant the independent character-reward absence proof.
+    pub(super) fn accepts_build_frame(
+        &self,
+        b: &mut Builder<'_, '_>,
+        row: &SourceEvidenceRow<'_>,
+    ) -> Result<bool> {
+        fresh_build(b, row, self.target_version)
+    }
+}
+
 pub(super) fn compile<'p>(
     policy: &'p NormalizationPolicy,
     mappings: &OwnedMappingIndex,
@@ -89,6 +112,34 @@ fn charge_row(b: &mut Builder<'_, '_>, row: &SourceEvidenceRow<'_>) -> Result<()
 }
 
 fn fresh_build(
+    b: &mut Builder<'_, '_>,
+    row: &SourceEvidenceRow<'_>,
+    target_version: &str,
+) -> Result<bool> {
+    b.charge(target_version.len().saturating_add(1))?;
+    let source = row.occurrence().id();
+    let max_children = b.limits.draft.input.max_collection_entries;
+    if let Some(cached) = &b.fresh_build_frame
+        && cached.source == source
+        && cached.target_version == target_version
+        && cached.max_children == max_children
+    {
+        return Ok(cached.accepted);
+    }
+    let accepted = inspect_fresh_build(b, row, target_version)?;
+    // Charge storage before copying the checked, bounded target string. Do not
+    // cache a partially inspected frame or refund any work after an error.
+    b.charge(target_version.len().saturating_add(1))?;
+    b.fresh_build_frame = Some(BuildFrameCache {
+        source,
+        target_version: target_version.to_owned(),
+        max_children,
+        accepted,
+    });
+    Ok(accepted)
+}
+
+fn inspect_fresh_build(
     b: &mut Builder<'_, '_>,
     row: &SourceEvidenceRow<'_>,
     target_version: &str,
@@ -370,3 +421,7 @@ pub(super) fn finish(
         "character-rewards-not-converted",
     )
 }
+
+#[cfg(test)]
+#[path = "build_header_owners_tests.rs"]
+mod build_header_tests;

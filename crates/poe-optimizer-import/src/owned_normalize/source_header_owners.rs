@@ -2,6 +2,9 @@
 use super::source_shape::{charge_frame, charge_row, container_text, plain_row, value};
 use super::*;
 
+mod build;
+pub(super) use build::account_build;
+
 fn saved_selection(
     b: &mut Builder<'_, '_>,
     draft: &DraftSessionInput,
@@ -35,6 +38,14 @@ fn append<const N: usize>(
     b: &mut Builder<'_, '_>,
     source: SourceOccurrenceId,
     additions: [OwnedOriginTarget; N],
+) -> Result<()> {
+    append_links(b, source, additions.into_iter())
+}
+
+fn append_links(
+    b: &mut Builder<'_, '_>,
+    source: SourceOccurrenceId,
+    additions: impl ExactSizeIterator<Item = OwnedOriginTarget>,
 ) -> Result<()> {
     // Preflight every addition before changing either links or their counter.
     // A late work/link limit failure must not leave a partly attributed header.
@@ -79,7 +90,6 @@ pub(super) fn account_tree(
     let Some(selection_issue) = saved_selection(b, draft)? else {
         return Ok(());
     };
-
     // Require the complete ordinary Spec-to-preset correspondence, not just a
     // selected-key lookup. A missing/foreign map entry or an aliased sibling
     // cannot lend ownership to the selected source. Descendant projections
@@ -346,6 +356,26 @@ pub(super) fn account_skills(
     let Some(selection_issue) = saved_selection(b, draft)? else {
         return Ok(());
     };
+    let Some(selected) = selected_skill_owner(b, draft, sets, &sources, selected_set)? else {
+        return Ok(());
+    };
+    append(
+        b,
+        skills,
+        [
+            OwnedOriginTarget::SkillPreset(selected),
+            OwnedOriginTarget::Issue(selection_issue),
+        ],
+    )
+}
+
+fn selected_skill_owner(
+    b: &mut Builder<'_, '_>,
+    draft: &DraftSessionInput,
+    sets: &BTreeMap<SourceOccurrenceId, usize>,
+    sources: &[SourceOccurrenceId],
+    selected_set: SourceOccurrenceId,
+) -> Result<Option<SkillPresetId>> {
     b.charge(
         sources
             .len()
@@ -353,17 +383,17 @@ pub(super) fn account_skills(
             .saturating_add(draft.skill_presets.members.len()),
     )?;
     if sources.len() != sets.len() || sources.len() != draft.skill_presets.members.len() {
-        return Ok(());
+        return Ok(None);
     }
     let mut owners = BTreeSet::new();
     let mut indices = BTreeSet::new();
     let mut selected = None;
-    for source in sources {
+    for &source in sources {
         let Some(&index) = sets.get(&source) else {
-            return Ok(());
+            return Ok(None);
         };
         let Some(preset) = draft.skill_presets.members.get(index) else {
-            return Ok(());
+            return Ok(None);
         };
         b.charge(
             b.origins[source.ordinal() as usize]
@@ -377,30 +407,20 @@ pub(super) fn account_skills(
             || !indices.insert(index)
             || !owners.insert(preset.id)
         {
-            return Ok(());
+            return Ok(None);
         }
         let mut linked = origin.links.iter().filter_map(|link| match link {
             OwnedOriginTarget::SkillPreset(id) => Some(*id),
             _ => None,
         });
         if linked.next() != Some(preset.id) || linked.next().is_some() {
-            return Ok(());
+            return Ok(None);
         }
         if source == selected_set {
             selected = Some(preset.id);
         }
     }
-    let Some(selected) = selected else {
-        return Ok(());
-    };
-    append(
-        b,
-        skills,
-        [
-            OwnedOriginTarget::SkillPreset(selected),
-            OwnedOriginTarget::Issue(selection_issue),
-        ],
-    )
+    Ok(selected)
 }
 
 #[cfg(test)]

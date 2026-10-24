@@ -787,6 +787,21 @@ Header accounting distinguishes values consumed by the saved build from defaults
 used only by future editing operations. Root equipment toggles require their
 actual applicability proof independently of each selected loadout; MAIN source
 group selection retains its own selection owner independently of CALCS and usage.
+A checked Build header attributes its shared level to every actual Character
+preset it supplied, with the exact source attribute retained from the existing
+checked value recipe. Equal defaulted or independently selected values do not
+establish that ownership. Reuse the injected source-version admission and strict
+ordinary frame; class/ascendancy labels cannot replace Spec-derived identities.
+The saved MAIN group belongs to its exact saved SkillPreset and the unresolved
+selection owner. An in-range source index does not create a native Action, query
+or usage setting or prove post-load reference correspondence. Validate complete
+sibling mappings and preflight all provenance additions atomically; leave every
+child's independent responsibilities and all completion states intact.
+Within one normalization, the strict immutable Build frame may be checked once
+and reused for its exact source occurrence, injected target version and child
+limit. Charge lookup and storage, cache only completed structural results, and
+rerun all level, owner and selection checks. A cached frame never certifies reward
+completion or expands a resource budget.
 A checked Tree header joins its exact selected Spec to existing Character and
 Allocation presets and the existing unresolved saved-selection owner. Validate
 the complete sibling-to-preset correspondence before changing provenance; aliases,

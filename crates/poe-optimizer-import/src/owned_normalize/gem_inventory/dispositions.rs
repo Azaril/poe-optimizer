@@ -552,6 +552,7 @@ pub(super) mod tests {
             fresh_configuration_sets: None,
             fresh_skill_containers: None,
             fresh_skill_sets: None,
+            fresh_build_frame: None,
         };
         let physical = b.id().unwrap();
         let skill_id = b.id().unwrap();

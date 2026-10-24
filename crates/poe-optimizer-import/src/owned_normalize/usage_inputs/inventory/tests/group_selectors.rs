@@ -245,6 +245,7 @@ fn with_joined_source_case(
             fresh_configuration_sets: None,
             fresh_skill_containers: None,
             fresh_skill_sets: None,
+            fresh_build_frame: None,
         };
         let group = case.receipts.inputs[0].group;
         let source = b.evidence.rows()[group.ordinal() as usize].children()[1];

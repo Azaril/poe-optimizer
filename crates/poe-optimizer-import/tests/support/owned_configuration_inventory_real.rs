@@ -123,7 +123,7 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
                 queries,
                 Default::default(),
             )
-            .unwrap();
+            .unwrap_or_else(|error| panic!("Original{case:02} normalization: {error:?}"));
             assert_eq!(result.sidecar().tree_policy, Some(*tree.identity()));
             result
         };
@@ -215,6 +215,25 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
             assert_eq!(links.len(), 2);
             assert!(links.contains(&owners[0]));
             assert!(links.contains(&OwnedOriginTarget::Issue(*id)));
+
+            let build = evidence
+                .rows()
+                .iter()
+                .find(|r| r.occurrence().name() == "Build")
+                .unwrap();
+            assert_eq!(build.occurrence().id().ordinal(), 1);
+            assert_eq!(build.attribute("level").unwrap().raw(), "92");
+            assert_eq!(build.attribute("mainSocketGroup").unwrap().raw(), "3");
+            let characters = &baseline.draft().input().character_presets.members;
+            assert_eq!(characters.len(), 7);
+            let links = &baseline.sidecar().origins[1].links;
+            assert_eq!(links.len(), characters.len() + 2);
+            for character in characters {
+                assert_eq!(character.level, DraftField::Known { value: 92 });
+                assert!(links.contains(&OwnedOriginTarget::CharacterPreset(character.id)));
+            }
+            assert!(links.contains(&owners[0]));
+            assert!(links.contains(&OwnedOriginTarget::Issue(*id)));
         }
         for retained_control in [false, true] {
             let mut policy = staged.normalization().clone();
@@ -294,10 +313,36 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
                     .iter()
                     .find(|c| links.contains(&OwnedOriginTarget::ChoicePreset(c.id)))
                     .unwrap();
-                let DraftListCompletion::Pending { code, .. } = &choice.choices.completion else {
+                let DraftListCompletion::Pending { id, code } = &choice.choices.completion else {
                     panic!()
                 };
                 assert_eq!(code.as_str(), "configuration-roles-not-converted");
+                let expected: Vec<_> = evidence
+                    .rows()
+                    .iter()
+                    .filter(|row| {
+                        matches!(
+                            row.occurrence().name(),
+                            "TimelessData" | "Config" | "ConfigSet" | "Calcs"
+                        ) || (row.occurrence().name() == "Input"
+                            && row.occurrence().parent().is_some_and(|parent| {
+                                evidence.rows()[parent.ordinal() as usize]
+                                    .occurrence()
+                                    .name()
+                                    == "Calcs"
+                            }))
+                    })
+                    .map(|row| row.occurrence().id())
+                    .collect();
+                assert_eq!(expected.len(), 6);
+                let remaining: Vec<_> = actual
+                    .sidecar()
+                    .origins
+                    .iter()
+                    .filter(|origin| origin.links.contains(&OwnedOriginTarget::Issue(*id)))
+                    .map(|origin| origin.source)
+                    .collect();
+                assert_eq!(remaining, expected);
                 // Exact draft/origin/allocator equality above preserves every
                 // current member and obligation. A previous checkpoint's origin
                 // ordinals or member counts are not this census's authority.

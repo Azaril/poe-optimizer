@@ -3328,3 +3328,6 @@ mod items_header_owner_tests;
 
 #[path = "support/owned_skills_header_owners.rs"]
 mod skills_header_owner_tests;
+
+#[path = "support/owned_build_header_owners.rs"]
+mod build_header_owner_tests;
