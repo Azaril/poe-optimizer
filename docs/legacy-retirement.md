@@ -1,6 +1,6 @@
 # Legacy retirement register
 
-Updated 2026-10-23. [Domain architecture](domain-architecture.md) defines the
+Updated 2026-10-24. [Domain architecture](domain-architecture.md) defines the
 single end state; [implementation R0-R6](implementation.md#delivery-plan-and-gates)
 is the schedule. This register classifies deletions and semantic questions; it is
 not another plan. Older detailed audits remain available in the
@@ -14,6 +14,15 @@ test, receipt or source-file pin is not itself a consumer requirement. Preserve
 useful semantic fixtures, then delete redundant machinery with its last consumer.
 No shipped-format compatibility is required. Do not maintain V1/V2 readers,
 aliases, old profiles or a second evaluator for historical test reproduction.
+
+The flat-Life support-domain checkpoint does not supersede its numerical or
+whole-plan laws. The routing helper still serves item-attack tests; the base
+helper also serves catalyst tests. Rounding/text discrepancies, exact occurrence
+delivery and refusal laws remain independently useful. Move packet-only
+admission/scalability checks when the maintained emitter/guard and full-owner
+inverse laws cover them, then delete their exclusive publishers. Do not retain
+helpers solely for historical replay or delete them solely because a new domain
+declaration exists. The new source proof reuses existing archived constructors.
 
 Tracked-source tests no longer rebootstrap the name ledger. The maintained
 whole-corpus, release and changed-formula builders use the complete canonical

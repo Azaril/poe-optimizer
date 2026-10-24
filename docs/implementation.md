@@ -10,99 +10,122 @@ adjustments below. Historical checkpoints remain in Git and
 
 ## Current state
 
-**Current checkpoint:** tracked KDL now supplies intrinsic revival for the exact
-Arsonist, Frost Mage and Reaver Skills through their physical Gem grants, reusing
-the Sniper body and existing three Stats. This adds three program occurrences
-and six query members with no allocation or coverage promotion. The seven revival
-producer instances retain exact recipients and eleven effects; all outer, group
-and owner Partial gaps remain. See the [source proof and limits](../data/owned/poe2/3887ae68/revival-producers/README.md).
+**Current checkpoint:** the fixed-Life modifier has a reviewed intrinsic
+support-source domain. This is the existing data-driven Modifier `3100`, emitted
+by the strict fixed-Life import rule; no new ID, formula, runtime API or build
+special case is added. The [source proof](../data/owned/poe2/3887ae68/flat-life-support-domain/README.md)
+checks every live emitter, its exact grammar/guards, complete source constructors
+and name-preserving record transport. It reuses existing source archives and
+adds six maintained Rust laws for source, execution and occurrence boundaries.
+
+Original05's four physical records on items 19/20/26/27 retain five equipment
+uses, including the repeated ring. The six native programs, four numerical and
+routing gaps, direct/copy contribution members and all other metadata remain
+unchanged. A whole historical inverse admits exactly this one additional domain;
+364 reviewed domains have now been added since the archived baseline. Current
+providers total 1,350: 1,321 Known and 29 Unmapped. Source classification does not
+complete Life values, incoming revival membership, reservation or build legality.
 
 The atomic authoring workflow publishes verified checkpoint
-`82677b8da2f00142276ba573854f00242dde4f9448246baca804524fed4d0b9a` from the canonical
-73-name predecessor. Its runtime input is
-`cc25c852ad3918a6fa610fe423890bb7d89e3c2fe03f1be264fb3a4ecd0004ea`.
+`5f3ea0e0f5a7a91207827cdb5effe16230df509f077a278fa802c982ed4299ba` from the canonical
+73-name predecessor, with runtime input
+`de3998a03a2aa932a8a5766c37a63c9ee4eedd2c974d1ecf5730272345ca596a`.
 An independent build reproduces all twenty files byte-for-byte. Only `rules.json`,
-`manifest.json` and `release.json` change from the Timeless release; schema, ledger,
-registry and Import artifacts remain byte-exact. The [canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md)
-records current bytes and identities. Historical restoration extends its exact
-subtraction whitelist by three owner/program pairs and preserves every old supply.
+`manifest.json` and `release.json` change from the skeletal revival checkpoint;
+schema, ledger, registry and Import artifacts remain byte-exact. The
+[canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md) records the
+measured inventory. The first final-publication attempt refused a misspelled KDL
+header; the first verification used the earlier unpinned candidate identity and
+refused it. Corrected publication and verification pass; diagnostic logs remain.
 
-The [configuration packet](../data/owned/poe2/3887ae68/configuration-census/README.md)
-now has four complete normal-load dispatcher contrasts for check/count/list and
-count-allow-zero controls. They distinguish false, zero, absence, placeholders
-and UI fallback while checking complete records and source order. All 33 cases
-agree in fresh JIT-off/on replays: 42,992,270 bytes, SHA-256
-`024e67e96349ce0b993e571c17c37b030886e28e77bb30961619892d32dd083a`.
-The reference target passes three tests in 357.82s; two existing optional witnesses
-remain ignored. Original Lua observer and source catalogue pins are unchanged.
-The prior 23- and 29-case captures remain historical; current evidence SHA-256 is
-`602cf5a9feb24c8646bee3bf77e7595c03f77d12537c1ebc848c5aae6dbe2e0a`.
-
-A realistic-size Rust inventory law exercises 448 callback controls plus twenty
-retained-Scenario responsibilities across two presets. It checks the exact
-work-budget boundary, atomic one-short refusal, duplicate-name identity and
-selected/unselected Input/Placeholder ownership while preserving every other
-field and replay identity. This is a synthetic contract fixture, not a production
-source-semantics certificate; its focused run passed in 0.37s. The real policy
-remains 38 rules with `inventory=None`.
-
-The obsolete character-reward publication test and its exclusive staging helper
-are removed. Three maintained release laws cover exact Spec-to-Character
-ownership, five unchanged originals and sixteen source contrasts. The actual
-policy-absent comparison independently accounts for Build-header and Timeless
-frame-authority deltas; it preserves all other Draft/sidecar/query/allocator
-state and never reconstructs the obsolete predecessor chain. Existing Import
-and optional PoB source laws remain. Thirteen real-source contrasts reach the
-full semantic inverse; three deliberately malformed frames reach the existing
-work ceiling. Unknown Build child has an asymmetric result (policy absent:
-Pending; enabled: work-limit); unknown Spec child and namespaced Build refuse
-under both policies. Preserve those exact bounded outcomes and the successful
-side's Pending reward state, without treating refusals as semantic proof.
-**Found work:** profile malformed-source fallback cost and remove repeated scans
-where confirmed, retaining the 2,000,000 hard cap and exact ownership/atomicity.
-This does not block the
-five unchanged originals and is deferred behind selected-source completion.
 Validation: 175 Authoring library tests and eight CLI tests pass. The full release
-run passed 216 laws; its two new harness failures were repaired (fixture-relative
-path, stale historical Config reward count and explicit malformed-source work
-outcomes), and both pass in focused reruns. All 218 release laws therefore have
-passing results; the final contrast replay took 129.97s. No production limit or
-semantic assertion was relaxed. Import normalization passes 442 tests in 3.20s
-with one existing ignored witness. Strict Clippy passes Authoring all targets/
-features (3.93s), Import normalization (12.80s) and the PoB reference target
-(1.00s). Scoped formatting, UTF-8/LF, whitespace, independent reviews and all nine
-protected draft hashes pass. Logs retain the initial failures and corrected
-runs; no failed run is relabelled as successful.
+run passed 223 of 224 tests; its one new failure supplied a negative raw value
+outside the declared parameter range. The repaired test uses admitted integer
+values and separately asserts exact schema refusal plus successful scratch reuse.
+Import's integer grammar remains distinct from the numeric slot's range. All six
+new tests pass together in 60.33s, so all 224 release laws now have passing results.
+No calculation, input bound or completion check changed. Strict Authoring Clippy
+passes for all targets/features in 4.17s. Formatting, whitespace, UTF-8/LF and all
+nine protected draft hashes pass; the initial failed run remains in the log.
 
-Latest anonymous CI snapshot, 19:23:25 UTC: repair run
-[40106355676](https://github.com/Azaril/poe-optimizer/actions/runs/40106355676)
-has seventeen successful jobs, Windows CLI shard 2 still running, and no failures.
-The `898b16cc` run [40122912844](https://github.com/Azaril/poe-optimizer/actions/runs/40122912844)
-is pending with no jobs; intervening pending runs including `cd176f6a` were
-cancelled without jobs. Hosted completion is not claimed. Slow two-profile shard
-cost remains tracked independently of failures.
+Latest anonymous hosted CI observation, 19:43:48 UTC: the
+[repair run](https://github.com/Azaril/poe-optimizer/actions/runs/40106355676)
+has seventeen successful jobs and Windows CLI shard 2 still running, with zero
+failures. The [21073c9d run](https://github.com/Azaril/poe-optimizer/actions/runs/40125679720)
+is pending with no jobs. Neither is complete; slow shard cost remains separate
+tracked work and local validation is not a hosted-success claim.
 
-Original05 retains all five selected input obligations plus numerical/legality
-work; **0/5 builds are complete**. No final revival duration, neutral contributor,
-query-dependent reservation or numerical parity exception is introduced. Current
-logs and publication evidence are under `runs/configuration-dispatch-checkpoint`;
-fresh reference reports are under `runs/configuration-dispatch-source-02`.
-The preceding source-census checkpoint is archived in
-[history](implementation-history.md#archived-2026-10-24-finite-configuration-census-checkpoint).
+The cleanup review found no newly redundant flat-Life publisher: the shared
+routing helper still serves item-attack coverage, the base helper also serves
+catalyst laws, and numeric/native tests retain independent rounding, occurrence
+and refusal evidence. Retire those helpers only with their last real consumer;
+do not remove useful validation just because a support-domain law now exists.
 
-**Next executable work:** prioritize the selected flat-Life Modifier `3100`
-intrinsic source domain while pending design decisions remain open. Its native
-six-program owner already exists; Original05 items 19/20/26/27 produce five uses
-because ring 26 repeats. Review every live policy emitter against the fixed-Life
-grammar/guard and the retained `flat-life`, `flat-life-admission`,
-`flat-life-scalability` and `flat-life-routing` evidence. Only after full
-constructor/output proof, add its Known authored-assignment domain using the
-existing contract; preserve magnitude, encoding, recipient and routing gaps.
-Check amulet-copy behavior, repeated item occurrences, all existing outputs and
-whole historical schema/rule/query equality. This proves only one selected
-family's direct-channel disjointness from revival, not complete Life or incoming
-revival coverage. Defer unselected passive 15358 (+8 revival plus +10% minion Life)
-until counterfactual breadth actually enables a required closure proof.
+Original05 retains five selected input obligations plus numerical/legality work;
+**0/5 builds are complete**. This checkpoint narrows a real selected-source gap,
+without weakening any completion gate. Publication and test evidence is under
+`runs/flat-life-domain-checkpoint`. The preceding revival/configuration/reward
+checkpoint is preserved in [history](implementation-history.md#archived-2026-10-24-skeletal-revival-and-configuration-dispatch-checkpoint).
+
+**Next executable work:** complete the selected physical-item source/output
+matrix, starting with global-minion-level Modifier `30ca`. Items 21 and 23 each
+supply its +1 record; its contribution feeds Sniper's effective-input preparation.
+Review every live emitter and the complete nested GemProperty/Minion construction
+and transport using the retained global-minion-gem-level, category, scalability,
+routing and amulet-copy evidence. Prove the current 24 roll inputs and three
+admitted categories, including integer bounds, zero, duplicate records, unknown
+siblings and source flags. The historical eleven-line witness alone is not a
+universal admission proof. Retire `canonical-input-admission-unproved` only if
+that full proof succeeds; retain the other gaps and all six programs/recipients.
+Group genuinely shared constructor/transport families through reusable test
+helpers instead of duplicating a large module for each ID. Stop at a complete
+finite disposition of the selected physical sources, then prioritize the selected
+Skill/descendant families. Defer unselected passive 15358 until counterfactual
+breadth enables a required closure proof.
+
+The current manual audit finds **at least 25 selected root definitions** missing
+intrinsic support-domain coverage after this checkpoint:
+
+| Selected family | Missing definitions | Remaining work |
+| --- | ---: | --- |
+| Item templates | 4 of 8 | Iron Crown, Cryptic Leggings, Solar Amulet, Sapphire Ring |
+| Rolled modifiers | 8 of 9 | Minion level `30ca`, movement speed `30e6`, Spirit `314d`, cold resistance `2542`, charm slots `3172`, flask charges/sec `318c`, Firebolt grant `31c6`, spell damage `31ad`; nine physical records across ten equipment uses |
+| Passives | 6 of 57 | Source nodes 10561, 14686, 23265, 26926, 53324, 53795 |
+| Primary Skills | 6 of 10 | Firebolt, Frost Bomb, Ice Nova, Pain Offering, Sand Djinn, Water Djinn; eight active occurrence roots |
+| Encounter | 1 | Current encounter `31d1` |
+
+All 23 physical Gem occurrences and five current skill-usage policy definitions
+already have domains. This is a lower bound from exact selected-root joins, not
+an execution-plan census: supplied Actors and ActionOutputs can add unresolved
+descendants. The build has no ready composed request yet. **Found work:** expose
+the complete selected-provider inventory through the existing composition path
+once that request can be constructed; do not create a second provider graph.
+Source-domain closure still requires actual incoming membership, selected owner
+completeness and staging/readiness before the evaluation bundle can execute.
+
+The eight modifier families have thirteen live Import emitters. Reuse the
+authenticated Item/ModParser/ModStore boundaries, but preserve separate proof
+of each payload, guard, category/property projection and receiver:
+
+| Modifier | Current emitters | Existing evidence under `data/owned/poe2/3887ae68/` |
+| --- | ---: | --- |
+| Minion level `30ca` | 1 fixed | `global-minion-gem-level`, `category-inputs`, `minion-level-scalability`, `ordinary-item-routing`, `amulet-copy-consumer` |
+| Movement speed `30e6` | 1 fixed | `movement-speed`, `leggings-declarations`, `leggings-placement` |
+| Spirit `314d` | 1 fixed + 1 ranged | `fixed-spirit`, `ranged-spirit`, `amulet-life-copy`, `player-spirit-pool/consumer.json` |
+| Cold resistance `2542` | 2 fixed + 2 ranged | `cold-family-inputs`, `cold-category-inputs`, `sapphire-item-inputs`, `cold-item-delivery` |
+| Charm slots `3172` | 1 ranged | `fine-belt-modifiers`, including its scalability certificate and `charm-capacity*.json` |
+| Flask charges/sec `318c` | 1 fixed | `fine-belt-modifiers`, including `flask-charge-delivery*.json` |
+| Firebolt grant `31c6` | 1 fixed + 1 ranged | `firebolt-item-grant`, `ashen-staff-item-inputs`, `generated-firebolt-dispositions` |
+| Spell damage `31ad` | 1 fixed | `spell-damage-modifier` and the retained Ashen Staff source witness |
+
+Plain numeric records can share name-preserving transport evidence. Nested
+GemProperty records and real Skill grants need their own complete constructors
+and descendants; a common parser entry does not certify those semantics.
+Keep family guards distinct: fixed/ranged Spirit differ; two Cold source roles
+remain unproved; fixed Firebolt allows zero while ranged endpoints require
+1..100; Flask retains precision 60/display 2 and BASE zero; Charm has a 25th tag
+input. Reuse a private authenticated source bundle and typed family cases, not a
+new public parser/model or an assertion that every branch is already supported.
 
 In parallel, finish the combined source lifecycle/writer proof for
 the 448 callback candidates and independently resolve the 34 excluded plus
@@ -4237,6 +4260,8 @@ These are retained obligations, not extra competing phases.
 | PoB updates | One pin manifest, offline extraction and selective differential tests, stable semantic anchors and a pin-bump runbook; no automatic network/source work in cargo build |
 | Repository/release hygiene | R0-R4 dependency boundaries, deduplicated tests/artifacts/docs, one MSRV policy and locked workspace dependencies; batch Windows formatting by package while workspace-wide `cargo fmt --all` exceeds the process command-line limit (OS error 206); R6 release packaging, dependency audit and measured release-profile tuning. Git auto-packing at `aee2f494` reported many unreachable loose objects; inspect recovery/retention needs before any separate repository maintenance, with no automatic pruning during implementation |
 | Repeated offline recipe validation | Exact-input, same-limit reuse is implemented and validated for evaluation-bearing authoring. Keep all shared aggregate and dependency checks. The current metadata-only release has no evaluation bundle and gets no performance claim; measure actual evaluation-bearing builds before broader optimization |
+| Malformed-source Import cost | Profile the reward-inventory contrast failures and remove repeated scans where confirmed; retain the 2,000,000 work cap, exact ownership and atomic refusal. Unknown Build child reaches Pending without the policy but the cap with it; unknown Spec child and namespaced Build reach the cap under both. Deferred behind selected-source completion; do not relabel capped cases as semantic proof |
+| Complete selected-provider diagnostics | Once a ready composed request exists, inventory exact selected roots and descendants through that same graph. The current manual 25-root lower bound excludes unresolved descendants; no second provider traversal or false complete-build count |
 | Mutable authoring-head promotion | Deferred until a shared mutable head is introduced; the first approved checkpoint publisher uses an explicit immutable predecessor. Implement actual stored-predecessor CAS/concurrency control and interruption tests before exposing head promotion; read-compare-rename alone is insufficient |
 | Canonical allocation-history distribution | Compact storage cutover replaces the first-generation source bridge with a complete checked snapshot and pinned archive/checkpoint digests. Fresh extraction must verify before current-source replay. Preserve the ledger and semantic input; no historical source-replay chain, silent rebootstrap, machine-local dependency or second ledger importer |
 

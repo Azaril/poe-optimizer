@@ -80,7 +80,7 @@ The name ledger and registry are unchanged. Only the presentation flag and its
 constructed tree normalization binding change; the same three runtime files
 listed above have new bytes. No numerical or completion state changes.
 
-Current tracked sources extend the same intrinsic revival body to the exact
+The preceding tracked sources extend the same intrinsic revival body to the exact
 Arsonist, Frost Mage and Reaver Skills and their physical Gem grants. This adds
 three program occurrences and six query members with all Partial gaps retained.
 The verified checkpoint is
@@ -91,21 +91,32 @@ Compared with the Timeless checkpoint, only `rules.json`, `manifest.json` and
 `release.json` change. Schema, ledger, registry, Import data and queries retain
 their bytes. No new allocation or complete-build admission is introduced.
 
+Current tracked sources additionally declare the intrinsic support-source domain
+of the independently reviewed [fixed-Life modifier](flat-life-support-domain/README.md).
+Its six numerical programs and all four owner gaps remain unchanged. The verified
+checkpoint is `5f3ea0e0f5a7a91207827cdb5effe16230df509f077a278fa802c982ed4299ba`,
+runtime input `de3998a03a2aa932a8a5766c37a63c9ee4eedd2c974d1ecf5730272345ca596a`,
+with release receipt SHA-256
+`6b6b654eaeb73e2c629db7a6e4e8a1ac8244c6c0bef9b6f352573942a4517b92`.
+Only `rules.json`, `manifest.json` and `release.json` change from the preceding
+revival publication. All other runtime artifacts, the ledger and registry remain
+byte-identical; no new allocation or complete-build admission is introduced.
+
 | Current tracked-source build | Count or bytes |
 | --- | ---: |
 | Declared source files | 2,802 |
-| Encoded source bytes | 6,731,152 |
-| Decoded source bytes | 46,030,245 |
+| Encoded source bytes | 6,731,170 |
+| Decoded source bytes | 46,030,483 |
 | Root manifest bytes | 184,376 |
 | Runtime files | 18 |
-| Runtime bytes | 53,665,506 |
+| Runtime bytes | 53,665,744 |
 | Schema artifact bytes | 19,774,085 |
 | Checkpoint and name-ledger bytes | 455,218 |
 
 The saved verifier accepts the current checkpoint, and an independent build
 reproduces all twenty files byte-for-byte: eighteen runtime files, the name ledger
 and checkpoint receipt. Evidence is in
-`runs/configuration-dispatch-checkpoint/release-verified.json` and
+`runs/flat-life-domain-checkpoint/release-verified-02.json` and
 `release-equivalence.json`; these local records are not build inputs. The canonical
 `71ff4429` snapshot above remains the allocation predecessor, not the latest
 content. Build the tracked source to obtain the current release. Validation and

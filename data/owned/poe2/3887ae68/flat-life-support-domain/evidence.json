@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "modifier": "def.0000000000003100",
+  "all_live_emitters": [
+    "fixed-life"
+  ],
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/flat-life/item-rule.json",
+      "bytes": 9321,
+      "sha256": "99794b52e89edd3ee6d5bafb1ae91748a47b3f4792a1e70eef1b97f89e182d5d"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/flat-life/source-condition.json",
+      "bytes": 351,
+      "sha256": "a6b8ca5f96565c2dd4a0cd8d03c424cc47da4c43835f0a87d439ee52e5777eda"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/flat-life/bindings.json",
+      "bytes": 16662,
+      "sha256": "b33f62a6b93b713db1a03482bebc65f40bf007ce9a1a0956a3d2d8c679e5eb61"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/flat-life-admission/context.json",
+      "bytes": 43126,
+      "sha256": "0902fda14c738a2276e7542c8b3fa3862322987be2c957400fd040ce9ecc6101"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/flat-life-admission/source-vectors.json",
+      "bytes": 17598,
+      "sha256": "17523ff5877a128861bbd1f659c6e3fef194696daf52b850ee4e7a950c197e24"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/flat-life-scalability/source-vectors.json",
+      "bytes": 17192,
+      "sha256": "46d1e076ece76682d54ddbd670f82a75f99f47150773de64b28b344ab3cf9a9a"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/amulet-life-copy/consumer.json",
+      "bytes": 62048,
+      "sha256": "b30100c76ac35482439c9aefdd7166792fbbe105393486e54d239696eb4d213a"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/amulet-life-copy/source-vectors.json",
+      "bytes": 9779,
+      "sha256": "bc19c725699d3fb117d78c13106c31208d8e7be25301157b38d04e24031a6ce2"
+    }
+  ],
+  "sources": [
+    {
+      "path": "src/Classes/Item.lua",
+      "archive": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/Item.lua.gz",
+      "archive_bytes": 24796,
+      "archive_sha256": "f1d4fc1a06d7162d426e9b1d1acd3519e387eeeb29cafc3fa17f221dc020d1ee",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "archive": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/ModParser.lua.gz",
+      "archive_bytes": 104767,
+      "archive_sha256": "a80fda56f9bd3cff9dd210a2a9718c6ccde957beb18737e0c715f41ea0349928",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "archive": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/CalcSetup.lua.gz",
+      "archive_bytes": 21345,
+      "archive_sha256": "9bd2988b89e91f51aae8cd09e3bae5f08030f67f1f652bb5eba73a8f6050c0d0",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "archive": "data/owned/poe2/3887ae68/mana-supplier-sources/equipment-ItemTools.lua.gz",
+      "archive_bytes": 4034,
+      "archive_sha256": "c75ac1e059f461cbdaa927e5ef597cbe6e76705bfe9206bf276b812d74e877ce",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "archive": "data/owned/poe2/3887ae68/life-base-domain/ModDB.lua.gz",
+      "archive_bytes": 2575,
+      "archive_sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+      "archive_bytes": 7158,
+      "archive_sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    }
+  ],
+  "spans": [
+    {
+      "role": "item-parse",
+      "path": "src/Classes/Item.lua",
+      "first": 468,
+      "last": 1803,
+      "bytes": 52766,
+      "sha256": "c958138f3452b7db7ef73c6f9326512121966e934a05f8623a73195796350f89"
+    },
+    {
+      "role": "active-records",
+      "path": "src/Classes/Item.lua",
+      "first": 2198,
+      "last": 2220,
+      "bytes": 911,
+      "sha256": "024e6b7cd268e28f5213bae7a04ec91150ee0ee819d0fbc445a5caa41dd038fe"
+    },
+    {
+      "role": "ranged-records",
+      "path": "src/Classes/Item.lua",
+      "first": 2682,
+      "last": 2692,
+      "bytes": 397,
+      "sha256": "422dd2d5b5602b1495f5e3388e021b7c4e16ffb8f869256ad30eeb6c14e5f18e"
+    },
+    {
+      "role": "parser-form",
+      "path": "src/Modules/ModParser.lua",
+      "first": 72,
+      "last": 72,
+      "bytes": 37,
+      "sha256": "c51bd48249f24e5035a5f6fed09ae56342faad874b5643e8efd44bffe580177b"
+    },
+    {
+      "role": "parser-name",
+      "path": "src/Modules/ModParser.lua",
+      "first": 178,
+      "last": 178,
+      "bytes": 27,
+      "sha256": "7ac8a18aa8c57b351779d6dea495a16395f712fb0f1361191432de474427f39a"
+    },
+    {
+      "role": "parse-mod",
+      "path": "src/Modules/ModParser.lua",
+      "first": 6619,
+      "last": 7036,
+      "bytes": 14115,
+      "sha256": "cd82fd500785137c465ec1b4448030a0f7efe88fcecbd40893a3201248b32151"
+    },
+    {
+      "role": "parser-entry",
+      "path": "src/Modules/ModParser.lua",
+      "first": 7404,
+      "last": 7423,
+      "bytes": 653,
+      "sha256": "f94429b794236d77926a45cbb0faf74ecd651d9a7879de91a6de90cb783fa414"
+    },
+    {
+      "role": "value-format",
+      "path": "src/Modules/ItemTools.lua",
+      "first": 45,
+      "last": 65,
+      "bytes": 1062,
+      "sha256": "703eefee758bb48cc7c75a092ab3a330acb59d6f2cdba1c050f08dfbd109cc07"
+    },
+    {
+      "role": "apply-range",
+      "path": "src/Modules/ItemTools.lua",
+      "first": 130,
+      "last": 338,
+      "bytes": 8241,
+      "sha256": "8c17dc6958009c62a31be797f23fd94bff1e245ce8965678a59f7283ff2f5ab6"
+    },
+    {
+      "role": "database-constructor",
+      "path": "src/Classes/ModDB.lua",
+      "first": 25,
+      "last": 29,
+      "bytes": 90,
+      "sha256": "132f8fa41862a09285df7145a04050a2bbde854fa92f3ff1a8a6660f0cc711a8"
+    },
+    {
+      "role": "database-add",
+      "path": "src/Classes/ModDB.lua",
+      "first": 31,
+      "last": 37,
+      "bytes": 148,
+      "sha256": "ee630c4e523799697498a51aa49801f1bb9ce58da18bd1e8e0efe5949ce02bf9"
+    },
+    {
+      "role": "copy-list",
+      "path": "src/Classes/ModStore.lua",
+      "first": 121,
+      "last": 125,
+      "bytes": 110,
+      "sha256": "155d37461469f0df997e36f48d6e454a80fd113dfa7d9ac3d1ebbd1e3422751e"
+    },
+    {
+      "role": "scale-list",
+      "path": "src/Classes/ModStore.lua",
+      "first": 127,
+      "last": 135,
+      "bytes": 212,
+      "sha256": "04190bc2a11e1c7c872859177828a9345f79f515e2b06c8a3fb3e99d41ab9d51"
+    },
+    {
+      "role": "amulet-copy",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1661,
+      "last": 1669,
+      "bytes": 515,
+      "sha256": "5858c4da50d915e713804e0550bc5b431a1ab41229f1d41a95ead088c3aeba57"
+    },
+    {
+      "role": "talisman-route",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1397,
+      "last": 1403,
+      "bytes": 396,
+      "sha256": "2fa723f9546f0f6ebf189d56d4d9b16c2e0ec69337c3e4fc7a3501e63ff8aafa"
+    }
+  ],
+  "whole_item_coverage": false,
+  "numerical_completeness": false,
+  "incoming_contribution_completeness": false
+}

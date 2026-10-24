@@ -697,6 +697,13 @@ retain separate supplying occurrences. Certifying a template's support-source
 domain cannot certify those suppliers, move their grants onto the template or
 erase intrinsic numerical outputs. Reuse authenticated source-family evidence
 without treating a selected item's display name as runtime authority.
+For a parsed modifier family, certification covers every live Import emitter,
+its admitted grammar and guards, the complete source construction, and every
+copy/scale transport that can carry its records. A second emitter or weakened
+guard invalidates that proof even when the selected build still imports. Keep
+the modifier's numerical outputs and exact recipient rules independently
+checked; a support-source declaration cannot close their Partial coverage.
+Repeated equipment uses retain distinct occurrences, including copied effects.
 Conditional definitions require evidence for every admitted branch, including
 whole-list replacements, rather than only the selected character's branch.
 Intrinsic source absence does not close a contribution-query membership or the

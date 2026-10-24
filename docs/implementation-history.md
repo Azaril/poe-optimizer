@@ -6,6 +6,89 @@
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
 
+## Archived 2026-10-24 skeletal revival and configuration dispatch checkpoint
+
+**Current checkpoint:** tracked KDL now supplies intrinsic revival for the exact
+Arsonist, Frost Mage and Reaver Skills through their physical Gem grants, reusing
+the Sniper body and existing three Stats. This adds three program occurrences
+and six query members with no allocation or coverage promotion. The seven revival
+producer instances retain exact recipients and eleven effects; all outer, group
+and owner Partial gaps remain. See the [source proof and limits](../data/owned/poe2/3887ae68/revival-producers/README.md).
+
+The atomic authoring workflow publishes verified checkpoint
+`82677b8da2f00142276ba573854f00242dde4f9448246baca804524fed4d0b9a` from the canonical
+73-name predecessor. Its runtime input is
+`cc25c852ad3918a6fa610fe423890bb7d89e3c2fe03f1be264fb3a4ecd0004ea`.
+An independent build reproduces all twenty files byte-for-byte. Only `rules.json`,
+`manifest.json` and `release.json` change from the Timeless release; schema, ledger,
+registry and Import artifacts remain byte-exact. The [canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md)
+records current bytes and identities. Historical restoration extends its exact
+subtraction whitelist by three owner/program pairs and preserves every old supply.
+
+The [configuration packet](../data/owned/poe2/3887ae68/configuration-census/README.md)
+now has four complete normal-load dispatcher contrasts for check/count/list and
+count-allow-zero controls. They distinguish false, zero, absence, placeholders
+and UI fallback while checking complete records and source order. All 33 cases
+agree in fresh JIT-off/on replays: 42,992,270 bytes, SHA-256
+`024e67e96349ce0b993e571c17c37b030886e28e77bb30961619892d32dd083a`.
+The reference target passes three tests in 357.82s; two existing optional witnesses
+remain ignored. Original Lua observer and source catalogue pins are unchanged.
+The prior 23- and 29-case captures remain historical; current evidence SHA-256 is
+`602cf5a9feb24c8646bee3bf77e7595c03f77d12537c1ebc848c5aae6dbe2e0a`.
+
+A realistic-size Rust inventory law exercises 448 callback controls plus twenty
+retained-Scenario responsibilities across two presets. It checks the exact
+work-budget boundary, atomic one-short refusal, duplicate-name identity and
+selected/unselected Input/Placeholder ownership while preserving every other
+field and replay identity. This is a synthetic contract fixture, not a production
+source-semantics certificate; its focused run passed in 0.37s. The real policy
+remains 38 rules with `inventory=None`.
+
+The obsolete character-reward publication test and its exclusive staging helper
+are removed. Three maintained release laws cover exact Spec-to-Character
+ownership, five unchanged originals and sixteen source contrasts. The actual
+policy-absent comparison independently accounts for Build-header and Timeless
+frame-authority deltas; it preserves all other Draft/sidecar/query/allocator
+state and never reconstructs the obsolete predecessor chain. Existing Import
+and optional PoB source laws remain. Thirteen real-source contrasts reach the
+full semantic inverse; three deliberately malformed frames reach the existing
+work ceiling. Unknown Build child has an asymmetric result (policy absent:
+Pending; enabled: work-limit); unknown Spec child and namespaced Build refuse
+under both policies. Preserve those exact bounded outcomes and the successful
+side's Pending reward state, without treating refusals as semantic proof.
+**Found work:** profile malformed-source fallback cost and remove repeated scans
+where confirmed, retaining the 2,000,000 hard cap and exact ownership/atomicity.
+This does not block the
+five unchanged originals and is deferred behind selected-source completion.
+Validation: 175 Authoring library tests and eight CLI tests pass. The full release
+run passed 216 laws; its two new harness failures were repaired (fixture-relative
+path, stale historical Config reward count and explicit malformed-source work
+outcomes), and both pass in focused reruns. All 218 release laws therefore have
+passing results; the final contrast replay took 129.97s. No production limit or
+semantic assertion was relaxed. Import normalization passes 442 tests in 3.20s
+with one existing ignored witness. Strict Clippy passes Authoring all targets/
+features (3.93s), Import normalization (12.80s) and the PoB reference target
+(1.00s). Scoped formatting, UTF-8/LF, whitespace, independent reviews and all nine
+protected draft hashes pass. Logs retain the initial failures and corrected
+runs; no failed run is relabelled as successful.
+
+Latest anonymous CI snapshot, 19:23:25 UTC: repair run
+[40106355676](https://github.com/Azaril/poe-optimizer/actions/runs/40106355676)
+has seventeen successful jobs, Windows CLI shard 2 still running, and no failures.
+The `898b16cc` run [40122912844](https://github.com/Azaril/poe-optimizer/actions/runs/40122912844)
+is pending with no jobs; intervening pending runs including `cd176f6a` were
+cancelled without jobs. Hosted completion is not claimed. Slow two-profile shard
+cost remains tracked independently of failures.
+
+Original05 retains all five selected input obligations plus numerical/legality
+work; **0/5 builds are complete**. No final revival duration, neutral contributor,
+query-dependent reservation or numerical parity exception is introduced. Current
+logs and publication evidence are under `runs/configuration-dispatch-checkpoint`;
+fresh reference reports are under `runs/configuration-dispatch-source-02`.
+The preceding source-census checkpoint is archived in
+[history](implementation-history.md#archived-2026-10-24-finite-configuration-census-checkpoint).
+
+
 ## Archived 2026-10-24 finite configuration census checkpoint
 
 **Current checkpoint:** the complete finite configuration source inventory is now

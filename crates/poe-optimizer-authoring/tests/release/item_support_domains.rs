@@ -167,10 +167,19 @@ fn four_exact_template_domains_preserve_intrinsic_and_numerical_boundaries() {
         assert_eq!(owners.len(), 1);
         assert!(!owners[0].programs.is_complete());
     }
-    assert!(providers.iter().all(|row| !matches!(
-        row.owner,
-        SchemaSubject::Definition(DefinitionAddress::Modifier(_))
-    )));
+    // Item-template admission never lends authority to its rolled modifiers.
+    // Only the separately proved fixed-Life family has its own domain now.
+    let modifiers: Vec<_> = providers
+        .iter()
+        .filter(|row| {
+            matches!(
+                row.owner,
+                SchemaSubject::Definition(DefinitionAddress::Modifier(_))
+            )
+        })
+        .cloned()
+        .collect();
+    assert_eq!(modifiers, super::flat_life_support_domain::declarations());
     assert!(!rules.contribution_queries.as_ref().unwrap().is_complete());
     assert!(release.evaluation().is_none());
 }

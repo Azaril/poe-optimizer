@@ -1052,6 +1052,15 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
             });
         }
     }
+    // The fixed-Life source proof admits this exact Modifier's intrinsic
+    // support domain; it does not complete its numerical or recipient rules.
+    expected_domains.push(SupportSourceDomainDeclaration {
+        owner: SchemaSubject::Definition(DefinitionAddress::Modifier(ModifierDefId::new(
+            ns.clone(),
+            key("3100"),
+        ))),
+        domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+    });
     let domains = &mut preserved.support_discovery.as_mut().unwrap().providers;
     let prior_domains = &expected.support_discovery.as_ref().unwrap().providers;
     assert_eq!(domains.len(), prior_domains.len() + expected_domains.len());

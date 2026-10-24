@@ -34,6 +34,10 @@ mod engine_fixtures;
 mod evaluation_content;
 #[path = "../../../tests/support/owned_evaluation_release_fixture.rs"]
 mod fixture;
+#[path = "release/flat_life_support_domain.rs"]
+mod flat_life_support_domain;
+#[path = "release/flat_life_support_source.rs"]
+mod flat_life_support_source;
 #[path = "release/gem_support_domains.rs"]
 mod gem_support_domains;
 #[path = "release/generated_singleton_usage.rs"]
@@ -2084,6 +2088,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         .chain(player_support_domains::declarations())
         .chain(item_support_domains::declarations())
         .chain(skeletal_support_domains::declarations())
+        .chain(flat_life_support_domain::declarations())
         .collect();
     assert_eq!(domains.len(), prior_domains.len() + additions.len());
     for added in &additions {
