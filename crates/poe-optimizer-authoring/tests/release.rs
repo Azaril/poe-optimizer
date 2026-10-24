@@ -72,6 +72,8 @@ mod usage_support_domains;
 mod view_support_domains;
 #[path = "release/view_support_source.rs"]
 mod view_support_source;
+#[path = "release/weapon_profiles.rs"]
+mod weapon_profiles;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{

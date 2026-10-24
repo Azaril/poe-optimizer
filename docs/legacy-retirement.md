@@ -63,13 +63,19 @@ ownership consumer retains its existing tests through the shared parent binding.
 The obsolete intrinsic CLI publication target is deleted after moving its useful
 optional exporter/digest/no-clobber law into acquisition. Maintained class/source
 and declaration laws already own its semantic proofs. Its shared predecessor and
-two live weapon/extension callers remain until their own migration; this
+remaining extension caller stay until that consumer migrates; this
 does not yet remove that production compiler.
 The item-base publication target is also deleted after transferring its complete
 1,756-template identity/capability/Partial-coverage and five-original item laws
 to the maintained release. Acquisition retains the real exporter and no-clobber
 check; Import retains compiler-negative laws. Test-only pinned evidence views
 avoid importing the obsolete compiler DTOs into the maintained harness.
+The weapon-profile publication root is now deleted too. Three maintained release
+laws cover every profile, field policy, exact template join and native output;
+optional acquisition retains both catalog outputs and all-file no-clobber.
+The shared intrinsic predecessor and intrinsic/item/weapon compilers remain for
+`owned_extension_cli`, whose Cleric whole-plan checks have not migrated. The nine
+independent Import compiler laws remain, including synthetic present-zero reload.
 
 Authoring's private schema size serializer is removed. Data owns one artifact
 projection for publication and borrowed append preflight, with separate streaming

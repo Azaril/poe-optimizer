@@ -31,25 +31,21 @@ cargo run --features pob -- export-owned-weapon-profiles `
   --output runs/weapon-profiles-export
 ```
 
-Generate the [item-base predecessor](../item-bases/README.md), then run the native host:
+Build the maintained KDL/DSL release using the
+[checked authoring predecessor](../authoring-genesis.md). That release already
+contains these raw-profile rules. The catalog and conversion policy here are
+pinned acquisition and regression evidence, not a second authoring workflow.
 
-```powershell
-cargo run --no-default-features -- compile-owned-weapon-profiles runs/owned-item-bases-package `
-  --base-catalog data/owned/poe2/3887ae68/item-bases/catalog.json `
-  --catalog data/owned/poe2/3887ae68/weapon-profiles/catalog.json `
-  --policy data/owned/poe2/3887ae68/weapon-profiles/policy.json `
-  --definitions data/owned/poe2/3887ae68/weapon-profiles/definitions.json `
-  --output runs/owned-weapon-profiles-package
-```
+Three Rust laws in the maintained Authoring release suite cover all 337 profiles,
+all 1,756 template bindings, the 14 fields and their units/defaults/omissions,
+exact effects and Partial owners. Each forward/reverse pass with fresh/reused
+scratch checks 1,762 source values, 2,652 zero defaults, 304 reload omissions and
+337 reload-presence flags. Authored zeros remain distinct from absent fields.
+The optional acquisition CLI suite reproduces both exact catalogs and checks
+that a repeated export leaves every output file unchanged.
 
-Publication uses compact successor format v2: canonical registry/schema/rules/routing
-files are the single recipe representation. Bundle membership is closed: keep README
-files, acquisition evidence and run receipts outside the published directory. The checked loader reconstructs and validates
-the recipe and manifest; no duplicate `recipe.json` is shipped. Existing v1 bundles remain
-readable with unchanged identities. Both prior recipe and remaining v2 transition inputs
-are separately bounded at 64 MiB each (at most 128 MiB streamed in total);
-published files still have one 64 MiB aggregate limit. All 110 original
-queries, registry history, source policies and tree evidence survive the transition.
-
-All new tooling and tests are Rust. Existing Python tooling/tests are unchanged; their
-coherent replacement is tracked by architecture migration milestone T1.
+The old weapon-profile CLI publication test is removed. Its compiler and shared
+predecessor remain temporarily because the extension harness still consumes them;
+the nine independent Import compiler laws also remain. Their final retirement is
+tracked under R1/R4 in the [implementation plan](../../../../../docs/implementation.md).
+These component checks do not establish final damage or complete-build parity.

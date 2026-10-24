@@ -61,6 +61,14 @@ useful legacy-exporter law transfers all pass. Two optional PoB audit targets
 compile and remain explicitly ignored. A disk-full failure in the historical
 CLI chain was resolved by verified cache cleanup and a passing isolated replay.
 No complete build or binary-runtime milestone is claimed here.
+The compact cutover is committed and pushed as `aee2f494`. This checkpoint
+transfers the weapon-profile leaf's useful laws into the maintained release and
+acquisition suites, then deletes its obsolete CLI publication root. Production
+data and build coverage stay unchanged. All 164 Authoring release tests, nine
+retained Import weapon laws, five optional acquisition tests, the native CLI
+exclusion check and strict scoped Clippy pass. The first compile exposed a test
+assertion comparing a typed source-system enum with a string; it now uses the
+existing enum variant. No validation check was relaxed.
 The delivery driver also has a validated private repair: exact receiving
 effects, source memberships, summoner dependencies and prepared outputs determine
 applicability preparation. An unused selection container no longer needs invented
@@ -115,7 +123,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; current checkpoint compacts standalone schema artifacts, separates release transport/semantic bounds, publishes a complete allocation snapshot and retires two obsolete Python export paths |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer and its full affected checks are complete |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -125,7 +133,7 @@ silently become a second supported implementation.
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
 | Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 69 Stats, one Sniper initial-type program and 350 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,336 source domains (1,307 Known, 29 Unmapped). Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally. The later `d490eb54` hosted workflow is successful; this compact cutover still requires its own run |
-| CI | At 02:39 UTC October 24 (October 23 EDT), `d490eb54` run `40011474882` is successful: all twenty jobs passed, with no timeout or failure. Main `8f91c7b1` run `40045082862` is running (eight passed, ten running, none failed among eighteen jobs at that snapshot). Earlier `96e5533e` also passed. Main-branch serialization preserves the running revision and coalesces pending revisions; this compact-format checkpoint still requires its own hosted run |
+| CI | At 02:42 UTC October 24 (October 23 EDT), `d490eb54` run `40011474882` is successful. `8f91c7b1` run `40045082862` is running (eight passed, ten running, none failed among eighteen jobs). Pushed compact checkpoint `aee2f494` has pending run `40055284214`, with no jobs started. Main-branch serialization preserves the running revision and coalesces pending revisions; local validation does not imply hosted success |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First extract and verify the allocation predecessor using the
@@ -756,7 +764,7 @@ helper repair; the earlier runs above describe its predecessor layout. Logs:
 `runs/resource-equipment-shared-native-tests.log` and
 `runs/resource-equipment-shared-final-clippy.log`.
 
-Current clean-checkout metadata has 250 runnable CLI targets, selected exactly
+The resource/equipment checkpoint's clean-checkout metadata had 250 runnable CLI targets, selected exactly
 once across four shards (64/62/62/62) in both feature profiles, plus one separately
 accounted Cargo build-script dependency. Both new suites are selected once and
 all 25 retired roots are absent. The two protected untracked root tests are
@@ -772,6 +780,13 @@ absent, and the two protected untracked root drafts are excluded only from this
 clean-checkout simulation. Metadata and plans are recorded in
 `runs/schema-storage-clean-metadata.json` and
 `runs/schema-storage-shard-plans.json`.
+
+After weapon-profile retirement, fresh metadata and the existing shard planner
+select all 248 runnable targets exactly once, as 63/62/62/61 in both feature
+profiles, plus the separate build-script dependency. The retired root is absent;
+only the two protected untracked drafts are excluded from this clean-checkout
+simulation. Evidence: `runs/weapon-profile-retirement/clean-metadata.json` and
+`runs/weapon-profile-retirement/shard-plans.json`. No hosted speedup is claimed.
 
 Next audited R0 candidate (not yet implemented): nine roots share the
 `owned_global_minion_level_native` closure: amulet-copy consumer, Fine Belt,
@@ -1077,15 +1092,15 @@ law now lives in `tests/owned_acquisition_cli.rs`, retaining the exact catalog/d
 nine exported Classes and full-directory second-run no-clobber checks. The redundant
 two-test ordinary publication chain is removed. Compiler-negative cases remain independently
 covered by Import's `owned_intrinsic_attack` tests. Keep the shared intrinsic
-predecessor until `owned_weapon_profiles_cli` and `owned_extension_cli` move;
-those live callers still block deleting its production
+predecessor until `owned_extension_cli` moves;
+that live caller still blocks deleting its production
 compiler. The Class compiler also retains eight Import unit laws. Moving the
 allocator/publication implementation prematurely would still create cycles through
 the seven allocator families and release revision/migration. Historical descriptor
 ordering, intermediate operation versions and Pending-all counts are intentionally
 retired; maintained named declarations instead require permutation-stable allocation.
-This does not retire the production intrinsic compiler while those two callers
-remain. All nine retained Import intrinsic laws pass (9m04s compilation / 3.47s
+This does not retire the production intrinsic compiler while that caller
+remains. All nine retained Import intrinsic laws pass (9m04s compilation / 3.47s
 execution; `runs/intrinsic-retirement-import-tests.log`). Maintained Authoring
 class/source and checkpoint laws pass in the complete 334-test package run.
 
@@ -1107,18 +1122,24 @@ its exact output/no-clobber checks (8m33s compilation, 1.81s execution).
 The native-only CLI help exclusion law also passes (2m33s compilation, 0.28s
 execution); optional acquisition commands remain absent from that profile.
 
-Next transfer the 337 weapon profiles and all 14 field/default/omission/presence/
-unit laws, move that exporter into acquisition and remove its root. These
-whole-profile laws are not yet maintained Authoring tests: graph-equivalence and
-synthetic Import checks support transfer, but cannot substitute for it.
-The follow-up audit fixes the scope: one module in the existing Authoring
-`release` harness must preserve 1,762 source values, 2,652 zero defaults, 304 reload
-omissions and 337 presence flags (33 true, 304 false), including authored zeros
-and fresh/reused/reverse scratch. Acquisition keeps both exact catalog outputs
-and whole-directory no-clobber; its native-only help check must exclude the weapon
-export command. Delete only the replaced root. Keep the nine Import refusal laws,
-including synthetic present-zero reload, and the intrinsic predecessor still
-used by `owned_extension_cli`. This is the next independent leaf retirement.
+The weapon-profile transfer is implemented in the existing Authoring `release`
+harness. Three laws authenticate the four evidence files and their bindings,
+all 1,756 exact template mappings and Partial owners, 337 raw-profile programs
+and 1,419 absent programs, and all 14 field/default/omission/presence/unit policies.
+Every forward/reverse pass with fresh/reused scratch checks 1,762 source values,
+2,652 zero defaults, 304 reload omissions and 337 presence flags (33 true, 304
+false), with separate authored-zero counts. Acquisition retains both exact output
+catalogs and whole-directory no-clobber; native help excludes the exporter.
+Only `tests/owned_weapon_profiles_cli.rs` is deleted. The nine Import refusal laws,
+including synthetic present-zero reload, and the shared intrinsic predecessor
+used by `owned_extension_cli` remain. The complete Authoring release suite passes
+164 tests (3m11s compilation, 18.73s execution); retained Import weapon laws pass
+all nine (5.01s execution). Optional acquisition passes all five tests, including
+the transferred law (2m34s compilation, 1.81s execution); native acquisition passes
+its exclusion law (2m34s compilation, 0.28s execution). Strict Authoring-release
+and optional-acquisition Clippy, scoped formatting, diff checks and all nine
+protected draft hashes pass. Logs: `runs/weapon-profile-retirement/*.log`.
+The existing optional-PoB LNK4098 linkage warning remains tracked under R4.
 
 After those two leaf retirements, `owned_extension_cli` still consumes the shared
 intrinsic predecessor and intrinsic/item/weapon compiler commands; its defence
@@ -1370,6 +1391,16 @@ verify the snapshot through the normal reader, then use it as predecessor.
 Historical source replay is no longer the normal allocation-history workflow;
 local checkpoint outputs are evidence only.
 
+The next declaration must first move the maintained release-test harness from
+bootstrap allocation to the checked canonical checkpoint. Its current 69-name
+bootstrap assumption is valid only for the first allocation generation. Adding
+an earlier-sorting name must preserve all existing identities and allocate exactly
+the new declaration through the stored ledger. Load the pinned archive with a
+maintained Rust archive library and the existing bounded checkpoint reader; do
+not write a ZIP parser or resurrect source replay. Update the historical inverse
+and mutation tests to distinguish the fixed predecessor from current authored
+additions. Synthetic bootstrap tests keep their separate purpose.
+
 The smallest current producer needs no level, quality, count or support-result
 read. Existing group-100/group-101 programs already produce prepared level/quality
 channels; group-000 owns physical Sniper raw/final projections. The later bundle
@@ -1384,6 +1415,31 @@ prohibition; those still need their actual occurrence/definition authority.
 Keep support prohibition as a separate evidence/ownership task. The current Djinn
 snapshots omit nil `cannotBeSupported`; omission does not establish a native false
 producer, and occurrence-specific `noSupports` must not prohibit the shared Skill.
+The next bounded slice is the shared Boolean Skill Stat and the Sniper producer,
+with a complete pinned field/export/construction/consumer source proof and an
+Abyssal Apparition positive control. It uses the accepted declaration model and
+does not by itself establish preparation readiness.
+That proof must cover both actual Boolean decoding and the winning loaded
+definition. Pin the schema, exporter and small Dat/Dat64 Boolean readers; reuse
+existing complete skill/loader archives. Account for all nine loaded skill modules
+so a later replacement of the same key cannot invalidate the chosen Sniper or
+Abyssal definition unnoticed. Three modules lack reusable archives (`act_str`,
+`act_dex`, `spectre`); add bounded evidence where required. A naive assignment-text
+scan is not a general Lua parser or proof against computed writes. Keep this
+offline source authority separate from the native Boolean property and from
+occurrence-specific `noSupports` filtering.
+The readiness review found a separate blocker: the current validator requires
+Complete owner programs for every early-readiness role. Sniper is still Partial,
+so its initial-type and prohibition facts cannot yet be assigned PreparationFacts.
+V4 also requires exact complete classification of all known programs. Review
+confirmed that the accepted whole-owner gate is intentional: support attempts
+also reject incomplete base plans, and source-property compilation requires
+complete producer owners. No new dependency cycle requires relaxing these gates;
+the existing phases already resolve supported final-input ordering. Keep the
+current contract for the MVP. Inventory and finish the selected owners' actual
+remaining mechanics before authoring executable readiness. Never mark an owner
+Complete or label early facts Execution just to bypass these checks. Exact fact
+coverage is a possible later diagnostic feature, not another migration prerequisite.
 Acceptance for the declaration/type slice includes positive and negative membership
 within the declared vocabulary, absent versus present-empty minion context,
 repeated occurrences and unchanged partial-owner coverage. Source census, stages
@@ -2904,13 +2960,14 @@ These are retained obligations, not extra competing phases.
 | Resource obligations | Accepted Skill-owned payer/resource model remains required; amount-channel signature proposal still needs a concrete decision if R5 requires it |
 | Separate socket configurations | Accepted but incomplete; finish when needed for the first build or R6 equipment search; keep rolls/configurations/physical copies separate |
 | Scoped numerical coverage / computed source selection | Pending, not implied by DSL approval; unknown reach stays blocking. Ask only when a concrete required case needs a public contract change |
+| Partial-build preparation diagnostics | Deferred unless a real consumer needs them. Current Complete-owner, plan, receiving and source-property gates stay. Exact fact coverage would need explicit closed producer authority and exclusion of unknown competing writes; complete classification of known programs alone is insufficient. No MVP cycle currently requires this public model change |
 | Lua cleanup and resistance terminology | R4 audit classifies game law vs external syntax vs obsolete application code; ordinary resistance is a game channel, legacy is not |
 | Numeric P3 suggestions | After semantics-preserving migration, add targeted cases for exact integer folds, failure order/All/Any, equality, rounding and decimal scaling; discuss output-changing policy before adoption |
 | Curve/segment storage | [S1-S4 investigation](owned-scaling-data-investigation.md) in R6 unless an earlier real mechanic requires it; lossless data/domain/rounding equivalence, no fitted extrapolation |
 | Seeded jewels / legion-rune opportunity | [J1-J5](seeded-jewel-feasibility.md) in R6: establish game/pin applicability, provider parity, bounded seed/socket/path search, reproducible reporting and independent cost/quality checks; opt-in |
 | UI autocomplete | Bounded query/index over loaded named definitions; no database/ORM milestone |
 | PoB updates | One pin manifest, offline extraction and selective differential tests, stable semantic anchors and a pin-bump runbook; no automatic network/source work in cargo build |
-| Repository/release hygiene | R0-R4 dependency boundaries, deduplicated tests/artifacts/docs, one MSRV policy and locked workspace dependencies; batch Windows formatting by package while workspace-wide `cargo fmt --all` exceeds the process command-line limit (OS error 206); R6 release packaging, dependency audit and measured release-profile tuning |
+| Repository/release hygiene | R0-R4 dependency boundaries, deduplicated tests/artifacts/docs, one MSRV policy and locked workspace dependencies; batch Windows formatting by package while workspace-wide `cargo fmt --all` exceeds the process command-line limit (OS error 206); R6 release packaging, dependency audit and measured release-profile tuning. Git auto-packing at `aee2f494` reported many unreachable loose objects; inspect recovery/retention needs before any separate repository maintenance, with no automatic pruning during implementation |
 | Repeated offline recipe validation | Exact-input, same-limit reuse is implemented and validated for evaluation-bearing authoring. Keep all shared aggregate and dependency checks. The current metadata-only release has no evaluation bundle and gets no performance claim; measure actual evaluation-bearing builds before broader optimization |
 | Mutable authoring-head promotion | Deferred until a shared mutable head is introduced; the first approved checkpoint publisher uses an explicit immutable predecessor. Implement actual stored-predecessor CAS/concurrency control and interruption tests before exposing head promotion; read-compare-rename alone is insufficient |
 | Canonical allocation-history distribution | Compact storage cutover replaces the first-generation source bridge with a complete checked snapshot and pinned archive/checkpoint digests. Fresh extraction must verify before current-source replay. Preserve the ledger and semantic input; no historical source-replay chain, silent rebootstrap, machine-local dependency or second ledger importer |
@@ -3020,8 +3077,10 @@ copying source-language accidents into the native model.
    checked owners remain in Import; do not expose historical repair APIs.
    The intrinsic CLI exporter/no-clobber law now lives in acquisition and its
    duplicate publication target is removed. Item-base laws/exporter now use the
-   maintained release/acquisition harness and their old root is deleted. Next
-   migrate the two still-live intrinsic-predecessor consumers identified in R1.
+   maintained release/acquisition harness and their old root is deleted. The
+   weapon-profile transfer is implemented and validated. Next migrate
+   the remaining `owned_extension_cli` consumer identified in R1 after actual
+   execution declarations can replace its whole-plan fixture.
    The audited 24-root
    resource/equipment cohort now forms two verified suites. Reassess compilation
    and live consumers before choosing another R0 cohort. In R3, the new standalone checkpoint

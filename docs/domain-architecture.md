@@ -884,6 +884,11 @@ occurrence provenance. Actor/skill isolation and parallel determinism checks run
 as ordinary tests without a manually published predecessor. These component laws
 do not substitute for complete-build parity. Keep optional upstream acquisition
 authentication beside the offline exporter tests when retiring historical chains.
+For finite catalog transfers, retain the complete source-field census, typed
+units, absent/default/present-zero behavior, exact owner bindings and coverage.
+Exercise fresh and reused scratch in multiple orders against the maintained
+release before removing the old publisher test. A shared predecessor or compiler
+with another live consumer remains until that consumer has moved too.
 
 Support admission must distinguish definition-owned eligibility data from facts
 of an exact composed occurrence. Actor identity, supplying source and summoner
