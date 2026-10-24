@@ -732,6 +732,10 @@ filters through every admitted transfer or transform. A key-only inventory or
 zero payload cannot establish non-consumption when lookup itself changes source
 metadata. Keep this evidence in the offline adapter; native rules receive explicit
 owned mechanics and never inherit incidental lazy-cache behavior.
+Transport evidence is specific to the admitted record shape. A direct payload's
+copy/scale proof cannot certify nested modifiers or payloads with separate scaling
+keys. Preserve filter authority, duplicate records and provenance independently
+from native numerical semantics; an upstream zero scale is not an absence proof.
 
 Configuration source accounting must enumerate repeated custom-modifier blocks
 and legacy fields separately from typed Encounter inputs. Proving constructor

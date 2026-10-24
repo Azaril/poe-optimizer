@@ -179,7 +179,85 @@ mod factory_family {
             .as_array_mut()
             .unwrap()
             .sort_by_cached_key(|v| serde_json::to_string(v).unwrap());
+        for row in observation["transports"].as_array_mut().unwrap() {
+            row["records"]
+                .as_array_mut()
+                .unwrap()
+                .sort_by_cached_key(|v| serde_json::to_string(v).unwrap());
+        }
         observation
+    }
+    fn check_control(id: &str, control: &Json, mode: &str, value: u64) {
+        assert_eq!(control["mode"], mode);
+        assert_eq!(control["value"], value);
+        let fixed = mode == "fixed_family";
+        assert_eq!(control["delivered"], usize::from(!fixed));
+        assert_eq!(control["global"], !fixed);
+        assert_eq!(control["mapped"], !fixed);
+        assert_eq!(control["global_records"], usize::from(!fixed));
+        if fixed {
+            assert!(control.get("record").is_none());
+        } else {
+            assert_eq!(
+                control["record"],
+                json!({"name":"DamageTakenConsecratedGround","type":"INC",
+                "flags":0,"keywordFlags":0,"value":value,"source":format!("Skill:{id}"),
+                "1":{"type":"GlobalEffect","effectType":"Debuff"},
+                "2":{"type":"Condition","var":"OnConsecratedGround"}})
+            );
+        }
+    }
+    fn check_transports(actual: &Json) {
+        let original: Vec<_> = cases()
+            .into_iter()
+            .flat_map(|(_, mods)| mods)
+            .filter(|m| m["name"] == "ExtraSkillStat")
+            .collect();
+        assert_eq!(original.len(), 14);
+        let mut inventory = vec![];
+        for kind in ["ModList", "ModDB"] {
+            for operation in ["AddMod", "CopyList", "setSource_then_copy_scale"] {
+                inventory.push((kind, operation, None));
+            }
+            for operation in ["ScaleAddMod", "ScaleAddList"] {
+                for scale in [0.0, 0.5, 1.0, 2.0] {
+                    for nearest in [false, true] {
+                        inventory.push((kind, operation, Some((scale, nearest))));
+                    }
+                }
+            }
+        }
+        assert_eq!(rows(actual).len(), 38);
+        assert_eq!(rows(actual).len(), inventory.len());
+        for (row, (kind, operation, scaling)) in rows(actual).iter().zip(inventory) {
+            assert_eq!(row["store"], kind);
+            assert_eq!(row["operation"], operation);
+            if let Some((scale, nearest)) = scaling {
+                assert_eq!(row["scale"].as_f64().unwrap(), scale);
+                assert_eq!(row["round_to_nearest"], nearest);
+            } else {
+                assert!(row.get("scale").is_none());
+                assert!(row.get("round_to_nearest").is_none());
+            }
+            let mut expected = original.clone();
+            if operation == "setSource_then_copy_scale" {
+                for record in &mut expected {
+                    record["source"] = json!("Factory witness:replacement");
+                }
+            }
+            assert_eq!(
+                ordered(&row["records"]),
+                ordered(&json!(expected)),
+                "{kind}/{operation}/{scaling:?}"
+            );
+            assert_eq!(row["originals_preserved"], true);
+            assert_eq!(rows(&row["commands"]).len(), 2);
+            for (command, id) in rows(&row["commands"]).iter().zip(COMMANDS) {
+                assert_eq!(command["id"], id);
+                check_control(id, &command["fixed"], "fixed_family", 0);
+                check_control(id, &command["retargeted"], "retargeted", 17);
+            }
+        }
     }
     fn check(actual: &Json) {
         let expected = cases();
@@ -212,26 +290,10 @@ mod factory_family {
                 ("retargeted", 0),
             ];
             for (control, (mode, value)) in rows(&row["controls"]).iter().zip(expected_controls) {
-                assert_eq!(control["mode"], mode);
-                assert_eq!(control["value"], value);
-                let fixed = mode == "fixed_family";
-                assert_eq!(control["delivered"], usize::from(!fixed));
-                assert_eq!(control["global"], !fixed);
-                assert_eq!(control["mapped"], !fixed);
-                assert_eq!(control["global_records"], usize::from(!fixed));
-                if fixed {
-                    assert!(control.get("record").is_none());
-                } else {
-                    assert_eq!(
-                        control["record"],
-                        json!({"name":"DamageTakenConsecratedGround","type":"INC",
-                        "flags":0,"keywordFlags":0,"value":control["value"],"source":format!("Skill:{id}"),
-                        "1":{"type":"GlobalEffect","effectType":"Debuff"},
-                        "2":{"type":"Condition","var":"OnConsecratedGround"}})
-                    );
-                }
+                check_control(id, control, mode, value);
             }
         }
+        check_transports(&actual["transports"]);
         for key in ["shared_metadata_preserved", "methods_preserved"] {
             assert_eq!(actual[key], true);
         }
@@ -335,15 +397,20 @@ mod factory_family {
             "src/Modules/CalcTools.lua",
             "src/Classes/ModStore.lua",
             "src/Classes/ModList.lua",
+            "src/Classes/ModDB.lua",
             "src/Modules/Common.lua",
         ];
-        let report = json!({"schema_version":1,"source_revision":pinned::UPSTREAM_REVISION,
+        let report = json!({"schema_version":2,"source_revision":pinned::UPSTREAM_REVISION,
             "manifest_sha256":pinned::manifest_sha256(),"probe_sha256":digest(PROBE.as_bytes()),
             "rust_witness_sha256":digest(include_bytes!("generated_extra_skill_stats_source.rs")),
             "literal_sites":14,"distinct_payload_keys":13,"parser_patterns":11,
             "numeric_representation":"exact; Flame Wall secondary captures remain strings",
-            "comparison":"complete records, unordered only within each parser result; numeric tolerance zero",
-            "scope":"literal factory family and fixed filters only; no supplier/transform closure, obtainable-item claim, native policy or Deferred retirement",
+            "comparison":"complete records, unordered within each parser result and transport record list; numeric tolerance zero",
+            "ordinary_transport_shape":"exact direct ExtraSkillStat LIST {key,value} payloads and named tags; no nested mod/keyOfScaledMod/metatable",
+            "ordinary_transport_cases":38,
+            "ordinary_transport_scope":"ModList/ModDB AddMod, CopyList, ScaleAddMod, ScaleAddList at 0/0.5/1/2 and both rounding flags; setSource then copy/scale preserves only its explicit source-label change",
+            "unproved_paths":["arbitrarily named NewMod/ReplaceMod/ConvertMod","nested wrappers and payload transforms","NodeModifier replacements and radius callbacks","complete selected supplier graph and cross-occurrence warming"],
+            "scope":"literal factory family and ordinary direct-record transport only; no all-supplier/all-transform closure, obtainable-item claim, native policy or Deferred retirement",
             "files":files.map(|path| json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})),
             "observation":captured.into_inner().unwrap()});
         // Only each parser result's records are canonically ordered. Every

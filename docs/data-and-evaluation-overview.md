@@ -318,6 +318,12 @@ effect can be initialized by a zero-valued stat, while the real producer's skill
 filter prevents delivery to these Commands. Isolated copies and fresh JIT-on/off
 runs preserve shared metadata. This finite family evidence does not yet account
 for every reachable supplier, copy or transform, so the fields remain deferred.
+The same witness now validates 38 ordinary insertion/copy/scaling paths for those
+direct records, including the observed zero-factor shape. It retains exact payload
+types, mandatory filters and provenance, and uses actual inherited stores with
+positive delivery controls. Nested/scalable payloads, arbitrary factories and
+the complete selected-source join remain outside this proof. These upstream
+transport observations do not define native arithmetic.
 
 One next limitation is documented in the [Skill-to-Actor contribution proposal](owned-skill-actor-contribution-proposal.md):
 direct Skill effects can name Player, while checked Skill-origin queries currently
