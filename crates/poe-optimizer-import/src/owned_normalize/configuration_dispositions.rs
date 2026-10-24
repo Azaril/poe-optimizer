@@ -6,11 +6,12 @@ use super::*;
 mod accounting;
 mod custom_modifiers;
 mod inventory;
+mod missing_raw;
 mod receipts;
 pub use inventory::{
     ConfigurationCensusClosure, ConfigurationInventoryControl, ConfigurationInventoryDisposition,
-    ConfigurationInventoryPolicy, ConfigurationInventoryTarget, ConfigurationSourceCensus,
-    configuration_inventory_census_identity,
+    ConfigurationInventoryPolicy, ConfigurationInventoryTarget, ConfigurationScenarioField,
+    ConfigurationSourceCensus, configuration_inventory_census_identity,
 };
 
 pub(super) use accounting::account;

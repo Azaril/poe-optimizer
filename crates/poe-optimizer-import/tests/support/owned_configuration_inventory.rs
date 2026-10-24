@@ -3,6 +3,8 @@
 use super::*;
 #[path = "owned_configuration_custom_modifiers.rs"]
 mod custom_modifiers;
+#[path = "owned_configuration_inventory_missing.rs"]
+mod missing;
 #[path = "owned_configuration_inventory_observations.rs"]
 mod observations;
 #[path = "owned_configuration_inventory_real.rs"]

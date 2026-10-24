@@ -1,10 +1,195 @@
-> Historical snapshots through 2026-10-20.
+> Historical snapshots through 2026-10-24.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-24 source-header and Timeless checkpoints
+
+**Current checkpoint:** the existing source-presentation
+path now has an independently enabled `timeless_search_defaults` family. It
+accepts only the exact four literal defaults in one ordinary Build/TimelessData
+frame and preserves all other source responsibilities, Draft values, queries,
+allocator and completion states. It reuses the immutable Build-frame proof and
+existing atomic disposition pass; occupied semantic origins cannot be displaced.
+The tracked policy enables this family through checked authored Import content.
+No native rule, definition, objective, ledger allocation or new owner is added.
+The [source evidence](../data/owned/poe2/3887ae68/timeless-search-defaults/README.md)
+retains the default-versus-absent limitations and explicit result-to-item action.
+
+Three private and five integration laws cover opt-in/source authority, exact
+defaults, malformed/nondefault/foreign frames, whole-Draft/sidecar preservation,
+semantic-link protection, deterministic replay and atomic budget boundaries.
+The first focused run exposed one test invoking normalization after a foreign
+root was already rejected by decoding; that control now asserts the exact
+`WrongRoot` error at its actual boundary. No production check was relaxed.
+Maintained Authoring coverage checks all five originals, unchanged selected
+obligations and the exact historical receipt inverse. The policy change covers
+Originals 01/04/05; 02/03 retain their extra saved distance field and remain
+unresolved. All **709 affected Import tests pass** (275 library in 71.38s,
+434 normalization in 3.23s), and the authenticated five-original replay passes
+in 120.20s against the new package under unchanged limits. Sniper's remaining
+configuration-linked origins are exactly Config, ConfigSet, Calcs and its two
+Inputs. The immutable checkpoint independently verifies and all twenty files
+replay byte-for-byte, including its unchanged 73-name ledger.
+
+All **210 maintained Authoring release tests pass** across validation runs. The
+full run passed 208 tests in 195.42s, including both new laws and historical
+restoration, and exposed two older selected-Actor test helpers that assumed
+Character provenance had a single origin. The repaired helpers authenticate the
+exact selected Spec and actual parent Tree independently of legitimate Build/
+Tree header and child projections. All four focused laws pass in 61.05s; all
+15 previous corruption controls remain and twelve header/foreign-owner controls
+are added. This changes no production authority, and independent review is clear.
+Strict all-feature/all-target Import/Authoring Clippy passes in 19.45s. Scoped
+formatting, whitespace, strict UTF-8/LF and all nine protected hashes also pass.
+Logs and immutable replay evidence are under `runs/timeless-search-defaults/`.
+Sniper still has five selected input
+obligations plus numerical work, and **0/5** originals are complete.
+
+The related provenance-consumer audit found no further production or ordinary
+maintained-test regression. One ignored legacy publication helper remains:
+`tests/owned_character_reward_inventory.rs::compare_inputs` gathers Character
+links globally and expects one origin. During R1 harness retirement, transfer
+its useful laws to the maintained release harness and use the exact Spec join;
+also preserve the deliberate Build-header delta when its policy is enabled.
+If that ignored command remains needed before retirement, fix those precise
+joins first. Do not merely relax its count assertion or run it as current proof.
+Protected incoming-critical drafts were excluded and remain unchanged.
+
+**Preceding checkpoint (`8a11db10`, pushed and remote-verified):** Build-header ownership now reuses the existing strict
+frame and injected source version, retains the checked scalar's exact selected
+attribute, and joins every actual Spec-derived Character preset plus the exact
+saved SkillPreset and existing unresolved selection owner. Equal defaulted or
+foreign-attribute numbers cannot establish level ownership. The complete
+Character/SkillSet maps, finite ordinary views and saved MAIN range are checked
+before any provenance mutation. Shared append and SkillPreset correspondence
+remain one private implementation. No native defaults, queries, selection,
+completion, public data format or runtime artifacts change.
+
+The unchanged-original gate exposed duplicate strict Build-frame work. The
+private fix shares only that immutable result across character-reward checking
+and header accounting, keyed by exact source, injected target version and child
+limit. Lookup/storage remain charged; resource errors are never cached, and all
+owner/level/selection checks run fresh. No reward completion certificate or
+larger resource budget is used. All seven private laws pass, including two cache
+isolation/resource laws; independent reviews are clear. The refreshed unchanged
+five-original replay passes in **74.45s** under the original limits. Its exact
+Sniper provenance check leaves six configuration-linked sources: Config,
+ConfigSet, TimelessData, Calcs and the two Calcs Inputs. This is source accounting,
+not completion of a selected inventory.
+
+The **1,592 Import regression tests pass** across the validation runs: 272 library,
+891 owned integration and 429 normalization tests. The refreshed library and
+normalization suites pass after the cache repair in 66.97s and 3.03s; the unchanged
+owned suite passed in 219.09s. The initial run's five new private fixture failures
+were corrected by preparing the actual source attribute index; its 265 existing
+tests passed unchanged.
+The synthetic integration fixture retains Character reward Pending because its
+Specs omit the separate reward frame; the corrected assertion preserves that
+boundary. No production validator was relaxed. The seven private and five
+integration laws cover exact producer/owner identity, foreign/default refusal,
+labels, children/queries, independent maps, deterministic replay and atomic
+work/link limits. Independent production and test reviews are clear.
+Evidence: `build-header-regression-final.log`, `build-header-private-final.log`,
+`build-header-targeted-final.log`, `build-header-integration-final.log`,
+`build-header-cache-tests.log` and `build-header-originals-final.log` under
+`runs/configuration-census-audit-01/`. Strict all-feature/all-target Import and
+Authoring Clippy passes (`build-header-clippy-final.log`, 19.51s), as do scoped
+formatting, whitespace, strict UTF-8/LF and all nine protected-draft hashes.
+Original05 Sniper remains
+closest; five selected input obligations and **0/5** complete originals remain.
+
+**Preceding checkpoint (`8f50fe6e`, pushed and remote-verified):** Skills-header ownership now reuses the existing strict
+keyed selector and joins every ordinary SkillSet to its exact existing preset
+before attributing the header to the selected SkillPreset and the unresolved
+saved-selection owner. Finite editing, ranking and filtering preferences stay
+source-owned. Missing preferences emit no native defaults; saved Gem level,
+quality, usage and generated-source obligations retain separate authority.
+Unknown, legacy, clamped, aliased and foreign frames refuse accounting, and all
+work/link checks precede mutation. This removes another redundant header fallback
+without changing native values, allocator state, public formats or completion.
+
+All **689 affected Import tests pass**: 265 library and 424 normalization tests.
+Five private laws check complete keyed ownership, finite/absent preferences,
+malformed/legacy values, 26 map/provenance/selection corruptions and atomic
+cold/cached work/link limits. Two integration laws preserve actual Gem inputs,
+all other draft/origin/query values and child obligations across header-only
+changes; malformed frames retain fallback responsibility. The authenticated
+five-original replay passes in 73.66s, including Sniper's exact key-4/source-204
+SkillPreset owner. Strict all-feature/all-target Import and Authoring Clippy
+passes. Evidence: `skills-header-regression-final.log`,
+`skills-header-originals.log` and `skills-header-clippy.log` under
+`runs/configuration-census-audit-01/`. Independent implementation/test reviews
+found no blocker. Closest build remains Original05 Sniper: five selected input
+obligations, an additional numerical backlog and **0/5** complete originals.
+Source-header accounting alone retires none of those five obligations.
+
+Both source-only XML-preservation tests pass. The final six-case title witness
+passes in 31.62s, and the existing eight-case default/omission witness passes in
+43.31s after sharing supervision. Its refreshed JIT-on/off reports are identical
+at 1,744,068 bytes, SHA-256
+`5b91db0f644b380cfbe1a87c5d7f6bff75e8b3c8b6907a1f5cc49a8a4223ff9c`;
+the report now includes the expanded observer/source metadata, not new native
+coverage. Evidence: `runs/outside-config-defaults-02` and audit-directory
+`outside-defaults-{regression,xml,clippy}-final.log`. Strict affected PoB-target
+Clippy passes. The known optional Windows LNK4098 warning remains R4 work; it
+does not affect source execution or strict lint. No runtime artifacts change.
+Scoped formatting, whitespace, strict UTF-8/LF and all nine protected-draft hashes
+pass. The source/default matrix and Build follow-up below preserve newly found
+work; pending model decisions remain explicit.
+
+**Preceding checkpoint (`1274f071`, pushed and remote-verified):** Items-header ownership now shares the existing keyed
+source selector with generated-source resolution. It validates the complete
+ordinary root and nonempty set-to-preset correspondence, then attributes the
+header to its actual EquipmentPreset and the existing unresolved saved-selection
+owner. Root weapon-swap preferences cannot override independent set state.
+Unknown, legacy, malformed, aliased or foreign frames retain their responsibility;
+all link/work checks happen before mutation. The shared Tree/Items helpers add no
+native values, public types, default selection, new IDs or completion claims.
+
+All **682 affected Import tests pass**: 260 library and 422 normalization,
+including 96 independent-key/root-preference combinations and 28 refusal controls.
+Six new private laws add 45 invalid map/provenance/selection/frame controls,
+reordered preset correspondence, preserved Slot descendants and cold/cached exact
+budget atomicity. The authenticated five-original replay passes in 76.67s,
+including unchanged Sniper's exact key-2/source-597 equipment owner. Strict
+all-feature/all-target Import and Authoring Clippy, scoped formatting, whitespace,
+strict UTF-8/LF and all nine protected-draft hashes pass.
+Logs: `runs/configuration-census-audit-01/items-header-*.log`. Independent
+production and test reviews are clear. Closest build remains Original05 Sniper;
+five selected input obligations and **0/5** complete originals remain. This
+checkpoint retires one redundant header fallback, not a whole build obligation.
+
+**Preceding checkpoint (`f8a5ff1e`, pushed and remote-verified):** Tree-header
+ownership now uses one private pass before
+historical fallback assignment. The existing strict Tree selector is shared with
+generated-source resolution. Complete sibling/source-to-preset correspondence
+joins the selected Spec to its actual Character and Allocation presets and the
+existing saved-selection Pending owner. Work and all link additions are checked
+before mutation; aliases, foreign or malformed sources refuse accounting. No
+native values, selection, allocator state, policy/artifact format or readiness
+gates change. The global outside-Config completeness check remains intact.
+
+All **1,565 Import tests pass**: 254 library, 891 owned integration and 420
+normalization tests. The ordinary run leaves one existing explicit current-release
+test ignored. Three new integration laws prove alternate exact selections change
+only the header's provenance, malformed/ambiguous/foreign frames keep their
+responsibility, and exact/one-short work limits preserve replay. Five private laws
+cover 41 invalid map/link/selection cases and atomic late work/link failure, with
+authentic baselines and all child Pending states retained. Independent review is
+clear. Evidence: `runs/configuration-census-audit-01/tree-header-integration.log`
+and `tree-header-library.log`. The authenticated five-original replay passes in
+74.24s, including the unchanged Sniper's exact third-Spec header owners. Strict
+all-feature/all-target Import and Authoring Clippy passes. Evidence:
+`tree-header-originals.log` and `tree-header-clippy.log` in the same directory.
+Scoped formatting, whitespace, strict UTF-8/LF and all nine protected-draft hashes
+pass.
+Closest build remains Original05 Sniper; five selected input obligations
+and **0/5** complete originals remain. The preceding checkpoint's validation is
+recorded below, not claimed as validation of this new pass.
 
 ## Archived 2026-10-20 backup and validation notes
 

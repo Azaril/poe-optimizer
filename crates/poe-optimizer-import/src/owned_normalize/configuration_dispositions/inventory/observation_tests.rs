@@ -40,6 +40,7 @@ fn with_observation(
         let inventory = CompiledInventory {
             complete: true,
             strict_empty_custom_modifiers: false,
+            missing_raw: false,
             controls: vec![(
                 ConfigurationInventoryControl {
                     id: key("source-control"),
@@ -109,8 +110,16 @@ fn observation_consumer_rechecks_exact_current_authority_and_single_use() {
             }
             let before = b.origins.clone();
             let allocator = b.allocator.state();
-            let result =
-                match_receipts(b, scope, scenario(1), &inventory, &[], &[receipt], None).unwrap();
+            let result = match_receipts(
+                b,
+                scope,
+                scenario(1),
+                &inventory,
+                &[],
+                &[receipt],
+                AuxiliaryReceipts::default(),
+            )
+            .unwrap();
             assert_eq!(result, mutation == 0, "mutation {mutation}");
             assert_eq!(b.origins, before);
             assert_eq!(b.allocator.state(), allocator);
@@ -154,8 +163,16 @@ fn observation_receipts_cannot_be_missing_duplicated_or_borrowed_from_another_se
                 _ => unreachable!(),
             }
             assert!(
-                !match_receipts(b, scope, scenario(1), &inventory, &[], &observations, None)
-                    .unwrap(),
+                !match_receipts(
+                    b,
+                    scope,
+                    scenario(1),
+                    &inventory,
+                    &[],
+                    &observations,
+                    AuxiliaryReceipts::default()
+                )
+                .unwrap(),
                 "mutation {mutation}"
             );
         });
@@ -168,15 +185,31 @@ fn observation_consumer_has_an_exact_work_limit_without_mutations() {
         let observations = [receipt];
         let start = b.work;
         assert!(
-            match_receipts(b, scope, scenario(1), &inventory, &[], &observations, None).unwrap()
+            match_receipts(
+                b,
+                scope,
+                scenario(1),
+                &inventory,
+                &[],
+                &observations,
+                AuxiliaryReceipts::default()
+            )
+            .unwrap()
         );
         let required = b.work;
         let before = b.origins.clone();
         for sufficient in [true, false] {
             b.work = start;
             b.limits.max_work = required - usize::from(!sufficient);
-            let result =
-                match_receipts(b, scope, scenario(1), &inventory, &[], &observations, None);
+            let result = match_receipts(
+                b,
+                scope,
+                scenario(1),
+                &inventory,
+                &[],
+                &observations,
+                AuxiliaryReceipts::default(),
+            );
             if sufficient {
                 assert!(result.unwrap());
             } else {

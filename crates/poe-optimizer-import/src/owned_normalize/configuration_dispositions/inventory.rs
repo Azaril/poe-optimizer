@@ -41,8 +41,8 @@ pub struct ConfigurationInventoryDisposition {
     pub target: ConfigurationInventoryTarget,
 }
 
-/// A source consumer needs either all of its checked adapter outputs or the
-/// exact reviewed branch proving that it consumes no independent owned input.
+/// A source consumer needs its checked adapter outputs, a reviewed no-input
+/// branch, or exact retained same-Scenario responsibility.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum ConfigurationInventoryTarget {
@@ -52,6 +52,22 @@ pub enum ConfigurationInventoryTarget {
     /// References an existing InapplicableObservation rule; does not duplicate
     /// its selector, value recipe or encounter guards.
     Inapplicable { rule: OwnedDefinitionKey },
+    /// A reviewed absent raw source branch consumes no additional owned input.
+    /// This does not assert an effective false/zero value or a native default.
+    MissingRawNoAdditionalInput {},
+    /// Absence leaves these exact same-Scenario obligations unresolved.
+    MissingRawRetainedScenario {
+        fields: Vec<ConfigurationScenarioField>,
+    },
+}
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+/// Import-only discriminator for existing Scenario obligations, not a new owner.
+pub enum ConfigurationScenarioField {
+    Assumptions,
+    Usage,
+    UsageIntents,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -77,6 +93,7 @@ pub fn configuration_inventory_census_identity(
 pub(super) struct CompiledInventory {
     complete: bool,
     strict_empty_custom_modifiers: bool,
+    missing_raw: bool,
     controls: Vec<(ConfigurationInventoryControl, ConfigurationInventoryTarget)>,
 }
 
@@ -101,7 +118,7 @@ fn charge(work: &mut usize, amount: usize, limits: NormalizationLimits) -> Resul
 // each operation. This is not an upper bound on std BTree's within-node key
 // comparisons. Finite collection/key limits and balanced indices bound those
 // operations; no source rows or receipt positions are merged.
-fn index_work(entries: usize, key_bytes: usize) -> usize {
+pub(super) fn index_work(entries: usize, key_bytes: usize) -> usize {
     let levels = usize::BITS as usize - entries.leading_zeros() as usize + 1;
     key_bytes.saturating_add(1).saturating_mul(levels)
 }
@@ -147,6 +164,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     }
     charge(work, input.dispositions.len(), limits)?;
     let mut dispositions = BTreeMap::new();
+    let mut missing_raw = false;
     let mut disposition_width = 0usize;
     for disposition in &input.dispositions {
         disposition_width = disposition_width.max(disposition.source_control.as_str().len());
@@ -232,6 +250,30 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             continue;
         };
         let adapters = match target {
+            ConfigurationInventoryTarget::MissingRawNoAdditionalInput {}
+            | ConfigurationInventoryTarget::MissingRawRetainedScenario { .. } => {
+                if row.selector.is_none() || row.source_states != [ConfigurationSourceState::Absent]
+                {
+                    return Err(NormalizationError::Policy(
+                        "configuration inventory missing raw",
+                    ));
+                }
+                if let ConfigurationInventoryTarget::MissingRawRetainedScenario { fields } = target
+                {
+                    charge(work, fields.len(), limits)?;
+                    if fields.is_empty()
+                        || fields.len() > 3
+                        || fields.iter().collect::<BTreeSet<_>>().len() != fields.len()
+                    {
+                        return Err(NormalizationError::Policy(
+                            "configuration inventory retained fields",
+                        ));
+                    }
+                }
+                missing_raw = true;
+                controls.push((row.clone(), target.clone()));
+                continue;
+            }
             ConfigurationInventoryTarget::Inapplicable { rule } => {
                 charge(
                     work,
@@ -393,6 +435,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     Ok(Some(CompiledInventory {
         complete,
         strict_empty_custom_modifiers,
+        missing_raw,
         controls,
     }))
 }
@@ -470,6 +513,12 @@ fn selector_size(selector: Option<&ValueSelector>) -> usize {
 
 // This is the same finite consumer relation used by prepare. Index values retain
 // every source/receipt position so ambiguity and unmatched records still refuse.
+#[derive(Default)]
+struct AuxiliaryReceipts<'a> {
+    custom_modifiers: Option<&'a custom_modifiers::CheckedCustomModifiers>,
+    missing_raw: Option<missing_raw::Checked>,
+}
+
 fn match_receipts(
     b: &mut Builder<'_, '_>,
     scope: SourceOccurrenceId,
@@ -477,7 +526,7 @@ fn match_receipts(
     inventory: &CompiledInventory,
     receipts: &[CheckedConfigurationReceipt],
     observations: &[accounting::CheckedInapplicable],
-    custom_modifiers: Option<&custom_modifiers::CheckedCustomModifiers>,
+    mut auxiliary: AuxiliaryReceipts<'_>,
 ) -> Result<bool> {
     if !inventory.complete {
         return Ok(false);
@@ -536,7 +585,7 @@ fn match_receipts(
         if matches!(target, ConfigurationInventoryTarget::Adapters { controls }
             if controls.as_slice() == [ConfigurationAdapterControl::StrictEmptyCustomModifiers])
         {
-            let Some(checked) = custom_modifiers else {
+            let Some(checked) = auxiliary.custom_modifiers else {
                 return Ok(false);
             };
             b.charge(control.source_states.len().saturating_add(1))?;
@@ -566,6 +615,16 @@ fn match_receipts(
             None
         };
         let adapters = match target {
+            ConfigurationInventoryTarget::MissingRawNoAdditionalInput {}
+            | ConfigurationInventoryTarget::MissingRawRetainedScenario { .. } => {
+                let Some(checked) = &mut auxiliary.missing_raw else {
+                    return Ok(false);
+                };
+                if !checked.consume(b, scope, scenario, control, target)? {
+                    return Ok(false);
+                }
+                continue;
+            }
             ConfigurationInventoryTarget::Inapplicable { rule } => {
                 let Some(origin) = expected_origin else {
                     return Ok(false);
@@ -654,6 +713,10 @@ fn match_receipts(
         .iter()
         .chain(&observations_covered)
         .any(|matched| !matched)
+        || auxiliary
+            .missing_raw
+            .as_ref()
+            .is_some_and(|checked| !checked.consumed())
     {
         return Ok(false);
     }
@@ -705,6 +768,17 @@ pub(super) fn prepare(
     if !inventory.complete {
         return Ok(None);
     }
+    let missing_raw = if inventory.missing_raw {
+        let Some(proof) = missing_raw::collect(b, draft, &authority, &inventory.controls)? else {
+            return Ok(None);
+        };
+        let Some(checked) = proof.check(b, draft, &authority)? else {
+            return Ok(None);
+        };
+        Some(checked)
+    } else {
+        None
+    };
     let Scope {
         source: scope,
         scenario,
@@ -720,7 +794,10 @@ pub(super) fn prepare(
         inventory,
         receipts.iter().as_slice(),
         receipts.inapplicable(),
-        receipts.custom_modifiers(),
+        AuxiliaryReceipts {
+            custom_modifiers: receipts.custom_modifiers(),
+            missing_raw,
+        },
     )? {
         return Ok(None);
     }
@@ -991,6 +1068,9 @@ mod index_tests;
 
 #[cfg(test)]
 mod observation_tests;
+
+#[cfg(test)]
+mod missing_raw_tests;
 
 #[cfg(test)]
 mod tests {

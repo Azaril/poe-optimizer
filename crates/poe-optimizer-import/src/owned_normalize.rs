@@ -74,8 +74,9 @@ pub use configuration_dispositions::{
     ConfigurationDispositionContent, ConfigurationDispositionDependencies,
     ConfigurationDispositionPolicy, ConfigurationDispositionRule, ConfigurationInventoryControl,
     ConfigurationInventoryDisposition, ConfigurationInventoryPolicy, ConfigurationInventoryTarget,
-    ConfigurationResponsibility, ConfigurationSourceCensus, ConfigurationSourceState,
-    configuration_disposition_dependencies, configuration_inventory_census_identity,
+    ConfigurationResponsibility, ConfigurationScenarioField, ConfigurationSourceCensus,
+    ConfigurationSourceState, configuration_disposition_dependencies,
+    configuration_inventory_census_identity,
 };
 pub use configuration_inputs::{
     ConfigurationDefaultInput, ConfigurationInputTarget, ConfigurationInputsPolicy,

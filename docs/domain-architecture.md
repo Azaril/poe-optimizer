@@ -767,6 +767,19 @@ Reviewed missing-source branches may prove no additional owned input, or retain
 their exact responsibility on the same Scenario's assumptions, usage or usage
 intents. Check absence across source lanes and preserve all actual members and
 Pending issues; a shared remaining field does not merge distinct source consumers.
+The initial Import contract admits only raw absence, with one exact selector and
+the `Absent` source state. An authored false, zero, empty string or wrong-lane
+Placeholder is present and cannot use this proof. No constructor default or
+adapter output is manufactured. Retained responsibilities name a nonempty unique
+set of the three actual Scenario fields; each must have its exact current Pending
+issue, code and source owner. Validate reverse ownership across unselected sets
+as well as the selected one. Known members survive unchanged, and a Complete
+field is not evidence of a retained Pending responsibility.
+Collect these private proofs after actual adapter materialization and consume
+them once per independent census-control identity. Share bounded name indices and
+scope-owner checks within that attempt; never cache mutable ownership with immutable source
+framing. Missing, surplus, foreign or reused proofs refuse retirement. These
+checks add no Core/Engine type, source occurrence or parallel aggregation path.
 Use the existing complete census and atomic inventory transaction. Statistical
 and risk modes need measurement/output correspondence; they cannot be assigned
 to external assumptions merely because that inventory is unresolved. Mixed
