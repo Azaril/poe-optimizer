@@ -30,6 +30,13 @@ source files or ancestor checkpoints. Current builds consume this checked ledger
 as an explicit predecessor; never bootstrap evolving sources to reconstruct IDs.
 Runtime consumers use `rebuilt-checkpoint/runtime`.
 
+The maintained Rust corpus and release tests consume this same persisted
+predecessor. Their shared test-only transport authenticates the archive, reads
+its bounded inventory in memory and calls the ordinary checkpoint validator.
+Tracked-source arithmetic mutations and new declarations preserve that ledger;
+synthetic bootstrap tests separately exercise first allocation. The transport
+library is not a production or native evaluation dependency.
+
 The October 23 compact schema cutover regenerated storage from the original
 first-allocation source at Git revision
 `caca40a55885e5c8612e7d9b47c1691f8ea321a9`, replacing only its bootstrap schema

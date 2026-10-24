@@ -37,3 +37,6 @@ kdl = { version = "=6.5.0", default-features = false }
 [dev-dependencies]
 poe-optimizer-engine = { path = "../poe-optimizer-engine", default-features = false }
 tempfile = "3"
+# Test-only transport for the pinned canonical checkpoint; no runtime ZIP reader.
+# 8.6 supports Rust 1.88, within this crate's 1.93 MSRV. Reuse flate2's Rust backend.
+zip = { version = "=8.6.0", default-features = false, features = ["deflate-flate2"] }

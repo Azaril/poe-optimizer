@@ -5,8 +5,12 @@ mod arithmetic;
 mod attribute_support_domains;
 #[path = "release/attribute_support_source.rs"]
 mod attribute_support_source;
+#[path = "support/canonical_checkpoint.rs"]
+mod canonical_checkpoint;
 #[path = "release/checkpoint.rs"]
 mod checkpoint;
+#[path = "release/checkpoint_history.rs"]
+mod checkpoint_history;
 #[path = "release/class_support_domains.rs"]
 mod class_support_domains;
 #[path = "release/class_support_source.rs"]
@@ -77,9 +81,11 @@ mod weapon_profiles;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use poe_optimizer_authoring::{
-    BuiltRelease, OwnedReleaseEvaluationContent, ReleaseAllocationBase, ReleaseBuildError,
-    ReleaseBuildLimits, ReleaseSource, ReleaseSourceParts, SourceEncoding, SymbolRegistry,
-    build_release, load_names, lower_program, parse_program, parse_release_manifest, raise_program,
+    BuiltRelease, CheckedAuthoringCheckpoint, CheckpointLimits, OwnedReleaseEvaluationContent,
+    ReleaseAllocationBase, ReleaseBuildError, ReleaseBuildLimits, ReleaseSource,
+    ReleaseSourceParts, SourceEncoding, SymbolRegistry, build_release,
+    load_authoring_checkpoint_artifacts, load_names, lower_program, parse_program,
+    parse_release_manifest, raise_program,
 };
 use poe_optimizer_core::{
     owned_build::ParameterValue,
@@ -185,7 +191,19 @@ fn tracked_sources() -> &'static Sources {
 
 fn tracked_release() -> &'static BuiltRelease {
     static RELEASE: OnceLock<BuiltRelease> = OnceLock::new();
-    RELEASE.get_or_init(|| tracked_sources().build(Default::default()).unwrap())
+    RELEASE.get_or_init(|| {
+        tracked_sources()
+            .build_with_allocation(tracked_allocation(), Default::default())
+            .unwrap()
+    })
+}
+
+fn tracked_allocation() -> ReleaseAllocationBase<'static> {
+    let names = canonical_checkpoint::checkpoint().names();
+    ReleaseAllocationBase::Predecessor {
+        names,
+        expected_names: names.identity().unwrap(),
+    }
 }
 
 fn gzip(bytes: &[u8]) -> Vec<u8> {
@@ -1810,10 +1828,16 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     )
     .unwrap();
     let allocation = actual.name_allocation();
-    assert!(
-        allocation.predecessor().is_none(),
-        "the content-test fixture bootstraps its ledger; CLI publication uses a checked predecessor"
+    let predecessor = canonical_checkpoint::checkpoint();
+    assert_eq!(
+        allocation.predecessor(),
+        Some(predecessor.names().identity().unwrap()),
+        "tracked source must preserve the published allocation history"
     );
+    predecessor
+        .names()
+        .validate_successor(allocation.names())
+        .unwrap();
     assert_eq!(
         allocation
             .names()

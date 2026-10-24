@@ -15,6 +15,12 @@ useful semantic fixtures, then delete redundant machinery with its last consumer
 No shipped-format compatibility is required. Do not maintain V1/V2 readers,
 aliases, old profiles or a second evaluator for historical test reproduction.
 
+Tracked-source tests no longer rebootstrap the name ledger. The maintained
+whole-corpus, release and changed-formula builders use the complete canonical
+checkpoint through one bounded test-only archive transport and the existing
+checked loader. Explicit synthetic bootstrap fixtures remain for first-allocation
+laws. No alternate ledger reconstruction or production archive reader is added.
+
 The cached maintained-release harness now owns scalar, Actor attribute and the
 four remaining defence-component numeric laws. Their superseded numeric helpers
 and callers are removed. Outer import/layout/publication assertions and Cleric

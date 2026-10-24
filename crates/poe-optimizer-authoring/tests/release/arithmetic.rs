@@ -1,5 +1,5 @@
 //! Independent local arithmetic examples evaluated from the tracked DSL release.
-use super::{invalid, tracked_release, tracked_sources};
+use super::{invalid, tracked_allocation, tracked_release, tracked_sources};
 use poe_optimizer_core::{
     owned_build::ParameterValue,
     owned_definitions::FiniteQuantity,
@@ -256,7 +256,7 @@ fn changing_an_authored_divisor_changes_the_value_and_invalidates_the_old_commit
     let edited = original.replace(divisor, "quantity(10, unit.percentage_points)");
     changed.replace_plain(&path, edited);
     invalid(
-        changed.build(Default::default()),
+        changed.build_with_allocation(tracked_allocation(), Default::default()),
         "assembled input identity differs from expected_input",
     );
 
@@ -265,7 +265,9 @@ fn changing_an_authored_divisor_changes_the_value_and_invalidates_the_old_commit
     let commitment = format!(" expected_input=\"{}\"", baseline.receipt().input);
     assert_eq!(changed.manifest.matches(&commitment).count(), 1);
     changed.manifest = changed.manifest.replacen(&commitment, "", 1);
-    let altered = changed.build(Default::default()).unwrap();
+    let altered = changed
+        .build_with_allocation(tracked_allocation(), Default::default())
+        .unwrap();
     assert_ne!(altered.release().receipt().input, baseline.receipt().input);
     assert_ne!(altered.release().receipt().rules, baseline.receipt().rules);
     assert_value(

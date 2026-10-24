@@ -877,7 +877,13 @@ old scaffolding. No new receipt type is justified solely by a refactor.
 
 Behavioral tests build the maintained declared release once and share its checked
 packages, with per-execution scratch. Arithmetic fixtures supply independent
-inputs/expected values; data-mutation tests edit declared DSL and must invalidate
+inputs/expected values. Tests of evolving tracked source must use the same
+persisted allocation history as ordinary authoring, including when mutating a
+formula or adding an earlier-sorting declaration. Authenticate a complete current
+checkpoint and load it through the ordinary checked reader; a test-only archive
+transport must not become another ledger importer or runtime dependency.
+Bootstrap remains explicit for synthetic first-allocation tests. Data-mutation
+tests edit declared DSL and must invalidate
 the prior commitment. Original-build fixtures consume unchanged external builds
 and current normalization policies, preserving unresolved coverage and exact
 occurrence provenance. Actor/skill isolation and parallel determinism checks run
@@ -919,6 +925,12 @@ use the same transactional allocator as other definitions before program lowerin
 Complete membership in a declared vocabulary may establish negative type facts;
 absence of an unrelated source field does not establish a false prohibition.
 Provider-specific restrictions stay attached to their exact occurrence.
+Where source construction can overwrite definitions, the offline adapter should
+reuse the bounded original constructor and capture its final typed values.
+An assignment-text census is not a general substitute for that construction.
+Source field presence, scalar type, load order and source commitments belong in
+acquisition evidence; reviewed owned declarations and programs determine native
+semantics. This does not put Lua tables or constructor behavior in runtime APIs.
 
 ### Command-line parsing
 

@@ -1,5 +1,7 @@
 //! Migration gates over every retained owner/program, not a build-parity claim.
 //! Synthetic round trips and actual tracked aliases are checked independently.
+#[path = "../tests/support/canonical_checkpoint.rs"]
+mod canonical_checkpoint;
 use crate::*;
 use flate2::read::GzDecoder;
 use poe_optimizer_core::{
@@ -440,10 +442,14 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
         .iter()
         .map(|(path, bytes)| ReleaseSource { path, bytes })
         .collect();
+    let names = canonical_checkpoint::checkpoint().names();
     let release = build_release(
         &manifest,
         &sources,
-        crate::ReleaseAllocationBase::Bootstrap,
+        crate::ReleaseAllocationBase::Predecessor {
+            names,
+            expected_names: names.identity().unwrap(),
+        },
         limits,
     )
     .unwrap();

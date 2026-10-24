@@ -6,6 +6,13 @@ proven-exact-sum prerequisite. Obligation effects, amount channels and their
 query signature are not implemented by that reducer.
 **Date:** 2026-10-15.
 
+**Revisited 2026-10-23:** the current Sniper source audit makes this the next
+substantive reservation decision. Its Action-owned formula lacks fifteen input
+producers, while selected Gigantic Following already emits a real -25% efficiency
+contribution with no delivery to that formula. Implement the accepted Skill-owned
+obligation migration and actual contributor delivery together after resolving
+this representation choice. The completeness gates remain unchanged.
+
 ## Why a separate amount channel is needed
 
 The [accepted ownership model](owned-resource-obligations-proposal.md) uses the
