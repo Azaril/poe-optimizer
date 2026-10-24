@@ -70,4 +70,5 @@ definitions game="poe2" version="owned-mechanics-v1" {
     stat "stat.initial_minion_type.usable_while_moving" type="boolean" { target "skill"; }
     stat "stat.initial_minion_type.usable_while_shapeshifted" type="boolean" { target "skill"; }
     stat "stat.initial_minion_types_present" type="boolean" { target "skill"; }
+    stat "stat.cannot_be_supported" type="boolean" { target "skill"; }
 }

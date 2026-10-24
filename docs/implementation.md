@@ -82,7 +82,19 @@ along with strict all-target Clippy and normal-dependency exclusion of ZIP.
 The new fixture initially attempted a second Stat-declaration component; it now
 extends the existing declaration document. Five existing Windows publication
 tests needed filesystem access for atomic rename and pass in the complete replay.
-Neither issue required relaxing a production validator.
+Neither issue required relaxing a production validator. This prerequisite is
+committed and pushed as `55eb01e9`.
+The offline final-definition acquisition is implemented and validated.
+It reuses the existing bounded static skill constructor and captures every final
+definition in canonical ID order, preserving absent, explicit false and true.
+The optional CLI reuses the existing atomic acquisition publisher. Its seven
+library laws, five optional CLI laws, native-only CLI exclusion and shared
+extractor regression pass; strict lint and native dependency checks pass too.
+The following native slice adds one generic Boolean Skill Stat and one reviewed
+Sniper producer through the existing KDL/DSL compiler. All 345 Authoring tests
+and strict all-target Clippy pass. The complete 70-name checkpoint verifies from fresh extraction and
+replays the ledger and all eighteen runtime files exactly. Owner coverage remains
+Partial and no evaluation bundle or complete build is admitted.
 The delivery driver also has a validated private repair: exact receiving
 effects, source memberships, summoner dependencies and prepared outputs determine
 applicability preparation. An unused selection container no longer needs invented
@@ -137,7 +149,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law validated |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint validated in this commit |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -145,29 +157,29 @@ silently become a second supported implementation.
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
-| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 69 Stats, one Sniper initial-type program and 350 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,336 source domains (1,307 Known, 29 Unmapped). Fixed first-allocation genesis is the predecessor for later builds; evaluation bundle still absent |
+| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 70 Stats, Sniper initial-type/support-prohibition programs and 350 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,336 source domains (1,307 Known, 29 Unmapped). The complete current 70-name checkpoint is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally. The later `d490eb54` hosted workflow is successful; this compact cutover still requires its own run |
-| CI | At 03:18 UTC October 24 (October 23 EDT), `d490eb54` run `40011474882` is successful. `8f91c7b1` run `40045082862` is running (ten passed, eight running, none failed among eighteen jobs). Pushed weapon-profile checkpoint `46f47bcc` has pending run `40056088209`, with no jobs started. The pending compact run was coalesced before starting. Main-branch serialization preserves the running revision and coalesces pending revisions; local validation does not imply hosted success |
+| CI | At 03:50 UTC October 24 (October 23 EDT), `d490eb54` run `40011474882` is successful. `8f91c7b1` run `40045082862` is running (thirteen passed, five running, none failed among eighteen jobs). Current main `55eb01e9` has pending run `40058214813`, with no jobs started. The pending weapon-profile run was coalesced before starting. Main-branch serialization preserves the running revision and coalesces pending revisions; local validation does not imply hosted success |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First extract and verify the allocation predecessor using the
-[canonical genesis reference](../data/owned/poe2/3887ae68/authoring-genesis.md), then use
-`cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124 --output rebuilt-release`
+[canonical checkpoint reference](../data/owned/poe2/3887ae68/authoring-genesis.md), then use
+`cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37 --output rebuilt-release`
 with a fresh output directory; runtime consumers use `rebuilt-release/runtime`.
 Successful publication prints the checkpoint identity to
 stderr and checkpoint receipt JSON to stdout. The committed complete snapshot
-supplies first-allocation history; later builds preserve its ledger as a checked
+supplies the complete allocation history; later builds preserve its ledger as a checked
 predecessor. Do not bootstrap evolving source. Current runtime input identity:
-`3ede2f3da137c16ccf3a3d3cbb914f9b1a65db717d86edd339346ccdbdd22d43`.
-The 2,787 declared source files use 6,056,538 encoded and 46,244,165 decoded
-bytes, within the existing 64 MiB bounds. The 183,544-byte root manifest and
+`9d9e3326f0a6fdf211f48df8d2813e61f8550012c5ed131ab7e3242d38fae838`.
+The 2,788 declared source files use 6,056,894 encoded and 46,244,521 decoded
+bytes, within the existing 64 MiB bounds. The 183,609-byte root manifest and
 expanded rule bytes also fit current limits without increases.
 Metadata JSON remains temporary; gzip is not the compact runtime format.
 Decoded source bytes are now below the 80% warning threshold. Fresh publication
 from the extracted canonical snapshot produces checkpoint
-`3872b395afc00c61f75e11804fdab4b7b91993806711817f17f03a861657bf31`, whose eighteen
-runtime files total 53,647,002 bytes (13,461,862 bytes below the unchanged aggregate
-cap). Its schema is 19,773,401 bytes; checkpoint/name files add 452,231 bytes.
+`0f7962e4163e8e90f424a91176181d1df2160d0d38b0351f081cf43d52aa73a0`, whose eighteen
+runtime files total 53,647,754 bytes (13,461,110 bytes below the unchanged aggregate
+cap). Its schema is 19,773,543 bytes; checkpoint/name files add 452,589 bytes.
 The fresh full verifier passes. The distinct indexed binary runtime work remains
 required; no resident-memory or evaluator-throughput saving is claimed.
 
@@ -176,7 +188,7 @@ Historical input
 and its receipt remain independent regression evidence. Original rule IR lives
 only in Authoring's `tests/fixtures/retained-rules.json.gz`, outside production
 inputs. Actual-source graph checks plus restoration of just historical program
-members, with only the exact 69-Stat/one-program/350-domain delta removed through
+members, with only the exact 70-Stat/two-program/350-domain delta removed through
 maintained content constructors, prove complete historical schema meaning and
 metadata/provenance are preserved. All other artifact bytes remain exact; the
 manifest is authenticated after restoring only its historical schema row. New
@@ -1197,10 +1209,10 @@ maintained declarations and the still-missing evaluation bundle. Keep the single
 existing release assembler and shared Host publisher; do not introduce another
 succession chain.
 
-The current-release census contains 8,212 program occurrences, 2,561 distinct
+The pre-declaration migration census contained 8,212 program occurrences, 2,561 distinct
 serialized programs across 2,631 nonempty owners, and 18 integer tables with 975
 rows. Every program now passes the whole-corpus Rust KDL/DSL migration gate and
-complete Engine compilation. The schema has 9,391 definitions and 3,873
+complete Engine compilation. That schema had 9,391 definitions and 3,873
 slots: use bounded per-source symbol groups rather than assuming one default-size
 names manifest fits; the tested groups require at most 921 symbols without raising
 limits. All eleven core/Import constituent files differ from the
@@ -1399,9 +1411,10 @@ minion Attack=true and own Physical=true from minion Physical=false. Exact repea
 Skill recipients and missing-producer plan controls belong with the upcoming actual
 execution bundle; the current slice does not construct a parallel fixture bundle.
 The canonical reference, outside the compiled inventory, pins one complete
-first-allocation snapshot. The compact storage cutover regenerates its transport
-without changing the established ledger or semantic runtime input. Extract and
-verify the snapshot through the normal reader, then use it as predecessor.
+current allocation snapshot. The compact storage cutover originally regenerated
+the first-allocation transport without changing its semantic identity. The
+support-prohibition checkpoint now advances that snapshot to all seventy names.
+Extract and verify it through the normal reader, then use it as predecessor.
 Historical source replay is no longer the normal allocation-history workflow;
 local checkpoint outputs are evidence only.
 
@@ -1420,9 +1433,9 @@ The historical inverse now requires the checked predecessor and validates retain
 name bindings. A new real-source law adds an earlier-sorting declaration, requires
 exact prior bindings/registry history, and replays from its successor without
 another allocation. It leaves the persisted fixture unchanged. Existing synthetic
-bootstrap tests retain their first-allocation purpose. The following production
-Stat slice still needs its own exact seventy-name union and two-program inverse;
-this prerequisite does not pre-admit those additions.
+bootstrap tests retain their first-allocation purpose. This prerequisite did not
+pre-admit the following production Stat: its separate checkpoint below implements
+the exact seventy-name union and two-program historical inverse.
 Validation passes all 341 affected checks: 168 library and eight CLI tests from
 the initial full run, followed by the complete repaired 165-test release suite.
 The repair adds the test Stat to the one existing declaration source instead of
@@ -1433,8 +1446,9 @@ the normal dependency guard pass. The repair compile took 3m38s; the final cache
 suite ran in 23.56s. Evidence: `runs/canonical-fixture-tests.log`,
 `runs/canonical-fixture-release-repair.log`, `runs/canonical-fixture-release-final.log`,
 `runs/canonical-fixture-clippy.log` and `runs/canonical-fixture-normal-dependencies.log`.
-All nine protected incoming-critical draft hashes are unchanged. The canonical
-archive, source release identity, five input counts and 0/5 completion are unchanged.
+All nine protected incoming-critical draft hashes were unchanged. That prerequisite
+left the canonical archive, release identity, five input counts and 0/5 completion
+unchanged; the following content checkpoint advances only the archive and release.
 
 The smallest current producer needs no level, quality, count or support-result
 read. Existing group-100/group-101 programs already produce prepared level/quality
@@ -1444,29 +1458,55 @@ readiness, receiving and metrics. Do not copy the old fixture's complete-empty
 support census from `sniper-final-inputs/source-properties.json` into Original05;
 its unresolved support discovery remains real. Likewise, the Partial census in
 `sand-preparation/source-properties.json` cannot be promoted by relabelling it.
-Initial-type membership does not establish summoner presence or support
-prohibition; those still need their actual occurrence/definition authority.
+Initial-type membership does not establish summoner presence. Support prohibition
+now has separate reviewed definition authority; occurrence authority remains
+necessary for later execution declarations.
 
-Keep support prohibition as a separate evidence/ownership task. The current Djinn
-snapshots omit nil `cannotBeSupported`; omission does not establish a native false
-producer, and occurrence-specific `noSupports` must not prohibit the shared Skill.
-The next bounded slice is the shared Boolean Skill Stat and the Sniper producer,
-with a complete pinned field/export/construction/consumer source proof and an
-Abyssal Apparition positive control. It uses the accepted declaration model and
-does not by itself establish preparation readiness.
-That proof must cover both actual Boolean decoding and the winning loaded
-definition. Reuse the existing bounded offline skill constructor in the optional
-PoB adapter, project the final table after all actual modules load, and record
-authenticated source/output commitments. This replaces the drafted 1,439-write
-assignment census and six additional source archives; do not commit that parallel
-proof mechanism. Retain the small schema/Bool-reader/exporter/consumer semantic
-audit, absent versus explicit false, positive prohibition, invalid type/metatable,
-missing definition, later-module overwrite and fresh-repeat controls. No new
-GameDataPackage field, second Lua constructor or full build/UI evaluator is
-needed. Acquisition produces review evidence; only reviewed KDL declarations and
-DSL programs enter native evaluation. Occurrence-specific `noSupports` filtering
-remains separate. The single Stat declaration component must be extended in place,
-not accompanied by a second `stat-declarations` manifest entry.
+The support-prohibition slice now defines one generic Boolean Skill Stat and an
+exact Sniper producer through the existing declaration component and DSL. Its
+pinned field/Bool-reader/export/construction/consumer proof establishes false for
+that definition; Abyssal Apparition is the positive control. Omission alone does
+not establish a native false, and occurrence-specific `noSupports` remains a
+separate source-use setting. Owner coverage remains Partial.
+The optional PoB adapter reuses the bounded static constructor and captures all
+1,436 final definitions after the actual modules load: 1,430 absent properties,
+six true and no explicit false. Explicit false is separately tested. Canonical
+ID ordering, authenticated sixteen-input commitments, fresh repeated captures,
+non-Gem additions, whole-row replacement, invalid types/metatables and missing or
+mismatched identities are checked. This replaces the drafted 1,439-write census
+and six extra archives. The semantic audit uses seven full archives/eight spans,
+reusing four existing archives and adding only the two Boolean readers and schema.
+No new GameDataPackage field, second Lua constructor or full build/UI evaluator
+is introduced. Acquisition supplies review evidence; reviewed KDL/DSL alone
+supplies the native producer. No readiness or complete-build claim follows.
+The complete canonical snapshot preserves all seventy allocations. Fresh archive
+extraction passes the ordinary verifier; current-source replay preserves the
+ledger and all eighteen runtime files byte-for-byte with zero new allocations.
+The historical inverse checks the exact seventy-name union, exact retained
+registry prefix and one occurrence of every admitted target in its suffix, then
+removes only the two reviewed programs and prior 350-domain delta. It does not
+require schema targets to have an arbitrary total ordering.
+Validation passes **359 affected checks**: 168 Authoring library, eight Authoring
+CLI and 169 release tests, plus seven optional PoB acquisition tests, five optional
+CLI tests, one native-only CLI exclusion test and the shared complete-extraction
+regression. Strict scoped Clippy passes for Authoring and both affected root CLI
+profiles and the PoB library. Normal dependency checks exclude ZIP from Authoring
+and the optional PoB/Lua stack from the native-only CLI. Scoped formatting and
+diff checks pass. The first Authoring compile caught a test-only `Ord` assumption
+for `SchemaSubject`; the repaired exact-membership check preserves allocation
+order without changing domain types or weakening validation. The complete repaired
+suite compiled in 3m38s and its release tests ran in 23.60s.
+Evidence: `runs/support-prohibition-authoring-tests-final.log`,
+`runs/support-prohibition-authoring-clippy-final.log`,
+`runs/support-prohibition-normal-dependencies.log`,
+`runs/skill-definition-facts-unit-final.log`,
+`runs/skill-definition-facts-cli-pob.log`,
+`runs/skill-definition-facts-cli-native.log`,
+`runs/skill-definition-facts-shared-extractor.log` and the corresponding scoped
+Clippy/dependency logs. The existing optional Windows LNK4098 warning remains an
+R4 task; it is not suppressed. All nine protected draft hashes remain unchanged.
+No complete-build or optimizer milestone is claimed. The next blocker remains
+actual Sniper owner mechanics and the maintained execution bundle, as detailed below.
 The readiness review found a separate blocker: the current validator requires
 Complete owner programs for every early-readiness role. Sniper is still Partial,
 so its initial-type and prohibition facts cannot yet be assigned PreparationFacts.
@@ -1481,17 +1521,17 @@ Complete or label early facts Execution just to bypass these checks. Exact fact
 coverage is a possible later diagnostic feature, not another migration prerequisite.
 
 The follow-on owner audit identifies actual missing mechanics rather than treating
-`remaining-game-effects-not-converted` as a stale label. Sniper has six current
+`remaining-game-effects-not-converted` as a stale label. Sniper has seven current
 programs and complete declaration inventories, but still lacks its resummoning
 flag, twelve-second intrinsic revival override, checked revival-speed calculation,
 and magnitude-fifteen graft property with its conditional exact-recipient
 application. Its reservation formula lacks seven numeric and eight Boolean input
 producers. Gigantic Following's existing -25% reservation-efficiency contribution
 has no delivery to that formula. Do not fill those channels with neutral constants.
-After the prohibition slice, prioritize the accepted Skill-owned obligation/payer
+Next prioritize the accepted Skill-owned obligation/payer
 migration and actual reservation contributor delivery; the
 [amount-signature refinement](owned-resource-obligation-aggregation-proposal.md)
-is still proposed and is being brought back for owner input. Bounded revival work
+is still proposed with an unanswered owner question. Bounded revival work
 can proceed independently using existing operations. Preserve a full source-field
 and constructor disposition before closing the parent owner, and retain separate
 child Actor, Basic and Gas Skill coverage. The current generic fact vocabulary
@@ -3124,9 +3164,10 @@ copying source-language accidents into the native model.
    Sniper's real initial-type facts are now authored from pinned source evidence.
    The compact cutover preserves first-genesis semantics and publishes a full
    current-format checkpoint snapshot through the canonical reference.
-   Next complete the composed Original05 support-source audit above, followed by
-   execution inputs: explicit shared
-   support-prohibition authority and any genuinely demanded assigned-target facts, then
+   The generic support-prohibition Stat and exact Sniper producer are now authored;
+   their evidence does not make the owner Complete. Next finish the actual Sniper
+   mechanics recorded above and the composed Original05 support-source audit,
+   followed by genuinely demanded assigned-target facts, then
    program classification, freezing, readiness, receiving and metrics. Inherited
    summoner context already uses the exact-parent receiving relation. A missing
    source value is not an inferred false.

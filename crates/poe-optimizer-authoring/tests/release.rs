@@ -70,6 +70,10 @@ mod source_dependencies;
 mod structural_support_domains;
 #[path = "release/structural_support_source.rs"]
 mod structural_support_source;
+#[path = "release/support_prohibition.rs"]
+mod support_prohibition;
+#[path = "release/support_prohibition_source.rs"]
+mod support_prohibition_source;
 #[path = "release/usage_support_domains.rs"]
 mod usage_support_domains;
 #[path = "release/view_support_domains.rs"]
@@ -1761,7 +1765,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     let current_artifacts: BTreeMap<_, _> = release.artifacts().collect();
 
     // Historical IR remains a test reference only. Authenticate the exact new
-    // producer, 69 Boolean channels and 350 support-source domains before
+    // producers, 70 Boolean channels and 350 support-source domains before
     // reconstructing old commitments through maintained APIs.
     let retained = fs::read(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"),
@@ -1847,6 +1851,9 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
             .map(|binding| binding.name.clone())
             .collect::<BTreeSet<_>>(),
         initial_skill_types::stat_names()
+            .into_iter()
+            .chain(support_prohibition::stat_names())
+            .collect::<BTreeSet<_>>()
     );
     let additions: Vec<_> = allocation
         .names()
@@ -1855,13 +1862,13 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         .iter()
         .map(|binding| binding.target.clone())
         .collect();
-    assert_eq!(additions.len(), 69);
+    assert_eq!(additions.len(), 70);
     let mut prior_schema = release.input().recipe.schema.clone();
     let before_count = prior_schema.definitions.len();
     prior_schema
         .definitions
         .retain(|row| !additions.contains(&SchemaSubject::Definition(row.address())));
-    assert_eq!(before_count - prior_schema.definitions.len(), 69);
+    assert_eq!(before_count - prior_schema.definitions.len(), 70);
     assert_eq!(
         &prior_schema,
         old_schema.input(),
@@ -1876,14 +1883,53 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         &current_registry.entries[..previous.entries.len()],
         previous.entries.as_slice()
     );
+    assert_eq!(current_registry.entries.len(), previous.entries.len() + 70);
+    for target in &additions {
+        assert_eq!(
+            current_registry.entries[previous.entries.len()..]
+                .iter()
+                .filter(|row| &row.target == target)
+                .count(),
+            1,
+            "each admitted target occurs exactly once in the registry suffix"
+        );
+    }
+    let predecessor_registry = predecessor.names().registry().input();
     assert_eq!(
-        current_registry.entries[previous.entries.len()..]
+        &current_registry.entries[..predecessor_registry.entries.len()],
+        predecessor_registry.entries.as_slice(),
+        "new names preserve the exact registry allocation prefix"
+    );
+    let new_bindings: Vec<_> = allocation
+        .names()
+        .input()
+        .bindings
+        .iter()
+        .filter(|binding| {
+            !predecessor
+                .names()
+                .input()
+                .bindings
+                .iter()
+                .any(|prior| prior.name == binding.name)
+        })
+        .collect();
+    assert!(
+        new_bindings
+            .iter()
+            .all(|binding| binding.name == support_prohibition::SYMBOL)
+    );
+    assert_eq!(
+        current_registry.entries[predecessor_registry.entries.len()..]
             .iter()
             .map(|row| row.target.clone())
             .collect::<Vec<_>>(),
-        additions
+        new_bindings
+            .iter()
+            .map(|binding| binding.target.clone())
+            .collect::<Vec<_>>(),
+        "only the exact newly named target allocates; checked replays allocate none"
     );
-    assert_eq!(current_registry.entries.len(), previous.entries.len() + 69);
     let parts = ReleaseSourceParts::from_checked(
         poe_optimizer_import::owned_release::check_release_source_dependencies(
             release.input(),
@@ -1895,16 +1941,27 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     let mut restored = release.input().clone();
     restored.recipe.rules = parts.rules.into_input(&old_schema);
     let admitted_owner = initial_skill_types::owner();
-    let mut removed = 0;
+    let admitted_programs =
+        BTreeSet::from([initial_skill_types::PROGRAM, support_prohibition::PROGRAM]);
+    let mut removed = BTreeSet::new();
     for row in &mut restored.recipe.rules.owners {
         row.programs.members.retain(|program| {
             let admitted =
-                row.owner == admitted_owner && program.id.as_str() == initial_skill_types::PROGRAM;
-            removed += usize::from(admitted);
+                row.owner == admitted_owner && admitted_programs.contains(program.id.as_str());
+            if admitted {
+                assert!(removed.insert(program.id.as_str().to_owned()));
+            }
             !admitted
         });
     }
-    assert_eq!(removed, 1, "exact admitted producer address");
+    assert_eq!(
+        removed,
+        admitted_programs
+            .into_iter()
+            .map(str::to_owned)
+            .collect::<BTreeSet<_>>(),
+        "exact admitted producer addresses"
+    );
     let domains = &mut restored
         .recipe
         .rules

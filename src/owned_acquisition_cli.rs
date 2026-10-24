@@ -50,3 +50,12 @@ pub(crate) fn augments(args: Args) -> Result<(), Box<dyn Error>> {
     )?;
     publish(&args.output, result.catalog_bytes(), result.evidence())
 }
+
+pub(crate) fn skill_definitions(args: Args) -> Result<(), Box<dyn Error>> {
+    let result =
+        poe_optimizer_pob::owned_skill_definition_facts::export_owned_skill_definition_facts(
+            &args.source_root,
+            Default::default(),
+        )?;
+    publish(&args.output, result.catalog_bytes(), result.evidence())
+}

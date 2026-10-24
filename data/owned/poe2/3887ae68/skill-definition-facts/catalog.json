@@ -1,0 +1,5819 @@
+{
+  "schema_version": 1,
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Data/Assets.lua",
+        "sha256": "d57230441d6205f001466a1c3a0d4458ddda0a1ccf9f685345f0f0fa2d5154ba"
+      },
+      {
+        "path": "src/Data/Gems.lua",
+        "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+      },
+      {
+        "path": "src/Data/Global.lua",
+        "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+      },
+      {
+        "path": "src/Data/SkillStatMap.lua",
+        "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+      },
+      {
+        "path": "src/Data/Skills/SkillAssets.lua",
+        "sha256": "6fab71e4a5f07e04bd363472374fe059f8ae1cdd77c126357f3adceff8f145ed"
+      },
+      {
+        "path": "src/Data/Skills/act_dex.lua",
+        "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+      },
+      {
+        "path": "src/Data/Skills/act_int.lua",
+        "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+      },
+      {
+        "path": "src/Data/Skills/act_str.lua",
+        "sha256": "7da86ad169055e234fcfdd82ded89c2b4cf883ed3d1b217ef25533ad64ebeeed"
+      },
+      {
+        "path": "src/Data/Skills/minion.lua",
+        "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+      },
+      {
+        "path": "src/Data/Skills/other.lua",
+        "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+      },
+      {
+        "path": "src/Data/Skills/spectre.lua",
+        "sha256": "3bc57d7abee172364977c174884cdf3d2d94980c70e3b12b7ae65c62bd726603"
+      },
+      {
+        "path": "src/Data/Skills/sup_dex.lua",
+        "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac"
+      },
+      {
+        "path": "src/Data/Skills/sup_int.lua",
+        "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+      },
+      {
+        "path": "src/Data/Skills/sup_str.lua",
+        "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+      },
+      {
+        "path": "src/Modules/Common.lua",
+        "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+      },
+      {
+        "path": "src/Modules/Data.lua",
+        "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+      }
+    ]
+  },
+  "skills": [
+    {
+      "id": "ABTTProcessionBannerDrain",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AcidicConcoctionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AlchemistsBoonPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AlignFatePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AmazonTriggerElementalSurgePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AncestralCryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AncestralCryProjectilePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AncestralCryShockwavePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AncestralSpiritsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AncestralWarriorTotemPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AncientGiftsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AnimusExchangePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ApocalypseColdPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ApocalypseFirePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ApocalypseLightningPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ApocalypsePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ApplyTangmazuSwarmAuraPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArbitersReachWardPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArcPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArcSkeletonMageMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArchmagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArchonOfChayulaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArchonOfChayulaTornadoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArcticArmourPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArmourBreakerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArmourExplosionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArmourPiercingBoltsAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArmourPiercingBoltsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArtilleryBallistaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ArtilleryBallistaProjectilePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AttritionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AzmeriFabricationDespair",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AzmeriFabricationEnfeeble",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AzmeriFabricationTemporalChains",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AzmeriPictBowRainOfSpores",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AzmerianSwarmAttack",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "AzmerianSwarmPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BallLightningPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BarkskinPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BarragePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BearFuryOfTheMountainPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BearMaulPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BearRampagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BerserkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BitterDeadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BlackPowderBlitzPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BlackPowderBlitzReservationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BlackStriderMassMortar",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BlackStriderWebProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BlasphemyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BleedingConcoctionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BlinkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BlinkReservationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BloodBoilPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BloodHuntPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BloodMageBloodTendrils",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BloodbarrierPlayer",
+      "cannot_be_supported": true
+    },
+    {
+      "id": "BloodhoundsMarkExplosionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BloodhoundsMarkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BoneBlastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BoneCagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BoneCultistZealotFirestorm",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BoneCultistZealotLightningstorm",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BoneOfferingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BoneshatterBruteMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BoneshatterPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BonestormPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BriarpatchPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BurdenedWretchSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "BurdenedWretchSlamUnique",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CGEAbyssCocoon3FlameGeyser",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CGEArenaBeastBossSulpurGas",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CGEBloodPriestBoilingBlood",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CGEMudBurrowerVomit",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CGEQuillCrabCausticGround",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CGEQuillCrabFireGround",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CGESanctifiedMonstrosityPusGround",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CGESanctumBlackStriderWeb",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CGEStarFishSpitCausticGround",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ChaosFrogExplosionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ChaosSpearTriggerChaosSurgePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ChargeRegulationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ChargedStaffPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ChargedStaffShockwavePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ChilledGroundBurstWaterDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ChilledGroundOasisConvertWaterDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ClusterGrenadePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CoffinWretchBabySoulrend1",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CoilingBoltsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CombatFrenzyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CometPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CommandCorpseBeetleExplodePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CommandFireDjinnLivingBombPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CommandMadFlightPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CommandMistRavenPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CommandPackleaderPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CommandSandDjinnKnifeThrowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CommandWaterDjinnBubblePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CompanionBearLeapImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CompanionBearMaul",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CompanionBearSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CompressedDurationSupportPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CompressedDurationSupportPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ConductiveRunesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ContagionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ConvalescenceActivePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ConvalescencePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CorpseBeetleExplode",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CorpseBeetlesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CorpseCloudPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CracklingPalmPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CrossbowRequiemAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CrossbowRequiemPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CrushingFearPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CullTheWeakPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CultistBeastSunder",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CurseOfRepulsionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "CurseOfRepulsionShockwavePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DTTAnimateWeaponSpearDashStabImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DTTHellscapeStabbySkyStab",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DTTKaruiBloodFeverButcherLeap",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DTTMantisRatLeap",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DTTParasiteSwarmLeap",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DTTParasiteSwarmLeapAttach",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DarkEffigyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DarkEffigyProjectilePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DeathFromAboveDaemonMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DeathKnightSlamEAA",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DeathStormSkeletonStormMageMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DefianceBannerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DefianceBannerReservationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DemonFormPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DespairPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DestructiveLinkSkeletonBombadierMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DetonateDeadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DetonateLivingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DetonatingArrowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DisciplinePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DisengagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DoomBlastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DreadBannerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "DreadBannerReservationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EDSAbyssMorayClanFlamethrower",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EDSGolemancerReapLeft",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EDSPyramidHandLightningLance",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EDSShellMonsterFlamethrower",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EDSShellMonsterPoisonSpray",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ESRechargeForceRestartWaterDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EarthquakePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EarthshatterPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ElectrocutingArrowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ElementalConfluxPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ElementalExpressionTriggeredPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ElementalStormPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ElementalSunderingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ElementalWeaknessPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EmberFusilladePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EmergencyReloadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EncaseInJadePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EnemyExplode",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EnervatingNovaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EnfeeblePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EnrageSkeletonReaverMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EntanglePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EscapeShotIceFragmentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EscapeShotPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EssenceDrainPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EternalMarchPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EternalRagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ExpeditionGroundLaser",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ExplodingPoisonToadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ExplosiveConcoctionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ExplosiveGrenadePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ExplosiveShotAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ExplosiveShotPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ExplosiveSpearPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ExplosiveTeleportSandDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ExplosiveTransmutationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ExsanguinatePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "EyeOfWinterPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FallingThunderPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FangsOfFrostPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FarudinWarlockBugRend",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FeastOfFleshPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FerociousRoarMetaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FireBombSkeletonMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FireRuneFireDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FireballPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FireboltPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FirestormPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FistOfWarSupportPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FistOfWarSupportPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FistOfWarSupportPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FlameSliceFireDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FlameWallPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FlameblastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FlashGrenadePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FlickerStrikePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ForgeHammerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FortifyingCryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FortifyingCryShockwavePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FragmentationRoundsAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FragmentationRoundsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FragmentsOfThePastFragmentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FragmentsOfThePastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FreezingMarkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FreezingSalvoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FreezingShardsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FrostBoltSkeletonMageMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FrostBombPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FrostDartsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FrostWallPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FrostboltPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FrostflameNovaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FrozenLocusPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FulminatingConcoctionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FulminationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FungalArtilleryMortar",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FuriousSlamPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "FuturePastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAAncestralJadeHulkLeapImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAAnimateWeaponMaceSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAAnimateWeaponQuarterstaffSweep",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastBossBigSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastBossFissureDamage",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastBossFissureExplosion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastBossPunchLeft",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastBossPunchLeftEmpowered",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastBossPunchRight",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastBossPunchRightEmpowered",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastBossShockwave",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastLeapSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastLeapSlamEnraged",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastLeapSlamEnragedKick",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAArenaBeastSlamEmpowered",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GABlackStriderWebMortarImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GACenobiteBloaterSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GADeathKnightOverheadslamforward",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GADrownedCrawlerSwipe",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAExpeditionShakariMonsterSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAFigureheadSlamGhostFlame",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAFirebreatherFireSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAGoblinArenaBeastGroundSlash",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAGoblinArenaBeastGroundSlashLightning",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAGoblinArenaBeastHeadbutt",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAGoblinArenaBeastHeadbuttEmpowered",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAGullGoliathSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAHellscapeFleshLeapImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAHellscapePaleEliteSkyStab",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAIcyQuadrillaBossRectSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAKaruiSpiritTurtleSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAKaruiTuataraTailSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAMantisRatDualStrike",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAMediumBeetleChargedSunder",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAMediumBeetleSunder",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAMudBurrowerBloodProj",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAMudBurrowerDivePush",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAMudBurrowerGoopSmallImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAMudBurrowerHeadSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAMudBurrowerSpraySmallImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAMutewindWomanSpearStab1",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GAQuadrillaBossRectSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GARathbreakerEnrageSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GASaltGolemMelee",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GATwilightOfficerSmite",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GATwilightOrderSoldierChargeImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GATwilightSoldierStab",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GATwoHeadedTitanSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GATwoHeadedTitanStomp",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GPAPorcupineAntSpikeNova",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GPAPorcupineAntSpikeNovaSanctum",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GPSCaveDwellerSuperProjectileSanctum",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GPSPaleWalkerWave",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSAbyssCarrionWingBeamImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSAbyssCocoon3BallSpitImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSAbyssCocoon3BallSpitSmallImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSAbyssPaleEliteBeam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSAbyssPaleEliteSnowBallImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSAbyssPitArtilleryMortarImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSAbyssPrimordialMonsterScreech",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSArmourCasterVolatileExplode",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSBeetleLightningNova",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSCaveDwellerSonicPulse",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSCaveDwellerSuperProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSCenobiteBloaterOnDeath",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSDesertBatZap",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSExcavatorOrbDonutExplosion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSExcavatorOrbExplosion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSExcavatorRaptorTriangleSlam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSExpeditionBoneCultistEggExplosion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSHellscapeDemonEliteBeamNuke",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSHellscapePaleEliteBoltImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSHellscapePaleEliteOmegaBeam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSMercurialCasterBlast",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSPlagueNymphLaser",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSProwlingShadeIceBeam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSRagingFireSpiritsVolatileSanctum",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSRagingTimeSpiritsVolatileSanctum",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSRaptorDefenderRailShot",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSSerpentClanAcidSpit",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSShrikeScreech",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSStarFishSpitImpact",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSTwilightOrderPlagueNymphLaser",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSVaalConstructSkitterbotGrenadeExplode",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSVaalZealotLightningBlast",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSWardboundMinionBlast",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GSWarlockRaiseBugs",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GaleStrikePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GalvanicFieldBuffPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GalvanicShardsAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GalvanicShardsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GasArrowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GasShotSkeletonSniperMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GatheringStormPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GelidPalmPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GeminiSurgePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GhostDancePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GlacialBoltAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GlacialBoltPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GlacialCascadePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GlacialLancePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GoreChargerCharge",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GraveyardGhostDashToTarget",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GraveyardSpookyGhostExplode",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GreatHuntPackleaderMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GrimFeastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GrimFeastResummonPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "GrimPillarsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HailstormRoundsAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HailstormRoundsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HammerOfTheGodsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HandOfChayulaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HandSlamSandDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HarbingerOfMadnessPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HealSkeletonClericMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HeartOfIcePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HellscapeDemonFodderFaceLaser",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HeraldOfAshPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HeraldOfBloodPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HeraldOfIcePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HeraldOfPlaguePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HeraldOfThunderPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HexblastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HighVelocityRoundsAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HighVelocityRoundsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HisFoulEmergencePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HisWinnowingFlamePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HollowFocusPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HollowResonancePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HollowShellPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HuhuGrubLarvaeMortar",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HyenaCacklePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HyenaCentaurMeleeStab",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HyenaCentaurMeleeSwipe",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HyenaCentaurSpearThrow",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HyenaCentaurSpearThrowCliff",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "HyenaCompanionMelee",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IceArmourSkeletonMageMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IceFragmentsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IceNovaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IceShardsAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IceShardsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IceShotPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IceStrikePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IceTippedArrowsIceFragmentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IceTippedArrowsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IcestormPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ImpactShockwaveSupportPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ImpurityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IncendiaryShotAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IncendiaryShotPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IncineratePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "InevitableAgonyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "InfernalCryCorpseExplosionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "InfernalCryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IntoTheBreachPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IronWardNovaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "IronWardPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "JellyfishNettlerArc",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "KillingPalmPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "KnifeThrowSandDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "KnockbackWavePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LeapSlamPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LeylinesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LifeRemnantsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LightningArrowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LightningBoltPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LightningConduitPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LightningRodPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LightningSpearPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LightningWarpPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LingeringIllusionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LingeringIllusionSpawnPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LivingBombFireDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LivingBombPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LivingLightningZap",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "LunarAssaultPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MAASBaronEndgameBasic",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MAASExpedition2ShakariBasicMelee",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MAASExpedition2ShakariTailSwipe",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MASExtraAttackDistance20",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MASExtraAttackDistance6",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MASFireConvertAltArtFireArrow",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MASKelpDregCrossbow",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MASKelpDregCrossbowIce",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MASKelpDregCrossbowPhys",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MASStatueWretchPush",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MMAPorcupineAntSpikeball",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MMAPorcupineAntSpikeballSanctum",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MMSBaneSapling",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MMSBoneRabbleMortar",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MMSHellscapeDemonEliteTripleMortar",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MMSVaalGuardGrenade",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MMSVaalGuardOilTrap",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPAMudBurrowerBloodProj",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPAMudBurrowerGoopBigBall",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPAMudBurrowerGoopSmallBall",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPAMudBurrowerSprayProj",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPAMudBurrowerVomitProj",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPAVaalHumanoidCannon",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSAbyssCocoon3BallSpit",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSAbyssCocoon3BallSpitSmall",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSAbyssPaleEliteFireball",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSAbyssPaleEliteSnowBall",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSAbyssPaleWalker2Fireball",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSAbyssPitArtillery",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSAncestralTotemSpiritSoulCasterProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSArmourCasterBasic",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSAzmeriPictStaffProj",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSAzmeriPictStaffProj2",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSBloodMageBloodProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSBoneCultistNecromancerLightning",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSBoneCultistZealotFire",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSBoneCultistZealotLightning",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSBoneRabbleBurningArrow",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSBreachEliteBoneProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSBreachEliteFallenLunarisMonsterChaosSpark",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSBrineMaidenIceProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSChaosGodTriHeadLizardBasicProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSCrawGullSpit",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSElectricStingRayProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSExpeditionBoneCultistProjectiles",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSGoblinMinerRockThrow",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSGoblinShamanBasicProj",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSHellscapeDemonFodderProj",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSHellscapeFleshEliteBasicProj",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSHellscapePaleHammerhead",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSKaruiCasterProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSMercurialCasterEnrage",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSPlagueNymphRailGun",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSRaptorDefenderExplosiveShot",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSRedSkeletonCaster",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSSkeletonMancerBasicProj",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSSpearfisherSpearThrow",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSStarfishVomit",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSTwilightClericProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSTwilightOrderPlagueNymphRailGun",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSTwilightSorcerorFireball",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSVaalBloodPriestProj",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSVaalConstructCannon",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSVaalHumanoidCannonNapalmMiniBlob",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPSVaalSunApparitionBasicProj",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWAzmeriPitifulFabricationSkullThrow",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWBlackStriderWebProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWBlackStriderWebProjectileSanctum",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWCleansedMonstrosityRailgun",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWDrudgeExplosiveGrenade",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWExpeditionArbalestProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWExpeditionArbalestSnipe",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWFarudinSpearThrow",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWGoblinSpearThrow",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWKelpDregPuncture",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWKelpDregPunctureIce",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MPWVaalSavageBlowDart",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MagmaBarrierPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MagmaSprayPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MagneticSalvoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MalicePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ManaDrainPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ManaRemnantsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ManaTempestPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ManifestWeaponPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MantraOfDestructionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MassFusilladeFireDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeditatePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "Melee1HMacePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "Melee2HMacePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeed",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeed2",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeedBoss",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeedBow",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeedCold",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeedComboTEMP",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeedFire",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeedFireCombo35",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeedLightning",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeedUnique",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeedWolfCompanion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeAtAnimationSpeedWolfPackleader",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeBowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeCrossbowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeGiantStarfishTentacle1",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeGrenadeLauncherPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeMaceMacePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeMudBurrowerBite",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeMudBurrowerLeftCleave",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeMudBurrowerRightCleave",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeQuarterstaffPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeSpearOffHandPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeSpearPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeleeUnarmedPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaAnimusSplintersPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaBarrierInvocationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaCastCurseOnBlockPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaCastFireSpellOnHitPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaCastLightningSpellOnHitPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaCastOnBlockPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaCastOnCharmUsePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaCastOnCritPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaCastOnDodgePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaCastOnElementalAilmentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaCastOnMeleeKillPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaCastOnMeleeStunPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaCastOnMinionDeathPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaDeadeyeMarksPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaElementalInvocationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaFeralInvocationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaHollowFormPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaMirageArcherPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaMirageDeadeyePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaMortarCannonPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaReapersInvocationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaRemnantsOfKalguurPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MetaSpellslingerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MeteorFireDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MidnightStarPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MinionInstability",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MinionMelee",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MinionMeleeBow",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MinionMeleeStep",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MirageArcherSpawnPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MirageDeadeyeSpawnPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MirrorOfRefractionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MoltenBlastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MoltenCrashPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MomentOfVulnerabilityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MudBurrowerGoopExplode",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MudBurrowerMaggotSummon",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "MutewindBanditWomanLeap",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "NightfallEmbraceTheFallPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "NightfallSoaringMidnightPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "OilBarragePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "OilGrenadePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "OrbOfStormsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "OverwhelmingPresencePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PainOfferingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ParryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PassiveTriggeredManaWaveWaterDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PerfectStrikePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PermafrostBoltsAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PermafrostBoltsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PhantasmalArrowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PinnacleOfPowerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PlagueBearerNovaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PlagueBearerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PlagueBurstPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PlasmaBlastAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PlasmaBlastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PoisonBurstArrowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PowerSiphonPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PoweredByVerisiumPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PrimalBountyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PrimalStrikesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ProfaneRitualPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ProlongedDurationSupportPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ProlongedDurationSupportPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PurityOfFirePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PurityOfIcePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "PurityOfLightningPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "QuillCrabSpikeBurst",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "QuillCrabSpikeBurstPoison",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "QuillCrabSpikeBurstTropical",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "QuillCrabSpikeShrapnel",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "QuillCrabSpikeShrapnelPoison",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RagingSpiritsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RainOfArrowsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RainOfBladesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RainOfBladesTriggeredPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RaiseZombiePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RakePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RapidAssaultPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RapidShotAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RapidShotPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RavenousSwarmAttack",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RavenousSwarmPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ReapPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RefutationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ResonatingShieldPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RhoaMountPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RighteousDescentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RisenArbalestBasicProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RisenArbalestRainOfArrows",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RisenArbalestSnipe",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RitualSacrificePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RollingMagmaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RollingSlamPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RunicReprievePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RunicTemperingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "RuthlessSupportPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SSMJellyfishNettlerMinions",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SacredGroundPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SacrificePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SanguineRevelryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SavageFuryActivePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SavageFuryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ScatteringCalamityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ScavengedPlatingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SeismicCryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SerpentClanCurse",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SerpentClanTailWhip",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShardScavengerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShatteringConcoctionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShatteringPalmExplosionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShatteringPalmPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShatteringRoarSkeletalBruteMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShatteringSpitePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShellMonsterDeathMortar",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShellMonsterDeathMortarPoison",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShellMonsterFirehose",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShellMonsterSprayMortar",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShellMonsterSprayMortarPoison",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShieldBlockPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShieldChargePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShieldWallPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShockGrenadePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShockburstRoundsAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShockburstRoundsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShockchainArrowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShockwaveTotemPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ShockwaveTotemQuakePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SiegeBallistaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SiegeBallistaProjectilePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SiegeCascadeAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SiegeCascadePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SigilOfPowerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SiphonElementsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SiphoningStrikePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SkelemancerSkelenado",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SkyfallPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SmashToSmithereensPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SnapPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SnipePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SnipersMarkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SolarOrbPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SorceryWardPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SoulOfferingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SoulrendPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SparkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SpearOfSolarisPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SpearThrowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SpearfieldPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SpiralVolleyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SpiritVesselPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SpiritVesselSupport",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SpookyGhostLightningBounce",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SpookyWraithProjectileExplosionCold",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "StaffConsecratePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "StaggeringPalmPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "StaggeringPalmProjectilePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "StampedePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "StarbornOnslaughtPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "StompingGroundShockwavePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "StormLancePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "StormWavePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "StormblastBoltsAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "StormblastBoltsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "StormcallerArrowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonAzmerianWolfPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonBeastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonFireDjinnPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonInfernalHoundPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonMetaTotemSpellTotemPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonMistRavenPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonSandDjinnPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonSkeletalArsonistsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonSkeletalBrutesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonSkeletalClericsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonSkeletalFrostMagesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonSkeletalReaversPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonSkeletalSnipersPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonSkeletalStormMagesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonSkeletalWarriorsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonSpectrePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonSpiralingConspiracyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SummonWaterDjinnPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SunderPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SuperchargedSlamPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAbidingHexPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAcrimonyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAddedChaosDamagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAddedColdDamagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAddedFireDamagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAddedLightningDamagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAdhesiveGrenadesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAdhesiveGrenadesPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAdmixturePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAdvancingStormPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAftershockChancePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAftershockChancePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAhnsCitadelPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAilithLineagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAlignmentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAlignmentPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAlignmentPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAmanamusTithePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAmbrosiaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAmbrosiaPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAmbushPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAmmoConservationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAmmoConservationPlayerFour",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAmmoConservationPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAmmoConservationPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAncestralAidPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAncestralCallPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAncestralCallPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAncestralWarriorTotemPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAnimusSplintersPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportArakaalisLustPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportArbitersIgnitionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportArcaneSurgePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportArmourBreakPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportArmourBreakPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportArmourBreakPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportArmourDemolisherPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportArmourDemolisherPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportArmourExplosionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportArmsLengthPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAstralProjectionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAtaluiBloodlettingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAtzirisAllurePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAtzirisCommunionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAtzirisImpatiencePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportAutoReloadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBarbsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBarbsPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBarbsPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBarrierInvocationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBattershoutPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBeheadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBeheadPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBhatairsVengeancePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBiddingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBiddingPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBiddingPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBitingFrostPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBitingFrostPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBlasphemyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBlazingCriticalPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBleedPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBleedPlayerFour",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBleedPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBleedPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBlindPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBlindPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBlindsidePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBloodFountainPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBloodMagicPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBloodlustPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBoneShrapnelPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBoundlessEnergyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBoundlessEnergyPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBountyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBountyPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBrambleslamPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBranchingFissuresPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBranchingFissuresPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBreachlordsAmalgam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBreachlordsRift",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBrinkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBrinkPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBrittleArmourPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBrutalityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBrutalityPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBrutalityPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBrutusBrainPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBurgeonPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBurgeonPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBurningRunesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportBurstingPlaguePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCadencePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCaltropsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCannibalismPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCannibalismPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCatalysingElementsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCatharsisPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCathasBrilliance",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChainPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChainPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChainPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChaosMasteryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChaoticFreezePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChargeInhibitionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChargeProfusionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChargeProfusionPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChargedMarkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChargedShotsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChargedShotsPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCharmBountyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportChillingIcePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCirelsCultivationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportClarityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportClarityPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportClashPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCloseCombatPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCloseCombatPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportColdExposurePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportColdMasteryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportColdPenetrationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCombatReloadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportComboFinisherPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportComboFinisherPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCommandment",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCommiseratePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportConcentratedAreaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportConcoctPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportConcoctPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportConcussiveRunesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportConcussiveSpellsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportConsideredCastingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportControlledDestructionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportControlledHazardPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCooldownRecoveryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCooldownRecoveryPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCoolheadedPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCorpseConservationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCorrosionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCorruptingCryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCorruptingCryPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCorruptingCryPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCracklingBarrierPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCraterPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCrazedMinionsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCreepingChillPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCrescendoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCrescendoPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCrescendoPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCrystallineShardsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCullingStrikePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCullingStrikePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCulminationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCulminationPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCurseEffectPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportCursedGroundPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDanseMacabrePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDaressosPassionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDauntlessPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDazePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDeadlyCurrentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDeadlyHeraldsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDeadlyIgnitesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDeadlyIgnitesPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDeadlyPoisonPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDeadlyPoisonPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDeadlyResolvePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDeathmarchPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDecayingHexPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDeepCutsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDeepCutsPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDefyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDefyPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDelayedGratificationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDelayedReactionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDeliberationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDerangePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDiallasDesirePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDirestrikePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDirestrikePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDoedresUndoingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDoubleBarrelPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDoubleBarrelPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDoubleBarrelPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDrainedAilmentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportDurabilityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEchoingCryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEfficiencyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEfficiencyPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEinharsBeastritePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportElectrocutePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportElementalArmamentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportElementalArmamentPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportElementalArmamentPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportElementalArmyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportElementalDischargePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportElementalFocusPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportElementalInvocationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEmbitterPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEmpoweredCullPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEmpoweredSparksPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEncroachingGroundPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEnergyCapacitorPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEnergyRetentionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEnergyShieldOnShockKillPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEnragedWarcryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEnragedWarcryPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEonyrsThunderPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEscalatingPoisonPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEshsProwess",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEshsRadiancePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEssenceHarvestPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportEternalMarkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExcisePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExecratePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExecutePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExecutePlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExecutePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExpandPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExpansePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExploitWeaknessPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExplosiveGrowthPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExplosiveGrowthPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExposingCryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportExtractionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFanTheFlamesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFanTheFlamesPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFarCombatPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFarCombatPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFeedingFrenzyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFeedingFrenzyPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFeralInvocationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFerociousRoarPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFerocityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFieryDeathPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFireExposurePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFireMasteryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFirePenetrationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFirePenetrationPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFistOfKalguurPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFlamePillarPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFlamepiercePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFleetingRemnantsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFleetingRemnantsPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFlukePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFlukePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFocusedCursePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportForkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFreezePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFreezeforkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFrenziedRipostePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFreshClipPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFreshClipPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFrostfirePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportFrozenSpitePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportGambleshotPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportGarukhansResolvePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportGlacierPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportGorgePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportGuatelitzisAblationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHaemocrystalsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHandOfChayulaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHardyTotemsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHardyTotemsPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHardyTotemsPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHayoxisBindingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHealingRunesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHeavyStunEndurancePlayerOne",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHeavyStunEndurancePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHeftPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHeightenedAccuracyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHeightenedAccuracyPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHeightenedChargesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHelbrymsHidePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHerDeclarationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHerbalismPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHerbalismPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHexBloomPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHitAndRunPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHollowFormPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHolyDescentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHourglassPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportHulkingMinionsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIceBitePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIceBitePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIciclePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIgniteDurationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIgniteDurationPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIgniteDurationPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIgnitePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIgnitePlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIgnitePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportImmolatePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportImpalePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIncisionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIncreaseLimitPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIncreaseLimitPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIncreasedCriticalDamagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportInevitableCriticalsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportInevitableCriticalsPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportInfernalLegionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportInfernalLegionPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportInfernalLegionPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportInnervatePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportIntenseAgonyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportInterludePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportInterludePlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportInterludePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportJaggedGroundPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportJaggedGroundPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportKalisasCrescendoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportKaomsMadnessPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportKhatalsRejuvenationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportKnockbackPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportKnockbackWavePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportKulemaksDominionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportKurgalsLeashPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLastGaspPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLastingFrostPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLastingGroundPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLastingShockPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLifeFlaskPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLifeLeechPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLifeLeechPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLifeLeechPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLifeOnCullPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLightningExposurePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLightningMasteryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLightningPenetrationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLivingLightningPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLivingLightningPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLockdownPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLongFusePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLongFusePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportLoyaltyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMagneticRemnantsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMagnifiedAreaPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMagnifiedAreaPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMaimPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMaladyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportManaFlarePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportManaFlaskPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportManaFountainPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportManaLeechPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportManaOnCullPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMarkForDeathPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMarkForDeathPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMarkOfSiphoningPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMarkOfSiphoningPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMeatShieldPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMeatShieldPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMedvedsFelling",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMeleePhysicalDamagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaCastCurseOnBlockPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaCastFireSpellOnHitPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaCastLightningSpellOnHitPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaCastOnBlockPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaCastOnCharmUsePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaCastOnCritPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaCastOnDodgePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaCastOnElementalAilmentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaCastOnMeleeKillPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaCastOnMeleeStunPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaCastOnMinionDeathPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaDeadeyeMarksPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMetaTotemSpellTotemPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMinionInstabilityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMinionMasteryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMinionMeleeSplashPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMinionMeleeSplashPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMinionPactPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMinionPactPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMirageArcherPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMirageDeadeyePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMobilityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMomentumPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMorganasTempestPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMorrigansInsight",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMortarCannonPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMultishotPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMultishotPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMusterPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMysticismPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportMysticismPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportNeuralOverloadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportNimbleReloadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportNovaProjectilesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportNovaProjectilesTwoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportOisinsOathPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportOlrothsConvictionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportOlrothsHubrisPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportOpeningMovePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportOverchargePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportOverextendPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportOverreachPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPayloadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPerfectEndurancePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPerfectionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPerpetualChargePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPersistentGroundPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPersistentGroundPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPersistentGroundPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPhysicalMasteryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPiercePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPiercePlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPiercePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPietysMercyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPinPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPinPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPinPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPinpointCriticalPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPoisonPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPoisonPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPoisonPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPoisonSpores",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPotentExposurePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPracticalMagicPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPracticalMagicPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPracticedComboPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPrecisionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPrecisionPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportProfanityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportProfanityPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportProjectileAccelerationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportProjectileAccelerationPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportProjectileAccelerationPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportProjectileDecelerationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportProjectileDecelerationPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPrototypeSeventeenPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPunchThroughPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPursuitPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPursuitPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportPursuitPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportQuillburstPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRagePlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRagePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRageforgedPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRageforgedPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRagingCryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRakiatasFlowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRapidAttacksPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRapidAttacksPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRapidAttacksPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRapidCastingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRapidCastingPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRapidCastingPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportReapersInvocationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRearmPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRearmPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRefractionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRefractionPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRefractionPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportReinforcedTotemsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportReinforcedTotemsPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRelentlessRagePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRendingApexPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRetaliatePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRetaliatePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRetreatPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRetreatPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRetreatPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportReveberatePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRicochetPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRicochetPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRigwaldsFerocityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRipPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRitualisticCursePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRomirasRequitalPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRuneforgedBladesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRunicExtractionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRunicInfusionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRupturePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportRustedSpikesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSacrificalOfferingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSacrificialLambPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSacrificialLambPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSalvoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportScouringFlamePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSecondWindPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSecondWindPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSecondWindPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSelflessRemnantsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSeraphsHeartPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportShockConductionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportShockConductionPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportShockPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportShockingLeapPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportShockingRiftPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportShortFusePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportShortFusePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSkitteringStonePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSkitteringStonePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSlamAftershocksPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSlowPotencyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSparPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSpectralVolleyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSpellCascadePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSpellEchoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSpellslingerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSplinteringTotemPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSplinteringTotemPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStaticShocksPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSteadfastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSteadfastPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStoicismPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStoicismPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStompingGroundPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStormchainPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStormfirePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStreamlinedRoundsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStrongHeartedPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStunPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStunPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStunPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStyrnsFerocity",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportStyrnsMountain",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSwiftAfflictionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSwiftAfflictionPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSwiftAfflictionPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportSyzygyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportTacatisIrePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportTangMazusThuriblePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportTasaliosRhythmPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportTearPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportTecrodsRevengePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportTempestuousTempoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportThornskinPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportThornskinPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportThrillOfTheKillPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportThrillOfTheKillPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportTirelessPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportTrickstersShardPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportTriggeredAnnihilationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportTulsAvalanche",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportTulsStillnessPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUhtredAuguryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUhtredExodusPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUhtredOmenPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUhtredsConstellation",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUhtredsRitePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUnderminePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUnerringPowerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUnleashPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUntouchablePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUpheavalPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUpheavalPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUpwellingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUpwellingPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUrgentTotemsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUrgentTotemsPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUrgentTotemsPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUruksSmeltingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportUulNetolsEmbracePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVanguardPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVanguardPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVarashtasBlessingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVerglasPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVilentasPropulsionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVitalityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVitalityPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVolatilityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVolcanicEruptionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVoltPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVoranasSiege",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVruunsAftermath",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportVruunsInevitability",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportWallFortressPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportWallFortressPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportWarmbloodedPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportWildfirePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportWildshardsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportWildshardsPlayerThree",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportWildshardsPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportWindowOfOpportunityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportWindowOfOpportunityPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportWitheringTouchPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportWolfPouncePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportXibaquasRendingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportXophsPyrePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportZarokhsRefrainPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportZarokhsRevoltPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportZenithPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportZenithPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportZerphisLegacyPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "SupportingFirePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TBAbyssCarrionWingBeam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TBBreachElitePaleLightningBoltSpammableLeft",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TBExcavatorSceptreErraticBeam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TBHellscapePaleLightningBoltSpammableLeft",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TBVaalPyramidBeam",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TCAncestralLeagueKaruiHulk",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TCExcavatorOrbCharge",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TCHellscapePaleElite2Charge",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TCRathbreakerDrivebyCharge",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TCTwilghtOrderSoldierCharge",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TameBeastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TangmazuMadFlightMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TemperWeaponCombustionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TemperWeaponPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TempestBellPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TempestFlurryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TemporalChainsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TemporalRiftPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TheStarsAnswerCometPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TheStarsAnswerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ThornsPlayer",
+      "cannot_be_supported": true
+    },
+    {
+      "id": "ThrashingVinesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ThunderousLeapPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ThunderstormPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TimeFreezePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TimeOfNeedPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TimeSnapPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TornadoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TornadoShotPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ToxicDomainPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ToxicGrenadePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ToxicGrowthPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TrailOfCaltropsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredAbyssalApparitionPlayer",
+      "cannot_be_supported": true
+    },
+    {
+      "id": "TriggeredBarbsPlayer",
+      "cannot_be_supported": true
+    },
+    {
+      "id": "TriggeredBarbsPlayerThree",
+      "cannot_be_supported": true
+    },
+    {
+      "id": "TriggeredBarbsPlayerTwo",
+      "cannot_be_supported": true
+    },
+    {
+      "id": "TriggeredBattershoutExplosionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredBoneShrapnelPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredBrambleslamPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredBurningRunesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredCaltropsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredCatalysingDischargePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredChargedMarkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredCorruptingCryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredCorruptingCryThreePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredCorruptingCryTwoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredCraterPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredCreepingChillPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredCurseZoneHazardExplosionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredDeadlyCurrentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredDeadlyResolvePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredDecayingHexPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredElementalDischargePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredEmpoweredSparkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredExplosiveGrowthPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredExplosiveGrowthPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredExplosiveTransmutationExplosionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredFanTheFlamesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredFanTheFlamesPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredFieryDeathPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredFistOfKalguurPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredFlamePillarPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredFracturedSelfPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredHaemocrystalsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredHisWinnowingFlamePillarPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredLightningDetonateDeadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredLivingLightningPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredLivingLightningPlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredManaFlarePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredManifestRunePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredMoltenShowerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredMorrigansInsightPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredPoisonSporesPustule",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredQuillburstPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredRuneforgedBladesPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredShockingRiftPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredSkitteringStonePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredSkitteringStonePlayerTwo",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredSparkEmpowerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredSplinterExplosionHardyTotems",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredStaticShocksPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredSupportFrozenSpiteIceFragmentPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredTrailOfCaltropsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredVolcanicEruptionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredWindDancerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriggeredXibaquasRendingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TrinityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TriskelionCascadePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "TwisterPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "UnboundAvatarPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "UnearthPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "UniqueAtziriHeraldPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "UniqueBreachLightningBoltPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "UnleashPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "UnloadAmmoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "UrchinSlingProjectile",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VaalBloodPriestDetonateDead",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VaalBloodPriestExsanguinate",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VaalBloodPriestSoulrend",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VaalHumanoidShockRifle",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VaalZealotLightningSpark",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VaalZealotLightningSparkNova",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ValakosChargePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VaultingImpactPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VerisiumManifestationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "ViciousHexSupportPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VileDisruptionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VineArrowPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VirtuousBarrierPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VividStampedePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VoidIllusionPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VoidIllusionSpawnPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VolatileDeadPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VolcanicFissurePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VolcanoPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VoltaicBarrierPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VoltaicBarrierTriggeredChainLightningPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VoltaicMarkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "VulnerabilityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WalkingCalamityMeteorPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WalkingCalamityPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WarBannerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WarBannerReservationPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WardboundMinionsPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WaterBubbleWaterDjinn",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WaveOfFrostPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WeaponGrantedChaosboltPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WhirlingAssaultPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WhirlingSlashPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WhirlwindLancePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WildProtectorPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WindDancerPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WindSerpentsFuryPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WingBlastPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WitherPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WitheringPresencePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfArcticHowlPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfCrossSlashPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfLeapAttackMinion",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfLunarBlessingBeamAttackPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfLunarBlessingPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfPackPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfPackleaderDashAttack",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfPackleaderLungeBite",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfPounceMarkPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfPouncePlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfPounceSummonWolfPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WolfShredPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WyvernDevourPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WyvernFlameBreathPlayer",
+      "cannot_be_supported": null
+    },
+    {
+      "id": "WyvernRendPlayer",
+      "cannot_be_supported": null
+    }
+  ]
+}

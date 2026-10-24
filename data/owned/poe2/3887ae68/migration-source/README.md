@@ -6,10 +6,10 @@ allocation predecessor using the [canonical reference](../authoring-genesis.md),
 then build into a fresh output directory:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124 --output rebuilt-release
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37 --output rebuilt-release
 ```
 
-The canonical snapshot preserves the first 69-name allocation ledger. Source builds use that checked checkpoint with
+The canonical snapshot preserves the current 70-name allocation ledger. Source builds use that checked checkpoint with
 `--predecessor` and `--expected-predecessor`; do not bootstrap evolving sources.
 The output contains `checkpoint.json`, `names.json` and `runtime/`. Runtime
 consumers receive `rebuilt-release/runtime`. The [canonical reference](../authoring-genesis.md)
@@ -28,7 +28,7 @@ coverage inventories, tables, receivers, queries, applications and bindings.
 It has **no program members**. The builder rejects embedded programs, including
 when no packets are declared. A DSL error cannot select another execution path.
 The remaining compressed JSON constituents are temporary R1/R2 metadata inputs,
-not the final compact runtime pack. Loading the fixed genesis needs no local
+not the final compact runtime pack. Loading the canonical snapshot needs no local
 predecessor, historical source rebuild, staging helper, migration generator or PoB checkout.
 Schema artifacts use the sole compact typed codec with one root namespace; the
 semantic schema version and identity are independent of that wire representation.
@@ -45,8 +45,8 @@ actual tracked aliases, packets and DSL. Its independent comparator permits
 node renaming, retains read/operand/effect semantics and order, checks exact
 owner membership, and compiles the complete reconstructed rule package with the
 existing Engine. Non-program metadata and all incomplete-coverage declarations
-must remain unchanged except for the explicitly admitted 69 Stat declarations,
-one Sniper initial-type program and 350 intrinsic support-domain declarations.
+must remain unchanged except for the explicitly admitted 70 Stat declarations,
+two Sniper initial-type/support-prohibition programs and 350 intrinsic support-domain declarations.
 The release test removes exactly that delta,
 restores historical program members and uses checked content constructors to bind
 the original dependencies. Complete historical schema meaning and semantic receipt
@@ -65,8 +65,8 @@ Historical reference identity (not the current DSL input):
 
 ## Preserved scope and limitations
 
-The release has 13,333 active allocations, 9,460 schema definitions and
-3,873 slots. Rules have 6,550 owners, 8,213 program occurrences, 18 integer
+The release has 13,334 active allocations, 9,461 schema definitions and
+3,873 slots. Rules have 6,550 owners, 8,214 program occurrences, 18 integer
 tables, 59 receivers, 114 contribution queries, one effect application and one
 existing-Actor binding. The five named query sets retain their original order
 and 22 queries each. The 227 provenance rows are unchanged metadata, not
@@ -76,6 +76,8 @@ There is no evaluation bundle. The derived manifest still reports 5,827 partial
 rule owners and five partial routing outputs. The first declarations add Sniper's
 initial own/minion type facts and explicit minion-context presence through generic
 Skill Boolean Stats. See [evidence and limits](../initial-skill-types/README.md).
+The next declaration adds the separately reviewed definition-level support
+prohibition; see its [source proof and limits](../support-prohibition/README.md).
 Eight existing Skill, Actor and declared-slot owners, three root/Ascendancy
 owners, four UsagePolicies, 293 ordinary attribute-choice passives, eighteen
 reviewed numeric minion passives, seven class-view passives, one intrinsic socket,
@@ -105,8 +107,8 @@ initializer and generic modifier constructors. Foreign sources and the nine
 Partial numerical programs remain independently accountable; the UI fallback
 action supplies no native coverage.
 Inherited supports remain present, external origins remain independently checked,
-and all numerical Partial coverage stays unchanged. No new names or IDs are
-allocated by this metadata update.
+and all numerical Partial coverage stays unchanged. The support-domain metadata
+additions allocate no names or IDs; the separate Stat declarations do.
 This adds no whole-build coverage or numerical parity and
 does not make an incomplete build executable. The first complete unchanged
 build remains gated on the remaining data/runtime migration and actual blockers.
@@ -126,10 +128,10 @@ serve as production names.
 
 ## Checked source inventory
 
-Current input: `3ede2f3da137c16ccf3a3d3cbb914f9b1a65db717d86edd339346ccdbdd22d43`.
-The 103 packets reference 2,562 distinct complete rule sources, preserving all
-8,213 occurrences. Their local name files use 5,011 distinct exact addresses;
-the declaration ledger adds 69 names. The 2,787 declared inputs occupy 5,789,442
-encoded and 58,665,360 decoded bytes; the root manifest is 183,544 bytes.
+Current input: `9d9e3326f0a6fdf211f48df8d2813e61f8550012c5ed131ab7e3242d38fae838`.
+The 103 packets reference 2,563 distinct complete rule sources, preserving all
+8,214 occurrences. Their local name files use 5,011 distinct exact addresses;
+the declaration ledger adds 70 names. The 2,788 declared inputs occupy 6,056,894
+encoded and 46,244,521 decoded bytes; the root manifest is 183,609 bytes.
 All fit the existing default limits. The maintained Authoring tests check actual
-source graphs, historical artifacts and the new initial-type projection.
+source graphs, historical artifacts and both new definition-level producers.

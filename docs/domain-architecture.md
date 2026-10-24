@@ -606,6 +606,10 @@ ancestor checkpoints. Standard archive transport may wrap this exact directory;
 transport is not a second semantic format, a source-reproduction proof or the
 compact runtime representation. Keep a durable checkpoint reference independent
 of CI artifact retention before advancing allocation history.
+Advance that complete snapshot when new names are admitted. Subsequent declarations
+must preserve the newly allocated IDs too, even when their names sort earlier.
+The current source tests consume this same snapshot; replacing it removes the
+old archive from the live workflow without introducing an ancestor dependency.
 
 Rule source composition uses `rule-packet "family/packet.kdl"
 names="family/names.kdl"` and explicit `rule-source "rules/example.rule"`
@@ -649,8 +653,8 @@ The conversion passes its preservation gates; detailed validation belongs in the
 retained only in Authoring's
 [`tests/fixtures/retained-rules.json.gz`](../crates/poe-optimizer-authoring/tests/fixtures/retained-rules.json.gz).
 Its historical receipt
-authenticates the archived bytes. Tests remove only the exact admitted 69-Stat,
-one-program and 350 support-domain additions, restore the archived program
+authenticates the archived bytes. Tests remove only the exact admitted 70-Stat,
+two-program and 350 support-domain additions, restore the archived program
 members, and reconstruct the original dependency bindings with maintained content
 constructors. The existing
 assembler then checks every historical artifact and provenance field. A separate
@@ -931,6 +935,10 @@ An assignment-text census is not a general substitute for that construction.
 Source field presence, scalar type, load order and source commitments belong in
 acquisition evidence; reviewed owned declarations and programs determine native
 semantics. This does not put Lua tables or constructor behavior in runtime APIs.
+Capture the complete bounded final definition catalog in canonical identity order,
+including definitions outside Gem references or the selected build. Preserve
+absence separately from explicit false. Caller-provided facts or copied provenance
+cannot acquire authority merely by matching an upstream revision.
 
 ### Command-line parsing
 

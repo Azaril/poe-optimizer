@@ -393,7 +393,9 @@ fn declarations<'a>(
 // Retain the actual bounded construction as the one acquisition path. Offline
 // source-selection evidence uses these same original tables, without a second
 // constructor or a numeric evaluator.
-fn construct_catalog(sources: &BTreeMap<String, String>) -> Result<(Lua, Table, Vec<String>)> {
+pub(crate) fn construct_catalog(
+    sources: &BTreeMap<String, String>,
+) -> Result<(Lua, Table, Vec<String>)> {
     let lua = Lua::new_with(
         StdLib::TABLE | StdLib::STRING | StdLib::MATH | StdLib::BIT | StdLib::JIT,
         LuaOptions::default(),

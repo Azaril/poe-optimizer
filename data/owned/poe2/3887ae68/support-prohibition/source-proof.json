@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "source_commit": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "files": [
+    {
+      "path": "src/Export/spec.lua",
+      "archive": "support-prohibition/spec.lua.gz",
+      "archive_bytes": 65210,
+      "archive_sha256": "4d9b76fd5d15c58156ba457a6ec2f34434ad138abd4b961cb544d01bd6e6b9a3",
+      "decoded_bytes": 834761,
+      "normalized_lf_sha256": "781b7eac1c2b9647aa3ad002987d36aae36f054d56957ee6a79c3ec35ae4cd5f"
+    },
+    {
+      "path": "src/Export/Scripts/skills.lua",
+      "archive": "support-structural-inventories/sources/src_Export_Scripts_skills.lua.gz",
+      "archive_bytes": 7676,
+      "archive_sha256": "ba892ca3fc45154b0793896a1cc6c76cf442b54d8f58ed5c8918973f937a8089",
+      "decoded_bytes": 37334,
+      "normalized_lf_sha256": "c3cdb3b5b9e1fa620ca034a64f35d42863af07af7a1628d5acbef1b99fca3417"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "archive": "mana-supplier-sources/CalcSetup.lua.gz",
+      "archive_bytes": 21347,
+      "archive_sha256": "6cf68ffe3f750e1b0670c54f4152fa2cbd88db2c1092d16c7541f773582a708c",
+      "decoded_bytes": 100609,
+      "normalized_lf_sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "archive": "configuration-distance-inputs/CalcActiveSkill.lua.gz",
+      "archive_bytes": 10868,
+      "archive_sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48",
+      "decoded_bytes": 50144,
+      "normalized_lf_sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "archive": "self-flat-skill-construction/child-CalcTools.lua.gz",
+      "archive_bytes": 3321,
+      "archive_sha256": "b4b896d49bbe5f0d2006b1b03cd6f1d4e5274c061e46e52fd21787b7eabcf67a",
+      "decoded_bytes": 11517,
+      "normalized_lf_sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Export/Classes/Dat64File.lua",
+      "archive": "support-prohibition/Dat64File.lua.gz",
+      "archive_bytes": 1811,
+      "archive_sha256": "b27c72fd2aea85e1c16772794a21863125db7b64a7f67d003b24bec3bfe14443",
+      "decoded_bytes": 7547,
+      "normalized_lf_sha256": "48ca42720ef5d1818623bed14ad66f56ef247e306c4bd33d0d3cb35bd390798a"
+    },
+    {
+      "path": "src/Export/Classes/DatFile.lua",
+      "archive": "support-prohibition/DatFile.lua.gz",
+      "archive_bytes": 1738,
+      "archive_sha256": "1391a7dafcb61238dc480a3e2551d91e15cbd736403abb26530c25c72f8f12dc",
+      "decoded_bytes": 7145,
+      "normalized_lf_sha256": "9626eca4b4e9221123478cb83d9bcf4f804706a5e63a84e2f2b6a5df0a244447"
+    }
+  ],
+  "spans": [
+    {
+      "role": "database-boolean",
+      "path": "src/Export/spec.lua",
+      "first": 24771,
+      "last": 24777,
+      "bytes": 99,
+      "sha256": "e2e7082ec2860b0066cd923fa1dfd0f4122a6f16d8d154ff04b171fdbab5dd0f"
+    },
+    {
+      "role": "exporter-active-branch",
+      "path": "src/Export/Scripts/skills.lua",
+      "first": 324,
+      "last": 436,
+      "bytes": 3632,
+      "sha256": "1599282ec5e09b5d320cf430f558dc59fdbf1c0a9ccbe01339b55290f7076b04"
+    },
+    {
+      "role": "effect-construction",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1996,
+      "last": 2105,
+      "bytes": 5920,
+      "sha256": "d0604f0a76e04ae69fb714cfe1296f6933ed6e8644623c17018002312ceafe25"
+    },
+    {
+      "role": "source-usage-no-supports",
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 1713,
+      "last": 1735,
+      "bytes": 952,
+      "sha256": "812e712c88122ea6bfba0c5fc16eb0707315958a13b97e0293af0675b49a67a5"
+    },
+    {
+      "role": "active-skill-construction",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 144,
+      "last": 234,
+      "bytes": 3538,
+      "sha256": "215482b85ed4bfab7be529873181e240d0f2b11cee6c6cf0007f007c00e7fd16"
+    },
+    {
+      "role": "admission-consumer",
+      "path": "src/Modules/CalcTools.lua",
+      "first": 108,
+      "last": 133,
+      "bytes": 1585,
+      "sha256": "73425f8177a670ce12b0c546787884380a813f9560e809665d5d7c43df3d9364"
+    },
+    {
+      "role": "boolean-reader-Dat64File",
+      "path": "src/Export/Classes/Dat64File.lua",
+      "first": 10,
+      "last": 16,
+      "bytes": 105,
+      "sha256": "39b354d12ebfb710108d7acdb8bc8c1a2796d59e207318938f1605ae539b1654"
+    },
+    {
+      "role": "boolean-reader-DatFile",
+      "path": "src/Export/Classes/DatFile.lua",
+      "first": 10,
+      "last": 16,
+      "bytes": 109,
+      "sha256": "811ecc26c90c50cdc31d7394c0b29eb96e01db583cc0550b8a016f79c8103093"
+    }
+  ],
+  "final_catalog": "skill-definition-facts/catalog.json",
+  "final_evidence": "skill-definition-facts/evidence.json",
+  "policy": "The final Sniper row is present with an absent property, and the pinned Bool export and direct admission consumer establish false for this exact retained definition. No general absent-to-false conversion is provided."
+}

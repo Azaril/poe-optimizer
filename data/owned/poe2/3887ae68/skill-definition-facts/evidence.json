@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "extractor_sha256": "e6808ff2b32ea3251d8178ea17b438714ef89b4c8db546ed278e587887d2fd47",
+  "extraction_source_files": [
+    {
+      "path": "src/Data/Assets.lua",
+      "sha256": "d57230441d6205f001466a1c3a0d4458ddda0a1ccf9f685345f0f0fa2d5154ba"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+    },
+    {
+      "path": "src/Data/Skills/SkillAssets.lua",
+      "sha256": "6fab71e4a5f07e04bd363472374fe059f8ae1cdd77c126357f3adceff8f145ed"
+    },
+    {
+      "path": "src/Data/Skills/act_dex.lua",
+      "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/act_str.lua",
+      "sha256": "7da86ad169055e234fcfdd82ded89c2b4cf883ed3d1b217ef25533ad64ebeeed"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Data/Skills/spectre.lua",
+      "sha256": "3bc57d7abee172364977c174884cdf3d2d94980c70e3b12b7ae65c62bd726603"
+    },
+    {
+      "path": "src/Data/Skills/sup_dex.lua",
+      "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+    },
+    {
+      "path": "src/Data/Skills/sup_str.lua",
+      "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    }
+  ],
+  "module_order": [
+    "src/Data/Global.lua",
+    "src/Data/SkillStatMap.lua",
+    "src/Data/Skills/act_str.lua",
+    "src/Data/Skills/act_dex.lua",
+    "src/Data/Skills/act_int.lua",
+    "src/Data/Skills/other.lua",
+    "src/Data/Skills/minion.lua",
+    "src/Data/Skills/spectre.lua",
+    "src/Data/Skills/sup_str.lua",
+    "src/Data/Skills/sup_dex.lua",
+    "src/Data/Skills/sup_int.lua",
+    "src/Data/Gems.lua",
+    "src/Data/Assets.lua",
+    "src/Data/Skills/SkillAssets.lua"
+  ],
+  "catalog_sha256": "98b3af560aa998fcc2f7cf4d2e9aeeff8fe909e67a0f8543ab96e6f77c41ad8b",
+  "definitions": 1436,
+  "absent": 1430,
+  "explicit_false": 0,
+  "explicit_true": 6
+}

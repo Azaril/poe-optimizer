@@ -21,6 +21,13 @@ checkpoint through one bounded test-only archive transport and the existing
 checked loader. Explicit synthetic bootstrap fixtures remain for first-allocation
 laws. No alternate ledger reconstruction or production archive reader is added.
 
+Final skill-definition acquisition reuses the existing bounded static-data
+constructor; do not add a second Lua constructor or assignment-inventory parser.
+Retain that constructor for the optional acquisition consumer when retiring the
+broader legacy identity projection. The drafted support-prohibition write census
+is superseded before adoption; only its useful Boolean-decoding/consumer evidence
+belongs in the maintained proof. Acquisition facts do not grant native coverage.
+
 The cached maintained-release harness now owns scalar, Actor attribute and the
 four remaining defence-component numeric laws. Their superseded numeric helpers
 and callers are removed. Outer import/layout/publication assertions and Cleric

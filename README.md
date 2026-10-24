@@ -21,9 +21,10 @@ The October 22 [architecture review](docs/architecture-review-2026-10-22.md) is
 adopted. Before adding further mechanic content, migrate to readable `.rule`
 formulas and KDL manifests, one checked IR, reproducible releases and an interned
 runtime package. Consolidate tests and remove redundant legacy paths. **Migration
-has started: complete program compilation, formatting, name/membership KDL,
-stable named allocation and final-release construction exist; whole-release DSL
-conversion and the binary runtime remain ahead.** The first
+is in progress: the tracked whole-release DSL conversion, typed Stat declarations,
+atomic name-ledger/release publication and compact schema artifacts are validated.
+Broader declarations, the indexed binary runtime and remaining legacy retirement
+are still ahead.** The first
 complete unchanged build must run exclusively through the new format and native
 path; then native search and broader
 build validation follow.
@@ -104,12 +105,12 @@ Optional `stat-declarations "definitions.kdl" names="declaration-names.kdl"`
 entries in a release manifest stage typed Stats through the stable name allocator
 before packet lowering; declaration aliases stay separate from packet aliases.
 
-First extract and verify the fixed allocation checkpoint using the
-[canonical genesis reference](data/owned/poe2/3887ae68/authoring-genesis.md).
+First extract and verify the current allocation checkpoint using the
+[canonical checkpoint reference](data/owned/poe2/3887ae68/authoring-genesis.md).
 Then build current source into a fresh directory:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124 --output rebuilt-checkpoint
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37 --output rebuilt-checkpoint
 ```
 
 The output contains `checkpoint.json`, `names.json` and the closed `runtime/`
@@ -118,11 +119,11 @@ The command writes the checkpoint receipt to stdout and prints its checkpoint
 identity on stderr. Later checkpoints can be selected explicitly with their
 reported identity; predecessor selection is never implicit.
 
-The first declaration checkpoint contains 69 generic Skill Boolean Stats and
-Sniper's initial-type producer. Use that fixed genesis as the
-checked predecessor for later source builds; do not bootstrap evolving sources.
-Before another allocation generation requires a newer predecessor, the plan
-requires distributing a complete checked snapshot rather than replaying history.
+The current declaration checkpoint contains 70 generic Skill Boolean Stats and
+Sniper's initial-type and support-prohibition producers. Use that complete snapshot
+as the checked predecessor for later source builds; do not bootstrap evolving
+sources. New allocation generations must distribute another complete checked
+snapshot, preserving the prior ledger without requiring historical replay.
 
 Choose `--bootstrap` only to start a new history. A predecessor is fully checked,
 and its names remain reserved even when the next build declares no new Stats.

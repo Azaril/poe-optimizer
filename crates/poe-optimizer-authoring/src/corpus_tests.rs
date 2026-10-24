@@ -460,8 +460,20 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
     // tested declaration addition changes only this derived schema binding.
     original.definitions = schema.identity().clone();
     drop(CompiledRulePackage::compile(&original, schema, Default::default()).unwrap());
-    let additions_source = "rules/initial-skill-types/skeletal-sniper.rule";
-    let additions_id = OwnedDefinitionKey::new("initial-skill-types").unwrap();
+    let reviewed_additions = [
+        (
+            OwnedDefinitionKey::new("initial-skill-types").unwrap(),
+            "rules/initial-skill-types/skeletal-sniper.rule",
+        ),
+        (
+            OwnedDefinitionKey::new("definition-support-prohibition").unwrap(),
+            "rules/support-prohibition/skeletal-sniper.rule",
+        ),
+    ];
+    let reviewed_ids: BTreeSet<_> = reviewed_additions
+        .iter()
+        .map(|(id, _)| id.clone())
+        .collect();
     let owner_symbols = load_names(
         std::str::from_utf8(&owned["names/group-000.kdl"]).unwrap(),
         schema,
@@ -506,7 +518,7 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
     }
     let mut expected = after.clone();
     let mut occurrences = 0;
-    let mut additions = 0;
+    let mut additions = BTreeSet::new();
     for (group, owners) in original.owners.chunks(64).enumerate() {
         let owners: Vec<_> = owners
             .iter()
@@ -532,19 +544,22 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
             ManifestLimits::default(),
         )
         .unwrap();
-        // Admit exactly the new producer covered by the maintained behavioral
+        // Admit exactly the new producers covered by the maintained behavioral
         // suite. Do not weaken historical placement to a subset/count check.
         for append in &mut packet.appends {
             append.programs.retain(|member| {
-                if member.id != additions_id && member.source != additions_source {
+                let Some((id, source)) = reviewed_additions
+                    .iter()
+                    .find(|(id, source)| id == &member.id || *source == member.source.as_str())
+                else {
                     return true;
-                }
+                };
                 assert_eq!(append.owner, additions_owner);
-                assert_eq!(member.id, additions_id);
-                assert_eq!(member.source, additions_source);
-                assert!(declared_sources.contains(additions_source));
-                used_sources.insert(additions_source.to_owned());
-                additions += 1;
+                assert_eq!(member.id, *id);
+                assert_eq!(member.source, *source);
+                assert!(declared_sources.contains(*source));
+                used_sources.insert((*source).to_owned());
+                assert!(additions.insert(id.clone()), "unique reviewed producer");
                 false
             });
         }
@@ -646,20 +661,23 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
         after, expected,
         "exact independently assembled owner/program placement"
     );
-    assert_eq!(additions, 1, "exact reviewed new producer membership");
+    assert_eq!(
+        additions, reviewed_ids,
+        "exact reviewed new producer membership"
+    );
     let mut preserved = actual.clone();
-    let mut removed = 0;
+    let mut removed = BTreeSet::new();
     for owner in &mut preserved.owners {
         owner.programs.members.retain(|program| {
-            if owner.owner == additions_owner && program.id == additions_id {
-                removed += 1;
+            if owner.owner == additions_owner && reviewed_ids.contains(&program.id) {
+                assert!(removed.insert(program.id.clone()));
                 false
             } else {
                 true
             }
         });
     }
-    assert_eq!(removed, 1);
+    assert_eq!(removed, reviewed_ids);
     // Independently pin the admitted metadata additions. All prior rows and
     // every other metadata field still undergo whole-package equality below.
     let ns = schema.namespace();

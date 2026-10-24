@@ -262,12 +262,13 @@ fn real_sniper_initial_type_facts_are_definition_owned_boolean_channels() {
     let release = tracked_release().release();
     let schema = release.assembled().schema();
     let names = symbols();
-    assert_eq!(
-        names
-            .definitions()
-            .map(|(name, _)| name.to_owned())
-            .collect::<BTreeSet<_>>(),
-        stat_names()
+    assert!(
+        stat_names().is_subset(
+            &names
+                .definitions()
+                .map(|(name, _)| name.to_owned())
+                .collect::<BTreeSet<_>>()
+        )
     );
     for name in stat_names() {
         let SchemaLookup::Known(declaration) = schema.definition(&stat(&names, &name)) else {

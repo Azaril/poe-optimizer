@@ -13,6 +13,7 @@ packet "retained-000" {
     }
     append definition="skill.sniper_skill" {
         program "initial-skill-types" source="rules/initial-skill-types/skeletal-sniper.rule"
+        program "definition-support-prohibition" source="rules/support-prohibition/skeletal-sniper.rule"
         program "ordinary-population-inputs" source="rules/ordinary-population-inputs/86e9f459ef684d3b.rule"
         program "ordinary-population-activation" source="rules/ordinary-population-activation/d1480142d271160f.rule"
         program "ordinary-population-requirements" source="rules/ordinary-population-requirements/aa9ba9ba671d9adc.rule"

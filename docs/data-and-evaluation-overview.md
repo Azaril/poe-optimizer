@@ -14,12 +14,19 @@ Three different systems exist in the baseline, and their names can obscure that:
 | --- | --- | --- |
 | Owned native evaluator | Rust checks and interprets typed SSA rules, then resolves/executes exact occurrence effects and metrics | The foundation to retain and improve; component coverage exists, full originals remain blocked |
 | Source-compatibility stack | Rust implements Lua-shaped parsing/control/data semantics; legacy Data/Engine features and the embedded snapshot are enabled by default | To remove with its remaining consumers; it is not the desired long-term rule language |
-| Actual PoB host | `mlua` embeds LuaJIT, loads pinned PoB Lua and provides host shims in isolated reference processes | Optional extraction/reference tool to retain |
+| Actual PoB host | `mlua` embeds LuaJIT; bounded static-data constructors run in process, while full build/reference evaluation uses isolated processes and host shims | Optional extraction/reference tool to retain |
 
 A Rust implementation of Lua-like behavior is different from running LuaJIT.
 Both exist today. Neither should be confused with the owned typed-rule VM.
 The review found default dependencies still pull the legacy stack into binaries;
 absence of the `pob` feature alone does not prove the native distribution is clean.
+
+Static acquisition does not require the full build/UI evaluator. For example,
+final skill-definition facts reuse the existing bounded original data constructor,
+then project exact source identities and typed optional values after every module
+has loaded. The offline evidence preserves absence separately from explicit false.
+Reviewed KDL declarations and DSL rules supply native meaning; no Lua table,
+truthiness rule or source-field spelling becomes a native calculation contract.
 
 Current Import also contains much of the offline release toolchain, and many
 historical test-support functions still construct and publish IR directly. The

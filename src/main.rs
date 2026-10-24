@@ -165,6 +165,9 @@ enum Action {
     /// Export finite socketed-augment definitions through the optional pinned adapter.
     #[cfg(feature = "pob")]
     ExportOwnedAugments(owned_acquisition_cli::Args),
+    /// Capture finite final skill-definition facts through the optional data adapter.
+    #[cfg(feature = "pob")]
+    ExportOwnedSkillDefinitionFacts(owned_acquisition_cli::Args),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
     /// Resolve owned component effects from explicit packages; no game metric conversion.
@@ -326,6 +329,10 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::ExportOwnedActorBaselines(args)) => owned_acquisition_cli::actors(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedAugments(args)) => owned_acquisition_cli::augments(args)?,
+        #[cfg(feature = "pob")]
+        Some(Action::ExportOwnedSkillDefinitionFacts(args)) => {
+            owned_acquisition_cli::skill_definitions(args)?
+        }
         Some(Action::ExtendOwnedRecipe(args)) => owned_extension_cli::run(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedWeaponProfiles(args)) => owned_weapon_profiles_cli::export(args)?,

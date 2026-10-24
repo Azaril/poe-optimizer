@@ -35,17 +35,17 @@ loss. No mutable head is introduced by this implementation.
 
 ## Current commands and layout
 
-The bootstrap command illustrates starting a new history. For the maintained
-production history, run it only against the fixed genesis source described below;
-use the predecessor form for evolving source.
+For the maintained production history, first extract and verify the snapshot in
+the [canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md), then
+build against that exact predecessor:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output first-checkpoint
-$checkpointIdentity = "<checkpoint identity printed by the previous build>"
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor first-checkpoint --expected-predecessor $checkpointIdentity --output next-checkpoint
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37 --output next-checkpoint
 ```
 
-Every release build requires either explicit bootstrap or a predecessor path and
+Use `--bootstrap` only to start an independent allocation history. It must not
+reconstruct the maintained ledger from evolving source. Every release build
+requires either explicit bootstrap or a predecessor path and
 its expected checkpoint identity. It emits receipt JSON on stdout and the new
 checkpoint identity on stderr after successful publication. The output contains
 only `checkpoint.json`, `names.json`, and `runtime/`; runtime consumers receive the
@@ -54,7 +54,7 @@ last directory. A failed predecessor load never falls back to bootstrap.
 To validate a transported checkpoint independently of its sources and ancestors:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release verify first-checkpoint --expected $checkpointIdentity
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release verify canonical-checkpoint --expected 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37
 ```
 
 Supply the expected identity of the directory being verified from a maintained
@@ -63,8 +63,9 @@ compact JSON containing `checkpoint`, `names`, `runtime_input` and
 `runtime_registry` only after full validation. It writes no files. A valid receipt
 alone is insufficient: the exact ledger and complete runtime inventory are required.
 This verifies a snapshot, not its source reproducibility or any build's coverage.
-An archive may transport the unchanged directory; durable distribution remains an
-R3 requirement before a second allocation generation needs a new predecessor.
+An archive transports the unchanged directory. Each new canonical allocation
+generation must publish another complete checked snapshot; the current snapshot
+already includes the first subsequent allocation.
 
 An optional `stat-declarations "definitions.kdl" names="declaration-names.kdl"`
 manifest record uses the existing bounded source decoder, KDL declaration parser
@@ -84,11 +85,12 @@ checks bounded canonical receipts and names, and revalidates the complete runtim
 The runtime registry is the only registry snapshot: `NamesInput.registry` must
 equal its identity. The ledger identity is a separate commitment.
 
-## Canonical first-allocation genesis
+## Canonical allocation snapshot
 
 The first production declaration slice establishes one genesis checkpoint with
-69 allocated Skill Stats. The earlier empty-ledger checkpoint is verification
-evidence, not that genesis. The [canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md)
+69 allocated Skill Stats. The support-prohibition checkpoint preserves those
+bindings and appends the seventieth. The earlier empty-ledger checkpoint is
+verification evidence, not allocation authority. The [canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md)
 pins a complete immutable snapshot and its checkpoint/archive identities outside
 the compiled manifest inventory, avoiding a self-referential receipt.
 

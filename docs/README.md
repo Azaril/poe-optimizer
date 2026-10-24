@@ -1,9 +1,10 @@
 # Documentation
 
 Start here. The October 22 architecture review is adopted; **migration is in
-progress, with test consolidation and an initial Rust expression parser**.
-Full DSL compilation and runtime cutover remain ahead. No supplied build yet
-completes native evaluation.
+progress**. The tracked whole-release DSL conversion, atomic authoring checkpoints
+and compact schema artifacts are validated. Broader declaration migration, the
+indexed binary runtime and remaining legacy retirement are ahead. No supplied
+build yet completes native evaluation.
 
 | Document | Authority |
 | --- | --- |

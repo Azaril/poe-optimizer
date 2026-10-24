@@ -4,12 +4,16 @@ use std::process::Command;
 #[cfg(feature = "pob")]
 #[test]
 fn finite_catalogs_reproduce_reviewed_data_and_refuse_overwrite() {
-    use std::{fs, path::Path};
+    use std::{collections::BTreeMap, fs, path::Path};
     let root = Path::new(env!("CARGO_MANIFEST_DIR"));
     let temp = tempfile::tempdir().unwrap();
     for (command, folder) in [
         ("export-owned-actor-baselines", "actor-baselines"),
         ("export-owned-augments", "augments"),
+        (
+            "export-owned-skill-definition-facts",
+            "skill-definition-facts",
+        ),
     ] {
         let destination = temp.path().join(folder);
         let invoke = || {
@@ -53,8 +57,18 @@ fn finite_catalogs_reproduce_reviewed_data_and_refuse_overwrite() {
             "stale acquisition evidence for {folder}"
         );
         assert_eq!(fs::read_dir(&destination).unwrap().count(), 2);
+        let snapshot = || {
+            fs::read_dir(&destination)
+                .unwrap()
+                .map(|entry| {
+                    let entry = entry.unwrap();
+                    (entry.file_name(), fs::read(entry.path()).unwrap())
+                })
+                .collect::<BTreeMap<_, _>>()
+        };
+        let before = snapshot();
         assert!(!invoke().status.success());
-        assert_eq!(fs::read(destination.join("catalog.json")).unwrap(), bytes);
+        assert_eq!(snapshot(), before);
     }
 }
 
@@ -211,7 +225,11 @@ fn optional_export_reproduces_both_catalogs_without_overwrite() {
 #[test]
 fn absent_source_does_not_publish_an_acquisition() {
     let temp = tempfile::tempdir().unwrap();
-    for name in ["export-owned-actor-baselines", "export-owned-augments"] {
+    for name in [
+        "export-owned-actor-baselines",
+        "export-owned-augments",
+        "export-owned-skill-definition-facts",
+    ] {
         let destination = temp.path().join(name);
         let output = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
             .arg(name)
@@ -240,4 +258,5 @@ fn native_cli_excludes_optional_source_acquisition_commands() {
     assert!(!help.contains("export-owned-intrinsic-attack"));
     assert!(!help.contains("export-owned-item-bases"));
     assert!(!help.contains("export-owned-weapon-profiles"));
+    assert!(!help.contains("export-owned-skill-definition-facts"));
 }

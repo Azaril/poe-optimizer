@@ -1,0 +1,4 @@
+program "definition-support-prohibition" context skill {
+    let prohibited = false;
+    effect "definition-prohibition" = derive(current, stat.cannot_be_supported, prohibited);
+}

@@ -1,26 +1,26 @@
-# Canonical first-allocation checkpoint
+# Canonical authoring checkpoint
 
-This complete immutable snapshot preserves the first 69 named Stat allocations
+This complete immutable snapshot preserves all 70 named Stat allocations
 alongside their checked runtime. It is outside the compiled manifest inventory
 to avoid a self-referential receipt. A clean clone can load it directly; no
 historical source rebuild or prior local output is required.
 
 | Commitment | Value |
 | --- | --- |
-| Archive | `authoring-checkpoints/c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124.zip` |
-| Archive bytes | 1,439,333 |
-| Archive SHA-256 | `3dec46a43add68b63b095f07e58cd0c3275dc204ff286726175e5fe918170254` |
-| Checkpoint identity | `c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124` |
-| Name-ledger identity | `dabf9a92dffb7e9ec36ee587e1dd377bc9aaffa096373c32062ac4428dadabd2` |
-| Registry identity | `003d28c7f38b4b3f72e3c39b2f25462d216cbf3fc7c6f67c393073d127ddfcb8` |
-| Genesis runtime input identity | `802bf2eccbdf83814dbb34f0745a2006c75ec4fdcd80e4ee8fc80e053852cdcb` |
+| Archive | `authoring-checkpoints/5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37.zip` |
+| Archive bytes | 1,441,115 |
+| Archive SHA-256 | `7618ec1fd10f7e7e4b46a2865d988ce37cba829f42047a37f863a3ef4ceef72f` |
+| Checkpoint identity | `5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37` |
+| Name-ledger identity | `c1eb716472a8af62a998ddf1319fd9bff580e0558b3b95f14f302b9b6f83375c` |
+| Registry identity | `e997d7222de1e153706c9fd9c1003568f8c7a3b766112c250f3c8fc677dde8d1` |
+| Runtime input identity | `9d9e3326f0a6fdf211f48df8d2813e61f8550012c5ed131ab7e3242d38fae838` |
 
 From the repository root, with fresh output paths:
 
 ```powershell
-Expand-Archive -LiteralPath data/owned/poe2/3887ae68/authoring-checkpoints/c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124.zip -DestinationPath genesis-checkpoint
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release verify genesis-checkpoint --expected c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor genesis-checkpoint --expected-predecessor c588b782e7683f74f4e3ead45360364a7e6f9c69e3e4430f0783ebf4f45a6124 --output rebuilt-checkpoint
+Expand-Archive -LiteralPath data/owned/poe2/3887ae68/authoring-checkpoints/5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37.zip -DestinationPath canonical-checkpoint
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release verify canonical-checkpoint --expected 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37 --output rebuilt-checkpoint
 ```
 
 The archive contains `checkpoint.json`, `names.json` and the eighteen files in
@@ -37,24 +37,21 @@ Tracked-source arithmetic mutations and new declarations preserve that ledger;
 synthetic bootstrap tests separately exercise first allocation. The transport
 library is not a production or native evaluation dependency.
 
-The October 23 compact schema cutover regenerated storage from the original
-first-allocation source at Git revision
-`caca40a55885e5c8612e7d9b47c1691f8ea321a9`, replacing only its bootstrap schema
-with the new canonical encoding before using the maintained compiler. Name
-allocations, registry identity and semantic runtime input are unchanged. Schema
-artifact, manifest, source and checkpoint transport commitments deliberately
-change; the replaced expanded-artifact reader and one-time converter are gone.
-The original source revision alone is no longer a current-format reproduction
-command. The snapshot replaces that temporary source-rebuild bridge.
+The support-prohibition checkpoint extends the prior 69-name ledger by exactly
+one generic Boolean Skill Stat. The new name sorts before existing names but its
+ID appends after the saved registry history. The original 69 bindings remain
+unchanged. This snapshot replaces the previous archive; its recorded predecessor
+digest is provenance and does not require loading an ancestor.
 
 Verified on October 23, 2026: a fresh extraction passed complete checkpoint
 validation, then current tracked source built successor
-`3872b395afc00c61f75e11804fdab4b7b91993806711817f17f03a861657bf31` with semantic
-runtime input
-`3ede2f3da137c16ccf3a3d3cbb914f9b1a65db717d86edd339346ccdbdd22d43` and the same
-ledger/registry. Its eighteen runtime files total 53,647,002 bytes. Evidence is
-recorded in `runs/compact-schema-*-verified.json` and
-`runs/compact-schema-checkpoint-inventory.json`; those local files are not inputs.
+`0f7962e4163e8e90f424a91176181d1df2160d0d38b0351f081cf43d52aa73a0` with the
+same semantic runtime input, ledger and registry. Its eighteen runtime files
+total 53,647,754 bytes. All eighteen runtime files and the name ledger replay
+byte-for-byte, with no further allocation. Evidence is recorded in
+`runs/support-prohibition-extracted-verified.json`,
+`runs/support-prohibition-archive.json` and
+`runs/support-prohibition-replay-equivalence.json`; those local files are not inputs.
 
 Archive transport is not a second semantic format, a source-reproduction proof
 or the planned indexed binary runtime pack. Future canonical allocation
