@@ -27,7 +27,9 @@ fn with_family(f: &Fixture) -> NormalizationPolicy {
         .dispositions
         .push(ConfigurationInventoryDisposition {
             source_control: key("custom-modifier-source-family"),
-            adapters: vec![ConfigurationAdapterControl::StrictEmptyCustomModifiers],
+            target: ConfigurationInventoryTarget::Adapters {
+                controls: vec![ConfigurationAdapterControl::StrictEmptyCustomModifiers],
+            },
         });
     reseal(&mut p);
     p
@@ -181,12 +183,14 @@ fn source_family_authority_is_explicit_bounded_and_cannot_be_a_scalar_wildcard()
                 .unwrap()
                 .source_states
                 .push(ConfigurationSourceState::Authored),
-            3 => inventory
-                .dispositions
-                .last_mut()
-                .unwrap()
-                .adapters
-                .push(ConfigurationAdapterControl::Encounter),
+            3 => {
+                let ConfigurationInventoryTarget::Adapters { controls } =
+                    &mut inventory.dispositions.last_mut().unwrap().target
+                else {
+                    panic!()
+                };
+                controls.push(ConfigurationAdapterControl::Encounter);
+            }
             4 => {
                 let mut control = inventory.source_census.controls.last().unwrap().clone();
                 control.id = key("duplicate-family");
@@ -247,7 +251,7 @@ fn source_family_authority_is_explicit_bounded_and_cannot_be_a_scalar_wildcard()
     );
 }
 
-fn scoped_fixture() -> (Fixture, NormalizationPolicy) {
+pub(super) fn scoped_fixture() -> (Fixture, NormalizationPolicy) {
     let mut f = fixture();
     // A complete reward census must contain a real rule. Its independently
     // authored default produces no reward; an enabled input stays unreviewed.
@@ -307,9 +311,11 @@ fn scoped_fixture() -> (Fixture, NormalizationPolicy) {
         .dispositions
         .push(ConfigurationInventoryDisposition {
             source_control: key("fixture-reward-default"),
-            adapters: vec![ConfigurationAdapterControl::Reward {
-                recipe: control.recipe,
-            }],
+            target: ConfigurationInventoryTarget::Adapters {
+                controls: vec![ConfigurationAdapterControl::Reward {
+                    recipe: control.recipe,
+                }],
+            },
         });
     reseal(&mut p);
     p.configuration_dispositions.as_mut().unwrap().dependencies =

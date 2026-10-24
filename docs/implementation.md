@@ -10,7 +10,53 @@ adjustments below. Historical checkpoints remain in Git and
 
 ## Current state
 
-**Current checkpoint:** the existing optional source witness now proves the bounded
+**Current checkpoint:** configuration inventory matching now retains checked
+inapplicability proofs. Each inventory consumer selects either its existing
+adapter outputs or one exact existing disposition-rule ID; the rule remains the
+sole owner of the selector, recipe and encounter guards. A private proof is
+retained only after successful branch validation and leaf accounting, and the
+inventory rechecks current source/Scenario correspondence, reason and links.
+Missing, duplicated, surplus, stale and foreign proofs refuse completion. This
+replaces the adapter-only target field in place, with no compatibility reader,
+new native rule, game-name dispatch or second accounting system.
+
+The production policy still has no complete inventory. Its serialized source and
+runtime release are unchanged, and this tranche does not retire an original-build
+obligation. Complete originals remain **0/5**; unchanged Sniper still has five
+selected input obligations. The remaining work is full source/default accounting,
+the actual outside-Config owners, and separately proved Scenario memberships.
+Independent review found no correctness or model-boundary issue. All 666 Import
+regression tests pass (249 library and 417 normalization); the ordinary run leaves
+one existing explicit real-release test ignored. Nine new tests cover mixed
+adapter/observation completion, malformed and unproved source, exact rule binding,
+independent presets, stale/foreign/duplicate proofs, current provenance and exact
+work-limit/replay behavior. Strict all-feature/all-target Import and Authoring
+Clippy passes. Logs: `runs/configuration-census-audit-01/inapplicable-import-tests.log`
+and `inapplicable-clippy.log` in that directory.
+
+The explicit current-release replay exposed a stale historical test assertion:
+it expected thirteen configuration origins, including the Import origin already
+retired before this tranche; the current original has twelve. The test now relies
+on its exact full draft/origin/allocator/sidecar comparison and deterministic
+replay, preserving all current obligations without pinning obsolete growth counts.
+No production validation was relaxed; independent review confirmed that the
+behavioral assertions remain intact. The final authenticated five-original replay
+passes in 74.72s, preserving exact drafts, provenance, allocation state and all
+remaining obligations under partial census controls. Evidence:
+`runs/configuration-census-audit-01/inapplicable-originals-final.log`; the initial
+diagnostic remains in `inapplicable-originals.log`. Scoped formatting, strict
+UTF-8/LF, whitespace checks and all nine protected-draft hashes pass.
+
+The parallel outside-Config audit identifies an immediate follow-up: archived
+generated sources currently require a selector adapter even when every reference
+selector is absent. Reuse the live path's exact absence proof while preserving the
+archived usage owner and refusing live-output links. Build/Tree/Skills/Items headers
+need full field-to-owner correspondence; their existing child/domain checks alone
+cannot close the headers. TimelessData and Calcs need a bounded ordinary-load
+default-versus-omission witness for both MAIN and CALCS before any retirement.
+Evidence: `runs/configuration-census-audit-01/outside-config-next.md`.
+
+**Preceding checkpoint (`a1f9e586`, pushed and remote-verified):** the existing optional source witness now proves the bounded
 ordinary direct-record transport family. Thirty-eight cases cover ModList/ModDB
 insertion, copying, scaling at 0/0.5/1/2 with both rounding modes, and provenance
 assignment followed by copying/scaling. Complete payloads, types, duplicate records
@@ -482,7 +528,7 @@ silently become a second supported implementation.
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets; all 117 contribution queries come from five named KDL fragments. The normal builder rejects embedded program and query members. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
 | Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 73 Stats, six exact program occurrences, three revival queries with one outer gap and 363 intrinsic support-source domains. The current Import delta changes exactly four inventory destinations and derives their dependency commitments. Historical restoration admits only these exact deltas through checked content constructors. There are 1,349 source domains (1,320 Known, 29 Unmapped). Canonical checkpoint `71ff4429` remains the complete 73-name allocation predecessor; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Future commands must use the same standard; hosted status belongs to the CI row below |
-| CI | Pushed `1e227d5d` run [40106355676](https://github.com/Azaril/poe-optimizer/actions/runs/40106355676) has three successful and fifteen running jobs with no failures in the public snapshot at 15:29 UTC October 24; hosted success is not yet established. Earlier snapshot at 15:00 UTC: main `bdb0e883` run [40073568065](https://github.com/Azaril/poe-optimizer/actions/runs/40073568065) and preceding `bf533382` run [40066505992](https://github.com/Azaril/poe-optimizer/actions/runs/40066505992) both completed with sixteen successful and four failed jobs. In each run, Ubuntu and Windows CLI jobs fail the same retained flat-life witness source-hash assertion; the other two failures are their aggregate checks. The local repair authenticates the exact archived witness and proves that only the two compact-schema loader substitutions produce the maintained source; its two local tests pass in each CLI feature profile. No numerical witness is relabeled or relaxed. Previous `8f91c7b1` run `40045082862` passed all twenty jobs; its Windows CLI jobs took 3h02m–4h17m. Per-target cost remains R0/R4 work. This checkpoint still requires hosted validation; local success does not imply hosted success |
+| CI | Pushed `1e227d5d` run [40106355676](https://github.com/Azaril/poe-optimizer/actions/runs/40106355676) has five successful and thirteen running jobs with no failures in the public snapshot at 15:42:28 UTC October 24; `a1f9e586` run [40107869444](https://github.com/Azaril/poe-optimizer/actions/runs/40107869444) is pending. Hosted success is not yet established. Earlier snapshot at 15:00 UTC: main `bdb0e883` run [40073568065](https://github.com/Azaril/poe-optimizer/actions/runs/40073568065) and preceding `bf533382` run [40066505992](https://github.com/Azaril/poe-optimizer/actions/runs/40066505992) both completed with sixteen successful and four failed jobs. In each run, Ubuntu and Windows CLI jobs fail the same retained flat-life witness source-hash assertion; the other two failures are their aggregate checks. The local repair authenticates the exact archived witness and proves that only the two compact-schema loader substitutions produce the maintained source; its two local tests pass in each CLI feature profile. No numerical witness is relabeled or relaxed. Previous `8f91c7b1` run `40045082862` passed all twenty jobs; its Windows CLI jobs took 3h02m–4h17m. Per-target cost remains R0/R4 work. This checkpoint still requires hosted validation; local success does not imply hosted success |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First extract and verify the allocation predecessor using the
@@ -2148,11 +2194,10 @@ The delivery order is:
    discuss that public contract before implementation. If a reachable supplier
    makes the gate effective, retain its actual child-usage obligation instead.
    **Independent configuration path:** the current policy has 38 disposition
-   rules and no complete inventory. `inventory.rs` currently accepts adapter
-   receipts only: `accounting.rs::branch_proven` proves the existing
-   `enemyDamageRollRange` inapplicable branch but does not retain its certificate
-   for whole-inventory matching. Complete the accepted private proof path for
-   checked inapplicability and exact surviving-owner responsibilities, reusing
+   rules and no complete inventory. The checked inapplicability receipt path is
+   now implemented: exact existing rule references retain successful leaf proofs
+   for whole-inventory matching. Complete the remaining exact surviving-owner
+   responsibilities, reusing
    current reward/scalar/encounter/usage and strict-empty custom-family receipts.
    A Deferred destination alone remains insufficient. Authenticate the complete
    ordered configuration catalogue and applicable defaults through the existing
@@ -2167,6 +2212,17 @@ The delivery order is:
    dropping meaningful settings. Discuss ownership only if that audit finds
    semantics the existing model cannot preserve. This is accepted accounting
    completion, not a second importer or native model.
+   The archived Firebolt group/Gem can next reuse the live path's checked absence
+   of all reference selectors, instead of requiring a nonexistent selector
+   adapter. Preserve its genuine archived usage issue, exact preset/provider and
+   remaining saved fields (including literal nil); produce no live skill/input.
+   Build character/reward, Tree allocation/socket, Skills container and Items
+   loadout proofs are reusable prerequisites for whole-header checks, not
+   substitutes. For TimelessData/Calcs, compare ordinary load of the exact saved
+   constructor defaults against omission in both MAIN and CALCS; preserve query
+   selection and reject nondefault, unknown and legacy-migration cases. Account
+   for optional false/zero fields installed by load before claiming equivalence.
+   Details: `runs/configuration-census-audit-01/outside-config-next.md`.
    Scenario follow-on is also explicit: the current draft has 34 known assumptions
    (fifteen presence flags, one option and eighteen scalar/default records), no
    exact usage overrides, and two known intents (Sigil stage 1 and Corrupting Cry

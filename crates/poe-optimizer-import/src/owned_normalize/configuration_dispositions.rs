@@ -9,7 +9,7 @@ mod inventory;
 mod receipts;
 pub use inventory::{
     ConfigurationCensusClosure, ConfigurationInventoryControl, ConfigurationInventoryDisposition,
-    ConfigurationInventoryPolicy, ConfigurationSourceCensus,
+    ConfigurationInventoryPolicy, ConfigurationInventoryTarget, ConfigurationSourceCensus,
     configuration_inventory_census_identity,
 };
 
@@ -287,6 +287,7 @@ pub(super) enum CompiledDestination {
     Deferred(ConfigurationResponsibility),
 }
 pub(super) struct CompiledRule {
+    id: OwnedDefinitionKey,
     selector: ValueSelector,
     destinations: Vec<CompiledDestination>,
 }
@@ -434,6 +435,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             limits,
         )?;
         rules.push(CompiledRule {
+            id: row.id.clone(),
             selector: row.selector.clone(),
             destinations,
         });

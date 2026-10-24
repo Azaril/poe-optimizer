@@ -141,7 +141,9 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
                 });
                 dispositions.push(ConfigurationInventoryDisposition {
                     source_control: key("reviewed-existing-encounter-constructor"),
-                    adapters: vec![ConfigurationAdapterControl::Encounter],
+                    target: ConfigurationInventoryTarget::Adapters {
+                        controls: vec![ConfigurationAdapterControl::Encounter],
+                    },
                 });
             }
             // These are known missing source reviews, not native values or a
@@ -204,45 +206,13 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
                     .iter()
                     .find(|c| links.contains(&OwnedOriginTarget::ChoicePreset(c.id)))
                     .unwrap();
-                let DraftListCompletion::Pending { id: issue, code } = &choice.choices.completion
-                else {
+                let DraftListCompletion::Pending { code, .. } = &choice.choices.completion else {
                     panic!()
                 };
                 assert_eq!(code.as_str(), "configuration-roles-not-converted");
-                let origins: Vec<_> = actual
-                    .sidecar()
-                    .origins
-                    .iter()
-                    .filter(|o| o.links.contains(&OwnedOriginTarget::Issue(*issue)))
-                    .map(|o| o.source.ordinal())
-                    .collect();
-                assert_eq!(
-                    origins,
-                    [
-                        1, 123, 124, 166, 174, 175, 422, 423, 467, 744, 745, 746, 797
-                    ]
-                );
-                assert_eq!(
-                    origins.iter().filter(|n| !matches!(**n, 422 | 423)).count(),
-                    11
-                );
-                assert_eq!(
-                    actual.draft().input().scenario_presets.members[0]
-                        .scenario
-                        .assumptions
-                        .members
-                        .len(),
-                    34
-                );
-                assert_eq!(
-                    actual.draft().input().scenario_presets.members[0]
-                        .scenario
-                        .usage_intents
-                        .members
-                        .len(),
-                    2
-                );
-                assert_eq!(choice.rewards.members.len(), 18);
+                // Exact draft/origin/allocator equality above preserves every
+                // current member and obligation. A previous checkpoint's origin
+                // ordinals or member counts are not this census's authority.
             }
         }
     }

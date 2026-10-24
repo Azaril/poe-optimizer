@@ -3,6 +3,8 @@
 use super::*;
 #[path = "owned_configuration_custom_modifiers.rs"]
 mod custom_modifiers;
+#[path = "owned_configuration_inventory_observations.rs"]
+mod observations;
 #[path = "owned_configuration_inventory_real.rs"]
 mod real;
 
@@ -65,14 +67,18 @@ fn bounded(f: &Fixture) -> NormalizationPolicy {
     let mut dispositions: Vec<_> = (0..2)
         .map(|index| ConfigurationInventoryDisposition {
             source_control: key(&format!("source-{index}")),
-            adapters: vec![ConfigurationAdapterControl::ScalarInput {
-                input: f.inputs[index].1.clone(),
-            }],
+            target: ConfigurationInventoryTarget::Adapters {
+                controls: vec![ConfigurationAdapterControl::ScalarInput {
+                    input: f.inputs[index].1.clone(),
+                }],
+            },
         })
         .collect();
     dispositions.push(ConfigurationInventoryDisposition {
         source_control: key("fresh-encounter"),
-        adapters: vec![ConfigurationAdapterControl::Encounter],
+        target: ConfigurationInventoryTarget::Adapters {
+            controls: vec![ConfigurationAdapterControl::Encounter],
+        },
     });
     owner.inventory = Some(ConfigurationInventoryPolicy {
         source_census_identity: configuration_inventory_census_identity(
@@ -285,17 +291,21 @@ fn consumer_destinations_are_conjunctive_and_duplicate_catalogue_names_are_not_c
     let base = bounded(&f);
     let source = source(&xml(r#"<Input name="raw-0" number="3"/>"#), 0x94);
     let mut p = base.clone();
-    p.configuration_dispositions
+    let ConfigurationInventoryTarget::Adapters { controls } = &mut p
+        .configuration_dispositions
         .as_mut()
         .unwrap()
         .inventory
         .as_mut()
         .unwrap()
         .dispositions[0]
-        .adapters
-        .push(ConfigurationAdapterControl::ScalarInput {
-            input: f.inputs[1].1.clone(),
-        });
+        .target
+    else {
+        panic!()
+    };
+    controls.push(ConfigurationAdapterControl::ScalarInput {
+        input: f.inputs[1].1.clone(),
+    });
     let after = normalize(&source, &f, &p, Default::default()).unwrap();
     assert_eq!(completed(&after), [false]);
     let before = normalize(&source, &f, &without_inventory(&p), Default::default()).unwrap();

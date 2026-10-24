@@ -38,8 +38,20 @@ pub struct ConfigurationSourceCensus {
 #[serde(deny_unknown_fields)]
 pub struct ConfigurationInventoryDisposition {
     pub source_control: OwnedDefinitionKey,
-    /// Every destination must produce its own exact current-output receipt.
-    pub adapters: Vec<ConfigurationAdapterControl>,
+    pub target: ConfigurationInventoryTarget,
+}
+
+/// A source consumer needs either all of its checked adapter outputs or the
+/// exact reviewed branch proving that it consumes no independent owned input.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ConfigurationInventoryTarget {
+    Adapters {
+        controls: Vec<ConfigurationAdapterControl>,
+    },
+    /// References an existing InapplicableObservation rule; does not duplicate
+    /// its selector, value recipe or encounter guards.
+    Inapplicable { rule: OwnedDefinitionKey },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -65,10 +77,7 @@ pub fn configuration_inventory_census_identity(
 pub(super) struct CompiledInventory {
     complete: bool,
     strict_empty_custom_modifiers: bool,
-    controls: Vec<(
-        ConfigurationInventoryControl,
-        Vec<ConfigurationAdapterControl>,
-    )>,
+    controls: Vec<(ConfigurationInventoryControl, ConfigurationInventoryTarget)>,
 }
 
 impl CompiledInventory {
@@ -159,10 +168,9 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     let mut id_width = 0usize;
     let mut consumers = BTreeMap::new();
     let mut consumer_width = 0usize;
-    let mut controls: Vec<(
-        ConfigurationInventoryControl,
-        Vec<ConfigurationAdapterControl>,
-    )> = Vec::new();
+    let mut controls: Vec<(ConfigurationInventoryControl, ConfigurationInventoryTarget)> =
+        Vec::new();
+    let mut observations = BTreeSet::new();
     let mut strict_empty_custom_modifiers = false;
     for row in &census.controls {
         charge(
@@ -212,21 +220,67 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             ),
             limits,
         )?;
-        let adapters = if let Some(disposition) = dispositions.remove(&row.id) {
-            if disposition.adapters.is_empty()
-                || disposition.adapters.len() > limits.value.max_selectors
-            {
-                return Err(NormalizationError::Policy(
-                    "configuration inventory destinations",
-                ));
-            }
-            disposition.adapters.as_slice()
+        let unassigned = ConfigurationInventoryTarget::Adapters { controls: vec![] };
+        let target = if let Some(disposition) = dispositions.remove(&row.id) {
+            &disposition.target
         } else if complete {
             return Err(NormalizationError::Policy(
                 "configuration inventory missing destination",
             ));
         } else {
-            &[]
+            controls.push((row.clone(), unassigned));
+            continue;
+        };
+        let adapters = match target {
+            ConfigurationInventoryTarget::Inapplicable { rule } => {
+                charge(
+                    work,
+                    owner.rules.iter().fold(rule.as_str().len(), |n, r| {
+                        n.saturating_add(r.id.as_str().len())
+                            .saturating_add(selector_size(Some(&r.selector)))
+                    }),
+                    limits,
+                )?;
+                let mut matches = owner.rules.iter().filter(|r| &r.id == rule);
+                let Some(observation) = matches.next() else {
+                    return Err(NormalizationError::Policy(
+                        "configuration inventory observation rule",
+                    ));
+                };
+                if matches.next().is_some()
+                    || row.selector.as_ref() != Some(&observation.selector)
+                    || observation.selector.lane != ValueLane::PlaceholderNumber
+                    || row.source_states != [ConfigurationSourceState::Placeholder]
+                    || !matches!(
+                        observation.destinations.as_slice(),
+                        [ConfigurationDestination::InapplicableObservation { .. }]
+                    )
+                {
+                    return Err(NormalizationError::Policy(
+                        "configuration inventory observation rule",
+                    ));
+                }
+                charge(
+                    work,
+                    index_work(observations.len(), rule.as_str().len()),
+                    limits,
+                )?;
+                if !observations.insert(rule) {
+                    return Err(NormalizationError::Policy(
+                        "configuration inventory duplicated observation",
+                    ));
+                }
+                controls.push((row.clone(), target.clone()));
+                continue;
+            }
+            ConfigurationInventoryTarget::Adapters { controls } => {
+                if controls.is_empty() || controls.len() > limits.value.max_selectors {
+                    return Err(NormalizationError::Policy(
+                        "configuration inventory destinations",
+                    ));
+                }
+                controls.as_slice()
+            }
         };
         let mut unique = BTreeSet::new();
         for adapter in adapters {
@@ -327,7 +381,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                 ));
             }
         }
-        controls.push((row.clone(), adapters.to_vec()));
+        controls.push((row.clone(), target.clone()));
     }
     // Every removal required one exact, unique census ID. Any remaining entry
     // names an unknown source control; a count-only match cannot consume it.
@@ -419,8 +473,10 @@ fn selector_size(selector: Option<&ValueSelector>) -> usize {
 fn match_receipts(
     b: &mut Builder<'_, '_>,
     scope: SourceOccurrenceId,
+    scenario: ScenarioPresetId,
     inventory: &CompiledInventory,
     receipts: &[CheckedConfigurationReceipt],
+    observations: &[accounting::CheckedInapplicable],
     custom_modifiers: Option<&custom_modifiers::CheckedCustomModifiers>,
 ) -> Result<bool> {
     if !inventory.complete {
@@ -463,10 +519,23 @@ fn match_receipts(
             .or_insert_with(Vec::new)
             .push(index);
     }
+    let mut by_observation = BTreeMap::new();
+    let mut observation_width = 0usize;
+    for (index, receipt) in observations.iter().enumerate() {
+        observation_width = observation_width.max(receipt.rule.as_str().len().saturating_add(2));
+        b.charge(index_work(by_observation.len(), observation_width))?;
+        by_observation
+            .entry((receipt.scope, &receipt.rule, receipt.origin))
+            .or_insert_with(Vec::new)
+            .push(index);
+    }
     let mut covered = vec![false; receipts.len()];
+    let mut observations_covered = vec![false; observations.len()];
     let mut custom_origins = None;
-    for (control, adapters) in &inventory.controls {
-        if adapters.as_slice() == [ConfigurationAdapterControl::StrictEmptyCustomModifiers] {
+    for (control, target) in &inventory.controls {
+        if matches!(target, ConfigurationInventoryTarget::Adapters { controls }
+            if controls.as_slice() == [ConfigurationAdapterControl::StrictEmptyCustomModifiers])
+        {
             let Some(checked) = custom_modifiers else {
                 return Ok(false);
             };
@@ -495,6 +564,48 @@ fn match_receipts(
             }
         } else {
             None
+        };
+        let adapters = match target {
+            ConfigurationInventoryTarget::Inapplicable { rule } => {
+                let Some(origin) = expected_origin else {
+                    return Ok(false);
+                };
+                b.charge(index_work(
+                    by_observation.len(),
+                    observation_width.max(rule.as_str().len().saturating_add(2)),
+                ))?;
+                let Some(indices) = by_observation.get(&(scope, rule, origin)) else {
+                    return Ok(false);
+                };
+                let [index] = indices.as_slice() else {
+                    return Ok(false);
+                };
+                let receipt = &observations[*index];
+                b.charge(
+                    b.origins[origin.ordinal() as usize]
+                        .links
+                        .len()
+                        .saturating_add(selector_size(Some(&receipt.selector)))
+                        .saturating_add(receipt.reason.as_str().len()),
+                )?;
+                let current = &b.origins[origin.ordinal() as usize];
+                if observations_covered[*index]
+                    || receipt.scenario != scenario
+                    || control.selector.as_ref() != Some(&receipt.selector)
+                    || control.source_states != [ConfigurationSourceState::Placeholder]
+                    || evidence.rows()[origin.ordinal() as usize]
+                        .occurrence()
+                        .parent()
+                        != Some(scope)
+                    || current.disposition != SourceDisposition::SourceOnly(receipt.reason.clone())
+                    || current.links.as_slice() != [OwnedOriginTarget::ScenarioPreset(scenario)]
+                {
+                    return Ok(false);
+                }
+                observations_covered[*index] = true;
+                continue;
+            }
+            ConfigurationInventoryTarget::Adapters { controls } => controls,
         };
         for adapter in adapters {
             let width = selector_size(control.selector.as_ref()).saturating_add(2);
@@ -538,8 +649,12 @@ fn match_receipts(
             covered[index] = true;
         }
     }
-    b.charge(covered.len())?;
-    if covered.iter().any(|matched| !matched) {
+    b.charge(covered.len().saturating_add(observations_covered.len()))?;
+    if covered
+        .iter()
+        .chain(&observations_covered)
+        .any(|matched| !matched)
+    {
         return Ok(false);
     }
     // All indexed receipts have matched. Preserve the separate every-leaf proof.
@@ -548,6 +663,12 @@ fn match_receipts(
         b.charge(index_work(receipt_origins.len(), 1))?;
         if let Some(origin) = receipt.origin {
             receipt_origins.insert(origin);
+        }
+    }
+    for receipt in observations {
+        b.charge(index_work(receipt_origins.len(), 1))?;
+        if !receipt_origins.insert(receipt.origin) {
+            return Ok(false);
         }
     }
     if let Some(origins) = custom_origins {
@@ -595,8 +716,10 @@ pub(super) fn prepare(
     if !match_receipts(
         b,
         scope,
+        scenario.id,
         inventory,
         receipts.iter().as_slice(),
+        receipts.inapplicable(),
         receipts.custom_modifiers(),
     )? {
         return Ok(None);
@@ -865,6 +988,9 @@ pub(super) fn commit(
 
 #[cfg(test)]
 mod index_tests;
+
+#[cfg(test)]
+mod observation_tests;
 
 #[cfg(test)]
 mod tests {

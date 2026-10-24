@@ -747,6 +747,15 @@ It uses the same source ledger and retirement transaction as scalar accounting,
 while retaining every repeated occurrence and its exact Scenario. A partial
 census cannot complete an inventory. Policies that do not request the family
 keep their existing behavior and work accounting.
+Configuration inventory consumers can also reference an exact reviewed
+inapplicability rule. Its selector, value recipe and guards remain in the existing
+Import disposition policy. Retain the private proof only after both the branch
+check and leaf accounting succeed, then recheck its exact source, Scenario,
+source-only reason and surviving links during inventory matching. Adapter outputs
+and inapplicability are distinct evidence within the same inventory transaction;
+neither implies the other. Missing, duplicate, surplus or foreign proofs refuse
+completion. A leaf proof does not settle outside-Config responsibilities or
+complete any Scenario output domain.
 Preserve normal-load migration and headless fallback as separate external source
 behaviors. No source receipt can certify an Encounter's intrinsic domain without
 also checking every admitted typed consumer.

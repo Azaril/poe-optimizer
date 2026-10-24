@@ -63,7 +63,7 @@ fn apply(
     issue: DraftIssueId,
     targets: &[OwnedOriginTarget],
     source_only: Option<&OwnedDefinitionKey>,
-) -> Result<()> {
+) -> Result<bool> {
     b.charge(
         targets.len().saturating_add(3).saturating_mul(
             b.origins[origin.ordinal() as usize]
@@ -77,7 +77,7 @@ fn apply(
         .parent()
         != Some(scope)
     {
-        return Ok(());
+        return Ok(false);
     }
     let row = &b.origins[origin.ordinal() as usize];
     let obligation = OwnedOriginTarget::Issue(issue);
@@ -92,7 +92,7 @@ fn apply(
             .any(|target| row.links.iter().filter(|l| *l == target).count() > 1)
         || (source_only.is_none() && targets.iter().any(|target| !row.links.contains(target)))
     {
-        return Ok(());
+        return Ok(false);
     }
     let row = &mut b.origins[origin.ordinal() as usize];
     row.links.retain(|link| *link != obligation);
@@ -104,7 +104,18 @@ fn apply(
             b.link(origin, target.clone())?;
         }
     }
-    Ok(())
+    Ok(true)
+}
+
+/// Retained only after both the reviewed branch and its leaf disposition have
+/// succeeded. This cannot stand in for an adapter's actual output receipt.
+pub(super) struct CheckedInapplicable {
+    pub(super) scope: SourceOccurrenceId,
+    pub(super) origin: SourceOccurrenceId,
+    pub(super) scenario: ScenarioPresetId,
+    pub(super) rule: OwnedDefinitionKey,
+    pub(super) selector: ValueSelector,
+    pub(super) reason: OwnedDefinitionKey,
 }
 
 /// The family receipt is all-or-nothing. Before retiring any source leaf, every
@@ -282,7 +293,7 @@ pub(in crate::owned_normalize) fn account(
         let Some(policy) = policy else {
             continue;
         };
-        let receipts = receipts.finish(
+        let mut receipts = receipts.finish(
             b,
             draft,
             &adapters,
@@ -362,8 +373,8 @@ pub(in crate::owned_normalize) fn account(
                         }
                     }
                 }
-                if admitted {
-                    apply(
+                if admitted
+                    && apply(
                         b,
                         scope,
                         *origin,
@@ -374,7 +385,26 @@ pub(in crate::owned_normalize) fn account(
                         } else {
                             source_only.as_ref()
                         },
+                    )?
+                    && policy.inventory.is_some()
+                    && let [CompiledDestination::Inapplicable { reason, .. }] =
+                        rule.destinations.as_slice()
+                {
+                    b.charge(
+                        rule.id
+                            .as_str()
+                            .len()
+                            .saturating_add(rule.selector.name.len())
+                            .saturating_add(reason.as_str().len()),
                     )?;
+                    receipts.retain_inapplicable(CheckedInapplicable {
+                        scope,
+                        origin: *origin,
+                        scenario: scenario.id,
+                        rule: rule.id.clone(),
+                        selector: rule.selector.clone(),
+                        reason: reason.clone(),
+                    });
                 }
             }
         }

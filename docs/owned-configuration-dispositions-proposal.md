@@ -4,6 +4,12 @@
 The first partial leaf-accounting implementation and source-backed publication
 are validated; complete catalogue/default accounting and inventory retirement
 remain pending.
+The October 24 completion adds retained private inapplicability proofs to the
+existing inventory matcher. An inventory target is either its checked adapters
+or the ID of an existing reviewed inapplicability rule. The latter succeeds only
+after leaf accounting and exact current provenance checks. This replaces the
+adapter-only target format directly; it does not add a compatibility path or
+complete the production catalogue, outside-Config or Scenario inventories.
 The narrower source-presentation precursor and final issue-integrity check are
 implemented. Neither closes an inventory; publication status and the current
 baseline are recorded in [implementation](implementation.md).

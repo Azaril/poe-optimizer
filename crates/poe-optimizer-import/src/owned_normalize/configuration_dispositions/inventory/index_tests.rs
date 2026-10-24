@@ -7,6 +7,12 @@ use poe_optimizer_data::owned_schema::*;
 const COUNT: usize = 600;
 const PRIOR_WORK: usize = 128_000;
 
+fn scenario() -> ScenarioPresetId {
+    ScenarioPresetId::from_instance_id(
+        InstanceId::from_parts(BuildLineage::from_bytes([38; 16]), 1).unwrap(),
+    )
+}
+
 struct Fixture {
     owner: ConfigurationDispositionPolicy,
     policy: NormalizationPolicy,
@@ -106,7 +112,9 @@ fn fixture() -> Fixture {
         });
         dispositions.push(ConfigurationInventoryDisposition {
             source_control: id,
-            adapters: vec![ConfigurationAdapterControl::ScalarInput { input }],
+            target: ConfigurationInventoryTarget::Adapters {
+                controls: vec![ConfigurationAdapterControl::ScalarInput { input }],
+            },
         });
     }
     let census = ConfigurationSourceCensus {
@@ -207,7 +215,10 @@ fn with_receipts(
         let receipts = inventory
             .controls
             .iter()
-            .flat_map(|(control, adapters)| {
+            .flat_map(|(control, target)| {
+                let ConfigurationInventoryTarget::Adapters { controls: adapters } = target else {
+                    panic!()
+                };
                 let origin = children.iter().copied().find(|id| {
                     source_shape::value(&b.evidence.rows()[id.ordinal() as usize], "name")
                         == control.selector.as_ref().map(|s| s.name.as_str())
@@ -262,13 +273,15 @@ fn full_catalogue_compile_keeps_partial_rows_and_exact_work_boundaries() {
     assert_eq!(partial.controls, complete.controls);
     with_receipts(&xml(COUNT, ""), &partial, work, |b, scope, receipts| {
         let before = b.work;
-        assert!(!match_receipts(b, scope, &partial, &receipts, None).unwrap());
+        assert!(!match_receipts(b, scope, scenario(), &partial, &receipts, &[], None).unwrap());
         assert_eq!(b.work, before);
     });
     f.owner.inventory.as_mut().unwrap().dispositions.pop();
     let (partial, _) = compiled(&f);
     assert_eq!(partial.controls.len(), COUNT);
-    assert!(partial.controls[COUNT - 1].1.is_empty());
+    assert!(
+        matches!(&partial.controls[COUNT - 1].1, ConfigurationInventoryTarget::Adapters { controls } if controls.is_empty())
+    );
 }
 
 #[test]
@@ -279,13 +292,13 @@ fn full_catalogue_receipts_share_default_budget_and_have_an_exact_boundary() {
         let initial = b.work;
         let origins = b.origins.clone();
         let allocator = b.allocator.state();
-        assert!(match_receipts(b, scope, &inventory, &receipts, None).unwrap());
+        assert!(match_receipts(b, scope, scenario(), &inventory, &receipts, &[], None).unwrap());
         let required = b.work;
         assert!(required < NormalizationLimits::default().max_work);
         for sufficient in [true, false] {
             b.work = initial;
             b.limits.max_work = required - usize::from(!sufficient);
-            let result = match_receipts(b, scope, &inventory, &receipts, None);
+            let result = match_receipts(b, scope, scenario(), &inventory, &receipts, &[], None);
             if sufficient {
                 assert!(result.unwrap());
                 assert_eq!(b.work, required);
@@ -363,7 +376,8 @@ fn late_receipt_faults_never_borrow_another_consumer_or_scope() {
                 let origins = b.origins.clone();
                 let allocator = b.allocator.state();
                 assert!(
-                    !match_receipts(b, scope, &inventory, &receipts, None).unwrap(),
+                    !match_receipts(b, scope, scenario(), &inventory, &receipts, &[], None)
+                        .unwrap(),
                     "mutation {mutation}"
                 );
                 assert_eq!(b.origins, origins);
@@ -411,11 +425,13 @@ fn duplicate_selector_consumers_remain_distinct_and_source_ambiguity_refuses() {
         |b, scope, receipts| {
             assert_eq!(receipts[0].origin, receipts[COUNT - 1].origin);
             assert_ne!(receipts[0].control, receipts[COUNT - 1].control);
-            assert!(match_receipts(b, scope, &inventory, &receipts, None).unwrap());
+            assert!(
+                match_receipts(b, scope, scenario(), &inventory, &receipts, &[], None).unwrap()
+            );
         },
     );
     let policy = f.owner.inventory.as_mut().unwrap();
-    policy.dispositions[COUNT - 1].adapters = policy.dispositions[0].adapters.clone();
+    policy.dispositions[COUNT - 1].target = policy.dispositions[0].target.clone();
     assert!(matches!(
         compile(&f.owner, &f.policy, &f.schema, Default::default(), &mut 0),
         Err(NormalizationError::Policy(
@@ -436,7 +452,10 @@ fn duplicate_selector_consumers_remain_distinct_and_source_ambiguity_refuses() {
             &inventory,
             work,
             |b, scope, receipts| {
-                assert!(!match_receipts(b, scope, &inventory, &receipts, None).unwrap());
+                assert!(
+                    !match_receipts(b, scope, scenario(), &inventory, &receipts, &[], None)
+                        .unwrap()
+                );
             },
         );
     }

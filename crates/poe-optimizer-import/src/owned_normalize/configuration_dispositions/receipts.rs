@@ -102,6 +102,7 @@ impl<'d> ScalarReceipts<'d> {
             rows: self.rows,
             encounter_absence,
             custom_modifiers,
+            inapplicable: Vec::new(),
         })
     }
 }
@@ -118,9 +119,18 @@ pub(super) struct ScopeReceipts<'p> {
     rows: Vec<CheckedConfigurationReceipt>,
     encounter_absence: EncounterAbsence<'p>,
     custom_modifiers: Option<custom_modifiers::CheckedCustomModifiers>,
+    inapplicable: Vec<accounting::CheckedInapplicable>,
 }
 
 impl ScopeReceipts<'_> {
+    pub(super) fn retain_inapplicable(&mut self, receipt: accounting::CheckedInapplicable) {
+        self.inapplicable.push(receipt);
+    }
+
+    pub(super) fn inapplicable(&self) -> &[accounting::CheckedInapplicable] {
+        &self.inapplicable
+    }
+
     pub(super) fn custom_modifiers(&self) -> Option<&custom_modifiers::CheckedCustomModifiers> {
         self.custom_modifiers
             .as_ref()
