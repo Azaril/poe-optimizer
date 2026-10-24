@@ -791,6 +791,16 @@ duplicate declarations and distinct consumers of the same name. A lexical search
 or sampled absence cannot prove arbitrary aliases absent. Retaining meaningful
 work on an unresolved owner requires a checked exact-owner contract; neither a
 Deferred destination nor a generic no-op disposition establishes completeness.
+Keep the ordered source inventory as a reproducible offline evidence artifact.
+The [configuration census](../data/owned/poe2/3887ae68/configuration-census/README.md)
+preserves complete row definitions, repeated callback identities, exact direct
+sites and computed families, authenticated against complete source files. The
+existing reference observer reproduces it; ordinary Rust tests verify it without
+executing Lua. A source-inventory match is not semantic closure or runtime
+admission. Fresh construction, ordered defaults, migration and alias writers
+still delimit each reviewed absence claim. Preserve explicit unsupported
+families until their real ownership is resolved, including analysis choices
+that require metric semantics rather than Actor state.
 Preserve normal-load migration and headless fallback as separate external source
 behaviors. No source receipt can certify an Encounter's intrinsic domain without
 also checking every admitted typed consumer.

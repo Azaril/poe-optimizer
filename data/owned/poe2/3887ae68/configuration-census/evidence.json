@@ -1,0 +1,321 @@
+{
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "original05": {
+    "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+    "bytes": 106378,
+    "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+  },
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-census/catalogue.json.gz",
+      "encoding": "gzip",
+      "bytes": 32982,
+      "sha256": "f451ebd2aebfed1d32c3d1a160680af588af32a10486c03603ed94eeafb8f15e",
+      "source_bytes": 305662,
+      "source_sha256": "d6d46de5910ef9002cb7a549f11ffe633eb1f42314483ba8ba6dee503fab39ee"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-census/consumers.json",
+      "encoding": "plain",
+      "bytes": 59267,
+      "sha256": "a5ab6dbae2e4199b589cbe75e379ac4075ea6cfb252feaa77f62015df0f8bda2",
+      "source_bytes": 59267,
+      "source_sha256": "a5ab6dbae2e4199b589cbe75e379ac4075ea6cfb252feaa77f62015df0f8bda2"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-census/review.json",
+      "encoding": "plain",
+      "bytes": 38949,
+      "sha256": "1667344911d76c64a70a8b05255c668997b0b1e863eb911dfd8a1f184d27430c",
+      "source_bytes": 38949,
+      "source_sha256": "1667344911d76c64a70a8b05255c668997b0b1e863eb911dfd8a1f184d27430c"
+    }
+  ],
+  "sources": [
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-census/sources/src_Classes_BuildSetListControl.lua.gz",
+      "encoding": "gzip",
+      "bytes": 2102,
+      "sha256": "d64339d8b276558933b89f31cdf51a0fd9a38f5365cd306fdb5fb5b0471d29be",
+      "source_bytes": 8924,
+      "source_sha256": "4eb2dd8509bf9580986bff89a09eff3ed8e6b88e4da3d9e297ba39266a9bc58e",
+      "source_path": "src/Classes/BuildSetListControl.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-census/sources/src_Classes_CheckBoxControl.lua.gz",
+      "encoding": "gzip",
+      "bytes": 1163,
+      "sha256": "daec2158d5f2eb8190303c35efc30f7e4fa73ef002c3059ce7e184a6be3e81e8",
+      "source_bytes": 3650,
+      "source_sha256": "a51827514c74c722c795af64ac0192775eae9ce734289da1680da8125f168ee5",
+      "source_path": "src/Classes/CheckBoxControl.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-census/sources/src_Classes_CompareEntry.lua.gz",
+      "encoding": "gzip",
+      "bytes": 5410,
+      "sha256": "92211fde7a9312df349cfc07baf15eed8eeb179e991d22e51cee52aa3d9008e2",
+      "source_bytes": 21683,
+      "source_sha256": "5a97ae4fb30177b346bd2187cd4fe2e5db0b2312aab5a40cc186a9ee913e591a",
+      "source_path": "src/Classes/CompareEntry.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-census/sources/src_Classes_CompareTab.lua.gz",
+      "encoding": "gzip",
+      "bytes": 40543,
+      "sha256": "e2f4245284ff1bcfa14f54a24dbb3d07b6e591e2edad254057ee631e4a743a31",
+      "source_bytes": 199649,
+      "source_sha256": "b4fcfa06fc6cea277e6f473a1ce7085ba7373d64abbb6758fd87a63688ce7ba5",
+      "source_path": "src/Classes/CompareTab.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-census/sources/src_Classes_ConfigSetListControl.lua.gz",
+      "encoding": "gzip",
+      "bytes": 1119,
+      "sha256": "1a2c3259f68c61556c8715e85255572eea128438b899cbc347192578a579d733",
+      "source_bytes": 5123,
+      "source_sha256": "44d9d22255e3554fa13781fbcda22b8d4d293c8995c220d76bc7c98da01f49a0",
+      "source_path": "src/Classes/ConfigSetListControl.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-census/sources/src_Classes_ConfigSetService.lua.gz",
+      "encoding": "gzip",
+      "bytes": 399,
+      "sha256": "9c24d0c5e25de6d6ec205785ae7afa0359c499d9efb30deb27d5624f2ad570c3",
+      "source_bytes": 1468,
+      "source_sha256": "7e59877809baf351445b3ed47b80ae52d88f70c68e237f8ff7a1bd0744e530a9",
+      "source_path": "src/Classes/ConfigSetService.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
+      "encoding": "plain",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "source_bytes": 50481,
+      "source_sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "source_path": "src/Classes/ConfigTab.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/source-empty-party/evidence/DropDownControl.lua.gz",
+      "encoding": "gzip",
+      "bytes": 4148,
+      "sha256": "f811cdf5c39b15c0fb3d9dd08759685531b49fe6e0a388456eed0575f72a65b6",
+      "source_bytes": 17071,
+      "source_sha256": "a20fe837f44f8ca028b4cc3447fee72e6f6f102224e9b8331edbdcafa8601a8f",
+      "source_path": "src/Classes/DropDownControl.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/source-import-preferences/evidence/EditControl.lua.gz",
+      "encoding": "gzip",
+      "bytes": 4812,
+      "sha256": "9e49370e3a2506e591278e4f1469dc7212786a326454017b7ede48e56661d86e",
+      "source_bytes": 24662,
+      "source_sha256": "6af3f270ec07ddf2e3594effd868332c76c9e3039e6a49309965a51419dcf2d4",
+      "source_path": "src/Classes/EditControl.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-campaign-progression/ImportTab.lua.gz",
+      "encoding": "gzip",
+      "bytes": 16017,
+      "sha256": "6e7da474dda76b3af022e2b003d0e9f651a212be3cf563acee99baccf0404946",
+      "source_bytes": 71408,
+      "source_sha256": "ba2933b2268ba9cb8a4ecfb529a01612781100975272a4bc2ef3e9555eb9f5e2",
+      "source_path": "src/Classes/ImportTab.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/item-structural-inventories/evidence/ItemsTab.lua.gz",
+      "encoding": "gzip",
+      "bytes": 38810,
+      "sha256": "8755094579e6ff436cadf9e23306c50f8003eaa7819c13de7fe37bba446ad262",
+      "source_bytes": 180248,
+      "source_sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d",
+      "source_path": "src/Classes/ItemsTab.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+      "encoding": "gzip",
+      "bytes": 7158,
+      "sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b",
+      "source_bytes": 36471,
+      "source_sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62",
+      "source_path": "src/Classes/ModStore.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Data/BossSkills.lua",
+      "encoding": "plain",
+      "bytes": 5605,
+      "sha256": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d",
+      "source_bytes": 5605,
+      "source_sha256": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d",
+      "source_path": "src/Data/BossSkills.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-minion-store/act_int.lua.gz",
+      "encoding": "gzip",
+      "bytes": 141617,
+      "sha256": "076f9caf8f271b4faf456497f254b69d6cab0c7864f15b9f63dd3ba475df39ac",
+      "source_bytes": 1420976,
+      "source_sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d",
+      "source_path": "src/Data/Skills/act_int.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-demonflame/other.lua.gz",
+      "encoding": "gzip",
+      "bytes": 124283,
+      "sha256": "7f56e9ed93f98f55afd1d69ec4a9bd982b0a499db0207235eb3a737160f5fa33",
+      "source_bytes": 1172527,
+      "source_sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962",
+      "source_path": "src/Data/Skills/other.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Data_Skills_sup_int.lua.gz",
+      "encoding": "gzip",
+      "bytes": 42898,
+      "sha256": "5bfaa0261d86313be125d073c34236e815ee02d85a83407436d2613480006e4e",
+      "source_bytes": 358587,
+      "source_sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b",
+      "source_path": "src/Data/Skills/sup_int.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Data_SkillStatMap.lua.gz",
+      "encoding": "gzip",
+      "bytes": 17343,
+      "sha256": "9e98975b399de8e883e327e448440c1e55f2da586026bf6e1da19ee697f4f43d",
+      "source_bytes": 111112,
+      "source_sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675",
+      "source_path": "src/Data/SkillStatMap.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/source-empty-party/evidence/Build.lua.gz",
+      "encoding": "gzip",
+      "bytes": 26180,
+      "sha256": "3f6a44249269eeb28cde364af74eadcc293d28aa3e2807f321cf3382aef8e0b6",
+      "source_bytes": 116017,
+      "source_sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d",
+      "source_path": "src/Modules/Build.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcActiveSkill.lua.gz",
+      "encoding": "gzip",
+      "bytes": 10868,
+      "sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48",
+      "source_bytes": 50144,
+      "source_sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04",
+      "source_path": "src/Modules/CalcActiveSkill.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-census/sources/src_Modules_CalcBase.lua.gz",
+      "encoding": "gzip",
+      "bytes": 1802,
+      "sha256": "c51ad0e98cc253a01e4480d3dfccbe5c52f346480a6e60bc4530bbfa350c9ecd",
+      "source_bytes": 7796,
+      "source_sha256": "5041ca38f407671dfb5215b5aa3142733cca3a897e284a71fb9f2b9076769942",
+      "source_path": "src/Modules/CalcBase.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/CalcDefence.lua.gz",
+      "encoding": "gzip",
+      "bytes": 39593,
+      "sha256": "9e232710732a7223b87b7174c7bd8a0531309675b76c605e07df55b0f72d6bf3",
+      "source_bytes": 239878,
+      "source_sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2",
+      "source_path": "src/Modules/CalcDefence.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcOffence.lua.gz",
+      "encoding": "gzip",
+      "bytes": 64248,
+      "sha256": "3ee439d6209cd88adbca368dd7b3e741e9ed537531a37fcc0a8f4b1863e56147",
+      "source_bytes": 364029,
+      "source_sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94",
+      "source_path": "src/Modules/CalcOffence.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+      "encoding": "gzip",
+      "bytes": 34408,
+      "sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575",
+      "source_bytes": 181097,
+      "source_sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae",
+      "source_path": "src/Modules/CalcPerform.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcSetup.lua.gz",
+      "encoding": "gzip",
+      "bytes": 21399,
+      "sha256": "cdefa2fbbb4a15befdc728fd549902f4032c1cdf0b52c3070dc356f0a45e718f",
+      "source_bytes": 100609,
+      "source_sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "source_path": "src/Modules/CalcSetup.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-helpers/CalcTriggers.lua.gz",
+      "encoding": "gzip",
+      "bytes": 14074,
+      "sha256": "a99e0837a5c68c3fb8f0724b82756e9926571eb2e20cf32f17fe693a5d361f0f",
+      "source_bytes": 80722,
+      "source_sha256": "a44964495c13ea81f3e0ae5c8e1b5f1e64509c8bdc4d141301b27f06df36a02d",
+      "source_path": "src/Modules/CalcTriggers.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-census/sources/src_Modules_ConfigModBrowser.lua.gz",
+      "encoding": "gzip",
+      "bytes": 3265,
+      "sha256": "0b3bea92c1fa4f32519dd3f08604daea2b776acac9da16d641568e3e1d11b045",
+      "source_bytes": 10085,
+      "source_sha256": "5c648990ce94c2ba5913ef674e42a8cac1e82427cc16dd07f81e807f908a65c4",
+      "source_path": "src/Modules/ConfigModBrowser.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+      "encoding": "plain",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "source_bytes": 235127,
+      "source_sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "source_path": "src/Modules/ConfigOptions.lua"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModParser.lua.gz",
+      "encoding": "gzip",
+      "bytes": 105049,
+      "sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466",
+      "source_bytes": 677245,
+      "source_sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+      "source_path": "src/Modules/ModParser.lua"
+    }
+  ],
+  "acquisition": {
+    "scope": "existing original Lua source observer; callback catalogue only; no native admission",
+    "test": "crates/poe-optimizer-pob/tests/owned_configuration_inputs_source.rs",
+    "projection": "crates/poe-optimizer-pob/tests/support/configuration_census_source.rs",
+    "observer": "crates/poe-optimizer-pob/tests/support/configuration_inputs_source.lua",
+    "observer_sha256": "867d172c8083ad6b305169792836540ee1a91b81df74835fcd5e462d19b41fb5",
+    "initial_capture_cases": 23,
+    "initial_capture_sha256": "92d9f761a2383ed841ff4a9699395181f7dc621a691a94d480357d1367ebf561",
+    "maintained_capture_attempts_per_jit": 29,
+    "native_effect_coverage": false,
+    "arbitrary_alias_closure": false,
+    "fresh_verification": {
+      "attempts_per_jit": 29,
+      "successful_catalogue_comparisons_per_jit": 29,
+      "report_bytes": 37752151,
+      "report_sha256": "b16d8d172a2f9b60f78d3efe082c40bfbee1913d1b5eb2f797574fb3631b47f7",
+      "receipt": {
+        "attempts": 29,
+        "catalogue_sha256": "d6d46de5910ef9002cb7a549f11ffe633eb1f42314483ba8ba6dee503fab39ee",
+        "native_effect_coverage": false,
+        "observer_sha256": "867d172c8083ad6b305169792836540ee1a91b81df74835fcd5e462d19b41fb5",
+        "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+        "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+        "successful_catalogue_comparisons": 29
+      },
+      "full_report_equality": true
+    }
+  }
+}

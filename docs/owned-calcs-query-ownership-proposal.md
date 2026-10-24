@@ -2,11 +2,11 @@
 
 **Status:** Proposed; requires the project owner's decision before Calcs responsibilities can be retired. No implementation is authorized by this document.
 **Date:** 2026-10-24.
-**Scope:** Preserve PoB's saved calculation-view selection without inventing native measurements or importing PoB execution modes into Core.
+**Scope:** Preserve PoB's calculation-view and reviewed reference-analysis choices without inventing native measurements or importing PoB execution modes into Core.
 
 ## Decision needed
 
-Should imported Calcs settings remain **source-owned reference settings**, with native queries and scenarios chosen explicitly, or should import automatically construct native query/scenario presets from that saved view when correspondence is available?
+Should imported Calcs settings and the four reviewed configuration analysis defaults below remain **source-owned reference settings**, with native measurements and scenarios explicit, or should import automatically construct native query/scenario presets when correspondence is available?
 
 Recommend source-owned reference settings. This uses the existing import provenance boundary and keeps the original meaning recoverable. It is a deliberate import contract, not a claim that the settings are cosmetic or have no effect.
 
@@ -51,3 +51,50 @@ The recommended option changes the Import admission contract, not the native eva
 Acceptance must retain the unchanged original, separate MAIN/CALCS identities and existing queries; reject crossed presets, missing source retention, duplicate/malformed fields and one-short budgets; and preserve exact replay. The fresh witness corroborates the source interpretation but is not a runtime certificate.
 
 Until approval and implementation, keep the current unresolved Calcs responsibility. No additional omission or warm-load experiment can replace this ownership decision.
+
+## October 24 extension: configuration analysis defaults
+
+The [installed-default review](../data/owned/poe2/3887ae68/configuration-census/installed-defaults.md)
+finds four absent raw controls with installed values that change the reference
+calculation's statistic. They are not missing gameplay inputs or harmless UI
+labels. This extends the same proposed ownership decision rather than creating
+a second analysis-settings system:
+
+| Control | Default meaning | Source arithmetic |
+| --- | --- | --- |
+| `resourceGainMode` | Average | Probability-weighted resource gain rather than full or omitted chance contributions |
+| `repeatMode` | Average | Sequence weighting, with distinct final-hit and final-hit-DPS alternatives |
+| `ChanceToIgnoreEnemyPhysicalDamageReductionMode` | Average | Chance-weighted mitigation rather than minimum/maximum outcomes |
+| `elementalConfluxElement` | Average | Three effects each divided by three rather than one selected elemental state |
+
+The review retains exact callback and downstream consumers. Averaging modifiers
+before nonlinear operations is not automatically the same as expected final
+damage. A native expected-value metric must state its mathematical meaning;
+matching a reference `AVERAGE` label is insufficient parity evidence. Any mixed
+control that also chooses actual usage or targets still needs those separate
+projections and cannot be wholly classified as reference-only by this decision.
+
+Recommend retaining these finite reference choices with authenticated source
+provenance and using **existing injected metric definitions** for native expected,
+conditional and extremal results. `MetricRequest { id, metric, target }` already
+selects an owned definition; no new generic mode field is proposed. Import must
+not create or select metrics implicitly. Explicit future reference-view conversion
+must prove the requested metric/target and estimator correspondence.
+
+For missing raw values, durable retention requires the pinned constructor and
+catalogue/default evidence as well as the original XML. An XML hash alone cannot
+preserve an installed default. The first checked disposition must reject changed
+defaults, crossed source scopes, unknown consumers or missing retained artifacts,
+preserve authored false/zero/empty states, and leave gameplay and Scenario
+responsibilities unchanged. Saved nondefault modes need their own reviewed
+branches. This extension does not approve arbitrary source-only settings.
+
+The alternative automatically maps each reference estimator into native query
+presets. That offers a closer import experience but requires explicit mapping of
+the actual output statistic, target and assumptions before completion. Putting
+these modes into Actor assumptions loses that distinction and is not recommended.
+
+Until this expanded Import choice is accepted and implemented, all four remain
+unassigned. Neither checked missing-raw target may retire them merely because
+some Scenario field is Pending. The other twenty reviewed installed defaults
+can continue toward their existing exact Scenario responsibility proofs.

@@ -1,0 +1,67 @@
+# Finite missing Config callback family
+
+Source review following checkpoint `cd176f6a`, 2026-10-24. The tracked catalogue and review inventory preserve these candidates; they are not production assignments. Fresh source reproduction is recorded separately in [evidence.json](evidence.json).
+
+## Concrete next family
+
+Of the matrix's 482 unsupported named-but-absent occurrences, **448 occurrences / 447 names / 448 distinct apply spans** form one conservative callback-only candidate family. They comprise 293 checks, 128 counts, 13 countAllowZero rows, one float and 13 lists. Each has an actual apply callback and no `defaultState`, `defaultIndex` or `defaultPlaceholderState` property. All other rows sharing a candidate name are included; the two `conditionEnemyExitedPresenceRecently` rows remain separate (`catalogue-0523` / 1669–1671 and `catalogue-0524` / 1672–1674).
+
+The candidate claim is only: under the authenticated fresh saved-source construction, an exact ConfigSet with neither Input nor Placeholder of this name supplies no additional input through this callback. This is not a false/zero/default value, no global condition absence, no assertion that the mechanic cannot arise from equipment/passives/skills, and no Scenario or numerical completeness. Native ordinary legality and intrinsic conditions remain independently owned.
+
+The maintained [catalogue](catalogue.json.gz) preserves all 663 full definitions. [review.json](review.json) records the exact 448 candidate IDs, 34 exclusions and 17 shared lifecycle spans; [evidence.json](evidence.json) authenticates all 28 complete source files. Their reviewed role is separate from Import assignment authority.
+
+## Exact exclusions, not empty buckets
+
+The 34 excluded rows are:
+
+* **16 direct/computed readers:** 0007 `conditionFullLife`, 0008 `conditionLowLife`, 0012 `conditionLowEnergyShield`, 0021 `ailmentMode`, 0022 `cooldownMode`, 0023 `physMode`, 0026 `EHPUnluckyWorstOf`, 0027 `DisableEHPGainOnBlock`, 0031 `ignoreItemDisablers`, 0032 `ignoreJewelLimits`, 0288 `ruthlessSupportMode`, 0335 `TotemsSummoned`, 0508 `multiplierPvpTvalueOverride`, 0610 `EEIgnoreHitDamage`, 0633 `enemyMultiplierPvpDamage`, 0637 `enemyPhysicalOverwhelm`. Separate review can admit individual missing branches, as already done for the two ignore controls; this family does not absorb their ordinary legality duties.
+* **17 additional legacy Calcs destinations:** 0009 `conditionFullMana`, 0010 `conditionLowMana`, 0270 `usePowerCharges`, 0272 `useFrenzyCharges`, 0274 `useEnduranceCharges`, 0303 `buffOnslaught`, 0311 `buffPhasing`, 0330 `conditionUsingFlask`, 0531 `conditionEnemyCursed`, 0535 `conditionEnemyBleeding`, 0540 `conditionEnemyPoisoned`, 0557 `conditionEnemyBurning`, 0558 `conditionEnemyIgnited`, 0564 `conditionEnemyChilled`, 0570 `conditionEnemyFrozen`, 0576 `conditionEnemyShocked`, 0620 `enemyPhysicalReduction`. Full/Low Life are also legacy destinations but are already in the direct group. All 26 destinations of the legacy function are retained in JSON, including destinations outside the 482.
+* **One separately reviewed widget-derived family:** 0263 `enemyRadius`. Size presets install its widget placeholder and directly contribute EnemyRadius. `SetPlaceholder(..., false)` is non-notifying, so this is not presently a demonstrated raw table writer; excluding it keeps that consumer relationship out of the first shared proof.
+
+The whole 663-row catalogue still includes 58 existing-adapter correspondences, 24 installed-default candidates and 99 unnamed structure rows. The companion installed-default audit owns those 24. Non-catalogue direct inputs, custom text, outside-Config responsibilities, and all unresolved consumer rows remain independent; no number here is a complete source census.
+
+## Shared source proof and alias boundaries
+
+All paths below are relative to `vendor/path-of-building-poe2/src/`. The evidence and review artifacts record full normalized file hashes and exact span hashes.
+
+1. **Actual final catalogue:** `Modules/ConfigOptions.lua`, complete module, feeds ConfigTab's `varList` (ConfigTab line 13). The captured ordered catalogue includes dynamically appended quest rows. Account every occurrence, not unique names or unique function addresses. The absence of a declared default must hold across every row with the same name.
+2. **Fresh tables, not widget defaults:** complete `Classes/ConfigTab.lua:134–872` and `1317–1334` create separate per-set input/placeholder tables and install only the three explicit default forms. Constructor 713–732 separately establishes widget/default-state fallbacks. `GetDefaultState` 980–998 returns those values without writing an input. These distinctions are essential for the 13 candidate lists: their first visible option is not silently an installed Config input.
+3. **Every saved lane:** complete `Load` 878–978 creates each ConfigSet anew and consumes exact saved names. Input number/string/boolean all matter; Placeholder number writes placeholder, while **Placeholder string writes input** at 914–915. Any saved name in either lane must refuse missing-raw admission, including wrong/empty/false/zero values. The legacy custom-text migration touches `customMods`, not this family. Missing/malformed/namespaced/duplicate source frames do not lend authority.
+4. **Refresh does not notify:** `UpdateControls` 1047–1061 uses non-notifying setters. Full EditControl constructor plus SetText/SetPlaceholder (42–115), full DropDown constructor (20–65) plus SelByValue/SetSel (142–175), and full CheckBox constructor (9–19) distinguish display initialization from user callbacks. SetSel is not interchangeable with SelByValue. These extra widget source files are pinned in JSON.
+5. **Ordered actual dispatch:** complete `BuildModList` 1169–1241 creates new output lists, walks every varList row, and calls apply only through the type-specific input/placeholder tests at 1181/1185/1187/1191/1195. Both raw tables missing the name skips every candidate callback regardless of ifSkill/visibility. Do not infer that a present false/zero value has this proof. UpdateLevel 1157–1167 is the separate fixed enemyLevel lane. Custom text follows in a separate lane and can supply the same gameplay conditions independently.
+6. **Cross-callback writes are explicit:** all captured callback bodies are authenticated. The three bodies using the Build/Config object are size preset 780–794, boss preset 1982–2139, and boss skill preset 2189–2268. The latter two write a finite fixed envelope of enemy level/speed/crit/resists/damage/penetration/armour/evasion/type controls, not a candidate name. Complete `Data/BossSkills.lua` bounds computed damage keys to Physical/Lightning/Cold/Fire and penetration keys to FirePen/ColdPen; fixed resets add Chaos damage/Lightning penetration. AdditionalStats emits modifiers, not Config-table writes. Do not equate a lexical keyword census alone with this whole-body review.
+7. **Legacy alias excluded, not assumed dormant:** `Modules/Build.lua:596–599` calls `ImportCalcSettings` when `next(configTab.input) == nil`. Complete ConfigTab 1243–1278 writes the 26 literal destinations from a different source owner. All matching unsupported rows are excluded. Existing installed defaults or this one Original05 observation are insufficient to declare that branch unreachable for every admitted source. This shared family does not retire Calcs or borrow its pending ownership decision.
+8. **Per-set aliases and lifecycle:** SetActiveConfigSet 1407–1434 aliases exactly one existing set's input/placeholder, then refreshes/dispatches. It does not coalesce their values. Check every ConfigSet independently, including dormant ones, without claiming final title-synchronized selection. New/Copy/Undo/import-API/manage callbacks are mutable operations outside the fresh saved-source claim; their persisted values become ordinary raw source on a subsequent import.
+9. **Interactive/Compare boundaries:** CompareTab's makeConfigControl 1180–1223 creates callbacks but non-notifying constructors do not invoke them. CopyCompareConfig 1298–1310 writes arbitrary peer keys only through its explicit button operation (967–970). ComparePowerBuilder 3048–3078 temporarily substitutes peer input, computes, restores, and rebuilds; this is a real counterfactual consumer, not proof of missing input on arbitrary live objects. CompareEntry owns a separate ConfigTab. ImportTab's API/quest operations likewise have a distinct entry path. The candidate certificate must be for reconstruction of the saved source, never a reusable certificate for those mutable reference objects.
+
+The original matrix's literal/computed-reader inventory is the conservative exclusion basis, and its 1,069-file / 375-carrier-occurrence lexical census is only discovery evidence. The maintained proof must keep the actual reviewed carrier/alias paths and complete source identities; a future newly added reader or source writer requires re-review rather than automatic expansion of this family.
+
+## Match to the current Import implementation
+
+`owned_normalize/configuration_dispositions/missing_raw.rs` already has the necessary runtime mechanics. `owners` calls `source_shape::fresh_config_sets`, checks exact per-set Scenario/Choice ownership and reverse joins, and distinguishes descendant projections. `collect` scans all Input/Placeholder names without trusting the requested lane, then stores one control per exact census ID. `check` revalidates current owners and `consume` requires the same scope, Scenario, selector, target and Absent state, removing each independent ID once. Thus both duplicate-name callbacks can be represented and must be consumed separately. Existing bounded work and atomic inventory retirement remain relevant for 448 controls.
+
+**The collector intentionally proves raw absence only.** Its fresh-config structural frame is not a proof of PoB defaults, lifecycle, callbacks, aliases, whole incoming gameplay semantics or full source census. Those facts must come from the checked authored catalogue/constructor commitments and reviewed per-consumer census. No collector change or new public model is indicated by this candidate family. In particular, do not add a runtime Lua/name-based dispatcher or reinterpret absent as false.
+
+Inventory `prepare` returns before matching any Partial census. Publishing 448 Partial entries solely to show a larger number would not execute the new matcher or remove an obligation. The useful next step is a maintained finite source law which authenticates this shared proof, preserves the exact 448/34 partition, and exercises the existing checked complete-inventory fixture with independent per-consumer IDs. Production Complete publication still requires all remaining catalogue, constructor, outside-source and unknown obligations to be genuinely accounted.
+
+## Required maintained controls
+
+* Reproduce the actual catalogue through the existing original-loader observer; compare complete ordered definitions and function source identities against this packet. Preserve both duplicate-name rows and their two callbacks.
+* Changed/added default on any same-name row, a new same-name direct/computed consumer, new legacy alias destination, or cross-callback write into a candidate must invalidate the family. Missing/surplus/moved callback rows must not be deduplicated away.
+* Actual dispatcher controls should contrast absent with present true/false, zero/nonzero counts and a list option. The test must invoke the existing reference dispatcher, not implement a replacement. Preserve the existing untouched-source and fresh JIT/replay boundaries.
+* Existing Import laws should retain all-lane presence refusal, independent ConfigSets including dormant sets, malformed sibling atomic refusal, exact independent census IDs, complete/Partial distinction, and exact/one-short work at realistic family size.
+* Keep runtime/schema/query/readiness and Original05's remaining Pending states unchanged until the genuinely complete current census is ready. Source-accounting progress alone is not a working build.
+
+## Fixed source identities
+
+Revision `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`; manifest SHA-256 `8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675` (217,603 bytes), normalization `utf8_crlf_to_lf`. All 28 full files in the evidence artifact were rehashed against this manifest. Core pins:
+
+| Source | LF bytes | SHA-256 |
+|---|---:|---|
+| Classes/ConfigTab.lua | 50,481 | `0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88` |
+| Modules/ConfigOptions.lua | 235,127 | `0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467` |
+| Modules/Build.lua | 116,017 | `5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d` |
+| Classes/EditControl.lua | 24,662 | `6af3f270ec07ddf2e3594effd868332c76c9e3039e6a49309965a51419dcf2d4` |
+| Data/BossSkills.lua | 5,605 | `97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d` |
+
+Matrix SHA-256 `84804799f8133f40481dc52ee0534d342b71f8c5054f6d01c701c458c6433d29` (1,813,842 bytes). Original05 XML SHA-256 `442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089` (106,378 bytes). Existing JIT-off/on report SHA-256 `92d9f761a2383ed841ff4a9699395181f7dc621a691a94d480357d1367ebf561` (29,934,293 bytes each) corroborates this snapshot's raw/effective absence; it is not the general missing-branch proof.

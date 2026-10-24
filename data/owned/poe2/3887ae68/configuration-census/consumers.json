@@ -1,0 +1,1561 @@
+{
+  "scope": "finite_source_inventory_not_semantic_closure",
+  "direct_accesses": [
+    {
+      "id": "src/Classes/ItemsTab.lua:4164:1",
+      "path": "src/Classes/ItemsTab.lua",
+      "line": 4164,
+      "column": 46,
+      "expression": "self.build.configTab.input.conditionFullLife",
+      "source_line": "\t\t\t\t\tif flaskData.lifeAdditional > 0 and not self.build.configTab.input.conditionFullLife then",
+      "literal_name": "conditionFullLife",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0007"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcActiveSkill.lua:674:1",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "line": 674,
+      "column": 19,
+      "expression": "env.configInput.enemyDistance",
+      "source_line": "\teffectiveRange = env.configInput.enemyDistance or env.configPlaceholder.enemyDistance",
+      "literal_name": "enemyDistance",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0513"
+      ],
+      "existing_adapter_ids": [
+        "scalar/default_inputs/configured-target-distance-for-skill-range",
+        "scalar/default_inputs/configured-target-distance-for-distance-effects"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcActiveSkill.lua:674:2",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "line": 674,
+      "column": 52,
+      "expression": "env.configPlaceholder.enemyDistance",
+      "source_line": "\teffectiveRange = env.configInput.enemyDistance or env.configPlaceholder.enemyDistance",
+      "literal_name": "enemyDistance",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0513"
+      ],
+      "existing_adapter_ids": [
+        "scalar/default_inputs/configured-target-distance-for-skill-range",
+        "scalar/default_inputs/configured-target-distance-for-distance-effects"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:1086:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 1086,
+      "column": 19,
+      "expression": "env.configInput.EHPUnluckyWorstOf",
+      "source_line": "\t\t\tluck = luck / (env.configInput.EHPUnluckyWorstOf or 1)",
+      "literal_name": "EHPUnluckyWorstOf",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0026"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:1465:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 1465,
+      "column": 188,
+      "expression": "env.configInput[\"conditionLowEnergyShield\"]",
+      "source_line": "\t\toutput.CappingES = modDB:Flag(nil, \"ArmourESRecoveryCap\") and output.Armour < output.EnergyShield or modDB:Flag(nil, \"EvasionESRecoveryCap\") and output.Evasion < output.EnergyShield or env.configInput[\"conditionLowEnergyShield\"]",
+      "literal_name": "conditionLowEnergyShield",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0012"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:1469:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 1469,
+      "column": 37,
+      "expression": "env.configInput[\"conditionLowEnergyShield\"]",
+      "source_line": "\t\t\toutput.EnergyShieldRecoveryCap = env.configInput[\"conditionLowEnergyShield\"] and m_min(output.EnergyShield * data.misc.LowPoolThreshold, output.EnergyShieldRecoveryCap) or output.EnergyShieldRecoveryCap",
+      "literal_name": "conditionLowEnergyShield",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0012"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:1519:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 1519,
+      "column": 79,
+      "expression": "env.configInput.enemyLevel",
+      "source_line": "\t\t\t\t\ts_format(\"Enemy level: %d ^8(%s the Configuration tab)\", env.enemyLevel, env.configInput.enemyLevel and \"overridden from\" or \"can be overridden in\"),",
+      "literal_name": "enemyLevel",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0616"
+      ],
+      "existing_adapter_ids": [
+        "enemy-level"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:1524:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 1524,
+      "column": 79,
+      "expression": "env.configInput.enemyLevel",
+      "source_line": "\t\t\t\t\ts_format(\"Enemy level: %d ^8(%s the Configuration tab)\", env.enemyLevel, env.configInput.enemyLevel and \"overridden from\" or \"can be overridden in\"),",
+      "literal_name": "enemyLevel",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0616"
+      ],
+      "existing_adapter_ids": [
+        "enemy-level"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:1530:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 1530,
+      "column": 79,
+      "expression": "env.configInput.enemyLevel",
+      "source_line": "\t\t\t\t\ts_format(\"Enemy level: %d ^8(%s the Configuration tab)\", env.enemyLevel, env.configInput.enemyLevel and \"overridden from\" or \"can be overridden in\"),",
+      "literal_name": "enemyLevel",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0616"
+      ],
+      "existing_adapter_ids": [
+        "enemy-level"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:1536:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 1536,
+      "column": 79,
+      "expression": "env.configInput.enemyLevel",
+      "source_line": "\t\t\t\t\ts_format(\"Enemy level: %d ^8(%s the Configuration tab)\", env.enemyLevel, env.configInput.enemyLevel and \"overridden from\" or \"can be overridden in\"),",
+      "literal_name": "enemyLevel",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0616"
+      ],
+      "existing_adapter_ids": [
+        "enemy-level"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:1542:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 1542,
+      "column": 79,
+      "expression": "env.configInput.enemyLevel",
+      "source_line": "\t\t\t\t\ts_format(\"Enemy level: %d ^8(%s the Configuration tab)\", env.enemyLevel, env.configInput.enemyLevel and \"overridden from\" or \"can be overridden in\"),",
+      "literal_name": "enemyLevel",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0616"
+      ],
+      "existing_adapter_ids": [
+        "enemy-level"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:1559:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 1559,
+      "column": 78,
+      "expression": "env.configInput.enemyLevel",
+      "source_line": "\t\t\t\ts_format(\"Enemy level: %d ^8(%s the Configuration tab)\", env.enemyLevel, env.configInput.enemyLevel and \"overridden from\" or \"can be overridden in\"),",
+      "literal_name": "enemyLevel",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0616"
+      ],
+      "existing_adapter_ids": [
+        "enemy-level"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:1585:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 1585,
+      "column": 18,
+      "expression": "env.configInput.EHPUnluckyWorstOf",
+      "source_line": "\t\tluck = luck / (env.configInput.EHPUnluckyWorstOf or 1)",
+      "literal_name": "EHPUnluckyWorstOf",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0026"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2217:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2217,
+      "column": 31,
+      "expression": "env.configInput.enemyDamageType",
+      "source_line": "\tlocal damageCategoryConfig = env.configInput.enemyDamageType or \"Average\"",
+      "literal_name": "enemyDamageType",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0631"
+      ],
+      "existing_adapter_ids": [
+        "scalar/option_inputs/raw-enemydamagetype"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2221:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2221,
+      "column": 19,
+      "expression": "env.configInput.EHPUnluckyWorstOf",
+      "source_line": "\t\tlocal worstOf = env.configInput.EHPUnluckyWorstOf or 1",
+      "literal_name": "EHPUnluckyWorstOf",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0026"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2268:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2268,
+      "column": 166,
+      "expression": "env.configInput[\"enemyCritChance\"]",
+      "source_line": "\t\tlocal enemyCritChance = enemyDB:Flag(nil, \"NeverCrit\") and 0 or enemyDB:Flag(nil, \"AlwaysCrit\") and 100 or (m_max(m_min((modDB:Override(nil, \"enemyCritChance\") or env.configInput[\"enemyCritChance\"] or env.configPlaceholder[\"enemyCritChance\"] or 0) * (1 + modDB:Sum(\"INC\", nil, \"EnemyCritChance\") / 100 + enemyDB:Sum(\"INC\", nil, \"CritChance\") / 100) * (1 - output[\"ConfiguredEvadeChance\"] / 100), 100), 0))",
+      "literal_name": "enemyCritChance",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0634"
+      ],
+      "existing_adapter_ids": [
+        "scalar/default_inputs/saved-enemy-critical-strike-chance"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2268:2",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2268,
+      "column": 204,
+      "expression": "env.configPlaceholder[\"enemyCritChance\"]",
+      "source_line": "\t\tlocal enemyCritChance = enemyDB:Flag(nil, \"NeverCrit\") and 0 or enemyDB:Flag(nil, \"AlwaysCrit\") and 100 or (m_max(m_min((modDB:Override(nil, \"enemyCritChance\") or env.configInput[\"enemyCritChance\"] or env.configPlaceholder[\"enemyCritChance\"] or 0) * (1 + modDB:Sum(\"INC\", nil, \"EnemyCritChance\") / 100 + enemyDB:Sum(\"INC\", nil, \"CritChance\") / 100) * (1 - output[\"ConfiguredEvadeChance\"] / 100), 100), 0))",
+      "literal_name": "enemyCritChance",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0634"
+      ],
+      "existing_adapter_ids": [
+        "scalar/default_inputs/saved-enemy-critical-strike-chance"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2273:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2273,
+      "column": 35,
+      "expression": "env.configInput[\"enemyCritDamage\"]",
+      "source_line": "\t\tlocal enemyCritDamage = m_max(((env.configInput[\"enemyCritDamage\"] or env.configPlaceholder[\"enemyCritDamage\"] or 0) + enemyDB:Sum(\"BASE\", nil, \"CritMultiplier\")) * (1 + enemyDB:Sum(\"INC\", { flags = ModFlag.Hit }, \"CritMultiplier\") / 100), 0)",
+      "literal_name": "enemyCritDamage",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0635"
+      ],
+      "existing_adapter_ids": [
+        "scalar/default_inputs/saved-enemy-critical-strike-damage"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2273:2",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2273,
+      "column": 73,
+      "expression": "env.configPlaceholder[\"enemyCritDamage\"]",
+      "source_line": "\t\tlocal enemyCritDamage = m_max(((env.configInput[\"enemyCritDamage\"] or env.configPlaceholder[\"enemyCritDamage\"] or 0) + enemyDB:Sum(\"BASE\", nil, \"CritMultiplier\")) * (1 + enemyDB:Sum(\"INC\", { flags = ModFlag.Hit }, \"CritMultiplier\") / 100), 0)",
+      "literal_name": "enemyCritDamage",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0635"
+      ],
+      "existing_adapter_ids": [
+        "scalar/default_inputs/saved-enemy-critical-strike-damage"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2279:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2279,
+      "column": 33,
+      "expression": "env.configInput[\"enemy\"..damageType..\"Damage\"]",
+      "source_line": "\t\t\tlocal enemyDamage = tonumber(env.configInput[\"enemy\"..damageType..\"Damage\"])",
+      "literal_name": null,
+      "classification": "computed_key_requires_reviewed_family",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2280:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2280,
+      "column": 30,
+      "expression": "env.configInput[\"enemy\"..damageType..\"Pen\"]",
+      "source_line": "\t\t\tlocal enemyPen = tonumber(env.configInput[\"enemy\"..damageType..\"Pen\"])",
+      "literal_name": null,
+      "classification": "computed_key_requires_reviewed_family",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2281:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2281,
+      "column": 36,
+      "expression": "env.configInput[\"enemy\"..damageType..\"Overwhelm\"]",
+      "source_line": "\t\t\tlocal enemyOverwhelm = tonumber(env.configInput[\"enemy\"..damageType..\"Overwhelm\"])",
+      "literal_name": null,
+      "classification": "computed_key_requires_reviewed_family",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2285:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2285,
+      "column": 28,
+      "expression": "env.configPlaceholder[\"enemy\"..damageType..\"Damage\"]",
+      "source_line": "\t\t\t\tenemyDamage = tonumber(env.configPlaceholder[\"enemy\"..damageType..\"Damage\"]) or 0",
+      "literal_name": null,
+      "classification": "computed_key_requires_reviewed_family",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2288:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2288,
+      "column": 25,
+      "expression": "env.configPlaceholder[\"enemy\"..damageType..\"Pen\"]",
+      "source_line": "\t\t\t\tenemyPen = tonumber(env.configPlaceholder[\"enemy\"..damageType..\"Pen\"]) or 0",
+      "literal_name": null,
+      "classification": "computed_key_requires_reviewed_family",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2291:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2291,
+      "column": 31,
+      "expression": "env.configPlaceholder[\"enemy\"..damageType..\"enemyOverwhelm\"]",
+      "source_line": "\t\t\t\tenemyOverwhelm = tonumber(env.configPlaceholder[\"enemy\"..damageType..\"enemyOverwhelm\"]) or 0",
+      "literal_name": null,
+      "classification": "computed_key_requires_reviewed_family",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2849:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2849,
+      "column": 5,
+      "expression": "env.configInput[\"conditionLowLife\"]",
+      "source_line": "\tif env.configInput[\"conditionLowLife\"] then",
+      "literal_name": "conditionLowLife",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0008"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:2871:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 2871,
+      "column": 10,
+      "expression": "env.configInput[\"conditionLowLife\"]",
+      "source_line": "\t\tif not env.configInput[\"conditionLowLife\"] then",
+      "literal_name": "conditionLowLife",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0008"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:3246:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 3246,
+      "column": 11,
+      "expression": "env.configInput.DisableEHPGainOnBlock",
+      "source_line": "\t\t\tif not env.configInput.DisableEHPGainOnBlock then",
+      "literal_name": "DisableEHPGainOnBlock",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0027"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:3281:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 3281,
+      "column": 11,
+      "expression": "env.configInput.DisableEHPGainOnBlock",
+      "source_line": "\t\t\tif not env.configInput.DisableEHPGainOnBlock then",
+      "literal_name": "DisableEHPGainOnBlock",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0027"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:3300:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 3300,
+      "column": 22,
+      "expression": "env.configInput.EHPUnluckyWorstOf",
+      "source_line": "\t\t\t\t\tlocal worstOf = env.configInput.EHPUnluckyWorstOf or 1",
+      "literal_name": "EHPUnluckyWorstOf",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0026"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:3387:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 3387,
+      "column": 21,
+      "expression": "env.configInput.EHPUnluckyWorstOf",
+      "source_line": "\t\t\t\tlocal worstOf = env.configInput.EHPUnluckyWorstOf or 1",
+      "literal_name": "EHPUnluckyWorstOf",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0026"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:3412:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 3412,
+      "column": 29,
+      "expression": "env.configInput.enemySpeed",
+      "source_line": "\t\t\toutput.enemySkillTime = (env.configInput.enemySpeed or env.configPlaceholder.enemySpeed or 700) / (1 + enemyDB:Sum(\"INC\", nil, \"Speed\") / 100)",
+      "literal_name": "enemySpeed",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0632"
+      ],
+      "existing_adapter_ids": [
+        "scalar/default_inputs/saved-enemy-attack-cast-interval"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:3412:2",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 3412,
+      "column": 59,
+      "expression": "env.configPlaceholder.enemySpeed",
+      "source_line": "\t\t\toutput.enemySkillTime = (env.configInput.enemySpeed or env.configPlaceholder.enemySpeed or 700) / (1 + enemyDB:Sum(\"INC\", nil, \"Speed\") / 100)",
+      "literal_name": "enemySpeed",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0632"
+      ],
+      "existing_adapter_ids": [
+        "scalar/default_inputs/saved-enemy-attack-cast-interval"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:3573:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 3573,
+      "column": 5,
+      "expression": "env.configInput.PvpScaling",
+      "source_line": "\tif env.configInput.PvpScaling then",
+      "literal_name": "PvpScaling",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:3575:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 3575,
+      "column": 26,
+      "expression": "env.configInput.enemyMultiplierPvpDamage",
+      "source_line": "\t\tlocal PvpMultiplier = (env.configInput.enemyMultiplierPvpDamage or 100) / 100",
+      "literal_name": "enemyMultiplierPvpDamage",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0633"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:4029:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 4029,
+      "column": 31,
+      "expression": "env.configInput[\"enemy\"..damageType..\"Damage\"]",
+      "source_line": "\t\t\t\t\tlocal baseVal = tonumber(env.configInput[\"enemy\"..damageType..\"Damage\"])",
+      "literal_name": null,
+      "classification": "computed_key_requires_reviewed_family",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcDefence.lua:4032:1",
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 4032,
+      "column": 26,
+      "expression": "env.configPlaceholder[\"enemy\"..damageType..\"Damage\"]",
+      "source_line": "\t\t\t\t\t\tbaseVal = tonumber(env.configPlaceholder[\"enemy\"..damageType..\"Damage\"]) or 0",
+      "literal_name": null,
+      "classification": "computed_key_requires_reviewed_family",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:688:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 688,
+      "column": 114,
+      "expression": "env.configInput[\"enemy\"..damageType..\"Resist\"]",
+      "source_line": "\t\tlocal maxResist = enemyDB:Flag(nil, \"DoNotChangeMaxResFromConfig\") and data.misc.EnemyMaxResist or m_min(m_max(env.configInput[\"enemy\"..damageType..\"Resist\"] or data.misc.EnemyMaxResist, data.misc.EnemyMaxResist), data.misc.MaxResistCap)",
+      "literal_name": null,
+      "classification": "computed_key_requires_reviewed_family",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1142:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1142,
+      "column": 6,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\t\tif env.configInput.repeatMode ~= \"NONE\" then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1146:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1146,
+      "column": 8,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\t\t\t\tif env.configInput.repeatMode == \"AVERAGE\" then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1154:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1154,
+      "column": 8,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\t\t\t\tif env.configInput.repeatMode == \"AVERAGE\" then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1162:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1162,
+      "column": 8,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\t\t\t\tif env.configInput.repeatMode == \"AVERAGE\" then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1170:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1170,
+      "column": 8,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\t\t\t\tif env.configInput.repeatMode == \"AVERAGE\" then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1182:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1182,
+      "column": 8,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\t\t\t\tif env.configInput.repeatMode == \"AVERAGE\" and not skillModList:Flag(nil, \"OnlyFinalRepeat\") then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1190:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1190,
+      "column": 8,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\t\t\t\tif env.configInput.repeatMode == \"AVERAGE\" then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1208:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1208,
+      "column": 12,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\t\t\t\telseif env.configInput.repeatMode == \"AVERAGE\" then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1219:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1219,
+      "column": 7,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\t\t\tif env.configInput.repeatMode == \"AVERAGE\" then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1339:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1339,
+      "column": 20,
+      "expression": "env.configInput.physMode",
+      "source_line": "\t\tlocal physMode = env.configInput.physMode or \"AVERAGE\"",
+      "literal_name": "physMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0023"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1808:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1808,
+      "column": 24,
+      "expression": "env.configInput.cooldownMode",
+      "source_line": "\t\tlocal cooldownMode = env.configInput.cooldownMode or \"BASE\"",
+      "literal_name": "cooldownMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0022"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:1941:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 1941,
+      "column": 50,
+      "expression": "env.configInput.TotemsSummoned",
+      "source_line": "\t\t\t\t\"Totems Summoned: \"..output.TotemsSummoned..(env.configInput.TotemsSummoned and \" ^8(overridden from the Configuration tab)\" or \" ^8(can be overridden in the Configuration tab)\"),",
+      "literal_name": "TotemsSummoned",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0335"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:2780:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 2780,
+      "column": 44,
+      "expression": "env.configInput.enemyLevel",
+      "source_line": "\t\t\t\t\t\"Enemy level: \" .. env.enemyLevel .. (env.configInput.enemyLevel and \" ^8(overridden from the Configuration tab\" or \" ^8(can be overridden in the Configuration tab)\"),",
+      "literal_name": "enemyLevel",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0616"
+      ],
+      "existing_adapter_ids": [
+        "enemy-level"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:3161:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 3161,
+      "column": 5,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\tif env.configInput.repeatMode == \"FINAL\" or skillModList:Flag(nil, \"OnlyFinalRepeat\") then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:3674:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 3674,
+      "column": 27,
+      "expression": "env.configInput.ruthlessSupportMode",
+      "source_line": "\t\t\tlocal ruthlessEffect = env.configInput.ruthlessSupportMode or \"AVERAGE\"",
+      "literal_name": "ruthlessSupportMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0288"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:3832:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 3832,
+      "column": 8,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\t\t\t\tif env.configInput.repeatMode == \"None\" then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:3835:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 3835,
+      "column": 12,
+      "expression": "env.configInput.repeatMode",
+      "source_line": "\t\t\t\telseif env.configInput.repeatMode == \"AVERAGE\" then",
+      "literal_name": "repeatMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0287"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:4306:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 4306,
+      "column": 12,
+      "expression": "env.configInput.ChanceToIgnoreEnemyPhysicalDamageReductionMode",
+      "source_line": "\t\t\t\t\t\t\t\tif env.configInput.ChanceToIgnoreEnemyPhysicalDamageReductionMode == \"MAX\" then",
+      "literal_name": "ChanceToIgnoreEnemyPhysicalDamageReductionMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0289"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:4308:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 4308,
+      "column": 16,
+      "expression": "env.configInput.ChanceToIgnoreEnemyPhysicalDamageReductionMode",
+      "source_line": "\t\t\t\t\t\t\t\telseif env.configInput.ChanceToIgnoreEnemyPhysicalDamageReductionMode == \"MIN\" then",
+      "literal_name": "ChanceToIgnoreEnemyPhysicalDamageReductionMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0289"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:4478:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 4478,
+      "column": 66,
+      "expression": "env.configInput.EEIgnoreHitDamage",
+      "source_line": "\t\tif skillModList:Flag(skillCfg, \"ElementalEquilibrium\") and not env.configInput.EEIgnoreHitDamage and (output.FireHitAverage + output.ColdHitAverage + output.LightningHitAverage > 0) then",
+      "literal_name": "EEIgnoreHitDamage",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0610"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:4631:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 4631,
+      "column": 6,
+      "expression": "env.configInput.PvpScaling",
+      "source_line": "\t\tif env.configInput.PvpScaling then",
+      "literal_name": "PvpScaling",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:4638:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 4638,
+      "column": 22,
+      "expression": "env.configInput.multiplierPvpTvalueOverride",
+      "source_line": "\t\t\tlocal PvpTvalue = env.configInput.multiplierPvpTvalueOverride or nil",
+      "literal_name": "multiplierPvpTvalueOverride",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0508"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:5592:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 5592,
+      "column": 44,
+      "expression": "env.configInput.enemyLevel",
+      "source_line": "\t\t\t\t\t\"Enemy level: \" .. env.enemyLevel .. (env.configInput.enemyLevel and \" ^8(overridden from the Configuration tab\" or \" ^8(can be overridden in the Configuration tab)\"),",
+      "literal_name": "enemyLevel",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0616"
+      ],
+      "existing_adapter_ids": [
+        "enemy-level"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:5649:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 5649,
+      "column": 23,
+      "expression": "env.configInput.ailmentMode",
+      "source_line": "\t\tlocal ailmentMode = env.configInput.ailmentMode or \"AVERAGE\"",
+      "literal_name": "ailmentMode",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0021"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcOffence.lua:5764:1",
+      "path": "src/Modules/CalcOffence.lua",
+      "line": 5764,
+      "column": 133,
+      "expression": "env.configInput.enemyIsBoss",
+      "source_line": "\t\t\t\t\t\t\tlocal threshString = s_format(\"%d\", thresh)..(m_floor(thresh + 0.5) == m_floor(enemyThreshold + 0.5) and s_format(\" ^8(%s)\", env.configInput.enemyIsBoss) or \"\")",
+      "literal_name": "enemyIsBoss",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0618"
+      ],
+      "existing_adapter_ids": [
+        "encounter"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcPerform.lua:805:1",
+      "path": "src/Modules/CalcPerform.lua",
+      "line": 805,
+      "column": 7,
+      "expression": "env.configInput.multiplierManaBurnStacks",
+      "source_line": "\t\tif (env.configInput.multiplierManaBurnStacks or 0) > 0 then",
+      "literal_name": "multiplierManaBurnStacks",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcPerform.lua:810:1",
+      "path": "src/Modules/CalcPerform.lua",
+      "line": 810,
+      "column": 34,
+      "expression": "env.configInput.multiplierManaBurnStacks",
+      "source_line": "\t\t\tlocal manaBurnStacks = m_min((env.configInput.multiplierManaBurnStacks or 0), maxManaBurn)",
+      "literal_name": "multiplierManaBurnStacks",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcSetup.lua:847:1",
+      "path": "src/Modules/CalcSetup.lua",
+      "line": 847,
+      "column": 38,
+      "expression": "env.configInput.resistancePenalty",
+      "source_line": "\t\tmodDB:NewMod(\"FireResist\", \"BASE\", env.configInput.resistancePenalty or -60, \"Base\")",
+      "literal_name": "resistancePenalty",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0002"
+      ],
+      "existing_adapter_ids": [
+        "scalar/default_inputs/saved-player-resistance-penalty"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcSetup.lua:848:1",
+      "path": "src/Modules/CalcSetup.lua",
+      "line": 848,
+      "column": 38,
+      "expression": "env.configInput.resistancePenalty",
+      "source_line": "\t\tmodDB:NewMod(\"ColdResist\", \"BASE\", env.configInput.resistancePenalty or -60, \"Base\")",
+      "literal_name": "resistancePenalty",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0002"
+      ],
+      "existing_adapter_ids": [
+        "scalar/default_inputs/saved-player-resistance-penalty"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcSetup.lua:849:1",
+      "path": "src/Modules/CalcSetup.lua",
+      "line": 849,
+      "column": 43,
+      "expression": "env.configInput.resistancePenalty",
+      "source_line": "\t\tmodDB:NewMod(\"LightningResist\", \"BASE\", env.configInput.resistancePenalty or -60, \"Base\")",
+      "literal_name": "resistancePenalty",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0002"
+      ],
+      "existing_adapter_ids": [
+        "scalar/default_inputs/saved-player-resistance-penalty"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcSetup.lua:1041:1",
+      "path": "src/Modules/CalcSetup.lua",
+      "line": 1041,
+      "column": 101,
+      "expression": "env.configInput.ignoreJewelLimits",
+      "source_line": "\t\tlocal grantedNodes = env.spec:CollectGrantedPassiveNodesFromItems(build.itemsTab, env.allocNodes, env.configInput.ignoreJewelLimits, override, nodesModsList)",
+      "literal_name": "ignoreJewelLimits",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0032"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcSetup.lua:1138:1",
+      "path": "src/Modules/CalcSetup.lua",
+      "line": 1138,
+      "column": 28,
+      "expression": "env.configInput.ignoreJewelLimits",
+      "source_line": "\t\t\t\t\tif item.limit and not env.configInput.ignoreJewelLimits then",
+      "literal_name": "ignoreJewelLimits",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0032"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcSetup.lua:1216:1",
+      "path": "src/Modules/CalcSetup.lua",
+      "line": 1216,
+      "column": 10,
+      "expression": "env.configInput.ignoreItemDisablers",
+      "source_line": "\t\tif not env.configInput.ignoreItemDisablers then",
+      "literal_name": "ignoreItemDisablers",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0031"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcTriggers.lua:581:1",
+      "path": "src/Modules/CalcTriggers.lua",
+      "line": 581,
+      "column": 46,
+      "expression": "env.build.configTab.input[\"doomBlastSource\"]",
+      "source_line": "\t\t\tif config.triggerName == \"Doom Blast\" and env.build.configTab.input[\"doomBlastSource\"] == \"expiration\" then",
+      "literal_name": "doomBlastSource",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0097"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcTriggers.lua:595:1",
+      "path": "src/Modules/CalcTriggers.lua",
+      "line": 595,
+      "column": 50,
+      "expression": "env.build.configTab.input[\"doomBlastSource\"]",
+      "source_line": "\t\t\telseif config.triggerName == \"Doom Blast\" and env.build.configTab.input[\"doomBlastSource\"] == \"hexblast\" then",
+      "literal_name": "doomBlastSource",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0097"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcTriggers.lua:694:1",
+      "path": "src/Modules/CalcTriggers.lua",
+      "line": 694,
+      "column": 80,
+      "expression": "env.build.configTab.input[\"doomBlastSource\"]",
+      "source_line": "\t\t\tif env.player.mainSkill.activeEffect.grantedEffect.name == \"Doom Blast\" and env.build.configTab.input[\"doomBlastSource\"] == \"vixen\" then",
+      "literal_name": "doomBlastSource",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0097"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/CalcTriggers.lua:1292:1",
+      "path": "src/Modules/CalcTriggers.lua",
+      "line": 1292,
+      "column": 6,
+      "expression": "env.build.configTab.input[\"doomBlastSource\"]",
+      "source_line": "\t\tif env.build.configTab.input[\"doomBlastSource\"] == \"replacement\" then",
+      "literal_name": "doomBlastSource",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0097"
+      ],
+      "existing_adapter_ids": [],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/ConfigOptions.lua:2203:1",
+      "path": "src/Modules/ConfigOptions.lua",
+      "line": 2203,
+      "column": 38,
+      "expression": "build.configTab.input['enemyDamageRollRange']",
+      "source_line": "\t\t\tlocal rollRangeMult = m_min(m_max(build.configTab.input['enemyDamageRollRange'] or build.configTab.varControls['enemyDamageRollRange'].placeholder, 0), 100)",
+      "literal_name": "enemyDamageRollRange",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0630"
+      ],
+      "existing_adapter_ids": [
+        "damage-roll-inapplicable"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/ConfigOptions.lua:2230:1",
+      "path": "src/Modules/ConfigOptions.lua",
+      "line": 2230,
+      "column": 5,
+      "expression": "build.configTab.input['enemyDamageType']",
+      "source_line": "\t\t\t\tbuild.configTab.input['enemyDamageType'] = bossData.DamageType",
+      "literal_name": "enemyDamageType",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0631"
+      ],
+      "existing_adapter_ids": [
+        "scalar/option_inputs/raw-enemydamagetype"
+      ],
+      "admission_proved": false
+    },
+    {
+      "id": "src/Modules/ConfigOptions.lua:2263:1",
+      "path": "src/Modules/ConfigOptions.lua",
+      "line": 2263,
+      "column": 5,
+      "expression": "build.configTab.input['enemyDamageType']",
+      "source_line": "\t\t\t\tbuild.configTab.input['enemyDamageType'] = \"Average\"",
+      "literal_name": "enemyDamageType",
+      "classification": "literal_access_read_or_write_role_recorded_separately",
+      "catalogue_row_ids": [
+        "catalogue-0631"
+      ],
+      "existing_adapter_ids": [
+        "scalar/option_inputs/raw-enemydamagetype"
+      ],
+      "admission_proved": false
+    }
+  ],
+  "computed_key_families": [
+    {
+      "id": "damage",
+      "sites": [
+        "CalcDefence.lua:2277-2285",
+        "CalcDefence.lua:4027-4032"
+      ],
+      "domain": "exact dmgTypeList at CalcDefence.lua:28",
+      "names": [
+        {
+          "name": "enemyPhysicalDamage",
+          "catalogue_row_ids": [
+            "catalogue-0636"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemyphysicaldamage"
+          ],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyLightningDamage",
+          "catalogue_row_ids": [
+            "catalogue-0638"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemylightningdamage"
+          ],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyColdDamage",
+          "catalogue_row_ids": [
+            "catalogue-0640"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemycolddamage"
+          ],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyFireDamage",
+          "catalogue_row_ids": [
+            "catalogue-0642"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemyfiredamage"
+          ],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyChaosDamage",
+          "catalogue_row_ids": [
+            "catalogue-0644"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemychaosdamage"
+          ],
+          "admission_proved": false
+        }
+      ],
+      "review": "Input then Placeholder then zero, outside apply dispatch."
+    },
+    {
+      "id": "penetration",
+      "sites": [
+        "CalcDefence.lua:2277-2288"
+      ],
+      "domain": "exact dmgTypeList:28",
+      "names": [
+        {
+          "name": "enemyPhysicalPen",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyLightningPen",
+          "catalogue_row_ids": [
+            "catalogue-0639"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemylightningpen"
+          ],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyColdPen",
+          "catalogue_row_ids": [
+            "catalogue-0641"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemycoldpen"
+          ],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyFirePen",
+          "catalogue_row_ids": [
+            "catalogue-0643"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemyfirepen"
+          ],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyChaosPen",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        }
+      ],
+      "review": "Five keys: Physical/Chaos not silently dropped because absent from UI."
+    },
+    {
+      "id": "overwhelm-input",
+      "sites": [
+        "CalcDefence.lua:2277-2281"
+      ],
+      "domain": "exact dmgTypeList:28",
+      "names": [
+        {
+          "name": "enemyPhysicalOverwhelm",
+          "catalogue_row_ids": [
+            "catalogue-0637"
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyLightningOverwhelm",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyColdOverwhelm",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyFireOverwhelm",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyChaosOverwhelm",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        }
+      ],
+      "review": "Five Input keys; only Physical is in named catalogue."
+    },
+    {
+      "id": "overwhelm-placeholder",
+      "sites": [
+        "CalcDefence.lua:2291"
+      ],
+      "domain": "exact dmgTypeList:28",
+      "names": [
+        {
+          "name": "enemyPhysicalenemyOverwhelm",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyLightningenemyOverwhelm",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyColdenemyOverwhelm",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyFireenemyOverwhelm",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyChaosenemyOverwhelm",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        }
+      ],
+      "review": "Exact source suffix enemyOverwhelm differs from Input/UI. No correction or intended-equivalence assumption."
+    },
+    {
+      "id": "resistance-helper",
+      "sites": [
+        "CalcOffence.lua:686-688",
+        "CalcOffence.lua:4319,4330,5364,5374,5384,5981,6023,6098"
+      ],
+      "domain": "conservative five damage-type envelope; explicit Fire/Chaos and ailment callers retained",
+      "names": [
+        {
+          "name": "enemyPhysicalResist",
+          "catalogue_row_ids": [
+            null
+          ],
+          "existing_adapter_ids": [],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyLightningResist",
+          "catalogue_row_ids": [
+            "catalogue-0621"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemylightningresist"
+          ],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyColdResist",
+          "catalogue_row_ids": [
+            "catalogue-0622"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemycoldresist"
+          ],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyFireResist",
+          "catalogue_row_ids": [
+            "catalogue-0623"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemyfireresist"
+          ],
+          "admission_proved": false
+        },
+        {
+          "name": "enemyChaosResist",
+          "catalogue_row_ids": [
+            "catalogue-0624"
+          ],
+          "existing_adapter_ids": [
+            "scalar/inputs/raw-enemychaosresist"
+          ],
+          "admission_proved": false
+        }
+      ],
+      "review": "Input-only direct maximum-resistance consumer, separate from apply. Envelope is not reachability proof; exact caller/ailment domain remains review."
+    },
+    {
+      "id": "boss-preset-writes",
+      "sites": [
+        "ConfigOptions.lua:2189-2268",
+        "Data/BossSkills.lua whole pinned body"
+      ],
+      "domain": "bossData.DamageMultipliers and DamagePenetrations, including Uber overrides",
+      "names": [],
+      "review": "Computed enemy..damageType..Damage, enemy..penType widget writes and direct enemyDamageType write. Full bodies pinned; arbitrary non-None boss family not fully adjudicated; existing guarded Encounter proof is narrower."
+    }
+  ],
+  "alias_review": [
+    {
+      "id": "active-config-table",
+      "source": "ConfigTab.lua:1407-1435",
+      "review": "self.input/self.placeholder alias selected configSets tables; key/title/loadout changes remain separate.",
+      "admission_proved": false
+    },
+    {
+      "id": "calculation-carriers",
+      "source": "CalcSetup.lua:717-741",
+      "review": "env.configInput/env.configPlaceholder reference build.configTab tables; env.build.configTab.input is same carrier. No whole-program alias closure claimed.",
+      "admission_proved": false
+    },
+    {
+      "id": "ordered-dispatch",
+      "source": "ConfigTab.lua:1157-1199",
+      "review": "local input/placeholder; UpdateLevel precedence; every varData.apply visited in order. Visibility/ifSkill is not apply admission. Exact check/count-zero/list branches retained, not reinterpreted in PowerShell.",
+      "admission_proved": false
+    },
+    {
+      "id": "constructor-vs-ui",
+      "source": "ConfigTab.lua:703-732,980-998,1317-1334",
+      "review": "Constructor defaultState/defaultPlaceholder then defaultIndex, nil removal and duplicate order differ from UI false/0/first-option defaults.",
+      "admission_proved": false
+    },
+    {
+      "id": "load-lanes",
+      "source": "ConfigTab.lua:878-977",
+      "review": "Placeholder string writes Input; numeric writes Placeholder. All sets and legacy custom text retained, no compatibility parser added.",
+      "admission_proved": false
+    },
+    {
+      "id": "widget-notify",
+      "source": "EditControl.lua:110-115;ConfigTab.lua:315-324;ConfigOptions.lua:780-794,1982-2139,2189-2268",
+      "review": "SetPlaceholder notify true updates raw Placeholder via changeFunc; false only widget. rollRange explicitly reads widget placeholder.",
+      "admission_proved": false
+    },
+    {
+      "id": "custom-modifier-family",
+      "source": "ConfigTab.lua:962-973,1200-1241",
+      "review": "Enabled block parser and fallback input.customMods are separate paths. Only entire literal-empty source family currently has private checked control.",
+      "admission_proved": false
+    },
+    {
+      "id": "legacy-calcs-import",
+      "source": "Build.lua:596-599;ConfigTab.lua:1243-1277",
+      "review": "26 old/new assignments behind next(input)==nil; original observed Input has45 entries. This is not a general dismissal of legacy Calcs/Config responsibility.",
+      "admission_proved": false
+    },
+    {
+      "id": "compare-aliases",
+      "source": "CompareTab.lua:1180-1224,1239-1257,1301-1305,2108-2109,2656-2657,3049-3050;CompareEntry.lua:135-138",
+      "review": "pInput/cInput/inputTable/configTab/pConfigTab read/write arbitrary varData.var or k. Interactive comparison not the unchanged archived loader; retained unsupported for broader claim.",
+      "admission_proved": false
+    },
+    {
+      "id": "api-import-alias",
+      "source": "ImportTab.lua:830-922",
+      "review": "local configTab, computed quest var and configBossFaceBroken writes; current reward recipes are sole checked native projections. API mutation not source XML responsibility certificate.",
+      "admission_proved": false
+    },
+    {
+      "id": "loadout-and-set-carriers",
+      "source": "Build.lua:646-977;ConfigSetListControl.lua;ConfigSetService.lua;BuildSetListControl.lua",
+      "review": "configSet/configList/configId/title affect selection. Header/SyncLoadouts proof separate; not universally presentation-only.",
+      "admission_proved": false
+    },
+    {
+      "id": "derived-calculation-locals",
+      "source": "CalcDefence.lua:2217-2291,3575;CalcOffence.lua:1339,1808,3674,4638,5649;CalcPerform.lua:805-818",
+      "review": "damageCategoryConfig/worstOf/enemyDamage/enemyPen/enemyOverwhelm/physMode/cooldownMode/ruthlessEffect/ailmentMode/manaBurnStacks carry real branches/fallbacks.",
+      "admission_proved": false
+    }
+  ]
+}

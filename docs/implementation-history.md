@@ -29704,3 +29704,43 @@ exact selector correspondence before changing allocation-free source accounting;
 do not invent a Pending owner or a physical/manual root. Broader configuration,
 Actor-to-Enemy, resource-demand and scoped-coverage proposals remain unapproved.
 The Action/optional-selection approvals do not approve those later changes.
+
+## Archived 2026-10-24 checked missing-raw checkpoint
+
+Commit `cd176f6a490ee2524863b4ce9bf064cd80b58180`, pushed and remote-verified.
+
+**Current checkpoint:** checked missing-raw configuration consumers now use the
+existing inventory transaction. The two admitted meanings are no additional
+owned input and responsibility retained on exact Pending Scenario fields.
+Compilation requires a named selector, exactly `Absent`, and a nonempty unique
+field set for retained responsibility. The private collector checks every raw
+Input/Placeholder lane, exact source/Scenario/Choice identity, reverse ownership
+across unselected sets, and current Pending codes and issue IDs. Independent
+consumer IDs are consumed once; known members and all Scenario obligations
+survive. Partial catalogues and unrelated inventories do no new source-proof
+work. The existing all-leaf, adapter, global-origin and sole atomic Choice
+retirement checks remain mandatory. No Core/Engine model or runtime rule changes.
+
+Six private and seven integration laws cover owner/field corruption, actual
+zero versus absence, multiple consumers, independent presets, strict wire
+format, partial/global refusal and exact resource boundaries. The first focused
+run exposed Serde accepting unknown fields on an internally tagged unit variant;
+the no-input target now uses an empty struct variant with the same intended wire
+spelling and no custom parser. The strict rejection test is retained. All 281
+library tests pass in 73.15s and 441 normalization tests pass in 3.23s; the
+separate explicit current-release test remains ignored in the ordinary suite.
+The strengthened private guard law now calls `prepare` with real receipts and
+zero remaining work, and checks that unrelated inventories retain exact prior
+work; all six focused private tests pass in 0.02s. Both maintained Authoring laws
+pass in 100.67s, including the actual five-original current-release replay,
+unchanged selected obligations and exact historical policy inverse. This gives
+724 distinct passing tests across the affected suites. Independent source and
+production reviews are clear. Strict all-feature/all-target Import/Authoring
+Clippy passes in 19.50s, as do scoped formatting, whitespace, strict UTF-8/LF and
+all nine protected-draft hashes.
+Logs are under `runs/configuration-missing-raw/`.
+
+No production Complete census or native coverage is inferred. The prior
+checkpoint is `8de86f95`, pushed and remote-verified; its immutable runtime input,
+checkpoint and ledger remain the current release. No data artifacts are rebuilt
+because this checkpoint adds no production assignment.

@@ -1,0 +1,1519 @@
+{
+  "scope": "review_candidates_not_assignments",
+  "claims": {
+    "production_assignments": false,
+    "complete_configuration_census": false,
+    "global_channel_absence": false,
+    "fresh_saved_source_scope_only": true,
+    "lifecycle_evidence_required": true,
+    "native_readiness_promoted": false
+  },
+  "counts": {
+    "original_catalogue": 663,
+    "existing_adapter_correspondences": 58,
+    "installed_default_candidates": 24,
+    "unnamed_structure": 99,
+    "unsupported_named_rows": 482,
+    "candidate_rows": 448,
+    "candidate_names": 447,
+    "excluded_rows": 34,
+    "candidate_distinct_callback_bodies": 448
+  },
+  "candidate_ids": [
+    "catalogue-0003",
+    "catalogue-0005",
+    "catalogue-0006",
+    "catalogue-0011",
+    "catalogue-0013",
+    "catalogue-0015",
+    "catalogue-0016",
+    "catalogue-0017",
+    "catalogue-0018",
+    "catalogue-0019",
+    "catalogue-0020",
+    "catalogue-0024",
+    "catalogue-0028",
+    "catalogue-0029",
+    "catalogue-0030",
+    "catalogue-0035",
+    "catalogue-0037",
+    "catalogue-0039",
+    "catalogue-0041",
+    "catalogue-0043",
+    "catalogue-0044",
+    "catalogue-0046",
+    "catalogue-0047",
+    "catalogue-0049",
+    "catalogue-0051",
+    "catalogue-0053",
+    "catalogue-0054",
+    "catalogue-0056",
+    "catalogue-0058",
+    "catalogue-0059",
+    "catalogue-0061",
+    "catalogue-0063",
+    "catalogue-0064",
+    "catalogue-0066",
+    "catalogue-0067",
+    "catalogue-0069",
+    "catalogue-0070",
+    "catalogue-0071",
+    "catalogue-0072",
+    "catalogue-0074",
+    "catalogue-0076",
+    "catalogue-0080",
+    "catalogue-0082",
+    "catalogue-0083",
+    "catalogue-0084",
+    "catalogue-0088",
+    "catalogue-0090",
+    "catalogue-0092",
+    "catalogue-0098",
+    "catalogue-0100",
+    "catalogue-0102",
+    "catalogue-0103",
+    "catalogue-0104",
+    "catalogue-0107",
+    "catalogue-0108",
+    "catalogue-0113",
+    "catalogue-0115",
+    "catalogue-0117",
+    "catalogue-0119",
+    "catalogue-0121",
+    "catalogue-0123",
+    "catalogue-0125",
+    "catalogue-0127",
+    "catalogue-0129",
+    "catalogue-0133",
+    "catalogue-0135",
+    "catalogue-0139",
+    "catalogue-0141",
+    "catalogue-0142",
+    "catalogue-0143",
+    "catalogue-0145",
+    "catalogue-0147",
+    "catalogue-0149",
+    "catalogue-0151",
+    "catalogue-0153",
+    "catalogue-0155",
+    "catalogue-0157",
+    "catalogue-0159",
+    "catalogue-0161",
+    "catalogue-0163",
+    "catalogue-0165",
+    "catalogue-0169",
+    "catalogue-0170",
+    "catalogue-0171",
+    "catalogue-0172",
+    "catalogue-0173",
+    "catalogue-0174",
+    "catalogue-0176",
+    "catalogue-0178",
+    "catalogue-0179",
+    "catalogue-0181",
+    "catalogue-0182",
+    "catalogue-0183",
+    "catalogue-0185",
+    "catalogue-0187",
+    "catalogue-0191",
+    "catalogue-0193",
+    "catalogue-0195",
+    "catalogue-0197",
+    "catalogue-0199",
+    "catalogue-0200",
+    "catalogue-0202",
+    "catalogue-0203",
+    "catalogue-0205",
+    "catalogue-0207",
+    "catalogue-0216",
+    "catalogue-0218",
+    "catalogue-0220",
+    "catalogue-0222",
+    "catalogue-0224",
+    "catalogue-0226",
+    "catalogue-0228",
+    "catalogue-0230",
+    "catalogue-0232",
+    "catalogue-0233",
+    "catalogue-0234",
+    "catalogue-0236",
+    "catalogue-0237",
+    "catalogue-0241",
+    "catalogue-0243",
+    "catalogue-0245",
+    "catalogue-0247",
+    "catalogue-0249",
+    "catalogue-0250",
+    "catalogue-0251",
+    "catalogue-0253",
+    "catalogue-0254",
+    "catalogue-0255",
+    "catalogue-0256",
+    "catalogue-0258",
+    "catalogue-0260",
+    "catalogue-0264",
+    "catalogue-0265",
+    "catalogue-0266",
+    "catalogue-0267",
+    "catalogue-0268",
+    "catalogue-0271",
+    "catalogue-0273",
+    "catalogue-0275",
+    "catalogue-0276",
+    "catalogue-0277",
+    "catalogue-0278",
+    "catalogue-0279",
+    "catalogue-0280",
+    "catalogue-0281",
+    "catalogue-0282",
+    "catalogue-0283",
+    "catalogue-0284",
+    "catalogue-0286",
+    "catalogue-0290",
+    "catalogue-0291",
+    "catalogue-0292",
+    "catalogue-0293",
+    "catalogue-0294",
+    "catalogue-0295",
+    "catalogue-0296",
+    "catalogue-0297",
+    "catalogue-0298",
+    "catalogue-0299",
+    "catalogue-0300",
+    "catalogue-0301",
+    "catalogue-0302",
+    "catalogue-0304",
+    "catalogue-0305",
+    "catalogue-0306",
+    "catalogue-0307",
+    "catalogue-0308",
+    "catalogue-0309",
+    "catalogue-0310",
+    "catalogue-0312",
+    "catalogue-0313",
+    "catalogue-0314",
+    "catalogue-0315",
+    "catalogue-0316",
+    "catalogue-0317",
+    "catalogue-0318",
+    "catalogue-0319",
+    "catalogue-0320",
+    "catalogue-0321",
+    "catalogue-0322",
+    "catalogue-0323",
+    "catalogue-0324",
+    "catalogue-0325",
+    "catalogue-0326",
+    "catalogue-0327",
+    "catalogue-0328",
+    "catalogue-0329",
+    "catalogue-0331",
+    "catalogue-0332",
+    "catalogue-0333",
+    "catalogue-0334",
+    "catalogue-0336",
+    "catalogue-0337",
+    "catalogue-0339",
+    "catalogue-0340",
+    "catalogue-0341",
+    "catalogue-0342",
+    "catalogue-0343",
+    "catalogue-0344",
+    "catalogue-0345",
+    "catalogue-0346",
+    "catalogue-0347",
+    "catalogue-0348",
+    "catalogue-0349",
+    "catalogue-0350",
+    "catalogue-0351",
+    "catalogue-0352",
+    "catalogue-0353",
+    "catalogue-0354",
+    "catalogue-0355",
+    "catalogue-0356",
+    "catalogue-0357",
+    "catalogue-0358",
+    "catalogue-0359",
+    "catalogue-0360",
+    "catalogue-0361",
+    "catalogue-0362",
+    "catalogue-0363",
+    "catalogue-0364",
+    "catalogue-0366",
+    "catalogue-0367",
+    "catalogue-0368",
+    "catalogue-0369",
+    "catalogue-0370",
+    "catalogue-0371",
+    "catalogue-0372",
+    "catalogue-0373",
+    "catalogue-0374",
+    "catalogue-0375",
+    "catalogue-0376",
+    "catalogue-0377",
+    "catalogue-0378",
+    "catalogue-0379",
+    "catalogue-0380",
+    "catalogue-0381",
+    "catalogue-0382",
+    "catalogue-0383",
+    "catalogue-0384",
+    "catalogue-0385",
+    "catalogue-0386",
+    "catalogue-0387",
+    "catalogue-0388",
+    "catalogue-0389",
+    "catalogue-0390",
+    "catalogue-0391",
+    "catalogue-0392",
+    "catalogue-0393",
+    "catalogue-0394",
+    "catalogue-0395",
+    "catalogue-0396",
+    "catalogue-0397",
+    "catalogue-0398",
+    "catalogue-0399",
+    "catalogue-0400",
+    "catalogue-0401",
+    "catalogue-0402",
+    "catalogue-0403",
+    "catalogue-0404",
+    "catalogue-0405",
+    "catalogue-0406",
+    "catalogue-0407",
+    "catalogue-0408",
+    "catalogue-0409",
+    "catalogue-0410",
+    "catalogue-0411",
+    "catalogue-0412",
+    "catalogue-0414",
+    "catalogue-0415",
+    "catalogue-0416",
+    "catalogue-0417",
+    "catalogue-0418",
+    "catalogue-0419",
+    "catalogue-0420",
+    "catalogue-0421",
+    "catalogue-0422",
+    "catalogue-0423",
+    "catalogue-0424",
+    "catalogue-0425",
+    "catalogue-0426",
+    "catalogue-0427",
+    "catalogue-0428",
+    "catalogue-0429",
+    "catalogue-0430",
+    "catalogue-0431",
+    "catalogue-0432",
+    "catalogue-0433",
+    "catalogue-0434",
+    "catalogue-0435",
+    "catalogue-0436",
+    "catalogue-0437",
+    "catalogue-0438",
+    "catalogue-0439",
+    "catalogue-0440",
+    "catalogue-0441",
+    "catalogue-0442",
+    "catalogue-0443",
+    "catalogue-0444",
+    "catalogue-0445",
+    "catalogue-0446",
+    "catalogue-0447",
+    "catalogue-0448",
+    "catalogue-0450",
+    "catalogue-0451",
+    "catalogue-0452",
+    "catalogue-0453",
+    "catalogue-0454",
+    "catalogue-0455",
+    "catalogue-0456",
+    "catalogue-0457",
+    "catalogue-0458",
+    "catalogue-0459",
+    "catalogue-0460",
+    "catalogue-0461",
+    "catalogue-0462",
+    "catalogue-0463",
+    "catalogue-0464",
+    "catalogue-0465",
+    "catalogue-0466",
+    "catalogue-0467",
+    "catalogue-0468",
+    "catalogue-0469",
+    "catalogue-0470",
+    "catalogue-0472",
+    "catalogue-0473",
+    "catalogue-0474",
+    "catalogue-0475",
+    "catalogue-0476",
+    "catalogue-0477",
+    "catalogue-0478",
+    "catalogue-0479",
+    "catalogue-0480",
+    "catalogue-0481",
+    "catalogue-0482",
+    "catalogue-0483",
+    "catalogue-0484",
+    "catalogue-0485",
+    "catalogue-0486",
+    "catalogue-0487",
+    "catalogue-0488",
+    "catalogue-0489",
+    "catalogue-0490",
+    "catalogue-0491",
+    "catalogue-0492",
+    "catalogue-0493",
+    "catalogue-0494",
+    "catalogue-0495",
+    "catalogue-0496",
+    "catalogue-0497",
+    "catalogue-0498",
+    "catalogue-0499",
+    "catalogue-0500",
+    "catalogue-0501",
+    "catalogue-0502",
+    "catalogue-0504",
+    "catalogue-0505",
+    "catalogue-0506",
+    "catalogue-0507",
+    "catalogue-0509",
+    "catalogue-0510",
+    "catalogue-0511",
+    "catalogue-0514",
+    "catalogue-0515",
+    "catalogue-0516",
+    "catalogue-0517",
+    "catalogue-0518",
+    "catalogue-0521",
+    "catalogue-0522",
+    "catalogue-0523",
+    "catalogue-0524",
+    "catalogue-0525",
+    "catalogue-0526",
+    "catalogue-0527",
+    "catalogue-0528",
+    "catalogue-0529",
+    "catalogue-0530",
+    "catalogue-0532",
+    "catalogue-0533",
+    "catalogue-0534",
+    "catalogue-0536",
+    "catalogue-0537",
+    "catalogue-0538",
+    "catalogue-0539",
+    "catalogue-0541",
+    "catalogue-0542",
+    "catalogue-0543",
+    "catalogue-0544",
+    "catalogue-0545",
+    "catalogue-0546",
+    "catalogue-0547",
+    "catalogue-0548",
+    "catalogue-0549",
+    "catalogue-0550",
+    "catalogue-0551",
+    "catalogue-0552",
+    "catalogue-0553",
+    "catalogue-0554",
+    "catalogue-0555",
+    "catalogue-0556",
+    "catalogue-0559",
+    "catalogue-0560",
+    "catalogue-0561",
+    "catalogue-0563",
+    "catalogue-0565",
+    "catalogue-0566",
+    "catalogue-0568",
+    "catalogue-0569",
+    "catalogue-0571",
+    "catalogue-0572",
+    "catalogue-0573",
+    "catalogue-0574",
+    "catalogue-0575",
+    "catalogue-0577",
+    "catalogue-0579",
+    "catalogue-0580",
+    "catalogue-0581",
+    "catalogue-0582",
+    "catalogue-0583",
+    "catalogue-0584",
+    "catalogue-0585",
+    "catalogue-0586",
+    "catalogue-0587",
+    "catalogue-0588",
+    "catalogue-0589",
+    "catalogue-0590",
+    "catalogue-0591",
+    "catalogue-0592",
+    "catalogue-0595",
+    "catalogue-0596",
+    "catalogue-0597",
+    "catalogue-0598",
+    "catalogue-0599",
+    "catalogue-0600",
+    "catalogue-0601",
+    "catalogue-0602",
+    "catalogue-0603",
+    "catalogue-0604",
+    "catalogue-0605",
+    "catalogue-0606",
+    "catalogue-0607",
+    "catalogue-0608",
+    "catalogue-0609",
+    "catalogue-0611",
+    "catalogue-0612",
+    "catalogue-0613",
+    "catalogue-0614",
+    "catalogue-0617",
+    "catalogue-0619",
+    "catalogue-0625"
+  ],
+  "excluded": [
+    {
+      "id": "catalogue-0007",
+      "name": "conditionFullLife",
+      "reasons": [
+        "direct_or_computed_reader",
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0008",
+      "name": "conditionLowLife",
+      "reasons": [
+        "direct_or_computed_reader",
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0009",
+      "name": "conditionFullMana",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0010",
+      "name": "conditionLowMana",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0012",
+      "name": "conditionLowEnergyShield",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0021",
+      "name": "ailmentMode",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0022",
+      "name": "cooldownMode",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0023",
+      "name": "physMode",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0026",
+      "name": "EHPUnluckyWorstOf",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0027",
+      "name": "DisableEHPGainOnBlock",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0031",
+      "name": "ignoreItemDisablers",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0032",
+      "name": "ignoreJewelLimits",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0263",
+      "name": "enemyRadius",
+      "reasons": [
+        "widget_derived_radius_separate_review"
+      ]
+    },
+    {
+      "id": "catalogue-0270",
+      "name": "usePowerCharges",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0272",
+      "name": "useFrenzyCharges",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0274",
+      "name": "useEnduranceCharges",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0288",
+      "name": "ruthlessSupportMode",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0303",
+      "name": "buffOnslaught",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0311",
+      "name": "buffPhasing",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0330",
+      "name": "conditionUsingFlask",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0335",
+      "name": "TotemsSummoned",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0508",
+      "name": "multiplierPvpTvalueOverride",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0531",
+      "name": "conditionEnemyCursed",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0535",
+      "name": "conditionEnemyBleeding",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0540",
+      "name": "conditionEnemyPoisoned",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0557",
+      "name": "conditionEnemyBurning",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0558",
+      "name": "conditionEnemyIgnited",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0564",
+      "name": "conditionEnemyChilled",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0570",
+      "name": "conditionEnemyFrozen",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0576",
+      "name": "conditionEnemyShocked",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0610",
+      "name": "EEIgnoreHitDamage",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0620",
+      "name": "enemyPhysicalReduction",
+      "reasons": [
+        "legacy_calcs_destination"
+      ]
+    },
+    {
+      "id": "catalogue-0633",
+      "name": "enemyMultiplierPvpDamage",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    },
+    {
+      "id": "catalogue-0637",
+      "name": "enemyPhysicalOverwhelm",
+      "reasons": [
+        "direct_or_computed_reader"
+      ]
+    }
+  ],
+  "shared_spans": [
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 134,
+      "last": 872,
+      "role": "whole fresh ConfigTab constructor",
+      "lf_sha256": "dc984b4936779c5b0c9f35f0ffbdad62c2fd012fcbcd79df0c572b89468bd464"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 878,
+      "last": 978,
+      "role": "whole Config load, including Placeholder string alias and legacy custom text",
+      "lf_sha256": "029d5a2a7b8d5ca5cdccd5f1b862429d292e50cce962a230dde31771fab94578"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 980,
+      "last": 998,
+      "role": "widget fallback returns values without installing them",
+      "lf_sha256": "baea460ba9491fd0bc3eff3f93fbffeb1dffd5572dc4171d015da2f736c7f54b"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1047,
+      "last": 1061,
+      "role": "non-notifying control refresh",
+      "lf_sha256": "9cfb2bc068940a7c571c183fe0b7ec5518d2603ef9cd1bdfb97b7819f2300635"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1157,
+      "last": 1167,
+      "role": "level refresh is a separate fixed enemyLevel lane",
+      "lf_sha256": "a5a6a6562daaef0131755d29800b9b32e7c21d6dff49bb3cb01b24385e815fe4"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1169,
+      "last": 1241,
+      "role": "whole ordered callback dispatcher and separate custom-modifier lane",
+      "lf_sha256": "d1b285118e27f078def4671c868583eee256009e105dffa45042b1c8f835c4e8"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1243,
+      "last": 1278,
+      "role": "whole explicit legacy Calcs import destination family",
+      "lf_sha256": "6f8999ec9b0c5a58389ba767a549efb0e98b0985e8e3adaf6299da4b3fbed1b5"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1317,
+      "last": 1334,
+      "role": "whole fresh per-set default installation",
+      "lf_sha256": "60ff84266cd7f571d1b199bf0dae52509d516d61c1bf8108131029fef2724dd3"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1407,
+      "last": 1434,
+      "role": "whole exact active-set input/placeholder alias switch",
+      "lf_sha256": "cd9fd44cb5f01d3b9b5885252b293fcf0494d162fc432649c98767d094c2d600"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "first": 780,
+      "last": 794,
+      "role": "size preset widget callback; enemyRadius separately excluded",
+      "lf_sha256": "b01a794789a38a7848070996fa8a6d07947cbc769c38a1c0b363b0445bc62abd"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "first": 1982,
+      "last": 2139,
+      "role": "boss preset fixed destination writer",
+      "lf_sha256": "4d551b969af4cd87a210e3c2078f3c857b7fc0fe5b8b75c4abe7b601df3ae2af"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "first": 2189,
+      "last": 2268,
+      "role": "boss skill preset fixed/computed destination writer",
+      "lf_sha256": "3976d87ade33540ab68aa81d1af0c40a769c0e170d8fdf6f7cef2696f9b888b5"
+    },
+    {
+      "path": "src/Classes/EditControl.lua",
+      "first": 42,
+      "last": 98,
+      "role": "whole edit constructor",
+      "lf_sha256": "16a396ca795503fb178170986644f8bb70b086afd6c0d300427706a6ad95483d"
+    },
+    {
+      "path": "src/Classes/EditControl.lua",
+      "first": 100,
+      "last": 115,
+      "role": "explicit notification boundary for text/placeholder writes",
+      "lf_sha256": "04dd92cbc9ced8b50bc2a6d0a460512003f26d65120dd6c4da778c3add08eddd"
+    },
+    {
+      "path": "src/Classes/DropDownControl.lua",
+      "first": 20,
+      "last": 65,
+      "role": "whole dropdown constructor",
+      "lf_sha256": "79eb8980bd4c42dc8de84d7be7a24f57095c8b65568384ec8049b766cdd7b182"
+    },
+    {
+      "path": "src/Classes/DropDownControl.lua",
+      "first": 142,
+      "last": 175,
+      "role": "SelByValue does not notify; SetSel is distinct",
+      "lf_sha256": "0c4f8ca293af44669985a5ba4c37c3edd991aee72c4dc6017aa8d49117d11de4"
+    },
+    {
+      "path": "src/Classes/CheckBoxControl.lua",
+      "first": 9,
+      "last": 19,
+      "role": "whole checkbox constructor",
+      "lf_sha256": "48472bae0afb5d942b0c9d250fd2f7598988161104cff2343c8283673072a661"
+    }
+  ],
+  "direct_or_computed_reader_names": [
+    "ailmentMode",
+    "ChanceToIgnoreEnemyPhysicalDamageReductionMode",
+    "conditionFullLife",
+    "conditionLowEnergyShield",
+    "conditionLowLife",
+    "cooldownMode",
+    "DisableEHPGainOnBlock",
+    "doomBlastSource",
+    "EEIgnoreHitDamage",
+    "EHPUnluckyWorstOf",
+    "enemyChaosDamage",
+    "enemyChaosenemyOverwhelm",
+    "enemyChaosOverwhelm",
+    "enemyChaosPen",
+    "enemyChaosResist",
+    "enemyColdDamage",
+    "enemyColdenemyOverwhelm",
+    "enemyColdOverwhelm",
+    "enemyColdPen",
+    "enemyColdResist",
+    "enemyCritChance",
+    "enemyCritDamage",
+    "enemyDamageRollRange",
+    "enemyDamageType",
+    "enemyDistance",
+    "enemyFireDamage",
+    "enemyFireenemyOverwhelm",
+    "enemyFireOverwhelm",
+    "enemyFirePen",
+    "enemyFireResist",
+    "enemyIsBoss",
+    "enemyLevel",
+    "enemyLightningDamage",
+    "enemyLightningenemyOverwhelm",
+    "enemyLightningOverwhelm",
+    "enemyLightningPen",
+    "enemyLightningResist",
+    "enemyMultiplierPvpDamage",
+    "enemyPhysicalDamage",
+    "enemyPhysicalenemyOverwhelm",
+    "enemyPhysicalOverwhelm",
+    "enemyPhysicalPen",
+    "enemyPhysicalResist",
+    "enemySpeed",
+    "ignoreItemDisablers",
+    "ignoreJewelLimits",
+    "multiplierManaBurnStacks",
+    "multiplierPvpTvalueOverride",
+    "physMode",
+    "PvpScaling",
+    "repeatMode",
+    "resistancePenalty",
+    "ruthlessSupportMode",
+    "TotemsSummoned"
+  ],
+  "legacy_calcs_all_destination_names": [
+    "conditionLowLife",
+    "conditionFullLife",
+    "conditionLowMana",
+    "conditionFullMana",
+    "usePowerCharges",
+    "useFrenzyCharges",
+    "useEnduranceCharges",
+    "buffOnslaught",
+    "buffPhasing",
+    "buffFortify",
+    "conditionUsingFlask",
+    "usePendulum",
+    "conditionEnemyCursed",
+    "conditionEnemyBleeding",
+    "conditionEnemyPoisoned",
+    "conditionEnemyBurning",
+    "conditionEnemyIgnited",
+    "conditionEnemyChilled",
+    "conditionEnemyFrozen",
+    "conditionEnemyShocked",
+    "enemyPhysicalReduction",
+    "enemyFireResist",
+    "enemyColdResist",
+    "enemyLightningResist",
+    "enemyChaosResist",
+    "enemyIsBoss"
+  ],
+  "known_cross_callback_bodies": [
+    "ConfigOptions:780-794",
+    "ConfigOptions:1982-2139",
+    "ConfigOptions:2189-2268"
+  ],
+  "boss_data_computed_domains": {
+    "DamageMultipliers": [
+      "Physical",
+      "Lightning",
+      "Cold",
+      "Fire"
+    ],
+    "DamagePenetrations": [
+      "FirePen",
+      "ColdPen"
+    ],
+    "note": "Complete pinned BossSkills table; fixed reset writes additionally cover Chaos damage and Lightning penetration. AdditionalStats writes modifiers, not Config input."
+  },
+  "installed_defaults": [
+    {
+      "catalogue_id": "catalogue-0004",
+      "catalogue_index": 4,
+      "name": "multiplierCurrentManaPercentage",
+      "source_type": "count",
+      "installed_input": {
+        "present": true,
+        "value": 100
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:117-119",
+      "classification": "reviewed_actor_or_environment_state",
+      "recommended_retained_field": "Assumptions",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "assumptions"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0025",
+      "catalogue_index": 25,
+      "name": "resourceGainMode",
+      "source_type": "list",
+      "installed_input": {
+        "present": true,
+        "value": "AVERAGE"
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:192-198",
+      "classification": "reference_analysis_ownership_decision_pending",
+      "recommended_retained_field": null,
+      "target": null,
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0065",
+      "catalogue_index": 65,
+      "name": "targetBrandedEnemy",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:288-290",
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0078",
+      "catalogue_index": 78,
+      "name": "ConcPathBypassCD",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:320-322",
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0094",
+      "catalogue_index": 94,
+      "name": "inDemonForm",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:356-358",
+      "classification": "reviewed_actor_or_environment_state",
+      "recommended_retained_field": "Assumptions",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "assumptions"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0097",
+      "catalogue_index": 97,
+      "name": "doomBlastSource",
+      "source_type": "list",
+      "installed_input": {
+        "present": true,
+        "value": "vixen"
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": null,
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0105",
+      "catalogue_index": 105,
+      "name": "touchedDebuffsCount",
+      "source_type": "countAllowZero",
+      "installed_input": {
+        "present": true,
+        "value": 10
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:381-389",
+      "classification": "reviewed_actor_or_environment_state",
+      "recommended_retained_field": "Assumptions",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "assumptions"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0110",
+      "catalogue_index": 110,
+      "name": "FlickerStrikeBypassCD",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:398-400",
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0111",
+      "catalogue_index": 111,
+      "name": "elementalConfluxElement",
+      "source_type": "list",
+      "installed_input": {
+        "present": true,
+        "value": 1
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:401-419",
+      "classification": "reference_analysis_ownership_decision_pending",
+      "recommended_retained_field": null,
+      "target": null,
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0131",
+      "catalogue_index": 131,
+      "name": "SecondsSinceInevitableCrit",
+      "source_type": "count",
+      "installed_input": {
+        "present": true,
+        "value": 10
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:458-464",
+      "classification": "reviewed_actor_or_environment_state",
+      "recommended_retained_field": "Assumptions",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "assumptions"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0137",
+      "catalogue_index": 137,
+      "name": "purpleFlameStacks",
+      "source_type": "count",
+      "installed_input": {
+        "present": true,
+        "value": 10
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:474-476",
+      "classification": "reviewed_actor_or_environment_state",
+      "recommended_retained_field": "Assumptions",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "assumptions"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0167",
+      "catalogue_index": 167,
+      "name": "raiseSpectreEnableBuffs",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:544-546",
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0168",
+      "catalogue_index": 168,
+      "name": "raiseSpectreEnableCurses",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:547-549",
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0209",
+      "catalogue_index": 209,
+      "name": "summonCompanionEnableBuffs",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:644-646",
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0210",
+      "catalogue_index": 210,
+      "name": "summonCompanionEnableCurses",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:647-649",
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0212",
+      "catalogue_index": 212,
+      "name": "summonElementalRelicEnableAngerAura",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:651-653",
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0213",
+      "catalogue_index": 213,
+      "name": "summonElementalRelicEnableHatredAura",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:654-656",
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0214",
+      "catalogue_index": 214,
+      "name": "summonElementalRelicEnableWrathAura",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:657-659",
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0239",
+      "catalogue_index": 239,
+      "name": "VigilantStrikeBypassCD",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:715-717",
+      "classification": "reviewed_skill_usage_or_relationship_intent",
+      "recommended_retained_field": "UsageIntents",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "usage_intents"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0287",
+      "catalogue_index": 287,
+      "name": "repeatMode",
+      "source_type": "list",
+      "installed_input": {
+        "present": true,
+        "value": "AVERAGE"
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:871-879",
+      "classification": "reference_analysis_ownership_decision_pending",
+      "recommended_retained_field": null,
+      "target": null,
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0289",
+      "catalogue_index": 289,
+      "name": "ChanceToIgnoreEnemyPhysicalDamageReductionMode",
+      "source_type": "list",
+      "installed_input": {
+        "present": true,
+        "value": "AVERAGE"
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": null,
+      "classification": "reference_analysis_ownership_decision_pending",
+      "recommended_retained_field": null,
+      "target": null,
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0338",
+      "catalogue_index": 338,
+      "name": "companionInPresence",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:1032-1034",
+      "classification": "reviewed_actor_or_environment_state",
+      "recommended_retained_field": "Assumptions",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "assumptions"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0449",
+      "catalogue_index": 449,
+      "name": "conditionChampionIntimidate",
+      "source_type": "check",
+      "installed_input": {
+        "present": true,
+        "value": true
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:1421-1423",
+      "classification": "reviewed_actor_or_environment_state",
+      "recommended_retained_field": "Assumptions",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "assumptions"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    },
+    {
+      "catalogue_id": "catalogue-0503",
+      "catalogue_index": 503,
+      "name": "GamblesprintMovementSpeed",
+      "source_type": "list",
+      "installed_input": {
+        "present": true,
+        "value": 20
+      },
+      "installed_placeholder": {
+        "present": false
+      },
+      "raw_occurrences": [],
+      "callback": "ConfigOptions:1609-1611",
+      "classification": "reviewed_actor_or_environment_state",
+      "recommended_retained_field": "Assumptions",
+      "target": {
+        "kind": "missing_raw_retained_scenario",
+        "fields": [
+          "assumptions"
+        ]
+      },
+      "native_conversion_complete": false,
+      "production_census_complete": false
+    }
+  ]
+}

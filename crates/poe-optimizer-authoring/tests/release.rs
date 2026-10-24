@@ -15,6 +15,8 @@ mod checkpoint_history;
 mod class_support_domains;
 #[path = "release/class_support_source.rs"]
 mod class_support_source;
+#[path = "release/configuration_source_census.rs"]
+mod configuration_source_census;
 #[path = "release/content_bindings.rs"]
 mod content_bindings;
 #[path = "release/contribution_queries.rs"]

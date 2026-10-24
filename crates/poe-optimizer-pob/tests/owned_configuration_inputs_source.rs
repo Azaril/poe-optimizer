@@ -1,5 +1,7 @@
 //! Complete source evidence for saved and effective Config inputs and original downstream records.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/configuration_census_source.rs"]
+mod configuration_census;
 #[path = "support/outside_config_defaults_source.rs"]
 mod outside_config_defaults;
 #[allow(dead_code)]
@@ -225,6 +227,7 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
     )
     .unwrap();
     check(&result, &facts);
+    configuration_census::check(root, out, &result, enabled);
 }
 
 fn observe(lua: &Lua) -> Result<Json, RuntimeError> {
