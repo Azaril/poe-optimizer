@@ -223,6 +223,75 @@ fn optional_export_reproduces_both_catalogs_without_overwrite() {
 
 #[cfg(feature = "pob")]
 #[test]
+fn optional_item_observation_export_preserves_facts_and_does_not_replace_output() {
+    use std::{collections::BTreeMap, fs, path::Path};
+
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let authored = root.join("data/owned/poe2/3887ae68/item-observations");
+    let source = root.join("vendor/path-of-building-poe2");
+    let temp = tempfile::tempdir().unwrap();
+    let output = temp.path().join("exported");
+    let snapshot = |path: &Path| {
+        fs::read_dir(path)
+            .unwrap()
+            .map(|entry| {
+                let entry = entry.unwrap();
+                (entry.file_name(), fs::read(entry.path()).unwrap())
+            })
+            .collect::<BTreeMap<_, _>>()
+    };
+    let authored_before = snapshot(&authored);
+    let call = || {
+        Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
+            .current_dir(temp.path())
+            .arg("export-owned-item-observations")
+            .arg("--source-root")
+            .arg(&source)
+            .arg("--output")
+            .arg(&output)
+            .output()
+            .unwrap()
+    };
+    let first = call();
+    assert!(
+        first.status.success(),
+        "{}",
+        String::from_utf8_lossy(&first.stderr)
+    );
+    let report: serde_json::Value = serde_json::from_slice(&first.stdout).unwrap();
+    let current = poe_optimizer_pob::owned_item_observations::export_owned_item_observations(
+        &source,
+        Default::default(),
+    )
+    .unwrap();
+    let evidence = serde_json::to_value(current.evidence()).unwrap();
+    assert_eq!(report, evidence, "CLI reports its actual current extractor");
+    // The retained catalogue is an independent content reference. Its original
+    // extractor receipt remains historical evidence, not the identity of code
+    // that has since changed. Every other source/content/count field must match.
+    let historical: serde_json::Value =
+        serde_json::from_slice(&fs::read(authored.join("evidence.json")).unwrap()).unwrap();
+    let mut same_facts = evidence;
+    same_facts["extractor_sha256"] = historical["extractor_sha256"].clone();
+    assert_eq!(same_facts, historical);
+    assert_eq!(
+        fs::read(output.join("catalog.json")).unwrap(),
+        fs::read(authored.join("catalog.json")).unwrap()
+    );
+    let mut expected_receipt = serde_json::to_vec_pretty(current.evidence()).unwrap();
+    expected_receipt.push(b'\n');
+    assert_eq!(
+        fs::read(output.join("evidence.json")).unwrap(),
+        expected_receipt
+    );
+    let before = snapshot(&output);
+    assert!(!call().status.success());
+    assert_eq!(snapshot(&output), before);
+    assert_eq!(snapshot(&authored), authored_before);
+}
+
+#[cfg(feature = "pob")]
+#[test]
 fn absent_source_does_not_publish_an_acquisition() {
     let temp = tempfile::tempdir().unwrap();
     for name in [
@@ -258,5 +327,6 @@ fn native_cli_excludes_optional_source_acquisition_commands() {
     assert!(!help.contains("export-owned-intrinsic-attack"));
     assert!(!help.contains("export-owned-item-bases"));
     assert!(!help.contains("export-owned-weapon-profiles"));
+    assert!(!help.contains("export-owned-item-observations"));
     assert!(!help.contains("export-owned-skill-definition-facts"));
 }

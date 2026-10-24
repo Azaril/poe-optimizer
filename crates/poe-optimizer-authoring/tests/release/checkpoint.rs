@@ -577,7 +577,9 @@ fn cli_predecessor_replay_and_zero_additions_preserve_saved_names() {
     let mut input = fixture().input.clone();
     input.evaluation = None;
     input.schema_version = OWNED_RELEASE_VERSION;
-    let source = DslRelease::new(&input, false).source;
+    // Continue with compressed constituents too: gzip decoding must fit the
+    // ordinary CLI main-thread stack, including an unoptimized Windows build.
+    let source = DslRelease::new(&input, true).source;
     let without = write_source(&temp.path().join("without declarations"), &source);
     let zero = temp.path().join("zero additions");
     let result = predecessor_cli(&without, &zero, &first, identity);

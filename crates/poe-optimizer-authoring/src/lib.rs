@@ -11,6 +11,7 @@ mod allocation;
 mod ast;
 mod bindings;
 mod checkpoint;
+mod contribution_manifest;
 mod declarations;
 mod diagnostic;
 mod evaluation_content;
@@ -45,6 +46,7 @@ pub use checkpoint::{
     CheckpointSource, CheckpointSourceFile, StagedAuthoringCheckpoint, build_authoring_checkpoint,
     load_authoring_checkpoint_artifacts,
 };
+pub use contribution_manifest::parse_contribution_queries;
 pub use declarations::{
     DeclarationError, DeclarationErrorKind, DeclarationLimits, StagedStatDeclarations,
     StatDeclaration, StatDeclarations, StatValueDeclaration, parse_stat_declarations,

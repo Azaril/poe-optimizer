@@ -161,6 +161,13 @@ jobs:
           CARGO_PROFILE_TEST_DEBUG_ASSERTIONS: 'false'
         shell: pwsh
         run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-authoring', '--lib', '--locked', 'manifest_')
+      - name: Test unoptimized authoring checkpoint CLI
+        if: matrix.suite == 'workspace'
+        env:
+          # Exercise the ordinary CLI stack with debug and overflow checks kept.
+          CARGO_PROFILE_TEST_OPT_LEVEL: '0'
+        shell: pwsh
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-authoring', '--test', 'release', '--locked', 'checkpoint::cli_')
       - name: Test PoB package
         if: matrix.suite == 'pob'
         shell: pwsh

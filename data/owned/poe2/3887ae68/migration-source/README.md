@@ -23,10 +23,19 @@ slot bindings include their declaration owner. Reusing a complete source file
 does not merge its occurrences or their recipients. Identical program IDs alone
 never justify sharing a body.
 
+All 114 contribution queries live in the four declared `contribution-queries/`
+KDL files. Their names resolve after Stat allocation in the same build as rule
+programs; no separate allocation step or predicted identifier is needed. Exact
+source authority, member order, reducers, empty values and coverage remain in
+these files. The first fragment retains the outer Partial gap; all 45 partial
+groups retain their own gaps. Composition uses the existing runtime query model
+and final validators, not another evaluator.
+
 The compressed `bootstrap/rules.json.gz` contains only rule metadata: owner and
-coverage inventories, tables, receivers, queries, applications and bindings.
-It has **no program members**. The builder rejects embedded programs, including
-when no packets are declared. A DSL error cannot select another execution path.
+coverage inventories, tables, receivers, applications and bindings.
+It has **no program or contribution-query members**. The builder rejects embedded
+members, including when no corresponding KDL sources are declared. A source error
+cannot select another execution path.
 The remaining compressed JSON constituents are temporary R1/R2 metadata inputs,
 not the final compact runtime pack. Loading the canonical snapshot needs no local
 predecessor, historical source rebuild, staging helper, migration generator or PoB checkout.
@@ -131,7 +140,8 @@ serve as production names.
 Current input: `9d9e3326f0a6fdf211f48df8d2813e61f8550012c5ed131ab7e3242d38fae838`.
 The 103 packets reference 2,563 distinct complete rule sources, preserving all
 8,214 occurrences. Their local name files use 5,011 distinct exact addresses;
-the declaration ledger adds 70 names. The 2,788 declared inputs occupy 6,056,894
-encoded and 46,244,521 decoded bytes; the root manifest is 183,609 bytes.
+the declaration ledger adds 70 names. The four contribution-query fragments and
+their local names add no allocations. The 2,796 declared inputs occupy 6,720,948
+encoded and 46,018,221 decoded bytes; the root manifest is 184,029 bytes.
 All fit the existing default limits. The maintained Authoring tests check actual
 source graphs, historical artifacts and both new definition-level producers.

@@ -17,6 +17,8 @@ mod class_support_domains;
 mod class_support_source;
 #[path = "release/content_bindings.rs"]
 mod content_bindings;
+#[path = "release/contribution_queries.rs"]
+mod contribution_queries;
 #[path = "release/declarations.rs"]
 mod declarations;
 #[path = "release/defence_components.rs"]

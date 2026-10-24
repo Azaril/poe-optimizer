@@ -43,15 +43,18 @@ ID appends after the saved registry history. The original 69 bindings remain
 unchanged. This snapshot replaces the previous archive; its recorded predecessor
 digest is provenance and does not require loading an ancestor.
 
-Verified on October 23, 2026: a fresh extraction passed complete checkpoint
-validation, then current tracked source built successor
-`0f7962e4163e8e90f424a91176181d1df2160d0d38b0351f081cf43d52aa73a0` with the
+Verified on October 24, 2026: the extracted predecessor passed complete checkpoint
+validation, then current tracked source built and independently verified successor
+`be066899ebfaee7bc4f4ed3627b454591498306d17a4a4285dc6ce626a42550f` with the
 same semantic runtime input, ledger and registry. Its eighteen runtime files
 total 53,647,754 bytes. All eighteen runtime files and the name ledger replay
 byte-for-byte, with no further allocation. Evidence is recorded in
-`runs/support-prohibition-extracted-verified.json`,
-`runs/support-prohibition-archive.json` and
-`runs/support-prohibition-replay-equivalence.json`; those local files are not inputs.
+`runs/contribution-query-debug-verify.json`,
+`runs/contribution-query-checkpoint-verified.json` and
+`runs/contribution-query-replay-equivalence.json`; those local files are not inputs.
+Named KDL contribution sources change the source commitment, with no new names
+or runtime behavior. This source-only successor needs no replacement allocation
+archive; the canonical snapshot above remains the explicit predecessor.
 
 Archive transport is not a second semantic format, a source-reproduction proof
 or the planned indexed binary runtime pack. Future canonical allocation

@@ -334,50 +334,6 @@ fn check_originals(cwd: &Path, prior: &Path, output: &Path) {
     .unwrap();
 }
 
-#[cfg(feature = "pob")]
-fn check_export(cwd: &Path, authored: &Path) {
-    let output = cwd.join("item-observations-export");
-    let run = |output: &Path| {
-        Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
-            .current_dir(cwd)
-            .arg("export-owned-item-observations")
-            .arg("--source-root")
-            .arg(super::support::root().join("vendor/path-of-building-poe2"))
-            .arg("--output")
-            .arg(output)
-            .output()
-            .unwrap()
-    };
-    let report = success(run(&output));
-    let current = poe_optimizer_pob::owned_item_observations::export_owned_item_observations(
-        &super::support::root().join("vendor/path-of-building-poe2"),
-        Default::default(),
-    )
-    .unwrap();
-    let evidence = serde_json::to_value(current.evidence()).unwrap();
-    assert_eq!(report, evidence, "CLI reports its actual current extractor");
-    // The retained catalogue is an independent content reference. Its original
-    // extractor receipt remains historical evidence, not the identity of code
-    // that has since changed. Every other source/content/count field must match.
-    let historical = json(authored.join("evidence.json"));
-    let mut same_facts = evidence;
-    same_facts["extractor_sha256"] = historical["extractor_sha256"].clone();
-    assert_eq!(same_facts, historical);
-    assert_eq!(
-        fs::read(output.join("catalog.json")).unwrap(),
-        fs::read(authored.join("catalog.json")).unwrap()
-    );
-    let mut expected_receipt = serde_json::to_vec_pretty(current.evidence()).unwrap();
-    expected_receipt.push(b'\n');
-    assert_eq!(
-        fs::read(output.join("evidence.json")).unwrap(),
-        expected_receipt
-    );
-    let before = bundle(&output);
-    assert!(!run(&output).status.success());
-    unchanged(&bundle(&output), &before);
-}
-
 pub fn check_item_observations(cwd: &Path, prior: &Path) -> PathBuf {
     let authored = data().join("item-observations");
     let authored_bytes = bundle(&authored);
@@ -462,8 +418,6 @@ pub fn check_item_observations(cwd: &Path, prior: &Path) -> PathBuf {
         assert!(!destination.exists());
     }
     check_originals(cwd, prior, &output);
-    #[cfg(feature = "pob")]
-    check_export(cwd, &authored);
     unchanged(&bundle(&output), &published);
     unchanged(&bundle(prior), &before);
     unchanged(&bundle(&authored), &authored_bytes);

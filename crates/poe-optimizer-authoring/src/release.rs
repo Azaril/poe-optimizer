@@ -35,6 +35,7 @@ use std::{
     io::{self, Read},
 };
 
+mod contributions;
 mod declarations;
 mod rules;
 
@@ -51,6 +52,7 @@ enum SourceRole {
     Packet,
     Rule,
     Declarations,
+    ContributionQueries,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -121,6 +123,7 @@ pub struct ReleaseManifest {
     components: BTreeMap<Component, usize>,
     queries: Vec<(OwnedDefinitionKey, usize)>,
     packets: Vec<RulePacket>,
+    contribution_packets: Vec<RulePacket>,
     declarations: Option<DeclarationSource>,
     rules: BTreeSet<usize>,
     expected_input: Option<OwnedContentDigest>,
@@ -149,7 +152,10 @@ impl ReleaseManifest {
         if self.sources.len() > limits.max_sources {
             return Err(ReleaseBuildError::Limit("source count"));
         }
-        if self.components.len() + self.queries.len() + usize::from(self.declarations.is_some())
+        if self.components.len()
+            + self.queries.len()
+            + self.contribution_packets.len()
+            + usize::from(self.declarations.is_some())
             > limits.max_components
         {
             return Err(ReleaseBuildError::Limit("component count"));
@@ -341,6 +347,7 @@ pub fn parse_release_manifest(text: &str, limits: ReleaseBuildLimits) -> Result<
         components: BTreeMap::new(),
         queries: vec![],
         packets: vec![],
+        contribution_packets: vec![],
         declarations: None,
         rules: BTreeSet::new(),
         expected_input,
@@ -385,8 +392,12 @@ pub fn parse_release_manifest(text: &str, limits: ReleaseBuildLimits) -> Result<
             output.validate_counts(limits)?;
             continue;
         }
-        if matches!(node.name.as_str(), "rule-packet" | "rule-source") {
-            let packet = node.name == "rule-packet";
+        if matches!(
+            node.name.as_str(),
+            "rule-packet" | "rule-source" | "contribution-queries"
+        ) {
+            let contribution = node.name == "contribution-queries";
+            let packet = node.name != "rule-source";
             if !node.children.is_empty()
                 || node.arguments.len() != 1
                 || (packet
@@ -400,7 +411,9 @@ pub fn parse_release_manifest(text: &str, limits: ReleaseBuildLimits) -> Result<
             let position = output.add_source(
                 &mut paths,
                 &node.arguments[0],
-                if packet {
+                if contribution {
+                    SourceRole::ContributionQueries
+                } else if packet {
                     SourceRole::Packet
                 } else {
                     SourceRole::Rule
@@ -416,10 +429,15 @@ pub fn parse_release_manifest(text: &str, limits: ReleaseBuildLimits) -> Result<
                     SourceEncoding::Plain,
                     limits,
                 )?;
-                output.packets.push(RulePacket {
+                let spec = RulePacket {
                     packet: position,
                     names,
-                });
+                };
+                if contribution {
+                    output.contribution_packets.push(spec);
+                } else {
+                    output.packets.push(spec);
+                }
             } else {
                 output.rules.insert(position);
             }
@@ -563,7 +581,9 @@ impl ReleaseNameAllocation {
 }
 
 pub struct BuiltRelease {
-    release: StagedOwnedRelease,
+    // Keep the checked input and artifacts off each caller's stack as this
+    // value moves through checkpoint construction and the host CLI.
+    release: Box<StagedOwnedRelease>,
     encoded_bytes: usize,
     decoded_bytes: usize,
     name_allocation: ReleaseNameAllocation,
@@ -798,6 +818,14 @@ pub fn build_release(
         &staged,
         limits,
     )?;
+    contributions::compose(
+        manifest,
+        &decoder,
+        schema,
+        &mut input.recipe.rules,
+        &staged,
+        limits,
+    )?;
     // Content was captured from the original checked owners before composition.
     // Construct current dependencies; complete assembly remains mandatory below.
     let imports = source
@@ -831,7 +859,7 @@ pub fn build_release(
     let (names, _, _) = staged.into_parts();
     let name_allocation = ReleaseNameAllocation { predecessor, names };
     Ok(BuiltRelease {
-        release,
+        release: Box::new(release),
         encoded_bytes,
         decoded_bytes,
         name_allocation,

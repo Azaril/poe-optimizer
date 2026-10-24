@@ -623,6 +623,19 @@ a program-free composition may still omit packets. Tables, owner order, partial
 closure and other rule metadata remain explicit. Source errors have no raw-program
 fallback.
 
+Contribution queries use named KDL fragments in the same release manifest,
+resolved after Stat allocation and before final package validation. Their
+definition/slot aliases and current declaration overlay are shared with the
+program compiler. Fragments lower directly to the existing query/group/member
+model, retaining exact source authority, ordered folds, optional empty values
+and explicit partial gaps. Missing data is never filled during lowering.
+The source rules constituent must contain no embedded query members, even when
+no fragment is declared. Aggregate fragment counts and payload budgets apply
+before appending; the sole final validators still check the whole graph. See
+[named contribution authoring](authoring-contribution-queries.md) for the format
+and source-composition contract. No runtime query model or second evaluator is
+introduced by this authoring boundary.
+
 Paths have one role. Packets may share one names file, and memberships may reuse
 one declared rule file; both are inventoried and decoded once. Every declared
 rule source must be used. Repeated memberships are charged separately against

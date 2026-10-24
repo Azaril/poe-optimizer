@@ -24,6 +24,7 @@ requirements. Where they conflict, the October 22 architecture governs.
 
 Useful domain details include [build composition](owned-build-contract.md),
 [binding](owned-binding.md), [rules](owned-rules.md), [metrics](owned-metrics.md),
+[named contribution authoring](authoring-contribution-queries.md),
 [generality review](build-generality-review.md) and
 [breadth validation](breadth-validation.md). Read these for the task at hand,
 not as additional current plans.

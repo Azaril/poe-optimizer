@@ -1,0 +1,2696 @@
+// Exact contribution authority and coverage; compiled through the shared rule validator.
+queries game="poe2" version="owned-mechanics-v1" coverage="partial" {
+    gap subject="stat.attribute_empty_more.stages.strength_first.input" facet="game_rules" code="attribute-stage-contributor-domain-unproved"
+    query "strength-first-base" stat="stat.attribute_empty_more.stages.strength_first.input" contribution="add" {
+        group "ordinary" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.count"
+            member "program_effect" owner="class.witch" program="class-base-contributions" effect="contribution-2" {
+                origin kind="character"
+                order source="44" program="0" effect="4"
+            }
+            member "program_effect" owner="class.monk" program="class-base-contributions" effect="contribution-2" {
+                origin kind="character"
+                order source="46" program="0" effect="4"
+            }
+            member "program_effect" owner="class.druid" program="class-base-contributions" effect="contribution-2" {
+                origin kind="character"
+                order source="48" program="0" effect="4"
+            }
+            member "program_effect" owner="class.ranger" program="class-base-contributions" effect="contribution-2" {
+                origin kind="character"
+                order source="50" program="0" effect="4"
+            }
+            member "program_effect" owner="class.warrior" program="class-base-contributions" effect="contribution-2" {
+                origin kind="character"
+                order source="52" program="0" effect="4"
+            }
+            member "program_effect" owner="class.sorceress" program="class-base-contributions" effect="contribution-2" {
+                origin kind="character"
+                order source="54" program="0" effect="4"
+            }
+            member "program_effect" owner="class.huntress" program="class-base-contributions" effect="contribution-2" {
+                origin kind="character"
+                order source="56" program="0" effect="4"
+            }
+            member "program_effect" owner="class.mercenary" program="class-base-contributions" effect="contribution-2" {
+                origin kind="character"
+                order source="58" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes50" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="61" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence60" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="62" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence29" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="63" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength35" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="65" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes12" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="66" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes24" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="69" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity31" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="74" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence75" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="77" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity25" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="78" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes28" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="80" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence84" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="81" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes78" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="82" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence74" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="83" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity12" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="86" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes70" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="88" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength18" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="89" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity41" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="92" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity57" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="95" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength.strength109" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="97" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength41" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="98" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength78" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="99" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength3" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="101" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity3" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="102" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes27" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="108" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity48" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="109" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence49" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="111" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity70" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="112" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence68" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="118" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength2" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="123" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity42" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="124" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes45" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="129" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity24" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="132" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity47" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="134" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes53" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="135" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence47" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="136" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength27" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="139" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity15" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="141" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength87" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="142" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity33" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="143" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence66" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="145" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength21" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="146" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength_and_dexterity.azmerianimals5" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="148" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence7" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="149" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes47" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="150" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence4" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="151" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength57" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="155" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes77" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="158" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity75" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="159" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence18" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="164" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence12" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="166" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes16" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="168" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity68" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="172" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity64" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="174" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence27" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="178" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes80" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="183" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attributes.ascendancymonk1small7" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="184" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes3" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="189" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes46" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="191" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity21" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="192" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength67" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="195" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes52" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="197" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity11" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="198" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity13" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="199" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence11" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="204" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength9" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="206" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength11" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="208" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength20" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="212" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes58" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="213" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength59" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="217" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence41" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="219" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength26" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="221" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity58" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="223" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes56" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="224" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity82" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="226" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes15" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="227" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.strength.strength103" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="228" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity5" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="229" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity81" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="231" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity14" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="232" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes19" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="233" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity44" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="234" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength86" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="237" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.beef.strength102" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="238" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence62" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="240" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity51" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="244" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity85" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="249" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity40" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="253" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity66" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="255" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength69" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="257" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength64" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="258" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength19" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="259" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength73" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="261" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes10" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="264" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes31" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="266" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity20" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="268" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength85" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="269" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes17" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="270" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength36" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="271" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength81" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="274" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength32" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="275" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength43" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="276" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes72" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="277" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength48" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="278" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence56" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="279" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence48" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="280" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes61" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="281" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity87" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="286" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity38" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="287" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength46" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="288" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity67" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="289" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes15" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="290" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence43" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="292" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes2" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="295" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes40" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="297" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes9" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="299" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes11" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="301" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence38" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="303" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes14" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="304" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity7" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="311" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength76" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="313" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence78" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="315" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes22" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="320" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence34" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="321" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes4" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="326" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes1" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="327" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity39" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="332" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes75" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="341" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence72" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="343" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity55" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="345" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence35" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="346" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity8" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="347" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes20" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="348" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength.attributes101" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="349" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength70" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="352" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes76" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="354" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.all_attributes.attributes108" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="355" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes33" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="356" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength79" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="357" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength89" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="358" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity59" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="361" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence36" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="363" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity34" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="364" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.all_attributes.attributes107" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="370" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength22" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="371" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes11" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="374" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes18" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="378" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes44" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="383" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength7" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="384" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity17" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="390" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength17" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="391" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity80" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="393" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength53" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="395" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence44" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="397" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity71" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="399" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence40" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="401" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes59" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="402" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence17" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="404" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength44" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="405" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes60" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="408" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes54" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="412" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence14" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="413" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes23" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="421" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence86" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="425" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes26" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="427" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes68" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="429" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength25" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="430" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes3" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="435" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength39" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="437" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength47" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="439" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity43" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="440" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence81" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="442" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes74" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="444" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity65" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="447" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes14" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="448" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength34" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="449" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes25" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="450" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity27" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="451" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity86" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="452" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes39" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="453" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes73" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="457" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence64" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="459" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity10" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="464" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity16" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="465" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes1" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="469" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity1" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="471" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes63" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="472" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence88" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="474" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength23" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="475" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence2" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="476" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes79" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="479" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes5" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="480" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes51" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="481" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes2" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="482" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence54" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="488" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength4" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="489" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength31" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="490" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes69" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="493" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence37" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="495" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence59" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="499" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence76" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="500" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes21" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="501" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence52" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="503" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence85" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="504" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength54" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="507" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence13" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="509" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence8" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="511" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes12" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="512" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity52" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="514" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength6" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="516" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity23" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="517" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes13" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="518" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes67" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="520" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes65" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="522" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes30" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="523" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength40" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="524" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity50" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="525" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes38" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="527" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength.attributes103" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="530" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence33" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="531" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence46" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="534" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity30" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="536" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes13" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="537" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes55" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="538" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength13" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="539" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes35" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="541" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence51" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="542" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence39" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="544" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes66" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="546" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity76" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="554" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength10" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="555" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength50" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="559" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength71" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="560" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength.strength104" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="562" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence25" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="564" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength51" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="565" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength42" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="567" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity79" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="569" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength61" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="571" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength5" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="572" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence57" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="575" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence30" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="577" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength58" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="578" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes64" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="579" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence26" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="580" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes71" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="581" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence5" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="582" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength83" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="584" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength24" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="585" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength82" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="586" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity29" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="588" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength.strength105" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="591" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence53" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="592" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength15" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="594" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength80" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="595" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity54" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="597" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity2" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="599" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence3" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="600" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence63" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="601" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes4" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="602" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity77" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="603" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength8" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="605" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity6" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="606" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence21" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="607" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence15" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="610" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity73" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="611" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity4" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="612" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes32" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="614" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence16" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="615" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity9" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="617" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity69" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="618" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength45" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="619" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence77" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="620" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes8" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="628" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence71" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="629" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence45" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="630" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence83" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="631" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence67" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="632" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength65" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="635" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes5" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="636" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength95" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="637" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity28" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="638" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes81" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="639" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength16" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="641" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength.attributes112" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="642" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity19" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="647" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength.strength106" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="648" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence19" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="649" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes62" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="651" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence10" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="653" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity22" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="654" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence69" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="655" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength.strength101" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="656" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength33" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="657" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength.strength107" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="658" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength75" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="659" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes43" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="663" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes6" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="668" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence58" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="670" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength68" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="674" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength37" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="675" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity61" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="677" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes29" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="679" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence31" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="683" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength84" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="685" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity36" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="690" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence32" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="700" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity18" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="701" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength.attributes109" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="703" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity46" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="704" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity63" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="708" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength38" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="711" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity26" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="713" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.strength12" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="716" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes7" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="717" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence79" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="718" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes82" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="719" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence6" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="720" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence9" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="725" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence20" program="attribute-choice" effect="contribution-2" {
+                origin kind="allocation"
+                order source="731" program="0" effect="4"
+            }
+            member "program_effect" owner="passive_node.strength_and_dexterity.azmerianimals4" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="733" program="0" effect="0"
+            }
+        }
+    }
+    query "strength-first-increase" stat="stat.attribute_empty_more.stages.strength_first.input" contribution="increase" {
+        group "ordinary" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "program_effect" owner="passive_node.attributes.ascendancymercenary3small6" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="2" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.strength.ascendancywarrior1small5" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="4" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.strength.ascendancywarrior3small2" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="5" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.strength.ascendancywarrior1small6" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="6" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attributes.ascendancyhuntress3small2" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="3" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attributes.ascendancymercenary3small5" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="7" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.polymathy.all_attributes6" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="9" program="0" effect="0"
+            }
+        }
+    }
+    query "dexterity-first-base" stat="stat.attribute_empty_more.stages.dexterity_first.input" contribution="add" {
+        group "ordinary" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.count"
+            member "program_effect" owner="class.witch" program="class-base-contributions" effect="contribution-0" {
+                origin kind="character"
+                order source="44" program="0" effect="0"
+            }
+            member "program_effect" owner="class.monk" program="class-base-contributions" effect="contribution-0" {
+                origin kind="character"
+                order source="46" program="0" effect="0"
+            }
+            member "program_effect" owner="class.druid" program="class-base-contributions" effect="contribution-0" {
+                origin kind="character"
+                order source="48" program="0" effect="0"
+            }
+            member "program_effect" owner="class.ranger" program="class-base-contributions" effect="contribution-0" {
+                origin kind="character"
+                order source="50" program="0" effect="0"
+            }
+            member "program_effect" owner="class.warrior" program="class-base-contributions" effect="contribution-0" {
+                origin kind="character"
+                order source="52" program="0" effect="0"
+            }
+            member "program_effect" owner="class.sorceress" program="class-base-contributions" effect="contribution-0" {
+                origin kind="character"
+                order source="54" program="0" effect="0"
+            }
+            member "program_effect" owner="class.huntress" program="class-base-contributions" effect="contribution-0" {
+                origin kind="character"
+                order source="56" program="0" effect="0"
+            }
+            member "program_effect" owner="class.mercenary" program="class-base-contributions" effect="contribution-0" {
+                origin kind="character"
+                order source="58" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes50" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="61" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence60" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="62" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence29" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="63" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength35" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="65" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes12" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="66" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes24" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="69" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity31" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="74" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence75" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="77" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity25" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="78" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes28" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="80" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence84" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="81" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes78" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="82" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence74" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="83" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity12" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="86" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes70" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="88" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength18" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="89" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity41" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="92" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity57" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="95" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength41" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="98" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength78" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="99" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength3" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="101" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity3" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="102" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes27" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="108" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity48" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="109" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence49" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="111" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity70" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="112" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence68" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="118" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength2" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="123" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity42" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="124" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.dexterity.azmerianimals17" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="127" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes45" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="129" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity24" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="132" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity47" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="134" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes53" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="135" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence47" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="136" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength27" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="139" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity15" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="141" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength87" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="142" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity33" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="143" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence66" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="145" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength21" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="146" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.strength_and_dexterity.azmerianimals5" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="148" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence7" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="149" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes47" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="150" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence4" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="151" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength57" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="155" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes77" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="158" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity75" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="159" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence18" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="164" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence12" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="166" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes16" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="168" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity68" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="172" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity64" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="174" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence27" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="178" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.dexterity.dexterity104" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="179" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes80" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="183" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attributes.ascendancymonk1small7" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="184" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes3" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="189" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes46" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="191" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity21" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="192" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength67" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="195" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes52" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="197" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity11" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="198" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity13" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="199" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence11" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="204" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength9" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="206" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength11" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="208" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength20" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="212" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes58" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="213" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength59" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="217" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.dexterity.dexterity110" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="218" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence41" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="219" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength26" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="221" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.dexterity.dexterity106" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="222" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity58" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="223" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes56" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="224" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity82" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="226" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes15" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="227" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity5" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="229" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity81" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="231" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity14" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="232" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes19" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="233" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity44" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="234" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength86" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="237" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence62" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="240" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity51" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="244" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity85" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="249" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity40" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="253" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity66" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="255" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength69" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="257" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength64" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="258" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength19" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="259" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength73" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="261" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes10" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="264" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes31" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="266" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity20" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="268" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength85" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="269" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes17" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="270" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength36" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="271" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength81" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="274" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength32" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="275" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength43" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="276" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes72" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="277" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength48" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="278" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence56" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="279" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence48" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="280" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes61" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="281" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity87" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="286" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity38" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="287" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength46" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="288" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity67" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="289" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes15" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="290" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence43" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="292" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes2" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="295" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes40" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="297" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes9" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="299" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes11" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="301" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence38" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="303" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes14" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="304" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.dexterity.dexterity108" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="309" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity7" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="311" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength76" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="313" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence78" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="315" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes22" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="320" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence34" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="321" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes4" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="326" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes1" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="327" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity39" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="332" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes75" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="341" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence72" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="343" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity55" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="345" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence35" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="346" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity8" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="347" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes20" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="348" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength70" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="352" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes76" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="354" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.attributes108" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="355" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes33" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="356" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength79" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="357" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength89" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="358" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity59" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="361" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence36" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="363" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity34" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="364" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.attributes107" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="370" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.strength22" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="371" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes11" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="374" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes18" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="378" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.dexterity.attributes114" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="380" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes44" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="383" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength7" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="384" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity17" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="390" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength17" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="391" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity80" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="393" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength53" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="395" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence44" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="397" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.dexterity.attributes105" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="398" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity71" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="399" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence40" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="401" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes59" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="402" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence17" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="404" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength44" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="405" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes60" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="408" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes54" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="412" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence14" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="413" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.dexterity.azmerianimals16" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="420" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes23" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="421" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence86" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="425" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes26" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="427" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes68" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="429" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength25" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="430" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes3" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="435" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength39" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="437" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength47" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="439" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity43" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="440" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence81" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="442" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes74" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="444" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity65" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="447" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes14" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="448" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.strength34" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="449" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes25" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="450" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity27" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="451" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity86" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="452" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes39" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="453" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes73" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="457" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence64" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="459" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity10" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="464" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity16" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="465" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes1" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="469" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity1" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="471" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes63" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="472" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence88" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="474" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength23" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="475" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence2" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="476" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes79" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="479" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes5" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="480" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes51" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="481" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes2" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="482" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence54" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="488" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength4" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="489" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength31" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="490" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes69" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="493" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence37" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="495" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence59" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="499" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence76" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="500" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes21" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="501" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence52" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="503" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence85" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="504" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.dexterity.attributes113" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="505" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength54" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="507" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence13" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="509" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence8" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="511" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes12" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="512" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity52" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="514" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength6" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="516" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity23" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="517" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes13" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="518" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes67" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="520" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes65" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="522" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes30" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="523" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength40" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="524" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity50" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="525" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes38" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="527" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence33" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="531" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.dexterity.azmerianimals47" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="533" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence46" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="534" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity30" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="536" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes13" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="537" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes55" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="538" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength13" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="539" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes35" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="541" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence51" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="542" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence39" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="544" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes66" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="546" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity76" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="554" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength10" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="555" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength50" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="559" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength71" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="560" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence25" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="564" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength51" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="565" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength42" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="567" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity79" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="569" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength61" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="571" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength5" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="572" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence57" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="575" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence30" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="577" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength58" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="578" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes64" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="579" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence26" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="580" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes71" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="581" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence5" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="582" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength83" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="584" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength24" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="585" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength82" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="586" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity29" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="588" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence53" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="592" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength15" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="594" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength80" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="595" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity54" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="597" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity2" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="599" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence3" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="600" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence63" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="601" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.all_attributes.all_attributes4" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="602" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity77" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="603" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength8" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="605" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity6" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="606" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence21" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="607" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence15" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="610" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity73" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="611" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity4" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="612" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes32" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="614" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence16" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="615" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.dexterity.attributes106" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="616" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity9" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="617" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity69" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="618" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength45" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="619" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence77" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="620" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.proficiency.dexterity102" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="621" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes8" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="628" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence71" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="629" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence45" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="630" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence83" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="631" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence67" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="632" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength65" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="635" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes5" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="636" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength95" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="637" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity28" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="638" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes81" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="639" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength16" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="641" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity19" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="647" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence19" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="649" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes62" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="651" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence10" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="653" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity22" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="654" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence69" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="655" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength33" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="657" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength75" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="659" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes43" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="663" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes6" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="668" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence58" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="670" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength68" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="674" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength37" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="675" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity61" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="677" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes29" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="679" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence31" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="683" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength84" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="685" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity36" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="690" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence32" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="700" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity18" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="701" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity46" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="704" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity63" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="708" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength38" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="711" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.dexterity26" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="713" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.strength12" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="716" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes7" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="717" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence79" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="718" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.attributes82" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="719" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence6" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="720" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence9" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="725" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.attribute.intelligence20" program="attribute-choice" effect="contribution-0" {
+                origin kind="allocation"
+                order source="731" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.strength_and_dexterity.azmerianimals4" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="733" program="0" effect="2"
+            }
+        }
+    }
+    query "dexterity-first-increase" stat="stat.attribute_empty_more.stages.dexterity_first.input" contribution="increase" {
+        group "ordinary" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "program_effect" owner="passive_node.attributes.ascendancymercenary3small6" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="2" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attributes.ascendancyhuntress3small2" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="3" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.attributes.ascendancymercenary3small5" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="7" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.enhanced_reflexes.evasion32" program="passive-view" effect="default-effect-2" {
+                origin kind="allocation"
+                order source="8" program="0" effect="2"
+            }
+            member "program_effect" owner="passive_node.polymathy.all_attributes6" program="passive-view" effect="default-effect-1" {
+                origin kind="allocation"
+                order source="9" program="0" effect="2"
+            }
+        }
+    }
+}

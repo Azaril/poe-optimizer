@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-23 (EDT).
+Updated: 2026-10-24 (EDT).
 
 This is the only active delivery schedule. The [architecture](domain-architecture.md)
 defines the end state; [documentation index](README.md) explains authority. The
@@ -9,6 +9,45 @@ adjustments below. Historical checkpoints remain in Git and
 [implementation history](implementation-history.md), not in this resume point.
 
 ## Current state
+
+**Current checkpoint:** named KDL contribution queries now resolve new Stat names
+inside the same atomic authoring build. All 114 retained queries have migrated,
+preserving the outer Partial gap, 120 groups, 2,117 members and 45 partial groups.
+Captured query members are rejected even without KDL fragments; there is no
+parallel JSON path or predicted-ID step. A real unoptimized CLI publication and
+independent verification preserve all eighteen runtime files and the complete
+name ledger byte-for-byte. The canonical seventy-name predecessor is unchanged.
+The useful item-observation exporter law now lives in the acquisition suite;
+its obsolete helper is removed. No revival producer or consumer is published
+by this prerequisite, and complete-build coverage remains 0/5.
+
+Validation found and fixed a Windows debug-build stack overflow: nested by-value
+staged releases consumed almost the entire default main-thread stack before gzip
+decoding. The private `BuiltRelease` field now owns its large checked release in
+a `Box`, keeping the public borrowed API and artifact format unchanged. The
+three measured build frames fall from 952,872 to 560,568 bytes. No stack-size
+override, optimized-only requirement, codec change or relaxed check is used.
+CI now runs the existing checkpoint CLI laws at opt-level zero on both platforms,
+including a compressed-source predecessor replay. The complete Authoring suite
+passes after the repair: 175 library, eight CLI and 177 release tests, with strict
+all-target Clippy. Six optional acquisition tests and one native-only CLI test
+also pass, with strict CLI lint in both feature profiles. No validator was weakened
+to repair the new fixtures: producer expressions use a preceding `let`, typed
+namespace fields convert explicitly, and duplicate names assert the actual early
+source rejection. Aggregate application-declaration rows count as members;
+ordered ranks retain their separate work budget rather than double-counting slots.
+The optimized regression rebuild took 7m13s; build cost remains an R4 concern.
+Both unoptimized checkpoint CLI tests pass with the gzip replay. The sandbox's
+Windows rename restriction caused the first plain-fixture run's OS error 5;
+the unchanged tests passed with normal filesystem access, as does the final
+compressed fixture. Local evidence: `runs/contribution-query-authoring-tests-final.log`,
+`runs/contribution-query-authoring-clippy-final.log`,
+`runs/contribution-query-debug-gzip-cli-tests.log` and
+`runs/contribution-query-replay-equivalence.json`. These files are evidence, not
+inputs. Independent source/contract review found no remaining blocker, and all
+nine protected incoming-critical draft files remain unchanged and excluded.
+Next return to the bounded revival producer/contributor slice below; complete
+source accounting, final duration and reservation delivery remain separate gates.
 
 **Next work is the DSL/data/runtime migration, before further mechanic content.**
 The first complete unchanged build must use the new format and sole native path.
@@ -149,17 +188,17 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint validated in this commit |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement in this checkpoint |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
-| Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation, typed Stat staging, complete Import and evaluation content construction. The CLI now publishes immutable authoring checkpoints with explicit bootstrap/predecessor selection, KDL declaration sources and a fully checked persisted ledger. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Move the maintained publication core and retire obsolete transformation chains |
+| Authoring | Bounded Rust DSL, official kdl-rs manifests, exact typed names/slots, transactional appends, stable named allocation, typed Stat staging, complete Import and evaluation content construction. The CLI now publishes immutable authoring checkpoints with explicit bootstrap/predecessor selection, KDL declaration/query sources and a fully checked persisted ledger. Temporary Authoring -> Import dependency reuses the sole allocator/assembler; no runtime -> Authoring dependency. Move the maintained publication core and retire obsolete transformation chains |
 | Runtime packaging | Legacy Data/Engine default features and embedded legacy snapshot remain; default builds are not yet free of that stack |
 | Loader extraction | Checked runtime reader, shared complete-release validation and original-source dependency checks before DSL lowering implemented; no publication reassembly in metric/source-action loading. Runtime roles are separated from catalog generation. Final dependency construction and offline module/command relocation remain |
-| DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets. The normal builder rejects embedded programs. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
-| Current release | Tracked `migration-source/release.kdl` composes program-free metadata and DSL through one compiler/assembler. Production declarations add 70 Stats, Sniper initial-type/support-prohibition programs and 350 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,336 source domains (1,307 Known, 29 Unmapped). The complete current 70-name checkpoint is the predecessor for later builds; evaluation bundle still absent |
+| DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets; all 114 contribution queries now come from named KDL fragments. The normal builder rejects embedded program and query members. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
+| Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 70 Stats, Sniper initial-type/support-prohibition programs and 350 intrinsic support-source domains. Historical restoration admits only those exact deltas. There are 1,336 source domains (1,307 Known, 29 Unmapped). The complete current 70-name checkpoint is the predecessor for later builds; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Authoring command/release tests, example builds/tests and executable behavior checks pass locally. The later `d490eb54` hosted workflow is successful; this compact cutover still requires its own run |
-| CI | At 03:50 UTC October 24 (October 23 EDT), `d490eb54` run `40011474882` is successful. `8f91c7b1` run `40045082862` is running (thirteen passed, five running, none failed among eighteen jobs). Current main `55eb01e9` has pending run `40058214813`, with no jobs started. The pending weapon-profile run was coalesced before starting. Main-branch serialization preserves the running revision and coalesces pending revisions; local validation does not imply hosted success |
+| CI | At 04:52 UTC October 24, `d490eb54` run `40011474882` is successful. `8f91c7b1` run `40045082862` is running (fourteen passed, four running, none failed among eighteen jobs). Windows CLI shards 0/1/3 and PoB have run for about 3h27m; slow-suite work remains tracked under R4. Parent main `753fda3b` has pending run `40060233124`, with no jobs started. This checkpoint still requires its hosted run. Main-branch serialization preserves the running revision and coalesces pending revisions; local validation does not imply hosted success |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First extract and verify the allocation predecessor using the
@@ -171,15 +210,15 @@ stderr and checkpoint receipt JSON to stdout. The committed complete snapshot
 supplies the complete allocation history; later builds preserve its ledger as a checked
 predecessor. Do not bootstrap evolving source. Current runtime input identity:
 `9d9e3326f0a6fdf211f48df8d2813e61f8550012c5ed131ab7e3242d38fae838`.
-The 2,788 declared source files use 6,056,894 encoded and 46,244,521 decoded
-bytes, within the existing 64 MiB bounds. The 183,609-byte root manifest and
+The 2,796 declared source files use 6,720,948 encoded and 46,018,221 decoded
+bytes, within the existing 64 MiB bounds. The 184,029-byte root manifest and
 expanded rule bytes also fit current limits without increases.
 Metadata JSON remains temporary; gzip is not the compact runtime format.
 Decoded source bytes are now below the 80% warning threshold. Fresh publication
 from the extracted canonical snapshot produces checkpoint
-`0f7962e4163e8e90f424a91176181d1df2160d0d38b0351f081cf43d52aa73a0`, whose eighteen
+`be066899ebfaee7bc4f4ed3627b454591498306d17a4a4285dc6ce626a42550f`, whose eighteen
 runtime files total 53,647,754 bytes (13,461,110 bytes below the unchanged aggregate
-cap). Its schema is 19,773,543 bytes; checkpoint/name files add 452,589 bytes.
+cap). Its schema is 19,773,543 bytes; checkpoint/name files add 453,752 bytes.
 The fresh full verifier passes. The distinct indexed binary runtime work remains
 required; no resident-memory or evaluator-throughput saving is claimed.
 
@@ -1551,6 +1590,50 @@ requested by the Lua cleanup review; establish a checked precision-preserving
 domain or discuss a deliberate numerical policy. Do not silently copy incidental
 database rounding or invent neutral contributors. The ignored revival drafts are
 preparation only and do not establish coverage or a new model contract.
+The follow-up source review corrects the quality example: `CalcTools` applies
+`math.modf(0.25 * quality)` before adding Sacrifice's level value, so quality 1–3
+adds zero and quality 4 adds one percentage point. Sacrifice also needs the actual
+global Buff's activation, scaling and maximum-stacking application; it is not a
+local Sniper MORE source. The precision question concerns multiple MORE factors
+and inherited store layers, not the untruncated quality coefficient alone.
+The exact physical Sniper supply is Player-bound in source construction; any
+consumer using an explicit Player read must retain that domain, rather than
+claiming it reads every Skill's supplying Actor. Generic Actor behavior remains
+the target when a real non-Player source needs that relation.
+
+The [named contribution-query prerequisite](authoring-contribution-queries.md)
+is implemented: all retained queries use the existing checked model through
+typed KDL symbols, with partial coverage and sole final validators preserved.
+Real publication verifies the full runtime and ledger byte-preservation gate.
+The unchanged canonical seventy-name snapshot remains the allocation predecessor.
+Return to the real revival producer/contributor work; the reservation
+amount-signature decision remains open independently.
+
+The next bounded producer checkpoint can use the existing model: add the
+intrinsic revival Flag and twelve-second Override to the exact summoning Skill,
+plus actual unconditional Player INC contributions from Restless Dead (38972,
+mapped Passive `12f4`, +25) and the two distinct +5 nodes (28573/`0f9f` and
+44255/`1476`). Allocate only the three channels used by that checkpoint; do not
+predeclare a final duration or MORE channel. Keep the owners and query groups
+Partial until the complete source census is proved. The paired sources
+15358/`0bd9` (+8 and minion Life) and 41905/`13be` (+15 and recovery on revival),
+and conditional 31129/`104d` (+35 for all-Companion minions), remain explicit
+obligations. Preserve every other effect when reviewing those owners.
+Declare the already-reviewed Skill and Actor target domains on the shared
+enabled, base-override and speed-INC Stats: local and parent stores use the same
+mechanic, while exact query recipients keep their values separate. A permitted
+target does not invent an Actor writer, empty/default value or coverage. Avoid
+splitting local/parent channel identities merely to fit the first producer slice.
+Original05's saved SkillSet 4, TreeSpec 3, ItemSet 2 and ConfigSet 1 contain no
+Sacrifice or any of these six revival passives. They are counterfactual controls,
+not active-build modifiers. The selected physical Sniper is raw level 20,
+quality zero, enabled, and has no authored support in its group. Those saved
+facts do not prove absence of matching item, generated-skill, configuration or
+custom-source writers. Before adding the duration consumer, census the admitted
+composed sources and enforce its reviewed precision domain. The remaining
+critical path still includes the graft application, reservation ownership and
+contributor delivery, complete source-field disposition, then readiness.
+
 Acceptance for the declaration/type slice includes positive and negative membership
 within the declared vocabulary, absent versus present-empty minion context,
 repeated occurrences and unchanged partial-owner coverage. Source census, stages
@@ -1598,7 +1681,7 @@ the existing runtime path; runtime validation order and final rule/evaluation ch
 are preserved. At checkpoint `8fd6ab5c`, source checking returned only a checked
 schema; the later content-construction checkpoint below retains its checked Import
 owners as well. It never repairs incoming seals. Production declaration integration
-and the publication workflow decision remain pending.
+and atomic checkpoint publication were subsequently completed; see Current state.
 
 Tree already separates authored content from `bind_new`. Mapping, Roles, Rewards,
 Items and ItemSource now have their own explicit content types, consuming checked
@@ -3260,10 +3343,11 @@ copying source-language accidents into the native model.
    against actual current evaluation/readiness declarations, then remove its
    obsolete receiver staging. Do not rewrite operation versions or manufacture
    readiness authority to make a fixture load.
-   Also relocate `owned_item_observations::check_export`
-   (the `pob` feature) to maintained offline export tests: it checks extractor
-   output, authenticated catalog/evidence and no-clobber behavior. Default-profile
-   transfer alone would lose this evidence. Then delete predecessor/stage/republish
+   `owned_item_observations::check_export` has moved to the maintained optional
+   acquisition suite, retaining exact extractor output, authenticated catalog and
+   evidence, and complete no-clobber snapshots. Its old helper and call are removed;
+   both feature profiles and strict scoped Clippy pass at this checkpoint.
+   After the remaining behavioral transfers, delete predecessor/stage/republish
    helpers, obsolete transition fingerprints and the closed historical pipeline.
 
    Move the mutable allocator and sole recipe/release publication machinery into

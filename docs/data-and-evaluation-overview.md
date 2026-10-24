@@ -1,6 +1,6 @@
 # Data acquisition and evaluation overview
 
-Updated 2026-10-23. The [architecture](domain-architecture.md) defines the accepted
+Updated 2026-10-24. The [architecture](domain-architecture.md) defines the accepted
 end state; [implementation](implementation.md) records what is delivered. This
 page explains the distinction. **The tracked DSL program cutover is validated;
 broader declaration and runtime migration remain ahead. 0/5 supplied
@@ -87,6 +87,15 @@ composes all declared packets before its single checked publication transaction.
 Broader definition declarations remain pending; typed Stat declarations now use
 the same manifest and publication transaction.
 
+The current checkpoint adds [named contribution-query authoring](authoring-contribution-queries.md),
+with migration and validation still in progress. KDL fragments describe exact
+contribution channels, producers, groups, reducers, ordering and coverage. They
+resolve against the final schema after Stat allocation, using each fragment's
+own aliases plus the current declarations. A formula and its query can therefore
+refer to a newly declared Stat in one transaction without predicting its ID or
+publishing the ledger first. Lowering produces the existing typed query DTOs;
+the ordinary storage and Engine validators still check the complete graph.
+
 Stable naming now has an in-memory staged transaction API. `NamedIdRegistry`
 wraps the single existing Import allocator; `NamesInput` stores its exact registry
 digest plus sorted typed bindings. Transactions leave their base unchanged and
@@ -133,25 +142,28 @@ the separate production command below; other DSL developer commands remain plann
 
 ## Production release composition during migration
 
-`poe-author release build <release.kdl> --bootstrap --output <new-directory>` reads a
-declared final composition and publishes a checked authoring checkpoint. The tracked source command is:
+`poe-author release build` reads a declared final composition and publishes a
+checked authoring checkpoint. For the evolving tracked source, first extract and
+verify the persisted allocation predecessor using the
+[canonical checkpoint reference](../data/owned/poe2/3887ae68/authoring-genesis.md),
+then run:
 
 ```text
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --bootstrap --output rebuilt-release
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37 --output rebuilt-release
 ```
 
 The output directory must not exist and its parent must exist. Runtime consumers
-use `rebuilt-release/runtime`. For subsequent builds replace `--bootstrap` with
-`--predecessor rebuilt-release --expected-predecessor <identity>` and choose a new
-output directory. Successful publication prints the identity to stderr and the
+use `rebuilt-release/runtime`. Later builds likewise use a checked predecessor
+path and its expected checkpoint identity, with a new output directory. Bootstrap
+is reserved for an explicitly new allocation history; it is not the retained
+source rebuild command. Successful publication prints the identity to stderr and the
 checkpoint receipt JSON to stdout. Optional `stat-declarations "definitions.kdl"
 names="declaration-names.kdl"` declares new Stats in the same bounded inventory.
-The converted
-tracked source passes the complete corpus and historical artifact gates. The
-command reuses the existing
-typed release assembler; it
-does not call test staging helpers, replay the old publication chain or provide a
-second semantic checker.
+The completed program-source cutover has complete corpus and historical artifact
+gates. The contribution-query source migration preserves all eighteen runtime
+files and the name ledger exactly in a verified CLI rebuild. The command reuses the existing typed release
+assembler; it does not call test staging helpers, replay the old publication chain
+or provide a second semantic checker.
 
 The closed manifest requires registry, schema, rules, routing, mapping, roles,
 normalization, rewards, item rules and item-source policy. Tree normalization and
@@ -178,14 +190,27 @@ rule sources. Semantic names resolve exact schema addresses and grant no new
 authority. A source file may serve multiple owners; each occurrence remains
 separately checked and charged against expanded-work limits.
 
-The `rules` constituent is always program-free JSON metadata. Schema, tables,
-coverage and other constituents still use typed JSON DTOs, with `plain` transport
-by default or explicit `encoding="gzip"`. Names, packets and rule source are
-plain UTF-8. Broader declarations and the compact compiled package remain planned.
+Named contribution fragments use
+`contribution-queries "queries/resources.kdl" names="names/resources.kdl"`.
+Every query names its Stat and exact producer authority; typed empty values and
+ordered ranks are explicit. Fragments append without deduplicating members,
+duplicate query IDs fail across fragments, and every partial gap is retained.
+A complete fragment cannot close another fragment's partial coverage. These
+calculation inventories are distinct from the named imported metric query sets.
+
+The `rules` constituent is program-free and query-free JSON metadata: an empty
+contribution inventory may retain its coverage, but captured query members are
+rejected even when no named fragments are supplied. Schema, tables, coverage and
+other constituents still use typed JSON DTOs, with `plain` transport by default or
+explicit `encoding="gzip"`. Names, membership packets, Stat declarations,
+contribution fragments and rule source are plain UTF-8. Broader declarations and
+the indexed binary runtime package remain planned.
 The library receives injected bytes; the CLI resolves source paths within the
 manifest directory and bounds file reads. Separate aggregate limits cover encoded
-and decoded bytes, source/component/packet counts, expanded rule work and typed
-assembly limits. Source failures never fall back to embedded IR.
+and decoded bytes, source/component/packet counts, expanded rule work, query/group/
+member/binding/gap counts and typed assembly limits. Final validators retain the
+graph-work limits and all semantic checks. Source failures never fall back to
+embedded programs or captured query members.
 Gzip accepts exactly one complete member and rejects trailing bytes or additional
 members. Compression changes transport size, not mechanics or decoded limits.
 

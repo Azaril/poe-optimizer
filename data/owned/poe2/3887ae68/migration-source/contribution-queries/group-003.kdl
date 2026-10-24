@@ -1,0 +1,811 @@
+// Exact contribution authority and coverage; compiled through the shared rule validator.
+queries game="poe2" version="owned-mechanics-v1" coverage="complete" {
+    query "spirit-base-contributions" stat="stat.player_spirit_pool.final" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.spirit_points"
+            member "program_effect" owner="reward.questact_1freythornking_in_the_mists" program="flat-resource-contribution" effect="grant" {
+                origin kind="reward"
+                order source="0" program="0" effect="0"
+            }
+            member "program_effect" owner="reward.questact_3azak_bogignagduk" program="flat-resource-contribution" effect="grant" {
+                origin kind="reward"
+                order source="1" program="0" effect="0"
+            }
+            member "program_effect" owner="reward.questinterlude_3kriar_villagelythara" program="flat-resource-contribution" effect="grant" {
+                origin kind="reward"
+                order source="2" program="0" effect="0"
+            }
+            member "program_effect" owner="modifier.fixed_spirit.modifier" program="contribute-player-ranged-spirit" effect="direct-ranged-spirit" {
+                origin kind="item_modifier" {
+                    slot "equipment_slot.weapon_1"
+                    slot "equipment_slot.weapon_2"
+                    slot "equipment_slot.helmet"
+                    slot "equipment_slot.body_armour"
+                    slot "equipment_slot.gloves"
+                    slot "equipment_slot.boots"
+                    slot "equipment_slot.amulet"
+                    slot "equipment_slot.ring_1"
+                    slot "equipment_slot.ring_2"
+                    slot "equipment_slot.ring_3"
+                    slot "equipment_slot.belt"
+                    slot "equipment_slot.flask_1"
+                    slot "equipment_slot.flask_2"
+                    slot "equipment_slot.charm_1"
+                    slot "equipment_slot.charm_2"
+                    slot "equipment_slot.charm_3"
+                    slot "equipment_slot.arm_1"
+                    slot "equipment_slot.arm_2"
+                    slot "equipment_slot.leg_1"
+                    slot "equipment_slot.leg_2"
+                }
+                order source="3" program="0" effect="0" {
+                    slot-rank "equipment_slot.weapon_1" rank="0"
+                    slot-rank "equipment_slot.weapon_2" rank="1"
+                    slot-rank "equipment_slot.helmet" rank="2"
+                    slot-rank "equipment_slot.body_armour" rank="3"
+                    slot-rank "equipment_slot.gloves" rank="4"
+                    slot-rank "equipment_slot.boots" rank="5"
+                    slot-rank "equipment_slot.amulet" rank="6"
+                    slot-rank "equipment_slot.ring_1" rank="7"
+                    slot-rank "equipment_slot.ring_2" rank="8"
+                    slot-rank "equipment_slot.ring_3" rank="9"
+                    slot-rank "equipment_slot.belt" rank="10"
+                    slot-rank "equipment_slot.flask_1" rank="11"
+                    slot-rank "equipment_slot.flask_2" rank="12"
+                    slot-rank "equipment_slot.charm_1" rank="13"
+                    slot-rank "equipment_slot.charm_2" rank="14"
+                    slot-rank "equipment_slot.charm_3" rank="15"
+                    slot-rank "equipment_slot.arm_1" rank="16"
+                    slot-rank "equipment_slot.arm_2" rank="17"
+                    slot-rank "equipment_slot.leg_1" rank="18"
+                    slot-rank "equipment_slot.leg_2" rank="19"
+                }
+            }
+            member "program_effect" owner="modifier.fixed_spirit.modifier" program="amulet-copy-ranged-spirit" effect="copied-ranged-spirit" {
+                origin kind="item_modifier" {
+                    slot "equipment_slot.weapon_1"
+                    slot "equipment_slot.weapon_2"
+                    slot "equipment_slot.helmet"
+                    slot "equipment_slot.body_armour"
+                    slot "equipment_slot.gloves"
+                    slot "equipment_slot.boots"
+                    slot "equipment_slot.amulet"
+                    slot "equipment_slot.ring_1"
+                    slot "equipment_slot.ring_2"
+                    slot "equipment_slot.ring_3"
+                    slot "equipment_slot.belt"
+                    slot "equipment_slot.flask_1"
+                    slot "equipment_slot.flask_2"
+                    slot "equipment_slot.charm_1"
+                    slot "equipment_slot.charm_2"
+                    slot "equipment_slot.charm_3"
+                    slot "equipment_slot.arm_1"
+                    slot "equipment_slot.arm_2"
+                    slot "equipment_slot.leg_1"
+                    slot "equipment_slot.leg_2"
+                }
+                order source="3" program="1" effect="0" {
+                    slot-rank "equipment_slot.weapon_1" rank="0"
+                    slot-rank "equipment_slot.weapon_2" rank="1"
+                    slot-rank "equipment_slot.helmet" rank="2"
+                    slot-rank "equipment_slot.body_armour" rank="3"
+                    slot-rank "equipment_slot.gloves" rank="4"
+                    slot-rank "equipment_slot.boots" rank="5"
+                    slot-rank "equipment_slot.amulet" rank="6"
+                    slot-rank "equipment_slot.ring_1" rank="7"
+                    slot-rank "equipment_slot.ring_2" rank="8"
+                    slot-rank "equipment_slot.ring_3" rank="9"
+                    slot-rank "equipment_slot.belt" rank="10"
+                    slot-rank "equipment_slot.flask_1" rank="11"
+                    slot-rank "equipment_slot.flask_2" rank="12"
+                    slot-rank "equipment_slot.charm_1" rank="13"
+                    slot-rank "equipment_slot.charm_2" rank="14"
+                    slot-rank "equipment_slot.charm_3" rank="15"
+                    slot-rank "equipment_slot.arm_1" rank="16"
+                    slot-rank "equipment_slot.arm_2" rank="17"
+                    slot-rank "equipment_slot.leg_1" rank="18"
+                    slot-rank "equipment_slot.leg_2" rank="19"
+                }
+            }
+            gap subject="stat.player_spirit_pool.final" facet="game_rules" code="unreviewed-spirit-contributor-membership-and-order"
+        }
+    }
+    query "spirit-increased-contributions" stat="stat.player_spirit_pool.final" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            gap subject="stat.player_spirit_pool.final" facet="game_rules" code="unreviewed-spirit-contributor-membership-and-order"
+        }
+    }
+    query "spirit-more-contributions" stat="stat.player_spirit_pool.final" contribution="multiply" {
+        group "sources" reduction="product" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="1" unit="unit.factor"
+            gap subject="stat.player_spirit_pool.final" facet="game_rules" code="unreviewed-spirit-contributor-membership-and-order"
+        }
+    }
+    query "spirit-conversion-to-energy-shield-sources" stat="stat.spirit_conversion_to_energy_shield_sources" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            gap subject="stat.spirit_conversion_to_energy_shield_sources" facet="game_rules" code="unreviewed-spirit-adjustment-suppliers-and-order"
+        }
+    }
+    query "spirit-conversion-to-armour-sources" stat="stat.spirit_conversion_to_armour_sources" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            gap subject="stat.spirit_conversion_to_armour_sources" facet="game_rules" code="unreviewed-spirit-adjustment-suppliers-and-order"
+        }
+    }
+    query "spirit-conversion-to-evasion-sources" stat="stat.spirit_conversion_to_evasion_sources" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            gap subject="stat.spirit_conversion_to_evasion_sources" facet="game_rules" code="unreviewed-spirit-adjustment-suppliers-and-order"
+        }
+    }
+    query "additional-pre-scaling-spirit-sources" stat="stat.additional_pre_scaling_spirit_sources" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.spirit_points"
+            gap subject="stat.additional_pre_scaling_spirit_sources" facet="game_rules" code="unreviewed-spirit-adjustment-suppliers-and-order"
+        }
+    }
+    query "additional-post-scaling-spirit-sources" stat="stat.additional_post_scaling_spirit_sources" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.spirit_points"
+            gap subject="stat.additional_post_scaling_spirit_sources" facet="game_rules" code="unreviewed-spirit-adjustment-suppliers-and-order"
+        }
+    }
+    query "spirit-override-contributions" stat="stat.player_spirit_pool.final" contribution="override" {
+        group "sources" reduction="require_agreement" ordering="unordered" coverage="partial" {
+            gap subject="stat.player_spirit_pool.final" facet="game_rules" code="unreviewed-spirit-override-suppliers"
+        }
+    }
+    query "selected-physical-self-flat-minimum" stat="stat.selected_physical_self_flat_minimum" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.damage"
+        }
+    }
+    query "selected-physical-self-flat-maximum" stat="stat.selected_physical_self_flat_maximum" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.damage"
+        }
+    }
+    query "selected-actor-intimidated" stat="stat.selected_actor_intimidated" contribution="flag" {
+        group "sources" reduction="any" ordering="unordered" coverage="complete" {
+            empty type="boolean" value="false"
+        }
+    }
+    query "selected-actor-debilitated" stat="stat.selected_actor_debilitated" contribution="flag" {
+        group "sources" reduction="any" ordering="unordered" coverage="complete" {
+            empty type="boolean" value="false"
+        }
+    }
+    query "pain-offering-speed-contributions" stat="stat.pain_offering_speed_contributions" contribution="add" {
+        group "pain-offering-speed" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "application_group" family="pain-offering-buff" modifier="attack-cast-speed-increase" {
+                declaration application="pain-offering-minion-damage" effect="speed-increase"
+                order source="0" program="0" effect="0"
+            }
+        }
+    }
+    query "player-evasion-base" stat="stat.player_evasion_final.contribution_stat" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.defence_rating"
+            member "program_effect" owner="actor.player" program="intrinsic-player-evasion" effect="inherent-evasion" {
+                origin kind="existing_actor" application="shared-player-initialization"
+                order source="0" program="0" effect="0"
+            }
+        }
+    }
+    query "player-evasion-increase" stat="stat.player_evasion_final.contribution_stat" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield23" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="0" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion3" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="1" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield9" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="2" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield10" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="3" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield18" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="4" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.azmerianimals9" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="5" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.deflection_and_evasion.evasion27" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="6" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.azmerianimals38" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="7" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield27" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="8" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.ascendancymonk2small2" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="9" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.azmerianimals8" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="10" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion25" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="11" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield2" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="12" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield16" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="13" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield36" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="14" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion21" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="15" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_rating.azmerianimals51" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="16" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield26" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="17" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.azmerianimals39" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="18" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.ascendancymonk2small1" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="19" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.armour_and_evasion.deflect33" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="20" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion36" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="21" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield5" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="22" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.deflect26" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="23" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield4" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="24" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_rating.stun_threshold18" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="25" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion13" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="26" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion26" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="27" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield_delay.unarmed8" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="28" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.deflect63" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="29" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.deflection_and_evasion.deflect39" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="30" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.deflection_and_evasion.deflect38" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="31" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield24" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="32" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield_delay.evasion_and_energy_shield21" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="33" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion10" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="34" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion1" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="35" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion2" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="36" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.unarmed10" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="37" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.deflection_and_evasion.evasion22" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="38" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.deflect27" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="39" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.ascendancyranger3small5" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="40" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield8" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="41" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion24" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="42" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield_delay.evasion_and_energy_shield6" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="43" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion8" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="44" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion15" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="45" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion14" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="46" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.enhanced_reflexes.evasion32" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="47" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield_delay.unarmed9" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="48" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.ascendancymonk1small3" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="49" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion18" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="50" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield22" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="51" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield30" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="52" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield32" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="53" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.ascendancyhuntress1small8" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="54" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion17" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="55" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield17" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="56" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.mindful_awareness.evasion_and_energy_shield35" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="57" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.deflect28" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="58" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion16" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="59" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_and_energy_shield.evasion_and_energy_shield20" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="60" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion_rating.deflect50" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="61" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.evasion.evasion28" program="passive-view" effect="default-effect-0" {
+                origin kind="allocation"
+                order source="62" program="0" effect="0"
+            }
+            member "program_effect" owner="reward.questact_4eye_of_hinekoratribal_medicine" program="permanent-reward-contributions" effect="grant-1" {
+                origin kind="reward"
+                order source="63" program="0" effect="0"
+            }
+            member "program_effect" owner="reward.qimah_seven_pillars.global_defences" program="permanent-reward-contributions" effect="grant-1" {
+                origin kind="reward"
+                order source="64" program="0" effect="0"
+            }
+        }
+    }
+    query "player-evasion-more" stat="stat.player_evasion_final.contribution_stat" contribution="multiply" {
+        group "sources" reduction="product" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="1" unit="unit.factor"
+        }
+    }
+    query "item-evasion-single-base" stat="stat.item_local_evasion" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.defence_rating"
+            member "program_effect" owner="modifier.item_defence_inputs.evasion_base.canonical" program="deliver-local-evasion-single-base" effect="local" {
+                origin kind="item_modifier" {
+                    slot "equipment_slot.weapon_2"
+                    slot "equipment_slot.helmet"
+                    slot "equipment_slot.body_armour"
+                    slot "equipment_slot.gloves"
+                    slot "equipment_slot.boots"
+                }
+                order source="0" program="0" effect="0" {
+                    slot-rank "equipment_slot.weapon_2" rank="0"
+                    slot-rank "equipment_slot.helmet" rank="1"
+                    slot-rank "equipment_slot.body_armour" rank="2"
+                    slot-rank "equipment_slot.gloves" rank="3"
+                    slot-rank "equipment_slot.boots" rank="4"
+                }
+            }
+        }
+    }
+    query "item-evasion-paired-armour-base" stat="stat.local_defence_composition.channels.armour_evasion" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.defence_rating"
+            member "program_effect" owner="modifier.item_defence_inputs.armour_evasion_base.canonical" program="deliver-local-evasion-paired-armour-base" effect="local" {
+                origin kind="item_modifier" {
+                    slot "equipment_slot.weapon_2"
+                    slot "equipment_slot.helmet"
+                    slot "equipment_slot.body_armour"
+                    slot "equipment_slot.gloves"
+                    slot "equipment_slot.boots"
+                }
+                order source="0" program="0" effect="0" {
+                    slot-rank "equipment_slot.weapon_2" rank="0"
+                    slot-rank "equipment_slot.helmet" rank="1"
+                    slot-rank "equipment_slot.body_armour" rank="2"
+                    slot-rank "equipment_slot.gloves" rank="3"
+                    slot-rank "equipment_slot.boots" rank="4"
+                }
+            }
+        }
+    }
+    query "item-evasion-paired-shield-base" stat="stat.local_defence_composition.channels.evasion_energy_shield" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.count"
+            member "program_effect" owner="modifier.item_defence_inputs.evasion_energy_shield_base.canonical" program="deliver-local-evasion-paired-shield-base" effect="local" {
+                origin kind="item_modifier" {
+                    slot "equipment_slot.weapon_2"
+                    slot "equipment_slot.helmet"
+                    slot "equipment_slot.body_armour"
+                    slot "equipment_slot.gloves"
+                    slot "equipment_slot.boots"
+                }
+                order source="0" program="0" effect="0" {
+                    slot-rank "equipment_slot.weapon_2" rank="0"
+                    slot-rank "equipment_slot.helmet" rank="1"
+                    slot-rank "equipment_slot.body_armour" rank="2"
+                    slot-rank "equipment_slot.gloves" rank="3"
+                    slot-rank "equipment_slot.boots" rank="4"
+                }
+            }
+        }
+    }
+    query "item-evasion-single-increase" stat="stat.item_local_evasion" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "program_effect" owner="modifier.item_defence_inputs.evasion_increase.canonical" program="deliver-local-evasion-single-increase" effect="local" {
+                origin kind="item_modifier" {
+                    slot "equipment_slot.weapon_2"
+                    slot "equipment_slot.helmet"
+                    slot "equipment_slot.body_armour"
+                    slot "equipment_slot.gloves"
+                    slot "equipment_slot.boots"
+                }
+                order source="0" program="0" effect="0" {
+                    slot-rank "equipment_slot.weapon_2" rank="0"
+                    slot-rank "equipment_slot.helmet" rank="1"
+                    slot-rank "equipment_slot.body_armour" rank="2"
+                    slot-rank "equipment_slot.gloves" rank="3"
+                    slot-rank "equipment_slot.boots" rank="4"
+                }
+            }
+        }
+    }
+    query "item-evasion-paired-armour-increase" stat="stat.local_defence_composition.channels.armour_evasion" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "program_effect" owner="modifier.item_defence_inputs.armour_evasion_increase.canonical" program="deliver-local-evasion-paired-armour-increase" effect="local" {
+                origin kind="item_modifier" {
+                    slot "equipment_slot.weapon_2"
+                    slot "equipment_slot.helmet"
+                    slot "equipment_slot.body_armour"
+                    slot "equipment_slot.gloves"
+                    slot "equipment_slot.boots"
+                }
+                order source="0" program="0" effect="0" {
+                    slot-rank "equipment_slot.weapon_2" rank="0"
+                    slot-rank "equipment_slot.helmet" rank="1"
+                    slot-rank "equipment_slot.body_armour" rank="2"
+                    slot-rank "equipment_slot.gloves" rank="3"
+                    slot-rank "equipment_slot.boots" rank="4"
+                }
+            }
+        }
+    }
+    query "item-evasion-paired-shield-increase" stat="stat.local_defence_composition.channels.evasion_energy_shield" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "program_effect" owner="modifier.item_defence_inputs.evasion_energy_shield_increase.canonical" program="deliver-local-evasion-paired-shield-increase" effect="local" {
+                origin kind="item_modifier" {
+                    slot "equipment_slot.weapon_2"
+                    slot "equipment_slot.helmet"
+                    slot "equipment_slot.body_armour"
+                    slot "equipment_slot.gloves"
+                    slot "equipment_slot.boots"
+                }
+                order source="0" program="0" effect="0" {
+                    slot-rank "equipment_slot.weapon_2" rank="0"
+                    slot-rank "equipment_slot.helmet" rank="1"
+                    slot-rank "equipment_slot.body_armour" rank="2"
+                    slot-rank "equipment_slot.gloves" rank="3"
+                    slot-rank "equipment_slot.boots" rank="4"
+                }
+            }
+        }
+    }
+    query "item-evasion-defences-increase" stat="stat.local_defence_composition.channels.defences_increase" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "program_effect" owner="modifier.item_defence_inputs.defences_increase.canonical" program="deliver-local-evasion-defences-increase" effect="local" {
+                origin kind="item_modifier" {
+                    slot "equipment_slot.weapon_2"
+                    slot "equipment_slot.helmet"
+                    slot "equipment_slot.body_armour"
+                    slot "equipment_slot.gloves"
+                    slot "equipment_slot.boots"
+                }
+                order source="0" program="0" effect="0" {
+                    slot-rank "equipment_slot.weapon_2" rank="0"
+                    slot-rank "equipment_slot.helmet" rank="1"
+                    slot-rank "equipment_slot.body_armour" rank="2"
+                    slot-rank "equipment_slot.gloves" rank="3"
+                    slot-rank "equipment_slot.boots" rank="4"
+                }
+            }
+        }
+    }
+    query "item-evasion-alternate-quality" stat="stat.local_defence_composition.channels.alternate_quality" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.factor"
+        }
+    }
+    query "item-evasion-crafted-quality" stat="stat.local_defence_composition.channels.crafted_quality" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+        }
+    }
+    query "item-evasion-per-level" stat="stat.item_evasion_per_level" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="complete" {
+            empty type="quantity" value="0" unit="unit.defence_rating"
+        }
+    }
+    query "item-evasion-replacement" stat="stat.item_evasion_replacement" contribution="override" {
+        group "sources" reduction="require_agreement" ordering="unordered" coverage="complete" {
+        }
+    }
+    query "player-evasion-global-base-override" stat="stat.player_evasion_final.contribution_stat" contribution="override" {
+        group "sources" reduction="require_agreement" ordering="unordered" coverage="complete" {
+        }
+    }
+    query "outgoing-critical-chance-add" stat="stat.outgoing_critical.definitions.chance" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            gap subject="stat.outgoing_critical.definitions.chance" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-chance-increase" stat="stat.outgoing_critical.definitions.chance" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            gap subject="stat.outgoing_critical.definitions.chance" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-chance-multiply" stat="stat.outgoing_critical.definitions.chance" contribution="multiply" {
+        group "sources" reduction="product" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="1" unit="unit.factor"
+            gap subject="stat.outgoing_critical.definitions.chance" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-chance-override" stat="stat.outgoing_critical.definitions.chance" contribution="override" {
+        group "sources" reduction="require_agreement" ordering="unordered" coverage="partial" {
+            gap subject="stat.outgoing_critical.definitions.chance" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-bonus-add" stat="stat.outgoing_critical_damage_bonus" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "program_effect" owner="actor_slot.sniper_population" program="intrinsic-minion-attack-source" effect="critical-damage-bonus" {
+                origin kind="supplied_actor" {
+                    supply "actor_slot.sniper_population"
+                }
+                order source="0" program="0" effect="0"
+            }
+            gap subject="stat.outgoing_critical_damage_bonus" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-bonus-increase" stat="stat.outgoing_critical_damage_bonus" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            gap subject="stat.outgoing_critical_damage_bonus" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-bonus-multiply" stat="stat.outgoing_critical_damage_bonus" contribution="multiply" {
+        group "sources" reduction="product" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="1" unit="unit.factor"
+            gap subject="stat.outgoing_critical_damage_bonus" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-bonus-override" stat="stat.outgoing_critical_damage_bonus" contribution="override" {
+        group "sources" reduction="require_agreement" ordering="unordered" coverage="partial" {
+            gap subject="stat.outgoing_critical_damage_bonus" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-cap-add" stat="stat.outgoing_critical_chance_cap" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "program_effect" owner="actor_slot.sniper_population" program="intrinsic-minion-attack-source" effect="critical-chance-cap" {
+                origin kind="supplied_actor" {
+                    supply "actor_slot.sniper_population"
+                }
+                order source="0" program="0" effect="0"
+            }
+            gap subject="stat.outgoing_critical_chance_cap" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-cap-override" stat="stat.outgoing_critical_chance_cap" contribution="override" {
+        group "sources" reduction="require_agreement" ordering="unordered" coverage="partial" {
+            gap subject="stat.outgoing_critical_chance_cap" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-base-override" stat="stat.action_intrinsic_critical_chance" contribution="override" {
+        group "sources" reduction="require_agreement" ordering="unordered" coverage="partial" {
+            gap subject="stat.action_intrinsic_critical_chance" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-enemy-chance-add" stat="stat.enemy_self_critical_chance" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "program_effect" owner="encounter.pinnacle_default" program="configured-critical-weakness" effect="critical-weakness" {
+                origin kind="encounter"
+                order source="0" program="0" effect="0"
+            }
+            gap subject="stat.enemy_self_critical_chance" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-enemy-chance-increase" stat="stat.enemy_self_critical_chance" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            gap subject="stat.enemy_self_critical_chance" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-enemy-bonus-add" stat="stat.outgoing_critical_enemy_bonus" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            gap subject="stat.outgoing_critical_enemy_bonus" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-enemy-bonus-increase" stat="stat.outgoing_critical_enemy_bonus" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            gap subject="stat.outgoing_critical_enemy_bonus" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "outgoing-critical-weakness-enabled" stat="stat.enemy_apply_critical_weakness" contribution="flag" {
+        group "sources" reduction="any" ordering="unordered" coverage="partial" {
+            empty type="boolean" value="false"
+            member "program_effect" owner="encounter.pinnacle_default" program="configured-critical-weakness-activation" effect="configured-activation" {
+                origin kind="encounter"
+            }
+            gap subject="stat.enemy_apply_critical_weakness" facet="game_rules" code="outgoing-critical-source-domain-not-admitted"
+        }
+    }
+    query "enemy-armour-add" stat="stat.configuration_rating_inputs.inputs.enemyarmour.contribution_stat" contribution="add" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.defence_rating"
+            member "program_effect" owner="encounter.pinnacle_default" program="configured-enemy-armour-base" effect="configured-base" {
+                origin kind="encounter"
+                order source="0" program="0" effect="0"
+            }
+            gap subject="stat.configuration_rating_inputs.inputs.enemyarmour.contribution_stat" facet="game_rules" code="enemy-armour-source-domain-not-admitted"
+        }
+    }
+    query "enemy-armour-increase" stat="stat.configuration_rating_inputs.inputs.enemyarmour.contribution_stat" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            gap subject="stat.configuration_rating_inputs.inputs.enemyarmour.contribution_stat" facet="game_rules" code="enemy-armour-source-domain-not-admitted"
+        }
+    }
+    query "enemy-armour-multiply" stat="stat.configuration_rating_inputs.inputs.enemyarmour.contribution_stat" contribution="multiply" {
+        group "sources" reduction="product" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="1" unit="unit.factor"
+            gap subject="stat.configuration_rating_inputs.inputs.enemyarmour.contribution_stat" facet="game_rules" code="enemy-armour-source-domain-not-admitted"
+        }
+    }
+    query "enemy-armour-override" stat="stat.configuration_rating_inputs.inputs.enemyarmour.contribution_stat" contribution="override" {
+        group "sources" reduction="require_agreement" ordering="unordered" coverage="partial" {
+            gap subject="stat.configuration_rating_inputs.inputs.enemyarmour.contribution_stat" facet="game_rules" code="enemy-armour-source-domain-not-admitted"
+        }
+    }
+    query "campaign-bosses-defeated" stat="stat.campaign_bosses_defeated" contribution="override" {
+        group "sources" reduction="require_agreement" ordering="unordered" coverage="complete" {
+            member "program_effect" owner="reward.configbossfacebroken" program="campaign-progression-fact" effect="campaign-bosses-defeated" {
+                origin kind="reward"
+            }
+        }
+    }
+    query "campaign-progression-authority" stat="stat.campaign_progression_authority_count" contribution="add" {
+        group "sources" reduction="exact_integer_sum" ordering="unordered" coverage="complete" {
+            empty type="integer" value="0"
+            member "program_effect" owner="reward.configbossfacebroken" program="campaign-progression-fact" effect="campaign-progression-authority" {
+                origin kind="reward"
+            }
+        }
+    }
+    query "ignore-equipment-movement-penalties" stat="stat.ignore_equipment_movement_penalties" contribution="flag" {
+        group "sources" reduction="any" ordering="unordered" coverage="partial" {
+            empty type="boolean" value="false"
+            gap subject="stat.ignore_equipment_movement_penalties" facet="game_rules" code="movement-penalty-immunity-suppliers-unconverted"
+        }
+    }
+    query "equipment-local-charm-capacity" stat="stat.item_local_charm_capacity" contribution="add" {
+        group "ordered-local" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.count"
+            member "program_effect" owner="modifier.fine_belt_modifiers.charm.modifier" program="local-charm-capacity-contribution" effect="local-charm-capacity" {
+                origin kind="item_modifier" {
+                    slot "equipment_slot.belt"
+                }
+                order source="0" program="0" effect="0" {
+                    slot-rank "equipment_slot.belt" rank="0"
+                }
+            }
+            gap subject="stat.item_local_charm_capacity" facet="game_rules" code="local-charm-capacity-producer-membership-unproved"
+        }
+    }
+}
