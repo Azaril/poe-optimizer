@@ -1,2 +1,0 @@
-// Declaration allocation supplies the Stat addresses. No bootstrap aliases are needed.
-names game="poe2" version="owned-mechanics-v1" {}

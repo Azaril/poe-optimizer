@@ -1,0 +1,5 @@
+// Existing unit bindings needed by the new declaration rows.
+names game="poe2" version="owned-mechanics-v1" {
+    unit "unit.seconds" key="def.0000000000000005"
+    unit "unit.percentage_points" key="def.0000000000000002"
+}

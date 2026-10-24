@@ -1,0 +1,5 @@
+// Whole source node38972 and ModParser4736: the allocation contributes to Player.
+program "ordinary-revival-speed" context actor {
+    let increased = quantity(25, unit.percentage_points);
+    effect "speed" = contribute(player, stat.revival.speed_increased, increase, increased);
+}

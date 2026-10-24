@@ -1,4 +1,4 @@
-// Initial membership in the reviewed 34-type support-preparation vocabulary.
+// Generic mechanics channels allocated by this single authoring transaction.
 // Evidence: ../../initial-skill-types/evidence.json
 definitions game="poe2" version="owned-mechanics-v1" {
     stat "stat.initial_skill_type.area" type="boolean" { target "skill"; }
@@ -71,4 +71,7 @@ definitions game="poe2" version="owned-mechanics-v1" {
     stat "stat.initial_minion_type.usable_while_shapeshifted" type="boolean" { target "skill"; }
     stat "stat.initial_minion_types_present" type="boolean" { target "skill"; }
     stat "stat.cannot_be_supported" type="boolean" { target "skill"; }
+    stat "stat.revival.enabled" type="boolean" { target "skill"; target "actor"; }
+    stat "stat.revival.base_override" type="quantity" unit="unit.seconds" { target "skill"; target "actor"; }
+    stat "stat.revival.speed_increased" type="quantity" unit="unit.percentage_points" { target "skill"; target "actor"; }
 }

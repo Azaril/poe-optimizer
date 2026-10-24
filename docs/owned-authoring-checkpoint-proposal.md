@@ -40,7 +40,7 @@ the [canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md), the
 build against that exact predecessor:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37 --output next-checkpoint
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 71ff4429b7fcfb4f75e45d9c58df878453cb25428542d3531074fc08fccbba91 --output next-checkpoint
 ```
 
 Use `--bootstrap` only to start an independent allocation history. It must not
@@ -54,7 +54,7 @@ last directory. A failed predecessor load never falls back to bootstrap.
 To validate a transported checkpoint independently of its sources and ancestors:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release verify canonical-checkpoint --expected 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release verify canonical-checkpoint --expected 71ff4429b7fcfb4f75e45d9c58df878453cb25428542d3531074fc08fccbba91
 ```
 
 Supply the expected identity of the directory being verified from a maintained
@@ -65,7 +65,7 @@ alone is insufficient: the exact ledger and complete runtime inventory are requi
 This verifies a snapshot, not its source reproducibility or any build's coverage.
 An archive transports the unchanged directory. Each new canonical allocation
 generation must publish another complete checked snapshot; the current snapshot
-already includes the first subsequent allocation.
+includes 73 names, preserving the prior 70 and appending three revival channels.
 
 An optional `stat-declarations "definitions.kdl" names="declaration-names.kdl"`
 manifest record uses the existing bounded source decoder, KDL declaration parser
@@ -87,9 +87,12 @@ equal its identity. The ledger identity is a separate commitment.
 
 ## Canonical allocation snapshot
 
-The first production declaration slice establishes one genesis checkpoint with
+The first production declaration slice established one genesis checkpoint with
 69 allocated Skill Stats. The support-prohibition checkpoint preserves those
-bindings and appends the seventieth. The earlier empty-ledger checkpoint is
+bindings and appends the seventieth. The current revival checkpoint preserves all
+70 and appends three generic Skill/Actor Stats. The same `mechanics.kdl`
+declaration component and atomic publication transaction own these allocations;
+no parallel ledger or allocation step is introduced. The earlier empty-ledger checkpoint is
 verification evidence, not allocation authority. The [canonical reference](../data/owned/poe2/3887ae68/authoring-genesis.md)
 pins a complete immutable snapshot and its checkpoint/archive identities outside
 the compiled manifest inventory, avoiding a self-referential receipt.
@@ -99,6 +102,10 @@ A clean clone extracts it and validates the exact expected identity through the
 normal checked checkpoint loader. No historical compiler, ancestor checkpoint,
 source checkout or machine-local ledger is needed. Standard archive transport
 wraps the existing complete checkpoint directory and adds no semantic format.
+The current snapshot and its checked source replay preserve all eighteen runtime
+files and the name ledger byte-for-byte. The [revival component evidence](../data/owned/poe2/3887ae68/revival-producers/README.md)
+keeps incoming coverage and final duration unresolved; publication success does
+not promote those partial mechanics or complete any original build (0/5).
 
 Current source builds use the checked snapshot as their explicit predecessor.
 Never bootstrap evolving source to reconstruct allocation history or substitute
@@ -161,6 +168,8 @@ inherited content must come from the actual fully checked evaluation owner.
 Atomic nested publication, checked explicit-predecessor loading and allocating CLI
 integration are implemented. Mutable-head promotion is separate future work.
 That compiler checkpoint did not add production gameplay declarations or complete
-the first original build. The subsequent first-genesis slice adds the initial
-Skill type declarations described above, while retaining Partial rule coverage
-and the same incomplete-build admission result.
+the first original build. Subsequent declarations add initial Skill types, support
+prohibition and revival producers, while retaining Partial rule coverage and the
+same incomplete-build admission result. The three revival queries resolve their
+new Stat names within that same compile; their source census and final consumer
+remain follow-up work.

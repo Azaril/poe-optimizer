@@ -1,0 +1,5 @@
+// Shared body for distinct exact nodes28573 and44255. Do not merge occurrences.
+program "ordinary-revival-speed" context actor {
+    let increased = quantity(5, unit.percentage_points);
+    effect "speed" = contribute(player, stat.revival.speed_increased, increase, increased);
+}

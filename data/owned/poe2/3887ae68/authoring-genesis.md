@@ -1,26 +1,26 @@
 # Canonical authoring checkpoint
 
-This complete immutable snapshot preserves all 70 named Stat allocations
+This complete immutable snapshot preserves all 73 named Stat allocations
 alongside their checked runtime. It is outside the compiled manifest inventory
 to avoid a self-referential receipt. A clean clone can load it directly; no
 historical source rebuild or prior local output is required.
 
 | Commitment | Value |
 | --- | --- |
-| Archive | `authoring-checkpoints/5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37.zip` |
-| Archive bytes | 1,441,115 |
-| Archive SHA-256 | `7618ec1fd10f7e7e4b46a2865d988ce37cba829f42047a37f863a3ef4ceef72f` |
-| Checkpoint identity | `5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37` |
-| Name-ledger identity | `c1eb716472a8af62a998ddf1319fd9bff580e0558b3b95f14f302b9b6f83375c` |
-| Registry identity | `e997d7222de1e153706c9fd9c1003568f8c7a3b766112c250f3c8fc677dde8d1` |
-| Runtime input identity | `9d9e3326f0a6fdf211f48df8d2813e61f8550012c5ed131ab7e3242d38fae838` |
+| Archive | `authoring-checkpoints/71ff4429b7fcfb4f75e45d9c58df878453cb25428542d3531074fc08fccbba91.zip` |
+| Archive bytes | 1,442,323 |
+| Archive SHA-256 | `fc1f557b37c1318b5a89842755fa1faf2052d34e24405dcd20f4289caeeccd6f` |
+| Checkpoint identity | `71ff4429b7fcfb4f75e45d9c58df878453cb25428542d3531074fc08fccbba91` |
+| Name-ledger identity | `9e2c57cce54eb76422fd49cf3d259b51e0477a47212ed1a29817ebe7345cebc1` |
+| Registry identity | `2ba7a660227ce8c10acfa8e1194c4ff08078367290313862e0037b544adbbd80` |
+| Runtime input identity | `f94b745619f5a1b4fd40339289b5a62edfe3d103ff4bca69d0ca7393557a9d66` |
 
 From the repository root, with fresh output paths:
 
 ```powershell
-Expand-Archive -LiteralPath data/owned/poe2/3887ae68/authoring-checkpoints/5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37.zip -DestinationPath canonical-checkpoint
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release verify canonical-checkpoint --expected 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37 --output rebuilt-checkpoint
+Expand-Archive -LiteralPath data/owned/poe2/3887ae68/authoring-checkpoints/71ff4429b7fcfb4f75e45d9c58df878453cb25428542d3531074fc08fccbba91.zip -DestinationPath canonical-checkpoint
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release verify canonical-checkpoint --expected 71ff4429b7fcfb4f75e45d9c58df878453cb25428542d3531074fc08fccbba91
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 71ff4429b7fcfb4f75e45d9c58df878453cb25428542d3531074fc08fccbba91 --output rebuilt-checkpoint
 ```
 
 The archive contains `checkpoint.json`, `names.json` and the eighteen files in
@@ -37,24 +37,26 @@ Tracked-source arithmetic mutations and new declarations preserve that ledger;
 synthetic bootstrap tests separately exercise first allocation. The transport
 library is not a production or native evaluation dependency.
 
-The support-prohibition checkpoint extends the prior 69-name ledger by exactly
-one generic Boolean Skill Stat. The new name sorts before existing names but its
-ID appends after the saved registry history. The original 69 bindings remain
-unchanged. This snapshot replaces the previous archive; its recorded predecessor
-digest is provenance and does not require loading an ancestor.
+The revival checkpoint preserves the prior 70 bindings and appends exactly three
+generic Skill/Actor Stats. The earlier support-prohibition allocation likewise
+preserved the original 69 bindings despite its earlier-sorting name. The saved
+ledger determines identity history. This snapshot replaces the previous archive;
+its recorded predecessor digest is provenance and does not require an ancestor.
+The [revival producers](revival-producers/README.md) add component contributions,
+while source census, final duration and complete-build coverage remain unresolved.
 
 Verified on October 24, 2026: the extracted predecessor passed complete checkpoint
 validation, then current tracked source built and independently verified successor
-`be066899ebfaee7bc4f4ed3627b454591498306d17a4a4285dc6ce626a42550f` with the
+`dd2d337ab5ce1f0970a0644491636aa6d710895e3beb804dce5f8368da63a5f8` with the
 same semantic runtime input, ledger and registry. Its eighteen runtime files
-total 53,647,754 bytes. All eighteen runtime files and the name ledger replay
+total 53,655,992 bytes. All eighteen runtime files and the name ledger replay
 byte-for-byte, with no further allocation. Evidence is recorded in
-`runs/contribution-query-debug-verify.json`,
-`runs/contribution-query-checkpoint-verified.json` and
-`runs/contribution-query-replay-equivalence.json`; those local files are not inputs.
-Named KDL contribution sources change the source commitment, with no new names
-or runtime behavior. This source-only successor needs no replacement allocation
-archive; the canonical snapshot above remains the explicit predecessor.
+`runs/revival-producers-extracted-verified.json`,
+`runs/revival-producers-replay-verified.json`,
+`runs/revival-producers-replay-equivalence.json` and
+`runs/revival-producers-archive.json`; those local files are not inputs.
+Replay changes the checkpoint's predecessor commitment without allocating more
+names or changing runtime bytes. The snapshot above remains the explicit predecessor.
 
 Archive transport is not a second semantic format, a source-reproduction proof
 or the planned indexed binary runtime pack. Future canonical allocation

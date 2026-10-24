@@ -1,0 +1,46 @@
+// Explicit known members, NOT a closed incoming-source census or a ready consumer.
+// false/zero are mandatory fold identities; Partial membership prevents their use
+// as asserted absence, default facts, or a complete result.
+queries game="poe2" version="owned-mechanics-v1" coverage="partial" {
+    gap subject="stat.revival.enabled" facet="game_rules" code="revival-query-domain-unproved"
+    query "revival-enabled" stat="stat.revival.enabled" contribution="flag" {
+        group "sources" reduction="any" ordering="unordered" coverage="partial" {
+            empty type="boolean" value="false"
+            member "program_effect" owner="skill.sniper_skill" program="intrinsic-revival" effect="reviving" {
+                origin kind="skill" authored="false" {
+                    supply "skill_grant_slot.sniper_primary_skill"
+                }
+            }
+            gap subject="stat.revival.enabled" facet="game_rules" code="revival-flag-incoming-sources-unproved"
+        }
+    }
+    query "revival-base" stat="stat.revival.base_override" contribution="override" {
+        group "sources" reduction="require_agreement" ordering="unordered" coverage="partial" {
+            member "program_effect" owner="skill.sniper_skill" program="intrinsic-revival" effect="base-duration" {
+                origin kind="skill" authored="false" {
+                    supply "skill_grant_slot.sniper_primary_skill"
+                }
+            }
+            gap subject="stat.revival.base_override" facet="game_rules" code="revival-base-incoming-sources-unproved"
+        }
+    }
+    query "revival-increased" stat="stat.revival.speed_increased" contribution="increase" {
+        group "sources" reduction="sum" ordering="ordered" coverage="partial" {
+            empty type="quantity" value="0" unit="unit.percentage_points"
+            member "program_effect" owner="passive_node.minion_revive_speed.a" program="ordinary-revival-speed" effect="speed" {
+                origin kind="allocation"
+                order source="0" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.restless_dead" program="ordinary-revival-speed" effect="speed" {
+                origin kind="allocation"
+                order source="1" program="0" effect="0"
+            }
+            member "program_effect" owner="passive_node.minion_revive_speed.b" program="ordinary-revival-speed" effect="speed" {
+                origin kind="allocation"
+                order source="2" program="0" effect="0"
+            }
+            gap subject="stat.revival.speed_increased" facet="game_rules" code="revival-speed-incoming-sources-unproved"
+            gap subject="stat.revival.speed_increased" facet="game_rules" code="revival-numeric-order-domain-unproved"
+        }
+    }
+}

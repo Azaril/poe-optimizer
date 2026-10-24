@@ -55,7 +55,10 @@ allocation snapshot remains valid because this source-format change adds no
 allocations or runtime semantics. The maintained historical corpus is independent
 evidence; a converter or previous source layout is not a normal build dependency.
 
-The first subsequent consumer is revival. Its source review and missing contributor
-authority remain separate work: a symbolic query can represent a new Stat without
-establishing that all gameplay sources have been converted. See the
+Revival producers are the first production use of same-build Stat allocation and
+query lowering. Their shared Skill/Actor channels retain exact recipient identity;
+local and inherited sources do not need duplicate Stat definitions. All incoming
+groups remain Partial until their source census is proved. A symbolic query can
+represent a new Stat without establishing that all gameplay sources have been
+converted or that a final duration may execute. See the
 [implementation plan](implementation.md) for the current validation and resume point.

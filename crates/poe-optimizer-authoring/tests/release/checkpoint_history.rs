@@ -23,7 +23,7 @@ fn tracked_source_addition_and_replay_preserve_the_published_allocation_history(
     let mut changed = tracked_sources().clone();
     // The manifest has one declaration source. Extend it as an author would,
     // rather than introducing a second declaration component.
-    const DECLARATIONS: &str = "declarations/initial-skill-types.kdl";
+    const DECLARATIONS: &str = "declarations/mechanics.kdl";
     let mut declarations = changed.text(DECLARATIONS).to_owned();
     declarations.insert_str(
         declarations.rfind('}').unwrap(),

@@ -1,0 +1,12 @@
+// All numeric addresses below are EXISTING checked identities, not new allocations.
+// The two small nodes have the same game name; a/b distinguish exact source records.
+names game="poe2" version="owned-mechanics-v1" {
+    unit "unit.seconds" key="def.0000000000000005"
+    unit "unit.percentage_points" key="def.0000000000000002"
+    gem "gem.sniper_gem" key="def.0000000000000011"
+    skill "skill.sniper_skill" key="def.0000000000000012"
+    skill_grant_slot "skill_grant_slot.sniper_primary_skill" key="def.0000000000000016" owner="gem.sniper_gem"
+    passive_node "passive_node.restless_dead" key="def.00000000000012f4"
+    passive_node "passive_node.minion_revive_speed.a" key="def.0000000000000f9f"
+    passive_node "passive_node.minion_revive_speed.b" key="def.0000000000001476"
+}

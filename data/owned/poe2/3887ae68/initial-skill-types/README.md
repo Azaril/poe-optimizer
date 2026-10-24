@@ -46,13 +46,14 @@ initial facts must remain distinct from its parent's prepared support context.
 Only Sniper receives a maintained producer in this checkpoint. The other rows
 are evidence and component-test controls, not production coverage declarations.
 
-The [declarations](../migration-source/declarations/initial-skill-types.kdl)
+The [declarations](../migration-source/declarations/mechanics.kdl)
 allocate 69 shared Boolean Stats targeting Skill: 34
 `stat.initial_skill_type.<key>` memberships, 34
 `stat.initial_minion_type.<key>` memberships, and
-`stat.initial_minion_types_present`. The [names input](../migration-source/names/initial-skill-types.kdl)
-contains only the namespace; the existing declaration allocator supplies the
-new addresses. Sniper's program has an explicit derive for every Stat, using
+`stat.initial_minion_types_present`. The [names input](../migration-source/names/mechanics-declarations.kdl)
+contains the namespace and existing unit bindings for the shared declaration
+document; the declaration allocator supplies all new Stat addresses. Sniper's
+program has an explicit derive for every initial-type Stat, using
 two shared Boolean literals. The values describe initial source facts before
 support preparation; they contain no observed admission or final type results.
 

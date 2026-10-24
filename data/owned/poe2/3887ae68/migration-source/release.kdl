@@ -1,6 +1,6 @@
 // Checked source manifest. Rule programs are authored only in the declared DSL files.
-release expected_input="9d9e3326f0a6fdf211f48df8d2813e61f8550012c5ed131ab7e3242d38fae838" {
-    stat-declarations "declarations/initial-skill-types.kdl" names="names/initial-skill-types.kdl"
+release expected_input="f94b745619f5a1b4fd40339289b5a62edfe3d103ff4bca69d0ca7393557a9d66" {
+    stat-declarations "declarations/mechanics.kdl" names="names/mechanics-declarations.kdl"
     rule-source "rules/initial-skill-types/skeletal-sniper.rule"
     rule-source "rules/support-prohibition/skeletal-sniper.rule"
     contribution-queries "contribution-queries/group-000.kdl" names="names/contribution-queries-000.kdl"
@@ -2688,4 +2688,9 @@ release expected_input="9d9e3326f0a6fdf211f48df8d2813e61f8550012c5ed131ab7e3242d
     rule-source "rules/water-child-5-supply/2ed18b7d555b11b5.rule"
     rule-source "rules/water-command-supply/56f1d1f928f69e90.rule"
     rule-source "rules/water-tree-raw-supply/c9ef6d35f7b35b59.rule"
+    rule-source "rules/revival/sniper-intrinsic.rule"
+    rule-source "rules/revival/restless-dead.rule"
+    rule-source "rules/revival/small-revival-speed.rule"
+    rule-packet "packets/revival-producers.kdl" names="names/revival-producers.kdl"
+    contribution-queries "contribution-queries/revival-producers.kdl" names="names/revival-producers.kdl"
 }

@@ -2,7 +2,7 @@
 
 Updated 2026-10-24. The [architecture](domain-architecture.md) defines the accepted
 end state; [implementation](implementation.md) records what is delivered. This
-page explains the distinction. **The tracked DSL program cutover is validated;
+page explains the distinction. **The tracked DSL program and named query cutovers are validated;
 broader declaration and runtime migration remain ahead. 0/5 supplied
 originals complete natively.**
 
@@ -87,14 +87,23 @@ composes all declared packets before its single checked publication transaction.
 Broader definition declarations remain pending; typed Stat declarations now use
 the same manifest and publication transaction.
 
-The current checkpoint adds [named contribution-query authoring](authoring-contribution-queries.md),
-with migration and validation still in progress. KDL fragments describe exact
+The maintained compiler supports [named contribution-query authoring](authoring-contribution-queries.md).
+All 117 current queries are authored in five bounded KDL fragments, including the
+three new revival queries. KDL describes exact
 contribution channels, producers, groups, reducers, ordering and coverage. They
 resolve against the final schema after Stat allocation, using each fragment's
 own aliases plus the current declarations. A formula and its query can therefore
 refer to a newly declared Stat in one transaction without predicting its ID or
 publishing the ledger first. Lowering produces the existing typed query DTOs;
 the ordinary storage and Engine validators still check the complete graph.
+The 73-name ledger preserves its prior 70 bindings and appends three generic
+Skill/Actor channels through the existing shared `declarations/mechanics.kdl`
+component. The [revival producers](../data/owned/poe2/3887ae68/revival-producers/README.md)
+use those channels for Sniper's intrinsic true flag and twelve-second override,
+plus three independent Player passive speed contributions. Exact source and
+recipient ownership remain explicit. Incoming membership, numeric ordering and
+final revival duration remain incomplete; these component facts do not complete
+Sniper's owner or make an original build executable.
 
 Stable naming now has an in-memory staged transaction API. `NamedIdRegistry`
 wraps the single existing Import allocator; `NamesInput` stores its exact registry
@@ -149,7 +158,7 @@ verify the persisted allocation predecessor using the
 then run:
 
 ```text
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37 --output rebuilt-release
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 71ff4429b7fcfb4f75e45d9c58df878453cb25428542d3531074fc08fccbba91 --output rebuilt-release
 ```
 
 The output directory must not exist and its parent must exist. Runtime consumers
@@ -160,8 +169,12 @@ source rebuild command. Successful publication prints the identity to stderr and
 checkpoint receipt JSON to stdout. Optional `stat-declarations "definitions.kdl"
 names="declaration-names.kdl"` declares new Stats in the same bounded inventory.
 The completed program-source cutover has complete corpus and historical artifact
-gates. The contribution-query source migration preserves all eighteen runtime
-files and the name ledger exactly in a verified CLI rebuild. The command reuses the existing typed release
+gates. The named-query syntax migration preserved the prior query semantics;
+current revival checkpoint replay reproduces all eighteen runtime files and the
+73-name ledger exactly. Historical restoration removes only the admitted 73 Stats,
+six program occurrences, three revival queries and their new outer gap, and 350
+intrinsic support-domain declarations before checking the original evidence.
+The command reuses the existing typed release
 assembler; it does not call test staging helpers, replay the old publication chain
 or provide a second semantic checker.
 
@@ -253,7 +266,9 @@ tests restore only archived program members into a copy of the new input and use
 the existing assembler to check unchanged metadata, provenance and other artifacts.
 These migration gates pass without introducing an alternate release reader.
 
-The retained source release has no evaluation bundle and does not add rule coverage.
+The retained source release has no evaluation bundle. Added component producers
+retain Partial owner and incoming-query coverage; they do not establish a complete
+source census or final revival result.
 **No supplied original is complete natively (0/5).** Rebuilding its release is a
 reproducibility step toward the new-format first build, not that build's completion.
 

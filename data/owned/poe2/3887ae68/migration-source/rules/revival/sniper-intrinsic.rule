@@ -1,0 +1,8 @@
+// act_int18677-18799 + SkillStatMap2690-2696, with actual construction proof.
+// The packet attaches this only to the exact reviewed Skill definition.
+program "intrinsic-revival" context skill {
+    let reviving = true;
+    let base_seconds = quantity(12, unit.seconds);
+    effect "reviving" = contribute(current, stat.revival.enabled, flag, reviving);
+    effect "base-duration" = contribute(current, stat.revival.base_override, override, base_seconds);
+}

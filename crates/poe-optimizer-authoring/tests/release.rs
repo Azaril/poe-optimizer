@@ -56,6 +56,10 @@ mod originals;
 mod player_support_domains;
 #[path = "release/player_support_source.rs"]
 mod player_support_source;
+#[path = "release/revival_producers.rs"]
+mod revival_producers;
+#[path = "release/revival_source.rs"]
+mod revival_source;
 #[path = "release/root_support_domains.rs"]
 mod root_support_domains;
 #[path = "release/scalar_attributes.rs"]
@@ -1767,7 +1771,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     let current_artifacts: BTreeMap<_, _> = release.artifacts().collect();
 
     // Historical IR remains a test reference only. Authenticate the exact new
-    // producers, 70 Boolean channels and 350 support-source domains before
+    // producers, 73 generic channels and 350 support-source domains before
     // reconstructing old commitments through maintained APIs.
     let retained = fs::read(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/retained-rules.json.gz"),
@@ -1855,6 +1859,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         initial_skill_types::stat_names()
             .into_iter()
             .chain(support_prohibition::stat_names())
+            .chain(revival_producers::stat_names())
             .collect::<BTreeSet<_>>()
     );
     let additions: Vec<_> = allocation
@@ -1864,13 +1869,13 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         .iter()
         .map(|binding| binding.target.clone())
         .collect();
-    assert_eq!(additions.len(), 70);
+    assert_eq!(additions.len(), 73);
     let mut prior_schema = release.input().recipe.schema.clone();
     let before_count = prior_schema.definitions.len();
     prior_schema
         .definitions
         .retain(|row| !additions.contains(&SchemaSubject::Definition(row.address())));
-    assert_eq!(before_count - prior_schema.definitions.len(), 70);
+    assert_eq!(before_count - prior_schema.definitions.len(), 73);
     assert_eq!(
         &prior_schema,
         old_schema.input(),
@@ -1885,7 +1890,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         &current_registry.entries[..previous.entries.len()],
         previous.entries.as_slice()
     );
-    assert_eq!(current_registry.entries.len(), previous.entries.len() + 70);
+    assert_eq!(current_registry.entries.len(), previous.entries.len() + 73);
     for target in &additions {
         assert_eq!(
             current_registry.entries[previous.entries.len()..]
@@ -1919,7 +1924,7 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     assert!(
         new_bindings
             .iter()
-            .all(|binding| binding.name == support_prohibition::SYMBOL)
+            .all(|binding| revival_producers::stat_names().contains(&binding.name))
     );
     assert_eq!(
         current_registry.entries[predecessor_registry.entries.len()..]
@@ -1943,26 +1948,87 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     let mut restored = release.input().clone();
     restored.recipe.rules = parts.rules.into_input(&old_schema);
     let admitted_owner = initial_skill_types::owner();
-    let admitted_programs =
-        BTreeSet::from([initial_skill_types::PROGRAM, support_prohibition::PROGRAM]);
-    let mut removed = BTreeSet::new();
+    let revival_names = load_names(
+        source.text("names/revival-producers.kdl"),
+        release.assembled().schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let mut admitted_programs = vec![
+        (
+            admitted_owner.clone(),
+            initial_skill_types::PROGRAM.to_owned(),
+        ),
+        (
+            admitted_owner.clone(),
+            support_prohibition::PROGRAM.to_owned(),
+        ),
+        (admitted_owner, "intrinsic-revival".to_owned()),
+    ];
+    for name in [
+        "passive_node.restless_dead",
+        "passive_node.minion_revive_speed.a",
+        "passive_node.minion_revive_speed.b",
+    ] {
+        let address = (
+            SchemaSubject::Definition(revival_names.definition(name).unwrap().clone()),
+            "ordinary-revival-speed".to_owned(),
+        );
+        assert!(!admitted_programs.contains(&address));
+        admitted_programs.push(address);
+    }
+    let mut removed = Vec::new();
     for row in &mut restored.recipe.rules.owners {
         row.programs.members.retain(|program| {
-            let admitted =
-                row.owner == admitted_owner && admitted_programs.contains(program.id.as_str());
+            let address = (row.owner.clone(), program.id.as_str().to_owned());
+            let admitted = admitted_programs.contains(&address);
             if admitted {
-                assert!(removed.insert(program.id.as_str().to_owned()));
+                assert!(!removed.contains(&address));
+                removed.push(address);
             }
             !admitted
         });
     }
-    assert_eq!(
-        removed,
+    assert_eq!(removed.len(), admitted_programs.len());
+    assert!(
         admitted_programs
-            .into_iter()
-            .map(str::to_owned)
-            .collect::<BTreeSet<_>>(),
+            .iter()
+            .all(|address| removed.contains(address)),
         "exact admitted producer addresses"
+    );
+    let queries = restored.recipe.rules.contribution_queries.as_mut().unwrap();
+    let revival_queries = BTreeSet::from([
+        "revival-enabled".to_owned(),
+        "revival-base".to_owned(),
+        "revival-increased".to_owned(),
+    ]);
+    let mut removed_queries = BTreeSet::new();
+    queries.members.retain(|query| {
+        let remove = revival_queries.contains(query.id.as_str());
+        if remove {
+            assert!(removed_queries.insert(query.id.as_str().to_owned()));
+        }
+        !remove
+    });
+    assert_eq!(removed_queries, revival_queries);
+    let poe_optimizer_core::owned_schema::SchemaClosure::Partial { gaps } = &mut queries.closure
+    else {
+        panic!("the incoming query census remains partial")
+    };
+    let revival_flag = allocation
+        .names()
+        .input()
+        .bindings
+        .iter()
+        .find(|binding| binding.name == "stat.revival.enabled")
+        .unwrap();
+    assert_eq!(
+        gaps.pop().unwrap(),
+        poe_optimizer_core::owned_schema::SchemaGap {
+            subject: revival_flag.target.clone(),
+            facet: poe_optimizer_core::owned_schema::SchemaFacet::GameRules,
+            code: OwnedDefinitionKey::new("revival-query-domain-unproved").unwrap(),
+        }
     );
     let domains = &mut restored
         .recipe

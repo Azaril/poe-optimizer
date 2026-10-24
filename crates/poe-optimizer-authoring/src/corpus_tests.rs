@@ -512,6 +512,62 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
     }
     let packet_count = packets.len();
     let mut used_sources = BTreeSet::new();
+    // A reviewed addition can live in its own packet without creating a second
+    // historical grouping. Admit its exact owner/program/source tuples, not a
+    // wildcard packet family or any program with the same local ID.
+    let revival_path = "packets/revival-producers.kdl";
+    let revival_names = packets.remove(revival_path).unwrap();
+    assert_eq!(revival_names, "names/revival-producers.kdl");
+    let revival_symbols = load_names(
+        std::str::from_utf8(&owned[&revival_names]).unwrap(),
+        schema,
+        NamesLimits::default(),
+    )
+    .unwrap();
+    let revival_packet = parse_packet(
+        std::str::from_utf8(&owned[revival_path]).unwrap(),
+        &revival_symbols,
+        ManifestLimits::default(),
+    )
+    .unwrap();
+    let passive = |suffix| {
+        SchemaSubject::Definition(DefinitionAddress::PassiveNode(PassiveNodeDefId::new(
+            schema.namespace().clone(),
+            OwnedDefinitionKey::new(format!("def.000000000000{suffix}")).unwrap(),
+        )))
+    };
+    let revival_additions = [
+        (
+            additions_owner.clone(),
+            "intrinsic-revival",
+            "rules/revival/sniper-intrinsic.rule",
+        ),
+        (
+            passive("12f4"),
+            "ordinary-revival-speed",
+            "rules/revival/restless-dead.rule",
+        ),
+        (
+            passive("0f9f"),
+            "ordinary-revival-speed",
+            "rules/revival/small-revival-speed.rule",
+        ),
+        (
+            passive("1476"),
+            "ordinary-revival-speed",
+            "rules/revival/small-revival-speed.rule",
+        ),
+    ];
+    assert_eq!(revival_packet.appends.len(), revival_additions.len());
+    for (append, (owner, program, source)) in revival_packet.appends.iter().zip(&revival_additions)
+    {
+        assert_eq!(&append.owner, owner);
+        assert_eq!(append.programs.len(), 1);
+        assert_eq!(append.programs[0].id.as_str(), *program);
+        assert_eq!(append.programs[0].source, *source);
+        assert!(declared_sources.contains(*source));
+        used_sources.insert((*source).to_owned());
+    }
     let mut after = original.clone();
     for owner in &mut after.owners {
         owner.programs.members.clear();
@@ -643,7 +699,7 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
     }
     assert!(
         packets.is_empty(),
-        "every tracked packet must match an original owner group"
+        "every packet must be an original group or the exact reviewed addition"
     );
     assert_eq!(
         used_sources, declared_sources,
@@ -667,10 +723,18 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
     );
     let mut preserved = actual.clone();
     let mut removed = BTreeSet::new();
+    let mut removed_revival = Vec::new();
     for owner in &mut preserved.owners {
         owner.programs.members.retain(|program| {
             if owner.owner == additions_owner && reviewed_ids.contains(&program.id) {
                 assert!(removed.insert(program.id.clone()));
+                false
+            } else if let Some(index) = revival_additions
+                .iter()
+                .position(|(subject, id, _)| &owner.owner == subject && program.id.as_str() == *id)
+            {
+                assert!(!removed_revival.contains(&index));
+                removed_revival.push(index);
                 false
             } else {
                 true
@@ -678,6 +742,44 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
         });
     }
     assert_eq!(removed, reviewed_ids);
+    assert_eq!(removed_revival.len(), revival_additions.len());
+    let queries = preserved.contribution_queries.as_mut().unwrap();
+    let revival_query_ids = BTreeSet::from([
+        "revival-enabled".to_owned(),
+        "revival-base".to_owned(),
+        "revival-increased".to_owned(),
+    ]);
+    let mut removed_queries = BTreeSet::new();
+    queries.members.retain(|query| {
+        if revival_query_ids.contains(query.id.as_str()) {
+            assert!(removed_queries.insert(query.id.as_str().to_owned()));
+            false
+        } else {
+            true
+        }
+    });
+    assert_eq!(removed_queries, revival_query_ids);
+    let SchemaClosure::Partial { gaps } = &mut queries.closure else {
+        panic!("the incoming query inventory remains partial")
+    };
+    let allocated = release
+        .name_allocation()
+        .names()
+        .symbols(schema, SymbolLimits::default())
+        .unwrap();
+    assert_eq!(
+        gaps.pop().unwrap(),
+        SchemaGap {
+            subject: SchemaSubject::Definition(
+                allocated
+                    .definition("stat.revival.enabled")
+                    .unwrap()
+                    .clone(),
+            ),
+            facet: SchemaFacet::GameRules,
+            code: OwnedDefinitionKey::new("revival-query-domain-unproved").unwrap(),
+        }
+    );
     // Independently pin the admitted metadata additions. All prior rows and
     // every other metadata field still undergo whole-package equality below.
     let ns = schema.namespace();

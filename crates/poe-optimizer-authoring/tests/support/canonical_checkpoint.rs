@@ -12,9 +12,9 @@ use std::{
 };
 use zip::ZipArchive;
 
-const IDENTITY: &str = "5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37";
-const ARCHIVE_SHA256: &str = "7618ec1fd10f7e7e4b46a2865d988ce37cba829f42047a37f863a3ef4ceef72f";
-const ARCHIVE_BYTES: usize = 1_441_115;
+const IDENTITY: &str = "71ff4429b7fcfb4f75e45d9c58df878453cb25428542d3531074fc08fccbba91";
+const ARCHIVE_SHA256: &str = "fc1f557b37c1318b5a89842755fa1faf2052d34e24405dcd20f4289caeeccd6f";
+const ARCHIVE_BYTES: usize = 1_442_323;
 const ENTRIES: [&str; 20] = [
     "checkpoint.json",
     "names.json",

@@ -110,7 +110,7 @@ First extract and verify the current allocation checkpoint using the
 Then build current source into a fresh directory:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37 --output rebuilt-checkpoint
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 71ff4429b7fcfb4f75e45d9c58df878453cb25428542d3531074fc08fccbba91 --output rebuilt-checkpoint
 ```
 
 The output contains `checkpoint.json`, `names.json` and the closed `runtime/`
@@ -119,8 +119,10 @@ The command writes the checkpoint receipt to stdout and prints its checkpoint
 identity on stderr. Later checkpoints can be selected explicitly with their
 reported identity; predecessor selection is never implicit.
 
-The current declaration checkpoint contains 70 generic Skill Boolean Stats and
-Sniper's initial-type and support-prohibition producers. Use that complete snapshot
+The current declaration checkpoint contains 73 generic Stats: the initial Skill
+Boolean vocabulary plus three Skill/Actor revival channels. Sniper's initial-type,
+support-prohibition and intrinsic revival producers, and three exact passive
+revival-speed producers, retain Partial coverage. Use that complete snapshot
 as the checked predecessor for later source builds; do not bootstrap evolving
 sources. New allocation generations must distribute another complete checked
 snapshot, preserving the prior ledger without requiring historical replay.

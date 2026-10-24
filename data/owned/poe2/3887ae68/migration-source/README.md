@@ -6,10 +6,10 @@ allocation predecessor using the [canonical reference](../authoring-genesis.md),
 then build into a fresh output directory:
 
 ```powershell
-cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 5f77a8f22888bd946d273a7376c92fe9838535b770dff5a58d6996aa04662a37 --output rebuilt-release
+cargo run --locked -p poe-optimizer-authoring --bin poe-author -- release build data/owned/poe2/3887ae68/migration-source/release.kdl --predecessor canonical-checkpoint --expected-predecessor 71ff4429b7fcfb4f75e45d9c58df878453cb25428542d3531074fc08fccbba91 --output rebuilt-release
 ```
 
-The canonical snapshot preserves the current 70-name allocation ledger. Source builds use that checked checkpoint with
+The canonical snapshot preserves the current 73-name allocation ledger. Source builds use that checked checkpoint with
 `--predecessor` and `--expected-predecessor`; do not bootstrap evolving sources.
 The output contains `checkpoint.json`, `names.json` and `runtime/`. Runtime
 consumers receive `rebuilt-release/runtime`. The [canonical reference](../authoring-genesis.md)
@@ -23,12 +23,13 @@ slot bindings include their declaration owner. Reusing a complete source file
 does not merge its occurrences or their recipients. Identical program IDs alone
 never justify sharing a body.
 
-All 114 contribution queries live in the four declared `contribution-queries/`
+All 117 contribution queries live in the five declared `contribution-queries/`
 KDL files. Their names resolve after Stat allocation in the same build as rule
 programs; no separate allocation step or predicted identifier is needed. Exact
 source authority, member order, reducers, empty values and coverage remain in
-these files. The first fragment retains the outer Partial gap; all 45 partial
-groups retain their own gaps. Composition uses the existing runtime query model
+these files. The original and revival fragments retain both outer Partial gaps;
+all 48 partial groups retain their own gaps. The 123 groups contain 2,122 members.
+Composition uses the existing runtime query model
 and final validators, not another evaluator.
 
 The compressed `bootstrap/rules.json.gz` contains only rule metadata: owner and
@@ -54,8 +55,10 @@ actual tracked aliases, packets and DSL. Its independent comparator permits
 node renaming, retains read/operand/effect semantics and order, checks exact
 owner membership, and compiles the complete reconstructed rule package with the
 existing Engine. Non-program metadata and all incomplete-coverage declarations
-must remain unchanged except for the explicitly admitted 70 Stat declarations,
-two Sniper initial-type/support-prohibition programs and 350 intrinsic support-domain declarations.
+must remain unchanged except for the explicitly admitted 73 Stat declarations,
+six program occurrences, three revival queries with one new outer gap, and 350
+intrinsic support-domain declarations. The six programs comprise Sniper's initial
+types, support prohibition and intrinsic revival, plus three passive revival sources.
 The release test removes exactly that delta,
 restores historical program members and uses checked content constructors to bind
 the original dependencies. Complete historical schema meaning and semantic receipt
@@ -63,7 +66,7 @@ fields must match. Every non-schema, non-manifest artifact remains byte-exact;
 restoring only the old schema row must reproduce the original manifest size/hash.
 New schema wire commitments are asserted separately, without an old encoder.
 New semantic schema/registry identities change dependent artifact bindings;
-unchanged query payloads remain byte-exact.
+the retained historical query payloads remain byte-exact.
 
 Historical reference identity (not the current DSL input):
 
@@ -74,9 +77,9 @@ Historical reference identity (not the current DSL input):
 
 ## Preserved scope and limitations
 
-The release has 13,334 active allocations, 9,461 schema definitions and
-3,873 slots. Rules have 6,550 owners, 8,214 program occurrences, 18 integer
-tables, 59 receivers, 114 contribution queries, one effect application and one
+The release has 13,337 active allocations, 9,464 schema definitions and
+3,873 slots. Rules have 6,550 owners, 8,218 program occurrences, 18 integer
+tables, 59 receivers, 117 contribution queries, one effect application and one
 existing-Actor binding. The five named query sets retain their original order
 and 22 queries each. The 227 provenance rows are unchanged metadata, not
 instructions to replay historical migrations.
@@ -87,6 +90,10 @@ initial own/minion type facts and explicit minion-context presence through gener
 Skill Boolean Stats. See [evidence and limits](../initial-skill-types/README.md).
 The next declaration adds the separately reviewed definition-level support
 prohibition; see its [source proof and limits](../support-prohibition/README.md).
+The [revival producers](../revival-producers/README.md) add three generic Skill/Actor
+channels, Sniper's intrinsic flag and twelve-second override, and three distinct
+Player passive contributions. Their three queries retain incomplete membership
+and numeric ordering; no final revival duration or complete source census is claimed.
 Eight existing Skill, Actor and declared-slot owners, three root/Ascendancy
 owners, four UsagePolicies, 293 ordinary attribute-choice passives, eighteen
 reviewed numeric minion passives, seven class-view passives, one intrinsic socket,
@@ -118,8 +125,8 @@ action supplies no native coverage.
 Inherited supports remain present, external origins remain independently checked,
 and all numerical Partial coverage stays unchanged. The support-domain metadata
 additions allocate no names or IDs; the separate Stat declarations do.
-This adds no whole-build coverage or numerical parity and
-does not make an incomplete build executable. The first complete unchanged
+No supplied original is complete natively (0/5). This adds no whole-build coverage
+or numerical parity and does not make an incomplete build executable. The first complete unchanged
 build remains gated on the remaining data/runtime migration and actual blockers.
 
 The two `contribute-inherent-strength-life` programs remain distinct: shared
@@ -137,11 +144,14 @@ serve as production names.
 
 ## Checked source inventory
 
-Current input: `9d9e3326f0a6fdf211f48df8d2813e61f8550012c5ed131ab7e3242d38fae838`.
-The 103 packets reference 2,563 distinct complete rule sources, preserving all
-8,214 occurrences. Their local name files use 5,011 distinct exact addresses;
-the declaration ledger adds 70 names. The four contribution-query fragments and
-their local names add no allocations. The 2,796 declared inputs occupy 6,720,948
-encoded and 46,018,221 decoded bytes; the root manifest is 184,029 bytes.
-All fit the existing default limits. The maintained Authoring tests check actual
-source graphs, historical artifacts and both new definition-level producers.
+Current input: `f94b745619f5a1b4fd40339289b5a62edfe3d103ff4bca69d0ca7393557a9d66`.
+The 104 packets reference 2,566 distinct complete rule sources, preserving all
+8,218 occurrences. Their local names bind exact existing addresses; the shared
+`declarations/mechanics.kdl` component declares the 73 Stats bound by the persisted
+name ledger. The five
+contribution-query fragments use those declarations without separate allocation.
+The 2,802 declared inputs occupy 6,726,652 encoded and 46,023,925 decoded bytes;
+the root manifest is 184,374 bytes. The eighteen runtime files occupy 53,655,992
+bytes, including the 19,774,085-byte schema; the checkpoint receipt and name ledger
+total 455,214 bytes. All fit the existing default limits. The maintained Authoring
+tests check actual source graphs, historical artifacts and the new component producers.
