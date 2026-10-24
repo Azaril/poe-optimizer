@@ -56,6 +56,13 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
     let expected_release = std::env::var("POE_OPTIMIZER_CONFIGURATION_INVENTORY_RELEASE_SHA")
         .expect("exact receipt commitment");
     let staged = load(Path::new(&package), &expected_input, &expected_release);
+    assert!(matches!(
+        staged.normalization().source_presentation,
+        Some(SourcePresentationPolicy::PobFreshPresentationV1 {
+            timeless_search_defaults: true,
+            ..
+        })
+    ));
     assert!(
         staged
             .normalization()
@@ -234,6 +241,18 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
             }
             assert!(links.contains(&owners[0]));
             assert!(links.contains(&OwnedOriginTarget::Issue(*id)));
+
+            let timeless = evidence
+                .rows()
+                .iter()
+                .find(|r| r.occurrence().name() == "TimelessData")
+                .unwrap();
+            let origin = &baseline.sidecar().origins[timeless.occurrence().id().ordinal() as usize];
+            assert_eq!(
+                origin.disposition,
+                SourceDisposition::SourceOnly(key("source-timeless-search-defaults"))
+            );
+            assert!(origin.links.is_empty());
         }
         for retained_control in [false, true] {
             let mut policy = staged.normalization().clone();
@@ -321,20 +340,18 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
                     .rows()
                     .iter()
                     .filter(|row| {
-                        matches!(
-                            row.occurrence().name(),
-                            "TimelessData" | "Config" | "ConfigSet" | "Calcs"
-                        ) || (row.occurrence().name() == "Input"
-                            && row.occurrence().parent().is_some_and(|parent| {
-                                evidence.rows()[parent.ordinal() as usize]
-                                    .occurrence()
-                                    .name()
-                                    == "Calcs"
-                            }))
+                        matches!(row.occurrence().name(), "Config" | "ConfigSet" | "Calcs")
+                            || (row.occurrence().name() == "Input"
+                                && row.occurrence().parent().is_some_and(|parent| {
+                                    evidence.rows()[parent.ordinal() as usize]
+                                        .occurrence()
+                                        .name()
+                                        == "Calcs"
+                                }))
                     })
                     .map(|row| row.occurrence().id())
                     .collect();
-                assert_eq!(expected.len(), 6);
+                assert_eq!(expected.len(), 5);
                 let remaining: Vec<_> = actual
                     .sidecar()
                     .origins

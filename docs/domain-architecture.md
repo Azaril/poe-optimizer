@@ -763,6 +763,14 @@ and inapplicability are distinct evidence within the same inventory transaction;
 neither implies the other. Missing, duplicate, surplus or foreign proofs refuse
 completion. A leaf proof does not settle outside-Config responsibilities or
 complete any Scenario output domain.
+Reviewed missing-source branches may prove no additional owned input, or retain
+their exact responsibility on the same Scenario's assumptions, usage or usage
+intents. Check absence across source lanes and preserve all actual members and
+Pending issues; a shared remaining field does not merge distinct source consumers.
+Use the existing complete census and atomic inventory transaction. Statistical
+and risk modes need measurement/output correspondence; they cannot be assigned
+to external assumptions merely because that inventory is unresolved. Mixed
+controls may require separate usage and measurement projections.
 The source census must cover installed defaults and direct or computed-key readers
 as well as saved leaves and apply callbacks. An absent Input/Placeholder can still
 select a real fallback, topology rule or parent-qualified child effect. Preserve
@@ -779,6 +787,13 @@ absence versus explicit false/zero values. Fresh-load witnesses establish only
 their admitted cases; they neither certify arbitrary saved searches nor imply
 warm-state equivalence. Whole-header receipts must join validated outputs to
 their actual character, allocation, skill, equipment and selection owners.
+An independently enabled source-presentation family may retain the strict default
+Timeless search preferences as source-only state. This does not describe an
+equipped jewel, a passive transformation or a native search objective. Admit only
+the reviewed four-field frame; extra saved fields and nondefault search intent
+remain unresolved. Creating an item from a search result is a separate source
+action, never an implicit import step. Reuse immutable frame checks and the same
+atomic disposition pass without borrowing reward completion or semantic links.
 Constructor redundancy alone does not classify a saved calculation-view selector
 as presentation-only: it can still choose a different Action or assumptions.
 Require checked query/scenario ownership or an explicitly reviewed reference-only

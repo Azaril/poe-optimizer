@@ -3,6 +3,7 @@ use super::source_shape::{charge_row, container_text, plain_row, value};
 use super::*;
 
 mod presentation_frames;
+mod timeless_search;
 mod trade_search;
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -31,6 +32,10 @@ pub enum SourcePresentationPolicy {
         /// Absence authorizes no disposition for this independent family.
         #[serde(default, skip_serializing_if = "is_false")]
         import_preferences: bool,
+        /// Constructor-equivalent preferences for a future jewel search, not
+        /// an equipped jewel, calculation input or optimization objective.
+        #[serde(default, skip_serializing_if = "is_false")]
+        timeless_search_defaults: bool,
     },
 }
 
@@ -47,6 +52,7 @@ pub(super) struct CompiledSourcePresentation {
     empty_party: bool,
     trade_search_weights: bool,
     import_preferences: bool,
+    timeless_search_defaults: bool,
 }
 
 pub(super) fn compile(
@@ -64,6 +70,7 @@ pub(super) fn compile(
         empty_party,
         trade_search_weights,
         import_preferences,
+        timeless_search_defaults,
     }) = &policy.source_presentation
     else {
         return Ok(None);
@@ -86,6 +93,7 @@ pub(super) fn compile(
         empty_party: *empty_party,
         trade_search_weights: *trade_search_weights,
         import_preferences: *import_preferences,
+        timeless_search_defaults: *timeless_search_defaults,
     }))
 }
 
@@ -166,6 +174,7 @@ fn empty_socket_urls(
 pub(super) fn apply(
     b: &mut Builder<'_, '_>,
     policy: Option<&CompiledSourcePresentation>,
+    build_frame: Option<&character_reward_inventory::CompiledCharacterRewardInventory<'_>>,
 ) -> Result<()> {
     let Some(policy) = policy else { return Ok(()) };
     b.charge(1)?;
@@ -176,6 +185,9 @@ pub(super) fn apply(
     };
     if policy.trade_search_weights {
         candidates.extend(trade_search::collect(b)?);
+    }
+    if policy.timeless_search_defaults {
+        candidates.extend(timeless_search::collect(b, build_frame)?);
     }
     candidates.extend(presentation_frames::collect(
         b,

@@ -2360,7 +2360,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         },
     });
     items::defer_unmaterialized_augments(&mut b, &mut draft)?;
-    source_presentation::apply(&mut b, source_presentation.as_ref())?;
+    source_presentation::apply(
+        &mut b,
+        source_presentation.as_ref(),
+        character_reward_inventory.as_ref(),
+    )?;
     source_header_owners::account_tree(&mut b, &draft, &spec_sets, &spec_characters)?;
     source_header_owners::account_items(&mut b, &draft, &equipment_sets)?;
     source_header_owners::account_skills(&mut b, &draft, &skill_sets)?;

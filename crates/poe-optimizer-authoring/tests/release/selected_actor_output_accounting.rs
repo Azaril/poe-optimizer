@@ -7,15 +7,18 @@ use super::{
 };
 use poe_optimizer_core::{
     owned_definitions::*,
-    owned_draft::{DraftField, DraftFinalization, DraftSessionInput, EvaluationSelection},
+    owned_draft::{
+        DraftField, DraftFinalization, DraftListCompletion, DraftSessionInput, EvaluationSelection,
+    },
     owned_rules::*,
     owned_schema::*,
 };
 use poe_optimizer_import::{
+    build_instance::AuthoredInstanceId,
     owned_mapping::{
         ExternalOwnerSelector, ExternalSelector, MappingBasis, MappingOutcome, SourceComponent,
     },
-    owned_normalize::{OwnedOriginTarget, SourceOwnedOrigin},
+    owned_normalize::{OwnedOriginTarget, SourceDisposition, SourceOwnedOrigin},
     owned_source::SourceProjectEvidence,
 };
 use serde_json::json;
@@ -85,38 +88,114 @@ fn account(
     )?;
     let character_link = OwnedOriginTarget::CharacterPreset(character.id);
     let allocation_link = OwnedOriginTarget::AllocationPreset(selection.build.allocations);
+    let spec = originals::selected_spec(evidence);
+    ensure(
+        matches!(
+            spec.authored_instance(),
+            Some(AuthoredInstanceId::PassiveSpec(_))
+        ) && !spec.occurrence().has_namespace_context(),
+        "selected source is not the authored Spec",
+    )?;
+    // Build and Tree now retain legitimate header provenance for this same
+    // Character. The owning row is the exact saved Spec, never the first link.
     let origin = only(
         origins
             .iter()
-            .filter(|row| row.links.contains(&character_link)),
+            .filter(|row| row.source == spec.occurrence().id()),
     )?;
     ensure(
-        origin
-            .links
-            .iter()
-            .filter(|row| **row == character_link)
-            .count()
-            == 1
-            && origin
-                .links
-                .iter()
-                .filter(|row| **row == allocation_link)
-                .count()
-                == 1
-            && origins
-                .iter()
-                .filter(|row| row.source == origin.source)
-                .count()
-                == 1,
+        origin.disposition == SourceDisposition::Contributes
+            && only(origin.links.iter().filter_map(|link| match link {
+                OwnedOriginTarget::CharacterPreset(id) => Some(*id),
+                _ => None,
+            }))? == character.id
+            && only(origin.links.iter().filter_map(|link| match link {
+                OwnedOriginTarget::AllocationPreset(id) => Some(*id),
+                _ => None,
+            }))? == selection.build.allocations,
         "crossed or duplicate selected source links",
     )?;
-    let spec = evidence.row(origin.source).map_err(|_| "unknown source")?;
+    let root = evidence.rows().first().ok_or("missing source root")?;
+    let tree_source = evidence
+        .row(spec.occurrence().parent().ok_or("missing Spec parent")?)
+        .map_err(|_| "unknown Spec parent")?;
+    let build_source = only(evidence.rows().iter().filter(|row| {
+        row.occurrence().parent() == Some(root.occurrence().id())
+            && row.occurrence().name() == "Build"
+    }))?;
     ensure(
-        spec.occurrence().id() == originals::selected_spec(evidence).occurrence().id(),
-        "not the saved selected Spec source",
+        tree_source.occurrence().name() == "Tree"
+            && tree_source.occurrence().parent() == Some(root.occurrence().id())
+            && !tree_source.occurrence().has_namespace_context()
+            && !build_source.occurrence().has_namespace_context(),
+        "foreign source header",
+    )?;
+    let DraftListCompletion::Pending { id: issue, code } = &draft.saved_variants.completion else {
+        return Err("saved selection must remain unresolved");
+    };
+    ensure(
+        draft.saved_variants.members.is_empty() && code.as_str() == "saved-selection-not-converted",
+        "changed saved selection authority",
+    )?;
+    let tree_origin = only(
+        origins
+            .iter()
+            .filter(|row| row.source == tree_source.occurrence().id()),
+    )?;
+    let build_origin = only(
+        origins
+            .iter()
+            .filter(|row| row.source == build_source.occurrence().id()),
+    )?;
+    ensure(
+        tree_origin.disposition == SourceDisposition::Contributes
+            && tree_origin.links
+                == [
+                    allocation_link.clone(),
+                    character_link.clone(),
+                    OwnedOriginTarget::Issue(*issue),
+                ],
+        "changed selected Tree projection",
+    )?;
+    let mut build_links: Vec<_> = draft
+        .character_presets
+        .members
+        .iter()
+        .map(|row| OwnedOriginTarget::CharacterPreset(row.id))
+        .collect();
+    build_links.extend([
+        OwnedOriginTarget::SkillPreset(selection.build.skills),
+        OwnedOriginTarget::Issue(*issue),
+    ]);
+    ensure(
+        build_origin.disposition == SourceDisposition::Contributes
+            && build_origin.links == build_links,
+        "changed shared Build projection",
+    )?;
+    let mut character_sources = BTreeSet::new();
+    for projection in origins
+        .iter()
+        .filter(|row| row.links.contains(&character_link))
+    {
+        ensure(
+            [origin.source, tree_origin.source, build_origin.source].contains(&projection.source)
+                && character_sources.insert(projection.source)
+                && projection
+                    .links
+                    .iter()
+                    .filter(|link| **link == character_link)
+                    .count()
+                    == 1,
+            "foreign or duplicate Character projection",
+        )?;
+    }
+    ensure(
+        character_sources.len() == 3,
+        "missing Character source projection",
     )?;
     // Import also links each Spec child and each attribute-override entry to
-    // its containing preset. Those are provenance projections, not new owners.
+    // its containing preset. The proved parent Tree is a header projection;
+    // every other auxiliary origin must still descend from the selected Spec.
     let mut spec_owners = 0;
     let mut projected_sources = BTreeSet::new();
     for projection in origins
@@ -136,6 +215,9 @@ fn account(
         let source = evidence
             .row(projection.source)
             .map_err(|_| "unknown allocation source")?;
+        if projection.source == tree_origin.source {
+            continue;
+        }
         spec_owners += usize::from(source.occurrence().name() == "Spec");
         let mut cursor = source;
         let mut descendant = false;
@@ -311,10 +393,25 @@ fn saved_class_and_single_shared_player_join_without_closing_original_five() {
         )
         .unwrap();
         let selected_source = originals::selected_spec(evidence).occurrence().id();
+        let tree_source = originals::selected_spec(evidence)
+            .occurrence()
+            .parent()
+            .unwrap();
+        let character_link = OwnedOriginTarget::CharacterPreset(selection.build.character);
+        let character_sources: BTreeSet<_> = origins
+            .iter()
+            .filter(|row| row.links.contains(&character_link))
+            .map(|row| evidence.row(row.source).unwrap().occurrence().name())
+            .collect();
+        assert_eq!(character_sources, BTreeSet::from(["Build", "Spec", "Tree"]));
         let link = OwnedOriginTarget::AllocationPreset(selection.build.allocations);
         let auxiliary: Vec<_> = origins
             .iter()
-            .filter(|row| row.source != selected_source && row.links.contains(&link))
+            .filter(|row| {
+                row.source != selected_source
+                    && row.source != tree_source
+                    && row.links.contains(&link)
+            })
             .collect();
         assert!(!auxiliary.is_empty());
         let syntax = &release.tree().unwrap().input().content.syntax;
@@ -371,15 +468,33 @@ fn crossed_selection_and_copied_or_retargeted_actor_authority_are_rejected() {
             .position(|p| p.id == selection.build.character)
             .unwrap();
         let link = OwnedOriginTarget::CharacterPreset(selection.build.character);
+        let selected_spec = originals::selected_spec(evidence);
         let origin_index = origins
             .iter()
-            .position(|r| r.links.contains(&link))
+            .position(|row| row.source == selected_spec.occurrence().id())
+            .unwrap();
+        let tree_index = origins
+            .iter()
+            .position(|row| Some(row.source) == selected_spec.occurrence().parent())
+            .unwrap();
+        let build_source = only(evidence.rows().iter().filter(|row| {
+            row.occurrence().name() == "Build"
+                && row.occurrence().parent() == Some(evidence.rows()[0].occurrence().id())
+        }))
+        .unwrap()
+        .occurrence()
+        .id();
+        let build_index = origins
+            .iter()
+            .position(|row| row.source == build_source)
             .unwrap();
         let allocation_link = OwnedOriginTarget::AllocationPreset(selection.build.allocations);
         let auxiliary_index = origins
             .iter()
             .position(|row| {
-                row.source != origins[origin_index].source && row.links.contains(&allocation_link)
+                row.source != origins[origin_index].source
+                    && row.source != origins[tree_index].source
+                    && row.links.contains(&allocation_link)
             })
             .unwrap();
         let foreign_spec = evidence
@@ -394,7 +509,28 @@ fn crossed_selection_and_copied_or_retargeted_actor_authority_are_rejected() {
             .iter()
             .position(|row| row.source == foreign_spec.occurrence().id())
             .unwrap();
-        for control in 0..15 {
+        let foreign_character = draft
+            .character_presets
+            .members
+            .iter()
+            .find(|row| row.id != selection.build.character)
+            .unwrap()
+            .id;
+        let foreign_allocation = draft
+            .allocation_presets
+            .members
+            .iter()
+            .find(|row| row.id != selection.build.allocations)
+            .unwrap()
+            .id;
+        let foreign_skill = draft
+            .skill_presets
+            .members
+            .iter()
+            .find(|row| row.id != selection.build.skills)
+            .unwrap()
+            .id;
+        for control in 0..27 {
             let mut changed = draft.clone();
             let mut links = origins.clone();
             let mut applications = Some(expected.clone());
@@ -480,6 +616,43 @@ fn crossed_selection_and_copied_or_retargeted_actor_authority_are_rejected() {
                 13 => links[auxiliary_index].links.push(allocation_link.clone()),
                 14 => {
                     links[auxiliary_index].source = *foreign_spec.children().first().unwrap();
+                }
+                15 => links[foreign_index].links.push(link.clone()),
+                16 => links[auxiliary_index].links.push(link.clone()),
+                17 => links.push(links[tree_index].clone()),
+                18 => links[tree_index].links.push(allocation_link.clone()),
+                19 => {
+                    links[tree_index].links[0] =
+                        OwnedOriginTarget::AllocationPreset(foreign_allocation)
+                }
+                20 => {
+                    links[tree_index].links[1] =
+                        OwnedOriginTarget::CharacterPreset(foreign_character)
+                }
+                21 => links[tree_index]
+                    .links
+                    .retain(|row| !matches!(row, OwnedOriginTarget::Issue(_))),
+                22 => links.push(links[build_index].clone()),
+                23 => links[build_index].links.push(link.clone()),
+                24 => {
+                    let selected = links[build_index]
+                        .links
+                        .iter_mut()
+                        .find(|row| matches!(row, OwnedOriginTarget::SkillPreset(_)))
+                        .unwrap();
+                    *selected = OwnedOriginTarget::SkillPreset(foreign_skill);
+                }
+                25 => {
+                    // Preserve both source IDs exactly once while exchanging
+                    // their incompatible header responsibilities.
+                    let tree_source = links[tree_index].source;
+                    links[tree_index].source = links[build_index].source;
+                    links[build_index].source = tree_source;
+                }
+                26 => {
+                    links[tree_index].disposition = SourceDisposition::SourceOnly(
+                        OwnedDefinitionKey::new("unreviewed-header").unwrap(),
+                    )
                 }
                 _ => unreachable!(),
             }

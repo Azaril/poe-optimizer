@@ -96,6 +96,8 @@ mod structural_support_source;
 mod support_prohibition;
 #[path = "release/support_prohibition_source.rs"]
 mod support_prohibition_source;
+#[path = "release/timeless_search_preferences.rs"]
+mod timeless_search_preferences;
 #[path = "release/usage_support_domains.rs"]
 mod usage_support_domains;
 #[path = "release/view_support_domains.rs"]
@@ -2127,6 +2129,9 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
     .input()
     .clone();
     let mut import_content = parts.imports;
+    timeless_search_preferences::restore_prior_flag(
+        &mut import_content.normalization.source_presentation,
+    );
     let Some(poe_optimizer_import::owned_normalize::UsageInputContent::PobOccurrenceUsageV3 {
         inventory: Some(inventory),
         ..

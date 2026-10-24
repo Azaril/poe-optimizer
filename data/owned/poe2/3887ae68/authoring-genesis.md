@@ -60,8 +60,8 @@ Replay changes the checkpoint's predecessor commitment without allocating more
 names or changing runtime bytes. The snapshot above remains the explicit predecessor.
 
 The subsequent item/skeletal support-domain and generated-singleton accounting
-tranches preserve this entire 73-name ledger and registry. Current tracked source
-publishes verified checkpoint
+tranches preserve this entire 73-name ledger and registry. The singleton tranche
+published verified checkpoint
 `2be706a87dd1d7ab916565121422cb6fd16e7d0a04268a590d3887c01901c3f6`, with runtime
 input `58aa33797506bbd1c49988059756f04749a46207a8d85b569683a0b66f07e8dc`.
 Compared with the preceding skeletal checkpoint, exactly four inventory
@@ -70,27 +70,36 @@ runtime files are `normalization.json`, `tree-normalization.json` and `release.j
 Historical restoration restores those four destinations through checked content
 constructors, alongside the independently bounded earlier content deltas.
 
+Current tracked source additionally enables the independently reviewed
+[default Timeless search-preference family](timeless-search-defaults/README.md).
+It publishes verified checkpoint
+`54496d58233f41b8ef15cab738edf764ffc7d08fd1d97d69e3c53684f9c8eac8`, runtime input
+`5145862bfbaf30279b430888df2b69258e097d242ee05be81b198ecfafe1edcd` and release
+receipt SHA-256 `afaf818acf734cdfe56a2aa41878312e0f620b315b597ef7a93e3c80e82a89fd`.
+The name ledger and registry are unchanged. Only the presentation flag and its
+constructed tree normalization binding change; the same three runtime files
+listed above have new bytes. No numerical or completion state changes.
+
 | Current tracked-source build | Count or bytes |
 | --- | ---: |
 | Declared source files | 2,802 |
-| Encoded source bytes | 6,728,208 |
-| Decoded source bytes | 46,027,282 |
+| Encoded source bytes | 6,728,221 |
+| Decoded source bytes | 46,027,314 |
 | Root manifest bytes | 184,374 |
 | Runtime files | 18 |
-| Runtime bytes | 53,659,348 |
+| Runtime bytes | 53,659,380 |
 | Schema artifact bytes | 19,774,085 |
 | Checkpoint and name-ledger bytes | 455,214 |
 
-The saved verifier accepts the current checkpoint, and replay reproduces all
-eighteen runtime files and the name ledger without allocation. Evidence is in
-`runs/generated-singleton-usage/verified.json`, `equivalence.json` and
-`inventory.json`; these local records are not build inputs. The canonical
+The saved verifier accepts the current checkpoint, and an independent build
+reproduces all twenty files byte-for-byte: eighteen runtime files, the name ledger
+and checkpoint receipt. Evidence is in `runs/timeless-search-defaults/verified.json`
+and `equivalence.json`; these local records are not build inputs. The canonical
 `71ff4429` snapshot above remains the allocation predecessor, not the latest
-content. Build the tracked source to obtain the current release. Current accounting
-validation passes all 391 Authoring tests (175 library, eight CLI and 208 release)
-without optimization, including the three singleton laws. Strict Import/Authoring
-package lint also passes. The separate historical-witness repair passes both
-CLI feature profiles; hosted confirmation remains separate from these local checks.
+content. Build the tracked source to obtain the current release. Validation and
+the actual remaining first-build blockers are recorded at each checkpoint in
+the [living implementation plan](../../../../docs/implementation.md). Hosted
+confirmation remains separate from local tests and immutable publication checks.
 
 Archive transport is not a second semantic format, a source-reproduction proof
 or the planned indexed binary runtime pack. Future canonical allocation
