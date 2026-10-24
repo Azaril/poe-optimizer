@@ -277,13 +277,8 @@ fn validate<I: DefinitionSchemaIndex>(
     Ok(())
 }
 
+use super::source_selection::positive;
 use crate::owned_normalize::source_shape::{charge_frame, container_text, plain_row, value};
-fn positive(text: &str) -> bool {
-    !text.is_empty()
-        && !text.starts_with('0')
-        && text.bytes().all(|b| b.is_ascii_digit())
-        && text.parse::<u64>().is_ok_and(|n| n < (1_u64 << 53))
-}
 #[derive(Clone, Copy)]
 pub(super) struct Context<'a> {
     pub skills: &'a BTreeMap<SourceOccurrenceId, usize>,
@@ -322,40 +317,7 @@ fn selected(b: &mut Builder<'_, '_>, sets: Option<&[SourceOccurrenceId]>) -> Res
             }
         }
     }
-    let root = &evidence.rows()[0];
-    b.charge(root.children().len())?;
-    let trees: Vec<_> = root
-        .children()
-        .iter()
-        .map(|id| &evidence.rows()[id.ordinal() as usize])
-        .filter(|row| matches!(row.occurrence().name(), "Tree" | "Spec"))
-        .collect();
-    if let [tree] = trees.as_slice() {
-        charge_frame(b, tree, &["activeSpec"])?;
-        if tree.occurrence().name() == "Tree"
-            && plain_row(tree, &["activeSpec"], false)
-            && container_text(tree)
-            && let Some(index) = value(tree, "activeSpec")
-                .filter(|v| positive(v))
-                .and_then(|v| v.parse::<usize>().ok())
-        {
-            let mut valid = true;
-            for id in tree.children() {
-                let row = &evidence.rows()[id.ordinal() as usize];
-                b.charge(1)?;
-                valid &= row.occurrence().name() == "Spec"
-                    && !row.occurrence().has_namespace_context()
-                    && row.occurrence().parent() == Some(tree.occurrence().id())
-                    && matches!(
-                        row.authored_instance(),
-                        Some(AuthoredInstanceId::PassiveSpec(_))
-                    );
-            }
-            if valid {
-                result.spec = tree.children().get(index - 1).copied();
-            }
-        }
-    }
+    result.spec = source_selection::tree(b)?.map(|(_, spec)| spec);
     if let Some(parent) = equipment_membership::ordinary_items(b)? {
         let row = &evidence.rows()[parent.ordinal() as usize];
         charge_frame(b, row, &["activeItemSet"])?;

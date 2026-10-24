@@ -10,7 +10,56 @@ adjustments below. Historical checkpoints remain in Git and
 
 ## Current state
 
-**Current checkpoint:** archived generated-source accounting now proves actual
+**Current checkpoint:** Tree-header ownership now uses one private pass before
+historical fallback assignment. The existing strict Tree selector is shared with
+generated-source resolution. Complete sibling/source-to-preset correspondence
+joins the selected Spec to its actual Character and Allocation presets and the
+existing saved-selection Pending owner. Work and all link additions are checked
+before mutation; aliases, foreign or malformed sources refuse accounting. No
+native values, selection, allocator state, policy/artifact format or readiness
+gates change. The global outside-Config completeness check remains intact.
+
+All **1,565 Import tests pass**: 254 library, 891 owned integration and 420
+normalization tests. The ordinary run leaves one existing explicit current-release
+test ignored. Three new integration laws prove alternate exact selections change
+only the header's provenance, malformed/ambiguous/foreign frames keep their
+responsibility, and exact/one-short work limits preserve replay. Five private laws
+cover 41 invalid map/link/selection cases and atomic late work/link failure, with
+authentic baselines and all child Pending states retained. Independent review is
+clear. Evidence: `runs/configuration-census-audit-01/tree-header-integration.log`
+and `tree-header-library.log`. The authenticated five-original replay passes in
+74.24s, including the unchanged Sniper's exact third-Spec header owners. Strict
+all-feature/all-target Import and Authoring Clippy passes. Evidence:
+`tree-header-originals.log` and `tree-header-clippy.log` in the same directory.
+Scoped formatting, whitespace, strict UTF-8/LF and all nine protected-draft hashes
+pass.
+Closest build remains Original05 Sniper; five selected input obligations
+and **0/5** complete originals remain. The preceding checkpoint's validation is
+recorded below, not claimed as validation of this new pass.
+
+The [Calcs ownership proposal](owned-calcs-query-ownership-proposal.md) is awaiting
+the owner's decision. Recommendation: preserve saved view settings as source-owned
+reference state with durable original-source retention, while native metrics and
+scenarios remain explicit. The standalone importer currently does not publish
+original XML, so the existing sidecar's hash alone cannot establish that retention.
+No Calcs retirement is authorized yet. Continue independent Items/Skills/Build
+header proofs, the complete Config/default/custom census and separate Scenario
+domain proofs; do not construct metrics or copy a PoB mode to force completion.
+
+The next production tranche is Items-header ownership. The pinned complete
+loader/consumer audit establishes that root `useSecondWeaponSet` is read only
+by the legacy no-ItemSet branch, while ordinary sets retain their own flags.
+`showStatDifferences` requests comparison-tooltip work; it does not supply native
+gameplay state. `activeItemSet` selects an exact key, not an ordinal: unchanged
+Sniper's key 2 is its first set, source 597. Reuse the existing strict selection,
+ordinary frame and source-to-EquipmentPreset checks; add only that actual preset
+and existing selection obligation as header owners. Require nonempty sets and
+complete sibling correspondence; keep all per-set/loadout and configuration
+obligations. Evidence and refusal laws:
+`runs/configuration-census-audit-01/items-header-consumer-audit.md`.
+
+**Preceding checkpoint (`aa5f1386`, plus documentation `1a568768`, pushed and
+remote-verified):** archived generated-source accounting now proves actual
 reference/count absence independently of unused topology adapters. It checks the
 complete saved frame, exact source/preset identity and all three existing Pending
 owners, and rejects any live-output links. No native count, selector, skill or
@@ -52,7 +101,8 @@ optional Windows PoB LNK4098 linkage warning remains tracked under R4; it does
 not affect the passing source execution or strict lint.
 Independent reviews found no production ownership or budget regression.
 
-Checkpoint triage: finish exact Build/Tree/Skills/Items header-owner receipts,
+Checkpoint triage: continue exact Build/Skills/Items header-owner receipts after
+the completed Tree transfer,
 bounded Timeless/Calcs source-frame and consumer proofs, then the independently
 complete configuration/default/custom census. Calcs still lacks checked
 correspondence to an owned QueryPreset/scenario or an explicitly reviewed
@@ -571,7 +621,7 @@ silently become a second supported implementation.
 
 | Area | Verified state at this checkpoint |
 | --- | --- |
-| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal `f55fdacc`; intrinsic item-template support domains and redundant Gem-helper retirement `8b11bad1`; skeletal parent/profile source domains and exact selected Skill accounting `bdb0e883`; generated singleton field accounting and retained-witness repair `1e227d5d`; finite ExtraSkillStat factory/filter evidence `d96d454b`; ordinary direct-record transport evidence `a1f9e586`; checked inapplicability inventory proofs `00c57b66`; archived-source absence accounting and bounded outside-Config default evidence in this checkpoint |
+| Code baseline | Semantic baseline `fa49fcea32f0413cde5f5983e179c34e6c7acbdf`; whole-program DSL source cutover `b89f8e4d`; checked runtime loading `a6dc1991`; maintained-release behavioral harness `a7069aa1`; unused computed-support repair `1a88f37c`; typed Stat declaration staging `dde32fef`; shared source checks and defence laws `8fd6ab5c`; content construction, nested budgets and metadata laws `22899910`; private normalization owner `8e93cd7f`; complete Import construction `96e5533e`; declaration integration `f5e5f49d`; evaluation construction `15d93996`; atomic authoring publication `509f2008`; first production declarations `caca40a5`; canonical source reference `b815f0c5`; potential-output census and harness transfer `e59f8c88`; intrinsic Sniper domains `5f3305cc`; root/UsagePolicy domains `cda888e7`; attribute-choice domains and Count publisher retirement `45c9a1a6`; numeric minion domains and publisher retirement `8b6cd0a4`; class-view/Socket/Gigantic domains and selective retirement `d490eb54`; structural passive domains and publisher retirement `0658ac0f`; Class domains and publisher retirement `f58054a8`; shared Player domains and checked-recipe reuse `eda3612b`; evaluation-content extraction and strict-empty custom-source accounting `cc694b76`; Import/rule content extraction, configuration suite and consumed-target preparation `d9b905d2`; checkpoint verification, shared resource/equipment suites and intrinsic target retirement `60287fde`; schema preflight/cache and item-base retirement `8f91c7b1`; compact schema artifacts, separate release transport/semantic bounds, complete allocation snapshot and two obsolete Python export retirements `aee2f494`; weapon-profile harness transfer `46f47bcc`; persisted canonical-checkpoint test fixtures and allocation-history law `55eb01e9`; final-definition acquisition, native support-prohibition and canonical-70 checkpoint `753fda3b`; named contribution-query authoring, complete query-source migration and observation-export harness retirement `513f2ead`; revival producers and canonical-73 checkpoint `bf533382`; selected passive/Player/Class source accounting, component-suite consolidation and Graft proposal `f55fdacc`; intrinsic item-template support domains and redundant Gem-helper retirement `8b11bad1`; skeletal parent/profile source domains and exact selected Skill accounting `bdb0e883`; generated singleton field accounting and retained-witness repair `1e227d5d`; finite ExtraSkillStat factory/filter evidence `d96d454b`; ordinary direct-record transport evidence `a1f9e586`; checked inapplicability inventory proofs `00c57b66`; archived-source absence accounting and bounded outside-Config default evidence `aa5f1386`; Tree-header existing-owner accounting in this checkpoint |
 | Complete native originals | **0/5**; selected input issue counts **123/137/127/144/5** |
 | Closest build | Original05 Sniper; five input obligations are not its entire remaining numerical/legality work |
 | Native engine | Checked typed IR, explicit-stack VM and occurrence/effect graph exist; no native optimizer integration |
@@ -581,7 +631,7 @@ silently become a second supported implementation.
 | DSL / KDL / binary pack | Every retained program comes from tracked `.rule` sources with semantic KDL names and membership packets; all 117 contribution queries come from five named KDL fragments. The normal builder rejects embedded program and query members. Typed Stat declarations publish through the checkpoint CLI. Remaining descriptor kinds and binary pack remain pending; mutable-head CAS is deferred until a head exists |
 | Current release | Tracked `migration-source/release.kdl` composes program/query-free metadata, DSL and named contribution sources through one compiler/assembler. Production declarations add 73 Stats, six exact program occurrences, three revival queries with one outer gap and 363 intrinsic support-source domains. The current Import delta changes exactly four inventory destinations and derives their dependency commitments. Historical restoration admits only these exact deltas through checked content constructors. There are 1,349 source domains (1,320 Known, 29 Unmapped). Canonical checkpoint `71ff4429` remains the complete 73-name allocation predecessor; evaluation bundle still absent |
 | CLI parsing | All retained Rust CLI argument parsing uses the shared workspace `clap` dependency. Future commands must use the same standard; hosted status belongs to the CI row below |
-| CI | Pushed `1e227d5d` run [40106355676](https://github.com/Azaril/poe-optimizer/actions/runs/40106355676) has eight successful and ten running jobs with no failures in the public snapshot at 16:21:11 UTC October 24 (Windows workspace has passed); `00c57b66` run [40109271478](https://github.com/Azaril/poe-optimizer/actions/runs/40109271478) is pending with no jobs. Hosted success is not yet established. Earlier snapshot at 15:00 UTC: main `bdb0e883` run [40073568065](https://github.com/Azaril/poe-optimizer/actions/runs/40073568065) and preceding `bf533382` run [40066505992](https://github.com/Azaril/poe-optimizer/actions/runs/40066505992) both completed with sixteen successful and four failed jobs. In each run, Ubuntu and Windows CLI jobs fail the same retained flat-life witness source-hash assertion; the other two failures are their aggregate checks. The local repair authenticates the exact archived witness and proves that only the two compact-schema loader substitutions produce the maintained source; its two local tests pass in each CLI feature profile. No numerical witness is relabeled or relaxed. Previous `8f91c7b1` run `40045082862` passed all twenty jobs; its Windows CLI jobs took 3h02m–4h17m. Per-target cost remains R0/R4 work. This checkpoint still requires hosted validation; local success does not imply hosted success |
+| CI | Pushed `1e227d5d` run [40106355676](https://github.com/Azaril/poe-optimizer/actions/runs/40106355676) has eight successful and ten running jobs with no failures in the public snapshot at 16:27:54 UTC October 24 (Windows workspace has passed); `1a568768` run [40111607987](https://github.com/Azaril/poe-optimizer/actions/runs/40111607987) is pending with no jobs. Hosted success is not yet established. Earlier snapshot at 15:00 UTC: main `bdb0e883` run [40073568065](https://github.com/Azaril/poe-optimizer/actions/runs/40073568065) and preceding `bf533382` run [40066505992](https://github.com/Azaril/poe-optimizer/actions/runs/40066505992) both completed with sixteen successful and four failed jobs. In each run, Ubuntu and Windows CLI jobs fail the same retained flat-life witness source-hash assertion; the other two failures are their aggregate checks. The local repair authenticates the exact archived witness and proves that only the two compact-schema loader substitutions produce the maintained source; its two local tests pass in each CLI feature profile. No numerical witness is relabeled or relaxed. Previous `8f91c7b1` run `40045082862` passed all twenty jobs; its Windows CLI jobs took 3h02m–4h17m. Per-target cost remains R0/R4 work. This checkpoint still requires hosted validation; local success does not imply hosted success |
 
 Current reproducible source: `data/owned/poe2/3887ae68/migration-source/release.kdl`.
 First extract and verify the allocation predecessor using the
@@ -2259,8 +2309,8 @@ The delivery order is:
    occurrences and 563 distinct names, including the duplicate. The 28 non-reward
    defaults include seven actual child-effect enables; saved Inputs or callback
    output alone cannot certify absence. Check direct readers and absent controls.
-   Before Choice retirement, account for the remaining eight outside-Config
-   origins using their actual Build/Tree/Skills/Items and query/presentation
+   Before Choice retirement, account for the remaining outside-Config
+   origins using their actual Build/Skills/Items and query/presentation
    owners. The archived generated pair is now accounted for without inventing a
    topology adapter or native values; its three genuine Pending owners remain.
    TimelessData and Calcs have bounded fresh-load evidence in both MAIN and CALCS,
@@ -2274,17 +2324,21 @@ The delivery order is:
    substitutes. Reuse the character/reward fresh-frame checks and actual
    CharacterPreset outputs, skill container census, equipment membership and
    current active-selector-to-saved-selection correspondence. The smallest next
-   transfer is Tree selection: reuse the canonical tree frame and existing
-   selected-source resolver, then join the actual Spec to its Character and
-   Allocation presets while retaining saved-selection responsibility. Prefer one
-   private whole-header ownership pass after preset construction and before the
-   historical fallback assignment; do not teach the final global scan to ignore
-   headers. Share the existing resolver instead of adding another source-axis
-   parser. Keep exact per-set weapon state and independent presets. Build's
+   transfer, Tree selection, is now implemented: the canonical tree frame and
+   shared selected-source resolver join the actual Spec to its Character and
+   Allocation presets while retaining saved-selection responsibility. Continue
+   the same private whole-header ownership pass after preset construction and
+   before historical fallback assignment; keep the final global scan intact.
+   Keep exact per-set weapon state and independent presets. Build's
    saved class/ascendancy labels do not provide class authority; its actual level
    and MAIN selection have their own consumers. The completed header audit is in
    `runs/configuration-census-audit-01/header-owner-next.md`: Tree is the immediately
-   bounded transfer; Items needs a finite root-toggle applicability proof, Skills
+   bounded transfer completed here. The complete pinned Items consumer audit
+   (`items-header-consumer-audit.md` in that directory) now proves root-toggle
+   inapplicability only for nonempty ordinary ItemSets, separate per-set weapon
+   authority, and the comparison-tooltip preference. Implement its exact keyed
+   EquipmentPreset/selection receipt next; do not copy the no-set fallback.
+   Skills
    needs saved-input versus future-edit default consumer separation, and Build
    needs exact MAIN source-group correspondence under the existing saved-selection
    Pending owner. MAIN must not borrow CALCS or usage authority. These are private

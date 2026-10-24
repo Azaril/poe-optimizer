@@ -128,6 +128,40 @@ fn unchanged_originals_keep_configuration_obligations_without_independent_full_s
             result
         };
         let baseline = run(staged.normalization());
+        if case == 5 {
+            let tree = evidence
+                .rows()
+                .iter()
+                .find(|r| r.occurrence().name() == "Tree")
+                .unwrap();
+            let index: usize = tree.attribute("activeSpec").unwrap().raw().parse().unwrap();
+            assert_eq!(index, 3);
+            let selected = tree.children()[index - 1];
+            let owners: Vec<_> = baseline.sidecar().origins[selected.ordinal() as usize]
+                .links
+                .iter()
+                .filter(|link| {
+                    matches!(
+                        link,
+                        OwnedOriginTarget::CharacterPreset(_)
+                            | OwnedOriginTarget::AllocationPreset(_)
+                    )
+                })
+                .cloned()
+                .collect();
+            assert_eq!(owners.len(), 2);
+            let DraftListCompletion::Pending { id, code } =
+                &baseline.draft().input().saved_variants.completion
+            else {
+                panic!("saved selection remains Pending")
+            };
+            assert_eq!(code.as_str(), "saved-selection-not-converted");
+            let links =
+                &baseline.sidecar().origins[tree.occurrence().id().ordinal() as usize].links;
+            assert_eq!(links.len(), 3);
+            assert!(owners.iter().all(|owner| links.contains(owner)));
+            assert!(links.contains(&OwnedOriginTarget::Issue(*id)));
+        }
         for retained_control in [false, true] {
             let mut policy = staged.normalization().clone();
             let owner = policy.configuration_dispositions.as_mut().unwrap();

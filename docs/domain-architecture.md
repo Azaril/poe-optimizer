@@ -780,6 +780,19 @@ Header accounting distinguishes values consumed by the saved build from defaults
 used only by future editing operations. Root equipment toggles require their
 actual applicability proof independently of each selected loadout; MAIN source
 group selection retains its own selection owner independently of CALCS and usage.
+A checked Tree header joins its exact selected Spec to existing Character and
+Allocation presets and the existing unresolved saved-selection owner. Validate
+the complete sibling-to-preset correspondence before changing provenance; aliases,
+foreign owners and malformed selectors cannot lend authority. Share the strict
+source selector with generated-source resolution, and preflight the entire link
+change before mutation. This accounts for header ownership without resolving
+selection, child semantics or any native readiness requirement.
+Equipment selection uses the saved set key, independently of source order.
+For nonempty ordinary ItemSets, root weapon-swap state is inapplicable under the
+pinned normal loader; the actual set remains its own weapon-state authority.
+Comparison-tooltip preferences retain their source meaning without generating
+native gameplay values. Legacy no-set fallback requires its own proof and cannot
+borrow the ordinary-set ownership contract.
 
 This representation change adds no evaluation bundle or numerical coverage;
 0/5 supplied originals are complete. Schema/table/metadata JSON, historical Rust

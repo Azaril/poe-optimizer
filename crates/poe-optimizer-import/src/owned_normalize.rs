@@ -59,7 +59,9 @@ mod scope;
 mod skill_input_disposition;
 mod skill_inventory;
 mod skill_source_census;
+mod source_header_owners;
 mod source_presentation;
+mod source_selection;
 mod source_shape;
 mod support_inventory;
 mod support_order;
@@ -2345,6 +2347,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     });
     items::defer_unmaterialized_augments(&mut b, &mut draft)?;
     source_presentation::apply(&mut b, source_presentation.as_ref())?;
+    source_header_owners::account_tree(&mut b, &draft, &spec_sets, &spec_characters)?;
     // Unknown source semantics cannot become "UI-only" by default. They point to
     // real selected character/choice obligations until individually converted.
     for row in evidence.rows() {
