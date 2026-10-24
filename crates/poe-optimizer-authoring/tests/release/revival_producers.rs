@@ -25,14 +25,17 @@ pub(super) fn stat_names() -> BTreeSet<String> {
 fn key(value: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(value).unwrap()
 }
+struct Intrinsic {
+    owner: SchemaSubject,
+    supply: DeclaredSlot<SkillGrantSlotDefId>,
+}
 struct Bindings {
     enabled: StatDefId,
     base: StatDefId,
     increased: StatDefId,
     seconds: UnitDefId,
     percent: UnitDefId,
-    sniper: SchemaSubject,
-    supply: DeclaredSlot<SkillGrantSlotDefId>,
+    intrinsics: [Intrinsic; 4],
     // Exact query order; equal game names and values do not merge these owners.
     passives: [SchemaSubject; 3],
 }
@@ -67,34 +70,69 @@ fn bindings() -> &'static Bindings {
             }
             _ => panic!("exact passive source {name}"),
         };
-        let DefinitionAddress::Skill(sniper) = aliases.definition("skill.sniper_skill").unwrap()
-        else {
-            panic!("exact Sniper Skill")
-        };
-        assert_eq!(sniper.key().as_str(), "def.0000000000000012");
-        let SlotAddress::SkillGrant(supply) = aliases
-            .slot("skill_grant_slot.sniper_primary_skill")
-            .unwrap()
-        else {
-            panic!("exact physical Gem supply")
-        };
-        assert_eq!(supply.slot.key().as_str(), "def.0000000000000016");
-        let SlotOwnerDefId::Gem(gem) = &supply.declaration else {
-            panic!("physical Gem declaration")
-        };
-        assert_eq!(gem.key().as_str(), "def.0000000000000011");
-        let SchemaLookup::Known(declaration) = schema.slot(supply) else {
-            panic!("known supplying slot")
-        };
-        assert_eq!(&declaration.skill, sniper);
+        // Fixed source-to-owned joins, independent of the query membership under test.
+        let intrinsics = [
+            (
+                "skill.sniper_skill",
+                "0012",
+                "0011",
+                "skill_grant_slot.sniper_primary_skill",
+                "0016",
+            ),
+            (
+                "skill.skeletal_arsonists",
+                "0323",
+                "0914",
+                "skill_grant_slot.skeletal_arsonists_primary",
+                "3285",
+            ),
+            (
+                "skill.skeletal_frost_mages",
+                "0326",
+                "0917",
+                "skill_grant_slot.skeletal_frost_mages_primary",
+                "328f",
+            ),
+            (
+                "skill.skeletal_reavers",
+                "0327",
+                "0918",
+                "skill_grant_slot.skeletal_reavers_primary",
+                "3299",
+            ),
+        ]
+        .map(|(name, skill_key, gem_key, supply_name, supply_key)| {
+            let DefinitionAddress::Skill(skill) = aliases.definition(name).unwrap() else {
+                panic!("exact skeletal Skill")
+            };
+            assert_eq!(skill.key().as_str(), format!("def.000000000000{skill_key}"));
+            let SlotAddress::SkillGrant(supply) = aliases.slot(supply_name).unwrap() else {
+                panic!("exact physical Gem supply")
+            };
+            assert_eq!(
+                supply.slot.key().as_str(),
+                format!("def.000000000000{supply_key}")
+            );
+            let SlotOwnerDefId::Gem(gem) = &supply.declaration else {
+                panic!("physical Gem declaration")
+            };
+            assert_eq!(gem.key().as_str(), format!("def.000000000000{gem_key}"));
+            let SchemaLookup::Known(declaration) = schema.slot(supply) else {
+                panic!("known supplying slot")
+            };
+            assert_eq!(&declaration.skill, skill);
+            Intrinsic {
+                owner: SchemaSubject::Definition(skill.address()),
+                supply: supply.clone(),
+            }
+        });
         Bindings {
             enabled: stat(ENABLED),
             base: stat(BASE),
             increased: stat(INCREASED),
             seconds: unit("unit.seconds"),
             percent: unit("unit.percentage_points"),
-            sniper: SchemaSubject::Definition(sniper.address()),
-            supply: supply.clone(),
+            intrinsics,
             passives: [
                 passive("passive_node.minion_revive_speed.a", "def.0000000000000f9f"),
                 passive("passive_node.restless_dead", "def.00000000000012f4"),
@@ -155,9 +193,22 @@ fn member(
 }
 fn expected_queries() -> Vec<ContributionQuery> {
     let b = bindings();
-    let origin = ContributionOrigin::Skill {
-        authored: false,
-        supplies: vec![b.supply.clone()],
+    let intrinsic_members = |effect| {
+        b.intrinsics
+            .iter()
+            .map(|intrinsic| {
+                member(
+                    &intrinsic.owner,
+                    INTRINSIC,
+                    effect,
+                    ContributionOrigin::Skill {
+                        authored: false,
+                        supplies: vec![intrinsic.supply.clone()],
+                    },
+                    None,
+                )
+            })
+            .collect()
     };
     vec![
         ContributionQuery {
@@ -170,13 +221,7 @@ fn expected_queries() -> Vec<ContributionQuery> {
                 ordering: ContributionOrdering::Unordered,
                 empty: Some(ParameterValue::Boolean(false)),
                 members: DeclaredSet::partial(
-                    vec![member(
-                        &b.sniper,
-                        INTRINSIC,
-                        "reviving",
-                        origin.clone(),
-                        None,
-                    )],
+                    intrinsic_members("reviving"),
                     vec![gap(&b.enabled, "revival-flag-incoming-sources-unproved")],
                 ),
             }],
@@ -191,7 +236,7 @@ fn expected_queries() -> Vec<ContributionQuery> {
                 ordering: ContributionOrdering::Unordered,
                 empty: None,
                 members: DeclaredSet::partial(
-                    vec![member(&b.sniper, INTRINSIC, "base-duration", origin, None)],
+                    intrinsic_members("base-duration"),
                     vec![gap(&b.base, "revival-base-incoming-sources-unproved")],
                 ),
             }],
@@ -277,7 +322,7 @@ fn assert_program(
 }
 
 #[test]
-fn generic_revival_channels_and_four_producers_keep_exact_owner_and_recipient_authority() {
+fn generic_revival_channels_and_seven_producers_keep_exact_owner_and_recipient_authority() {
     revival_source::check_proof();
     let b = bindings();
     let schema = tracked_release().release().assembled().schema();
@@ -306,27 +351,33 @@ fn generic_revival_channels_and_four_producers_keep_exact_owner_and_recipient_au
         );
         assert_eq!(actual.targets.len(), 2);
     }
-    assert_program(
-        &b.sniper,
-        INTRINSIC,
-        RuleEntityKind::Skill,
-        &[
-            (
-                RuleEntity::Current,
-                &b.enabled,
-                ContributionKind::Flag,
-                "reviving",
-                ParameterValue::Boolean(true),
-            ),
-            (
-                RuleEntity::Current,
-                &b.base,
-                ContributionKind::Override,
-                "base-duration",
-                quantity(12.0, &b.seconds),
-            ),
-        ],
-    );
+    for intrinsic in &b.intrinsics {
+        assert_program(
+            &intrinsic.owner,
+            INTRINSIC,
+            RuleEntityKind::Skill,
+            &[
+                (
+                    RuleEntity::Current,
+                    &b.enabled,
+                    ContributionKind::Flag,
+                    "reviving",
+                    ParameterValue::Boolean(true),
+                ),
+                (
+                    RuleEntity::Current,
+                    &b.base,
+                    ContributionKind::Override,
+                    "base-duration",
+                    quantity(12.0, &b.seconds),
+                ),
+            ],
+        );
+        assert_eq!(
+            program(&intrinsic.owner, INTRINSIC),
+            program(&b.intrinsics[0].owner, INTRINSIC)
+        );
+    }
     for (subject, amount) in b.passives.iter().zip([5.0, 25.0, 5.0]) {
         assert_program(
             subject,
@@ -365,17 +416,25 @@ fn generic_revival_channels_and_four_producers_keep_exact_owner_and_recipient_au
             }
         }
     }
-    let expected: Vec<_> = [
-        (b.sniper.clone(), key(INTRINSIC), key("reviving")),
-        (b.sniper.clone(), key(INTRINSIC), key("base-duration")),
-    ]
-    .into_iter()
-    .chain(
-        b.passives
-            .iter()
-            .map(|owner| (owner.clone(), key(SPEED), key("speed"))),
-    )
-    .collect();
+    let expected: Vec<_> = b
+        .intrinsics
+        .iter()
+        .flat_map(|intrinsic| {
+            [
+                (intrinsic.owner.clone(), key(INTRINSIC), key("reviving")),
+                (
+                    intrinsic.owner.clone(),
+                    key(INTRINSIC),
+                    key("base-duration"),
+                ),
+            ]
+        })
+        .chain(
+            b.passives
+                .iter()
+                .map(|owner| (owner.clone(), key(SPEED), key("speed"))),
+        )
+        .collect();
     assert_eq!(writers.len(), expected.len());
     assert!(expected.iter().all(|address| writers.contains(address)));
     assert!(
@@ -394,14 +453,18 @@ fn component_execution_preserves_true_twelve_and_three_independent_player_contri
     let recipe = tracked_release().release().assembled().checked();
     let compiled = recipe.compiled_rules();
     let mut scratch = compiled.new_scratch();
-    let cases = [
-        (&b.sniper, INTRINSIC),
-        (&b.passives[0], SPEED),
-        (&b.passives[1], SPEED),
-        (&b.passives[2], SPEED),
-    ];
+    let cases: Vec<_> = b
+        .intrinsics
+        .iter()
+        .map(|intrinsic| (&intrinsic.owner, INTRINSIC))
+        .chain(b.passives.iter().map(|owner| (owner, SPEED)))
+        .collect();
     let mut original = Vec::new();
-    for order in [vec![0, 1, 2, 3], vec![3, 2, 1, 0], vec![0, 2, 1, 3]] {
+    for order in [
+        vec![0, 1, 2, 3, 4, 5, 6],
+        vec![6, 5, 4, 3, 2, 1, 0],
+        vec![0, 4, 1, 5, 2, 6, 3],
+    ] {
         for index in order {
             let (owner, name) = cases[index];
             let result = compiled
@@ -433,17 +496,20 @@ fn component_execution_preserves_true_twelve_and_three_independent_player_contri
                 result.owner_programs_closure,
                 SchemaClosure::Partial { .. }
             ));
-            let expected = if index == 0 {
+            let expected = if index < b.intrinsics.len() {
                 vec![ParameterValue::Boolean(true), quantity(12.0, &b.seconds)]
             } else {
-                vec![quantity([5.0, 25.0, 5.0][index - 1], &b.percent)]
+                vec![quantity(
+                    [5.0, 25.0, 5.0][index - b.intrinsics.len()],
+                    &b.percent,
+                )]
             };
             assert_eq!(result.effects.len(), expected.len());
             for (effect, value) in result.effects.iter().zip(expected) {
                 assert_eq!(effect.disposition, EffectDisposition::Applied { value });
                 assert!(
                     matches!(&effect.effect, RuleEffectKind::Contribute { entity, .. }
-                    if *entity == if index == 0 { RuleEntity::Current } else { RuleEntity::Player })
+                    if *entity == if index < b.intrinsics.len() { RuleEntity::Current } else { RuleEntity::Player })
                 );
             }
             if original.len() < cases.len() {
@@ -453,9 +519,21 @@ fn component_execution_preserves_true_twelve_and_three_independent_player_contri
             }
         }
     }
-    assert_ne!(original[1].owner, original[3].owner);
-    assert_eq!(original[1].effects, original[3].effects);
-    assert_eq!(original[1].program, original[3].program);
+    assert_eq!(original.len(), 7);
+    for (index, result) in original.iter().enumerate() {
+        assert!(
+            original[..index]
+                .iter()
+                .all(|other| other.owner != result.owner)
+        );
+    }
+    for result in &original[1..b.intrinsics.len()] {
+        assert_eq!(original[0].effects, result.effects);
+        assert_eq!(original[0].program, result.program);
+    }
+    assert_ne!(original[4].owner, original[6].owner);
+    assert_eq!(original[4].effects, original[6].effects);
+    assert_eq!(original[4].program, original[6].program);
     // A constant component result is not a ready complete owner or a sum over
     // selected occurrences. In particular the two five-percent sources survive.
     assert!(tracked_release().release().evaluation().is_none());
@@ -500,7 +578,12 @@ fn exact_revival_queries_and_owner_gaps_remain_partial_without_a_consumer() {
         .unwrap();
     assert!(bytes.len() <= 64 * 1024 * 1024);
     let baseline: RulePackageInput = serde_json::from_slice(&bytes).unwrap();
-    for subject in std::iter::once(&b.sniper).chain(&b.passives) {
+    for subject in b
+        .intrinsics
+        .iter()
+        .map(|intrinsic| &intrinsic.owner)
+        .chain(&b.passives)
+    {
         let before = baseline
             .owners
             .iter()
@@ -515,7 +598,10 @@ fn exact_revival_queries_and_owner_gaps_remain_partial_without_a_consumer() {
 fn component() -> RulePackageInput {
     let b = bindings();
     let source = rules();
-    let owners = std::iter::once((&b.sniper, INTRINSIC))
+    let owners = b
+        .intrinsics
+        .iter()
+        .map(|intrinsic| (&intrinsic.owner, INTRINSIC))
         .chain(b.passives.iter().map(|subject| (subject, SPEED)))
         .map(|(subject, name)| {
             let mut owner = owner(subject).clone();
@@ -560,13 +646,15 @@ fn checked_partial_queries_still_reject_crossed_sources_recipients_units_and_sel
             let SchemaState::Known(source) = &row.schema else {
                 return None;
             };
-            let SchemaSubject::Definition(DefinitionAddress::Skill(sniper)) = &b.sniper else {
+            let SchemaSubject::Definition(DefinitionAddress::Skill(sniper)) =
+                &b.intrinsics[0].owner
+            else {
                 unreachable!()
             };
             (source.skill != *sniper).then(|| row.id.clone())
         })
         .unwrap();
-    for control in 0..6 {
+    for control in 0..8 {
         let mut bad = valid.clone();
         match control {
             0 => {
@@ -588,7 +676,7 @@ fn checked_partial_queries_still_reject_crossed_sources_recipients_units_and_sel
                 };
                 *entity = RuleEntity::Player;
             }
-            2 => bad.owners[1].programs.members.clear(),
+            2 => bad.owners[b.intrinsics.len()].programs.members.clear(),
             3 => {
                 let group = &mut bad.contribution_queries.as_mut().unwrap().members[2].groups[0];
                 let duplicate = group.members.members[0].clone();
@@ -601,6 +689,23 @@ fn checked_partial_queries_still_reject_crossed_sources_recipients_units_and_sel
             5 => {
                 bad.contribution_queries.as_mut().unwrap().members[1].groups[0].empty =
                     Some(quantity(0.0, &b.seconds))
+            }
+            6 => {
+                // A valid sibling supply cannot authorize the same-valued producer.
+                let producer = bad.contribution_queries.as_mut().unwrap().members[0].groups[0]
+                    .members
+                    .members[1]
+                    .producer
+                    .as_program_effect_mut()
+                    .unwrap();
+                producer.origin = ContributionOrigin::Skill {
+                    authored: false,
+                    supplies: vec![b.intrinsics[2].supply.clone()],
+                };
+            }
+            7 => {
+                let group = &mut bad.contribution_queries.as_mut().unwrap().members[1].groups[0];
+                group.members.members.push(group.members.members[2].clone());
             }
             _ => unreachable!(),
         }

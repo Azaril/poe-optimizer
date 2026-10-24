@@ -25,6 +25,8 @@ use std::{
 const TEST: &str = "complete_configuration_inputs_preserve_source_lifecycle_and_delivery";
 const CHILD: &str = "POE_CONFIGURATION_INPUTS_SOURCE_CHILD";
 const OBSERVE: &str = include_str!("support/configuration_inputs_source.lua");
+const COMPLETE_LOAD_ATTEMPTS: usize = 33;
+const CONTROL_CASES: usize = COMPLETE_LOAD_ATTEMPTS - 5;
 const RESISTANCE_FIELDS: [&str; 4] = [
     "enemyFireResist",
     "enemyColdResist",
@@ -133,7 +135,7 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
     }
     let mut inputs = originals.clone();
     inputs.extend(controls(&originals, &facts));
-    assert_eq!(inputs.len(), 29);
+    assert_eq!(inputs.len(), COMPLETE_LOAD_ATTEMPTS);
     let mut cases = Vec::new();
     for (name, text) in inputs {
         eprintln!("complete configuration source case {name}");
@@ -213,8 +215,8 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
         );
     }
     let result = json!({"source_revision":"3887ae68a6a6b8bb7b41d1b61998f1aa184201e4", "source_hash":pinned::manifest_sha256(), "evidence":{
-        "complete_load_attempts_per_jit":29,"originals":originals.iter().map(|(name,text)|json!({"name":name,"sha256":digest(text.as_bytes()),"source_census":xml_census(text)})).collect::<Vec<_>>(),
-        "full_controls":24,"native_effect_coverage":false,"business_method_wrappers":false,"callback_invocation_trace":false,
+        "complete_load_attempts_per_jit":COMPLETE_LOAD_ATTEMPTS,"originals":originals.iter().map(|(name,text)|json!({"name":name,"sha256":digest(text.as_bytes()),"source_census":xml_census(text)})).collect::<Vec<_>>(),
+        "full_controls":CONTROL_CASES,"native_effect_coverage":false,"business_method_wrappers":false,"callback_invocation_trace":false,
         "observer_sha256":digest(OBSERVE.as_bytes()),
         "reward_metadata_sha256":digest(&fs::read(root.join("data/owned/poe2/3887ae68/import/reward-source-facts.json")).unwrap()),
         "files":(["src/Launch.lua","src/GameVersions.lua","src/Modules/Common.lua","src/Modules/Main.lua","src/Modules/Build.lua","src/Classes/ConfigTab.lua","src/Classes/CalcsTab.lua","src/Classes/PopupDialog.lua","src/Modules/CalcSetup.lua","src/Modules/CalcDefence.lua","src/Modules/CalcOffence.lua","src/Modules/Data.lua","src/Classes/ModList.lua","src/Classes/ModDB.lua","src/Classes/ModStore.lua","src/Classes/EditControl.lua","src/Modules/ModParser.lua","src/Data/BossSkills.lua","src/Data/Bosses.lua","src/Data/Misc.lua","src/Modules/ConfigOptions.lua","src/Data/QuestRewards.lua"].map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})))},"cases":cases});
@@ -369,7 +371,8 @@ fn controls(originals: &[(String, String)], _facts: &Json) -> Vec<(String, Strin
         }
         cases.push((name.into(), add(&resistance_clean, &body)));
     }
-    assert_eq!(cases.len(), 24);
+    cases.extend(configuration_census::dispatcher_controls(xml));
+    assert_eq!(cases.len(), CONTROL_CASES);
     cases
 }
 fn resistance_controls() -> [ResistanceControl; 6] {
@@ -753,7 +756,7 @@ fn check_resistance_controls(result: &Json) {
     }
 }
 fn check(result: &Json, facts: &Json) {
-    assert_eq!(rows(&result["cases"]).len(), 29);
+    assert_eq!(rows(&result["cases"]).len(), COMPLETE_LOAD_ATTEMPTS);
     let catalogue = &state(result, "original-05")["catalogue"];
     assert!(
         rows(catalogue).len() > 300,

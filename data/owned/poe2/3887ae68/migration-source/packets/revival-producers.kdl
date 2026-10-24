@@ -1,7 +1,16 @@
 // Appends preserve each existing owner closure, including all Partial gaps.
 packet "revival-producers" {
     append definition="skill.sniper_skill" {
-        program "intrinsic-revival" source="rules/revival/sniper-intrinsic.rule"
+        program "intrinsic-revival" source="rules/revival/skeletal-intrinsic.rule"
+    }
+    append definition="skill.skeletal_arsonists" {
+        program "intrinsic-revival" source="rules/revival/skeletal-intrinsic.rule"
+    }
+    append definition="skill.skeletal_frost_mages" {
+        program "intrinsic-revival" source="rules/revival/skeletal-intrinsic.rule"
+    }
+    append definition="skill.skeletal_reavers" {
+        program "intrinsic-revival" source="rules/revival/skeletal-intrinsic.rule"
     }
     append definition="passive_node.restless_dead" {
         program "ordinary-revival-speed" source="rules/revival/restless-dead.rule"

@@ -6,6 +6,90 @@
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
 
+## Archived 2026-10-24 finite configuration census checkpoint
+
+**Current checkpoint:** the complete finite configuration source inventory is now
+tracked and reproduced by the existing reference observer. The
+[packet](../data/owned/poe2/3887ae68/configuration-census/README.md) retains all
+663 ordered rows (564 named occurrences / 563 names), 78 direct accesses, nine
+computed sites, six computed-key families and twelve bounded alias reviews.
+Twenty-eight full source files are authenticated; twenty reuse existing evidence
+and eight have new archives. Ordinary Rust Authoring tests verify the packet
+without Lua or the vendor checkout. Only the existing optional reference host
+executes original Lua; no new interpreter or production data model is added.
+
+The new Rust projection reproduced every catalogue field in all 29 successful
+original/control cases in each JIT mode. Complete reports agree byte-for-byte:
+37,752,151 bytes, SHA-256
+`b16d8d172a2f9b60f78d3efe082c40bfbee1913d1b5eb2f797574fb3631b47f7`.
+The reference target passes three tests in 312.17s; two pre-existing optional
+outside-configuration witnesses remain ignored. The packet preserves the old
+23-case capture as historical provenance rather than relabelling it. Current
+acquisition evidence SHA-256 is
+`58516a566d567fb578eb15b2afe46f51ad9589c2be870df45a4d081c4c77af75`.
+
+Four maintained Authoring laws pass in 60.44s, including the actual current
+Original05 source join, all 472 candidate/default raw-name absences and its exact
+five selected Pending codes. The strengthened constructor-default/same-name
+partition law passes separately in 0.23s. Shared byte-pin mutation checks exercise
+the actual loader; no immutable clone comparisons are presented as preservation
+evidence. Strict all-target/all-feature Authoring Clippy passes in 3.80s and the
+affected PoB target passes in 13.38s. Scoped formatting, UTF-8/LF, whitespace and
+all nine protected draft hashes pass. Independent packet/source/code reviews are
+clear. This is seven distinct passing tests, with no repeated source capture
+needed after the test-only partition strengthening.
+
+Latest anonymous CI snapshot, 18:53:15 UTC: repair run
+[40106355676](https://github.com/Azaril/poe-optimizer/actions/runs/40106355676)
+has fifteen successful jobs, three Windows CLI shards still running and no
+failures; Windows PoB completed successfully. The `cd176f6a` run
+[40121376288](https://github.com/Azaril/poe-optimizer/actions/runs/40121376288)
+is still pending with no jobs. Hosted completion is not claimed. This checkpoint
+will trigger its own run after push; slow per-target CI cost remains tracked.
+
+The [callback review](../data/owned/poe2/3887ae68/configuration-census/missing-callbacks.md)
+identifies 448 missing callback candidates and 34 explicit exclusions. All
+same-name callbacks remain independent. The exclusions preserve direct readers,
+legacy Calcs migration targets and the enemy-radius widget relationship. The
+existing missing-raw collector needs no new public model for this family, but
+raw absence alone does not prove defaults, lifecycle or writer semantics.
+The [installed-default review](../data/owned/poe2/3887ae68/configuration-census/installed-defaults.md)
+assigns responsibility candidates to eight Actor assumptions and twelve skill
+usage intents, including exact parent/target/trigger relationships. These retain
+unresolved work; they do not supply native default values or finish mechanics.
+
+Four statistical defaults remain unassigned. The pending
+[Calcs ownership proposal](owned-calcs-query-ownership-proposal.md) now includes
+the concrete choice of retaining their authenticated reference-analysis meaning
+while native queries select explicit data-defined metrics. This is one expanded
+Import decision, not a request for a new generic mode framework. The owner has
+been prompted. Title-driven loadout selection and Graft ownership decisions also
+remain separate; no unanswered proposal is treated as accepted.
+
+No production census is published: the maintained policy remains 38 rules with
+`inventory=None`. Runtime, ledger and immutable checkpoint are unchanged. Source
+inventory equality does not establish arbitrary alias closure, constructor or
+native semantic completeness. Original05 retains its five selected input
+obligations and numerical backlog; **0/5 builds are complete**. Validation and
+publication evidence for the prior checked missing-raw implementation is now in
+[history](implementation-history.md#archived-2026-10-24-checked-missing-raw-checkpoint).
+Current test logs are under `runs/configuration-census-audit-02` and fresh
+reference reports under `runs/configuration-census-source-01`.
+
+**Next executable work:** finish the reviewed fresh-lifecycle/dispatcher boundary
+for the 448 candidates, including original-dispatch contrasts for absent versus
+present check/count/list values and checked inventory budget/identity laws at the
+actual family size. Resolve the 34 excluded and noncatalogue/direct/computed
+families independently. Bind the twenty retained-Scenario responsibilities to
+actual exact current fields when composing the full census. Keep the four
+analysis choices unassigned until the expanded Import decision is accepted and
+its durable retention contract is implemented. Then replace the narrow previous
+catalogue/constructor commitments with explicitly combined evidence, run the
+existing complete inventory transaction and require only the intended Choice
+retirement on unchanged Original05. Do not publish a Partial count-only artifact:
+its matcher does not execute. Continue numerical/legality work on the closest
+build once its necessary inputs are actually proved.
+
 ## Archived 2026-10-24 source-header and Timeless checkpoints
 
 **Current checkpoint:** the existing source-presentation

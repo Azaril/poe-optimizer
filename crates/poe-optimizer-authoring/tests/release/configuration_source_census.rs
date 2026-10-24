@@ -15,7 +15,7 @@ use std::{
 };
 
 const BASE: &str = "data/owned/poe2/3887ae68/configuration-census/";
-const EVIDENCE_HASH: &str = "58516a566d567fb578eb15b2afe46f51ad9589c2be870df45a4d081c4c77af75";
+const EVIDENCE_HASH: &str = "602cf5a9feb24c8646bee3bf77e7595c03f77d12537c1ebc848c5aae6dbe2e0a";
 const REVISION: &str = "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4";
 const MANIFEST_HASH: &str = "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675";
 const ORIGINAL_HASH: &str = "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089";
@@ -140,7 +140,7 @@ fn packet() -> &'static Packet {
         assert_eq!(evidence.acquisition["initial_capture_cases"], 23);
         assert_eq!(
             evidence.acquisition["maintained_capture_attempts_per_jit"],
-            29
+            33
         );
         let observer = evidence.acquisition["observer"].as_str().unwrap();
         assert_eq!(
@@ -172,18 +172,24 @@ fn packet() -> &'static Packet {
         let catalogue_pin = evidence.artifacts.iter()
             .find(|pin| pin.path == format!("{BASE}catalogue.json.gz"))
             .unwrap();
-        let fresh = &evidence.acquisition["fresh_verification"];
-        assert_eq!(fresh["attempts_per_jit"], 29);
-        assert_eq!(fresh["successful_catalogue_comparisons_per_jit"], 29);
-        assert_eq!(fresh["report_bytes"], 37_752_151);
-        assert_eq!(fresh["report_sha256"], "b16d8d172a2f9b60f78d3efe082c40bfbee1913d1b5eb2f797574fb3631b47f7");
-        assert_eq!(fresh["full_report_equality"], true);
-        assert_eq!(fresh["receipt"], json!({
-            "attempts":29,"successful_catalogue_comparisons":29,
-            "catalogue_sha256":catalogue_pin.source_sha256,
-            "native_effect_coverage":false,"observer_sha256":evidence.acquisition["observer_sha256"],
-            "source_hash":MANIFEST_HASH,"source_revision":REVISION
-        }));
+        let prior = rows(&evidence.acquisition["previous_verifications"]);
+        assert_eq!(prior.len(), 1);
+        for (capture, attempts, bytes, hash) in [
+            (&prior[0], 29, 37_752_151, "b16d8d172a2f9b60f78d3efe082c40bfbee1913d1b5eb2f797574fb3631b47f7"),
+            (&evidence.acquisition["fresh_verification"], 33, 42_992_270, "024e67e96349ce0b993e571c17c37b030886e28e77bb30961619892d32dd083a"),
+        ] {
+            assert_eq!(capture["attempts_per_jit"], attempts);
+            assert_eq!(capture["successful_catalogue_comparisons_per_jit"], attempts);
+            assert_eq!(capture["report_bytes"], bytes);
+            assert_eq!(capture["report_sha256"], hash);
+            assert_eq!(capture["full_report_equality"], true);
+            assert_eq!(capture["receipt"], json!({
+                "attempts":attempts,"successful_catalogue_comparisons":attempts,
+                "catalogue_sha256":catalogue_pin.source_sha256,
+                "native_effect_coverage":false,"observer_sha256":evidence.acquisition["observer_sha256"],
+                "source_hash":MANIFEST_HASH,"source_revision":REVISION
+            }));
+        }
         let mut documents = BTreeMap::new();
         for pin in &evidence.artifacts {
             let name = Path::new(&pin.path).file_name().unwrap().to_str().unwrap();

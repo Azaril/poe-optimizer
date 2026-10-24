@@ -620,3 +620,148 @@ fn missing_admission_work_and_link_limits_are_atomic_and_replay_preserves_inputs
         serde_json::to_value(expected.sidecar()).unwrap()
     );
 }
+
+/// Exercise realistic independent-consumer cardinality in the fixture's own
+/// declared domain. Borrowing reviewed names does not certify their source
+/// semantics or install a production PoB census.
+fn reviewed_family_fixture(base: NormalizationPolicy) -> (NormalizationPolicy, String) {
+    use std::io::Read as _;
+    let mut json = Vec::new();
+    flate2::read::GzDecoder::new(
+        include_bytes!(
+            "../../../../data/owned/poe2/3887ae68/configuration-census/catalogue.json.gz"
+        )
+        .as_slice(),
+    )
+    .read_to_end(&mut json)
+    .unwrap();
+    let catalogue: serde_json::Value = serde_json::from_slice(&json).unwrap();
+    let review: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../../data/owned/poe2/3887ae68/configuration-census/review.json"
+    ))
+    .unwrap();
+    let candidates = review["candidate_ids"].as_array().unwrap();
+    assert_eq!(candidates.len(), 448);
+    let mut policy = base;
+    let inventory = policy
+        .configuration_dispositions
+        .as_mut()
+        .unwrap()
+        .inventory
+        .as_mut()
+        .unwrap();
+    let original_controls = inventory.source_census.controls.len();
+    let mut add = |id: &str, name: &str, target| {
+        inventory
+            .source_census
+            .controls
+            .push(ConfigurationInventoryControl {
+                id: key(id),
+                selector: Some(ValueSelector {
+                    lane: ValueLane::InputNumber,
+                    name: name.into(),
+                }),
+                source_states: vec![ConfigurationSourceState::Absent],
+            });
+        inventory
+            .dispositions
+            .push(ConfigurationInventoryDisposition {
+                source_control: key(id),
+                target,
+            });
+    };
+    let mut last_name = String::new();
+    let mut names = std::collections::BTreeSet::new();
+    for id in candidates {
+        let id = id.as_str().unwrap();
+        let index: usize = id.strip_prefix("catalogue-").unwrap().parse().unwrap();
+        let row = &catalogue["rows"][index - 1];
+        assert_eq!(row["index"], index);
+        let name = row["definition"]["var"].as_str().unwrap();
+        names.insert(name);
+        add(
+            id,
+            name,
+            ConfigurationInventoryTarget::MissingRawNoAdditionalInput {},
+        );
+        last_name = name.into();
+    }
+    assert_eq!(names.len(), 447, "one name has two independent callbacks");
+    let mut retained_count = 0;
+    for entry in review["installed_defaults"].as_array().unwrap() {
+        if entry["target"]["kind"] != "missing_raw_retained_scenario" {
+            continue;
+        }
+        add(
+            entry["catalogue_id"].as_str().unwrap(),
+            entry["name"].as_str().unwrap(),
+            serde_json::from_value(entry["target"].clone()).unwrap(),
+        );
+        retained_count += 1;
+    }
+    assert_eq!(retained_count, 20);
+    assert_eq!(
+        inventory.source_census.controls.len(),
+        original_controls + 468
+    );
+    reseal(&mut policy);
+    (policy, last_name)
+}
+
+#[test]
+fn full_sized_missing_family_keeps_independent_controls_scopes_and_atomic_budget() {
+    let (f, base) = custom_modifiers::scoped_fixture();
+    let (policy, late_name) = reviewed_family_fixture(base);
+    let imported = source(&two_sets("", "2", false), 0xc8);
+    let baseline = normalize(
+        &imported,
+        &f,
+        &without_inventory(&policy),
+        Default::default(),
+    )
+    .unwrap();
+    let expected = normalize(&imported, &f, &policy, Default::default()).unwrap();
+    assert_choice_only(&imported, &baseline, &expected, &[true, true]);
+
+    let exact = minimum_budget(&imported, &f, &policy, false);
+    assert!(exact > 1);
+    let limits = |work| NormalizationLimits {
+        max_work: work,
+        ..Default::default()
+    };
+    let before_allocator = *imported.allocator_state();
+    let before_policy = policy.clone();
+    assert!(matches!(
+        normalize(&imported, &f, &policy, limits(exact - 1)),
+        Err(NormalizationError::Limit(_))
+    ));
+    let replay = normalize(&imported, &f, &policy, limits(exact)).unwrap();
+    assert_eq!(replay.draft(), expected.draft());
+    assert_eq!(
+        serde_json::to_value(replay.sidecar()).unwrap(),
+        serde_json::to_value(expected.sidecar()).unwrap()
+    );
+    assert_eq!(*imported.allocator_state(), before_allocator);
+    assert_eq!(policy, before_policy);
+
+    // Both duplicate-name consumers must independently refuse a real source
+    // occurrence. A late source name must refuse without partially retiring
+    // Choice; a selected set never lends authority to an unselected one.
+    for name in ["conditionEnemyExitedPresenceRecently", late_name.as_str()] {
+        assert!(name.bytes().all(|c| c.is_ascii_alphanumeric()));
+        let authored = format!(r#"<Placeholder name="{name}" number="0"/>"#);
+        for selected in ["1", "2"] {
+            let source = source(&two_sets(&authored, selected, false), 0xc8);
+            let before =
+                normalize(&source, &f, &without_inventory(&policy), Default::default()).unwrap();
+            let after = normalize(&source, &f, &policy, Default::default()).unwrap();
+            assert_choice_only(&source, &before, &after, &[true, false]);
+        }
+    }
+    let final_replay = normalize(&imported, &f, &policy, Default::default()).unwrap();
+    assert_eq!(final_replay.draft(), expected.draft());
+    assert_eq!(
+        serde_json::to_value(final_replay.sidecar()).unwrap(),
+        serde_json::to_value(expected.sidecar()).unwrap()
+    );
+}

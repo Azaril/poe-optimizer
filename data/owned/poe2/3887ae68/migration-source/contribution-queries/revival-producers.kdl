@@ -11,6 +11,21 @@ queries game="poe2" version="owned-mechanics-v1" coverage="partial" {
                     supply "skill_grant_slot.sniper_primary_skill"
                 }
             }
+            member "program_effect" owner="skill.skeletal_arsonists" program="intrinsic-revival" effect="reviving" {
+                origin kind="skill" authored="false" {
+                    supply "skill_grant_slot.skeletal_arsonists_primary"
+                }
+            }
+            member "program_effect" owner="skill.skeletal_frost_mages" program="intrinsic-revival" effect="reviving" {
+                origin kind="skill" authored="false" {
+                    supply "skill_grant_slot.skeletal_frost_mages_primary"
+                }
+            }
+            member "program_effect" owner="skill.skeletal_reavers" program="intrinsic-revival" effect="reviving" {
+                origin kind="skill" authored="false" {
+                    supply "skill_grant_slot.skeletal_reavers_primary"
+                }
+            }
             gap subject="stat.revival.enabled" facet="game_rules" code="revival-flag-incoming-sources-unproved"
         }
     }
@@ -19,6 +34,21 @@ queries game="poe2" version="owned-mechanics-v1" coverage="partial" {
             member "program_effect" owner="skill.sniper_skill" program="intrinsic-revival" effect="base-duration" {
                 origin kind="skill" authored="false" {
                     supply "skill_grant_slot.sniper_primary_skill"
+                }
+            }
+            member "program_effect" owner="skill.skeletal_arsonists" program="intrinsic-revival" effect="base-duration" {
+                origin kind="skill" authored="false" {
+                    supply "skill_grant_slot.skeletal_arsonists_primary"
+                }
+            }
+            member "program_effect" owner="skill.skeletal_frost_mages" program="intrinsic-revival" effect="base-duration" {
+                origin kind="skill" authored="false" {
+                    supply "skill_grant_slot.skeletal_frost_mages_primary"
+                }
+            }
+            member "program_effect" owner="skill.skeletal_reavers" program="intrinsic-revival" effect="base-duration" {
+                origin kind="skill" authored="false" {
+                    supply "skill_grant_slot.skeletal_reavers_primary"
                 }
             }
             gap subject="stat.revival.base_override" facet="game_rules" code="revival-base-incoming-sources-unproved"

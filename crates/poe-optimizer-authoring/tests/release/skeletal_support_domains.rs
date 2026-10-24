@@ -111,7 +111,7 @@ fn supply_meaning(program: &RuleProgram) -> RuleProgram {
 }
 
 #[test]
-fn nine_exact_subjects_are_checked_without_changing_any_retained_schema_or_rule() {
+fn nine_exact_subjects_preserve_retained_rules_and_reviewed_revival_additions() {
     source::check_proof();
     let release = tracked_release().release();
     let recipe = release.assembled().checked();
@@ -160,25 +160,43 @@ fn nine_exact_subjects_are_checked_without_changing_any_retained_schema_or_rule(
             .sum::<usize>(),
         9
     );
+    let revival_owners: Vec<_> = source::bindings()["families"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|family| {
+            let skill: SkillDefId = typed(&family["primary"]);
+            SchemaSubject::Definition(skill.address())
+        })
+        .collect();
+    assert_eq!(revival_owners.len(), 3);
+    let mut revival_count = 0;
     for retained in &owners {
         assert!(!retained.programs.is_complete());
         let current = current_owner(&retained.owner);
         let mut metadata = current.clone();
         metadata.programs.members = retained.programs.members.clone();
         assert_eq!(&metadata, retained, "exact owner and Partial closure");
-        assert_eq!(
-            current.programs.members.len(),
-            retained.programs.members.len()
-        );
-        for (actual, old) in current
+        // Only these three exact parent owners gain the independently checked
+        // intrinsic contribution program. Preserve every pre-existing supply
+        // program and the entire owner/closure metadata above.
+        let current_supply: Vec<_> = current
             .programs
             .members
             .iter()
-            .zip(&retained.programs.members)
-        {
+            .filter(|program| {
+                let added = revival_owners.contains(&retained.owner)
+                    && program.id.as_str() == "intrinsic-revival";
+                revival_count += usize::from(added);
+                !added
+            })
+            .collect();
+        assert_eq!(current_supply.len(), retained.programs.members.len());
+        for (actual, old) in current_supply.iter().zip(&retained.programs.members) {
             assert_eq!(supply_meaning(actual), supply_meaning(old));
         }
     }
+    assert_eq!(revival_count, 3);
     for (index, (effect, _, _, _, _, _)) in source::CHAINS.iter().enumerate() {
         let family = &source::bindings()["families"][index];
         let selector = ExternalSelector::Definition(ExternalOwnerSelector::Skill {

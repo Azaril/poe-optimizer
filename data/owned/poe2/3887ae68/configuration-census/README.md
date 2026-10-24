@@ -46,15 +46,43 @@ ordered `BuildModList` catalogue and checks method identities and read-only
 observation. The Rust child `support/configuration_census_source.rs` compares the
 full portable catalogue against this packet for every successful original and
 control load, then writes a small receipt beside the complete report. The test
-attempts five originals and 24 controls independently with JIT off and on; the
+attempts five originals and 28 controls independently with JIT off and on; the
 existing full-report equality check remains mandatory.
 
 The initial projection used the historical **23-case** report identified in
 `evidence.json`. That identity remains historical provenance, not a claim that
-the old report contained 29 cases. Fresh verification is recorded separately:
-all 29 cases reproduce the catalogue in each mode, and the complete 37,752,151-byte
-reports agree at SHA-256
+the old report contained 29 cases. The first maintained **29-case** verification
+is retained under `acquisition.previous_verifications`: all 29 cases reproduced
+the catalogue in each mode, and the complete 37,752,151-byte reports agreed at SHA-256
 `b16d8d172a2f9b60f78d3efe082c40bfbee1913d1b5eb2f797574fb3631b47f7`.
+
+Fresh **33-case** verification includes four dispatcher contrasts. All 33 loads
+reproduce the same full catalogue in each mode. The complete reports are
+byte-identical, each 42,992,270 bytes with SHA-256
+`024e67e96349ce0b993e571c17c37b030886e28e77bb30961619892d32dd083a`.
+The observer, source manifest and catalogue pins are unchanged.
+
+The contrasts use four of the 448 candidates: `detonateDeadCorpseLife` (`count`,
+row 3), `conditionMoving` (`check`, row 6), `plagueBearerState` (`list`, row 155),
+and `windDancerStacks` (`countAllowZero`, row 253). Original05 supplies neither
+Input nor Placeholder for these names. Its controls still display fallback
+values 0, false, `INC`, and 0, while the corresponding Config records are absent.
+
+| Added source values | Independently expected Config records |
+| --- | --- |
+| Moving false, corpse count 0, Wind Dancer 0, list `INC` | Incubating flag and Wind Dancer BASE 0; no Moving or corpse record |
+| Moving true, corpse count 17, Wind Dancer 3, list `INF` | Corpse SkillData LIST 17, Moving flag, Infecting flag, Wind Dancer BASE 3, in catalogue order |
+| Numeric Placeholders: corpse 11 and Wind Dancer 7; other two names absent | Corpse SkillData LIST 11 and Wind Dancer BASE 7 |
+| The same Placeholders plus authored Input 0 for both numeric names | Corpse falls back to 11; `countAllowZero` preserves authored Wind Dancer 0 |
+
+The XML entries deliberately use the opposite order from the catalogue. Tests
+check complete typed records, multiplicity and order, all remaining Player and
+Enemy Config records, exact raw/load/saved lanes, and delivery through the
+existing MAIN and CALCS observations. An authored first list choice emits a
+record that the identical displayed fallback does not. These are actual original
+loader/dispatcher contrasts; no Lua callback is replaced or interpreted in Rust.
+There is no callback-invocation trace, proof for every callback body, native
+assignment, or new permission to close the 448-row family from raw absence alone.
 
 An ordinary Rust Authoring release test authenticates this packet without Lua
 or a local PoB checkout. It checks complete archives, all function spans, exact

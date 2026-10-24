@@ -801,6 +801,14 @@ admission. Fresh construction, ordered defaults, migration and alias writers
 still delimit each reviewed absence claim. Preserve explicit unsupported
 families until their real ownership is resolved, including analysis choices
 that require metric semantics rather than Actor state.
+Dispatcher evidence must distinguish absent, false and zero values, numeric
+placeholder precedence and list-widget defaults, using complete delivered records
+and their order from normal reference loading. These observations belong to the
+offline Import contract; native rules do not acquire Lua truthiness or UI state.
+Exercise the existing inventory transaction at the reviewed family size, including
+selected and unselected preset ownership and the exact work-budget boundary.
+Synthetic destination fixtures test that contract without certifying real source
+semantics or granting production completeness.
 Preserve normal-load migration and headless fallback as separate external source
 behaviors. No source receipt can certify an Encounter's intrinsic domain without
 also checking every admitted typed consumer.

@@ -1,5 +1,5 @@
 // Checked source manifest. Rule programs are authored only in the declared DSL files.
-release expected_input="5145862bfbaf30279b430888df2b69258e097d242ee05be81b198ecfafe1edcd" {
+release expected_input="cc25c852ad3918a6fa610fe423890bb7d89e3c2fe03f1be264fb3a4ecd0004ea" {
     stat-declarations "declarations/mechanics.kdl" names="names/mechanics-declarations.kdl"
     rule-source "rules/initial-skill-types/skeletal-sniper.rule"
     rule-source "rules/support-prohibition/skeletal-sniper.rule"
@@ -2688,7 +2688,7 @@ release expected_input="5145862bfbaf30279b430888df2b69258e097d242ee05be81b198ecf
     rule-source "rules/water-child-5-supply/2ed18b7d555b11b5.rule"
     rule-source "rules/water-command-supply/56f1d1f928f69e90.rule"
     rule-source "rules/water-tree-raw-supply/c9ef6d35f7b35b59.rule"
-    rule-source "rules/revival/sniper-intrinsic.rule"
+    rule-source "rules/revival/skeletal-intrinsic.rule"
     rule-source "rules/revival/restless-dead.rule"
     rule-source "rules/revival/small-revival-speed.rule"
     rule-packet "packets/revival-producers.kdl" names="names/revival-producers.kdl"

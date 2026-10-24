@@ -119,13 +119,16 @@ The command writes the checkpoint receipt to stdout and prints its checkpoint
 identity on stderr. Later checkpoints can be selected explicitly with their
 reported identity; predecessor selection is never implicit.
 
-The current declaration checkpoint contains 73 generic Stats: the initial Skill
+The allocation checkpoint contains 73 generic Stats: the initial Skill
 Boolean vocabulary plus three Skill/Actor revival channels. Sniper's initial-type,
 support-prohibition and intrinsic revival producers, and three exact passive
 revival-speed producers, retain Partial coverage. Use that complete snapshot
 as the checked predecessor for later source builds; do not bootstrap evolving
 sources. New allocation generations must distribute another complete checked
 snapshot, preserving the prior ledger without requiring historical replay.
+Current tracked sources additionally bind the same intrinsic revival body to
+Arsonist, Frost Mage and Reaver through their exact Skill grants. This adds no
+IDs or completeness claims; rebuild the tracked source for the latest content.
 
 Choose `--bootstrap` only to start a new history. A predecessor is fully checked,
 and its names remain reserved even when the next build declares no new Stats.

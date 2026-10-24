@@ -1,6 +1,6 @@
 //! Finite source evidence for intrinsic revival producers, not a closed writer census.
 //! Full pinned constructors remain offline evidence; no Lua is parsed or executed here.
-use super::minion_support_source;
+use super::{minion_support_source, skeletal_support_source};
 use flate2::read::GzDecoder;
 use poe_optimizer_core::owned_schema::{DefinitionAddress, SchemaSubject};
 use poe_optimizer_import::{
@@ -70,6 +70,32 @@ pub(super) const PASSIVES: &[(&str, &str, f64)] = &[
     ("28573", "def.0000000000000f9f", 5.0),
     ("38972", "def.00000000000012f4", 25.0),
     ("44255", "def.0000000000001476", 5.0),
+];
+const SKELETAL_SPANS: &[(&str, &str, usize, usize, &str, i32)] = &[
+    (
+        "SummonSkeletalArsonistsPlayer",
+        "def.0000000000000323",
+        18047,
+        18170,
+        "fb2bece57ff904a5d4a5766f3b3df28b112a90279ebd7cc25bc5153d6f5c3515",
+        15,
+    ),
+    (
+        "SummonSkeletalFrostMagesPlayer",
+        "def.0000000000000326",
+        18419,
+        18542,
+        "c9812f0956393628f52ef649f3d00eaa196a618a9905d9d34aa282f2518949d2",
+        35,
+    ),
+    (
+        "SummonSkeletalReaversPlayer",
+        "def.0000000000000327",
+        18543,
+        18676,
+        "54e56cb56c42207527985611680171aeb3eeeefeef94cab28a16dd62116a01a1",
+        6,
+    ),
 ];
 const NODE_SPANS: &[(usize, usize, &str)] = &[
     (
@@ -316,6 +342,29 @@ fn check_sniper(sources: &BTreeMap<&str, String>) -> Result<()> {
     )?;
     Ok(())
 }
+fn check_skeletal_revival(sources: &BTreeMap<&str, String>) -> Result<()> {
+    for &(source, _, first, last, digest, graft) in SKELETAL_SPANS {
+        let body = checked_span(&sources[SKILL], first, last, digest)?;
+        require(
+            body.starts_with(&format!("skills[\"{source}\"] = {{\n"))
+                && body.ends_with("\t}\n}\n")
+                && body
+                    .matches("\"minion_base_resummon_time_ms\", 12000")
+                    .count()
+                    == 1
+                && body.matches("\"is_resummoning_minion\",").count() == 1
+                && body.contains(&format!(
+                    "{{ \"skeletal_graft_buff_effect_magnitude\", {graft} }}"
+                ))
+                && body.matches("actorLevel =").count() == 40
+                && body.matches("spiritReservationFlat =").count() == 40,
+            "whole skeletal intrinsic source, level domain and remaining paired mechanics",
+        )?;
+    }
+    // check_sniper authenticates the shared flag factory, /1000 map, complete
+    // stat constructor and local merge/parent boundaries used by all four.
+    check_sniper(sources)
+}
 fn check_passive_constructors(sources: &BTreeMap<&str, String>) -> Result<()> {
     require(
         span(&sources[PARSER], 4736, 4736)?
@@ -356,6 +405,9 @@ fn proof() -> &'static Proof {
         // Reuse existing exact catalog/mapping authentication, not live release output.
         let catalog = minion_support_source::verified_catalog();
         let mapping = minion_support_source::verified_mapping();
+        // This independent whole-family proof also authenticates each winning
+        // declaration, physical Gem supply, full stat set and local map override.
+        skeletal_support_source::check_proof();
         let bytes = bounded(MANIFEST, 262144).unwrap();
         assert_eq!(hash(&bytes), MANIFEST_SHA);
         let manifest: Value = serde_json::from_slice(&bytes).unwrap();
@@ -380,6 +432,7 @@ fn proof() -> &'static Proof {
         let raw = serde_json::from_str(&sources[RAW_TREE]).unwrap();
         check_passives(&raw, &sources[TREE], catalog, mapping).unwrap();
         check_sniper(&sources).unwrap();
+        check_skeletal_revival(&sources).unwrap();
         check_passive_constructors(&sources).unwrap();
         check_mapping(
             mapping,
@@ -389,6 +442,16 @@ fn proof() -> &'static Proof {
             "def.0000000000000012",
         )
         .unwrap();
+        for &(source, expected, ..) in SKELETAL_SPANS {
+            check_mapping(
+                mapping,
+                &ExternalSelector::Definition(ExternalOwnerSelector::Skill {
+                    effect_id: SourceComponent::Text(source.into()),
+                }),
+                expected,
+            )
+            .unwrap();
+        }
         Proof { sources, raw }
     })
 }
@@ -482,6 +545,38 @@ fn altered_intrinsic_body_stat_map_or_construction_refuses_the_source_proof() {
         ),
     );
     assert!(check_passive_constructors(&changed).is_err());
+}
+
+#[test]
+fn each_skeletal_intrinsic_rejects_changed_revive_or_paired_source_records() {
+    let p = proof();
+    check_skeletal_revival(&p.sources).unwrap();
+    for &(_, _, first, last, _, _) in SKELETAL_SPANS {
+        let original = span(&p.sources[SKILL], first, last).unwrap();
+        for (before, after) in [
+            (
+                "\"minion_base_resummon_time_ms\", 12000",
+                "\"minion_base_resummon_time_ms\", 7500",
+            ),
+            (
+                "\"is_resummoning_minion\",",
+                "\"unreviewed_resummoning_minion\",",
+            ),
+            (
+                "\"skeletal_graft_buff_effect_magnitude\"",
+                "\"unreviewed_graft_buff_effect_magnitude\"",
+            ),
+        ] {
+            assert!(original.contains(before));
+            let changed = original.replacen(before, after, 1);
+            let mut sources = p.sources.clone();
+            sources.insert(SKILL, p.sources[SKILL].replacen(&original, &changed, 1));
+            assert!(
+                check_skeletal_revival(&sources).is_err(),
+                "source line {first}: {before}"
+            );
+        }
+    }
 }
 
 #[test]

@@ -540,7 +540,37 @@ fn tracked_sources_preserve_every_retained_graph_owner_and_metadata_field() {
         (
             additions_owner.clone(),
             "intrinsic-revival",
-            "rules/revival/sniper-intrinsic.rule",
+            "rules/revival/skeletal-intrinsic.rule",
+        ),
+        (
+            SchemaSubject::Definition(
+                revival_symbols
+                    .definition("skill.skeletal_arsonists")
+                    .unwrap()
+                    .clone(),
+            ),
+            "intrinsic-revival",
+            "rules/revival/skeletal-intrinsic.rule",
+        ),
+        (
+            SchemaSubject::Definition(
+                revival_symbols
+                    .definition("skill.skeletal_frost_mages")
+                    .unwrap()
+                    .clone(),
+            ),
+            "intrinsic-revival",
+            "rules/revival/skeletal-intrinsic.rule",
+        ),
+        (
+            SchemaSubject::Definition(
+                revival_symbols
+                    .definition("skill.skeletal_reavers")
+                    .unwrap()
+                    .clone(),
+            ),
+            "intrinsic-revival",
+            "rules/revival/skeletal-intrinsic.rule",
         ),
         (
             passive("12f4"),

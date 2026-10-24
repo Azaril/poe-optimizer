@@ -7,6 +7,8 @@ mod attribute_support_domains;
 mod attribute_support_source;
 #[path = "support/canonical_checkpoint.rs"]
 mod canonical_checkpoint;
+#[path = "release/character_reward_inventory.rs"]
+mod character_reward_inventory;
 #[path = "release/checkpoint.rs"]
 mod checkpoint;
 #[path = "release/checkpoint_history.rs"]
@@ -1985,6 +1987,16 @@ fn tracked_dsl_release_preserves_historical_content_and_only_reviewed_additions(
         ),
         (admitted_owner, "intrinsic-revival".to_owned()),
     ];
+    for name in [
+        "skill.skeletal_arsonists",
+        "skill.skeletal_frost_mages",
+        "skill.skeletal_reavers",
+    ] {
+        admitted_programs.push((
+            SchemaSubject::Definition(revival_names.definition(name).unwrap().clone()),
+            "intrinsic-revival".to_owned(),
+        ));
+    }
     for name in [
         "passive_node.restless_dead",
         "passive_node.minion_revive_speed.a",

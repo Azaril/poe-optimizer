@@ -28,7 +28,7 @@ KDL files. Their names resolve after Stat allocation in the same build as rule
 programs; no separate allocation step or predicted identifier is needed. Exact
 source authority, member order, reducers, empty values and coverage remain in
 these files. The original and revival fragments retain both outer Partial gaps;
-all 48 partial groups retain their own gaps. The 123 groups contain 2,122 members.
+all 48 partial groups retain their own gaps. The 123 groups contain 2,128 members.
 Composition uses the existing runtime query model
 and final validators, not another evaluator.
 
@@ -56,11 +56,14 @@ node renaming, retains read/operand/effect semantics and order, checks exact
 owner membership, and compiles the complete reconstructed rule package with the
 existing Engine. Non-program metadata and all incomplete-coverage declarations
 must remain unchanged except for the explicitly admitted 73 Stat declarations,
-six program occurrences, three revival queries with one new outer gap, and 363
+nine program occurrences, three revival queries with one new outer gap, and 363
 intrinsic support-domain declarations, plus four reviewed generated-singleton
 usage destinations, the default-Timeless source-presentation flag and their
-constructed dependency commitments. The six programs comprise Sniper's initial
-types, support prohibition and intrinsic revival, plus three passive revival sources.
+constructed dependency commitments. The nine programs comprise Sniper's initial
+types and support prohibition, four exact skeletal Skill intrinsic-revival
+instances and three passive revival sources. The original revival checkpoint
+added Sniper and the three passives; the later extension adds Arsonist, Frost
+Mage and Reaver with six query members, reusing the same Stats and source body.
 The [singleton accounting evidence](../generated-firebolt-dispositions/singleton-accounting.md)
 keeps the unchanged originals and independent generated sources blocked. The
 independent [Timeless preference proof](../timeless-search-defaults/README.md)
@@ -86,7 +89,7 @@ Historical reference identity (not the current DSL input):
 ## Preserved scope and limitations
 
 The release has 13,337 active allocations, 9,464 schema definitions and
-3,873 slots. Rules have 6,550 owners, 8,218 program occurrences, 18 integer
+3,873 slots. Rules have 6,550 owners, 8,221 program occurrences, 18 integer
 tables, 59 receivers, 117 contribution queries, one effect application and one
 existing-Actor binding. The five named query sets retain their original order
 and 22 queries each. The 227 provenance rows are unchanged metadata, not
@@ -99,9 +102,14 @@ Skill Boolean Stats. See [evidence and limits](../initial-skill-types/README.md)
 The next declaration adds the separately reviewed definition-level support
 prohibition; see its [source proof and limits](../support-prohibition/README.md).
 The [revival producers](../revival-producers/README.md) add three generic Skill/Actor
-channels, Sniper's intrinsic flag and twelve-second override, and three distinct
-Player passive contributions. Their three queries retain incomplete membership
-and numeric ordering; no final revival duration or complete source census is claimed.
+channels, intrinsic flags and twelve-second overrides for the exact Sniper,
+Arsonist, Frost Mage and Reaver Skills, and three distinct Player passive
+contributions. Their seven program instances share three bodies while retaining
+eleven exact effects and separate physical supplies. Source mutation, crossed
+supply and duplicate-member controls preserve this authority. Their three
+queries retain incomplete membership and numeric ordering; the remaining source
+census, paired/conditional contributors and post-stacking Sacrifice are still
+required before a final revival duration can be claimed.
 Eight existing Skill, Actor and declared-slot owners, three root/Ascendancy
 owners, four UsagePolicies, 293 ordinary attribute-choice passives, eighteen
 reviewed numeric minion passives, seven class-view passives, one intrinsic socket,
@@ -164,14 +172,14 @@ serve as production names.
 
 ## Checked source inventory
 
-Current input: `baa13efffdac5ca8b784b53e83254c5fc46ba9a0cdc142de8c2e392f8a768ba6`.
+Current input: `cc25c852ad3918a6fa610fe423890bb7d89e3c2fe03f1be264fb3a4ecd0004ea`.
 The 104 packets reference 2,566 distinct complete rule sources, preserving all
-8,218 occurrences. Their local names bind exact existing addresses; the shared
+8,221 occurrences. Their local names bind exact existing addresses; the shared
 `declarations/mechanics.kdl` component declares the 73 Stats bound by the persisted
 name ledger. The five
 contribution-query fragments use those declarations without separate allocation.
-The 2,802 declared inputs occupy 6,725,104 encoded and 46,027,477 decoded bytes;
-the root manifest is 184,374 bytes. The eighteen runtime files occupy 53,659,543
+The 2,802 declared inputs occupy 6,731,152 encoded and 46,030,245 decoded bytes;
+the root manifest is 184,376 bytes. The eighteen runtime files occupy 53,665,506
 bytes, including the 19,774,085-byte schema; the checkpoint receipt and name ledger
-total 455,214 bytes. All fit the existing default limits. The maintained Authoring
+total 455,218 bytes. All fit the existing default limits. The maintained Authoring
 tests check actual source graphs, historical artifacts and the new component producers.

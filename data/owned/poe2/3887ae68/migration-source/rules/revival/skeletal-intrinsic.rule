@@ -1,5 +1,6 @@
-// act_int18677-18799 + SkillStatMap2690-2696, with actual construction proof.
-// The packet attaches this only to the exact reviewed Skill definition.
+// Complete Sniper/Arsonist/Frost Mage/Reaver bodies and SkillStatMap2690-2696.
+// Each exact Skill owns its intrinsic flag and 12000ms / 1000 base override.
+// The shared body preserves distinct occurrences; no final-duration fallback.
 program "intrinsic-revival" context skill {
     let reviving = true;
     let base_seconds = quantity(12, unit.seconds);

@@ -70,7 +70,7 @@ runtime files are `normalization.json`, `tree-normalization.json` and `release.j
 Historical restoration restores those four destinations through checked content
 constructors, alongside the independently bounded earlier content deltas.
 
-Current tracked source additionally enables the independently reviewed
+The subsequent tracked source enabled the independently reviewed
 [default Timeless search-preference family](timeless-search-defaults/README.md).
 It publishes verified checkpoint
 `54496d58233f41b8ef15cab738edf764ffc7d08fd1d97d69e3c53684f9c8eac8`, runtime input
@@ -80,21 +80,33 @@ The name ledger and registry are unchanged. Only the presentation flag and its
 constructed tree normalization binding change; the same three runtime files
 listed above have new bytes. No numerical or completion state changes.
 
+Current tracked sources extend the same intrinsic revival body to the exact
+Arsonist, Frost Mage and Reaver Skills and their physical Gem grants. This adds
+three program occurrences and six query members with all Partial gaps retained.
+The verified checkpoint is
+`82677b8da2f00142276ba573854f00242dde4f9448246baca804524fed4d0b9a`, runtime input
+`cc25c852ad3918a6fa610fe423890bb7d89e3c2fe03f1be264fb3a4ecd0004ea`, with release
+receipt SHA-256 `d14bc0e44c04c64c7ab7ed22f0f8211d5ad3d5b30a6f7a2c8bf5f7f7d0b19af1`.
+Compared with the Timeless checkpoint, only `rules.json`, `manifest.json` and
+`release.json` change. Schema, ledger, registry, Import data and queries retain
+their bytes. No new allocation or complete-build admission is introduced.
+
 | Current tracked-source build | Count or bytes |
 | --- | ---: |
 | Declared source files | 2,802 |
-| Encoded source bytes | 6,728,221 |
-| Decoded source bytes | 46,027,314 |
-| Root manifest bytes | 184,374 |
+| Encoded source bytes | 6,731,152 |
+| Decoded source bytes | 46,030,245 |
+| Root manifest bytes | 184,376 |
 | Runtime files | 18 |
-| Runtime bytes | 53,659,380 |
+| Runtime bytes | 53,665,506 |
 | Schema artifact bytes | 19,774,085 |
-| Checkpoint and name-ledger bytes | 455,214 |
+| Checkpoint and name-ledger bytes | 455,218 |
 
 The saved verifier accepts the current checkpoint, and an independent build
 reproduces all twenty files byte-for-byte: eighteen runtime files, the name ledger
-and checkpoint receipt. Evidence is in `runs/timeless-search-defaults/verified.json`
-and `equivalence.json`; these local records are not build inputs. The canonical
+and checkpoint receipt. Evidence is in
+`runs/configuration-dispatch-checkpoint/release-verified.json` and
+`release-equivalence.json`; these local records are not build inputs. The canonical
 `71ff4429` snapshot above remains the allocation predecessor, not the latest
 content. Build the tracked source to obtain the current release. Validation and
 the actual remaining first-build blockers are recorded at each checkpoint in
